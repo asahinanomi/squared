@@ -1,0 +1,2 @@
+# squared
+squared.today
