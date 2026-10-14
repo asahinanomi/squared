@@ -64,13 +64,32 @@ function blob(r: number, ripples: [number, number, number][]) {
   return d + 'Z'
 }
 
-// Drops flicked onto the board around the dipped well, as [angle°, distance, radius]. Each well's set
+// Drops spilled over the dipped well's rim, as [angle°, distance from centre, radius]. Each well's set
 // avoids its neighbours and the brush.
 const SPLASH: Record<Paint, [number, number, number][]> = {
-  green: [[16, 27, 4.8], [44, 30, 3.2], [72, 28, 2.4], [-14, 31, 2], [30, 37, 1.4]],
-  grey: [[6, 27, 4.6], [36, 30, 3], [-24, 29, 2.2], [66, 29, 2], [16, 36, 1.4]],
-  red: [[104, 27, 4.6], [138, 29, 3.2], [164, 28, 2.1], [78, 30, 2.2], [120, 36, 1.4]],
+  green: [[18, 22, 6], [46, 23, 4.2], [74, 22.5, 3], [-12, 23, 2.6], [32, 30, 1.8]],
+  grey: [[8, 22, 5.8], [38, 23, 4], [-22, 23, 2.8], [66, 22.5, 2.6], [22, 30, 1.8]],
+  red: [[104, 22, 5.8], [136, 23, 4.2], [162, 22.5, 2.8], [78, 23, 2.6], [120, 30, 1.8]],
 }
+
+/** A spiral from radius r0 to r1 over the given turns, starting at angle a0 (radians). */
+function spiral(r0: number, r1: number, turns: number, a0: number) {
+  const n = 48
+  return Array.from({ length: n + 1 }, (_, i) => {
+    const t = i / n
+    const a = a0 + t * turns * Math.PI * 2
+    const r = r0 + (r1 - r0) * t
+    return `${i ? 'L' : 'M'}${(r * Math.cos(a)).toFixed(2)} ${(r * Math.sin(a)).toFixed(2)}`
+  }).join('')
+}
+
+// Stirred paint: a light and a dark streak swirling through the dipped well, turned differently per color.
+const SWIRLS: Record<Paint, [string, string]> = {
+  green: [spiral(2, 15, 1.3, 0.3), spiral(4, 14, 1.1, 3.4)],
+  grey: [spiral(2, 15, 1.3, 2.1), spiral(4, 14, 1.1, 5.2)],
+  red: [spiral(2, 15, 1.3, 4.4), spiral(4, 14, 1.1, 1.3)],
+}
+
 const DROPS: Record<Paint, { x: number; y: number; r: number; d: string }[]> = Object.fromEntries(
   (Object.keys(SPLASH) as Paint[]).map((id, w) => [
     id,
@@ -138,7 +157,13 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
                 <circle r={R} fill={`url(#pal-bowl-${id})`} />
                 <path className="bowl-shade" d={arc(R - 3.2, 150, 300)} />
                 <path className="bowl-lip" d={arc(R - 2.6, 5, 95)} />
-                {/* Dipped: a few drops of the color land on the board around the well. */}
+                {/* Dipped: the paint looks freshly stirred. */}
+                <g className="well-swirl">
+                  <path d={SWIRLS[id][0]} stroke={shade(hex, 0.22)} />
+                  <path d={SWIRLS[id][1]} stroke={shade(hex, -0.2)} />
+                </g>
+                <circle className="well-edge" style={line} r={R} />
+                {/* Dipped: drops spill over the rim onto the board. */}
                 <g className="well-splash">
                   {DROPS[id].map((p, i) => (
                     <g key={i} transform={`translate(${p.x.toFixed(2)} ${p.y.toFixed(2)})`}>
@@ -149,7 +174,6 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
                     </g>
                   ))}
                 </g>
-                <circle className="well-edge" style={line} r={R} />
               </g>
             </g>
           </g>
