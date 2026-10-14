@@ -60,7 +60,7 @@ export default function App() {
   }, [userId])
 
   useEffect(() => {
-    document.body.dataset.screen = signedIn ? screen : 'signin'
+    document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'
   }, [signedIn, screen])
 
   // Optimistic: show the paint at once, save in the background, roll back if it fails.

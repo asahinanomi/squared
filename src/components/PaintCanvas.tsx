@@ -9,6 +9,8 @@ type Props = {
   loaded: Paint | null
   onDryBrush: () => void
   onFilled: (p: Paint) => void
+  /** A quick tap in the margin around the square (not a stroke), in page coordinates. */
+  onMarginTap?: (clientX: number, clientY: number) => void
 }
 
 // Brush diameter as a share of the square: two side-by-side swipes cover it.
@@ -23,11 +25,13 @@ function brushCursor(tip: string) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 4 36, crosshair`
 }
 
-export function PaintCanvas({ saved, loaded, onDryBrush, onFilled }: Props) {
+export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }: Props) {
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const covered = useRef(new Uint8Array(GRID * GRID))
   const last = useRef<{ x: number; y: number } | null>(null)
+  // A press that began in the margin: a stroke once it moves, a tap if it doesn't.
+  const pending = useRef<{ x: number; y: number; cx: number; cy: number } | null>(null)
   const size = useRef(0)
   const [settling, setSettling] = useState<Paint | null>(null)
 
@@ -88,26 +92,55 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled }: Props) {
 
   const down = (e: React.PointerEvent) => {
     if (settling) return
+    const p = point(e)
+    const s = size.current
+    e.currentTarget.setPointerCapture(e.pointerId)
+    if (p.x < 0 || p.y < 0 || p.x > s || p.y > s) {
+      pending.current = { ...p, cx: e.clientX, cy: e.clientY }
+      return
+    }
     if (!loaded) {
       onDryBrush()
       return
     }
-    e.currentTarget.setPointerCapture(e.pointerId)
     last.current = null
-    strokeTo(point(e))
+    strokeTo(p)
   }
 
   const move = (e: React.PointerEvent) => {
+    const start = pending.current
+    if (start) {
+      const p = point(e)
+      if (Math.hypot(p.x - start.x, p.y - start.y) < 8) return
+      pending.current = null
+      if (!loaded) {
+        onDryBrush()
+        return
+      }
+      last.current = null
+      strokeTo(start)
+    }
     if (!last.current || !loaded) return
     const events = e.nativeEvent.getCoalescedEvents?.() ?? [e.nativeEvent]
     for (const ev of events.length ? events : [e.nativeEvent]) strokeTo(point(ev))
   }
 
   const up = () => {
+    const tap = pending.current
+    if (tap) {
+      pending.current = null
+      onMarginTap?.(tap.cx, tap.cy)
+      return
+    }
     if (!last.current) return
     last.current = null
     const done = covered.current.reduce((a, b) => a + b, 0) / covered.current.length
     if (done >= FILLED && loaded) setSettling(loaded)
+  }
+
+  const cancel = () => {
+    pending.current = null
+    up()
   }
 
   // Once filled, the last-dipped color settles evenly over the square.
@@ -128,11 +161,15 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled }: Props) {
         <canvas ref={canvas} className="paint-surface" />
         {settling && <div className="settle" style={{ background: paintHex(settling) }} />}
       </div>
-      {/* Strokes may start a little outside the square, like a real brush sweeping in. */}
+      {/* Strokes may start a little outside the square; a quick tap here reaches the grid day beneath. */}
       <div
         className="paint-reach"
         style={{ cursor: brushCursor(loaded ? paintHex(loaded) : '#f4f4f1') }}
-        onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} />
+        onPointerDown={down}
+        onPointerMove={move}
+        onPointerUp={up}
+        onPointerCancel={cancel}
+      />
     </div>
   )
 }

@@ -38,6 +38,7 @@ body {
 
 /* The painting screen sits on a soft grey veil so the white square glows. */
 body[data-screen='today'] { --bg: var(--veil); --dot: #b2b2ac; }
+html[data-screen='today'] { background: var(--veil); }
 
 button {
   font: inherit;

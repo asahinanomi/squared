@@ -29,6 +29,12 @@ export function Today(props: Props) {
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
   const day = days[date]
+
+  // A tap just outside the square goes to the grid day underneath it.
+  const tapGridDay = (x: number, y: number) => {
+    const cell = document.elementsFromPoint(x, y).find((el) => el.classList.contains('ghost'))
+    if (cell instanceof HTMLButtonElement && !cell.disabled) cell.click()
+  }
   return (
     <main className="today">
       <Question text={question} onDefine={onDefine} />
@@ -69,6 +75,7 @@ export function Today(props: Props) {
           loaded={loaded}
           onDryBrush={onDryBrush}
           onFilled={onFilled}
+          onMarginTap={tapGridDay}
         />
       </div>
 
@@ -78,7 +85,7 @@ export function Today(props: Props) {
         ) : (
           <>
             <Palette loaded={loaded} nudge={nudge} onLoad={onLoad} />
-            {day && <NoteCard note={day.note} noteAt={day.noteAt} onEdit={onEditNote} />}
+            {day && <NoteCard key={date} note={day.note} onEdit={onEditNote} />}
           </>
         )}
       </div>

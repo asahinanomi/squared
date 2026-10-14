@@ -145,20 +145,17 @@
 .day-nav button { pointer-events: auto; width: 44px; height: 44px; display: grid; place-items: center; }
 .day-label { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; min-width: 15em; text-align: center; }
 
+/* The month grid takes its own space; the square floats centered on top of it. */
 .easel {
   position: relative;
   width: 100%;
-  display: grid;
-  place-items: center;
-  margin-top: 20px;
-  padding: 10px 0;
+  margin-top: 18px;
 }
 .ghost-grid {
-  position: absolute;
-  top: 50%;
+  position: relative;
   left: 50%;
   width: min(100vw - 16px, 540px);
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 10px;
@@ -184,7 +181,7 @@
 .canvas {
   position: relative;
   z-index: 1;
-  width: min(46vw, 180px);
+  width: min(38vw, 146px);
   aspect-ratio: 1;
   background: #fff;
   border: 3px solid var(--ink);
@@ -192,7 +189,13 @@
   box-shadow: 0 2px 0 rgba(20, 20, 19, 0.04), 0 18px 40px rgba(20, 20, 19, 0.08);
   overflow: hidden;
 }
-.paint-wrap { position: relative; z-index: 1; }
+.paint-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
 .paint-surface {
   position: absolute;
   inset: 0;
@@ -202,7 +205,7 @@
 }
 .paint-reach {
   position: absolute;
-  inset: -12px;
+  inset: -24px;
   z-index: 2;
   touch-action: none;
   cursor: crosshair;
@@ -234,20 +237,39 @@
 
 /* ---------- note under the square ---------- */
 .note-card {
-  width: min(100%, 340px);
+  position: relative;
+  width: min(100%, 360px);
   margin-top: 22px;
-  padding: 14px 20px 16px;
+  padding: 16px 20px;
   background: #fff;
   border-radius: 18px;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
   animation: rise 0.25s ease-out;
 }
-.note-card:active { transform: scale(0.99); }
-.note-stamp { font-size: 14px; color: var(--ink-soft); letter-spacing: 0.01em; }
-.note-text { font-size: 20px; line-height: 1.4; color: var(--ink); overflow-wrap: anywhere; }
+.note-text {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+/* Long notes show their first four lines, fading out, until opened. */
+.note-card:not(.is-open) .note-text {
+  max-height: calc(19px * 1.5 * 4);
+  overflow: hidden;
+}
+.note-card.is-long .note-text {
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent);
+}
+.note-more {
+  margin-top: 8px;
+  font-size: 15px;
+  color: var(--ink-soft);
+  text-decoration: underline dotted var(--grey-3);
+  text-underline-offset: 4px;
+}
 .note-add {
   margin-top: 14px;
   padding: 8px 14px;
@@ -285,9 +307,14 @@
 }
 .why-label { display: block; font-size: 19px; color: var(--ink-soft); margin-bottom: 12px; }
 .why-input {
+  display: block;
   width: 100%;
+  min-height: 44px;
+  max-height: 45vh;
+  resize: none;
+  line-height: 1.45;
   font: inherit;
-  font-size: 20px;
+  font-size: 19px;
   color: var(--ink);
   border: 0;
   border-bottom: 1.5px solid var(--grey-1);
@@ -298,6 +325,15 @@
 }
 .why-input::placeholder { color: var(--grey-3); }
 .why-input:focus { border-bottom-color: var(--grey-3); }
+.why-done {
+  display: block;
+  margin: 14px 0 0 auto;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 16px;
+}
 .why-skip { position: relative; z-index: 6; pointer-events: none; color: var(--ink-soft); font-size: 16px; margin: 18px 0 0; }
 @keyframes rise { from { opacity: 0; transform: translateY(10px) scale(0.97); } }
 
