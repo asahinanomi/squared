@@ -21,7 +21,7 @@ export function Topbar({ onHome, onCalendar, onIdea, onSignOut }: Props) {
       {open && (
         <div className="menu-layer" onClick={() => setOpen(false)}>
           <nav className="menu" onClick={(e) => e.stopPropagation()}>
-            <button onClick={go(onCalendar)}>calendar</button>
+            <button onClick={go(onCalendar)}>my squares</button>
             <button onClick={go(onIdea)}>the idea</button>
             <button onClick={go(onSignOut)}>sign out</button>
           </nav>
