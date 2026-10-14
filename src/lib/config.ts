@@ -1,2 +1,2 @@
-// The question shown above the square. Becomes a stored Supabase value in step 4.
+// Fallback only: the live question is read from the Supabase `settings` table.
 export const QUESTION = 'Did I spend today meaningfully?'

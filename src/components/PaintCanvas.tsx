@@ -17,6 +17,12 @@ const BRUSH = 0.58
 const GRID = 24
 const FILLED = 0.88
 
+// Desktop cursor: a little brush whose tip carries the loaded paint; hotspot at the tip.
+function brushCursor(tip: string) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><g stroke="#141413" stroke-width="1.6" stroke-linejoin="round"><path d="M34 3c2-1.5 4 .5 2.5 2.5L22 21l-3-3z" fill="#8c8c87"/><path d="M19 18l3 3-3.5 4L15 21.5z" fill="#d9d9d4"/><path d="M15 21.5l3.5 3.5C17 31 12 35.5 5 37c-1.5.3-2.3-.7-1.8-2C5.5 28.5 9 23.5 15 21.5z" fill="${tip}"/></g></svg>`
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 4 36, crosshair`
+}
+
 export function PaintCanvas({ saved, loaded, onDryBrush, onFilled }: Props) {
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
@@ -122,7 +128,10 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled }: Props) {
         {settling && <div className="settle" style={{ background: paintHex(settling) }} />}
       </div>
       {/* Strokes may start a little outside the square, like a real brush sweeping in. */}
-      <div className="paint-reach" onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} />
+      <div
+        className="paint-reach"
+        style={{ cursor: brushCursor(loaded ? paintHex(loaded) : '#f4f4f1') }}
+        onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} />
     </div>
   )
 }
