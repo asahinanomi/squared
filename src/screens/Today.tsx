@@ -85,7 +85,7 @@ export function Today(props: Props) {
         ) : (
           <>
             <Palette loaded={loaded} nudge={nudge} onLoad={onLoad} />
-            {day && <NoteCard key={date} note={day.note} onEdit={onEditNote} />}
+            {day && <NoteCard key={date} note={day.note} noteAt={day.noteAt} onEdit={onEditNote} />}
           </>
         )}
       </div>

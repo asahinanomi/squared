@@ -1,9 +1,17 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 
-type Props = { note?: string; onEdit: () => void }
+type Props = { note?: string; noteAt?: string; onEdit: () => void }
+
+/** "Oct 14 · 9:42 pm" */
+function stamp(iso: string) {
+  const d = new Date(iso)
+  const day = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()
+  return `${day} · ${time}`
+}
 
 // The day's "why?" under the palette. Long notes show their first lines; tap to read all.
-export function NoteCard({ note, onEdit }: Props) {
+export function NoteCard({ note, noteAt, onEdit }: Props) {
   const text = useRef<HTMLParagraphElement>(null)
   const [open, setOpen] = useState(false)
   const [long, setLong] = useState(false)
@@ -22,6 +30,7 @@ export function NoteCard({ note, onEdit }: Props) {
 
   return (
     <div className={'note-card' + (open ? ' is-open' : '') + (long && !open ? ' is-long' : '')}>
+      {noteAt && <p className="note-stamp">{stamp(noteAt)}</p>}
       <p ref={text} className="note-text" onClick={() => (long && !open ? setOpen(true) : onEdit())}>
         {note}
       </p>

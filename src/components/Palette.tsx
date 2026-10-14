@@ -8,7 +8,7 @@ type Props = {
   onLoad: (p: Paint) => void
 }
 
-// Well positions on the board (viewBox 0 0 270 190). Centers sit ~70 units apart so each
+// Well positions on the board (drawn in a 270×190 space; the viewBox crops the empty top). Centers sit ~70 units apart so each
 // well's tap zone (r 33 ≈ 46px on a phone) never overlaps its neighbour's.
 const WELLS: Record<Paint, { x: number; y: number }> = {
   green: { x: 82, y: 70 },
@@ -24,7 +24,7 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
   return (
     <svg
       className={'palette' + (nudge ? ' is-nudging' : '')}
-      viewBox="0 0 270 190"
+      viewBox="0 22 270 168"
       role="radiogroup"
       aria-label="Paint palette"
     >
