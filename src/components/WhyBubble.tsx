@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { ConfirmDialog } from './ConfirmDialog'
 
 type Props = {
   /** Text of the note being edited; empty for a new note. */
@@ -17,7 +18,7 @@ export function WhyBubble({ initial = '', editing = false, onSave, onDelete, onC
   const [text, setText] = useState(initial)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [confirming, setConfirming] = useState(false)
   const input = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -58,13 +59,13 @@ export function WhyBubble({ initial = '', editing = false, onSave, onDelete, onC
   }
 
   const del = () => {
-    if (!confirmDelete) return setConfirmDelete(true)
+    setConfirming(false)
     if (onDelete) run(onDelete)
   }
 
   // Outside tap: a new note keeps what's typed; an edit is left as it was.
   const outside = () => {
-    if (busy) return
+    if (busy || confirming) return
     if (editing) onCancel()
     else save()
   }
@@ -84,23 +85,29 @@ export function WhyBubble({ initial = '', editing = false, onSave, onDelete, onC
           maxLength={10000}
           rows={1}
           value={text}
-          onChange={(e) => {
-            setText(e.target.value)
-            setConfirmDelete(false)
-          }}
+          onChange={(e) => setText(e.target.value)}
         />
         {error && <p className="why-error">{error}</p>}
         <div className="why-actions">
-          {editing && (
-            <button className={'why-delete' + (confirmDelete ? ' is-confirming' : '')} onClick={del} disabled={busy}>
-              {confirmDelete ? 'tap again to delete' : 'delete this note'}
-            </button>
-          )}
           <button className="why-done" onClick={save} disabled={busy || (editing && !value)}>
             {busy ? 'saving…' : editing ? 'update' : 'save'}
           </button>
+          {editing && (
+            <button className="why-delete" onClick={() => setConfirming(true)} disabled={busy}>
+              delete
+            </button>
+          )}
         </div>
       </div>
+      {confirming && (
+        <ConfirmDialog
+          title="Delete this note?"
+          body="It can't be undone."
+          confirm="delete"
+          onConfirm={del}
+          onCancel={() => setConfirming(false)}
+        />
+      )}
       <p className="why-skip">{editing ? 'tap anywhere to leave it as it was' : 'tap anywhere to skip'}</p>
     </>
   )

@@ -7,6 +7,7 @@
   --grey-1: #e3e3df;
   --grey-2: #c4c4bf;
   --grey-3: #8f8f8a;
+  --grey-4: #6f6f6a; /* deepest grey: readable with white text (5:1) */
   --dot: #c8c8c3;
   --bg: var(--paper);
 
