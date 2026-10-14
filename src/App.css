@@ -132,6 +132,9 @@
   text-underline-offset: 8px;
 }
 .day-nav {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -139,7 +142,7 @@
   margin-top: 18px;
   width: 100%;
 }
-.day-nav button { width: 44px; height: 44px; display: grid; place-items: center; }
+.day-nav button { pointer-events: auto; width: 44px; height: 44px; display: grid; place-items: center; }
 .day-label { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; min-width: 15em; text-align: center; }
 
 .easel {
@@ -165,9 +168,18 @@
   aspect-ratio: 1;
   border-radius: 7px;
   border: 1.5px solid rgba(20, 20, 19, 0.07);
+  pointer-events: auto;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: rgba(20, 20, 19, 0.38);
 }
-.ghost.is-blank { border-color: transparent; }
-.ghost.is-painted { border-color: transparent; opacity: 0.3; }
+.ghost.is-painted { border-color: transparent; color: rgba(20, 20, 19, 0.5); }
+.ghost.is-current { border-color: var(--ink); border-width: 2px; color: var(--ink); }
+.ghost:disabled { opacity: 1; color: rgba(20, 20, 19, 0.16); }
+.ghost:not(:disabled):active { transform: scale(0.94); }
 
 .canvas {
   position: relative;
@@ -190,7 +202,7 @@
 }
 .paint-reach {
   position: absolute;
-  inset: -28px;
+  inset: -12px;
   z-index: 2;
   touch-action: none;
   cursor: crosshair;
@@ -207,6 +219,9 @@
 @keyframes settle { from { opacity: 0; } }
 
 .tray {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
   width: 100%;
   min-height: 170px;
   display: flex;
@@ -214,6 +229,8 @@
   align-items: center;
   padding-top: 18px;
 }
+
+.tray > * { pointer-events: auto; }
 
 /* ---------- note under the square ---------- */
 .note-card {

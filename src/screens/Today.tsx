@@ -44,14 +44,24 @@ export function Today(props: Props) {
       </div>
 
       <div className="easel">
-        <div className="ghost-grid" aria-hidden="true">
-          {monthCells(date).map((iso, i) => (
-            <span
-              key={iso ?? `b${i}`}
-              className={'ghost' + (iso ? '' : ' is-blank') + (iso && days[iso] ? ' is-painted' : '')}
-              style={iso && days[iso] ? { background: paintHex(days[iso].color) } : undefined}
-            />
-          ))}
+        {/* The month behind the square: tap a day to go to it (not future days). */}
+        <div className="ghost-grid">
+          {monthCells(date).map((iso, i) =>
+            iso ? (
+              <button
+                key={iso}
+                className={'ghost' + (days[iso] ? ' is-painted' : '') + (iso === date ? ' is-current' : '')}
+                style={days[iso] ? { background: paintHex(days[iso].color) + '4d' } : undefined}
+                disabled={iso > today}
+                aria-label={longDate(iso)}
+                onClick={() => onDate(iso)}
+              >
+                {Number(iso.slice(8))}
+              </button>
+            ) : (
+              <span key={`b${i}`} />
+            ),
+          )}
         </div>
         <PaintCanvas
           key={`${date}:${day?.color ?? ''}`}
