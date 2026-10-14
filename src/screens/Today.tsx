@@ -100,7 +100,8 @@ export function Chevron({ dir }: { dir: 'left' | 'right' }) {
         d={dir === 'left' ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'}
         fill="none"
         stroke="currentColor"
-        strokeWidth="2.6"
+        strokeWidth="2"
+        vectorEffect="non-scaling-stroke"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

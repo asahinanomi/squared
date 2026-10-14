@@ -12,6 +12,9 @@
 
   --font: 'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
   --gutter: 24px;
+  /* The one outline weight used everywhere (square, current day, palette, brush, icons).
+     Whole pixels only: browsers round box borders but not SVG strokes, so 2.5px would not match. */
+  --keyline: 2px;
 
   color-scheme: light;
   font-family: var(--font);
