@@ -59,6 +59,18 @@ Pleasant, muted shades; to be refined later.
 - No badges, streaks, counters, confetti, notifications or celebration of any kind. This is a reflection tool, not a productivity app.
 - An unpainted day stays blank. No guilt messages, no broken-streak warnings.
 
+## Capitalization
+
+| Kind of text | Style | Examples |
+|---|---|---|
+| Statements and questions the app says to you | Sentence case | "Did I spend today meaningfully?", "Meaningfully" sheet, "Delete this note?" |
+| Dates | Normal date capitals | "Wednesday, Oct 14th, 2026", "Wed, Oct 14, 2026 · 4:52 pm" |
+| Buttons and controls | all lowercase | continue with Google, add new note, hide older, update, delete, cancel |
+| Quiet helper and error text | all lowercase | why?, tap anywhere to skip, 3 notes, couldn't save, sign-in didn't finish |
+| The user's own notes | as typed | — |
+
+Proper names keep their capitals everywhere (Google, I).
+
 ## Data
 
 - A `days` table in Supabase: `date`, `color`, `note`, and a boolean for whether the square was painted on the day itself or backfilled later (set automatically).

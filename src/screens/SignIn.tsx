@@ -14,7 +14,7 @@ export function SignIn({ onSignIn, error }: { onSignIn: () => void; error?: stri
         </span>
         continue with Google
       </button>
-      {error && <p className="signin-error">Sign-in didn't finish: {error}</p>}
+      {error && <p className="signin-error">sign-in didn't finish: {error}</p>}
     </main>
   )
 }
