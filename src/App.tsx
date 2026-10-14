@@ -6,7 +6,7 @@ import { QUESTION } from './lib/config'
 import { todayIso } from './lib/dates'
 import { mockDays, type Day } from './lib/mock'
 import type { Paint } from './lib/paints'
-import { fetchQuestion, signInWithGoogle, supabase } from './lib/supabase'
+import { fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/supabase'
 import { Calendar } from './screens/Calendar'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
@@ -21,6 +21,7 @@ export default function App() {
   // undefined = still checking; null = signed out. Without Supabase env vars the app runs as a local demo.
   const [session, setSession] = useState<Session | null | undefined>(supabase ? undefined : null)
   const [demoIn, setDemoIn] = useState(previewWhy)
+  const [authError, setAuthError] = useState<string | null>(null)
   const [question, setQuestion] = useState(QUESTION)
   const [screen, setScreen] = useState<Screen>('today')
   const [date, setDate] = useState(todayIso)
@@ -47,8 +48,13 @@ export default function App() {
 
   useEffect(() => {
     if (!supabase) return
-    supabase.auth.getSession().then(({ data }) => setSession(data.session))
-    const { data } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
+    const sb = supabase
+    finishSignIn().then(async (err) => {
+      setAuthError(err)
+      const { data } = await sb.auth.getSession()
+      setSession(data.session)
+    })
+    const { data } = sb.auth.onAuthStateChange((_e, s) => setSession(s))
     return () => data.subscription.unsubscribe()
   }, [])
 
@@ -64,7 +70,7 @@ export default function App() {
   }, [signedIn, screen])
 
   if (session === undefined) return null
-  if (!signedIn) return <SignIn onSignIn={supabase ? signInWithGoogle : () => setDemoIn(true)} />
+  if (!signedIn) return <SignIn error={authError} onSignIn={supabase ? signInWithGoogle : () => setDemoIn(true)} />
 
   const signOut = () => {
     setScreen('today')

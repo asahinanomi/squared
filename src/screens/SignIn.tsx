@@ -1,7 +1,7 @@
 import { GoogleG } from '../components/GoogleG'
 import { Logo } from '../components/Logo'
 
-export function SignIn({ onSignIn }: { onSignIn: () => void }) {
+export function SignIn({ onSignIn, error }: { onSignIn: () => void; error?: string | null }) {
   return (
     <main className="signin">
       <Logo size={96} />
@@ -14,6 +14,7 @@ export function SignIn({ onSignIn }: { onSignIn: () => void }) {
         </span>
         continue with Google
       </button>
+      {error && <p className="signin-error">Sign-in didn't finish: {error}</p>}
     </main>
   )
 }

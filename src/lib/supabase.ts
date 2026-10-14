@@ -4,7 +4,7 @@ const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
 const key = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
 
 /** Null until the Supabase env vars are set; the app then runs in local demo mode. */
-export const supabase = url && key ? createClient(url, key, { auth: { flowType: 'pkce' } }) : null
+export const supabase = url && key ? createClient(url, key, { auth: { flowType: 'pkce', detectSessionInUrl: false } }) : null
 
 export async function signInWithGoogle() {
   if (!supabase) return
@@ -12,6 +12,27 @@ export async function signInWithGoogle() {
     provider: 'google',
     options: { redirectTo: window.location.origin },
   })
+}
+
+let finishing: Promise<string | null> | null = null
+
+/**
+ * Completes a Google redirect: trades the ?code for a session and cleans the URL.
+ * Returns a readable error when sign-in didn't finish. Runs once per page load.
+ */
+export function finishSignIn(): Promise<string | null> {
+  finishing ??= (async () => {
+    if (!supabase) return null
+    const params = new URLSearchParams(location.search)
+    const code = params.get('code')
+    const failed = params.get('error_description')
+    if (code || failed) history.replaceState(null, '', location.pathname)
+    if (failed) return failed
+    if (!code) return null
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    return error ? error.message : null
+  })()
+  return finishing
 }
 
 /** The question text, stored as a single configurable value. */
