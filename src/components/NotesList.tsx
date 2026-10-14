@@ -4,20 +4,53 @@ import { NoteCard } from './NoteCard'
 
 type Props = { notes: Note[]; onOpen: (n: Note) => void; onAdd: () => void }
 
-// A day's notes, oldest to newest. Earlier ones stay folded so the latest feeling leads.
+// Show/hide is remembered on this device (a convenience; fine if storage is unavailable).
+const KEY = 'squared.notesHidden'
+const readHidden = () => {
+  try {
+    return localStorage.getItem(KEY) === '1'
+  } catch {
+    return false
+  }
+}
+const writeHidden = (hidden: boolean) => {
+  try {
+    localStorage.setItem(KEY, hidden ? '1' : '0')
+  } catch {
+    /* ignore */
+  }
+}
+
+// A day's notes, all open, oldest to newest — with a clear way to tuck them away.
 export function NotesList({ notes, onOpen, onAdd }: Props) {
-  const [showEarlier, setShowEarlier] = useState(false)
-  const earlier = notes.slice(0, -1)
-  const latest = notes.at(-1)
+  const [hidden, setHidden] = useState(readHidden)
+  const toggle = () => {
+    writeHidden(!hidden)
+    setHidden(!hidden)
+  }
+  const count = `${notes.length} ${notes.length === 1 ? 'note' : 'notes'}`
   return (
     <div className="notes">
-      {earlier.length > 0 && (
-        <button className="note-earlier" onClick={() => setShowEarlier(!showEarlier)}>
-          {showEarlier ? 'hide earlier notes' : `${earlier.length} earlier ${earlier.length === 1 ? 'note' : 'notes'}`}
-        </button>
+      {notes.length > 0 && (
+        <div className="notes-head">
+          <span className="notes-count">{count}</span>
+          <button className="notes-toggle" onClick={toggle} aria-expanded={!hidden}>
+            {hidden ? 'show' : 'hide'}
+            <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d={hidden ? 'M6 9l6 6 6-6' : 'M6 15l6-6 6 6'}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+          </button>
+        </div>
       )}
-      {showEarlier && earlier.map((n) => <NoteCard key={n.id} note={n} onOpen={() => onOpen(n)} />)}
-      {latest && <NoteCard key={latest.id} note={latest} onOpen={() => onOpen(latest)} />}
+      {!hidden && notes.map((n) => <NoteCard key={n.id} note={n} onOpen={() => onOpen(n)} />)}
       <button className="note-add" onClick={onAdd}>
         add new note
       </button>

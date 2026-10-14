@@ -246,13 +246,25 @@
   align-items: center;
   gap: 12px;
 }
-.note-earlier {
-  font-size: 15px;
-  color: var(--ink-soft);
-  text-decoration: underline dotted var(--grey-3);
-  text-underline-offset: 4px;
-  padding: 4px 10px;
+.notes-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
 }
+.notes-count { font-size: 15px; color: var(--ink-soft); }
+.notes-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 15px;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 var(--keyline) var(--ink);
+}
+.notes-toggle:active { transform: scale(0.97); }
 .note-card {
   display: block;
   text-align: left;
@@ -273,15 +285,6 @@
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   cursor: pointer;
-}
-/* Long notes show their first four lines, fading out, until opened. */
-.note-card .note-text {
-  max-height: calc(19px * 1.5 * 4);
-  overflow: hidden;
-}
-.note-card.is-long .note-text {
-  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
-  mask-image: linear-gradient(to bottom, #000 60%, transparent);
 }
 .note-add {
   margin-top: 4px;
