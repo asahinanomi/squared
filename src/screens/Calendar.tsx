@@ -26,6 +26,7 @@ export function Calendar({ days, onPick }: Props) {
               key={iso}
               className={`cal-day ${state}` + (iso === today && day ? ' is-today' : '')}
               style={day ? { background: paintHex(day.color) } : undefined}
+              disabled={iso > today}
               onClick={() => onPick(iso)}
             >
               {Number(iso.slice(8))}

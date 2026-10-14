@@ -32,7 +32,7 @@ The UI in these screens should be kept; better treatments are welcome.
 - A square is painted by dragging across it with a finger (or mouse on desktop). The color follows the stroke, like real paint on paper.
 - One fixed medium brush size — no thickness picker. About two swipes should fill a square.
 - The brush can paint the full square. **Tapping a square to fill it instantly is NOT acceptable. Painting is the point.**
-- Any square can be painted at any time — no date restrictions.
+- Any past or present day can be painted at any time (backfilling is fine). Future days can't be painted — you can't reflect on a day that hasn't happened yet. (Changed from "no date restrictions" during v1 review.)
 - The palette itself must show which color is loaded (the picked well lifts or highlights), since a finger covers the square while painting.
 
 ## The three colors

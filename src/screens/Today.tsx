@@ -38,7 +38,7 @@ export function Today(props: Props) {
           <Chevron dir="left" />
         </button>
         <span className="day-label">{longDate(date)}</span>
-        <button aria-label="Next day" disabled={!sameMonth(next, today)} onClick={() => onDate(next)}>
+        <button aria-label="Next day" disabled={next > today} onClick={() => onDate(next)}>
           <Chevron dir="right" />
         </button>
       </div>
@@ -67,8 +67,8 @@ export function Today(props: Props) {
           <WhyBubble initial={day?.note} onDone={onWhyDone} />
         ) : (
           <>
-            {day && <NoteCard note={day.note} noteAt={day.noteAt} onEdit={onEditNote} />}
             <Palette loaded={loaded} nudge={nudge} onLoad={onLoad} />
+            {day && <NoteCard note={day.note} noteAt={day.noteAt} onEdit={onEditNote} />}
           </>
         )}
       </div>
