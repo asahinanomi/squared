@@ -246,6 +246,15 @@
   opacity: 0;
   transition: opacity 0.6s;
 }
+.whisper-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 8px;
+  border-radius: 50%;
+  vertical-align: 1px;
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
 .whisper.is-on { opacity: 1; transition-duration: 0.25s; }
 
 /* ---------- note under the square ---------- */

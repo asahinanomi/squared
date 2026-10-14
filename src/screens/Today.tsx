@@ -116,7 +116,12 @@ export function Today(props: Props) {
         <div className="tray-rest" hidden={!!why}>
           <Palette loaded={loaded} nudge={nudge} onLoad={dip} />
           <p className={'whisper' + (whispering ? ' is-on' : '')} aria-live="polite">
-            {whisper && PAINTS.find((x) => x.id === whisper.paint)!.meaning}
+            {whisper && (
+              <>
+                <span className="whisper-dot" style={{ background: paintHex(whisper.paint) }} />
+                {PAINTS.find((x) => x.id === whisper.paint)!.meaning}
+              </>
+            )}
           </p>
           {(day || notes.length > 0) && (
             <NotesList
