@@ -8,12 +8,12 @@ type Props = {
   onLoad: (p: Paint) => void
 }
 
-// Drawn to match the reference illustration (traced at 1/5 scale). Tap zones (r 26.5) stop just short of each other.
+// Drawn to match the reference illustration (traced at 1/5 scale). Tap zones (r 29) stop just short of each other.
 const R = 25
-const HIT = 26.5
+const HIT = 29
 const WELLS: Record<Paint, { x: number; y: number }> = {
-  green: { x: 112, y: 74 },
-  grey: { x: 102, y: 127 },
+  green: { x: 114, y: 70 },
+  grey: { x: 96, y: 132 },
   red: { x: 172, y: 100 },
 }
 
@@ -46,6 +46,31 @@ function arc(r: number, from: number, to: number) {
   return `M${p(from)}A${r} ${r} 0 0 1 ${p(to)}`
 }
 
+/** A closed, wobbly scoop shape: a circle of radius r whose edge wanders by a few fixed ripples. */
+function blob(r: number, ripples: [number, number, number][]) {
+  const n = 28
+  const pts = Array.from({ length: n }, (_, i) => {
+    const a = (i / n) * Math.PI * 2
+    const k = 1 + ripples.reduce((sum, [amp, freq, phase]) => sum + amp * Math.sin(freq * a + phase), 0)
+    return [r * k * Math.cos(a), r * k * Math.sin(a)]
+  })
+  // Catmull-Rom through the points, as cubic Béziers.
+  const f = (v: number) => v.toFixed(2)
+  let d = `M${f(pts[0][0])} ${f(pts[0][1])}`
+  for (let i = 0; i < n; i++) {
+    const [p0, p1, p2, p3] = [pts[(i - 1 + n) % n], pts[i], pts[(i + 1) % n], pts[(i + 2) % n]]
+    d += `C${f(p1[0] + (p2[0] - p0[0]) / 6)} ${f(p1[1] + (p2[1] - p0[1]) / 6)} ${f(p2[0] - (p3[0] - p1[0]) / 6)} ${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])} ${f(p2[1])}`
+  }
+  return d + 'Z'
+}
+
+// Each well's scoop has its own shape, so they don't look stamped.
+const SCOOPS: Record<Paint, string> = {
+  green: blob(11, [[0.1, 2, 0.4], [0.07, 3, 2.1], [0.04, 5, 1.3]]),
+  grey: blob(11, [[0.09, 2, 2.6], [0.08, 3, 0.7], [0.05, 4, 3.9]]),
+  red: blob(11, [[0.11, 2, 1.5], [0.06, 3, 4.2], [0.04, 5, 0.2]]),
+}
+
 export function Palette({ loaded, nudge, onLoad }: Props) {
   return (
     <svg
@@ -57,19 +82,18 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
       <defs>
         {PAINTS.map(({ id, hex }) => (
           <g key={id}>
-            {/* Domed wet paint, lit from the top-left; the rim darkens most at the bottom-right. */}
-            <radialGradient id={`pal-dome-${id}`} cx="0.5" cy="0.5" r="0.5" fx="0.4" fy="0.36">
-              <stop offset="0" stopColor={shade(hex, 0.14)} />
-              <stop offset="0.8" stopColor={hex} />
-              <stop offset="0.9" stopColor={shade(hex, -0.2)} />
-              <stop offset="1" stopColor={shade(hex, -0.24)} />
+            {/* The paint sits in a shallow bowl: its top-left wall in shadow, its bottom-right catching light. */}
+            <radialGradient id={`pal-bowl-${id}`} cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.64">
+              <stop offset="0" stopColor={shade(hex, 0.1)} />
+              <stop offset="0.65" stopColor={hex} />
+              <stop offset="1" stopColor={shade(hex, -0.36)} />
             </radialGradient>
-            {/* Pressed into a bowl: the top-left wall falls into shadow, the bottom-right catches light. */}
-            <radialGradient id={`pal-dent-${id}`} cx="0.5" cy="0.5" r="0.5" fx="0.62" fy="0.66">
-              <stop offset="0" stopColor={shade(hex, 0.06)} />
-              <stop offset="0.6" stopColor={shade(hex, -0.1)} />
-              <stop offset="1" stopColor={shade(hex, -0.42)} />
-            </radialGradient>
+            {/* Where the brush scooped: deeper, darkest under its top-left edge. */}
+            <linearGradient id={`pal-scoop-${id}`} x1="0.2" y1="0" x2="0.8" y2="1">
+              <stop offset="0" stopColor={shade(hex, -0.5)} />
+              <stop offset="0.55" stopColor={shade(hex, -0.2)} />
+              <stop offset="1" stopColor={shade(hex, 0.05)} />
+            </linearGradient>
             <linearGradient id={`pal-head-${id}`} x1="0.8" y1="0" x2="0.2" y2="1">
               <stop offset="0" stopColor={shade(hex, 0.12)} />
               <stop offset="1" stopColor={shade(hex, -0.12)} />
@@ -102,16 +126,13 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
             <g transform={`translate(${x} ${y})`}>
               <g className="well-body">
                 <circle className="well-ring" style={line} r={R + 4} />
-                <g className="well-dome">
-                  <circle r={R} fill={`url(#pal-dome-${id})`} />
-                  <path className="well-shine" d={arc(R * 0.7, 196, 248)} />
-                  <ellipse className="well-glint" cx={-3} cy={-17.5} rx={2.4} ry={1.3} transform="rotate(-18 -3 -17.5)" />
-                </g>
-                {/* Dipped: the whole well is scooped into a bowl. */}
-                <g className="well-dent">
-                  <circle r={R} fill={`url(#pal-dent-${id})`} />
-                  <path className="dent-shade" d={arc(R - 3.2, 150, 300)} />
-                  <path className="dent-lip" d={arc(R - 2.6, 5, 95)} />
+                <circle r={R} fill={`url(#pal-bowl-${id})`} />
+                <path className="bowl-shade" d={arc(R - 3.2, 150, 300)} />
+                <path className="bowl-lip" d={arc(R - 2.6, 5, 95)} />
+                {/* Dipped: the brush leaves an uneven scoop near the middle, with a lit ridge of pushed-up paint. */}
+                <g className="well-scoop">
+                  <path d={SCOOPS[id]} className="scoop-ridge" transform="translate(1.6 1.8) scale(1.1)" />
+                  <path d={SCOOPS[id]} fill={`url(#pal-scoop-${id})`} />
                 </g>
                 <circle className="well-edge" style={line} r={R} />
               </g>
