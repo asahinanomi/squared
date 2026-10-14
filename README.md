@@ -45,6 +45,8 @@ The UI in these screens should be kept; better treatments are welcome.
 
 Pleasant, muted shades; to be refined later.
 
+In the app the meanings read, in the owner's words: **green** "Conscious, and meaningful." · **grey** "It went by, and I don't know where." · **red** "Conscious, but spent poorly." They show in the "meaningfully" sheet, and as a quiet grey line under the palette each time a color is dipped (it fades after a few seconds, or as soon as painting starts).
+
 ## The why note
 
 - Once a square is filled, a small gentle bubble appears asking "why?". The note can be as long as needed, with paragraph breaks (up to 10,000 characters). (Was a single-line input; changed during v1 review.)

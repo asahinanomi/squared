@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { NotesList } from '../components/NotesList'
 import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
@@ -6,7 +7,7 @@ import { WhyBubble } from '../components/WhyBubble'
 import { addDays, longDate, monthCells, sameMonth, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note } from '../lib/notes'
-import { paintHex, type Paint } from '../lib/paints'
+import { PAINTS, paintHex, type Paint } from '../lib/paints'
 
 type Props = {
   question: string
@@ -37,6 +38,20 @@ export function Today(props: Props) {
   const next = addDays(date, 1)
   const day = days[date]
 
+  // On each dip, the color's meaning whispers under the palette, then fades (sooner if painting starts).
+  const [whisper, setWhisper] = useState<{ paint: Paint; at: number } | null>(null)
+  const [whispering, setWhispering] = useState(false)
+  useEffect(() => {
+    if (!whisper) return
+    setWhispering(true)
+    const t = setTimeout(() => setWhispering(false), 3500)
+    return () => clearTimeout(t)
+  }, [whisper])
+  const dip = (p: Paint) => {
+    onLoad(p)
+    setWhisper({ paint: p, at: Date.now() })
+  }
+
   // A tap just outside the square goes to the grid day underneath it.
   const tapGridDay = (x: number, y: number) => {
     const cell = document.elementsFromPoint(x, y).find((el) => el.classList.contains('ghost'))
@@ -56,7 +71,7 @@ export function Today(props: Props) {
         </button>
       </div>
 
-      <div className="easel">
+      <div className="easel" onPointerDown={() => setWhispering(false)}>
         {/* The month behind the square: tap a day to go to it (not future days). */}
         <div className="ghost-grid">
           {monthCells(date).map((iso, i) =>
@@ -99,7 +114,10 @@ export function Today(props: Props) {
         )}
         {/* Kept mounted (just hidden) while writing, so opened notes stay open afterwards. */}
         <div className="tray-rest" hidden={!!why}>
-          <Palette loaded={loaded} nudge={nudge} onLoad={onLoad} />
+          <Palette loaded={loaded} nudge={nudge} onLoad={dip} />
+          <p className={'whisper' + (whispering ? ' is-on' : '')} aria-live="polite">
+            {whisper && PAINTS.find((x) => x.id === whisper.paint)!.meaning}
+          </p>
           {(day || notes.length > 0) && (
             <NotesList
               key={date}
