@@ -1,23 +1,73 @@
-import { Logo } from './components/Logo'
+import { useEffect, useState } from 'react'
+import { MeaningSheet } from './components/MeaningSheet'
+import { Topbar } from './components/Topbar'
+import { QUESTION } from './lib/config'
+import { todayIso } from './lib/dates'
+import { mockDays, type Day } from './lib/mock'
+import type { Paint } from './lib/paints'
+import { Calendar } from './screens/Calendar'
+import { SignIn } from './screens/SignIn'
+import { Today } from './screens/Today'
 import './App.css'
 
-// Step 1 shell: app frame, type and background only. Screens arrive in step 2.
+type Screen = 'signin' | 'today' | 'calendar'
+
+// Step 2 preview: open with ?why to see the why bubble on a painted square.
+const previewWhy = new URLSearchParams(location.search).has('why')
+
 export default function App() {
+  const [screen, setScreen] = useState<Screen>(previewWhy ? 'today' : 'signin')
+  const [date, setDate] = useState(todayIso)
+  const [days, setDays] = useState<Record<string, Day>>(() =>
+    previewWhy ? { ...mockDays(), [todayIso()]: { color: 'green' } } : mockDays(),
+  )
+  const [loaded, setLoaded] = useState<Paint | null>(previewWhy ? 'green' : null)
+  const [defining, setDefining] = useState(false)
+  const [asking, setAsking] = useState(previewWhy)
+
+  useEffect(() => {
+    document.body.dataset.screen = screen
+  }, [screen])
+
+  if (screen === 'signin') return <SignIn onSignIn={() => setScreen('today')} />
+
+  const saveNote = (note: string) => {
+    setAsking(false)
+    setDays((d) => (d[date] ? { ...d, [date]: { ...d[date], note: note || undefined } } : d))
+  }
+
   return (
     <div className="app">
-      <header className="topbar">
-        <Logo />
-        <button className="menu-btn" aria-label="Menu">
-          <span />
-          <span />
-        </button>
-      </header>
-      <main className="stage">
-        <h1 className="wordmark">
-          squared<span>.today</span>
-        </h1>
-        <p className="note">step 1 — shell is alive</p>
-      </main>
+      <Topbar
+        onHome={() => {
+          setDate(todayIso())
+          setScreen('today')
+        }}
+        onCalendar={() => setScreen('calendar')}
+        onSignOut={() => setScreen('signin')}
+      />
+      {screen === 'today' ? (
+        <Today
+          question={QUESTION}
+          date={date}
+          days={days}
+          loaded={loaded}
+          showWhy={asking}
+          onDate={setDate}
+          onLoad={setLoaded}
+          onDefine={() => setDefining(true)}
+          onWhyDone={saveNote}
+        />
+      ) : (
+        <Calendar
+          days={days}
+          onPick={(iso) => {
+            setDate(iso)
+            setScreen('today')
+          }}
+        />
+      )}
+      <MeaningSheet open={defining} onClose={() => setDefining(false)} />
     </div>
   )
 }

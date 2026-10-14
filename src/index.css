@@ -1,17 +1,14 @@
 :root {
   /* Ink & paper — the only non-paint colors in the app. */
   --paper: #fafaf8;
+  --veil: #cacac5;
   --ink: #141413;
   --ink-soft: #3d3d3a;
-  --grey-1: #e6e6e2;
-  --grey-2: #c9c9c4;
+  --grey-1: #e3e3df;
+  --grey-2: #c4c4bf;
   --grey-3: #8f8f8a;
   --dot: #c8c8c3;
-
-  /* Paint — refined later. */
-  --paint-green: #6b9e7b;
-  --paint-grey: #a8a8a1;
-  --paint-red: #c4695f;
+  --bg: var(--paper);
 
   --font: 'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
   --gutter: 24px;
@@ -26,15 +23,21 @@
 
 * { box-sizing: border-box; }
 
-html, body, #root { height: 100%; margin: 0; }
+html, body, #root { min-height: 100%; margin: 0; }
+#root { min-height: 100dvh; display: flex; flex-direction: column; }
 
 body {
-  background-color: var(--paper);
+  background-color: var(--bg);
   background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px);
   background-size: 22px 22px;
   background-position: 11px 11px;
+  background-attachment: fixed;
   overscroll-behavior: none;
+  transition: background-color 0.3s;
 }
+
+/* The painting screen sits on a soft grey veil so the white square glows. */
+body[data-screen='today'] { --bg: var(--veil); --dot: #b2b2ac; }
 
 button {
   font: inherit;
@@ -44,3 +47,4 @@ button {
   padding: 0;
   cursor: pointer;
 }
+button:disabled { opacity: 0.2; cursor: default; }

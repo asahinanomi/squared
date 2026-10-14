@@ -1,0 +1,37 @@
+.palette {
+  width: min(62vw, 240px);
+  height: auto;
+  overflow: visible;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.palette-board {
+  fill: #ecece8;
+  stroke: var(--ink);
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+}
+
+.well { cursor: pointer; outline: none; }
+.well-hit { fill: transparent; }
+.well-ring { fill: none; stroke: var(--ink); stroke-width: 3; }
+.well-paint { stroke: var(--ink); stroke-width: 3; }
+.well-gloss { fill: #fff; opacity: 0.35; }
+.well-shadow { fill: var(--ink); opacity: 0; transition: opacity 0.2s; }
+
+.well-lift { transition: transform 0.22s cubic-bezier(0.3, 1.6, 0.5, 1); }
+.well-ring { opacity: 0; transition: opacity 0.2s; }
+
+/* Loaded well lifts off the board and gets an ink ring. */
+.well.is-loaded .well-lift { transform: translateY(-7px) scale(1.12); }
+.well.is-loaded .well-shadow { opacity: 0.18; }
+.well.is-loaded .well-ring { opacity: 1; stroke-width: 3; }
+.well.is-loaded .well-ring { r: 24px; }
+.well:focus-visible .well-ring { opacity: 1; }
+
+.brush-handle { fill: #8c8c87; stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; }
+.brush-ferrule { fill: #d9d9d4; stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; }
+.brush-tip { stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; transition: fill 0.25s; }
+.brush-hairs { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; opacity: 0.6; }
