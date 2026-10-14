@@ -234,12 +234,28 @@
 }
 
 .tray > * { pointer-events: auto; }
+.tray-rest { width: 100%; display: flex; flex-direction: column; align-items: center; }
+.tray-rest[hidden] { display: none; }
 
 /* ---------- note under the square ---------- */
+.notes {
+  width: min(100%, 360px);
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.note-earlier {
+  font-size: 15px;
+  color: var(--ink-soft);
+  text-decoration: underline dotted var(--grey-3);
+  text-underline-offset: 4px;
+  padding: 4px 10px;
+}
 .note-card {
   position: relative;
-  width: min(100%, 360px);
-  margin-top: 22px;
+  width: 100%;
   padding: 16px 20px;
   background: #fff;
   border-radius: 18px;
@@ -272,8 +288,7 @@
   text-underline-offset: 4px;
 }
 .note-add {
-  margin-top: 14px;
-  padding: 8px 14px;
+  padding: 6px 14px;
   font-size: 16px;
   color: var(--ink-soft);
   text-decoration: underline dotted var(--grey-3);
@@ -326,15 +341,22 @@
 }
 .why-input::placeholder { color: var(--grey-3); }
 .why-input:focus { border-bottom-color: var(--grey-3); }
-.why-done {
-  display: block;
-  margin: 14px 0 0 auto;
-  padding: 8px 18px;
+.why-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.why-done,
+.why-secondary {
+  padding: 9px 18px;
   border-radius: 999px;
-  background: var(--ink);
-  color: #fff;
   font-size: 16px;
 }
+.why-done { background: var(--ink); color: #fff; }
+.why-done:disabled { opacity: 0.35; }
+.why-secondary { box-shadow: inset 0 0 0 var(--keyline) var(--ink); color: var(--ink); }
 .why-skip { position: relative; z-index: 6; pointer-events: none; color: var(--ink-soft); font-size: 16px; margin: 18px 0 0; }
 @keyframes rise { from { opacity: 0; transform: translateY(10px) scale(0.97); } }
 

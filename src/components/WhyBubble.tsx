@@ -1,11 +1,18 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
-type Props = { initial?: string; onDone: (note: string) => void }
+type Props = {
+  /** Text to start from (when editing an existing note). */
+  initial?: string
+  /** Editing an existing note offers replace / add-as-new; otherwise a single "done". */
+  editing?: boolean
+  onAdd: (text: string) => void
+  onReplace?: (text: string) => void
+  onCancel: () => void
+}
 
 // Gentle "why?" bubble under the square. Write as much as you like; Enter makes a new line.
-// "done" or tapping anywhere outside keeps what's typed (or nothing).
-export function WhyBubble({ initial = '', onDone }: Props) {
-  const [note, setNote] = useState(initial)
+export function WhyBubble({ initial = '', editing = false, onAdd, onReplace, onCancel }: Props) {
+  const [text, setText] = useState(initial)
   const input = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -24,12 +31,15 @@ export function WhyBubble({ initial = '', onDone }: Props) {
     if (!el) return
     el.style.height = 'auto'
     el.style.height = `${el.scrollHeight}px`
-  }, [note])
+  }, [text])
 
-  const done = () => onDone(note.trim())
+  const value = text.trim()
+  // Outside tap: a new note keeps what's typed; an edit is simply left as it was.
+  const outside = editing ? onCancel : () => onAdd(value)
+
   return (
     <>
-      <div className="why-catcher" onClick={done} />
+      <div className="why-catcher" onClick={outside} />
       <div className="why">
         <label className="why-label" htmlFor="why">
           why?
@@ -41,14 +51,27 @@ export function WhyBubble({ initial = '', onDone }: Props) {
           placeholder="a line, or a page, or skip"
           maxLength={10000}
           rows={1}
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
         />
-        <button className="why-done" onClick={done}>
-          done
-        </button>
+        <div className="why-actions">
+          {editing ? (
+            <>
+              <button className="why-secondary" onClick={() => onReplace?.(value)}>
+                replace
+              </button>
+              <button className="why-done" onClick={() => onAdd(value)} disabled={!value}>
+                add new note
+              </button>
+            </>
+          ) : (
+            <button className="why-done" onClick={() => onAdd(value)}>
+              done
+            </button>
+          )}
+        </div>
       </div>
-      <p className="why-skip">tap anywhere to skip</p>
+      <p className="why-skip">{editing ? 'tap anywhere to leave it as it was' : 'tap anywhere to skip'}</p>
     </>
   )
 }

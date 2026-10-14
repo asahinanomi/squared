@@ -46,7 +46,8 @@ Pleasant, muted shades; to be refined later.
 ## The why note
 
 - Once a square is filled, a small gentle bubble appears asking "why?". The note can be as long as needed, with paragraph breaks (up to 10,000 characters). (Was a single-line input; changed during v1 review.)
-- The note shows under the palette: long notes show their first lines, tap to read all, then edit.
+- Notes keep a history: a day can hold several notes, each stamped with when it was written (stored in a `notes` table, migration 0004). They show under the palette oldest → newest; earlier ones are folded ("2 earlier notes") so the latest leads. Long notes show their first lines; tap to read all.
+- Editing a note offers **replace** (overwrite that note; its time becomes now; clearing it removes it) or **add new note** (keeps the old one and logs a new one stamped now). Tapping outside an edit leaves it as it was. Painting a day asks "why?" as a fresh note, and "add a note" is always available.
 - Easy to dismiss — tapping outside closes it; skipping is fine. Never required, never nagging.
 - Text only. No voice recording.
 

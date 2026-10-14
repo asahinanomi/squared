@@ -1,6 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react'
-
-type Props = { note?: string; noteAt?: string; onEdit: () => void }
+import type { Note } from '../lib/notes'
 
 /** "Oct 14 · 9:42 pm" */
 function stamp(iso: string) {
@@ -10,8 +9,8 @@ function stamp(iso: string) {
   return `${day} · ${time}`
 }
 
-// The day's "why?" under the palette. Long notes show their first lines; tap to read all.
-export function NoteCard({ note, noteAt, onEdit }: Props) {
+// One note, with when it was written. Long notes show their first lines; tap to read all.
+export function NoteCard({ note, onEdit }: { note: Note; onEdit: () => void }) {
   const text = useRef<HTMLParagraphElement>(null)
   const [open, setOpen] = useState(false)
   const [long, setLong] = useState(false)
@@ -19,27 +18,19 @@ export function NoteCard({ note, noteAt, onEdit }: Props) {
   useLayoutEffect(() => {
     const el = text.current
     if (el && !open) setLong(el.scrollHeight > el.clientHeight + 1)
-  }, [note, open])
-
-  if (!note)
-    return (
-      <button className="note-add" onClick={onEdit}>
-        add a note
-      </button>
-    )
+  }, [note.body, open])
 
   return (
     <div className={'note-card' + (open ? ' is-open' : '') + (long && !open ? ' is-long' : '')}>
-      {noteAt && <p className="note-stamp">{stamp(noteAt)}</p>}
+      <p className="note-stamp">{stamp(note.writtenAt)}</p>
       <p ref={text} className="note-text" onClick={() => (long && !open ? setOpen(true) : onEdit())}>
-        {note}
+        {note.body}
       </p>
-      {long && !open && (
+      {long && !open ? (
         <button className="note-more" onClick={() => setOpen(true)}>
           read all
         </button>
-      )}
-      {open && (
+      ) : (
         <button className="note-more" onClick={onEdit}>
           edit
         </button>

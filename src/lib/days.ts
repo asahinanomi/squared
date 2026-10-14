@@ -31,9 +31,3 @@ export async function saveColor(date: string, color: Paint): Promise<void> {
     .upsert({ date, color, time_zone: timeZone() }, { onConflict: 'user_id,date' })
   if (error) throw error
 }
-
-export async function saveNote(date: string, note: string | null): Promise<void> {
-  if (!supabase) return
-  const { error } = await supabase.from('days').update({ note }).eq('date', date)
-  if (error) throw error
-}

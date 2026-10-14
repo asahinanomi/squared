@@ -1,30 +1,36 @@
-import { NoteCard } from '../components/NoteCard'
+import { NotesList } from '../components/NotesList'
 import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { addDays, longDate, monthCells, sameMonth, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
+import type { Note } from '../lib/notes'
 import { paintHex, type Paint } from '../lib/paints'
 
 type Props = {
   question: string
   date: string
   days: Days
+  notes: Note[]
   loaded: Paint | null
-  showWhy: boolean
+  /** The open "why?" bubble: a new note, or an existing note being edited. */
+  why: { note?: Note } | null
   nudge: boolean
   onDate: (iso: string) => void
   onLoad: (p: Paint) => void
   onDefine: () => void
-  onWhyDone: (note: string) => void
-  onEditNote: () => void
+  onAddNote: (text: string) => void
+  onReplaceNote: (note: Note, text: string) => void
+  onCloseWhy: () => void
+  onOpenWhy: (note?: Note) => void
   onDryBrush: () => void
   onFilled: (p: Paint) => void
 }
 
 export function Today(props: Props) {
-  const { question, date, days, loaded, showWhy, nudge, onDate, onLoad, onDefine, onWhyDone, onEditNote, onDryBrush, onFilled } = props
+  const { question, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } = props
+  const { onAddNote, onReplaceNote, onCloseWhy, onOpenWhy } = props
   const today = todayIso()
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
@@ -80,14 +86,23 @@ export function Today(props: Props) {
       </div>
 
       <div className="tray">
-        {showWhy ? (
-          <WhyBubble initial={day?.note} onDone={onWhyDone} />
-        ) : (
-          <>
-            <Palette loaded={loaded} nudge={nudge} onLoad={onLoad} />
-            {day && <NoteCard key={date} note={day.note} noteAt={day.noteAt} onEdit={onEditNote} />}
-          </>
+        {why && (
+          <WhyBubble
+            key={why.note?.id ?? 'new'}
+            initial={why.note?.body}
+            editing={!!why.note}
+            onAdd={onAddNote}
+            onReplace={(text) => why.note && onReplaceNote(why.note, text)}
+            onCancel={onCloseWhy}
+          />
         )}
+        {/* Kept mounted (just hidden) while writing, so opened notes stay open afterwards. */}
+        <div className="tray-rest" hidden={!!why}>
+          <Palette loaded={loaded} nudge={nudge} onLoad={onLoad} />
+          {(day || notes.length > 0) && (
+            <NotesList key={date} notes={notes} onEdit={(n) => onOpenWhy(n)} onAdd={() => onOpenWhy()} />
+          )}
+        </div>
       </div>
     </main>
   )
