@@ -35,3 +35,9 @@
 .brush-ferrule { fill: #d9d9d4; stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; }
 .brush-tip { stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; transition: fill 0.25s; }
 .brush-hairs { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; opacity: 0.6; }
+
+.palette.is-nudging .well-lift { animation: nudge 0.5s ease-in-out; }
+@keyframes nudge {
+  25% { transform: translateY(-6px); }
+  55% { transform: translateY(1px); }
+}

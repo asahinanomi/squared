@@ -3,6 +3,8 @@ import './Palette.css'
 
 type Props = {
   loaded: Paint | null
+  /** Gentle wiggle when someone tries to paint with a clean brush. */
+  nudge?: boolean
   onLoad: (p: Paint) => void
 }
 
@@ -13,10 +15,10 @@ const WELLS: Record<Paint, { x: number; y: number }> = {
   red: { x: 92, y: 132 },
 }
 
-export function Palette({ loaded, onLoad }: Props) {
+export function Palette({ loaded, nudge, onLoad }: Props) {
   const tip = loaded ? paintHex(loaded) : '#f4f4f1'
   return (
-    <svg className="palette" viewBox="0 0 240 190" role="radiogroup" aria-label="Paint palette">
+    <svg className={'palette' + (nudge ? ' is-nudging' : '')} viewBox="0 0 240 190" role="radiogroup" aria-label="Paint palette">
       <path
         className="palette-board"
         d="M40 46C82 18 170 20 204 50C226 70 214 92 190 98C170 103 166 122 184 138C200 152 178 176 132 178C76 181 20 168 14 120C10 88 16 62 40 46Z"

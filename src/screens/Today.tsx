@@ -1,3 +1,4 @@
+import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
@@ -11,13 +12,17 @@ type Props = {
   days: Record<string, Day>
   loaded: Paint | null
   showWhy: boolean
+  nudge: boolean
   onDate: (iso: string) => void
   onLoad: (p: Paint) => void
   onDefine: () => void
   onWhyDone: (note: string) => void
+  onDryBrush: () => void
+  onFilled: (p: Paint) => void
 }
 
-export function Today({ question, date, days, loaded, showWhy, onDate, onLoad, onDefine, onWhyDone }: Props) {
+export function Today(props: Props) {
+  const { question, date, days, loaded, showWhy, nudge, onDate, onLoad, onDefine, onWhyDone, onDryBrush, onFilled } = props
   const today = todayIso()
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
@@ -46,15 +51,17 @@ export function Today({ question, date, days, loaded, showWhy, onDate, onLoad, o
             />
           ))}
         </div>
-        <div
-          className={'canvas' + (date === today ? ' is-today' : '')}
-          style={day ? { background: paintHex(day.color) } : undefined}
-          aria-label={day ? `Painted ${day.color}` : 'Unpainted'}
+        <PaintCanvas
+          key={`${date}:${day?.color ?? ''}`}
+          saved={day?.color}
+          loaded={loaded}
+          onDryBrush={onDryBrush}
+          onFilled={onFilled}
         />
       </div>
 
       <div className="tray">
-        {showWhy ? <WhyBubble initial={day?.note} onDone={onWhyDone} /> : <Palette loaded={loaded} onLoad={onLoad} />}
+        {showWhy ? <WhyBubble initial={day?.note} onDone={onWhyDone} /> : <Palette loaded={loaded} nudge={nudge} onLoad={onLoad} />}
       </div>
     </main>
   )

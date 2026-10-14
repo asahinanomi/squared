@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { MeaningSheet } from './components/MeaningSheet'
 import { Topbar } from './components/Topbar'
 import { QUESTION } from './lib/config'
@@ -24,6 +24,20 @@ export default function App() {
   const [loaded, setLoaded] = useState<Paint | null>(previewWhy ? 'green' : null)
   const [defining, setDefining] = useState(false)
   const [asking, setAsking] = useState(previewWhy)
+  const [nudge, setNudge] = useState(false)
+
+  const onFilled = useCallback(
+    (color: Paint) => {
+      setDays((d) => ({ ...d, [date]: { ...d[date], color } }))
+      setAsking(true)
+    },
+    [date],
+  )
+
+  const onDryBrush = () => {
+    setNudge(true)
+    setTimeout(() => setNudge(false), 520)
+  }
 
   useEffect(() => {
     document.body.dataset.screen = screen
@@ -53,10 +67,16 @@ export default function App() {
           days={days}
           loaded={loaded}
           showWhy={asking}
-          onDate={setDate}
+          nudge={nudge}
+          onDate={(iso) => {
+            setAsking(false)
+            setDate(iso)
+          }}
           onLoad={setLoaded}
           onDefine={() => setDefining(true)}
           onWhyDone={saveNote}
+          onDryBrush={onDryBrush}
+          onFilled={onFilled}
         />
       ) : (
         <Calendar
