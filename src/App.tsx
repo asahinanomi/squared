@@ -10,11 +10,12 @@ import { addNote, deleteNote, fetchMonthNotes, legacyNotes, replaceNote, type No
 import type { Paint } from './lib/paints'
 import { fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/supabase'
 import { Calendar } from './screens/Calendar'
+import { Idea } from './screens/Idea'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import './App.css'
 
-type Screen = 'today' | 'calendar'
+type Screen = 'today' | 'calendar' | 'idea'
 
 const byTime = (a: Note, b: Note) => a.writtenAt.localeCompare(b.writtenAt)
 
@@ -160,7 +161,12 @@ export default function App() {
 
   return (
     <div className="app">
-      <Topbar onHome={goToday} onCalendar={() => setScreen('calendar')} onSignOut={signOut} />
+      <Topbar
+        onHome={goToday}
+        onCalendar={() => setScreen('calendar')}
+        onIdea={() => setScreen('idea')}
+        onSignOut={signOut}
+      />
       {screen === 'today' ? (
         <Today
           question={question}
@@ -183,6 +189,8 @@ export default function App() {
           onDryBrush={onDryBrush}
           onFilled={onFilled}
         />
+      ) : screen === 'idea' ? (
+        <Idea />
       ) : (
         <Calendar
           days={days}

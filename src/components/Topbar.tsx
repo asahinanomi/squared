@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Logo } from './Logo'
 
-type Props = { onHome: () => void; onCalendar: () => void; onSignOut: () => void }
+type Props = { onHome: () => void; onCalendar: () => void; onIdea: () => void; onSignOut: () => void }
 
-export function Topbar({ onHome, onCalendar, onSignOut }: Props) {
+export function Topbar({ onHome, onCalendar, onIdea, onSignOut }: Props) {
   const [open, setOpen] = useState(false)
   const go = (fn: () => void) => () => {
     setOpen(false)
@@ -22,6 +22,7 @@ export function Topbar({ onHome, onCalendar, onSignOut }: Props) {
         <div className="menu-layer" onClick={() => setOpen(false)}>
           <nav className="menu" onClick={(e) => e.stopPropagation()}>
             <button onClick={go(onCalendar)}>calendar</button>
+            <button onClick={go(onIdea)}>the idea</button>
             <button onClick={go(onSignOut)}>sign out</button>
           </nav>
         </div>

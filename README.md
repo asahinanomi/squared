@@ -23,6 +23,8 @@ A quiet, minimal app where I paint one square per day with a color for how I spe
 4. **Why bubble** — after the square is filled, a white speech bubble pointing at the square: "why?" with a text box that grows as you write (paragraphs allowed) and a "done" button. Below it: "tap anywhere to skip".
 5. **Meaning sheet** — tapping the underlined "meaningful" opens a bottom sheet titled "Meaningfully": *Not a good day or a bad one. Not what you got done. A day is meaningful when you were aware of it, and spent it on what matters to you.* Followed by the three color definitions and a black "close" button.
 
+6. **The idea** — from the menu ("the idea"): a quiet page in the maker's words about why squared exists. Menu now holds: calendar, the idea, sign out.
+
 The UI in these screens should be kept; better treatments are welcome.
 
 ## The painting interaction (the most important part)
