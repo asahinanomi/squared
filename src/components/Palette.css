@@ -1,5 +1,5 @@
 .palette {
-  width: min(50vw, 192px);
+  width: min(52vw, 200px);
   height: auto;
   overflow: visible;
   touch-action: manipulation;
@@ -7,8 +7,8 @@
   -webkit-user-select: none;
 }
 
-.palette-shadow { fill: var(--ink); opacity: 0.08; }
 .palette-board {
+  fill: #f3f1e9;
   stroke: var(--ink);
   stroke-width: var(--keyline);
   stroke-linejoin: round;
@@ -16,39 +16,33 @@
 
 .well { cursor: pointer; outline: none; }
 .well-hit { fill: transparent; }
-.well-contact { fill: var(--ink); opacity: 0.1; }
-.well-paint { stroke: var(--ink); stroke-width: var(--keyline); }
-.well-gloss { fill: #fff; opacity: 0.6; transition: opacity 0.25s; }
-.well-glint { fill: #fff; opacity: 0.8; transition: opacity 0.25s; }
+.well-edge { fill: none; stroke: var(--ink); stroke-width: var(--keyline); }
+.well-shine { fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; opacity: 0.6; }
+.well-glint { fill: #fff; opacity: 0.75; }
 .well-ring { fill: none; stroke: var(--ink); stroke-width: var(--keyline); opacity: 0; }
 .well:focus-visible .well-ring { opacity: 1; }
 
-/* The dipped well shows a dent where the brush scooped paint out. */
-.well-dent {
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
-  scale: 0.4;
-  transition: opacity 0.2s, scale 0.28s cubic-bezier(0.3, 1.5, 0.5, 1);
-}
-.dent-shade { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; opacity: 0.3; }
-.dent-lip { fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; opacity: 0.65; }
-.well.is-loaded .well-dent { opacity: 1; scale: 1; }
-.well.is-loaded .well-gloss { opacity: 0.4; }
-.well.is-loaded .well-glint { opacity: 0; }
+/* Dipped: the dome gives way to a bowl, pressed in a touch. */
+.well-body { transform-box: fill-box; transform-origin: center; transition: scale 0.25s cubic-bezier(0.3, 1.5, 0.5, 1); }
+.well-dome, .well-dent { transition: opacity 0.25s; }
+.well-dent { opacity: 0; }
+.dent-shade { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linecap: round; opacity: 0.3; }
+.dent-lip { fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; opacity: 0.6; }
+.well.is-loaded .well-body { scale: 0.96; }
+.well.is-loaded .well-dome { opacity: 0; }
+.well.is-loaded .well-dent { opacity: 1; }
 
-.brush-handle { fill: url(#pal-handle); stroke: var(--ink); stroke-width: var(--keyline); stroke-linejoin: round; }
-.brush-shine { fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; opacity: 0.28; }
+.brush-handle { fill: #474746; stroke: var(--ink); stroke-width: var(--keyline); stroke-linejoin: round; }
+.brush-shine { fill: none; stroke: #8f8f8c; stroke-width: 3; stroke-linecap: round; }
 .brush-ferrule { fill: url(#pal-ferrule); stroke: var(--ink); stroke-width: var(--keyline); stroke-linejoin: round; }
-.brush-crimp { fill: none; stroke: var(--ink); stroke-width: 1; opacity: 0.3; }
+.brush-clean { fill: #faf9f5; }
 .brush-load { opacity: 0; transition: opacity 0.25s; }
 .brush-load.is-on { opacity: 1; }
-.brush-tip { fill: none; stroke: var(--ink); stroke-width: var(--keyline); stroke-linejoin: round; }
-.brush-hairs { fill: none; stroke: var(--ink); stroke-width: 1.2; stroke-linecap: round; opacity: 0.35; }
-.brush-wet { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; opacity: 0.35; }
+.brush-head { fill: none; stroke: var(--ink); stroke-width: var(--keyline); stroke-linejoin: round; }
+.brush-hairs { fill: none; stroke: var(--ink); stroke-width: 1; stroke-linecap: round; opacity: 0.45; }
 
 .palette.is-nudging .well-body { animation: nudge 0.5s ease-in-out; }
 @keyframes nudge {
-  25% { transform: translateY(-6px); }
-  55% { transform: translateY(1px); }
+  25% { translate: 0 -6px; }
+  55% { translate: 0 1px; }
 }
