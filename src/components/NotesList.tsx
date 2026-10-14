@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import type { Note } from '../lib/notes'
+import { ConfirmDialog } from './ConfirmDialog'
 import { NoteCard } from './NoteCard'
+import { SwipeRow } from './SwipeRow'
 
-type Props = { notes: Note[]; onOpen: (n: Note) => void; onAdd: () => void }
+type Props = { notes: Note[]; onOpen: (n: Note) => void; onAdd: () => void; onDelete: (n: Note) => Promise<void> }
 
 // Show/hide is remembered on this device (a convenience; fine if storage is unavailable).
 const KEY = 'squared.olderHidden'
@@ -22,8 +24,34 @@ const writeHidden = (hidden: boolean) => {
 }
 
 // A day's notes, oldest to newest. The latest always shows; older ones can be tucked away.
-export function NotesList({ notes, onOpen, onAdd }: Props) {
+export function NotesList({ notes, onOpen, onAdd, onDelete }: Props) {
   const [hidden, setHidden] = useState(readHidden)
+  // Only one row is swiped open at a time; deleting always asks first.
+  const [swiped, setSwiped] = useState<string | null>(null)
+  const [asking, setAsking] = useState<Note | null>(null)
+
+  const row = (n: Note) => (
+    <SwipeRow
+      key={n.id}
+      open={swiped === n.id}
+      onOpenChange={(o) => setSwiped(o ? n.id : null)}
+      onDelete={() => setAsking(n)}
+    >
+      <NoteCard note={n} onOpen={() => onOpen(n)} />
+    </SwipeRow>
+  )
+
+  const confirmDelete = async () => {
+    const n = asking
+    setAsking(null)
+    setSwiped(null)
+    if (!n) return
+    try {
+      await onDelete(n)
+    } catch (e) {
+      console.error(e) // the note simply stays
+    }
+  }
   const toggle = () => {
     writeHidden(!hidden)
     setHidden(!hidden)
@@ -53,11 +81,23 @@ export function NotesList({ notes, onOpen, onAdd }: Props) {
           )}
         </div>
       )}
-      {!hidden && older.map((n) => <NoteCard key={n.id} note={n} onOpen={() => onOpen(n)} />)}
-      {latest && <NoteCard key={latest.id} note={latest} onOpen={() => onOpen(latest)} />}
+      {!hidden && older.map(row)}
+      {latest && row(latest)}
       <button className="note-add" onClick={onAdd}>
         add new note
       </button>
+      {asking && (
+        <ConfirmDialog
+          title="Delete this note?"
+          body="It can't be undone."
+          confirm="delete"
+          onConfirm={confirmDelete}
+          onCancel={() => {
+            setAsking(null)
+            setSwiped(null)
+          }}
+        />
+      )}
     </div>
   )
 }

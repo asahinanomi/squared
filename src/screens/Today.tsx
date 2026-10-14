@@ -101,7 +101,13 @@ export function Today(props: Props) {
         <div className="tray-rest" hidden={!!why}>
           <Palette loaded={loaded} nudge={nudge} onLoad={onLoad} />
           {(day || notes.length > 0) && (
-            <NotesList key={date} notes={notes} onOpen={(n) => onOpenWhy(n)} onAdd={() => onOpenWhy()} />
+            <NotesList
+              key={date}
+              notes={notes}
+              onOpen={(n) => onOpenWhy(n)}
+              onAdd={() => onOpenWhy()}
+              onDelete={onDeleteNote}
+            />
           )}
         </div>
       </div>
