@@ -8,13 +8,13 @@ type Props = {
   onLoad: (p: Paint) => void
 }
 
-// Drawn to match the reference illustration (traced at 1/5 scale). Tap zones (r 29) stop just short of each other.
-const R = 25
-const HIT = 29
+// Drawn to match the reference illustration (traced at 1/5 scale). Tap zones (r 26) stop just short of each other.
+const R = 21
+const HIT = 26
 const WELLS: Record<Paint, { x: number; y: number }> = {
-  green: { x: 114, y: 70 },
-  grey: { x: 96, y: 132 },
-  red: { x: 172, y: 100 },
+  green: { x: 114, y: 72 },
+  grey: { x: 100, y: 124 },
+  red: { x: 170, y: 100 },
 }
 
 const BOARD =
@@ -46,7 +46,7 @@ function arc(r: number, from: number, to: number) {
   return `M${p(from)}A${r} ${r} 0 0 1 ${p(to)}`
 }
 
-/** A closed, wobbly scoop shape: a circle of radius r whose edge wanders by a few fixed ripples. */
+/** A closed, wobbly shape: a circle of radius r whose edge wanders by a few fixed ripples. */
 function blob(r: number, ripples: [number, number, number][]) {
   const n = 28
   const pts = Array.from({ length: n }, (_, i) => {
@@ -64,12 +64,27 @@ function blob(r: number, ripples: [number, number, number][]) {
   return d + 'Z'
 }
 
-// Each well's scoop has its own shape, so they don't look stamped.
-const SCOOPS: Record<Paint, string> = {
-  green: blob(11, [[0.1, 2, 0.4], [0.07, 3, 2.1], [0.04, 5, 1.3]]),
-  grey: blob(11, [[0.09, 2, 2.6], [0.08, 3, 0.7], [0.05, 4, 3.9]]),
-  red: blob(11, [[0.11, 2, 1.5], [0.06, 3, 4.2], [0.04, 5, 0.2]]),
+// Drops flicked onto the board around the dipped well, as [angle°, distance, radius]. Each well's set
+// avoids its neighbours and the brush.
+const SPLASH: Record<Paint, [number, number, number][]> = {
+  green: [[16, 27, 4.8], [44, 30, 3.2], [72, 28, 2.4], [-14, 31, 2], [30, 37, 1.4]],
+  grey: [[6, 27, 4.6], [36, 30, 3], [-24, 29, 2.2], [66, 29, 2], [16, 36, 1.4]],
+  red: [[104, 27, 4.6], [138, 29, 3.2], [164, 28, 2.1], [78, 30, 2.2], [120, 36, 1.4]],
 }
+const DROPS: Record<Paint, { x: number; y: number; r: number; d: string }[]> = Object.fromEntries(
+  (Object.keys(SPLASH) as Paint[]).map((id, w) => [
+    id,
+    SPLASH[id].map(([deg, dist, r], i) => {
+      const a = (deg * Math.PI) / 180
+      return {
+        x: dist * Math.cos(a),
+        y: dist * Math.sin(a),
+        r,
+        d: blob(r, [[0.12, 2, i + w], [0.07, 3, 2 * i + 1]]),
+      }
+    }),
+  ]),
+) as Record<Paint, { x: number; y: number; r: number; d: string }[]>
 
 export function Palette({ loaded, nudge, onLoad }: Props) {
   return (
@@ -88,12 +103,6 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
               <stop offset="0.65" stopColor={hex} />
               <stop offset="1" stopColor={shade(hex, -0.36)} />
             </radialGradient>
-            {/* Where the brush scooped: deeper, darkest under its top-left edge. */}
-            <linearGradient id={`pal-scoop-${id}`} x1="0.2" y1="0" x2="0.8" y2="1">
-              <stop offset="0" stopColor={shade(hex, -0.5)} />
-              <stop offset="0.55" stopColor={shade(hex, -0.2)} />
-              <stop offset="1" stopColor={shade(hex, 0.05)} />
-            </linearGradient>
             <linearGradient id={`pal-head-${id}`} x1="0.8" y1="0" x2="0.2" y2="1">
               <stop offset="0" stopColor={shade(hex, 0.12)} />
               <stop offset="1" stopColor={shade(hex, -0.12)} />
@@ -108,7 +117,7 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
 
       <path className="palette-board" style={line} d={BOARD} />
 
-      {PAINTS.map(({ id }) => {
+      {PAINTS.map(({ id, hex }) => {
         const { x, y } = WELLS[id]
         const on = loaded === id
         return (
@@ -129,10 +138,16 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
                 <circle r={R} fill={`url(#pal-bowl-${id})`} />
                 <path className="bowl-shade" d={arc(R - 3.2, 150, 300)} />
                 <path className="bowl-lip" d={arc(R - 2.6, 5, 95)} />
-                {/* Dipped: the brush leaves an uneven scoop near the middle, with a lit ridge of pushed-up paint. */}
-                <g className="well-scoop">
-                  <path d={SCOOPS[id]} className="scoop-ridge" transform="translate(1.6 1.8) scale(1.1)" />
-                  <path d={SCOOPS[id]} fill={`url(#pal-scoop-${id})`} />
+                {/* Dipped: a few drops of the color land on the board around the well. */}
+                <g className="well-splash">
+                  {DROPS[id].map((p, i) => (
+                    <g key={i} transform={`translate(${p.x.toFixed(2)} ${p.y.toFixed(2)})`}>
+                      <g className="drop" style={{ transitionDelay: `${i * 40}ms` }}>
+                        <path d={p.d} fill={hex} className="drop-paint" />
+                        <circle cx={-p.r * 0.35} cy={-p.r * 0.35} r={Math.max(0.5, p.r * 0.28)} className="drop-glint" />
+                      </g>
+                    </g>
+                  ))}
                 </g>
                 <circle className="well-edge" style={line} r={R} />
               </g>

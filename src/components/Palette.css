@@ -22,18 +22,17 @@
 .bowl-shade { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linecap: round; opacity: 0.3; }
 .bowl-lip { fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; opacity: 0.6; }
 
-/* Dipped: an uneven scoop appears where the brush took paint, and the well presses in a touch. */
-.well-body { transform-box: fill-box; transform-origin: center; transition: scale 0.25s cubic-bezier(0.3, 1.5, 0.5, 1); }
-.well.is-loaded .well-body { scale: 0.97; }
-.well-scoop {
+/* Dipped: drops of the color pop onto the board around the well. */
+.drop {
   opacity: 0;
-  scale: 0.3;
+  scale: 0;
   transform-box: fill-box;
   transform-origin: center;
-  transition: opacity 0.2s, scale 0.3s cubic-bezier(0.3, 1.5, 0.5, 1);
+  transition: opacity 0.15s, scale 0.3s cubic-bezier(0.3, 1.6, 0.5, 1);
 }
-.well.is-loaded .well-scoop { opacity: 1; scale: 1; }
-.scoop-ridge { fill: #fff; opacity: 0.5; }
+.well.is-loaded .drop { opacity: 1; scale: 1; }
+.drop-paint { stroke: var(--ink); stroke-width: 1.3; stroke-linejoin: round; }
+.drop-glint { fill: #fff; opacity: 0.7; }
 
 .brush-handle { fill: #474746; stroke: var(--ink); stroke-width: var(--keyline); stroke-linejoin: round; }
 .brush-shine { fill: none; stroke: #8f8f8c; stroke-width: 3; stroke-linecap: round; }

@@ -35,7 +35,7 @@ The UI in these screens should be kept; better treatments are welcome.
 - One fixed medium brush size — no thickness picker. About two swipes should fill a square.
 - The brush can paint the full square. **Tapping a square to fill it instantly is NOT acceptable. Painting is the point.**
 - Any past or present day can be painted at any time (backfilling is fine). Future days can't be painted — you can't reflect on a day that hasn't happened yet. (Changed from "no date restrictions" during v1 review.)
-- The palette itself must show which color is loaded, since a finger covers the square while painting: each well is a shallow bowl of paint; the dipped one gets an uneven scoop near its middle and the brush head fills with that color. The palette is drawn after the owner's reference illustration: cream board, three paint bowls, dark brush with a metal band resting in the thumb notch.
+- The palette itself must show which color is loaded, since a finger covers the square while painting: each well is a shallow bowl of paint; dipping flicks a few drops of that color onto the board around its well and fills the brush head with it. The palette is drawn after the owner's reference illustration: cream board, three paint bowls, dark brush with a metal band resting in the thumb notch.
 
 ## The three colors
 
