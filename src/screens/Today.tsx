@@ -20,8 +20,9 @@ type Props = {
   onDate: (iso: string) => void
   onLoad: (p: Paint) => void
   onDefine: () => void
-  onAddNote: (text: string) => void
-  onReplaceNote: (note: Note, text: string) => void
+  /** Saves a new note, or updates `note`; rejects with a readable message on failure. */
+  onSaveNote: (note: Note | undefined, text: string) => Promise<void>
+  onDeleteNote: (note: Note) => Promise<void>
   onCloseWhy: () => void
   onOpenWhy: (note?: Note) => void
   onDryBrush: () => void
@@ -30,7 +31,7 @@ type Props = {
 
 export function Today(props: Props) {
   const { question, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } = props
-  const { onAddNote, onReplaceNote, onCloseWhy, onOpenWhy } = props
+  const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy } = props
   const today = todayIso()
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
@@ -91,8 +92,8 @@ export function Today(props: Props) {
             key={why.note?.id ?? 'new'}
             initial={why.note?.body}
             editing={!!why.note}
-            onAdd={onAddNote}
-            onReplace={(text) => why.note && onReplaceNote(why.note, text)}
+            onSave={(text) => onSaveNote(why.note, text)}
+            onDelete={why.note ? () => onDeleteNote(why.note!) : undefined}
             onCancel={onCloseWhy}
           />
         )}
@@ -100,7 +101,7 @@ export function Today(props: Props) {
         <div className="tray-rest" hidden={!!why}>
           <Palette loaded={loaded} nudge={nudge} onLoad={onLoad} />
           {(day || notes.length > 0) && (
-            <NotesList key={date} notes={notes} onEdit={(n) => onOpenWhy(n)} onAdd={() => onOpenWhy()} />
+            <NotesList key={date} notes={notes} onOpen={(n) => onOpenWhy(n)} onAdd={() => onOpenWhy()} />
           )}
         </div>
       </div>

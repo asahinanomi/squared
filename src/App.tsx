@@ -97,45 +97,44 @@ export default function App() {
     [date],
   )
 
-  // Notes are optimistic too: shown at once, saved in the background, undone if saving fails.
+  // Notes save first, then close: the bubble waits, and keeps the text if saving fails.
   const putNotes = (day: string, fn: (list: Note[]) => Note[]) =>
-    setNotes((all) => ({ ...all, [day]: fn(all[day] ?? []) }))
+    setNotes((all) => ({ ...all, [day]: fn(all[day] ?? []).sort(byTime) }))
 
-  const onAddNote = (text: string) => {
-    setWhy(null)
-    if (!text) return
-    const day = date
-    const temp: Note = { id: `pending-${Date.now()}`, date: day, body: text, writtenAt: new Date().toISOString() }
-    putNotes(day, (l) => [...l, temp])
-    addNote(day, text)
-      .then((saved) => putNotes(day, (l) => l.map((n) => (n.id === temp.id ? saved : n))))
-      .catch((e) => {
-        console.error('Could not save note', e)
-        putNotes(day, (l) => l.filter((n) => n.id !== temp.id))
-      })
+  const failure = (e: unknown, verb: string) => {
+    console.error(`Could not ${verb} note`, e)
+    const code = (e as { code?: string })?.code
+    return new Error(
+      code === 'PGRST205' || code === '42P01'
+        ? `couldn't ${verb}: the notes update (0004) hasn't been run in Supabase yet`
+        : `couldn't ${verb}, check your connection and try again`,
+    )
   }
 
-  // Replace overwrites that note (clearing it removes it); its time becomes now.
-  const onReplaceNote = (note: Note, text: string) => {
-    setWhy(null)
-    if (text === note.body) return
-    const restore = () => putNotes(note.date, (l) => [...l.filter((n) => n.id !== note.id), note].sort(byTime))
-    if (!text) {
-      putNotes(note.date, (l) => l.filter((n) => n.id !== note.id))
-      deleteNote(note).catch((e) => {
-        console.error('Could not remove note', e)
-        restore()
-      })
-      return
+  const onSaveNote = async (note: Note | undefined, text: string) => {
+    try {
+      if (note) {
+        const saved = await replaceNote(note, text)
+        putNotes(note.date, (l) => l.map((n) => (n.id === note.id ? saved : n)))
+      } else {
+        const day = date
+        const saved = await addNote(day, text)
+        putNotes(day, (l) => [...l, saved])
+      }
+      setWhy(null)
+    } catch (e) {
+      throw failure(e, 'save')
     }
-    const draft = { ...note, body: text, writtenAt: new Date().toISOString() }
-    putNotes(note.date, (l) => [...l.filter((n) => n.id !== note.id), draft].sort(byTime))
-    replaceNote(note, text)
-      .then((saved) => putNotes(note.date, (l) => l.map((n) => (n.id === note.id ? saved : n)).sort(byTime)))
-      .catch((e) => {
-        console.error('Could not replace note', e)
-        restore()
-      })
+  }
+
+  const onDeleteNote = async (note: Note) => {
+    try {
+      await deleteNote(note)
+      putNotes(note.date, (l) => l.filter((n) => n.id !== note.id))
+      setWhy(null)
+    } catch (e) {
+      throw failure(e, 'delete')
+    }
   }
 
   const onDryBrush = () => {
@@ -177,8 +176,8 @@ export default function App() {
           }}
           onLoad={setLoaded}
           onDefine={() => setDefining(true)}
-          onAddNote={onAddNote}
-          onReplaceNote={onReplaceNote}
+          onSaveNote={onSaveNote}
+          onDeleteNote={onDeleteNote}
           onCloseWhy={() => setWhy(null)}
           onOpenWhy={(note) => setWhy({ note })}
           onDryBrush={onDryBrush}

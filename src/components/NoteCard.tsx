@@ -9,32 +9,22 @@ function stamp(iso: string) {
   return `${day} · ${time}`
 }
 
-// One note, with when it was written. Long notes show their first lines; tap to read all.
-export function NoteCard({ note, onEdit }: { note: Note; onEdit: () => void }) {
+// One note with when it was written. Long notes show their first lines; tap the card to open it.
+export function NoteCard({ note, onOpen }: { note: Note; onOpen: () => void }) {
   const text = useRef<HTMLParagraphElement>(null)
-  const [open, setOpen] = useState(false)
   const [long, setLong] = useState(false)
 
   useLayoutEffect(() => {
     const el = text.current
-    if (el && !open) setLong(el.scrollHeight > el.clientHeight + 1)
-  }, [note.body, open])
+    if (el) setLong(el.scrollHeight > el.clientHeight + 1)
+  }, [note.body])
 
   return (
-    <div className={'note-card' + (open ? ' is-open' : '') + (long && !open ? ' is-long' : '')}>
-      <p className="note-stamp">{stamp(note.writtenAt)}</p>
-      <p ref={text} className="note-text" onClick={() => (long && !open ? setOpen(true) : onEdit())}>
+    <button className={'note-card' + (long ? ' is-long' : '')} onClick={onOpen} aria-label="Open note">
+      <span className="note-stamp">{stamp(note.writtenAt)}</span>
+      <span ref={text} className="note-text">
         {note.body}
-      </p>
-      {long && !open ? (
-        <button className="note-more" onClick={() => setOpen(true)}>
-          read all
-        </button>
-      ) : (
-        <button className="note-more" onClick={onEdit}>
-          edit
-        </button>
-      )}
-    </div>
+      </span>
+    </button>
   )
 }
