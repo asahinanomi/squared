@@ -15,6 +15,7 @@ export function Idea() {
         One square, one day. We don’t get as many as we think. This just helps me pay attention — and spend the next one
         a little better.
       </p>
+      <p>I hope it helps you too.</p>
     </main>
   )
 }
