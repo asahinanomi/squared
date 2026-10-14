@@ -172,7 +172,7 @@
 .canvas {
   position: relative;
   z-index: 1;
-  width: min(56vw, 250px);
+  width: min(46vw, 180px);
   aspect-ratio: 1;
   background: #fff;
   border: 3px solid var(--ink);
@@ -208,11 +208,36 @@
 
 .tray {
   width: 100%;
-  min-height: 200px;
+  min-height: 170px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 18px;
+}
+
+/* ---------- note under the square ---------- */
+.note-card {
+  width: min(100%, 340px);
+  margin-bottom: 18px;
+  padding: 14px 20px 16px;
+  background: #fff;
+  border-radius: 18px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: rise 0.25s ease-out;
+}
+.note-card:active { transform: scale(0.99); }
+.note-stamp { font-size: 14px; color: var(--ink-soft); letter-spacing: 0.01em; }
+.note-text { font-size: 20px; line-height: 1.4; color: var(--ink); overflow-wrap: anywhere; }
+.note-add {
+  margin-bottom: 14px;
+  padding: 8px 14px;
+  font-size: 16px;
+  color: var(--ink-soft);
+  text-decoration: underline dotted var(--grey-3);
+  text-underline-offset: 5px;
 }
 
 /* ---------- why bubble ---------- */

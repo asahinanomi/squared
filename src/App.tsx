@@ -91,10 +91,11 @@ export default function App() {
     const note = text || undefined
     const day = days[date]
     if (!day || day.note === note) return
-    setDays((d) => ({ ...d, [date]: { ...d[date], note } }))
+    const noteAt = note ? new Date().toISOString() : undefined
+    setDays((d) => ({ ...d, [date]: { ...d[date], note, noteAt } }))
     saveNote(date, note ?? null).catch((e) => {
       console.error('Could not save note', e)
-      setDays((d) => ({ ...d, [date]: { ...d[date], note: day.note } }))
+      setDays((d) => ({ ...d, [date]: { ...d[date], note: day.note, noteAt: day.noteAt } }))
     })
   }
 
@@ -137,6 +138,7 @@ export default function App() {
           onLoad={setLoaded}
           onDefine={() => setDefining(true)}
           onWhyDone={onWhyDone}
+          onEditNote={() => setAsking(true)}
           onDryBrush={onDryBrush}
           onFilled={onFilled}
         />

@@ -1,3 +1,4 @@
+import { NoteCard } from '../components/NoteCard'
 import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
@@ -17,12 +18,13 @@ type Props = {
   onLoad: (p: Paint) => void
   onDefine: () => void
   onWhyDone: (note: string) => void
+  onEditNote: () => void
   onDryBrush: () => void
   onFilled: (p: Paint) => void
 }
 
 export function Today(props: Props) {
-  const { question, date, days, loaded, showWhy, nudge, onDate, onLoad, onDefine, onWhyDone, onDryBrush, onFilled } = props
+  const { question, date, days, loaded, showWhy, nudge, onDate, onLoad, onDefine, onWhyDone, onEditNote, onDryBrush, onFilled } = props
   const today = todayIso()
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
@@ -61,7 +63,14 @@ export function Today(props: Props) {
       </div>
 
       <div className="tray">
-        {showWhy ? <WhyBubble initial={day?.note} onDone={onWhyDone} /> : <Palette loaded={loaded} nudge={nudge} onLoad={onLoad} />}
+        {showWhy ? (
+          <WhyBubble initial={day?.note} onDone={onWhyDone} />
+        ) : (
+          <>
+            {day && <NoteCard note={day.note} noteAt={day.noteAt} onEdit={onEditNote} />}
+            <Palette loaded={loaded} nudge={nudge} onLoad={onLoad} />
+          </>
+        )}
       </div>
     </main>
   )
