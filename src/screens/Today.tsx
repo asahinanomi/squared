@@ -3,13 +3,13 @@ import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { addDays, longDate, monthCells, sameMonth, todayIso } from '../lib/dates'
-import type { Day } from '../lib/mock'
+import type { Days } from '../lib/days'
 import { paintHex, type Paint } from '../lib/paints'
 
 type Props = {
   question: string
   date: string
-  days: Record<string, Day>
+  days: Days
   loaded: Paint | null
   showWhy: boolean
   nudge: boolean

@@ -4,7 +4,8 @@ import { MeaningSheet } from './components/MeaningSheet'
 import { Topbar } from './components/Topbar'
 import { QUESTION } from './lib/config'
 import { todayIso } from './lib/dates'
-import { mockDays, type Day } from './lib/mock'
+import { fetchMonth, saveColor, saveNote, type Days } from './lib/days'
+import { mockDays } from './lib/mock'
 import type { Paint } from './lib/paints'
 import { fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/supabase'
 import { Calendar } from './screens/Calendar'
@@ -14,37 +15,22 @@ import './App.css'
 
 type Screen = 'today' | 'calendar'
 
-// Step 2 preview: open with ?why to see the why bubble on a painted square.
-const previewWhy = new URLSearchParams(location.search).has('why')
+// Without Supabase env vars the app runs as a local demo: no sign-in, fake days, nothing saved.
+const demo = !supabase
 
 export default function App() {
-  // undefined = still checking; null = signed out. Without Supabase env vars the app runs as a local demo.
-  const [session, setSession] = useState<Session | null | undefined>(supabase ? undefined : null)
-  const [demoIn, setDemoIn] = useState(previewWhy)
+  // undefined = still checking; null = signed out.
+  const [session, setSession] = useState<Session | null | undefined>(demo ? null : undefined)
+  const [demoIn, setDemoIn] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
   const [question, setQuestion] = useState(QUESTION)
   const [screen, setScreen] = useState<Screen>('today')
   const [date, setDate] = useState(todayIso)
-  const [days, setDays] = useState<Record<string, Day>>(() =>
-    previewWhy ? { ...mockDays(), [todayIso()]: { color: 'green' } } : mockDays(),
-  )
-  const [loaded, setLoaded] = useState<Paint | null>(previewWhy ? 'green' : null)
+  const [days, setDays] = useState<Days>(() => (demo ? mockDays() : {}))
+  const [loaded, setLoaded] = useState<Paint | null>(null)
   const [defining, setDefining] = useState(false)
-  const [asking, setAsking] = useState(previewWhy)
+  const [asking, setAsking] = useState(false)
   const [nudge, setNudge] = useState(false)
-
-  const onFilled = useCallback(
-    (color: Paint) => {
-      setDays((d) => ({ ...d, [date]: { ...d[date], color } }))
-      setAsking(true)
-    },
-    [date],
-  )
-
-  const onDryBrush = () => {
-    setNudge(true)
-    setTimeout(() => setNudge(false), 520)
-  }
 
   useEffect(() => {
     if (!supabase) return
@@ -58,42 +44,84 @@ export default function App() {
     return () => data.subscription.unsubscribe()
   }, [])
 
-  const signedIn = supabase ? !!session : demoIn
   const userId = session?.user.id
+  const signedIn = demo ? demoIn : !!userId
 
+  // Load the question and this month's squares for whoever is signed in.
   useEffect(() => {
-    if (userId) fetchQuestion().then((q) => q && setQuestion(q))
+    if (!userId) {
+      if (!demo) setDays({})
+      return
+    }
+    fetchQuestion().then((q) => q && setQuestion(q))
+    fetchMonth(todayIso())
+      .then(setDays)
+      .catch((e) => console.error('Could not load days', e))
   }, [userId])
 
   useEffect(() => {
     document.body.dataset.screen = signedIn ? screen : 'signin'
   }, [signedIn, screen])
 
+  // Optimistic: show the paint at once, save in the background, roll back if it fails.
+  const onFilled = useCallback(
+    (color: Paint) => {
+      setAsking(true)
+      let before: Days[string]
+      setDays((d) => {
+        before = d[date]
+        return { ...d, [date]: { ...d[date], color } }
+      })
+      saveColor(date, color).catch((e) => {
+        console.error('Could not save color', e)
+        setAsking(false)
+        setDays((d) => {
+          const next = { ...d }
+          if (before) next[date] = before
+          else delete next[date]
+          return next
+        })
+      })
+    },
+    [date],
+  )
+
+  const onWhyDone = (text: string) => {
+    setAsking(false)
+    const note = text || undefined
+    const day = days[date]
+    if (!day || day.note === note) return
+    setDays((d) => ({ ...d, [date]: { ...d[date], note } }))
+    saveNote(date, note ?? null).catch((e) => {
+      console.error('Could not save note', e)
+      setDays((d) => ({ ...d, [date]: { ...d[date], note: day.note } }))
+    })
+  }
+
+  const onDryBrush = () => {
+    setNudge(true)
+    setTimeout(() => setNudge(false), 520)
+  }
+
   if (session === undefined) return null
-  if (!signedIn) return <SignIn error={authError} onSignIn={supabase ? signInWithGoogle : () => setDemoIn(true)} />
+  if (!signedIn) return <SignIn error={authError} onSignIn={demo ? () => setDemoIn(true) : signInWithGoogle} />
+
+  const goToday = () => {
+    setDate(todayIso())
+    setScreen('today')
+  }
 
   const signOut = () => {
-    setScreen('today')
-    setDate(todayIso())
+    goToday()
+    setAsking(false)
+    setLoaded(null)
     if (supabase) supabase.auth.signOut()
     else setDemoIn(false)
   }
 
-  const saveNote = (note: string) => {
-    setAsking(false)
-    setDays((d) => (d[date] ? { ...d, [date]: { ...d[date], note: note || undefined } } : d))
-  }
-
   return (
     <div className="app">
-      <Topbar
-        onHome={() => {
-          setDate(todayIso())
-          setScreen('today')
-        }}
-        onCalendar={() => setScreen('calendar')}
-        onSignOut={signOut}
-      />
+      <Topbar onHome={goToday} onCalendar={() => setScreen('calendar')} onSignOut={signOut} />
       {screen === 'today' ? (
         <Today
           question={question}
@@ -108,7 +136,7 @@ export default function App() {
           }}
           onLoad={setLoaded}
           onDefine={() => setDefining(true)}
-          onWhyDone={saveNote}
+          onWhyDone={onWhyDone}
           onDryBrush={onDryBrush}
           onFilled={onFilled}
         />

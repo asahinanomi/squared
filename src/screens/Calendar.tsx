@@ -1,8 +1,8 @@
 import { monthCells, monthTitle, todayIso } from '../lib/dates'
-import type { Day } from '../lib/mock'
+import type { Days } from '../lib/days'
 import { paintHex } from '../lib/paints'
 
-type Props = { days: Record<string, Day>; onPick: (iso: string) => void }
+type Props = { days: Days; onPick: (iso: string) => void }
 
 const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 

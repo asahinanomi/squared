@@ -35,7 +35,8 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled }: Props) {
   useEffect(() => {
     const el = box.current!
     const fit = () => {
-      const c = canvas.current!
+      const c = canvas.current
+      if (!c) return
       const s = el.clientWidth
       const dpr = window.devicePixelRatio || 1
       size.current = s
