@@ -19,7 +19,7 @@ A quiet, minimal app where I paint one square per day with a color for how I spe
 
 1. **Sign in** — dotted-grid background, logo mark (rounded square with a paint wave), wordmark `squared` + grey `.today`, a black pill button "continue with Google" (Google's official G mark goes in the circle).
 2. **Today / paint** — logo top-left, hamburger top-right. Question "Was it meaningful?" with a dotted underline on "meaningful", big "today" below it, then `‹ Monday, Oct 12th, 2026 ›` day navigation. One large square to paint in the center; the month grid is faintly visible behind it. A paint palette (three wells + brush) sits under the square.
-3. **Month calendar** — `‹ October 2026 ›`, M–S weekday header, painted days filled with their color, today outlined in black, past unpainted days dashed, future days light grey. Hint: "tap a day to paint it".
+3. **Month calendar** — `‹ October 2026 ›`, M–S weekday header, painted days filled with their color, today outlined in black, past unpainted days dashed, future days light grey. Each day shows its number with a tiny weekday ("Wed") under it. Hint: "tap a day to paint it".
 4. **Why bubble** — after the square is filled, a white speech bubble pointing at the square: "why?" with a text box that grows as you write (paragraphs allowed) and a "done" button. Below it: "tap anywhere to skip".
 5. **Meaning sheet** — tapping the underlined "meaningful" opens a bottom sheet titled "Meaningfully": *Not a good day or a bad one. Not what you got done. A day is meaningful when you were aware of it, and spent it on what matters to you.* Followed by the three color definitions and a black "close" button.
 

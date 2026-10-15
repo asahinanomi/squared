@@ -465,6 +465,9 @@
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
+.cal-day { display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+.cal-num { font-size: clamp(18px, 5.4vw, 25px); }
+.cal-wd { margin-top: 2px; font-size: 9px; font-weight: 500; letter-spacing: 0.02em; opacity: 0.6; }
 .cal-day:active { transform: scale(0.94); }
 .cal-day.is-painted { color: var(--ink); }
 .cal-day.is-today { background: #fff; box-shadow: inset 0 0 0 var(--keyline) var(--ink); }
