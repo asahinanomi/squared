@@ -3,7 +3,7 @@ import './Palette.css'
 
 type Props = {
   loaded: Paint | null
-  /** Gentle wiggle when someone tries to paint with a clean brush. */
+  /** The wells hop one after another when someone tries to paint with a clean brush. */
   nudge?: boolean
   onLoad: (p: Paint) => void
 }
@@ -136,7 +136,7 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
 
       <path className="palette-board" style={line} d={BOARD} />
 
-      {PAINTS.map(({ id, hex }) => {
+      {PAINTS.map(({ id, hex }, n) => {
         const { x, y } = WELLS[id]
         const on = loaded === id
         return (
@@ -152,7 +152,7 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
           >
             <circle className="well-hit" cx={x} cy={y} r={HIT} />
             <g transform={`translate(${x} ${y})`}>
-              <g className="well-body">
+              <g className="well-body" style={{ animationDelay: `${n * 120}ms` }}>
                 <circle className="well-ring" style={line} r={R + 4} />
                 <circle r={R} fill={`url(#pal-bowl-${id})`} />
                 <path className="bowl-shade" d={arc(R - 3.2, 150, 300)} />

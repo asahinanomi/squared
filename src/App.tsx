@@ -140,7 +140,7 @@ export default function App() {
 
   const onDryBrush = () => {
     setNudge(true)
-    setTimeout(() => setNudge(false), 520)
+    setTimeout(() => setNudge(false), 750)
   }
 
   if (session === undefined) return null

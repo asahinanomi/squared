@@ -56,8 +56,8 @@
 .brush-head { fill: none; stroke: var(--ink); stroke-width: var(--keyline); stroke-linejoin: round; }
 .brush-hairs { fill: none; stroke: var(--ink); stroke-width: 1; stroke-linecap: round; opacity: 0.45; }
 
-.palette.is-nudging .well-body { animation: nudge 0.5s ease-in-out; }
+.palette.is-nudging .well-body { animation: nudge 0.45s ease-in-out both; }
 @keyframes nudge {
-  25% { translate: 0 -6px; }
-  55% { translate: 0 1px; }
+  35% { translate: 0 -7px; }
+  70% { translate: 0 1px; }
 }
