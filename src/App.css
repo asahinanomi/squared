@@ -163,16 +163,20 @@
 }
 .ghost {
   aspect-ratio: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
   border-radius: 7px;
   border: 1.5px solid rgba(20, 20, 19, 0.07);
   pointer-events: auto;
-  display: grid;
-  place-items: center;
+  display: flex;
   font-size: 15px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   color: rgba(20, 20, 19, 0.38);
 }
+.ghost-wd { margin-top: 2px; font-size: 8px; letter-spacing: 0.02em; opacity: 0.75; }
 .ghost.is-painted { border-color: transparent; color: rgba(20, 20, 19, 0.5); }
 .ghost.is-current { border-color: var(--ink); border-width: var(--keyline); color: var(--ink); }
 .ghost:disabled { opacity: 1; color: rgba(20, 20, 19, 0.16); }

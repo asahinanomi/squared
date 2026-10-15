@@ -4,7 +4,7 @@ import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
-import { addDays, longDate, monthCells, sameMonth, todayIso } from '../lib/dates'
+import { addDays, longDate, monthCells, sameMonth, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
@@ -85,6 +85,7 @@ export function Today(props: Props) {
                 onClick={() => onDate(iso)}
               >
                 {Number(iso.slice(8))}
+                <span className="ghost-wd">{shortWeekday(iso)}</span>
               </button>
             ) : (
               <span key={`b${i}`} />

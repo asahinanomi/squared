@@ -1,11 +1,10 @@
-import { monthCells, monthTitle, todayIso } from '../lib/dates'
+import { monthCells, monthTitle, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { paintHex } from '../lib/paints'
 
 type Props = { days: Days; onPick: (iso: string) => void }
 
 const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-const SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 export function Calendar({ days, onPick }: Props) {
   const today = todayIso()
@@ -32,7 +31,7 @@ export function Calendar({ days, onPick }: Props) {
             >
               <span className="cal-num">{Number(iso.slice(8))}</span>
               {/* Tiny weekday, for finding a date at a glance (or a zoom). */}
-              <span className="cal-wd">{SHORT[new Date(iso + 'T12:00').getDay()]}</span>
+              <span className="cal-wd">{shortWeekday(iso)}</span>
             </button>
           )
         })}

@@ -48,3 +48,7 @@ export function monthCells(iso: string): (string | null)[] {
   for (let i = 1; i <= days; i++) cells.push(isoDate(new Date(d.getFullYear(), d.getMonth(), i)))
   return cells
 }
+
+/** "Wed" for an ISO date. */
+export const shortWeekday = (iso: string) =>
+  ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][new Date(iso + 'T12:00').getDay()]
