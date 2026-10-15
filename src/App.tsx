@@ -6,7 +6,7 @@ import { QUESTION } from './lib/config'
 import { todayIso } from './lib/dates'
 import { fetchMonth, saveColor, type Days } from './lib/days'
 import { mockDays } from './lib/mock'
-import { addNote, deleteNote, fetchMonthNotes, legacyNotes, replaceNote, type Note, type Notes } from './lib/notes'
+import { addNote, deleteNote, draftNote, fetchMonthNotes, legacyNotes, replaceNote, type Note, type Notes, type Why } from './lib/notes'
 import type { Paint } from './lib/paints'
 import { fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/supabase'
 import { Calendar } from './screens/Calendar'
@@ -35,7 +35,7 @@ export default function App() {
   const [defining, setDefining] = useState(false)
   const [notes, setNotes] = useState<Notes>({})
   // The open "why?" bubble: a new note ({}), or an existing note being edited.
-  const [why, setWhy] = useState<{ note?: Note } | null>(null)
+  const [why, setWhy] = useState<Why | null>(null)
   const [nudge, setNudge] = useState(false)
 
   useEffect(() => {
@@ -98,43 +98,56 @@ export default function App() {
     [date],
   )
 
-  // Notes save first, then close: the bubble waits, and keeps the text if saving fails.
+  // Notes save instantly: the change shows at once and saves in the background. If saving fails,
+  // it's undone and the box reopens on that day with the text and a quiet message.
   const putNotes = (day: string, fn: (list: Note[]) => Note[]) =>
     setNotes((all) => ({ ...all, [day]: fn(all[day] ?? []).sort(byTime) }))
+  const swap = (day: string, id: string, to: Note) => putNotes(day, (l) => l.map((n) => (n.id === id ? to : n)))
 
   const failure = (e: unknown, verb: string) => {
     console.error(`Could not ${verb} note`, e)
     const code = (e as { code?: string })?.code
-    return new Error(
-      code === 'PGRST205' || code === '42P01'
-        ? `couldn't ${verb}: the notes update (0004) hasn't been run in Supabase yet`
-        : `couldn't ${verb}, check your connection and try again`,
-    )
+    return code === 'PGRST205' || code === '42P01'
+      ? `couldn't ${verb}: the notes update (0004) hasn't been run in Supabase yet`
+      : `couldn't ${verb}, check your connection and try again`
+  }
+
+  const reopen = (day: string, w: Why) => {
+    setDate(day)
+    setScreen('today')
+    setWhy({ ...w, n: Date.now() })
   }
 
   const onSaveNote = async (note: Note | undefined, text: string) => {
-    try {
-      if (note) {
-        const saved = await replaceNote(note, text)
-        putNotes(note.date, (l) => l.map((n) => (n.id === note.id ? saved : n)))
-      } else {
-        const day = date
-        const saved = await addNote(day, text)
-        putNotes(day, (l) => [...l, saved])
+    setWhy(null)
+    if (note) {
+      swap(note.date, note.id, { ...note, body: text, writtenAt: new Date().toISOString() })
+      try {
+        swap(note.date, note.id, await replaceNote(note, text))
+      } catch (e) {
+        swap(note.date, note.id, note)
+        reopen(note.date, { note, draft: text, error: failure(e, 'save') })
       }
-      setWhy(null)
-    } catch (e) {
-      throw failure(e, 'save')
+    } else {
+      const draft = draftNote(date, text)
+      putNotes(draft.date, (l) => [...l, draft])
+      try {
+        swap(draft.date, draft.id, await addNote(draft))
+      } catch (e) {
+        putNotes(draft.date, (l) => l.filter((n) => n.id !== draft.id))
+        reopen(draft.date, { draft: text, error: failure(e, 'save') })
+      }
     }
   }
 
   const onDeleteNote = async (note: Note) => {
+    setWhy(null)
+    putNotes(note.date, (l) => l.filter((n) => n.id !== note.id))
     try {
       await deleteNote(note)
-      putNotes(note.date, (l) => l.filter((n) => n.id !== note.id))
-      setWhy(null)
     } catch (e) {
-      throw failure(e, 'delete')
+      putNotes(note.date, (l) => [...l, note])
+      reopen(note.date, { note, error: failure(e, 'delete') })
     }
   }
 

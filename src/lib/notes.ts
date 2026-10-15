@@ -4,6 +4,8 @@ import { supabase } from './supabase'
 export type Note = { id: string; date: string; body: string; writtenAt: string }
 /** Notes per day (YYYY-MM-DD), oldest first. */
 export type Notes = Record<string, Note[]>
+/** The open "why?" box: a new note, or an existing one; after a failed save it carries the text and why. */
+export type Why = { note?: Note; draft?: string; error?: string; n?: number }
 
 type Row = { id: string; date: string; body: string; written_at: string }
 const toNote = (r: Row): Note => ({ id: r.id, date: r.date, body: r.body, writtenAt: r.written_at })
@@ -39,21 +41,23 @@ export async function fetchMonthNotes(iso: string): Promise<Notes | null> {
   return groupByDay((data as Row[]).map(toNote))
 }
 
-const local = (date: string, body: string): Note => ({
-  id: `local-${crypto.randomUUID()}`,
+/** A note made on this device, shown at once while it saves. */
+export const draftNote = (date: string, body: string): Note => ({
+  id: crypto.randomUUID(),
   date,
   body,
   writtenAt: new Date().toISOString(),
 })
 
-/** A new note stamped now. */
-export async function addNote(date: string, body: string): Promise<Note> {
-  if (!supabase) return local(date, body)
+/** Save a new note. Its id is made here, so a retried insert can't create a twin. */
+export async function addNote(note: Note): Promise<Note> {
+  if (!supabase) return note
   const { data, error } = await supabase
     .from('notes')
-    .insert({ date, body })
+    .insert({ id: note.id, date: note.date, body: note.body })
     .select('id, date, body, written_at')
     .single()
+  if (error?.code === '23505') return note // the first try got through after all
   if (error) throw error
   return toNote(data as Row)
 }

@@ -6,7 +6,7 @@ import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { addDays, longDate, monthCells, sameMonth, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
-import type { Note } from '../lib/notes'
+import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
 
 type Props = {
@@ -16,12 +16,12 @@ type Props = {
   notes: Note[]
   loaded: Paint | null
   /** The open "why?" bubble: a new note, or an existing note being edited. */
-  why: { note?: Note } | null
+  why: Why | null
   nudge: boolean
   onDate: (iso: string) => void
   onLoad: (p: Paint) => void
   onDefine: () => void
-  /** Saves a new note, or updates `note`; rejects with a readable message on failure. */
+  /** Saves a new note, or updates `note` (instantly; a failure reopens the box). */
   onSaveNote: (note: Note | undefined, text: string) => Promise<void>
   onDeleteNote: (note: Note) => Promise<void>
   onCloseWhy: () => void
@@ -105,8 +105,10 @@ export function Today(props: Props) {
       <div className="tray">
         {why && (
           <WhyBubble
-            key={why.note?.id ?? 'new'}
-            initial={why.note?.body}
+            key={`${why.note?.id ?? 'new'}:${why.n ?? 0}`}
+            initial={why.draft ?? why.note?.body}
+            original={why.note?.body}
+            initialError={why.error}
             editing={!!why.note}
             onSave={(text) => onSaveNote(why.note, text)}
             onDelete={why.note ? () => onDeleteNote(why.note!) : undefined}
