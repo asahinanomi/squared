@@ -23,14 +23,15 @@ import { fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/s
 import { Idea } from './screens/Idea'
 import { Month } from './screens/Month'
 import { Year } from './screens/Year'
+import { Life } from './screens/Life'
 import { Setup } from './screens/Setup'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import './App.css'
 
-type Screen = 'today' | 'month' | 'year' | 'idea' | 'setup'
+type Screen = 'today' | 'month' | 'year' | 'life' | 'idea' | 'setup'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
-const LADDER: Screen[] = ['today', 'month', 'year']
+const LADDER: Screen[] = ['today', 'month', 'year', 'life']
 
 const byTime = (a: Note, b: Note) => a.writtenAt.localeCompare(b.writtenAt)
 
@@ -48,6 +49,9 @@ export default function App() {
   const [motion, setMotion] = useState<'in' | 'out' | null>(null)
   // The month to open on when zooming in from a year (zooming out always lands on today's).
   const [monthFocus, setMonthFocus] = useState<string | undefined>()
+  const [yearFocus, setYearFocus] = useState<number | undefined>()
+  // Where "how many squares?" returns to: a life, when it was asked for on the way there.
+  const [afterSetup, setAfterSetup] = useState<Screen>('today')
   const [date, setDate] = useState(todayIso)
   const [days, setDays] = useState<Days>(() => (demo ? mockDays() : {}))
   const [loaded, setLoaded] = useState<Paint | null>(null)
@@ -226,7 +230,20 @@ export default function App() {
     setMonthFocus(focus)
     setScreen('month')
   }
-  const goYear = () => setScreen('year')
+  const goYear = (focus?: number) => {
+    setYearFocus(focus)
+    setScreen('year')
+  }
+  // A life needs a birth date and a lifespan: the first time, ask (gently) on the way.
+  const goLife = () => {
+    if (profile) return setScreen('life')
+    setAfterSetup('life')
+    setScreenValue('setup')
+  }
+  const openSetup = () => {
+    setAfterSetup('today')
+    setScreen('setup')
+  }
 
   const signOut = () => {
     goToday()
@@ -238,14 +255,20 @@ export default function App() {
 
   return (
     // Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint).
-    <div className={'app' + (screen === 'month' || screen === 'year' ? ' is-one-screen' : '')}>
+    <div className={'app' + (screen === 'month' || screen === 'year' || screen === 'life' ? ' is-one-screen' : '')}>
       {screen !== 'setup' && (
         <Topbar
           onHome={goToday}
           onCalendar={() => goMonth()}
-          back={screen === 'month' ? { label: todayIso().slice(0, 4), onBack: goYear } : undefined}
+          back={
+            screen === 'month'
+              ? { label: todayIso().slice(0, 4), onBack: () => goYear() }
+              : screen === 'year'
+                ? { label: 'a life', onBack: goLife }
+                : undefined
+          }
           onIdea={() => setScreen('idea')}
-          onSetup={() => setScreen('setup')}
+          onSetup={openSetup}
           onSignOut={signOut}
         />
       )}
@@ -279,15 +302,25 @@ export default function App() {
         ) : screen === 'setup' ? (
           <Setup
             profile={profile}
-            onBack={goToday}
+            onBack={() => (afterSetup === 'life' ? setScreen('year') : goToday())}
             onSave={async (p) => {
               await saveProfile(p)
               setProfile(p)
-              goToday()
+              if (afterSetup === 'life') setScreen('life')
+              else goToday()
             }}
           />
         ) : screen === 'year' ? (
-          <Year days={days} born={profile?.born} onPick={(m) => goMonth(m)} onIn={() => goMonth()} />
+          <Year
+            days={days}
+            born={profile?.born}
+            focus={yearFocus}
+            onPick={(m) => goMonth(m)}
+            onIn={() => goMonth()}
+            onOut={goLife}
+          />
+        ) : screen === 'life' && profile ? (
+          <Life days={days} profile={profile} onPick={(y) => goYear(y)} onIn={() => goYear()} />
         ) : (
           <Month
             days={days}
@@ -298,7 +331,7 @@ export default function App() {
               setScreen('today')
             }}
             onIn={goToday}
-            onOut={goYear}
+            onOut={() => goYear()}
           />
         )}
       </div>

@@ -469,7 +469,7 @@
 
 /* ---------- my squares: a month ---------- */
 .app.is-one-screen { flex: none; height: 100dvh; min-height: 0; box-sizing: border-box; overflow: hidden; }
-.month, .year { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.month, .year, .life { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .ladder-scroll {
   position: relative;
   flex: 1;
@@ -485,6 +485,32 @@
 .ladder-label { margin-bottom: 8px; text-align: center; font-size: 12px; letter-spacing: 0.06em; color: #9a9a93; }
 .month-block.is-faint { padding-bottom: 40vh; mask-image: linear-gradient(to bottom, #000, transparent 60%); }
 .month-block.is-faint .ladder-label, .year-block.is-faint .ladder-label { color: #c9c9c2; }
+
+/* ---------- a life, in years ---------- */
+.life-head { text-align: center; margin-top: 6px; }
+.life-title { margin: 0; font-size: 27px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+.life-sub { margin: 6px 0 0; font-size: 13px; color: #9a9a93; }
+.life-sub .is-on { color: var(--ink); font-weight: 600; }
+.life-sub .dot { color: #cfcfc8; }
+.life-years { margin-top: 16px; display: grid; gap: 5px; overflow-y: auto; scrollbar-width: none; padding: 3px; }
+.life-year {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  font-weight: 700;
+  background: #eeeee8;
+  color: #9a9a93;
+}
+.life-year.is-ahead { background: #efefea; color: #bfbfb8; font-weight: 600; }
+.life-year.is-current { overflow: visible; outline: 2px solid var(--ink); outline-offset: 1px; }
+.life-year:not(:disabled):active { transform: scale(0.94); }
+.life-year-name { position: relative; color: #1f1f1d; text-shadow: 0 0 3px rgba(255, 255, 255, 0.65); }
+.life-year.is-blank .life-year-name { color: #9a9a93; text-shadow: none; }
+.life .zoombar { margin-top: auto; }
 
 /* ---------- a year: 12 banded month-squares ---------- */
 .year-block { padding: 14px 0 12px; }

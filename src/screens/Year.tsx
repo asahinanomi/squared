@@ -8,6 +8,8 @@ import { Chevron } from './Today'
 type Props = {
   days: Days
   born?: string
+  /** Year to open on (zooming in from a life); otherwise this year. */
+  focus?: number
   /** Open a month's days. */
   onPick: (monthIso: string) => void
   /** Zoom in: this month's days. */
@@ -20,7 +22,7 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 
 // A year — twelve banded month-squares (6×2). Your years stack in one scroll, from the birth
 // year down to this one (next year peeks in faintly below). Opens centred on this year.
-export function Year({ days, born, onPick, onIn, onOut }: Props) {
+export function Year({ days, born, focus, onPick, onIn, onOut }: Props) {
   const today = todayIso()
   const thisYear = Number(today.slice(0, 4))
   const thisMonth = today.slice(0, 7)
@@ -28,8 +30,8 @@ export function Year({ days, born, onPick, onIn, onOut }: Props) {
   const { scroller, back, visible, onScroll, jumpTo } = useLadderScroll({
     maxBack,
     batch: 5,
-    focus: String(thisYear),
-    focusBack: 0,
+    focus: String(focus ?? thisYear),
+    focusBack: thisYear - (focus ?? thisYear),
   })
   const years = Array.from({ length: back + 1 }, (_, i) => thisYear - back + i)
   const shown = Number(visible)
