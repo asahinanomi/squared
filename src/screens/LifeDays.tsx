@@ -23,7 +23,8 @@ type Props = {
   focal?: Focal
 }
 
-const GAP = 2
+// Space between squares grows with them, so big squares stay apart (7 and 3 a row match my squares).
+const gapFor = (n: number) => ({ 28: 2, 14: 4, 7: 9, 3: 10 })[n] ?? 2
 const LABEL_H = 18 // year label above each block
 const BLOCK_GAP = 16 // space between years
 const LIVED_BLANK = '#eeeee8'
@@ -48,10 +49,11 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
   const [picked, setPicked] = useState<string | null>(null)
 
   const geometry = (w: number, n = cols) => {
-    const cell = (w - GAP * (n - 1)) / n
-    const pitch = cell + GAP
+    const gap = gapFor(n)
+    const cell = (w - gap * (n - 1)) / n
+    const pitch = cell + gap
     const rowsPerYear = Math.ceil(366 / n)
-    return { cell, pitch, block: LABEL_H + rowsPerYear * pitch - GAP + BLOCK_GAP }
+    return { cell, pitch, block: LABEL_H + rowsPerYear * pitch - gap + BLOCK_GAP }
   }
 
   /** Where a date sits: block (year) index, row and column within the block. */

@@ -24,7 +24,8 @@ type Props = {
   focal?: Focal
 }
 
-const GAP = 4
+// Space between squares grows with them, so big squares stay apart.
+const gapFor = (n: number) => ({ 12: 4, 6: 7, 4: 9, 3: 10 })[n] ?? 4
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const LIVED_BLANK = '#eeeee8'
 const AHEAD = '#f1f1ec'
@@ -59,8 +60,9 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
   }, [days, today, born])
 
   const geometry = (w: number, n = cols) => {
-    const cell = (w - GAP * (n - 1)) / n
-    return { cell, pitch: cell + GAP }
+    const gap = gapFor(n)
+    const cell = (w - gap * (n - 1)) / n
+    return { cell, pitch: cell + gap, gap }
   }
 
   const { scroller, canvas, size, onScroll } = useCanvasList(
@@ -168,7 +170,7 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
       <LifeHead profile={profile} current="months" onPick={onResolution} />
       <div className="life-canvas" ref={scroller} onScroll={onScroll} onClick={onTap}>
         <canvas ref={canvas} style={{ width: size.w, height: size.h }} aria-hidden="true" />
-        <div style={{ height: Math.max(0, rows * pitch - GAP - size.h) }} />
+        <div style={{ height: Math.max(0, rows * pitch - gapFor(cols) - size.h) }} />
       </div>
       <ZoomBar
         hint={
