@@ -34,6 +34,9 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
 
   const valid = born > '1900-01-01' && born <= today
   const c = valid ? lifeCounts(born, lifespan, today) : null
+  const [inYears, setInYears] = useState(false)
+  // Years from the squares themselves, so spent + left always add up to the lifespan.
+  const spentYears = c ? Math.round((c.sofar / c.total) * lifespan) : 0
 
   const save = async () => {
     if (!valid) return
@@ -192,10 +195,14 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
           <div className="setup-squares">squares</div>
           {c && (
             <div className="setup-line">
-              {c.age} years · {fmt(c.sofar)} so far ·{' '}
+              {inYears ? `${spentYears} years` : fmt(c.sofar)} spent ·{' '}
               <strong>
-                {fmt(c.left)} ({c.percentLeft}%) left
-              </strong>
+                {inYears ? `${lifespan - spentYears} years` : fmt(c.left)} ({c.percentLeft}%) left
+              </strong>{' '}
+              · {/* Flip between squares and years; it opens on squares every time. */}
+              <button className="setup-unit" onClick={() => setInYears(!inYears)}>
+                {inYears ? 'in squares' : 'in years'}
+              </button>
             </div>
           )}
         </div>
