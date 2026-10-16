@@ -194,7 +194,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
             <div className="setup-line">
               {c.age} years · {fmt(c.sofar)} so far ·{' '}
               <strong>
-                {fmt(c.left)} left · {c.percentLeft}%
+                {fmt(c.left)} ({c.percentLeft}%) left
               </strong>
             </div>
           )}
