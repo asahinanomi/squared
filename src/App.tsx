@@ -25,6 +25,7 @@ import { Month } from './screens/Month'
 import { Year } from './screens/Year'
 import { Life } from './screens/Life'
 import { LifeMonths } from './screens/LifeMonths'
+import { LifeDays } from './screens/LifeDays'
 import type { Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
 import { SignIn } from './screens/SignIn'
@@ -328,7 +329,18 @@ export default function App() {
             onOut={goLife}
           />
         ) : screen === 'life' && profile ? (
-          lifeRes === 'months' ? (
+          lifeRes === 'days' ? (
+            <LifeDays
+              days={days}
+              profile={profile}
+              onPick={(iso) => {
+                setDate(iso)
+                setScreen('today')
+              }}
+              onIn={() => goYear()}
+              onResolution={setLifeRes}
+            />
+          ) : lifeRes === 'months' ? (
             <LifeMonths
               days={days}
               profile={profile}

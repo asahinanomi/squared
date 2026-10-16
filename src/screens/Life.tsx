@@ -27,7 +27,7 @@ export function Life({ days, profile, onPick, onIn, onResolution }: Props) {
 
   return (
     <main className="life">
-      <LifeHead profile={profile} current="years" onPick={onResolution} ready={['years', 'months']} />
+      <LifeHead profile={profile} current="years" onPick={onResolution} />
 
       <div className="life-years" style={{ gridTemplateColumns: `repeat(${lifespan > 100 ? 10 : 8}, 1fr)` }}>
         {years.map((y) => {
