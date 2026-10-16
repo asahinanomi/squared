@@ -18,6 +18,8 @@
   height: 56px;
 }
 .logo-btn { display: grid; padding: 4px; margin-left: -4px; }
+.back-btn { display: flex; align-items: center; gap: 2px; height: 44px; margin-left: -8px; padding-right: 8px; font-size: 15px; font-weight: 600; }
+.back-btn svg { width: 22px; height: 22px; }
 .menu-btn {
   width: 48px;
   height: 48px;
@@ -467,8 +469,8 @@
 
 /* ---------- my squares: a month ---------- */
 .app.is-one-screen { flex: none; height: 100dvh; min-height: 0; box-sizing: border-box; overflow: hidden; }
-.month { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.month-scroll {
+.month, .year { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.ladder-scroll {
   position: relative;
   flex: 1;
   min-height: 0;
@@ -478,11 +480,38 @@
   scrollbar-width: none;
   mask-image: linear-gradient(to bottom, transparent, #000 28px, #000 calc(100% - 28px), transparent);
 }
-.month-scroll::-webkit-scrollbar { display: none; }
+.ladder-scroll::-webkit-scrollbar { display: none; }
 .month-block { padding: 14px 0 10px; }
-.month-label { margin-bottom: 8px; text-align: center; font-size: 12px; letter-spacing: 0.06em; color: #9a9a93; }
+.ladder-label { margin-bottom: 8px; text-align: center; font-size: 12px; letter-spacing: 0.06em; color: #9a9a93; }
 .month-block.is-faint { padding-bottom: 40vh; mask-image: linear-gradient(to bottom, #000, transparent 60%); }
-.month-block.is-faint .month-label { color: #c9c9c2; }
+.month-block.is-faint .ladder-label, .year-block.is-faint .ladder-label { color: #c9c9c2; }
+
+/* ---------- a year: 12 banded month-squares ---------- */
+.year-block { padding: 14px 0 12px; }
+.year-block.is-faint { padding-bottom: 22vh; mask-image: linear-gradient(to bottom, #000, transparent 70%); }
+.year-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 9px; }
+.year-month {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  background: #eeeee8; /* lived, nothing painted */
+  color: #9a9a93;
+}
+.year-month.is-ahead { background: #efefea; color: #bfbfb8; }
+.year-month.is-before { background: transparent; color: #d4d4cd; }
+.year-block.is-faint .year-month.is-ahead { background: #f1f1ec; color: #c7c7c0; font-size: 12px; }
+.year-month.is-current { overflow: visible; outline: 2px solid var(--ink); outline-offset: 1.5px; }
+.year-month:not(:disabled):active { transform: scale(0.95); }
+/* Rising bands: green from the bottom, then grey, then red; unpainted days stay empty on top. */
+.bands { position: absolute; inset: 0; display: flex; flex-direction: column-reverse; border-radius: inherit; overflow: hidden; }
+.bands > span { flex-basis: 0; }
+.year-month-name { position: relative; color: #24241f; text-shadow: 0 0 4px rgba(255, 255, 255, 0.7); }
+.year-month.is-blank .year-month-name { color: #9a9a93; text-shadow: none; }
 .month-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 9px; }
 .month-grid > * { aspect-ratio: 1; }
 .month-grid.is-faint > span:not(.is-blank) {
@@ -496,10 +525,10 @@
 }
 .month-grid.is-weekdays { margin: 12px 0 0; padding-bottom: 6px; }
 .month-grid.is-weekdays > span { aspect-ratio: auto; text-align: center; font-size: 11px; letter-spacing: 0.06em; color: #55554f; }
-.month-head { display: flex; align-items: center; justify-content: center; gap: 4px; }
-.month-head button { width: 44px; height: 44px; display: grid; place-items: center; }
-.month-head button:disabled { opacity: 0.2; }
-.month-title { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+.ladder-head { display: flex; align-items: center; justify-content: center; gap: 4px; }
+.ladder-head button { width: 44px; height: 44px; display: grid; place-items: center; }
+.ladder-head button:disabled { opacity: 0.2; }
+.ladder-title { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
 .month-day {
   border-radius: 5px;
   display: flex;

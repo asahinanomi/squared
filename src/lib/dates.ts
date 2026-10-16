@@ -18,7 +18,6 @@ export function addDays(iso: string, n: number): string {
   return isoDate(d)
 }
 
-export const sameMonth = (a: string, b: string) => a.slice(0, 7) === b.slice(0, 7)
 
 function ordinal(n: number): string {
   const s = ['th', 'st', 'nd', 'rd']

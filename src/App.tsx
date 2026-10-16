@@ -22,14 +22,15 @@ import { fetchProfile, saveProfile, type Profile } from './lib/profile'
 import { fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/supabase'
 import { Idea } from './screens/Idea'
 import { Month } from './screens/Month'
+import { Year } from './screens/Year'
 import { Setup } from './screens/Setup'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import './App.css'
 
-type Screen = 'today' | 'month' | 'idea' | 'setup'
+type Screen = 'today' | 'month' | 'year' | 'idea' | 'setup'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
-const LADDER: Screen[] = ['today', 'month']
+const LADDER: Screen[] = ['today', 'month', 'year']
 
 const byTime = (a: Note, b: Note) => a.writtenAt.localeCompare(b.writtenAt)
 
@@ -45,6 +46,8 @@ export default function App() {
   const [screen, setScreenValue] = useState<Screen>('today')
   // Which way the last move went, so the new level can zoom in or out into place.
   const [motion, setMotion] = useState<'in' | 'out' | null>(null)
+  // The month to open on when zooming in from a year (zooming out always lands on today's).
+  const [monthFocus, setMonthFocus] = useState<string | undefined>()
   const [date, setDate] = useState(todayIso)
   const [days, setDays] = useState<Days>(() => (demo ? mockDays() : {}))
   const [loaded, setLoaded] = useState<Paint | null>(null)
@@ -218,10 +221,12 @@ export default function App() {
   }
 
   // Zoom out from the square: the month, always the current one.
-  const goMonth = () => {
+  const goMonth = (focus?: string) => {
     setWhy(null)
+    setMonthFocus(focus)
     setScreen('month')
   }
+  const goYear = () => setScreen('year')
 
   const signOut = () => {
     goToday()
@@ -233,11 +238,12 @@ export default function App() {
 
   return (
     // Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint).
-    <div className={'app' + (screen === 'month' ? ' is-one-screen' : '')}>
+    <div className={'app' + (screen === 'month' || screen === 'year' ? ' is-one-screen' : '')}>
       {screen !== 'setup' && (
         <Topbar
           onHome={goToday}
-          onCalendar={goMonth}
+          onCalendar={() => goMonth()}
+          back={screen === 'month' ? { label: todayIso().slice(0, 4), onBack: goYear } : undefined}
           onIdea={() => setScreen('idea')}
           onSetup={() => setScreen('setup')}
           onSignOut={signOut}
@@ -266,7 +272,7 @@ export default function App() {
             onOpenWhy={(note) => setWhy({ note })}
             onDryBrush={onDryBrush}
             onFilled={onFilled}
-          onZoomOut={goMonth}
+            onZoomOut={() => goMonth()}
           />
         ) : screen === 'idea' ? (
           <Idea />
@@ -280,15 +286,19 @@ export default function App() {
               goToday()
             }}
           />
+        ) : screen === 'year' ? (
+          <Year days={days} born={profile?.born} onPick={(m) => goMonth(m)} onIn={() => goMonth()} />
         ) : (
           <Month
             days={days}
             born={profile?.born}
+            focus={monthFocus}
             onPick={(iso) => {
               setDate(iso)
               setScreen('today')
             }}
             onIn={goToday}
+            onOut={goYear}
           />
         )}
       </div>
