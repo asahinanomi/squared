@@ -610,6 +610,20 @@
   color: #55554f;
 }
 .setup-stepper button:disabled { opacity: 0.4; }
+.setup-years { display: flex; align-items: baseline; gap: 6px; cursor: text; }
+.setup-years input {
+  width: 1.8em;
+  padding: 2px 0;
+  border: 0;
+  border-bottom: 1.5px dashed var(--grey-2);
+  background: transparent;
+  font: inherit;
+  font-size: 18px;
+  text-align: right;
+  color: var(--ink);
+  outline: none;
+}
+.setup-years input:focus { border-bottom-color: var(--ink); }
 .setup-hero { text-align: center; }
 .setup-thats { font-size: 15px; color: #55554f; }
 .setup-total { font-size: 48px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; margin: 4px 0; font-variant-numeric: tabular-nums; }

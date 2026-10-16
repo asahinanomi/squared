@@ -20,7 +20,13 @@ const fmt = (n: number) => n.toLocaleString('en-US')
 export function Setup({ profile, onBack, onSave }: Props) {
   const today = todayIso()
   const [born, setBorn] = useState(profile?.born ?? '')
-  const [lifespan, setLifespan] = useState(profile?.lifespan ?? DEFAULT_LIFESPAN)
+  const [lifespan, setLifespanValue] = useState(profile?.lifespan ?? DEFAULT_LIFESPAN)
+  // What's typed in the years box (may be mid-edit, e.g. empty); the stepper keeps both in step.
+  const [yearsText, setYearsText] = useState(String(lifespan))
+  const setLifespan = (n: number) => {
+    setLifespanValue(n)
+    setYearsText(String(n))
+  }
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -101,15 +107,34 @@ export function Setup({ profile, onBack, onSave }: Props) {
               <button
                 aria-label="fewer years"
                 disabled={lifespan <= MIN_YEARS}
-                onClick={() => setLifespan((n) => Math.max(MIN_YEARS, n - 1))}
+                onClick={() => setLifespan(Math.max(MIN_YEARS, lifespan - 1))}
               >
                 –
               </button>
-              <span aria-live="polite">{lifespan} years</span>
+              <label className="setup-years">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={3}
+                  aria-label="years"
+                  value={yearsText}
+                  onFocus={(e) => e.currentTarget.select()}
+                  onChange={(e) => {
+                    const t = e.target.value.replace(/\D/g, '')
+                    setYearsText(t)
+                    const n = Number(t)
+                    if (n >= MIN_YEARS && n <= MAX_YEARS) setLifespan(n)
+                  }}
+                  onBlur={() => setYearsText(String(lifespan))}
+                  onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+                />
+                <span>years</span>
+              </label>
               <button
                 aria-label="more years"
                 disabled={lifespan >= MAX_YEARS}
-                onClick={() => setLifespan((n) => Math.min(MAX_YEARS, n + 1))}
+                onClick={() => setLifespan(Math.min(MAX_YEARS, lifespan + 1))}
               >
                 +
               </button>
