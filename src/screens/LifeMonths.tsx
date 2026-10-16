@@ -5,7 +5,7 @@ import { isoDate, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands, monthEnd, type Band } from '../lib/tally'
-import { roundRect, useCanvasList } from '../lib/useCanvasList'
+import { fitText, roundRect, useCanvasList } from '../lib/useCanvasList'
 import type { Focal } from '../lib/usePinch'
 
 type Props = {
@@ -30,7 +30,7 @@ const LIVED_BLANK = '#eeeee8'
 const AHEAD = '#f1f1ec'
 const BEFORE = '#f6f6f2'
 const INK = '#141413'
-const LABEL_MIN = 44 // squares at least this big print their name and year
+const LABEL_COLS = 3 // only at the deepest zoom do squares print their name and year (if it fits)
 const FONT = "'Schibsted Grotesk', system-ui, sans-serif"
 
 // A life, in months — about 1,140 banded month-squares, twelve to a row so each row is a year,
@@ -95,13 +95,19 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
             }
           }
           ctx.restore()
-          if (cell >= LABEL_MIN && key >= bornMonth) {
+          if (cols === LABEL_COLS && key >= bornMonth) {
+            // Clipped to the square, centred, and drawn only if it fits: a label never spills over.
+            ctx.save()
+            roundRect(ctx, x, y, cell, cell, radius)
+            ctx.clip()
             ctx.textAlign = 'center'
             ctx.fillStyle = lived ? '#24241f' : '#bfbfb8'
+            const maxW = cell * 0.84
             ctx.font = `600 ${Math.round(cell * 0.2)}px ${FONT}`
-            ctx.fillText(MONTHS[m], x + cell / 2, y + cell / 2)
+            fitText(ctx, MONTHS[m], x + cell / 2, y + cell / 2, maxW)
             ctx.font = `400 ${Math.round(cell * 0.15)}px ${FONT}`
-            ctx.fillText(String(year), x + cell / 2, y + cell / 2 + cell * 0.2)
+            fitText(ctx, String(year), x + cell / 2, y + cell / 2 + cell * 0.2, maxW)
+            ctx.restore()
           }
           if (key === thisMonth) {
             roundRect(ctx, x - 2, y - 2, cell + 4, cell + 4, radius + 2)
@@ -166,7 +172,7 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
       </div>
       <ZoomBar
         hint={
-          cell >= LABEL_MIN
+          cols === LABEL_COLS
             ? 'zoomed in — each month shows its name & year'
             : 'each square a month · scroll for your whole life'
         }

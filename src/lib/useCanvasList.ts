@@ -71,3 +71,28 @@ export function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w
   if (ctx.roundRect) ctx.roundRect(x, y, w, h, r)
   else ctx.rect(x, y, w, h)
 }
+
+/**
+ * Draws centred text only if it fits the width (never spills into a neighbour). With `font(px)` and
+ * a size range, it first shrinks down to `min` px to fit. Says whether it drew.
+ */
+export function fitText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  cx: number,
+  y: number,
+  maxW: number,
+  size?: { font: (px: number) => string; px: number; min: number },
+) {
+  if (size) {
+    let px = size.px
+    ctx.font = size.font(px)
+    const w = ctx.measureText(text).width
+    if (w > maxW) px = Math.floor((px * maxW) / w)
+    if (px < size.min) return false
+    ctx.font = size.font(px)
+  }
+  if (ctx.measureText(text).width > maxW) return false
+  ctx.fillText(text, cx, y)
+  return true
+}

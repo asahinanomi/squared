@@ -592,6 +592,7 @@
 .ladder-head button:disabled { opacity: 0.2; }
 .ladder-title { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
 .month-day {
+  overflow: hidden;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
@@ -614,7 +615,7 @@
 .month.is-zoomed .month-day { border-radius: 11px; }
 .month.is-zoomed .month-num { font-size: 30px; }
 .month.is-zoomed .month-wd { margin-top: 6px; font-size: 12px; letter-spacing: 0.01em; }
-.month-wd { margin-top: 2px; font-size: 8px; font-weight: 500; letter-spacing: 0.02em; opacity: 0.7; }
+.month-wd { max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: clip; margin-top: 2px; font-size: 8px; font-weight: 500; letter-spacing: 0.02em; opacity: 0.7; }
 
 /* ---------- confirm alert ---------- */
 .confirm-backdrop {
