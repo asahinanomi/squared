@@ -23,7 +23,10 @@ A quiet, minimal app where I paint one square per day with a color for how I spe
 4. **Why bubble** — after the square is filled, a white speech bubble pointing at the square: "why?" with a text box that grows as you write (paragraphs allowed) and a "done" button. Below it: "tap anywhere to skip".
 5. **Meaning sheet** — tapping the underlined "meaningful" opens a bottom sheet titled "Meaningfully": *Not a good day or a bad one. Not what you got done. A day is meaningful when you were aware of it, and spent it on what matters to you.* Followed by the three color definitions and a black "close" button.
 
-6. **The idea** — from the menu ("the idea"): a quiet page in the maker's words about why squared exists. Menu now holds: my squares (the month calendar), the idea, sign out.
+6. **The idea** — from the menu ("the idea"): a quiet page in the maker's words about why squared exists.
+7. **How many squares?** — from the menu (and, in phase 2, the first time you zoom out to a life): birth date ("when were you born?") and "how long do you hope to live?" (stepper, default 95 years). Shows the total as a hero number and one quiet line: "N years · X so far · **Y left · Z%**". Stored in `profiles` (migration 0005).
+
+Menu: my squares, the idea, how many squares?, sign out.
 
 The UI in these screens should be kept; better treatments are welcome.
 
@@ -44,7 +47,7 @@ The UI in these screens should be kept; better treatments are welcome.
 - **Grey** — I wasn't conscious. The day just slipped by.
 - **Red** — I was conscious, but I didn't spend the day meaningfully.
 
-Pleasant, muted shades; to be refined later.
+Shades (from the phase 2 design): green `#6E9B7B`, grey `#8E8E87`, red `#C06A62`; a backfilled day (painted later than the day itself) shows one shade lighter in the zoomed-out views: `#A7C4B0`, `#AEAEA6`, `#D9A8A3`.
 
 In the app the meanings read, in the owner's words: **green** "Conscious, and meaningful." · **grey** "It went by, and I don't know where." · **red** "Conscious, but spent poorly." They show in the "meaningfully" sheet, and as a quiet grey line (led by a small dot of that paint) under the palette each time a color is dipped (it fades after a few seconds, or as soon as painting starts).
 
@@ -104,6 +107,13 @@ Build step by step; the owner reviews and gives feedback after each step before 
 1. **Supabase**: run each file in `supabase/migrations/` in order (0001, 0002, …) in the SQL Editor. It creates `settings` (holds the `question` value) and `days` (row-level security: each person sees only their own rows; `painted_on_day` is set by a trigger on first paint).
 2. **Google sign-in**: Supabase → Authentication → Providers → Google, using an OAuth client from Google Cloud. Add the site URLs under Authentication → URL Configuration.
 3. **Env vars** (Vercel and local `.env`, see `.env.example`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. Without them, the app runs as a local demo (sign-in skipped, nothing saved).
+
+## Phase 2 — the zoom (in progress)
+
+Design: https://claude.ai/artifact/PFuFHaZmJXTG82GkJsT1NH. One zoom from a day out to a life: today → month → year → a life (years → months → days). Built step by step straight to production (agreed: no other users yet).
+
+- **Rollback point:** commit `e3cabe1` is the MVP exactly as it was live before phase 2. Vercel → Deployments → that deploy → Instant Rollback, or `git revert` the phase 2 commits.
+- Step 1 (done): `profiles` table (0005), all painted days loaded (paged, 1,000 per request) with the backfilled flag, the "how many squares?" screen, design colors.
 
 ## Live
 

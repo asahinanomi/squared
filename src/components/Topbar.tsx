@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Logo } from './Logo'
 
-type Props = { onHome: () => void; onCalendar: () => void; onIdea: () => void; onSignOut: () => void }
+type Props = { onHome: () => void; onCalendar: () => void; onIdea: () => void; onSetup: () => void; onSignOut: () => void }
 
-export function Topbar({ onHome, onCalendar, onIdea, onSignOut }: Props) {
+export function Topbar({ onHome, onCalendar, onIdea, onSetup, onSignOut }: Props) {
   const [open, setOpen] = useState(false)
   const go = (fn: () => void) => () => {
     setOpen(false)
@@ -23,6 +23,7 @@ export function Topbar({ onHome, onCalendar, onIdea, onSignOut }: Props) {
           <nav className="menu" onClick={(e) => e.stopPropagation()}>
             <button onClick={go(onCalendar)}>my squares</button>
             <button onClick={go(onIdea)}>the idea</button>
+            <button onClick={go(onSetup)}>how many squares?</button>
             <button onClick={go(onSignOut)}>sign out</button>
           </nav>
         </div>

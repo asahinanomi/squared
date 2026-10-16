@@ -4,18 +4,20 @@ import { MeaningSheet } from './components/MeaningSheet'
 import { Topbar } from './components/Topbar'
 import { QUESTION } from './lib/config'
 import { todayIso } from './lib/dates'
-import { fetchMonth, saveColor, type Days } from './lib/days'
+import { fetchAllDays, saveColor, type Days } from './lib/days'
 import { mockDays } from './lib/mock'
 import { addNote, deleteNote, draftNote, fetchMonthNotes, legacyNotes, replaceNote, type Note, type Notes, type Why } from './lib/notes'
 import type { Paint } from './lib/paints'
+import { fetchProfile, saveProfile, type Profile } from './lib/profile'
 import { fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/supabase'
 import { Calendar } from './screens/Calendar'
 import { Idea } from './screens/Idea'
+import { Setup } from './screens/Setup'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import './App.css'
 
-type Screen = 'today' | 'calendar' | 'idea'
+type Screen = 'today' | 'calendar' | 'idea' | 'setup'
 
 const byTime = (a: Note, b: Note) => a.writtenAt.localeCompare(b.writtenAt)
 
@@ -37,6 +39,7 @@ export default function App() {
   // The open "why?" bubble: a new note ({}), or an existing note being edited.
   const [why, setWhy] = useState<Why | null>(null)
   const [nudge, setNudge] = useState(false)
+  const [profile, setProfile] = useState<Profile | null>(null)
 
   useEffect(() => {
     if (!supabase) return
@@ -53,7 +56,7 @@ export default function App() {
   const userId = session?.user.id
   const signedIn = demo ? demoIn : !!userId
 
-  // Load the question, this month's squares and notes for whoever is signed in.
+  // Load the question, every painted day, this month's notes and the profile for whoever is signed in.
   useEffect(() => {
     if (!userId) {
       if (!demo) {
@@ -63,7 +66,8 @@ export default function App() {
       return
     }
     fetchQuestion().then((q) => q && setQuestion(q))
-    Promise.all([fetchMonth(todayIso()), fetchMonthNotes(todayIso())])
+    fetchProfile().then(setProfile)
+    Promise.all([fetchAllDays(), fetchMonthNotes(todayIso())])
       .then(([d, n]) => {
         setDays(d)
         setNotes(n ?? legacyNotes(d))
@@ -82,7 +86,8 @@ export default function App() {
       let before: Days[string]
       setDays((d) => {
         before = d[date]
-        return { ...d, [date]: { ...d[date], color } }
+        // A first paint counts as backfilled unless it's today's (the database decides for good).
+        return { ...d, [date]: { backfilled: date !== todayIso(), ...d[date], color } }
       })
       saveColor(date, color).catch((e) => {
         console.error('Could not save color', e)
@@ -174,12 +179,15 @@ export default function App() {
 
   return (
     <div className="app">
-      <Topbar
-        onHome={goToday}
-        onCalendar={() => setScreen('calendar')}
-        onIdea={() => setScreen('idea')}
-        onSignOut={signOut}
-      />
+      {screen !== 'setup' && (
+        <Topbar
+          onHome={goToday}
+          onCalendar={() => setScreen('calendar')}
+          onIdea={() => setScreen('idea')}
+          onSetup={() => setScreen('setup')}
+          onSignOut={signOut}
+        />
+      )}
       {screen === 'today' ? (
         <Today
           question={question}
@@ -204,6 +212,16 @@ export default function App() {
         />
       ) : screen === 'idea' ? (
         <Idea />
+      ) : screen === 'setup' ? (
+        <Setup
+          profile={profile}
+          onBack={goToday}
+          onSave={async (p) => {
+            await saveProfile(p)
+            setProfile(p)
+            goToday()
+          }}
+        />
       ) : (
         <Calendar
           days={days}
