@@ -108,7 +108,7 @@ Build step by step; the owner reviews and gives feedback after each step before 
 2. **Google sign-in**: Supabase → Authentication → Providers → Google, using an OAuth client from Google Cloud. Add the site URLs under Authentication → URL Configuration.
 3. **Env vars** (Vercel and local `.env`, see `.env.example`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. Without them, the app runs as a local demo (sign-in skipped, nothing saved).
 
-## Phase 2 — the zoom (in progress)
+## Phase 2 — the zoom (done)
 
 Design: https://claude.ai/artifact/PFuFHaZmJXTG82GkJsT1NH. One zoom from a day out to a life: today → month → year → a life (years → months → days). Built step by step straight to production (agreed: no other users yet).
 
@@ -122,6 +122,7 @@ Design: https://claude.ai/artifact/PFuFHaZmJXTG82GkJsT1NH. One zoom from a day o
 - Step 7 (done): **pinch everywhere** (two fingers on a phone, trackpad pinch on desktop; the phone's own page zoom is off). One straight ladder: today → month → year → a life · years → a life · months → a life · days. Pinch **out** and the zoom-out button walk it outward (greyed at days, the edge). The zoom-in button walks it back. Pinch **in** enlarges the squares where there's more to read — month: 7 → 3 a row with "16 / 2026.10 Fri"; a life in months: 12 → 6 → 4 → 3 a row with "Oct / 2026"; a life in days: 28 → 14 → 7 → 3 a row with "16 / 2026.10 Fri" — and on today, year and a life · years it steps in a level. While pinching, the view scales under the fingers; on release it moves a notch or eases back, and the square under the fingers stays put. A pinch begun on the paint square takes back the stray stroke. Zoom is never remembered: every level starts at its own size.
 - After step 7: **"today"** — when today has scrolled out of view (month, year, a life in months or days, at any zoom), a "today" link appears left of the zoom buttons. Tap it and the same screen glides back to today's square (this month / this year), which pulses once; the link hides again. It stays on the screen you got lost in. Labels only appear at the deepest zoom, centred, clipped and only if they fit; the space between squares grows with them (7 and 3 a row match my squares).
 - **Date labels on day squares (agreed):** big date number; a small line under it. Normal size: "Thu". Zoomed in: "2026.10 Thu" (year.month, then weekday — never "Oct '26", which reads like a date). Zoomed far out: color only, no text. Applies to the month view and "a life · in days" once pinch zoom lands (steps 6–7).
+- Step 8 (done): **ship** — full regression pass (paint, notes, swipe delete, instant save, every zoom level, pinch anchoring, labels, "today"), speed check with ~18,000 painted days, README wrapped up, PR merged into `main`.
 
 ## Live
 
