@@ -386,12 +386,12 @@ export default function App() {
                   ? setScreenValue('settings')
                   : goToday()
             }
+            mode={afterSetup === 'settings' ? 'settings' : 'onboarding'}
             onSave={async (p) => {
               await saveProfile(p)
               setProfile(p)
               if (afterSetup === 'life') setScreen('life')
-              else if (afterSetup === 'settings') setScreenValue('settings')
-              else goToday()
+              else if (afterSetup !== 'settings') goToday()
             }}
           />
         ) : screen === 'settings' ? (
