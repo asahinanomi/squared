@@ -102,6 +102,15 @@ Zoom levels (week/month/year/lifetime views), painting history before this month
 
 Build step by step; the owner reviews and gives feedback after each step before the next one starts.
 
+## Phase 3 — settings (in progress)
+
+Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: today · my squares · the idea · settings · sign out (sign out stays in the menu until the account phase).
+
+- Step 1 (done): **settings hub** — back arrow (returns to where you came from), "settings", four rows: square settings ("Oct 26, 1971 · 95 years · 34,699 squares", opens the square screen), and reminders / my data / account shown with a "soon" tag and not tappable. "squared.today" at the foot. The "how many squares?" menu item is gone.
+- Step 2: square settings — one shared screen, two modes (first-run "how many squares?" + "start painting"; from settings "square settings", back arrow, saves as you change it, quiet offline cue). Moving the birth date later hides earlier painted days, never deletes them.
+- Step 3: life bar — replaces the hint text on every zoom level; a fixed-width battery in ink, remaining part filled, "42% left" under it; tap flips to "14,620 squares left" and back.
+- Step 4: polish & wrap-up.
+
 ## Setup (for future sessions)
 
 1. **Supabase**: run each file in `supabase/migrations/` in order (0001, 0002, …) in the SQL Editor. It creates `settings` (holds the `question` value) and `days` (row-level security: each person sees only their own rows; `painted_on_day` is set by a trigger on first paint).

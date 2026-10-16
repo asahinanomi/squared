@@ -6,13 +6,13 @@ type Props = {
   onHome: () => void
   onCalendar: () => void
   onIdea: () => void
-  onSetup: () => void
+  onSettings: () => void
   onSignOut: () => void
   /** On a zoom level: one level out, labelled with where it lands ("2026", "a life"). Replaces the logo. */
   back?: { label: string; onBack: () => void }
 }
 
-export function Topbar({ onHome, onCalendar, onIdea, onSetup, onSignOut, back }: Props) {
+export function Topbar({ onHome, onCalendar, onIdea, onSettings, onSignOut, back }: Props) {
   const [open, setOpen] = useState(false)
   const go = (fn: () => void) => () => {
     setOpen(false)
@@ -42,9 +42,10 @@ export function Topbar({ onHome, onCalendar, onIdea, onSetup, onSignOut, back }:
       {open && (
         <div className="menu-layer" onClick={() => setOpen(false)}>
           <nav className="menu" onClick={(e) => e.stopPropagation()}>
+            <button onClick={go(onHome)}>today</button>
             <button onClick={go(onCalendar)}>my squares</button>
             <button onClick={go(onIdea)}>the idea</button>
-            <button onClick={go(onSetup)}>how many squares?</button>
+            <button onClick={go(onSettings)}>settings</button>
             <button onClick={go(onSignOut)}>sign out</button>
           </nav>
         </div>
