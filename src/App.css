@@ -509,8 +509,18 @@
 .life-title { margin: 0; font-size: 27px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
 .life-sub { margin: 6px 0 0; font-size: 13px; color: #9a9a93; }
 .life-sub .is-on { color: var(--ink); font-weight: 600; }
-.life-sub .dot { color: #cfcfc8; }
-.life-years { margin-top: 16px; display: grid; gap: 5px; overflow-y: auto; scrollbar-width: none; padding: 3px; }
+.life-sub .dot { margin: 0 7px; color: #b5b5ae; }
+/* Rows keep their squares' height: on a short, wide window the grid scrolls instead of squashing. */
+.life-years {
+  margin-top: 16px;
+  display: grid;
+  grid-auto-rows: max-content;
+  align-content: start;
+  gap: 5px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 3px;
+}
 .life-year {
   position: relative;
   aspect-ratio: 1;
