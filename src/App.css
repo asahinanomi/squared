@@ -511,6 +511,20 @@
 .life-year-name { position: relative; color: #1f1f1d; text-shadow: 0 0 3px rgba(255, 255, 255, 0.65); }
 .life-year.is-blank .life-year-name { color: #9a9a93; text-shadow: none; }
 .life .zoombar { margin-top: auto; }
+.life-link { font: inherit; color: inherit; text-decoration: underline dotted #cfcfc8; text-underline-offset: 3px; }
+.life-canvas {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin-top: 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  cursor: pointer;
+  mask-image: linear-gradient(to bottom, transparent, #000 20px, #000 calc(100% - 20px), transparent);
+}
+.life-canvas::-webkit-scrollbar { display: none; }
+.life-canvas canvas { position: sticky; top: 0; display: block; }
 
 /* ---------- a year: 12 banded month-squares ---------- */
 .year-block { padding: 14px 0 12px; }

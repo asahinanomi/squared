@@ -1,7 +1,7 @@
+import { LifeHead, type Resolution } from '../components/LifeHead'
 import { ZoomBar } from '../components/ZoomBar'
 import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
-import { lifeCounts } from '../lib/life'
 import type { Profile } from '../lib/profile'
 import { bands } from '../lib/tally'
 
@@ -12,32 +12,22 @@ type Props = {
   onPick: (year: number) => void
   /** Zoom in: this year. */
   onIn: () => void
+  /** Switch to months or days. */
+  onResolution: (r: Resolution) => void
 }
-
-const fmt = (n: number) => n.toLocaleString('en-US')
 
 // A life, in years — every year of it on one screen, on purpose: the whole life at a glance.
 // Lived years are banded, this year is outlined, the years ahead are empty.
-export function Life({ days, profile, onPick, onIn }: Props) {
+export function Life({ days, profile, onPick, onIn, onResolution }: Props) {
   const today = todayIso()
   const { born, lifespan } = profile
   const first = Number(born.slice(0, 4))
   const thisYear = Number(today.slice(0, 4))
   const years = Array.from({ length: lifespan }, (_, i) => first + i)
-  const { total } = lifeCounts(born, lifespan, today)
 
   return (
     <main className="life">
-      <div className="life-head">
-        <h1 className="life-title">a life</h1>
-        <p className="life-sub">
-          <span className="is-on">{lifespan} years</span>
-          <span className="dot"> · </span>
-          <span>{fmt(lifespan * 12)} months</span>
-          <span className="dot"> · </span>
-          <span>{fmt(total)} days</span>
-        </p>
-      </div>
+      <LifeHead profile={profile} current="years" onPick={onResolution} ready={['years', 'months']} />
 
       <div className="life-years" style={{ gridTemplateColumns: `repeat(${lifespan > 100 ? 10 : 8}, 1fr)` }}>
         {years.map((y) => {

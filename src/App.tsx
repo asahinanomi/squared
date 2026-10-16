@@ -24,6 +24,8 @@ import { Idea } from './screens/Idea'
 import { Month } from './screens/Month'
 import { Year } from './screens/Year'
 import { Life } from './screens/Life'
+import { LifeMonths } from './screens/LifeMonths'
+import type { Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
@@ -50,6 +52,8 @@ export default function App() {
   // The month to open on when zooming in from a year (zooming out always lands on today's).
   const [monthFocus, setMonthFocus] = useState<string | undefined>()
   const [yearFocus, setYearFocus] = useState<number | undefined>()
+  // Which view of a life: one square per year (where a life always lands), month or day.
+  const [lifeRes, setLifeRes] = useState<Resolution>('years')
   // Where "how many squares?" returns to: a life, when it was asked for on the way there.
   const [afterSetup, setAfterSetup] = useState<Screen>('today')
   const [date, setDate] = useState(todayIso)
@@ -236,6 +240,7 @@ export default function App() {
   }
   // A life needs a birth date and a lifespan: the first time, ask (gently) on the way.
   const goLife = () => {
+    setLifeRes('years')
     if (profile) return setScreen('life')
     setAfterSetup('life')
     setScreenValue('setup')
@@ -272,7 +277,10 @@ export default function App() {
           onSignOut={signOut}
         />
       )}
-      <div className={'stage' + (motion ? ` is-zoom-${motion}` : '')} key={screen}>
+      <div
+        className={'stage' + (motion ? ` is-zoom-${motion}` : '')}
+        key={screen === 'life' ? `life-${lifeRes}` : screen}
+      >
         {screen === 'today' ? (
           <Today
             question={question}
@@ -320,7 +328,23 @@ export default function App() {
             onOut={goLife}
           />
         ) : screen === 'life' && profile ? (
-          <Life days={days} profile={profile} onPick={(y) => goYear(y)} onIn={() => goYear()} />
+          lifeRes === 'months' ? (
+            <LifeMonths
+              days={days}
+              profile={profile}
+              onPick={(m) => goMonth(m)}
+              onIn={() => goYear()}
+              onResolution={setLifeRes}
+            />
+          ) : (
+            <Life
+              days={days}
+              profile={profile}
+              onPick={(y) => goYear(y)}
+              onIn={() => goYear()}
+              onResolution={setLifeRes}
+            />
+          )
         ) : (
           <Month
             days={days}
