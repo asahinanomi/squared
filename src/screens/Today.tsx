@@ -4,6 +4,7 @@ import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
+import { ZoomOutIcon } from '../components/ZoomBar'
 import { addDays, longDate, monthCells, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
@@ -30,11 +31,13 @@ type Props = {
   onOpenWhy: (note?: Note) => void
   onDryBrush: () => void
   onFilled: (p: Paint) => void
+  /** Zoom out to the month. */
+  onZoomOut: () => void
 }
 
 export function Today(props: Props) {
   const { question, born, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } = props
-  const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy } = props
+  const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut } = props
   const today = todayIso()
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
@@ -139,6 +142,12 @@ export function Today(props: Props) {
           )}
         </div>
       </div>
+      {/* The way out to the month, like every other level's (quiet here; hidden while writing). */}
+      {!why && (
+        <button className="today-zoomout" aria-label="Zoom out" onClick={onZoomOut}>
+          <ZoomOutIcon />
+        </button>
+      )}
     </main>
   )
 }

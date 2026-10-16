@@ -114,7 +114,7 @@ Design: https://claude.ai/artifact/PFuFHaZmJXTG82GkJsT1NH. One zoom from a day o
 
 - **Rollback point:** commit `e3cabe1` is the MVP exactly as it was live before phase 2. Vercel → Deployments → that deploy → Instant Rollback, or `git revert` the phase 2 commits.
 - Step 1 (done): `profiles` table (0005), all painted days loaded (paged, 1,000 per request) with the backfilled flag, the "how many squares?" screen, design colors.
-- Step 2 (done): zoom levels with in/out transitions; zoom bar (helper line + zoom out / zoom in, bottom-right); **month** ("my squares") replaces the old calendar: the current month's days (painted solid, backfilled one shade lighter, unpainted dashed, today outlined, tiny weekday under each date), faint rows of the previous and next month bleeding off the edges, chevrons to step months (back to the birth month, not past the current one). Opens on the current month every time. Tap a day → paint it (the day screen can now step back to any past day). Notes load a month at a time.
+- Step 2 (done): zoom levels with in/out transitions; zoom bar (helper line + zoom out / zoom in, bottom-right); **month** ("my squares") replaces the old calendar: the current month's days (painted solid, backfilled one shade lighter, unpainted dashed, today outlined, tiny weekday under each date), faint rows of the previous and next month bleeding off the edges, chevrons to step months (back to the birth month, not past the current one). Opens on the current month every time. Tap a day → paint it (the day screen can now step back to any past day). Notes load a month at a time. The day screen has a quiet grey zoom-out icon bottom-right (hidden while writing a note).
 
 ## Live
 

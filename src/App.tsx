@@ -260,6 +260,7 @@ export default function App() {
             onOpenWhy={(note) => setWhy({ note })}
             onDryBrush={onDryBrush}
             onFilled={onFilled}
+          onZoomOut={goMonth}
           />
         ) : screen === 'idea' ? (
           <Idea />
