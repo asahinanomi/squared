@@ -466,20 +466,23 @@
 .today-zoomout svg { width: 26px; height: 26px; }
 
 /* ---------- my squares: a month ---------- */
-/* Zoom levels fill exactly one screen; the faint neighbour months bleed off its edges. */
-body[data-screen='month'] .app { flex: none; height: 100dvh; min-height: 0; box-sizing: border-box; overflow: hidden; }
+.app.is-one-screen { flex: none; height: 100dvh; min-height: 0; box-sizing: border-box; overflow: hidden; }
 .month { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.month-stage {
+.month-scroll {
+  position: relative;
   flex: 1;
   min-height: 0;
-  display: grid;
-  grid-template-rows: 1fr auto 1fr;
-  overflow: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to bottom, transparent, #000 28px, #000 calc(100% - 28px), transparent);
 }
-.month-faint { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 6px; }
-.month-faint.is-before { justify-content: flex-end; padding-bottom: 20px; mask-image: linear-gradient(to top, #000 40%, transparent); }
-.month-faint.is-after { justify-content: flex-start; padding-top: 20px; mask-image: linear-gradient(to bottom, #000 40%, transparent); }
-.month-faint-label { text-align: center; font-size: 11px; color: #c9c9c2; letter-spacing: 0.08em; }
+.month-scroll::-webkit-scrollbar { display: none; }
+.month-block { padding: 14px 0 10px; }
+.month-label { margin-bottom: 8px; text-align: center; font-size: 12px; letter-spacing: 0.06em; color: #9a9a93; }
+.month-block.is-faint { padding-bottom: 40vh; mask-image: linear-gradient(to bottom, #000, transparent 60%); }
+.month-block.is-faint .month-label { color: #c9c9c2; }
 .month-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 9px; }
 .month-grid > * { aspect-ratio: 1; }
 .month-grid.is-faint > span:not(.is-blank) {
@@ -491,7 +494,7 @@ body[data-screen='month'] .app { flex: none; height: 100dvh; min-height: 0; box-
   font-weight: 500;
   color: #cbcbc4;
 }
-.month-grid.is-weekdays { margin: 12px 0 6px; }
+.month-grid.is-weekdays { margin: 12px 0 0; padding-bottom: 6px; }
 .month-grid.is-weekdays > span { aspect-ratio: auto; text-align: center; font-size: 11px; letter-spacing: 0.06em; color: #55554f; }
 .month-head { display: flex; align-items: center; justify-content: center; gap: 4px; }
 .month-head button { width: 44px; height: 44px; display: grid; place-items: center; }

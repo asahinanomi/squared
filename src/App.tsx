@@ -70,6 +70,11 @@ export default function App() {
   const userId = session?.user.id
   const signedIn = demo ? demoIn : !!userId
 
+  // The demo keeps its profile on this device.
+  useEffect(() => {
+    if (demo) fetchProfile().then(setProfile)
+  }, [])
+
   // Load the question, every painted day, this month's notes and the profile for whoever is signed in.
   useEffect(() => {
     if (!userId) {
@@ -227,7 +232,8 @@ export default function App() {
   }
 
   return (
-    <div className="app">
+    // Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint).
+    <div className={'app' + (screen === 'month' ? ' is-one-screen' : '')}>
       {screen !== 'setup' && (
         <Topbar
           onHome={goToday}
