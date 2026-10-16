@@ -4,13 +4,15 @@ import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
-import { addDays, longDate, monthCells, sameMonth, shortWeekday, todayIso } from '../lib/dates'
+import { addDays, longDate, monthCells, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
 
 type Props = {
   question: string
+  /** Birth date, if known: the earliest day you can step back to. */
+  born?: string
   date: string
   days: Days
   notes: Note[]
@@ -31,7 +33,7 @@ type Props = {
 }
 
 export function Today(props: Props) {
-  const { question, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } = props
+  const { question, born, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } = props
   const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy } = props
   const today = todayIso()
   const prev = addDays(date, -1)
@@ -62,7 +64,7 @@ export function Today(props: Props) {
       <Question text={question} onDefine={onDefine} />
 
       <div className="day-nav">
-        <button aria-label="Previous day" disabled={!sameMonth(prev, today)} onClick={() => onDate(prev)}>
+        <button aria-label="Previous day" disabled={!!born && prev < born} onClick={() => onDate(prev)}>
           <Chevron dir="left" />
         </button>
         <span className="day-label">{longDate(date)}</span>

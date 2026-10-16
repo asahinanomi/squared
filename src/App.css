@@ -437,47 +437,71 @@
 }
 
 /* ---------- calendar ---------- */
-.calendar {
+/* ---------- zoom levels ---------- */
+.stage { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.stage.is-zoom-out { animation: zoom-out 0.32s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.stage.is-zoom-in { animation: zoom-in 0.32s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes zoom-out { from { opacity: 0; transform: scale(1.12); } }
+@keyframes zoom-in { from { opacity: 0; transform: scale(0.9); } }
+@media (prefers-reduced-motion: reduce) { .stage { animation: none !important; } }
+
+.zoombar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0 4px; }
+.zoombar-hint { margin: 0; font-size: 12px; line-height: 1.4; color: #9a9a93; }
+.zoombar-buttons { display: flex; gap: 6px; flex-shrink: 0; }
+.zoombar-buttons button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--ink); }
+.zoombar-buttons button:disabled { opacity: 0.25; }
+.zoombar-buttons svg { width: 30px; height: 30px; }
+
+/* ---------- my squares: a month ---------- */
+/* Zoom levels fill exactly one screen; the faint neighbour months bleed off its edges. */
+body[data-screen='month'] .app { flex: none; height: 100dvh; min-height: 0; box-sizing: border-box; overflow: hidden; }
+.month { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.month-stage {
   flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  overflow: hidden;
+}
+.month-faint { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 6px; }
+.month-faint.is-before { justify-content: flex-end; padding-bottom: 20px; mask-image: linear-gradient(to top, #000 40%, transparent); }
+.month-faint.is-after { justify-content: flex-start; padding-top: 20px; mask-image: linear-gradient(to bottom, #000 40%, transparent); }
+.month-faint-label { text-align: center; font-size: 11px; color: #c9c9c2; letter-spacing: 0.08em; }
+.month-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 9px; }
+.month-grid > * { aspect-ratio: 1; }
+.month-grid.is-faint > span:not(.is-blank) {
+  border-radius: 4px;
+  background: #f1f1ec;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #cbcbc4;
+}
+.month-grid.is-weekdays { margin: 12px 0 6px; }
+.month-grid.is-weekdays > span { aspect-ratio: auto; text-align: center; font-size: 11px; letter-spacing: 0.06em; color: #55554f; }
+.month-head { display: flex; align-items: center; justify-content: center; gap: 4px; }
+.month-head button { width: 44px; height: 44px; display: grid; place-items: center; }
+.month-head button:disabled { opacity: 0.2; }
+.month-title { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+.month-day {
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 28px;
-  padding-bottom: 8vh;
-}
-.month-title {
-  font-size: clamp(34px, 10vw, 44px);
-  font-weight: 650;
-  letter-spacing: -0.035em;
-  margin: 0;
-}
-.cal-grid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
-}
-.cal-weekday { text-align: center; font-size: 15px; color: var(--ink-soft); padding-bottom: 6px; }
-.cal-day {
-  aspect-ratio: 1;
-  border-radius: 9px;
-  display: grid;
-  place-items: center;
-  font-size: clamp(20px, 6vw, 28px);
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  line-height: 1;
+  background: #fff;
+  border: 1.5px dashed #b0b0a8;
+  color: #9a9a93;
   font-variant-numeric: tabular-nums;
 }
-.cal-day { display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
-.cal-num { font-size: clamp(18px, 5.4vw, 25px); }
-.cal-wd { margin-top: 2px; font-size: 9px; font-weight: 500; letter-spacing: 0.02em; opacity: 0.6; }
-.cal-day:active { transform: scale(0.94); }
-.cal-day.is-painted { color: var(--ink); }
-.cal-day.is-today { background: #fff; box-shadow: inset 0 0 0 var(--keyline) var(--ink); }
-.cal-day.is-painted.is-today { box-shadow: inset 0 0 0 var(--keyline) var(--ink); }
-.cal-day.is-past { background: #fff; color: var(--ink-soft); outline: 2px dashed var(--grey-2); outline-offset: -2px; }
-.cal-day.is-future, .cal-day.is-future:disabled { color: var(--grey-2); opacity: 1; cursor: default; transform: none; }
+.month-day.is-painted { border: 0; color: var(--ink); }
+.month-day.is-today { border: 2px solid var(--ink); color: var(--ink); }
+.month-day:disabled { opacity: 1; cursor: default; }
+.month-day:not(:disabled):active { transform: scale(0.94); }
+.month-num { font-size: 18px; font-weight: 600; }
+.month-wd { margin-top: 2px; font-size: 8px; font-weight: 500; letter-spacing: 0.02em; opacity: 0.7; }
 
 /* ---------- confirm alert ---------- */
 .confirm-backdrop {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { MeaningSheet } from './components/MeaningSheet'
 import { Topbar } from './components/Topbar'
@@ -6,18 +6,30 @@ import { QUESTION } from './lib/config'
 import { todayIso } from './lib/dates'
 import { fetchAllDays, saveColor, type Days } from './lib/days'
 import { mockDays } from './lib/mock'
-import { addNote, deleteNote, draftNote, fetchMonthNotes, legacyNotes, replaceNote, type Note, type Notes, type Why } from './lib/notes'
+import {
+  addNote,
+  deleteNote,
+  draftNote,
+  fetchMonthNotes,
+  legacyNotes,
+  replaceNote,
+  type Note,
+  type Notes,
+  type Why,
+} from './lib/notes'
 import type { Paint } from './lib/paints'
 import { fetchProfile, saveProfile, type Profile } from './lib/profile'
 import { fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/supabase'
-import { Calendar } from './screens/Calendar'
 import { Idea } from './screens/Idea'
+import { Month } from './screens/Month'
 import { Setup } from './screens/Setup'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import './App.css'
 
-type Screen = 'today' | 'calendar' | 'idea' | 'setup'
+type Screen = 'today' | 'month' | 'idea' | 'setup'
+/** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
+const LADDER: Screen[] = ['today', 'month']
 
 const byTime = (a: Note, b: Note) => a.writtenAt.localeCompare(b.writtenAt)
 
@@ -30,7 +42,9 @@ export default function App() {
   const [demoIn, setDemoIn] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
   const [question, setQuestion] = useState(QUESTION)
-  const [screen, setScreen] = useState<Screen>('today')
+  const [screen, setScreenValue] = useState<Screen>('today')
+  // Which way the last move went, so the new level can zoom in or out into place.
+  const [motion, setMotion] = useState<'in' | 'out' | null>(null)
   const [date, setDate] = useState(todayIso)
   const [days, setDays] = useState<Days>(() => (demo ? mockDays() : {}))
   const [loaded, setLoaded] = useState<Paint | null>(null)
@@ -67,6 +81,7 @@ export default function App() {
     }
     fetchQuestion().then((q) => q && setQuestion(q))
     fetchProfile().then(setProfile)
+    notesLoaded.current = new Set([todayIso().slice(0, 7)])
     Promise.all([fetchAllDays(), fetchMonthNotes(todayIso())])
       .then(([d, n]) => {
         setDays(d)
@@ -74,6 +89,20 @@ export default function App() {
       })
       .catch((e) => console.error('Could not load days', e))
   }, [userId])
+
+  // Notes load a month at a time, as you visit days in it.
+  const notesLoaded = useRef(new Set<string>())
+  useEffect(() => {
+    const m = date.slice(0, 7)
+    if (!userId || notesLoaded.current.has(m)) return
+    notesLoaded.current.add(m)
+    fetchMonthNotes(date)
+      .then((n) => n && setNotes((all) => ({ ...all, ...n })))
+      .catch((e) => {
+        notesLoaded.current.delete(m)
+        console.error('Could not load notes', e)
+      })
+  }, [userId, date])
 
   useEffect(() => {
     document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'
@@ -87,7 +116,10 @@ export default function App() {
       setDays((d) => {
         before = d[date]
         // A first paint counts as backfilled unless it's today's (the database decides for good).
-        return { ...d, [date]: { backfilled: date !== todayIso(), ...d[date], color } }
+        return {
+          ...d,
+          [date]: { backfilled: date !== todayIso(), ...d[date], color },
+        }
       })
       saveColor(date, color).catch((e) => {
         console.error('Could not save color', e)
@@ -126,7 +158,11 @@ export default function App() {
   const onSaveNote = async (note: Note | undefined, text: string) => {
     setWhy(null)
     if (note) {
-      swap(note.date, note.id, { ...note, body: text, writtenAt: new Date().toISOString() })
+      swap(note.date, note.id, {
+        ...note,
+        body: text,
+        writtenAt: new Date().toISOString(),
+      })
       try {
         swap(note.date, note.id, await replaceNote(note, text))
       } catch (e) {
@@ -164,9 +200,22 @@ export default function App() {
   if (session === undefined) return null
   if (!signedIn) return <SignIn error={authError} onSignIn={demo ? () => setDemoIn(true) : signInWithGoogle} />
 
+  const setScreen = (next: Screen) => {
+    const a = LADDER.indexOf(screen)
+    const b = LADDER.indexOf(next)
+    setMotion(a < 0 || b < 0 || a === b ? null : b > a ? 'out' : 'in')
+    setScreenValue(next)
+  }
+
   const goToday = () => {
     setDate(todayIso())
     setScreen('today')
+  }
+
+  // Zoom out from the square: the month, always the current one.
+  const goMonth = () => {
+    setWhy(null)
+    setScreen('month')
   }
 
   const signOut = () => {
@@ -182,55 +231,60 @@ export default function App() {
       {screen !== 'setup' && (
         <Topbar
           onHome={goToday}
-          onCalendar={() => setScreen('calendar')}
+          onCalendar={goMonth}
           onIdea={() => setScreen('idea')}
           onSetup={() => setScreen('setup')}
           onSignOut={signOut}
         />
       )}
-      {screen === 'today' ? (
-        <Today
-          question={question}
-          date={date}
-          days={days}
-          notes={notes[date] ?? []}
-          loaded={loaded}
-          why={why}
-          nudge={nudge}
-          onDate={(iso) => {
-            setWhy(null)
-            setDate(iso)
-          }}
-          onLoad={setLoaded}
-          onDefine={() => setDefining(true)}
-          onSaveNote={onSaveNote}
-          onDeleteNote={onDeleteNote}
-          onCloseWhy={() => setWhy(null)}
-          onOpenWhy={(note) => setWhy({ note })}
-          onDryBrush={onDryBrush}
-          onFilled={onFilled}
-        />
-      ) : screen === 'idea' ? (
-        <Idea />
-      ) : screen === 'setup' ? (
-        <Setup
-          profile={profile}
-          onBack={goToday}
-          onSave={async (p) => {
-            await saveProfile(p)
-            setProfile(p)
-            goToday()
-          }}
-        />
-      ) : (
-        <Calendar
-          days={days}
-          onPick={(iso) => {
-            setDate(iso)
-            setScreen('today')
-          }}
-        />
-      )}
+      <div className={'stage' + (motion ? ` is-zoom-${motion}` : '')} key={screen}>
+        {screen === 'today' ? (
+          <Today
+            question={question}
+            born={profile?.born}
+            date={date}
+            days={days}
+            notes={notes[date] ?? []}
+            loaded={loaded}
+            why={why}
+            nudge={nudge}
+            onDate={(iso) => {
+              setWhy(null)
+              setDate(iso)
+            }}
+            onLoad={setLoaded}
+            onDefine={() => setDefining(true)}
+            onSaveNote={onSaveNote}
+            onDeleteNote={onDeleteNote}
+            onCloseWhy={() => setWhy(null)}
+            onOpenWhy={(note) => setWhy({ note })}
+            onDryBrush={onDryBrush}
+            onFilled={onFilled}
+          />
+        ) : screen === 'idea' ? (
+          <Idea />
+        ) : screen === 'setup' ? (
+          <Setup
+            profile={profile}
+            onBack={goToday}
+            onSave={async (p) => {
+              await saveProfile(p)
+              setProfile(p)
+              goToday()
+            }}
+          />
+        ) : (
+          <Month
+            days={days}
+            born={profile?.born}
+            onPick={(iso) => {
+              setDate(iso)
+              setScreen('today')
+            }}
+            onIn={goToday}
+          />
+        )}
+      </div>
       <MeaningSheet open={defining} onClose={() => setDefining(false)} />
     </div>
   )
