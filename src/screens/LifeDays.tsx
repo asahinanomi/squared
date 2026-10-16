@@ -7,7 +7,7 @@ import type { Days } from '../lib/days'
 import { addYears, daysBetween } from '../lib/life'
 import { paintHex, paintTint } from '../lib/paints'
 import type { Profile } from '../lib/profile'
-import { fitText, roundRect, useCanvasList } from '../lib/useCanvasList'
+import { fitText, MIN_TEXT_PX, roundRect, textFits, useCanvasList } from '../lib/useCanvasList'
 import type { Focal } from '../lib/usePinch'
 
 type Props = {
@@ -33,7 +33,8 @@ const AHEAD = '#f1f1ec'
 const AHEAD_EDGE = '#e4e4dd'
 const INK = '#141413'
 const NUM_MIN = 40 // squares at least this big print their day number…
-const DATE_COLS = 3 // …and only at the deepest zoom, the full "2026.10 Thu" under it (if it fits)
+// …and "2026.10 Thu" under it as soon as that fits at a readable size (checked with the widest weekday).
+const dated = (cell: number) => cell >= NUM_MIN && textFits('2026.10 Wed', `400 ${MIN_TEXT_PX}px ${FONT}`, cell * 0.84)
 const PULSE_MS = 900
 const FONT = "'Schibsted Grotesk', system-ui, sans-serif"
 
@@ -74,7 +75,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
       const b1 = Math.min(years - 1, Math.floor((top + h) / block))
       const radius = Math.min(8, Math.max(2, cell * 0.18))
       const labels = cell >= NUM_MIN
-      const dated = cols === DATE_COLS
+      const withDate = dated(cell)
       for (let b = b0; b <= b1; b++) {
         const year = firstYear + b
         const y0 = b * block - top
@@ -134,15 +135,15 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
             ctx.fillStyle = ahead ? '#bdbdb6' : day && !day.backfilled ? '#fff' : '#24241f'
             const pad = cell * 0.08
             ctx.font = `600 ${Math.round(cell * 0.32)}px ${FONT}`
-            const ny = dated ? y + cell * 0.42 : y + cell / 2
+            const ny = withDate ? y + cell * 0.42 : y + cell / 2
             fitText(ctx, String(Number(iso.slice(8))), x + cell / 2, ny, cell - pad * 2)
-            if (dated) {
+            if (withDate) {
               const d = `${iso.slice(0, 4)}.${iso.slice(5, 7)} ${shortWeekday(iso)}`
               const font = (px: number) => `400 ${px}px ${FONT}`
               fitText(ctx, d, x + cell / 2, y + cell * 0.72, cell - pad * 2, {
                 font,
                 px: Math.round(cell * 0.13),
-                min: 9,
+                min: MIN_TEXT_PX,
               })
             }
             ctx.restore()
@@ -270,7 +271,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
       )}
       <ZoomBar
         hint={
-          cols === DATE_COLS
+          cell && dated(cell)
             ? 'zoomed in — each day shows its full date'
             : 'each block is a year · each square a day · today is outlined'
         }

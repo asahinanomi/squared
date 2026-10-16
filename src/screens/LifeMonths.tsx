@@ -6,7 +6,7 @@ import { isoDate, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands, monthEnd, type Band } from '../lib/tally'
-import { fitText, roundRect, useCanvasList } from '../lib/useCanvasList'
+import { MIN_TEXT_PX, roundRect, textFits, useCanvasList } from '../lib/useCanvasList'
 import type { Focal } from '../lib/usePinch'
 
 type Props = {
@@ -32,7 +32,6 @@ const LIVED_BLANK = '#eeeee8'
 const AHEAD = '#f1f1ec'
 const BEFORE = '#f6f6f2'
 const INK = '#141413'
-const LABEL_COLS = 3 // only at the deepest zoom do squares print their name and year (if it fits)
 const PULSE_MS = 900
 const FONT = "'Schibsted Grotesk', system-ui, sans-serif"
 
@@ -63,6 +62,12 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
     }
   }, [days, today, born])
 
+  // A square prints "Oct" over "2026" as soon as both fit inside it at a readable size.
+  const nameFont = (cell: number) => `600 ${Math.max(MIN_TEXT_PX + 1, Math.round(cell * 0.2))}px ${FONT}`
+  const yearFont = (cell: number) => `400 ${Math.max(MIN_TEXT_PX, Math.round(cell * 0.15))}px ${FONT}`
+  const labelled = (cell: number) =>
+    cell >= 40 && textFits('May', nameFont(cell), cell * 0.84) && textFits('2026', yearFont(cell), cell * 0.84)
+
   const geometry = (w: number, n = cols) => {
     const gap = gapFor(n)
     const cell = (w - gap * (n - 1)) / n
@@ -75,6 +80,7 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
       const r0 = Math.max(0, Math.floor(top / pitch) - 1)
       const r1 = Math.min(rows - 1, Math.ceil((top + h) / pitch) + 1)
       const radius = Math.min(9, Math.max(3, cell * 0.12))
+      const showLabels = labelled(cell)
       for (let r = r0; r <= r1; r++) {
         for (let c = 0; c < cols; c++) {
           const i = r * cols + c
@@ -101,19 +107,13 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
             }
           }
           ctx.restore()
-          if (cols === LABEL_COLS && key >= bornMonth) {
-            // Clipped to the square, centred, and drawn only if it fits: a label never spills over.
-            ctx.save()
-            roundRect(ctx, x, y, cell, cell, radius)
-            ctx.clip()
+          if (showLabels && key >= bornMonth) {
             ctx.textAlign = 'center'
             ctx.fillStyle = lived ? '#24241f' : '#bfbfb8'
-            const maxW = cell * 0.84
-            ctx.font = `600 ${Math.round(cell * 0.2)}px ${FONT}`
-            fitText(ctx, MONTHS[m], x + cell / 2, y + cell / 2, maxW)
-            ctx.font = `400 ${Math.round(cell * 0.15)}px ${FONT}`
-            fitText(ctx, String(year), x + cell / 2, y + cell / 2 + cell * 0.2, maxW)
-            ctx.restore()
+            ctx.font = nameFont(cell)
+            ctx.fillText(MONTHS[m], x + cell / 2, y + cell / 2)
+            ctx.font = yearFont(cell)
+            ctx.fillText(String(year), x + cell / 2, y + cell / 2 + Math.max(cell * 0.2, MIN_TEXT_PX + 4))
           }
           if (key === thisMonth) {
             roundRect(ctx, x - 2, y - 2, cell + 4, cell + 4, radius + 2)
@@ -219,7 +219,7 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
       </div>
       <ZoomBar
         hint={
-          cols === LABEL_COLS
+          cell && labelled(cell)
             ? 'zoomed in — each month shows its name & year'
             : 'each square a month · scroll for your whole life'
         }
