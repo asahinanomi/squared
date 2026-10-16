@@ -1,0 +1,55 @@
+:root {
+  /* Ink & paper — the only non-paint colors in the app. */
+  --paper: #fafaf8;
+  --veil: #cacac5;
+  --ink: #141413;
+  --ink-soft: #3d3d3a;
+  --grey-1: #e3e3df;
+  --grey-2: #c4c4bf;
+  --grey-3: #8f8f8a;
+  --grey-4: #6f6f6a; /* deepest grey: readable with white text (5:1) */
+  --dot: #c8c8c3;
+  --bg: var(--paper);
+
+  --font: 'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
+  --gutter: 24px;
+  /* The one outline weight used everywhere (square, current day, palette, brush, icons).
+     Whole pixels only: browsers round box borders but not SVG strokes, so 2.5px would not match. */
+  --keyline: 2px;
+
+  color-scheme: light;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { min-height: 100%; margin: 0; }
+#root { min-height: 100dvh; display: flex; flex-direction: column; }
+
+body {
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px);
+  background-size: 22px 22px;
+  background-position: 11px 11px;
+  background-attachment: fixed;
+  overscroll-behavior: none;
+  transition: background-color 0.3s;
+}
+
+/* The painting screen sits on a soft grey veil so the white square glows. */
+body[data-screen='today'] { --bg: var(--veil); --dot: #b2b2ac; }
+html[data-screen='today'] { background: var(--veil); }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.2; cursor: default; }
