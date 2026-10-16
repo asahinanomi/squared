@@ -36,7 +36,8 @@ type Props = {
 }
 
 export function Today(props: Props) {
-  const { question, born, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } = props
+  const { question, born, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } =
+    props
   const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut } = props
   const today = todayIso()
   const prev = addDays(date, -1)

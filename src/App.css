@@ -585,6 +585,7 @@
   color: #cbcbc4;
 }
 .month-grid.is-weekdays { margin: 12px 0 0; padding-bottom: 6px; }
+.month-grid.is-weekdays[hidden] { display: none; }
 .month-grid.is-weekdays > span { aspect-ratio: auto; text-align: center; font-size: 11px; letter-spacing: 0.06em; color: #55554f; }
 .ladder-head { display: flex; align-items: center; justify-content: center; gap: 4px; }
 .ladder-head button { width: 44px; height: 44px; display: grid; place-items: center; }
@@ -607,6 +608,12 @@
 .month-day:disabled { opacity: 1; cursor: default; }
 .month-day:not(:disabled):active { transform: scale(0.94); }
 .month-num { font-size: 18px; font-weight: 600; }
+.month.is-zoomed .month-block:not(.is-faint) .month-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.month.is-zoomed .month-block.is-faint { display: none; }
+.month.is-zoomed .ladder-scroll::after { content: ""; display: block; height: 30vh; }
+.month.is-zoomed .month-day { border-radius: 11px; }
+.month.is-zoomed .month-num { font-size: 30px; }
+.month.is-zoomed .month-wd { margin-top: 6px; font-size: 12px; letter-spacing: 0.01em; }
 .month-wd { margin-top: 2px; font-size: 8px; font-weight: 500; letter-spacing: 0.02em; opacity: 0.7; }
 
 /* ---------- confirm alert ---------- */

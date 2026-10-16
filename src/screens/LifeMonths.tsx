@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useLayoutEffect, useMemo, useRef } from 'react'
 import { LifeHead, type Resolution } from '../components/LifeHead'
 import { ZoomBar } from '../components/ZoomBar'
 import { isoDate, todayIso } from '../lib/dates'
@@ -6,6 +6,7 @@ import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands, monthEnd, type Band } from '../lib/tally'
 import { roundRect, useCanvasList } from '../lib/useCanvasList'
+import type { Focal } from '../lib/usePinch'
 
 type Props = {
   days: Days
@@ -15,9 +16,14 @@ type Props = {
   /** Zoom in: this year. */
   onIn: () => void
   onResolution: (r: Resolution) => void
+  /** Zoom out: a life in days. */
+  onOut: () => void
+  /** Squares per row: 12 (a row is a year), or fewer and bigger when pinched in (6, 4, 3). */
+  cols?: number
+  /** Where the fingers were when the size changed: the square under them stays put. */
+  focal?: Focal
 }
 
-const COLS = 12 // each row is one calendar year, Jan–Dec
 const GAP = 4
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const LIVED_BLANK = '#eeeee8'
@@ -29,11 +35,12 @@ const FONT = "'Schibsted Grotesk', system-ui, sans-serif"
 
 // A life, in months — about 1,140 banded month-squares, twelve to a row so each row is a year,
 // read top to bottom. Drawn on a canvas (only the rows on screen), opening on this month.
-export function LifeMonths({ days, profile, onPick, onIn, onResolution }: Props) {
+export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, cols = 12, focal }: Props) {
   const today = todayIso()
   const { born, lifespan } = profile
   const firstYear = Number(born.slice(0, 4))
-  const rows = lifespan
+  const count = lifespan * 12 // every month of the life, from the January of the birth year
+  const rows = Math.ceil(count / cols)
   const thisMonth = today.slice(0, 7)
   const bornMonth = born.slice(0, 7)
 
@@ -51,8 +58,8 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution }: Props)
     }
   }, [days, today, born])
 
-  const geometry = (w: number) => {
-    const cell = (w - GAP * (COLS - 1)) / COLS
+  const geometry = (w: number, n = cols) => {
+    const cell = (w - GAP * (n - 1)) / n
     return { cell, pitch: cell + GAP }
   }
 
@@ -63,11 +70,14 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution }: Props)
       const r1 = Math.min(rows - 1, Math.ceil((top + h) / pitch) + 1)
       const radius = Math.min(9, Math.max(3, cell * 0.12))
       for (let r = r0; r <= r1; r++) {
-        const year = firstYear + r
-        for (let c = 0; c < COLS; c++) {
+        for (let c = 0; c < cols; c++) {
+          const i = r * cols + c
+          if (i >= count) break
+          const year = firstYear + Math.floor(i / 12)
+          const m = i % 12
           const x = c * pitch
           const y = r * pitch - top
-          const key = `${year}-${String(c + 1).padStart(2, '0')}`
+          const key = `${year}-${String(m + 1).padStart(2, '0')}`
           const lived = key >= bornMonth && key <= thisMonth
           ctx.save()
           roundRect(ctx, x, y, cell, cell, radius)
@@ -89,7 +99,7 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution }: Props)
             ctx.textAlign = 'center'
             ctx.fillStyle = lived ? '#24241f' : '#bfbfb8'
             ctx.font = `600 ${Math.round(cell * 0.2)}px ${FONT}`
-            ctx.fillText(MONTHS[c], x + cell / 2, y + cell / 2)
+            ctx.fillText(MONTHS[m], x + cell / 2, y + cell / 2)
             ctx.font = `400 ${Math.round(cell * 0.15)}px ${FONT}`
             ctx.fillText(String(year), x + cell / 2, y + cell / 2 + cell * 0.2)
           }
@@ -105,11 +115,30 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution }: Props)
     // Open with this month's row in the middle.
     (w, h) => {
       const { cell, pitch } = geometry(w)
-      return (Number(thisMonth.slice(0, 4)) - firstYear) * pitch - (h - cell) / 2
+      const i = (Number(thisMonth.slice(0, 4)) - firstYear) * 12 + Number(thisMonth.slice(5, 7)) - 1
+      return Math.floor(i / cols) * pitch - (h - cell) / 2
     },
   )
 
   const { cell, pitch } = size.w ? geometry(size.w) : { cell: 0, pitch: 0 }
+
+  // After a pinch changes the size, keep the square that was under the fingers under them.
+  const prevCols = useRef(cols)
+  // Read the scroll position before this render's layout lands: a smaller layout would clamp it.
+  const topBefore = useRef(0)
+  topBefore.current = scroller.current?.scrollTop ?? 0
+  useLayoutEffect(() => {
+    const el = scroller.current
+    const was = prevCols.current
+    prevCols.current = cols
+    if (!el || !size.w || was === cols) return
+    const box = el.getBoundingClientRect()
+    const fy = focal ? focal.y - box.top : el.clientHeight / 2
+    const fx = focal ? focal.x - box.left : el.clientWidth / 2
+    const old = geometry(size.w, was)
+    const i = Math.floor((topBefore.current + fy) / old.pitch) * was + Math.min(was - 1, Math.floor(fx / old.pitch))
+    el.scrollTop = Math.floor(i / cols) * pitch + cell / 2 - fy
+  }, [cols]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onTap = (e: React.MouseEvent) => {
     const el = scroller.current
@@ -119,11 +148,13 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution }: Props)
     const y = e.clientY - box.top + el.scrollTop
     const c = Math.floor(x / pitch)
     const r = Math.floor(y / pitch)
-    if (c < 0 || c >= COLS || r < 0 || r >= rows) return
+    if (c < 0 || c >= cols || r < 0 || r >= rows) return
     if (x - c * pitch > cell || y - r * pitch > cell) return // in a gap
-    const key = `${firstYear + r}-${String(c + 1).padStart(2, '0')}`
-    if (key < bornMonth || key > thisMonth) return
-    onPick(isoDate(new Date(firstYear + r, c, 1)))
+    const i = r * cols + c
+    if (i >= count) return
+    const first = isoDate(new Date(firstYear + Math.floor(i / 12), i % 12, 1))
+    if (first.slice(0, 7) < bornMonth || first.slice(0, 7) > thisMonth) return
+    onPick(first)
   }
 
   return (
@@ -131,9 +162,17 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution }: Props)
       <LifeHead profile={profile} current="months" onPick={onResolution} />
       <div className="life-canvas" ref={scroller} onScroll={onScroll} onClick={onTap}>
         <canvas ref={canvas} style={{ width: size.w, height: size.h }} aria-hidden="true" />
-        <div style={{ height: Math.max(0, rows * pitch - 4 - size.h) }} />
+        <div style={{ height: Math.max(0, rows * pitch - GAP - size.h) }} />
       </div>
-      <ZoomBar hint="each square a month · scroll for your whole life" onIn={onIn} />
+      <ZoomBar
+        hint={
+          cell >= LABEL_MIN
+            ? 'zoomed in — each month shows its name & year'
+            : 'each square a month · scroll for your whole life'
+        }
+        onIn={onIn}
+        onOut={onOut}
+      />
     </main>
   )
 }

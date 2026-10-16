@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { usePinch, type Focal } from './lib/usePinch'
 import type { Session } from '@supabase/supabase-js'
 import { MeaningSheet } from './components/MeaningSheet'
 import { Topbar } from './components/Topbar'
@@ -54,7 +55,12 @@ export default function App() {
   const [monthFocus, setMonthFocus] = useState<string | undefined>()
   const [yearFocus, setYearFocus] = useState<number | undefined>()
   // Which view of a life: one square per year (where a life always lands), month or day.
-  const [lifeRes, setLifeRes] = useState<Resolution>('years')
+  const [lifeRes, setLifeResValue] = useState<Resolution>('years')
+  // Pinched in within a level (bigger squares, with labels): a notch, 0 = the level's own size.
+  // Never remembered: every move to another level starts back at 0.
+  const [mag, setMag] = useState(0)
+  const [focal, setFocal] = useState<Focal | undefined>()
+  const [monthAnchor, setMonthAnchor] = useState<{ iso?: string; y: number } | undefined>()
   // Where "how many squares?" returns to: a life, when it was asked for on the way there.
   const [afterSetup, setAfterSetup] = useState<Screen>('today')
   const [date, setDate] = useState(todayIso)
@@ -80,6 +86,14 @@ export default function App() {
   }, [])
 
   const userId = session?.user.id
+
+  // The current level's stage is what scales under your fingers while you pinch.
+  const stage = useCallback(() => document.querySelector<HTMLElement>('.stage'), [])
+  const pinchRef = useRef<{ onIn?: (at: Focal) => boolean | void; onOut?: (at: Focal) => boolean | void }>({})
+  usePinch(stage, {
+    onIn: (at) => (pinchRef.current.onIn ? pinchRef.current.onIn(at) : false),
+    onOut: (at) => (pinchRef.current.onOut ? pinchRef.current.onOut(at) : false),
+  })
   const signedIn = demo ? demoIn : !!userId
 
   // The demo keeps its profile on this device.
@@ -221,7 +235,16 @@ export default function App() {
     const a = LADDER.indexOf(screen)
     const b = LADDER.indexOf(next)
     setMotion(a < 0 || b < 0 || a === b ? null : b > a ? 'out' : 'in')
+    setMag(0)
     setScreenValue(next)
+  }
+
+  // The three views of a life sit on the ladder too: years → months → days is zooming out.
+  const RES: Resolution[] = ['years', 'months', 'days']
+  const setLifeRes = (r: Resolution) => {
+    setMotion(RES.indexOf(r) > RES.indexOf(lifeRes) ? 'out' : RES.indexOf(r) < RES.indexOf(lifeRes) ? 'in' : null)
+    setMag(0)
+    setLifeResValue(r)
   }
 
   const goToday = () => {
@@ -241,7 +264,7 @@ export default function App() {
   }
   // A life needs a birth date and a lifespan: the first time, ask (gently) on the way.
   const goLife = () => {
-    setLifeRes('years')
+    setLifeResValue('years')
     if (profile) return setScreen('life')
     setAfterSetup('life')
     setScreenValue('setup')
@@ -258,6 +281,44 @@ export default function App() {
     if (supabase) supabase.auth.signOut()
     else setDemoIn(false)
   }
+
+  // Pinch: out walks the ladder outward (today → month → year → a life in years → months → days);
+  // in enlarges the squares where there's more to read (month, a life in months or days), else steps in.
+  const MONTH_NOTCHES = 2
+  const LIFE_NOTCHES = 4
+  const pinchIn = (at: Focal) => {
+    if (screen === 'month') {
+      if (mag >= MONTH_NOTCHES - 1) return false
+      const hit = document.elementsFromPoint(at.x, at.y).find((el) => (el as HTMLElement).dataset?.iso) as HTMLElement
+      setMonthAnchor({ iso: hit?.dataset.iso, y: at.y })
+      setMag(mag + 1)
+    } else if (screen === 'year') goMonth()
+    else if (screen === 'life' && lifeRes === 'years') goYear()
+    else if (screen === 'life') {
+      if (mag >= LIFE_NOTCHES - 1) return false
+      setFocal(at)
+      setMag(mag + 1)
+    } else return false
+  }
+  const pinchOut = (at: Focal) => {
+    if (screen === 'today') goMonth()
+    else if (screen === 'month') {
+      if (mag === 0) return goYear()
+      const hit = document.elementsFromPoint(at.x, at.y).find((el) => (el as HTMLElement).dataset?.iso) as HTMLElement
+      setMonthAnchor({ iso: hit?.dataset.iso, y: at.y })
+      setMag(mag - 1)
+    } else if (screen === 'year') goLife()
+    else if (screen === 'life') {
+      if (mag > 0) {
+        setFocal(at)
+        setMag(mag - 1)
+      } else if (lifeRes === 'years') setLifeRes('months')
+      else if (lifeRes === 'months') setLifeRes('days')
+      else return false
+    } else return false
+  }
+
+  pinchRef.current = { onIn: pinchIn, onOut: pinchOut }
 
   return (
     // Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint).
@@ -337,16 +398,21 @@ export default function App() {
                 setDate(iso)
                 setScreen('today')
               }}
-              onIn={() => goYear()}
+              onIn={() => setLifeRes('months')}
               onResolution={setLifeRes}
+              cols={[28, 14, 7, 3][mag]}
+              focal={focal}
             />
           ) : lifeRes === 'months' ? (
             <LifeMonths
               days={days}
               profile={profile}
               onPick={(m) => goMonth(m)}
-              onIn={() => goYear()}
+              onIn={() => setLifeRes('years')}
+              onOut={() => setLifeRes('days')}
               onResolution={setLifeRes}
+              cols={[12, 6, 4, 3][mag]}
+              focal={focal}
             />
           ) : (
             <Life
@@ -354,6 +420,7 @@ export default function App() {
               profile={profile}
               onPick={(y) => goYear(y)}
               onIn={() => goYear()}
+              onOut={() => setLifeRes('months')}
               onResolution={setLifeRes}
             />
           )
@@ -368,6 +435,8 @@ export default function App() {
             }}
             onIn={goToday}
             onOut={() => goYear()}
+            zoomed={mag > 0}
+            anchor={monthAnchor}
           />
         )}
       </div>

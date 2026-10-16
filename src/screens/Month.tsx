@@ -1,3 +1,4 @@
+import { useLayoutEffect } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { fromIso, isoDate, longDate, monthCells, monthTitle, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
@@ -16,6 +17,10 @@ type Props = {
   onIn: () => void
   /** Zoom out to the year. */
   onOut?: () => void
+  /** Pinched in: bigger day squares (3 to a row) that print their full date. */
+  zoomed?: boolean
+  /** The day under the fingers when the zoom changed, kept where it was on screen. */
+  anchor?: { iso?: string; y: number }
 }
 
 const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
@@ -30,7 +35,7 @@ export const monthsBetween = (a: string, b: string) =>
 
 // My squares — your months, one after another in a single scroll, from the birth month
 // down to this one (next month peeks in faintly below). Opens centred on this month.
-export function Month({ days, born, focus, onPick, onIn, onOut }: Props) {
+export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, anchor }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const maxBack = born ? monthsBetween(shiftMonth(born, 0), current) : Infinity
@@ -49,8 +54,20 @@ export function Month({ days, born, focus, onPick, onIn, onOut }: Props) {
   }
   const next = shiftMonth(current, 1)
 
+  // After zooming, put the day that was under the fingers back under them.
+  useLayoutEffect(() => {
+    const el = scroller.current
+    if (!el || !anchor) return
+    const target =
+      (anchor.iso && el.querySelector<HTMLElement>(`[data-iso="${anchor.iso}"]`)) ||
+      el.querySelector<HTMLElement>(`[data-key="${visible}"]`)
+    if (!target) return
+    const r = target.getBoundingClientRect()
+    el.scrollTop += r.top + r.height / 2 - anchor.y
+  }, [zoomed]) // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
-    <main className="month">
+    <main className={'month' + (zoomed ? ' is-zoomed' : '')}>
       <div className="ladder-head">
         <button
           aria-label="Previous month"
@@ -64,7 +81,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut }: Props) {
           <Chevron dir="right" />
         </button>
       </div>
-      <div className="month-grid is-weekdays" aria-hidden="true">
+      <div className="month-grid is-weekdays" aria-hidden="true" hidden={zoomed}>
         {WEEKDAYS.map((d, i) => (
           <span key={i}>{d}</span>
         ))}
@@ -76,7 +93,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut }: Props) {
             <div className="ladder-label">{monthTitle(m)}</div>
             <div className="month-grid">
               {monthCells(m).map((iso, i) => {
-                if (!iso) return <span key={`b${i}`} className="is-blank" />
+                if (!iso) return zoomed ? null : <span key={`b${i}`} className="is-blank" />
                 const day = days[iso]
                 const fill = day ? (day.backfilled ? paintTint(day.color) : paintHex(day.color)) : undefined
                 return (
@@ -86,10 +103,13 @@ export function Month({ days, born, focus, onPick, onIn, onOut }: Props) {
                     style={fill ? { background: fill } : undefined}
                     disabled={iso > today || (!!born && iso < born)}
                     aria-label={longDate(iso)}
+                    data-iso={iso}
                     onClick={() => onPick(iso)}
                   >
                     <span className="month-num">{Number(iso.slice(8))}</span>
-                    <span className="month-wd">{shortWeekday(iso)}</span>
+                    <span className="month-wd">
+                      {zoomed ? `${iso.slice(0, 4)}.${iso.slice(5, 7)} ${shortWeekday(iso)}` : shortWeekday(iso)}
+                    </span>
                   </button>
                 )
               })}
@@ -107,7 +127,11 @@ export function Month({ days, born, focus, onPick, onIn, onOut }: Props) {
         </section>
       </div>
 
-      <ZoomBar hint="tap a day to paint · pinch to zoom out" onIn={onIn} onOut={onOut} />
+      <ZoomBar
+        hint={zoomed ? 'zoomed in — each day shows its full date' : 'tap a day to paint · pinch to zoom out'}
+        onIn={onIn}
+        onOut={onOut}
+      />
     </main>
   )
 }

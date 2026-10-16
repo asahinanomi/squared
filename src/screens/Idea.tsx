@@ -11,7 +11,9 @@ export function Idea() {
         I made squared to help myself stay aware: you paint one square a day — for how you lived it. Not what you got
         done, but whether you were really there.
       </p>
-      <p>One square, one day. We don’t get as many as we think. This just helps me spend the next one a little better.</p>
+      <p>
+        One square, one day. We don’t get as many as we think. This just helps me spend the next one a little better.
+      </p>
       <p>I hope it helps you too.</p>
     </main>
   )

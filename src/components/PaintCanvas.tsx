@@ -33,6 +33,10 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
   // A press that began in the margin: a stroke once it moves, a tap if it doesn't.
   const pending = useRef<{ x: number; y: number; cx: number; cy: number } | null>(null)
   const size = useRef(0)
+  // Fingers on the square, and the paint as it was before this stroke: a second finger means a
+  // pinch (zooming out), so the stroke the first finger began is taken back.
+  const fingers = useRef(new Set<number>())
+  const before = useRef<{ img: ImageData; covered: Uint8Array } | null>(null)
   const [settling, setSettling] = useState<Paint | null>(null)
 
   // Size the backing store to the element at device resolution.
@@ -91,6 +95,18 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
   }
 
   const down = (e: React.PointerEvent) => {
+    fingers.current.add(e.pointerId)
+    if (fingers.current.size > 1) {
+      // A pinch, not a stroke: undo what the first finger painted.
+      const b = before.current
+      if (b && last.current) {
+        canvas.current!.getContext('2d')!.putImageData(b.img, 0, 0)
+        covered.current.set(b.covered)
+      }
+      last.current = null
+      pending.current = null
+      return
+    }
     if (settling) return
     const p = point(e)
     const s = size.current
@@ -103,8 +119,17 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
       onDryBrush()
       return
     }
-    last.current = null
+    begin()
     strokeTo(p)
+  }
+
+  const begin = () => {
+    const c = canvas.current!
+    before.current = {
+      img: c.getContext('2d')!.getImageData(0, 0, c.width, c.height),
+      covered: covered.current.slice(),
+    }
+    last.current = null
   }
 
   const move = (e: React.PointerEvent) => {
@@ -117,7 +142,7 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
         onDryBrush()
         return
       }
-      last.current = null
+      begin()
       strokeTo(start)
     }
     if (!last.current || !loaded) return
@@ -125,7 +150,9 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
     for (const ev of events.length ? events : [e.nativeEvent]) strokeTo(point(ev))
   }
 
-  const up = () => {
+  const up = (e?: React.PointerEvent) => {
+    if (e) fingers.current.delete(e.pointerId)
+    if (fingers.current.size > 0) return
     const tap = pending.current
     if (tap) {
       pending.current = null
@@ -138,9 +165,9 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
     if (done >= FILLED && loaded) setSettling(loaded)
   }
 
-  const cancel = () => {
+  const cancel = (e: React.PointerEvent) => {
     pending.current = null
-    up()
+    up(e)
   }
 
   // Once filled, the last-dipped color settles evenly over the square.

@@ -14,11 +14,13 @@ type Props = {
   onIn: () => void
   /** Switch to months or days. */
   onResolution: (r: Resolution) => void
+  /** Zoom out: a life in months. */
+  onOut: () => void
 }
 
 // A life, in years — every year of it on one screen, on purpose: the whole life at a glance.
 // Lived years are banded, this year is outlined, the years ahead are empty.
-export function Life({ days, profile, onPick, onIn, onResolution }: Props) {
+export function Life({ days, profile, onPick, onIn, onResolution, onOut }: Props) {
   const today = todayIso()
   const { born, lifespan } = profile
   const first = Number(born.slice(0, 4))
@@ -57,7 +59,7 @@ export function Life({ days, profile, onPick, onIn, onResolution }: Props) {
         })}
       </div>
 
-      <ZoomBar hint="this year is outlined · tap a year to open it" onIn={onIn} />
+      <ZoomBar hint="this year is outlined · tap a year to open it" onIn={onIn} onOut={onOut} />
     </main>
   )
 }
