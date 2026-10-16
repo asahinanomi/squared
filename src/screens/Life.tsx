@@ -59,7 +59,7 @@ export function Life({ days, profile, onPick, onIn, onResolution, onOut }: Props
         })}
       </div>
 
-      <ZoomBar hint="this year is outlined · tap a year to open it" onIn={onIn} onOut={onOut} />
+      <ZoomBar profile={profile} onIn={onIn} onOut={onOut} />
     </main>
   )
 }

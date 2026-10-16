@@ -217,16 +217,7 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
         <canvas ref={canvas} style={{ width: size.w, height: size.h }} aria-hidden="true" />
         <div style={{ height: Math.max(0, rows * pitch - gapFor(cols) - size.h) }} />
       </div>
-      <ZoomBar
-        hint={
-          cell && labelled(cell)
-            ? 'zoomed in — each month shows its name & year'
-            : 'each square a month · scroll for your whole life'
-        }
-        onIn={onIn}
-        onOut={onOut}
-        onToday={away ? backToToday : undefined}
-      />
+      <ZoomBar profile={profile} onIn={onIn} onOut={onOut} onToday={away ? backToToday : undefined} />
     </main>
   )
 }

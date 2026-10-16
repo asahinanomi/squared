@@ -269,15 +269,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
           )}
         </div>
       )}
-      <ZoomBar
-        hint={
-          cell && dated(cell)
-            ? 'zoomed in — each day shows its full date'
-            : 'each block is a year · each square a day · today is outlined'
-        }
-        onIn={onIn}
-        onToday={away ? backToToday : undefined}
-      />
+      <ZoomBar profile={profile} onIn={onIn} onToday={away ? backToToday : undefined} />
     </main>
   )
 }

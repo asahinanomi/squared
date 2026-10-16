@@ -1,6 +1,11 @@
+import { useState } from 'react'
+import { todayIso } from '../lib/dates'
+import { lifeCounts } from '../lib/life'
+import type { Profile } from '../lib/profile'
+
 type Props = {
-  /** Quiet helper text on the left. */
-  hint: string
+  /** The life the bar shows (no bar until birth date and lifespan are set). */
+  profile?: Profile | null
   /** Zoom out one level (see more); absent when there's no level further out yet. */
   onOut?: () => void
   /** Zoom in one level (see less, closer). */
@@ -45,11 +50,37 @@ export const ZoomInIcon = () => (
   </svg>
 )
 
-// Bottom of every zoom level: a helper line, and the two zoom controls (out = expand, in = contract).
-export function ZoomBar({ hint, onOut, onIn, onToday }: Props) {
+const fmt = (n: number) => n.toLocaleString('en-US')
+
+/**
+ * The life bar: a battery of the squares left, in ink. Always the same width — the width is the life.
+ * "42% left" under it; a tap shows "14,620 squares left", another tap goes back.
+ */
+function LifeBar({ profile }: { profile: Profile }) {
+  const [count, setCount] = useState(false)
+  const c = lifeCounts(profile.born, profile.lifespan, todayIso())
+  const label = count ? `${fmt(c.left)} squares left` : `${c.percentLeft}% left`
+  return (
+    <button
+      className="lifebar"
+      onClick={() => setCount(!count)}
+      aria-label={`${fmt(c.left)} squares left, ${c.percentLeft}%`}
+    >
+      <span className="lifebar-cell" aria-hidden="true">
+        <span className="lifebar-fill" style={{ width: `${(c.left / c.total) * 100}%` }} />
+      </span>
+      <span className="lifebar-label" aria-hidden="true">
+        {label}
+      </span>
+    </button>
+  )
+}
+
+// Bottom of every zoom level: the life bar, and the zoom controls (out = expand, in = contract).
+export function ZoomBar({ profile, onOut, onIn, onToday }: Props) {
   return (
     <div className="zoombar">
-      <p className="zoombar-hint">{hint}</p>
+      {profile ? <LifeBar profile={profile} /> : <span />}
       <div className="zoombar-buttons">
         {onToday && (
           <button className="zoombar-today" onClick={onToday}>

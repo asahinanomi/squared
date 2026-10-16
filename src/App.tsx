@@ -390,8 +390,8 @@ export default function App() {
             onSave={async (p) => {
               await saveProfile(p)
               setProfile(p)
-              if (afterSetup === 'life') setScreen('life')
-              else if (afterSetup !== 'settings') goToday()
+              // First run ends on "start painting": straight to today's square.
+              if (afterSetup !== 'settings') goToday()
             }}
           />
         ) : screen === 'settings' ? (
@@ -399,6 +399,7 @@ export default function App() {
         ) : screen === 'year' ? (
           <Year
             days={days}
+            profile={profile}
             born={profile?.born}
             focus={yearFocus}
             onPick={(m) => goMonth(m)}
@@ -443,6 +444,7 @@ export default function App() {
         ) : (
           <Month
             days={days}
+            profile={profile}
             born={profile?.born}
             focus={monthFocus}
             onPick={(iso) => {

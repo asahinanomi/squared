@@ -2,6 +2,7 @@ import { useLayoutEffect } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { fromIso, isoDate, longDate, monthCells, monthTitle, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
+import type { Profile } from '../lib/profile'
 import { useBackToToday } from '../lib/backToToday'
 import { paintHex, paintTint } from '../lib/paints'
 import { useLadderScroll } from '../lib/useLadderScroll'
@@ -9,6 +10,8 @@ import { Chevron } from './Today'
 
 type Props = {
   days: Days
+  /** For the life bar at the bottom. */
+  profile?: Profile | null
   /** Earliest month that can be shown (the birth date), if known. */
   born?: string
   /** Month to open on (zooming in from a year); otherwise the current month. */
@@ -36,7 +39,7 @@ export const monthsBetween = (a: string, b: string) =>
 
 // My squares — your months, one after another in a single scroll, from the birth month
 // down to this one (next month peeks in faintly below). Opens centred on this month.
-export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, anchor }: Props) {
+export function Month({ days, profile, born, focus, onPick, onIn, onOut, zoomed = false, anchor }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const maxBack = born ? monthsBetween(shiftMonth(born, 0), current) : Infinity
@@ -136,12 +139,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
         </section>
       </div>
 
-      <ZoomBar
-        hint={zoomed ? 'zoomed in — each day shows its full date' : 'tap a day to paint · pinch to zoom out'}
-        onIn={onIn}
-        onOut={onOut}
-        onToday={toToday.away ? toToday.back : undefined}
-      />
+      <ZoomBar profile={profile} onIn={onIn} onOut={onOut} onToday={toToday.away ? toToday.back : undefined} />
     </main>
   )
 }
