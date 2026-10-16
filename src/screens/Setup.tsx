@@ -81,6 +81,14 @@ export function Setup({ profile, onBack, onSave }: Props) {
                 max={today}
                 value={born}
                 onChange={(e) => setBorn(e.target.value)}
+                onClick={(e) => {
+                  // Open the picker wherever the field is tapped (some browsers only open it on the icon).
+                  try {
+                    e.currentTarget.showPicker()
+                  } catch {
+                    /* older browsers open it themselves */
+                  }
+                }}
               />
             </div>
           </div>
