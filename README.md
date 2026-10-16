@@ -107,6 +107,7 @@ Build step by step; the owner reviews and gives feedback after each step before 
 1. **Supabase**: run each file in `supabase/migrations/` in order (0001, 0002, …) in the SQL Editor. It creates `settings` (holds the `question` value) and `days` (row-level security: each person sees only their own rows; `painted_on_day` is set by a trigger on first paint).
 2. **Google sign-in**: Supabase → Authentication → Providers → Google, using an OAuth client from Google Cloud. Add the site URLs under Authentication → URL Configuration.
 3. **Env vars** (Vercel and local `.env`, see `.env.example`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. Without them, the app runs as a local demo (sign-in skipped, nothing saved).
+4. **Google screen says "squared.today"** (optional): set `VITE_GOOGLE_CLIENT_ID` to the same OAuth web client's ID, and in Google Cloud add `https://squared.today` to its Authorized JavaScript origins and `https://squared.today/` to its Authorized redirect URIs. The app then signs in with Google directly (ID token + nonce → `signInWithIdToken`). Without the variable it uses Supabase's redirect, whose Google screen shows the Supabase address.
 
 ## Phase 2 — the zoom (done)
 
@@ -129,5 +130,5 @@ Design: https://claude.ai/artifact/PFuFHaZmJXTG82GkJsT1NH. One zoom from a day o
 - App: **https://squared.today** (Vercel; `www.squared.today` redirects here). Backup URL: https://squared-peach.vercel.app
 - DNS at GoDaddy: `A @ → 76.76.21.21`, `CNAME www → cname.vercel-dns.com`. No other A/AAAA records for `@` (the GoDaddy "Parked" A record must stay deleted).
 - Supabase project `xsqpdmtruajdunawpxhk`: Site URL `https://squared.today`; Redirect URLs `https://squared.today/**` and `https://squared-peach.vercel.app/**`.
-- Google sign-in: the OAuth client's only redirect URI is `https://xsqpdmtruajdunawpxhk.supabase.co/auth/v1/callback`; its ID and secret live in Supabase → Authentication → Providers → Google.
+- Google sign-in: the OAuth client's redirect URIs are `https://xsqpdmtruajdunawpxhk.supabase.co/auth/v1/callback` and (for direct sign-in) `https://squared.today/`; its ID and secret live in Supabase → Authentication → Providers → Google.
 - Vercel env vars (Production + Preview): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (the publishable key of the project above). They are baked in at build time, so redeploy after changing them.
