@@ -5,6 +5,8 @@ type Props = {
   onOut?: () => void
   /** Zoom in one level (see less, closer). */
   onIn?: () => void
+  /** Back to today, on this same screen — shown only once today has scrolled out of view. */
+  onToday?: () => void
 }
 
 const stroke = {
@@ -44,11 +46,16 @@ export const ZoomInIcon = () => (
 )
 
 // Bottom of every zoom level: a helper line, and the two zoom controls (out = expand, in = contract).
-export function ZoomBar({ hint, onOut, onIn }: Props) {
+export function ZoomBar({ hint, onOut, onIn, onToday }: Props) {
   return (
     <div className="zoombar">
       <p className="zoombar-hint">{hint}</p>
       <div className="zoombar-buttons">
+        {onToday && (
+          <button className="zoombar-today" onClick={onToday}>
+            today
+          </button>
+        )}
         <button aria-label="Zoom out" disabled={!onOut} onClick={onOut}>
           <ZoomOutIcon />
         </button>

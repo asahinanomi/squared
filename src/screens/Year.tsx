@@ -1,6 +1,7 @@
 import { ZoomBar } from '../components/ZoomBar'
 import { isoDate, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
+import { useBackToToday } from '../lib/backToToday'
 import { bands, monthEnd } from '../lib/tally'
 import { useLadderScroll } from '../lib/useLadderScroll'
 import { Chevron } from './Today'
@@ -33,6 +34,7 @@ export function Year({ days, born, focus, onPick, onIn, onOut }: Props) {
     focus: String(focus ?? thisYear),
     focusBack: thisYear - (focus ?? thisYear),
   })
+  const toToday = useBackToToday(scroller, '.year-month.is-current')
   const years = Array.from({ length: back + 1 }, (_, i) => thisYear - back + i)
   const shown = Number(visible)
 
@@ -86,7 +88,14 @@ export function Year({ days, born, focus, onPick, onIn, onOut }: Props) {
         </button>
       </div>
 
-      <div className="ladder-scroll" ref={scroller} onScroll={onScroll}>
+      <div
+        className="ladder-scroll"
+        ref={scroller}
+        onScroll={() => {
+          onScroll()
+          toToday.check()
+        }}
+      >
         {years.map((y) => (
           <section key={y} className="year-block" data-key={String(y)}>
             <div className="ladder-label">{y}</div>
@@ -106,7 +115,12 @@ export function Year({ days, born, focus, onPick, onIn, onOut }: Props) {
         </section>
       </div>
 
-      <ZoomBar hint="tap a month to open its days" onIn={onIn} onOut={onOut} />
+      <ZoomBar
+        hint="tap a month to open its days"
+        onIn={onIn}
+        onOut={onOut}
+        onToday={toToday.away ? toToday.back : undefined}
+      />
     </main>
   )
 }

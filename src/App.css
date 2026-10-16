@@ -453,6 +453,23 @@
 .zoombar-buttons button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--ink); }
 .zoombar-buttons button:disabled { opacity: 0.25; }
 .zoombar-buttons svg { width: 30px; height: 30px; }
+.zoombar-buttons .zoombar-today {
+  width: auto;
+  padding: 0 10px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+  animation: today-in 0.25s ease-out;
+}
+@keyframes today-in { from { opacity: 0; } }
+/* Just came back to today: the square pulses once, so the eye lands on it. */
+.is-pulse { animation: today-pulse 0.9s ease-out; }
+@keyframes today-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(20, 20, 19, 0.4); }
+  100% { box-shadow: 0 0 0 12px rgba(20, 20, 19, 0); }
+}
 
 .today-zoomout {
   position: fixed;

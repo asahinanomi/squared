@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { glide } from '../lib/backToToday'
 import { LifeHead, type Resolution } from '../components/LifeHead'
 import { ZoomBar } from '../components/ZoomBar'
 import { isoDate, longDate, shortWeekday, todayIso } from '../lib/dates'
@@ -33,6 +34,7 @@ const AHEAD_EDGE = '#e4e4dd'
 const INK = '#141413'
 const NUM_MIN = 40 // squares at least this big print their day number…
 const DATE_COLS = 3 // …and only at the deepest zoom, the full "2026.10 Thu" under it (if it fits)
+const PULSE_MS = 900
 const FONT = "'Schibsted Grotesk', system-ui, sans-serif"
 
 const daysInYear = (y: number) => (new Date(y, 1, 29).getDate() === 29 ? 366 : 365)
@@ -47,6 +49,8 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
   const firstYear = Number(born.slice(0, 4))
   const years = Number(end.slice(0, 4)) - firstYear + (end.slice(5) === '01-01' ? 0 : 1)
   const [picked, setPicked] = useState<string | null>(null)
+  const [away, setAway] = useState(false) // today scrolled out of view
+  const pulseAt = useRef(-1e9) // when today's square last pulsed
 
   const geometry = (w: number, n = cols) => {
     const gap = gapFor(n)
@@ -110,6 +114,15 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
             ctx.lineWidth = 1.5
             ctx.strokeStyle = INK
             ctx.stroke()
+            // Just came back to today: a ring that grows and fades.
+            const p = (performance.now() - pulseAt.current) / PULSE_MS
+            if (p >= 0 && p < 1) {
+              const g = 2 + 10 * p
+              roundRect(ctx, x - g, y - g, cell + g * 2, cell + g * 2, radius + g)
+              ctx.lineWidth = 2
+              ctx.strokeStyle = `rgba(20, 20, 19, ${0.4 * (1 - p)})`
+              ctx.stroke()
+            }
           }
           if (labels) {
             // Clipped to the square, centred, and drawn only if it fits: a label never spills over.
@@ -203,6 +216,31 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
     setPicked(iso)
   }
 
+  // "today": glide back to today's square on this same screen, then pulse it.
+  const todayTop = () => {
+    const p = place(today)
+    return p.b * block + LABEL_H + p.r * pitch
+  }
+  const checkAway = () => {
+    const el = scroller.current
+    if (!el || !cell) return
+    const y = todayTop()
+    setAway(y + cell < el.scrollTop || y > el.scrollTop + el.clientHeight)
+  }
+  const backToToday = () => {
+    const el = scroller.current
+    if (!el) return
+    setPicked(null)
+    glide(el, todayTop() - (el.clientHeight - cell) / 2, () => {
+      pulseAt.current = performance.now()
+      const tick = () => {
+        onScroll() // repaint
+        if (performance.now() - pulseAt.current < PULSE_MS + 50) requestAnimationFrame(tick)
+      }
+      tick()
+    })
+  }
+
   const totalH = years * block - BLOCK_GAP
   return (
     <main className="life">
@@ -212,6 +250,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
         ref={scroller}
         onScroll={() => {
           onScroll()
+          checkAway()
           if (picked) setPicked(null)
         }}
         onClick={onTap}
@@ -236,6 +275,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
             : 'each block is a year · each square a day · today is outlined'
         }
         onIn={onIn}
+        onToday={away ? backToToday : undefined}
       />
     </main>
   )

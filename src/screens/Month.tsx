@@ -2,6 +2,7 @@ import { useLayoutEffect } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { fromIso, isoDate, longDate, monthCells, monthTitle, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
+import { useBackToToday } from '../lib/backToToday'
 import { paintHex, paintTint } from '../lib/paints'
 import { useLadderScroll } from '../lib/useLadderScroll'
 import { Chevron } from './Today'
@@ -47,6 +48,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
     focusBack: monthsBetween(start, current),
   })
 
+  const toToday = useBackToToday(scroller, '.month-day.is-today')
   const months = Array.from({ length: back + 1 }, (_, i) => shiftMonth(current, i - back))
   const step = (n: number) => {
     const target = shiftMonth(visible, n)
@@ -87,7 +89,14 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
         ))}
       </div>
 
-      <div className="ladder-scroll" ref={scroller} onScroll={onScroll}>
+      <div
+        className="ladder-scroll"
+        ref={scroller}
+        onScroll={() => {
+          onScroll()
+          toToday.check()
+        }}
+      >
         {months.map((m) => (
           <section key={m} className="month-block" data-key={m}>
             <div className="ladder-label">{monthTitle(m)}</div>
@@ -131,6 +140,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
         hint={zoomed ? 'zoomed in — each day shows its full date' : 'tap a day to paint · pinch to zoom out'}
         onIn={onIn}
         onOut={onOut}
+        onToday={toToday.away ? toToday.back : undefined}
       />
     </main>
   )

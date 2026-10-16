@@ -1,4 +1,5 @@
-import { useLayoutEffect, useMemo, useRef } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { glide } from '../lib/backToToday'
 import { LifeHead, type Resolution } from '../components/LifeHead'
 import { ZoomBar } from '../components/ZoomBar'
 import { isoDate, todayIso } from '../lib/dates'
@@ -32,6 +33,7 @@ const AHEAD = '#f1f1ec'
 const BEFORE = '#f6f6f2'
 const INK = '#141413'
 const LABEL_COLS = 3 // only at the deepest zoom do squares print their name and year (if it fits)
+const PULSE_MS = 900
 const FONT = "'Schibsted Grotesk', system-ui, sans-serif"
 
 // A life, in months — about 1,140 banded month-squares, twelve to a row so each row is a year,
@@ -44,6 +46,8 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
   const rows = Math.ceil(count / cols)
   const thisMonth = today.slice(0, 7)
   const bornMonth = born.slice(0, 7)
+  const [away, setAway] = useState(false) // this month scrolled out of view
+  const pulseAt = useRef(-1e9) // when this month's square last pulsed
 
   // Bands for each lived month, worked out once per change in your days.
   const monthBands = useMemo(() => {
@@ -116,6 +120,15 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
             ctx.lineWidth = 2
             ctx.strokeStyle = INK
             ctx.stroke()
+            // Just came back to today: a ring that grows and fades.
+            const p = (performance.now() - pulseAt.current) / PULSE_MS
+            if (p >= 0 && p < 1) {
+              const g = 3 + 10 * p
+              roundRect(ctx, x - g, y - g, cell + g * 2, cell + g * 2, radius + g)
+              ctx.lineWidth = 2
+              ctx.strokeStyle = `rgba(20, 20, 19, ${0.4 * (1 - p)})`
+              ctx.stroke()
+            }
           }
         }
       }
@@ -148,6 +161,30 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
     el.scrollTop = Math.floor(i / cols) * pitch + cell / 2 - fy
   }, [cols]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // "today": glide back to this month's square on this same screen, then pulse it.
+  const nowTop = () => {
+    const i = (Number(thisMonth.slice(0, 4)) - firstYear) * 12 + Number(thisMonth.slice(5, 7)) - 1
+    return Math.floor(i / cols) * pitch
+  }
+  const checkAway = () => {
+    const el = scroller.current
+    if (!el || !cell) return
+    const y = nowTop()
+    setAway(y + cell < el.scrollTop || y > el.scrollTop + el.clientHeight)
+  }
+  const backToToday = () => {
+    const el = scroller.current
+    if (!el) return
+    glide(el, nowTop() - (el.clientHeight - cell) / 2, () => {
+      pulseAt.current = performance.now()
+      const tick = () => {
+        onScroll() // repaint
+        if (performance.now() - pulseAt.current < PULSE_MS + 50) requestAnimationFrame(tick)
+      }
+      tick()
+    })
+  }
+
   const onTap = (e: React.MouseEvent) => {
     const el = scroller.current
     if (!el || !cell) return
@@ -168,7 +205,15 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
   return (
     <main className="life">
       <LifeHead profile={profile} current="months" onPick={onResolution} />
-      <div className="life-canvas" ref={scroller} onScroll={onScroll} onClick={onTap}>
+      <div
+        className="life-canvas"
+        ref={scroller}
+        onScroll={() => {
+          onScroll()
+          checkAway()
+        }}
+        onClick={onTap}
+      >
         <canvas ref={canvas} style={{ width: size.w, height: size.h }} aria-hidden="true" />
         <div style={{ height: Math.max(0, rows * pitch - gapFor(cols) - size.h) }} />
       </div>
@@ -180,6 +225,7 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
         }
         onIn={onIn}
         onOut={onOut}
+        onToday={away ? backToToday : undefined}
       />
     </main>
   )
