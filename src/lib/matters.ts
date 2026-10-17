@@ -1,11 +1,11 @@
 import { supabase } from './supabase'
 
-// "what matters": the owner's own compass — what a meaningful day and an empty day look like to them.
+// "what matters": the owner's own compass — what a meaningful day and a wasted day look like to them.
 // A reference only: it never scores or colours a day. Kept in the account (migration 0007) so every
 // device sees the same lists, with a copy on this device so it opens at once, and offline.
 
 export type Entry = { id: string; text: string }
-export type Matters = { meaningful: Entry[]; empty: Entry[] }
+export type Matters = { meaningful: Entry[]; wasted: Entry[] }
 export type Kind = keyof Matters
 /** The lists, and when they were last changed (absent on a copy saved before sync existed). */
 export type Saved = Matters & { at?: string }
@@ -16,18 +16,20 @@ export const MAX_CHARS = 120 // a line or two
 // Never keep blank entries.
 const clean = (m: Matters): Matters => {
   const keep = (l: Entry[]) => l.filter((e) => e.text.trim())
-  return { meaningful: keep(m.meaningful), empty: keep(m.empty) }
+  return { meaningful: keep(m.meaningful), wasted: keep(m.wasted) }
 }
 
 /** This device's copy. */
 export function loadMatters(): Saved {
   try {
-    const m = JSON.parse(localStorage.getItem(KEY) ?? 'null') as Saved | null
-    if (m && Array.isArray(m.meaningful) && Array.isArray(m.empty)) return m
+    // Copies saved before the rename keep the second list as "empty".
+    const m = JSON.parse(localStorage.getItem(KEY) ?? 'null') as (Saved & { empty?: Entry[] }) | null
+    const wasted = m?.wasted ?? m?.empty
+    if (m && Array.isArray(m.meaningful) && Array.isArray(wasted)) return { meaningful: m.meaningful, wasted, at: m.at }
   } catch {
     /* unreadable or unavailable: start fresh */
   }
-  return { meaningful: [], empty: [] }
+  return { meaningful: [], wasted: [] }
 }
 
 function keepLocal(m: Saved) {
@@ -38,13 +40,17 @@ function keepLocal(m: Saved) {
   }
 }
 
+// The second list's column was "empty" until migration 0008 renamed it; read either, so the app and
+// the migration can land in any order.
+const missingColumn = (code?: string) => code === '42703' || code === 'PGRST204'
+
 /** The account's copy: null when there's none yet, or no account to keep it in (demo, or 0007 not run). */
 export async function fetchMatters(): Promise<Saved | null> {
   if (!supabase) return null
-  const { data, error } = await supabase.from('matters').select('meaningful, empty, saved_at').maybeSingle()
+  const { data, error } = await supabase.from('matters').select('*').maybeSingle()
   if (error?.code === 'PGRST205' || error?.code === '42P01') return null
   if (error) throw error
-  return data && { meaningful: data.meaningful, empty: data.empty, at: data.saved_at }
+  return data && { meaningful: data.meaningful, wasted: data.wasted ?? data.empty, at: data.saved_at }
 }
 
 /** Save a change on this device (at once, on every change). */
@@ -57,16 +63,19 @@ export function saveMatters(m: Matters): Saved {
 /** Send this device's copy to the account. */
 export async function pushMatters(m: Saved): Promise<void> {
   if (!supabase) return
-  const { error } = await supabase
-    .from('matters')
-    .upsert({ meaningful: m.meaningful, empty: m.empty, saved_at: m.at }, { onConflict: 'user_id' })
+  const send = (second: 'wasted' | 'empty') =>
+    supabase!
+      .from('matters')
+      .upsert({ meaningful: m.meaningful, [second]: m.wasted, saved_at: m.at }, { onConflict: 'user_id' })
+  let { error } = await send('wasted')
+  if (missingColumn(error?.code)) ({ error } = await send('empty')) // 0008 not run yet
   if (error && error.code !== 'PGRST205' && error.code !== '42P01') throw error
 }
 
 /** Opening the lists: whichever copy changed last wins, and the other side catches up. */
 export async function syncMatters(local: Saved): Promise<Saved> {
   const remote = await fetchMatters()
-  const hasLocal = local.meaningful.length + local.empty.length > 0
+  const hasLocal = local.meaningful.length + local.wasted.length > 0
   // The account writes its times its own way ("…+00:00"), so compare them as times, not text.
   if (remote && (!local.at || Date.parse(remote.at!) >= Date.parse(local.at))) {
     keepLocal(remote)

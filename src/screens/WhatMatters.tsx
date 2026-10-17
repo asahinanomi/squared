@@ -28,8 +28,7 @@ type Props = {
 
 const LISTS: { kind: Kind; label: string; dot: string; hint: string }[] = [
   { kind: 'meaningful', label: 'meaningful', dot: paintHex('green'), hint: 'what does a meaningful day look like?' },
-  // Stored as "empty" (the account's column); shown as wasted, the red paint.
-  { kind: 'empty', label: 'wasted', dot: paintHex('red'), hint: 'what makes a day feel wasted?' },
+  { kind: 'wasted', label: 'wasted', dot: paintHex('red'), hint: 'what makes a day feel wasted?' },
 ]
 
 /** A text box that grows with what's typed (one or two lines). */
@@ -62,7 +61,7 @@ function EntryInput({ entry, onChange, onDone }: { entry: Entry; onChange: (t: s
   )
 }
 
-// What matters: two short lists — what a meaningful day and an empty day look like to you.
+// What matters: two short lists — what a meaningful day and a wasted day look like to you.
 // Your compass when you paint; it never judges or colours a day for you. Every change saves itself,
 // to this device and the account; opening it picks up changes made on another device.
 export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedToday }: Props) {
