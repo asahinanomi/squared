@@ -29,6 +29,7 @@ import { Month } from './screens/Month'
 import { Year } from './screens/Year'
 import { Life } from './screens/Life'
 import { Pie } from './screens/Pie'
+import { SCOPE_ORDER, type Scope } from './lib/pie'
 import { LifeMonths } from './screens/LifeMonths'
 import { LifeDays } from './screens/LifeDays'
 import type { Resolution } from './components/LifeHead'
@@ -69,6 +70,8 @@ export default function App() {
   const [afterSetup, setAfterSetup] = useState<Screen>('today')
   // The zoom level the pie was opened from: the switch returns there.
   const [pieFrom, setPieFrom] = useState<Screen>('life')
+  // Which days the pie is out of; it always opens on the whole life.
+  const [pieScope, setPieScope] = useState<Scope>('life')
   // Where settings was opened from: its back arrow returns there.
   const [settingsFrom, setSettingsFrom] = useState<Screen>('today')
   // What matters opens from settings or from the idea; back returns there.
@@ -283,6 +286,7 @@ export default function App() {
   const togglePie = () => {
     if (screen === 'pie') return setScreen(pieFrom)
     setPieFrom(screen)
+    setPieScope('life')
     if (profile) return setScreen('pie')
     setAfterSetup('pie')
     setScreenValue('setup')
@@ -315,7 +319,12 @@ export default function App() {
       setMonthAnchor({ iso: hit?.dataset.iso, y: at.y })
       setMag(mag + 1)
     } else if (screen === 'year') goMonth()
-    else if (screen === 'life' && lifeRes === 'years') goYear()
+    else if (screen === 'pie') {
+      // On the pie, closer means fewer days counted: whole life → days I lived → painted only.
+      const i = SCOPE_ORDER.indexOf(pieScope)
+      if (i >= SCOPE_ORDER.length - 1) return false
+      setPieScope(SCOPE_ORDER[i + 1])
+    } else if (screen === 'life' && lifeRes === 'years') goYear()
     else if (screen === 'life') {
       if (mag >= LIFE_NOTCHES - 1) return false
       setFocal(at)
@@ -330,7 +339,11 @@ export default function App() {
       setMonthAnchor({ iso: hit?.dataset.iso, y: at.y })
       setMag(mag - 1)
     } else if (screen === 'year') goLife()
-    else if (screen === 'life') {
+    else if (screen === 'pie') {
+      const i = SCOPE_ORDER.indexOf(pieScope)
+      if (i <= 0) return false
+      setPieScope(SCOPE_ORDER[i - 1])
+    } else if (screen === 'life') {
       if (mag > 0) {
         setFocal(at)
         setMag(mag - 1)
@@ -441,7 +454,7 @@ export default function App() {
               paintedToday={!!days[todayIso()]}
             />
           ) : screen === 'pie' && profile ? (
-            <Pie days={days} profile={profile} />
+            <Pie days={days} profile={profile} scope={pieScope} onScope={setPieScope} />
           ) : screen === 'year' ? (
             <Year
               days={days}

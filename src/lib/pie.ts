@@ -8,13 +8,16 @@ export type Slice = { id: SliceId; count: number }
 /** Clockwise from 12 o'clock, and the legend's order. */
 export const SLICE_ORDER: SliceId[] = ['green', 'red', 'grey', 'unpainted', 'ahead']
 
-/** Which days the pie is out of: a whole life, or the painted days only. */
-export type Scope = 'life' | 'painted'
+/** Which days the pie is out of, widest first: a whole life, the days lived so far, or the painted days only. */
+export type Scope = 'life' | 'lived' | 'painted'
+
+/** Zooming in on the pie steps along this, from the whole life to the painted days. */
+export const SCOPE_ORDER: Scope[] = ['life', 'lived', 'painted']
 
 /**
  * A life in slices: painted days by colour (backfilled counts the same), lived days left
  * unpainted, and the days still to come — today among them until it's painted, like the life glass.
- * "painted" keeps the colours only.
+ * "lived" drops the days still to come; "painted" keeps the colours only.
  */
 export function lifeSlices(days: Days, born: string, lifespan: number, today: string, scope: Scope = 'life'): Slice[] {
   const end = addYears(born, lifespan) // first day after the life
@@ -24,6 +27,6 @@ export function lifeSlices(days: Days, born: string, lifespan: number, today: st
   const lived = Math.min(Math.max(daysBetween(born, today) + (days[today] ? 1 : 0), 0), total)
   const sum = painted.green + painted.red + painted.grey
   const count: Record<SliceId, number> = { ...painted, unpainted: lived - sum, ahead: total - lived }
-  const ids = scope === 'painted' ? SLICE_ORDER.slice(0, 3) : SLICE_ORDER
+  const ids = SLICE_ORDER.slice(0, scope === 'painted' ? 3 : scope === 'lived' ? 4 : 5)
   return ids.map((id) => ({ id, count: count[id] }))
 }

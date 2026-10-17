@@ -1,14 +1,16 @@
-import { useState } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { paintHex } from '../lib/paints'
-import { lifeSlices, type Scope, type Slice, type SliceId } from '../lib/pie'
+import { lifeSlices, SCOPE_ORDER, type Scope, type Slice, type SliceId } from '../lib/pie'
 import type { Profile } from '../lib/profile'
 
 type Props = {
   days: Days
   profile: Profile
+  /** Which days the pie is out of (held by the app, so pinch can step it too). */
+  scope: Scope
+  onScope: (s: Scope) => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
@@ -21,10 +23,11 @@ const LABEL: Record<SliceId, string> = {
   ahead: 'still to come',
 }
 
-const SCOPES: [Scope, string][] = [
-  ['life', 'whole life'],
-  ['painted', 'painted only'],
-]
+const SCOPE_LABEL: Record<Scope, string> = {
+  life: 'whole life',
+  lived: 'days I lived',
+  painted: 'painted only',
+}
 
 const FILL: Record<SliceId, string> = {
   green: paintHex('green'),
@@ -50,9 +53,10 @@ function wedge(a: number, b: number) {
 
 // A life pie, in slices: line art like the squares — keylines, paint in the painted wedges,
 // a dashed keyline round the days still to come (which carry their own count).
-// Three denominators for the same chart; it always opens on the whole life.
-export function Pie({ days, profile }: Props) {
-  const [scope, setScope] = useState<Scope>('life')
+// Three denominators for the same chart; it always opens on the whole life. Zooming in (pinch or
+// the zoom buttons) steps closer: whole life → days I lived → painted only.
+export function Pie({ days, profile, scope, onScope }: Props) {
+  const step = SCOPE_ORDER.indexOf(scope)
   const slices = lifeSlices(days, profile.born, profile.lifespan, todayIso(), scope)
   const total = slices.reduce((s, x) => s + x.count, 0)
   let turn = 0
@@ -79,14 +83,14 @@ export function Pie({ days, profile }: Props) {
       </div>
 
       <div className="pie-scope" role="group" aria-label="Count out of">
-        {SCOPES.map(([id, label]) => (
+        {SCOPE_ORDER.map((id) => (
           <button
             key={id}
             className={id === scope ? 'is-on' : undefined}
             aria-pressed={id === scope}
-            onClick={() => setScope(id)}
+            onClick={() => onScope(id)}
           >
-            {label}
+            {SCOPE_LABEL[id]}
           </button>
         ))}
       </div>
@@ -146,7 +150,11 @@ export function Pie({ days, profile }: Props) {
         </button>
       </div>
 
-      <ZoomBar profile={profile} />
+      <ZoomBar
+        profile={profile}
+        onIn={step < SCOPE_ORDER.length - 1 ? () => onScope(SCOPE_ORDER[step + 1]) : undefined}
+        onOut={step > 0 ? () => onScope(SCOPE_ORDER[step - 1]) : undefined}
+      />
     </main>
   )
 }
