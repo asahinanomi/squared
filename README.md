@@ -108,7 +108,7 @@ Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: 
 
 - Step 1 (done): **settings hub** — back arrow (returns to where you came from), "settings", four rows: square settings ("Oct 26, 1971 · 95 years · 34,699 squares", opens the square screen), and reminders / my data / account shown with a "soon" tag and not tappable. "squared.today" at the foot. The "how many squares?" menu item is gone.
 - Step 2 (done): square settings — one shared screen, two modes (first-run "how many squares?" + "start painting", which lands on today; from settings "square settings", back arrow, saves as you change it, quiet offline cue). Moving the birth date later hides earlier painted days, never deletes them.
-- Step 3 (done): life bar — replaces the hint text on every zoom level; a fixed-width battery in ink, remaining part filled, "42% left" under it; tap flips to "14,620 squares left" and back.
+- Step 3 (done): life glass — replaces the hint text on every zoom level: an hourglass whose sand is your life (top = squares left, bottom = spent). Just the icon until tapped; a tap shows "14,620 left · 42%" in a soft pill, another tap hides it. A few grains trickle on arrival and every 30 seconds (off with "reduce motion"). The glass, zoom icons and "today" are a soft dark grey (#55554F), not black. (It replaced a first try: a battery bar.)
 - Step 4: polish & wrap-up.
 
 ## Setup (for future sessions)
