@@ -13,6 +13,9 @@ type Props = {
   onMarginTap?: (clientX: number, clientY: number) => void
 }
 
+// A quiet word in the middle of the square: what it holds, or that it's waiting.
+const WORD: Record<Paint, string> = { green: 'meaningful', red: 'wasted', grey: 'slipped by' }
+
 // Brush diameter as a share of the square: two side-by-side swipes cover it.
 const BRUSH = 0.58
 // Coverage is tracked on a coarse grid; this much painted counts as filled.
@@ -38,6 +41,8 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
   const fingers = useRef(new Set<number>())
   const before = useRef<{ img: ImageData; covered: Uint8Array } | null>(null)
   const [settling, setSettling] = useState<Paint | null>(null)
+  // The word steps aside once the brush touches the square (a new color is on its way).
+  const [touched, setTouched] = useState(false)
 
   // Size the backing store to the element at device resolution.
   useEffect(() => {
@@ -102,6 +107,8 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
       if (b && last.current) {
         canvas.current!.getContext('2d')!.putImageData(b.img, 0, 0)
         covered.current.set(b.covered)
+        // Nothing left on the square: the word comes back.
+        if (!b.covered.some(Boolean)) setTouched(false)
       }
       last.current = null
       pending.current = null
@@ -130,6 +137,7 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
       covered: covered.current.slice(),
     }
     last.current = null
+    setTouched(true)
   }
 
   const move = (e: React.PointerEvent) => {
@@ -187,6 +195,11 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
       >
         <canvas ref={canvas} className="paint-surface" />
         {settling && <div className="settle" style={{ background: paintHex(settling) }} />}
+        {!touched && !settling && (
+          <span className={'canvas-word' + (saved ? ' is-painted' : '')} aria-hidden="true">
+            {saved ? WORD[saved] : 'to paint'}
+          </span>
+        )}
       </div>
       {/* Strokes may start a little outside the square; a quick tap here reaches the grid day beneath. */}
       <div
