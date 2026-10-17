@@ -555,7 +555,7 @@
 .life-title { margin: 0; font-size: 27px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
 /* Rows keep their squares' height: on a short, wide window the grid scrolls instead of squashing. */
 .life-years {
-  margin-top: 16px;
+  margin-top: 9px;
   display: grid;
   grid-auto-rows: max-content;
   align-content: start;
@@ -586,7 +586,7 @@
   position: relative;
   flex: 1;
   min-height: 0;
-  margin-top: 16px;
+  margin-top: 4px;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
@@ -939,22 +939,22 @@ button.settings-row:active { background: var(--grey-1); }
 /* ---------- a life pie ---------- */
 .pie { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 /* A quiet segmented control: a life's years · months · days, and the pie's filter. */
-.seg { display: flex; gap: 2px; width: fit-content; margin: 14px auto 0; padding: 3px; border-radius: 999px; background: #efefea; flex-shrink: 0; }
+/* It sits closer to what it changes than to the title above it: 22px above, about 12px below. */
+.seg { display: flex; gap: 2px; width: fit-content; margin: 22px auto 0; padding: 3px; border-radius: 999px; background: #efefea; flex-shrink: 0; }
 .seg button { padding: 4px 13px; border-radius: 999px; font-size: 12.5px; color: #9a9a93; white-space: nowrap; }
 .seg button:focus:not(:focus-visible) { outline: none; }
 .seg button.is-on { background: #fff; color: var(--ink); font-weight: 600; }
 .pie-body {
   flex: 1;
   min-height: 0;
-  margin-top: 6px;
-  padding: 16px 0 20px;
+  padding: 12px 0 20px;
   /* The pie, its legend, and the "soon" buttons at the foot (pushed down when there's room). */
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
-  mask-image: linear-gradient(to bottom, transparent, #000 16px, #000 calc(100% - 20px), transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 12px, #000 calc(100% - 20px), transparent);
 }
 .pie-body::-webkit-scrollbar { display: none; }
 /* Large, a touch inside the screen's width; the legend lines up with the pie's own edges (the circle is 96% of the drawing). */
