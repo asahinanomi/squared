@@ -944,12 +944,16 @@ button.settings-row:active { background: var(--grey-1); }
 .pie { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .pie-scope { display: flex; gap: 2px; width: fit-content; margin: 14px auto 0; padding: 3px; border-radius: 999px; background: #efefea; flex-shrink: 0; }
 .pie-scope button { padding: 4px 13px; border-radius: 999px; font-size: 12.5px; color: #9a9a93; white-space: nowrap; }
+.pie-scope button:focus:not(:focus-visible) { outline: none; }
 .pie-scope button.is-on { background: #fff; color: var(--ink); font-weight: 600; }
 .pie-body {
   flex: 1;
   min-height: 0;
   margin-top: 6px;
   padding: 16px 0 20px;
+  /* The pie, its legend, and the "soon" buttons at the foot (pushed down when there's room). */
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
@@ -957,20 +961,22 @@ button.settings-row:active { background: var(--grey-1); }
 }
 .pie-body::-webkit-scrollbar { display: none; }
 /* Large, a touch inside the screen's width; the legend lines up with the pie's own edges (the circle is 96% of the drawing). */
-.pie-chart { display: block; width: min(88%, 310px); margin: 0 auto; overflow: visible; }
+.pie-chart { display: block; flex-shrink: 0; aspect-ratio: 1; width: min(88%, 310px); margin: 0 auto; overflow: visible; }
 .pie-legend { width: calc(min(88%, 310px) * 0.96); margin-left: auto; margin-right: auto; }
 .pie-slice { stroke: var(--ink); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
 .pie-slice.is-ahead { stroke-dasharray: 2 6; stroke-linecap: round; }
-.pie-ahead text { text-anchor: middle; font-family: inherit; }
-.pie-ahead-n { font-size: 15px; font-weight: 600; fill: #55554f; }
-.pie-ahead-unit { font-size: 8px; fill: #9a9a93; }
+.pie-label text { text-anchor: middle; font-family: inherit; }
+.pie-label-n { font-size: 15px; font-weight: 600; fill: #55554f; }
+.pie-label-unit { font-size: 8px; fill: #9a9a93; }
+/* On paint, ink reads better than grey. */
+.pie-label.is-on-paint .pie-label-n, .pie-label.is-on-paint .pie-label-unit { fill: var(--ink); }
 .pie-legend { list-style: none; margin-top: 28px; margin-bottom: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
 .pie-legend li { display: flex; align-items: center; gap: 12px; font-size: 15px; }
 .pie-dot { width: 13px; height: 13px; flex-shrink: 0; box-sizing: border-box; border-radius: 50%; border: 1.5px solid var(--ink); }
 .pie-dot.is-ahead { border-style: dashed; }
 .pie-legend-n { margin-left: auto; font-size: 14px; font-weight: 500; color: #55554f; font-variant-numeric: tabular-nums; }
 .pie-legend .is-quiet .pie-legend-label, .pie-legend .is-quiet .pie-legend-n { color: #9a9a93; font-weight: 400; }
-.pie-soon { margin-top: auto; padding-top: 16px; flex-shrink: 0; display: flex; gap: 10px; justify-content: center; }
+.pie-soon { margin-top: auto; padding-top: 24px; flex-shrink: 0; display: flex; gap: 10px; justify-content: center; }
 .pie-soon button,
 .pie-soon button:disabled {
   display: flex;

@@ -52,7 +52,7 @@ function wedge(a: number, b: number) {
 }
 
 // A life pie, in slices: line art like the squares — keylines, paint in the painted wedges,
-// a dashed keyline round the days still to come (which carry their own count).
+// a dashed keyline round the days still to come. Numbers sit inside the wedges that have room for them.
 // Three denominators for the same chart; it always opens on the whole life. Zooming in (pinch or
 // the zoom buttons) steps closer: whole life → days I lived → painted only.
 export function Pie({ days, profile, scope, onScope }: Props) {
@@ -67,14 +67,7 @@ export function Pie({ days, profile, scope, onScope }: Props) {
       turn += s.count / total
       return { ...s, a, b: turn }
     })
-  const ahead = drawn.find((s) => s.id === 'ahead')
-  // The count sits inside its wedge, when the wedge is wide enough to hold it.
-  const label =
-    ahead && ahead.b - ahead.a >= 0.12
-      ? at((ahead.a + ahead.b) / 2, R * 0.5)
-          .split(' ')
-          .map(Number)
-      : null
+  const labels = pieLabels(drawn, scope)
 
   return (
     <main className="pie">
@@ -108,46 +101,48 @@ export function Pie({ days, profile, scope, onScope }: Props) {
               className={s.id === 'ahead' ? 'pie-slice is-ahead' : 'pie-slice'}
             />
           ))}
-          {label && ahead && (
-            <g className="pie-ahead" aria-hidden="true">
-              <text x={label[0]} y={label[1] - 7} className="pie-ahead-n">
-                {fmt(ahead.count)}
+          {labels.map((l) => (
+            <g key={l.id} className={'pie-label' + (l.onPaint ? ' is-on-paint' : '')} aria-hidden="true">
+              <text x={l.x} y={l.unit ? l.y - 7 : l.y + 5} className="pie-label-n">
+                {fmt(l.n)}
               </text>
-              <text x={label[0]} y={label[1] + 9} className="pie-ahead-unit">
-                days to paint
-              </text>
+              {l.unit && (
+                <text x={l.x} y={l.y + 9} className="pie-label-unit">
+                  {l.unit}
+                </text>
+              )}
             </g>
-          )}
+          ))}
         </svg>
 
         <ul className="pie-legend">
           {slices.map((s) => (
-            <li key={s.id} className={s.id === 'unpainted' || s.id === 'ahead' ? 'is-quiet' : undefined}>
+            <li key={s.id} className={s.id === 'ahead' ? 'is-quiet' : undefined}>
               <span className={'pie-dot' + (s.id === 'ahead' ? ' is-ahead' : '')} style={{ background: FILL[s.id] }} />
               <span className="pie-legend-label">{LABEL[s.id]}</span>
               <span className="pie-legend-n">{fmt(s.count)}</span>
             </li>
           ))}
         </ul>
-      </div>
 
-      <div className="pie-soon">
-        <button disabled>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 15V4" />
-            <path d="M8 7l4-4 4 4" />
-            <path d="M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" />
-          </svg>
-          share my pie <span className="pie-soon-tag">soon</span>
-        </button>
-        <button disabled>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 4v11" />
-            <path d="M8 11l4 4 4-4" />
-            <path d="M5 20h14" />
-          </svg>
-          download <span className="pie-soon-tag">soon</span>
-        </button>
+        <div className="pie-soon">
+          <button disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 15V4" />
+              <path d="M8 7l4-4 4 4" />
+              <path d="M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" />
+            </svg>
+            share my pie <span className="pie-soon-tag">soon</span>
+          </button>
+          <button disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 4v11" />
+              <path d="M8 11l4 4 4-4" />
+              <path d="M5 20h14" />
+            </svg>
+            download <span className="pie-soon-tag">soon</span>
+          </button>
+        </div>
       </div>
 
       <ZoomBar
@@ -157,6 +152,37 @@ export function Pie({ days, profile, scope, onScope }: Props) {
       />
     </main>
   )
+}
+
+type Drawn = Slice & { a: number; b: number }
+type Label = { id: SliceId; x: number; y: number; n: number; unit?: string; onPaint: boolean }
+
+// A wedge holds a number when it's wide enough: two lines need more room than a bare count.
+const ROOM = { withUnit: 0.12, bare: 0.06 }
+
+/**
+ * The numbers inside the pie. Whole life: the days to paint in their wedge, and the days lived in the
+ * widest lived wedge. Days I lived: the days lived, the same way. Painted only: each slice its own count.
+ */
+function pieLabels(drawn: Drawn[], scope: Scope): Label[] {
+  const place = (s: Drawn, n: number, unit?: string): Label | null => {
+    if (s.b - s.a < (unit ? ROOM.withUnit : ROOM.bare)) return null
+    const [x, y] = at((s.a + s.b) / 2, R * (unit ? 0.5 : 0.6))
+      .split(' ')
+      .map(Number)
+    return { id: s.id, x, y, n, unit, onPaint: s.id !== 'unpainted' && s.id !== 'ahead' }
+  }
+  const out: (Label | null)[] = []
+  if (scope === 'painted') out.push(...drawn.map((s) => place(s, s.count)))
+  else {
+    const lived = drawn.filter((s) => s.id !== 'ahead')
+    const widest = lived.reduce<Drawn | null>((w, s) => (!w || s.count > w.count ? s : w), null)
+    const livedDays = lived.reduce((n, s) => n + s.count, 0)
+    if (widest) out.push(place(widest, livedDays, 'days lived'))
+    const ahead = drawn.find((s) => s.id === 'ahead')
+    if (ahead) out.push(place(ahead, ahead.count, 'days to paint'))
+  }
+  return out.filter((l): l is Label => !!l)
 }
 
 const pieLabel = (slices: Slice[]) =>
