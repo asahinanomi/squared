@@ -24,7 +24,10 @@ export function lifeSlices(days: Days, born: string, lifespan: number, today: st
   const painted: Record<Paint, number> = { green: 0, red: 0, grey: 0 }
   for (const [iso, d] of Object.entries(days)) if (iso >= born && iso <= today && iso < end) painted[d.color]++
   const total = daysBetween(born, end)
-  const lived = Math.min(Math.max(daysBetween(born, today) + (days[today] ? 1 : 0), 0), total)
+  // Birth day through today. On the whole life an unpainted today still counts as to come, like the life glass;
+  // "days I lived" always ends on today.
+  const withToday = scope === 'lived' || !!days[today]
+  const lived = Math.min(Math.max(daysBetween(born, today) + (withToday ? 1 : 0), 0), total)
   const sum = painted.green + painted.red + painted.grey
   const count: Record<SliceId, number> = { ...painted, unpainted: lived - sum, ahead: total - lived }
   const ids = SLICE_ORDER.slice(0, scope === 'painted' ? 3 : scope === 'lived' ? 4 : 5)
