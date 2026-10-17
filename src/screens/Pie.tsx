@@ -23,7 +23,6 @@ const LABEL: Record<SliceId, string> = {
 
 const SCOPES: [Scope, string][] = [
   ['life', 'whole life'],
-  ['started', 'since I started'],
   ['painted', 'painted only'],
 ]
 
