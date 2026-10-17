@@ -15,7 +15,7 @@ export function Idea() {
         I live a very busy life. one day I looked up and saw how much of it had quietly slipped past - and I couldn’t
         even say where it went :(
       </p>
-      <p>i made squared to help me stay aware. each day, you paint one square — one colour, for how you lived it.</p>
+      <p>I made squared to help me stay aware. each day, you paint one square — one colour, for how you lived it.</p>
       <ul className="idea-colours">
         {COLOURS.map(([paint, line]) => (
           <li key={paint}>
@@ -29,7 +29,7 @@ export function Idea() {
         no streaks. no scores. just an honest log, one day at a time - the days that build a life, the days we have
         fewer than we think.
       </p>
-      <p>i hope to make mine as green as I can. I hope squared can help you too.</p>
+      <p>I hope to make mine as green as I can. I hope squared can help you too.</p>
       <p className="idea-sign">— nomi</p>
     </main>
   )
