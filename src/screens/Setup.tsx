@@ -194,16 +194,34 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
           <div className="setup-total">{c ? fmt(c.total) : '—'}</div>
           <div className="setup-squares">squares</div>
           {c && (
-            <div className="setup-line">
-              {inYears ? `${spentYears} years` : fmt(c.sofar)} lived ·{' '}
-              <strong>
-                {inYears ? `${lifespan - spentYears} years` : fmt(c.left)} ({c.percentLeft}%) to paint
-              </strong>{' '}
-              · {/* Flip between squares and years; it opens on squares every time. */}
-              <button className="setup-unit" onClick={() => setInYears(!inYears)}>
-                {inYears ? 'in squares' : 'in years'}
-              </button>
-            </div>
+            <>
+              <div className="setup-line">
+                <span>{inYears ? `${spentYears} years` : fmt(c.sofar)} lived</span>
+                <span className="dot" aria-hidden="true">
+                  ·
+                </span>
+                <strong>
+                  {inYears ? `${lifespan - spentYears} years` : fmt(c.left)} ({c.percentLeft}%) to paint
+                </strong>
+              </div>
+              {/* Two views of the same numbers; it opens on squares every time. */}
+              <div className="seg setup-seg" role="group" aria-label="Count in">
+                <button
+                  className={inYears ? undefined : 'is-on'}
+                  aria-pressed={!inYears}
+                  onClick={() => setInYears(false)}
+                >
+                  squares
+                </button>
+                <button
+                  className={inYears ? 'is-on' : undefined}
+                  aria-pressed={inYears}
+                  onClick={() => setInYears(true)}
+                >
+                  years
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>

@@ -882,9 +882,10 @@
 .setup-thats { font-size: 15px; color: #55554f; }
 .setup-total { font-size: 48px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; margin: 4px 0; font-variant-numeric: tabular-nums; }
 .setup-squares { font-size: 20px; font-weight: 500; }
-.setup-line { margin-top: 10px; font-size: 13px; color: var(--grey-4); }
+.setup-line { margin-top: 10px; display: flex; justify-content: center; align-items: baseline; flex-wrap: wrap; font-size: 13px; color: var(--grey-4); }
 .setup-line strong { color: var(--ink); font-weight: 600; font-size: 15px; }
-.setup-unit { font: inherit; color: inherit; text-decoration: underline dotted #cfcfc8; text-underline-offset: 3px; }
+.setup-line .dot { margin: 0 12px; color: #b5b5ae; }
+.setup-seg { margin-top: 14px; }
 .setup-error { margin: 0 0 12px; text-align: center; font-size: 15px; color: var(--ink-soft); }
 .setup-go:disabled { opacity: 0.35; }
 
