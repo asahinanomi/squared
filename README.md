@@ -112,13 +112,14 @@ Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: 
 - **what matters** (done): settings → "what matters" — two short lists, meaningful and empty, of what each kind of day looks like to you. Your compass when you paint; a reference only, it never scores or colours a day. Tap "+ add" to write an entry (a line or two, up to 120 characters; Enter or tapping away saves), tap an entry to edit, swipe it left to delete, clear it to remove it. Saves itself on this device (`squared.matters` in local storage); it moves to the account once sync exists.
 - Step 4: polish & wrap-up.
 
-## Phase 4 — pie view (in progress)
+## Phase 4 — pie view (done)
 
 Design: board "16 · Pie — line art (final)". Built step by step; I check each step.
 
 - Step 1 (done): **a life pie** — the centre of the zoom bar (between the life glass and the zoom buttons) holds a pie icon on every zoom level; tap it for the pie. On the pie, it turns into a squares icon (2×2, one filled) that takes you back to the level you came from, and both zoom buttons are greyed. All bar icons are drawn to the same height. No back arrow on the pie, just the logo and menu. Title "a life pie, in slices", subtitle "how will you paint yours?". Line art: 2px keylines, slices clockwise from 12 o'clock — green "lived, it mattered" · red "here, but wasted" · grey "slipped by" · light grey "lived, not painted" (lived days left blank) · blank with a dashed keyline "still to come", which prints its own "N / days to paint" when the wedge is wide enough (today counts here until it's painted, so it matches the life glass). Backfilled days count the same as on-the-day ones. A slice of 0 days isn't drawn; its legend row stays, with 0. Legend under the pie: keyline dot, label, count. "share my pie" and "download" show greyed with a "soon" tag. With no birth date yet, "how many squares?" appears on the way. On a short screen the pie shrinks so the bar stays in view. The life glass's count pill now floats just above the glass (on every level), so the bar's icons never move or hide.
 - Step 2 (done): **scope filter** — a quiet segmented control under the subtitle, same chart out of three denominators: whole life (always opens here, never remembered) · since I started (first painted day → end of life; lived-not-painted and still to come counted from that day) · painted only (just the three colours, and only their three legend rows). With nothing painted, the pie is an empty keyline circle.
-- Step 3: ship.
+- Step 3 (done): **ship** — regression pass at 390×844 and 375×667 (the switch on month, year and a life in years, months and days, back to the same level each time; zoom buttons greyed on the pie; every scope adds up — whole life to the life's total; filter resets to whole life; menu from the pie; no birth date → "how many squares?" and back; the glass count leaves the switch in place), README wrapped up, PR ready to merge into `main`.
+- Later (own phase): share my pie, download my pie.
 
 ## Setup (for future sessions)
 
