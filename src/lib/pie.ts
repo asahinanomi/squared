@@ -10,12 +10,12 @@ export const SLICE_ORDER: SliceId[] = ['green', 'red', 'grey', 'unpainted', 'ahe
 
 /**
  * A whole life in slices: painted days by colour (backfilled counts the same), lived days left
- * unpainted (today among them until it's painted), and the days still to come.
+ * unpainted, and the days still to come — today among them until it's painted, like the life glass.
  */
 export function lifeSlices(days: Days, born: string, lifespan: number, today: string): Slice[] {
   const end = addYears(born, lifespan) // first day after the life
   const total = daysBetween(born, end)
-  const lived = Math.min(Math.max(daysBetween(born, today) + 1, 0), total)
+  const lived = Math.min(Math.max(daysBetween(born, today) + (days[today] ? 1 : 0), 0), total)
   const painted: Record<Paint, number> = { green: 0, red: 0, grey: 0 }
   for (const [iso, d] of Object.entries(days)) if (iso >= born && iso <= today && iso < end) painted[d.color]++
   const sum = painted.green + painted.red + painted.grey
