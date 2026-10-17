@@ -71,7 +71,7 @@ In the app the meanings read, in the owner's words: **green** "Conscious, and me
 
 | Kind of text | Style | Examples |
 |---|---|---|
-| Statements and questions the app says to you | Sentence case | "Did I spend today meaningfully?", "Meaningfully" sheet, "Delete this note?" |
+| Statements and questions the app says to you | Sentence case | "did I spend Today meaningfully?" (the owner's wording), "Meaningfully" sheet, "Delete this note?" |
 | Dates | Normal date capitals | "Wednesday, Oct 14th, 2026", "Wed, Oct 14, 2026 · 4:52 pm" |
 | Buttons and controls | all lowercase | continue with Google, add new note, hide older, update, delete, cancel |
 | Quiet helper and error text | all lowercase | why?, tap anywhere to skip, 3 notes, couldn't save, sign-in didn't finish |
@@ -83,7 +83,7 @@ Proper names keep their capitals everywhere (Google, I).
 
 - A `days` table in Supabase: `date`, `color`, `note`, and a boolean for whether the square was painted on the day itself or backfilled later (set automatically).
 - Painted squares persist and reload when the app is reopened.
-- The question text ("Did I spend today meaningfully?") is stored as a single configurable value, not hardcoded in the UI.
+- The question text ("did I spend Today meaningfully?", set by 0006) is stored as a single configurable value, not hardcoded in the UI.
 
 ## Auth
 
