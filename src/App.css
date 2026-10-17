@@ -960,8 +960,9 @@ button.settings-row:active { background: var(--grey-1); }
 /* Large, a touch inside the screen's width; the legend lines up with the pie's own edges (the circle is 96% of the drawing). */
 .pie-chart { display: block; flex-shrink: 0; aspect-ratio: 1; width: min(88%, 310px); margin: 0 auto; overflow: visible; }
 .pie-legend { width: calc(min(88%, 310px) * 0.96); margin-left: auto; margin-right: auto; }
-.pie-slice { stroke: var(--ink); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
-.pie-slice.is-ahead { stroke-dasharray: 2 6; stroke-linecap: round; }
+/* The hero's keyline, like today's square: heavier than the 2px of the small squares. */
+.pie-slice { stroke: var(--ink); stroke-width: 3; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.pie-slice.is-ahead { stroke-dasharray: 2 7; stroke-linecap: round; }
 .pie-label text { text-anchor: middle; font-family: inherit; }
 .pie-label-n { font-size: 15px; font-weight: 600; fill: #55554f; }
 .pie-label-unit { font-size: 8px; fill: #9a9a93; }
