@@ -13,6 +13,7 @@ Read `README.md` first: it is the product spec and the record of every phase bui
 
 - Copy: statements in sentence case; buttons, controls and helper text lowercase; dates written normally ("Oct 26, 1971"); "I" always capitalised; "squared" always lowercase.
 - Colour lives only in painted squares and the palette (small dots of the paint colours are fine). Everything else is ink on paper. Zoom bar ink is dark grey (`--zoom-ink: #55554f`), not black.
+- Buttons follow the table in README → "Buttons": one solid black pill per view (the main action); dark grey for destructive; keyline for secondary; dashed for an empty slot; text links for navigation. Full-width black pills are 54px tall, 18px text (Google sign-in is the exception).
 - Painting is the point — never let a tap fill a square.
 - Mobile-first. Desktop layout is deferred to a later phase.
 

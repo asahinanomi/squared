@@ -67,6 +67,24 @@ In the app the meanings read, in the owner's words: **green** "Here, and it matt
 - No badges, streaks, counters, confetti, notifications or celebration of any kind. This is a reflection tool, not a productivity app.
 - An unpainted day stays blank. No guilt messages, no broken-streak warnings.
 
+## Buttons
+
+| Kind | When | Examples |
+|---|---|---|
+| **Solid black pill** | The one main action of a screen or sheet. Never more than one per view. | continue with Google, start painting, close, done (note), now, paint today |
+| **Solid dark grey** (`--grey-4`) | Destructive actions. Grey, not red: colour belongs to paint only. | delete (note), delete (alert) |
+| **Keyline** (2px ink outline, no fill) | A secondary, neutral action beside or after the main one. | cancel, add new note |
+| **Dashed, light** | An empty slot in a list, waiting to be filled (like future day squares). | + add (what matters) |
+| **Faded keyline + "soon"** | Not built yet; not tappable. | share my pie, download |
+| **Text link** | Quiet navigation, not an action. | today (zoom bar), the dotted "meaningful", back arrows |
+| **Segmented control** | Switching between views of the same content. | years · months · days; whole life · days I lived · painted only |
+
+Width and size:
+- **Full width**: the main action that ends a screen or sheet, at its foot. Every full-width black pill is 54px tall with 18px text (the Google sign-in button, 64px, is the one exception).
+- **Hugs its text**: actions inside a card or bubble (done / delete, at least 88px; add new note).
+- **Equal halves**: a two-choice dialog (cancel | delete).
+- Tap targets are never smaller than 44px.
+
 ## Capitalization
 
 | Kind of text | Style | Examples |
