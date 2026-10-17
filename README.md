@@ -112,6 +112,14 @@ Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: 
 - **what matters** (done): settings → "what matters" — two short lists, meaningful and empty, of what each kind of day looks like to you. Your compass when you paint; a reference only, it never scores or colours a day. Tap "+ add" to write an entry (a line or two, up to 120 characters; Enter or tapping away saves), tap an entry to edit, swipe it left to delete, clear it to remove it. Saves itself on this device (`squared.matters` in local storage); it moves to the account once sync exists.
 - Step 4: polish & wrap-up.
 
+## Phase 4 — pie view (in progress)
+
+Design: board "16 · Pie — line art (final)". Built step by step; I check each step.
+
+- Step 1 (done): **a life pie** — the centre of the zoom bar (between the life glass and the zoom buttons) holds a pie icon on every zoom level; tap it for the pie. On the pie, it turns into a squares icon (2×2, one filled) that takes you back to the level you came from, and both zoom buttons are greyed. All bar icons are drawn to the same height. No back arrow on the pie, just the logo and menu. Title "a life pie, in slices", subtitle "how will you paint yours?". Line art: 2px keylines, slices clockwise from 12 o'clock — green "lived, it mattered" · red "here, but wasted" · grey "slipped by" · light grey "lived, not painted" (lived days left blank, today included until painted) · blank with a dashed keyline "still to come", which prints its own "N / days to paint" when the wedge is wide enough. Backfilled days count the same as on-the-day ones. A slice of 0 days isn't drawn; its legend row stays, with 0. Legend under the pie: keyline dot, label, count. "share my pie" and "download" show greyed with a "soon" tag. With no birth date yet, "how many squares?" appears on the way. On a short screen the pie shrinks so the bar stays in view; the switch steps aside while the life glass shows its count.
+- Step 2: the scope filter — whole life (default, never remembered) · since I started (first painted day → end of life) · painted only.
+- Step 3: ship.
+
 ## Setup (for future sessions)
 
 1. **Supabase**: run each file in `supabase/migrations/` in order (0001, 0002, …) in the SQL Editor. It creates `settings` (holds the `question` value) and `days` (row-level security: each person sees only their own rows; `painted_on_day` is set by a trigger on first paint).

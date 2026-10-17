@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
 import type { Profile } from '../lib/profile'
@@ -51,6 +51,28 @@ export const ZoomInIcon = () => (
     <line x1="9" y1="15" x2="3.5" y2="20.5" />
   </svg>
 )
+
+/** A pie: the whole life in slices. Drawn to the zoom icons' height. */
+export const PieIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
+    <circle cx="12" cy="12" r="8.5" />
+    <line x1="12" y1="12" x2="12" y2="3.5" />
+    <line x1="12" y1="12" x2="19.4" y2="16.25" />
+  </svg>
+)
+
+/** Squares, one painted: back to the zoom levels. Drawn to the zoom icons' height. */
+export const SquaresIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
+    <rect x="3.5" y="3.5" width="6" height="6" rx="1.2" />
+    <rect x="14.5" y="3.5" width="6" height="6" rx="1.2" fill="currentColor" />
+    <rect x="3.5" y="14.5" width="6" height="6" rx="1.2" />
+    <rect x="14.5" y="14.5" width="6" height="6" rx="1.2" />
+  </svg>
+)
+
+/** The switch between the squares and the pie, centre of the bar: `pie` = the pie is showing. */
+export const ViewSwitch = createContext<{ pie: boolean; toggle: () => void } | null>(null)
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
@@ -115,11 +137,17 @@ function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
   )
 }
 
-// Bottom of every zoom level: the life glass, and the zoom controls (out = expand, in = contract).
+// Bottom of every zoom level: the life glass, the pie ↔ squares switch, and the zoom controls (out = expand, in = contract).
 export function ZoomBar({ profile, unit = 'days', onOut, onIn, onToday }: Props) {
+  const view = useContext(ViewSwitch)
   return (
     <div className="zoombar">
       {profile ? <LifeGlass profile={profile} unit={unit} /> : <span />}
+      {view && (
+        <button className="zoombar-view" aria-label={view.pie ? 'Squares' : 'Pie view'} onClick={view.toggle}>
+          {view.pie ? <SquaresIcon /> : <PieIcon />}
+        </button>
+      )}
       <div className="zoombar-buttons">
         {onToday && (
           <button className="zoombar-today" onClick={onToday}>
