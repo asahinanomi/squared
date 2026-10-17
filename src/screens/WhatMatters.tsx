@@ -155,9 +155,11 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
         </section>
       ))}
 
-      {/* A quiet way back to the square: reflect, then go live it. */}
+      {/* The way back to the square: reflect, then go paint it. */}
       <p className="matters-go">
-        <button onClick={onPaint}>{paintedToday ? 'back to today →' : 'now, paint today →'}</button>
+        <button className="pill" onClick={onPaint}>
+          {paintedToday ? 'back to today →' : 'now, paint today →'}
+        </button>
       </p>
       <p className="matters-foot">a guide, not a rule — you still choose the day's colour</p>
     </main>
