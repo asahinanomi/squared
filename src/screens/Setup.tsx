@@ -211,14 +211,14 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
                   aria-pressed={!inYears}
                   onClick={() => setInYears(false)}
                 >
-                  squares
+                  in squares
                 </button>
                 <button
                   className={inYears ? 'is-on' : undefined}
                   aria-pressed={inYears}
                   onClick={() => setInYears(true)}
                 >
-                  years
+                  in years
                 </button>
               </div>
             </>
