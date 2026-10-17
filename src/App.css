@@ -147,6 +147,7 @@
 }
 .day-nav button { pointer-events: auto; width: 44px; height: 44px; display: grid; place-items: center; }
 .day-label { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; min-width: 15em; text-align: center; }
+.day-label sup { font-size: 0.6em; line-height: 0; margin-left: 1px; }
 
 /* The month grid takes its own space; the square floats centered on top of it. */
 .easel {

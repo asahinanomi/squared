@@ -5,7 +5,7 @@ import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { ZoomInIcon, ZoomOutIcon } from '../components/ZoomBar'
-import { addDays, longDate, monthCells, shortWeekday, todayIso } from '../lib/dates'
+import { addDays, longDate, monthCells, shortDateParts, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
@@ -71,7 +71,7 @@ export function Today(props: Props) {
         <button aria-label="Previous day" disabled={!!born && prev < born} onClick={() => onDate(prev)}>
           <Chevron dir="left" />
         </button>
-        <span className="day-label">{longDate(date)}</span>
+        <DayLabel iso={date} />
         <button aria-label="Next day" disabled={next > today} onClick={() => onDate(next)}>
           <Chevron dir="right" />
         </button>
@@ -172,5 +172,18 @@ export function Chevron({ dir }: { dir: 'left' | 'right' }) {
         strokeLinejoin="round"
       />
     </svg>
+  )
+}
+
+/** "Sat, Oct 17th, 2026" with the "th" raised; read aloud in full. */
+function DayLabel({ iso }: { iso: string }) {
+  const p = shortDateParts(iso)
+  return (
+    <span className="day-label" aria-label={longDate(iso)}>
+      <span aria-hidden="true">
+        {p.weekday}, {p.monthDay}
+        <sup>{p.suffix}</sup>, {p.year}
+      </span>
+    </span>
   )
 }

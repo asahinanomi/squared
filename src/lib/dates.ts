@@ -18,7 +18,6 @@ export function addDays(iso: string, n: number): string {
   return isoDate(d)
 }
 
-
 function ordinal(n: number): string {
   const s = ['th', 'st', 'nd', 'rd']
   const v = n % 100
@@ -33,9 +32,20 @@ export function longDate(iso: string): string {
   return `${weekday}, ${month} ${ordinal(d.getDate())}, ${d.getFullYear()}`
 }
 
+/** "Sat", "Oct 17", "th", "2026": the day screen's short date, its ordinal suffix kept apart to be raised. */
+export function shortDateParts(iso: string) {
+  const d = fromIso(iso)
+  const day = d.getDate()
+  return {
+    weekday: d.toLocaleDateString('en-US', { weekday: 'short' }),
+    monthDay: `${d.toLocaleDateString('en-US', { month: 'short' })} ${day}`,
+    suffix: ordinal(day).slice(String(day).length),
+    year: d.getFullYear(),
+  }
+}
+
 /** "October 2026" */
-export const monthTitle = (iso: string) =>
-  fromIso(iso).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+export const monthTitle = (iso: string) => fromIso(iso).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
 /** Monday-first month layout: leading nulls, then every date in the month. */
 export function monthCells(iso: string): (string | null)[] {
