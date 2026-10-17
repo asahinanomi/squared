@@ -895,7 +895,7 @@ button.settings-row:active { background: var(--grey-1); }
 }
 .matters-back { align-self: flex-start; margin-left: -6px; }
 .matters .settings-title { margin-top: 14px; }
-.matters-lede { margin: 8px 0 0; max-width: 300px; font-size: 12.5px; line-height: 1.45; color: #9a9a93; }
+.matters-lede { margin: 10px 0 0; max-width: 340px; font-size: 15px; line-height: 1.45; color: var(--ink-soft); }
 .matters-list { display: flex; flex-direction: column; gap: 7px; margin-top: 26px; }
 .matters-list + .matters-list { margin-top: 24px; }
 .matters-head { display: flex; align-items: center; gap: 9px; margin: 0 0 4px; font-size: 16px; font-weight: 600; }
