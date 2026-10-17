@@ -454,7 +454,7 @@
 @media (prefers-reduced-motion: reduce) { .stage { animation: none !important; } }
 
 .zoombar { --zoom-ink: #55554f; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0 4px; }
-.lifeglass { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0; }
+.lifeglass { position: relative; display: flex; align-items: center; min-height: 44px; padding: 0; }
 .lifeglass svg { width: 26px; height: 30px; flex: none; overflow: visible; }
 .lifeglass-frame { fill: none; stroke: var(--zoom-ink); stroke-width: 2.6; stroke-linecap: round; }
 .lifeglass-glass { fill: none; stroke: var(--zoom-ink); stroke-width: 2; stroke-linecap: round; }
@@ -477,6 +477,11 @@
   45% { transform: rotate(0); }
 }
 .lifeglass-count {
+  /* Floats just above the glass, so the bar's icons never move or hide. */
+  position: absolute;
+  z-index: 6;
+  left: -4px;
+  bottom: calc(100% + 6px);
   padding: 7px 13px;
   border-radius: 999px;
   background: #efefea;
@@ -488,6 +493,8 @@
   animation: fade-in 0.2s ease-out;
 }
 @keyframes fade-in { from { opacity: 0; } }
+.zoombar-view { width: 44px; height: 44px; display: grid; place-items: center; flex-shrink: 0; color: var(--zoom-ink); }
+.zoombar-view svg { width: 30px; height: 30px; }
 .zoombar-buttons { display: flex; gap: 6px; flex-shrink: 0; }
 .zoombar-buttons button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
 .zoombar-buttons button:disabled { opacity: 0.25; }
@@ -931,3 +938,58 @@ button.settings-row:active { background: var(--grey-1); }
 .matters-go { margin: 30px 0 0; text-align: center; }
 .matters-go button { font-size: 15px; color: #6b6b68; text-decoration: underline dotted #cfcfc8; text-underline-offset: 4px; }
 .matters-foot { margin: auto 0 0; padding-top: 28px; text-align: center; font-size: 11.5px; line-height: 1.4; color: #c7c7c0; }
+
+/* ---------- a life pie ---------- */
+.pie { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.pie-scope { display: flex; gap: 4px; width: fit-content; margin: 18px auto 0; padding: 4px; border-radius: 999px; background: #efefea; flex-shrink: 0; }
+.pie-scope button { padding: 7px 15px; border-radius: 999px; font-size: 12.5px; color: #9a9a93; white-space: nowrap; }
+.pie-scope button.is-on { background: #fff; color: var(--ink); font-weight: 600; }
+.pie-body {
+  flex: 1;
+  min-height: 0;
+  margin-top: 6px;
+  padding: 16px 0 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to bottom, transparent, #000 16px, #000 calc(100% - 20px), transparent);
+}
+.pie-body::-webkit-scrollbar { display: none; }
+/* As wide as the screen allows; the legend lines up with the pie's own edges (the circle is 96% of the drawing). */
+.pie-chart { display: block; width: min(100%, 360px); margin: 0 auto; overflow: visible; }
+.pie-legend { width: calc(min(100%, 360px) * 0.96); margin-left: auto; margin-right: auto; }
+.pie-slice { stroke: var(--ink); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.pie-slice.is-ahead { stroke-dasharray: 2 6; stroke-linecap: round; }
+.pie-ahead text { text-anchor: middle; font-family: inherit; }
+.pie-ahead-n { font-size: 15px; font-weight: 600; fill: #55554f; }
+.pie-ahead-unit { font-size: 8px; fill: #9a9a93; }
+.pie-legend { list-style: none; margin-top: 28px; margin-bottom: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+.pie-legend li { display: flex; align-items: center; gap: 12px; font-size: 15px; }
+.pie-dot { width: 13px; height: 13px; flex-shrink: 0; box-sizing: border-box; border-radius: 50%; border: 1.5px solid var(--ink); }
+.pie-dot.is-ahead { border-style: dashed; }
+.pie-legend-n { margin-left: auto; font-size: 14px; font-weight: 500; color: #55554f; font-variant-numeric: tabular-nums; }
+.pie-legend .is-quiet .pie-legend-label, .pie-legend .is-quiet .pie-legend-n { color: #9a9a93; font-weight: 400; }
+.pie-soon { margin-top: auto; padding-top: 16px; flex-shrink: 0; display: flex; gap: 10px; justify-content: center; }
+.pie-soon button,
+.pie-soon button:disabled {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 13px;
+  border: 1.5px solid #e6e6e0;
+  border-radius: 999px;
+  font-size: 12.5px;
+  color: #b6b6af;
+  opacity: 1;
+}
+.pie-soon svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.pie-soon-tag {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #f2f2ec;
+  color: #c4c4bd;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}

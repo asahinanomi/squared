@@ -3,6 +3,7 @@ import { usePinch, type Focal } from './lib/usePinch'
 import type { Session } from '@supabase/supabase-js'
 import { MeaningSheet } from './components/MeaningSheet'
 import { Topbar } from './components/Topbar'
+import { ViewSwitch } from './components/ZoomBar'
 import { Settings } from './screens/Settings'
 import { WhatMatters } from './screens/WhatMatters'
 import { QUESTION } from './lib/config'
@@ -27,6 +28,7 @@ import { Idea } from './screens/Idea'
 import { Month } from './screens/Month'
 import { Year } from './screens/Year'
 import { Life } from './screens/Life'
+import { Pie } from './screens/Pie'
 import { LifeMonths } from './screens/LifeMonths'
 import { LifeDays } from './screens/LifeDays'
 import type { Resolution } from './components/LifeHead'
@@ -35,7 +37,7 @@ import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import './App.css'
 
-type Screen = 'today' | 'month' | 'year' | 'life' | 'idea' | 'setup' | 'settings' | 'matters'
+type Screen = 'today' | 'month' | 'year' | 'life' | 'pie' | 'idea' | 'setup' | 'settings' | 'matters'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
 const LADDER: Screen[] = ['today', 'month', 'year', 'life']
 
@@ -65,6 +67,8 @@ export default function App() {
   const [monthAnchor, setMonthAnchor] = useState<{ iso?: string; y: number } | undefined>()
   // Where "how many squares?" returns to: a life, when it was asked for on the way there.
   const [afterSetup, setAfterSetup] = useState<Screen>('today')
+  // The zoom level the pie was opened from: the switch returns there.
+  const [pieFrom, setPieFrom] = useState<Screen>('life')
   // Where settings was opened from: its back arrow returns there.
   const [settingsFrom, setSettingsFrom] = useState<Screen>('today')
   // What matters opens from settings or from the idea; back returns there.
@@ -275,6 +279,14 @@ export default function App() {
     setAfterSetup('life')
     setScreenValue('setup')
   }
+  // The pie sits beside the ladder: the switch in the bar opens it, and takes you back to the level you left.
+  const togglePie = () => {
+    if (screen === 'pie') return setScreen(pieFrom)
+    setPieFrom(screen)
+    if (profile) return setScreen('pie')
+    setAfterSetup('pie')
+    setScreenValue('setup')
+  }
   const openSettings = () => {
     if (screen !== 'settings' && screen !== 'setup' && screen !== 'matters') setSettingsFrom(screen)
     setScreenValue('settings')
@@ -332,156 +344,168 @@ export default function App() {
 
   return (
     // Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint).
-    <div className={'app' + (screen === 'month' || screen === 'year' || screen === 'life' ? ' is-one-screen' : '')}>
-      {screen !== 'setup' && screen !== 'settings' && screen !== 'matters' && (
-        <Topbar
-          onHome={goToday}
-          onCalendar={() => goMonth()}
-          back={
-            screen === 'month'
-              ? { label: todayIso().slice(0, 4), onBack: () => goYear() }
-              : screen === 'year'
-                ? { label: 'a life', onBack: goLife }
-                : undefined
-          }
-          onIdea={() => setScreen('idea')}
-          onSettings={openSettings}
-          onSignOut={signOut}
-        />
-      )}
+    <ViewSwitch.Provider value={{ pie: screen === 'pie', toggle: togglePie }}>
       <div
-        className={'stage' + (motion ? ` is-zoom-${motion}` : '')}
-        key={screen === 'life' ? `life-${lifeRes}` : screen}
+        className={
+          'app' +
+          (screen === 'month' || screen === 'year' || screen === 'life' || screen === 'pie' ? ' is-one-screen' : '')
+        }
       >
-        {screen === 'today' ? (
-          <Today
-            question={question}
-            born={profile?.born}
-            date={date}
-            days={days}
-            notes={notes[date] ?? []}
-            loaded={loaded}
-            why={why}
-            nudge={nudge}
-            onDate={(iso) => {
-              setWhy(null)
-              setDate(iso)
-            }}
-            onLoad={setLoaded}
-            onDefine={() => setDefining(true)}
-            onSaveNote={onSaveNote}
-            onDeleteNote={onDeleteNote}
-            onCloseWhy={() => setWhy(null)}
-            onOpenWhy={(note) => setWhy({ note })}
-            onDryBrush={onDryBrush}
-            onFilled={onFilled}
-            onZoomOut={() => goMonth()}
-          />
-        ) : screen === 'idea' ? (
-          <Idea
-            onMatters={() => {
-              setMattersFrom('idea')
-              setScreenValue('matters')
-            }}
-          />
-        ) : screen === 'setup' ? (
-          <Setup
-            profile={profile}
-            onBack={() =>
-              afterSetup === 'life'
-                ? setScreen('year')
-                : afterSetup === 'settings'
-                  ? setScreenValue('settings')
-                  : goToday()
+        {screen !== 'setup' && screen !== 'settings' && screen !== 'matters' && (
+          <Topbar
+            onHome={goToday}
+            onCalendar={() => goMonth()}
+            back={
+              screen === 'month'
+                ? { label: todayIso().slice(0, 4), onBack: () => goYear() }
+                : screen === 'year'
+                  ? { label: 'a life', onBack: goLife }
+                  : undefined
             }
-            mode={afterSetup === 'settings' ? 'settings' : 'onboarding'}
-            onSave={async (p) => {
-              await saveProfile(p)
-              setProfile(p)
-              // First run ends on "start painting": straight to today's square.
-              if (afterSetup !== 'settings') goToday()
-            }}
+            onIdea={() => setScreen('idea')}
+            onSettings={openSettings}
+            onSignOut={signOut}
           />
-        ) : screen === 'settings' ? (
-          <Settings
-            profile={profile}
-            onBack={() => setScreenValue(settingsFrom)}
-            onSquares={openSquareSettings}
-            onMatters={() => {
-              setMattersFrom('settings')
-              setScreenValue('matters')
-            }}
-          />
-        ) : screen === 'matters' ? (
-          <WhatMatters
-            onBack={() => setScreenValue(mattersFrom)}
-            backLabel={mattersFrom === 'idea' ? 'the idea' : 'settings'}
-            onPaint={goToday}
-            paintedToday={!!days[todayIso()]}
-          />
-        ) : screen === 'year' ? (
-          <Year
-            days={days}
-            profile={profile}
-            born={profile?.born}
-            focus={yearFocus}
-            onPick={(m) => goMonth(m)}
-            onIn={() => goMonth()}
-            onOut={goLife}
-          />
-        ) : screen === 'life' && profile ? (
-          lifeRes === 'days' ? (
-            <LifeDays
+        )}
+        <div
+          className={'stage' + (motion ? ` is-zoom-${motion}` : '')}
+          key={screen === 'life' ? `life-${lifeRes}` : screen}
+        >
+          {screen === 'today' ? (
+            <Today
+              question={question}
+              born={profile?.born}
+              date={date}
+              days={days}
+              notes={notes[date] ?? []}
+              loaded={loaded}
+              why={why}
+              nudge={nudge}
+              onDate={(iso) => {
+                setWhy(null)
+                setDate(iso)
+              }}
+              onLoad={setLoaded}
+              onDefine={() => setDefining(true)}
+              onSaveNote={onSaveNote}
+              onDeleteNote={onDeleteNote}
+              onCloseWhy={() => setWhy(null)}
+              onOpenWhy={(note) => setWhy({ note })}
+              onDryBrush={onDryBrush}
+              onFilled={onFilled}
+              onZoomOut={() => goMonth()}
+            />
+          ) : screen === 'idea' ? (
+            <Idea
+              onMatters={() => {
+                setMattersFrom('idea')
+                setScreenValue('matters')
+              }}
+            />
+          ) : screen === 'setup' ? (
+            <Setup
+              profile={profile}
+              onBack={() =>
+                afterSetup === 'life'
+                  ? setScreen('year')
+                  : afterSetup === 'pie'
+                    ? setScreen(pieFrom)
+                    : afterSetup === 'settings'
+                      ? setScreenValue('settings')
+                      : goToday()
+              }
+              mode={afterSetup === 'settings' ? 'settings' : 'onboarding'}
+              onSave={async (p) => {
+                await saveProfile(p)
+                setProfile(p)
+                // First run ends on "start painting": straight to today's square.
+                if (afterSetup === 'pie') setScreen('pie')
+                else if (afterSetup !== 'settings') goToday()
+              }}
+            />
+          ) : screen === 'settings' ? (
+            <Settings
+              profile={profile}
+              onBack={() => setScreenValue(settingsFrom)}
+              onSquares={openSquareSettings}
+              onMatters={() => {
+                setMattersFrom('settings')
+                setScreenValue('matters')
+              }}
+            />
+          ) : screen === 'matters' ? (
+            <WhatMatters
+              onBack={() => setScreenValue(mattersFrom)}
+              backLabel={mattersFrom === 'idea' ? 'the idea' : 'settings'}
+              onPaint={goToday}
+              paintedToday={!!days[todayIso()]}
+            />
+          ) : screen === 'pie' && profile ? (
+            <Pie days={days} profile={profile} />
+          ) : screen === 'year' ? (
+            <Year
               days={days}
               profile={profile}
+              born={profile?.born}
+              focus={yearFocus}
+              onPick={(m) => goMonth(m)}
+              onIn={() => goMonth()}
+              onOut={goLife}
+            />
+          ) : screen === 'life' && profile ? (
+            lifeRes === 'days' ? (
+              <LifeDays
+                days={days}
+                profile={profile}
+                onPick={(iso) => {
+                  setDate(iso)
+                  setScreen('today')
+                }}
+                onIn={() => setLifeRes('months')}
+                onResolution={setLifeRes}
+                cols={[28, 14, 7, 3][mag]}
+                focal={focal}
+              />
+            ) : lifeRes === 'months' ? (
+              <LifeMonths
+                days={days}
+                profile={profile}
+                onPick={(m) => goMonth(m)}
+                onIn={() => setLifeRes('years')}
+                onOut={() => setLifeRes('days')}
+                onResolution={setLifeRes}
+                cols={[12, 6, 4, 3][mag]}
+                focal={focal}
+              />
+            ) : (
+              <Life
+                days={days}
+                profile={profile}
+                onPick={(y) => goYear(y)}
+                onIn={() => goYear()}
+                onOut={() => setLifeRes('months')}
+                onResolution={setLifeRes}
+              />
+            )
+          ) : (
+            <Month
+              days={days}
+              profile={profile}
+              born={profile?.born}
+              focus={monthFocus}
               onPick={(iso) => {
                 setDate(iso)
                 setScreen('today')
               }}
-              onIn={() => setLifeRes('months')}
-              onResolution={setLifeRes}
-              cols={[28, 14, 7, 3][mag]}
-              focal={focal}
+              onIn={goToday}
+              onOut={() => goYear()}
+              zoomed={mag > 0}
+              anchor={monthAnchor}
             />
-          ) : lifeRes === 'months' ? (
-            <LifeMonths
-              days={days}
-              profile={profile}
-              onPick={(m) => goMonth(m)}
-              onIn={() => setLifeRes('years')}
-              onOut={() => setLifeRes('days')}
-              onResolution={setLifeRes}
-              cols={[12, 6, 4, 3][mag]}
-              focal={focal}
-            />
-          ) : (
-            <Life
-              days={days}
-              profile={profile}
-              onPick={(y) => goYear(y)}
-              onIn={() => goYear()}
-              onOut={() => setLifeRes('months')}
-              onResolution={setLifeRes}
-            />
-          )
-        ) : (
-          <Month
-            days={days}
-            profile={profile}
-            born={profile?.born}
-            focus={monthFocus}
-            onPick={(iso) => {
-              setDate(iso)
-              setScreen('today')
-            }}
-            onIn={goToday}
-            onOut={() => goYear()}
-            zoomed={mag > 0}
-            anchor={monthAnchor}
-          />
-        )}
+          )}
+        </div>
+        <MeaningSheet open={defining} onClose={() => setDefining(false)} />
       </div>
-      <MeaningSheet open={defining} onClose={() => setDefining(false)} />
-    </div>
+    </ViewSwitch.Provider>
   )
 }
