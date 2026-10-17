@@ -1,6 +1,17 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { SwipeRow } from '../components/SwipeRow'
-import { loadMatters, MAX_CHARS, newEntry, saveMatters, type Entry, type Kind, type Matters } from '../lib/matters'
+import {
+  loadMatters,
+  MAX_CHARS,
+  newEntry,
+  pushMatters,
+  saveMatters,
+  syncMatters,
+  type Entry,
+  type Kind,
+  type Matters,
+  type Saved,
+} from '../lib/matters'
 import { paintHex } from '../lib/paints'
 import { Chevron } from './Today'
 
@@ -50,15 +61,41 @@ function EntryInput({ entry, onChange, onDone }: { entry: Entry; onChange: (t: s
 }
 
 // What matters: two short lists — what a meaningful day and an empty day look like to you.
-// Your compass when you paint; it never judges or colours a day for you. Every change saves itself.
+// Your compass when you paint; it never judges or colours a day for you. Every change saves itself,
+// to this device and the account; opening it picks up changes made on another device.
 export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedToday }: Props) {
   const [lists, setLists] = useState<Matters>(loadMatters)
   const [editing, setEditing] = useState<string | null>(null)
   const [swiped, setSwiped] = useState<string | null>(null)
+  // Only real edits are saved (not the lists arriving from the account).
+  const edited = useRef(false)
 
-  useEffect(() => saveMatters(lists), [lists])
+  // This device's copy shows at once; the account's replaces it if it's newer (unless you've already started editing).
+  useEffect(() => {
+    syncMatters(loadMatters())
+      .then((m) => !edited.current && setLists(m))
+      .catch((e) => console.error('Could not load what matters', e))
+  }, [])
 
-  const update = (kind: Kind, fn: (l: Entry[]) => Entry[]) => setLists((m) => ({ ...m, [kind]: fn(m[kind]) }))
+  // Each change is kept on this device at once and sent to the account once typing pauses (or on leaving).
+  const pending = useRef<Saved | null>(null)
+  const push = () => {
+    if (!pending.current) return
+    pushMatters(pending.current).catch((e) => console.error('Could not save what matters', e))
+    pending.current = null
+  }
+  useEffect(() => {
+    if (!edited.current) return
+    pending.current = saveMatters(lists)
+    const t = setTimeout(push, 800)
+    return () => clearTimeout(t)
+  }, [lists])
+  useEffect(() => push, [])
+
+  const update = (kind: Kind, fn: (l: Entry[]) => Entry[]) => {
+    edited.current = true
+    setLists((m) => ({ ...m, [kind]: fn(m[kind]) }))
+  }
   const add = (kind: Kind) => {
     const e = newEntry()
     update(kind, (l) => [...l, e])
@@ -79,7 +116,7 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
       </button>
       <h1 className="settings-title">what matters</h1>
       <p className="matters-lede">
-        what a meaningful day looks like to you — and what feels empty. your compass when you paint.
+        what does a meaningful day look like to you? and what feels empty? this is your compass to paint.
       </p>
 
       {LISTS.map(({ kind, label, dot, hint }) => (
