@@ -1,4 +1,5 @@
 import { paintHex, type Paint } from '../lib/paints'
+import { Chevron } from './Today'
 
 const COLOURS: [Paint, string][] = [
   ['green', 'here, and it mattered.'],
@@ -6,10 +7,23 @@ const COLOURS: [Paint, string][] = [
   ['grey', 'gone before I noticed.'],
 ]
 
+type Props = {
+  /** Signed in: the soft link on to what matters. */
+  onMatters?: () => void
+  /** Opened from the sign-in screen: the way back to it. */
+  onBack?: () => void
+}
+
 // "the idea": why squared exists, in the maker's own words.
-export function Idea({ onMatters }: { onMatters: () => void }) {
+export function Idea({ onMatters, onBack }: Props) {
   return (
     <main className="idea">
+      {onBack && (
+        <button className="back-btn idea-back" onClick={onBack} aria-label="Back to sign in">
+          <Chevron dir="left" />
+          sign in
+        </button>
+      )}
       <h1 className="idea-title">the idea</h1>
       <p>
         I live a very busy life. one day I looked up and saw how much of it had quietly slipped past - and I couldn’t
@@ -31,9 +45,11 @@ export function Idea({ onMatters }: { onMatters: () => void }) {
       </p>
       <p>I hope to make mine as green as I can. I hope squared can help you too.</p>
       {/* A very soft invitation, not a button. */}
-      <p className="idea-nudge">
-        <button onClick={onMatters}>(if it helps, name what matters to you →)</button>
-      </p>
+      {onMatters && (
+        <p className="idea-nudge">
+          <button onClick={onMatters}>(if it helps, name what matters to you →)</button>
+        </p>
+      )}
       <p className="idea-sign">— nomi</p>
     </main>
   )

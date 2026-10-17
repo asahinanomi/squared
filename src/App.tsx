@@ -51,6 +51,8 @@ export default function App() {
   // undefined = still checking; null = signed out.
   const [session, setSession] = useState<Session | null | undefined>(demo ? null : undefined)
   const [demoIn, setDemoIn] = useState(false)
+  // "the idea", opened from the sign-in screen.
+  const [ideaOut, setIdeaOut] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
   const [question, setQuestion] = useState(QUESTION)
   const [screen, setScreenValue] = useState<Screen>('today')
@@ -242,7 +244,18 @@ export default function App() {
   }
 
   if (session === undefined) return null
-  if (!signedIn) return <SignIn error={authError} onSignIn={demo ? () => setDemoIn(true) : signInWithGoogle} />
+  if (!signedIn)
+    return ideaOut ? (
+      <div className="app">
+        <Idea onBack={() => setIdeaOut(false)} />
+      </div>
+    ) : (
+      <SignIn
+        error={authError}
+        onSignIn={demo ? () => setDemoIn(true) : signInWithGoogle}
+        onIdea={() => setIdeaOut(true)}
+      />
+    )
 
   const setScreen = (next: Screen) => {
     const a = LADDER.indexOf(screen)
