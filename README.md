@@ -21,7 +21,7 @@ A quiet, minimal app where I paint one square per day with a color for how I spe
 2. **Today / paint** — logo top-left, hamburger top-right. Question "Was it meaningful?" with a dotted underline on "meaningful", big "today" below it, then `‹ Monday, Oct 12th, 2026 ›` day navigation. One large square to paint in the center; the month grid is faintly visible behind it. A paint palette (three wells + brush) sits under the square.
 3. **Month calendar** — `‹ October 2026 ›`, M–S weekday header, painted days filled with their color, today outlined in black, past unpainted days dashed, future days light grey. Each day shows its number with a tiny weekday ("Wed") under it. Hint: "tap a day to paint it".
 4. **Why bubble** — after the square is filled, a white speech bubble pointing at the square: "why?" with a text box that grows as you write (paragraphs allowed) and a "done" button. Below it: "tap anywhere to skip".
-5. **Meaning sheet** — tapping the underlined "meaningful" opens a bottom sheet titled "Meaningfully": *Not a good day or a bad one. Not what you got done. A day is meaningful when you were aware of it, and spent it on what matters to you.* Followed by the three color definitions and a black "close" button.
+5. **Meaning sheet** — tapping the underlined "meaningful" opens a bottom sheet titled "meaningfully" (lowercase, like every screen title): *Not a good day or a bad one. Not what you got done. A day is meaningful when you were aware of it, and spent it on what matters to you.* Followed by the three color definitions (each led by a small round paint dot with a keyline) and a black "close" button.
 
 6. **The idea** — from the menu ("the idea"): a quiet page in the maker's words about why squared exists.
 7. **How many squares?** — from the menu (and, in phase 2, the first time you zoom out to a life): birth date ("when were you born?") and "how long do you hope to live?" (stepper, default 95 years). Shows the total as a hero number and one quiet line: "N years · X so far · **Y left · Z%**". Stored in `profiles` (migration 0005).
@@ -71,7 +71,8 @@ In the app the meanings read, in the owner's words: **green** "Here, and it matt
 
 | Kind of text | Style | Examples |
 |---|---|---|
-| Statements and questions the app says to you | Sentence case | "did I spend Today meaningfully?" (the owner's wording), "Meaningfully" sheet, "Delete this note?" |
+| Statements and questions the app says to you | Sentence case | "did I spend Today meaningfully?" (the owner's wording), "Delete this note?" |
+| Screen and sheet titles | all lowercase | a life, settings, a life pie, in slices, meaningfully |
 | Dates | Normal date capitals | "Wednesday, Oct 14th, 2026", "Wed, Oct 14, 2026 · 4:52 pm" |
 | Buttons and controls | all lowercase | continue with Google, add new note, hide older, update, delete, cancel |
 | Quiet helper and error text | all lowercase | why?, tap anywhere to skip, 3 notes, couldn't save, sign-in didn't finish |
