@@ -453,7 +453,30 @@
 @keyframes zoom-in { from { opacity: 0; transform: scale(0.9); } }
 @media (prefers-reduced-motion: reduce) { .stage { animation: none !important; } }
 
-.zoombar { --zoom-ink: #55554f; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0 4px; }
+.zoombar {
+  --zoom-ink: #55554f;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  /* Down to the phone's home bar, no further (a little room on phones without one). */
+  padding: 10px 0 calc(max(env(safe-area-inset-bottom), 12px) + 2px);
+}
+/* App controls get their own ground: plain paper (no dot grid) and a hairline above, edge to edge. */
+.zoombar::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  background: var(--paper);
+  border-top: 1px solid var(--grey-1);
+}
 .lifeglass { position: relative; display: flex; align-items: center; min-height: 44px; padding: 0; }
 .lifeglass svg { width: 26px; height: 30px; flex: none; overflow: visible; }
 .lifeglass-frame { fill: none; stroke: var(--zoom-ink); stroke-width: 2.6; stroke-linecap: round; }
@@ -531,7 +554,8 @@
 .today-zoom svg { width: 30px; height: 30px; }
 
 /* ---------- my squares: a month ---------- */
-.app.is-one-screen { flex: none; height: 100dvh; min-height: 0; box-sizing: border-box; overflow: hidden; }
+/* The zoom bar runs to the bottom edge and carries the safe-area room itself. */
+.app.is-one-screen { flex: none; height: 100dvh; min-height: 0; box-sizing: border-box; overflow: hidden; padding-bottom: 0; }
 .life { position: relative; }
 .month, .year, .life { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .ladder-scroll {
