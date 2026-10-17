@@ -8,6 +8,7 @@ type Props = {
   /** Back to wherever settings was opened from. */
   onBack: () => void
   onSquares: () => void
+  onMatters: () => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
@@ -20,7 +21,7 @@ const SOON: [string, string][] = [
 ]
 
 // Settings: one quiet list; each row opens its own screen.
-export function Settings({ profile, onBack, onSquares }: Props) {
+export function Settings({ profile, onBack, onSquares, onMatters }: Props) {
   const summary = profile
     ? [
         fromIso(profile.born).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -40,6 +41,13 @@ export function Settings({ profile, onBack, onSquares }: Props) {
           <span>
             <span className="settings-label">square settings</span>
             <span className="settings-sub">{summary}</span>
+          </span>
+          <Chevron dir="right" />
+        </button>
+        <button className="settings-row" onClick={onMatters}>
+          <span>
+            <span className="settings-label">what matters</span>
+            <span className="settings-sub">meaningful &amp; empty — your compass</span>
           </span>
           <Chevron dir="right" />
         </button>
