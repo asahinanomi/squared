@@ -454,7 +454,7 @@
 @media (prefers-reduced-motion: reduce) { .stage { animation: none !important; } }
 
 .zoombar { --zoom-ink: #55554f; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0 4px; }
-.lifeglass { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0; }
+.lifeglass { position: relative; display: flex; align-items: center; min-height: 44px; padding: 0; }
 .lifeglass svg { width: 26px; height: 30px; flex: none; overflow: visible; }
 .lifeglass-frame { fill: none; stroke: var(--zoom-ink); stroke-width: 2.6; stroke-linecap: round; }
 .lifeglass-glass { fill: none; stroke: var(--zoom-ink); stroke-width: 2; stroke-linecap: round; }
@@ -477,6 +477,11 @@
   45% { transform: rotate(0); }
 }
 .lifeglass-count {
+  /* Floats just above the glass, so the bar's icons never move or hide. */
+  position: absolute;
+  z-index: 6;
+  left: -4px;
+  bottom: calc(100% + 6px);
   padding: 7px 13px;
   border-radius: 999px;
   background: #efefea;
@@ -490,8 +495,6 @@
 @keyframes fade-in { from { opacity: 0; } }
 .zoombar-view { width: 44px; height: 44px; display: grid; place-items: center; flex-shrink: 0; color: var(--zoom-ink); }
 .zoombar-view svg { width: 30px; height: 30px; }
-/* The count pill needs the room: the switch steps aside while it shows. */
-.zoombar:has(.lifeglass-count) .zoombar-view { display: none; }
 .zoombar-buttons { display: flex; gap: 6px; flex-shrink: 0; }
 .zoombar-buttons button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
 .zoombar-buttons button:disabled { opacity: 0.25; }
