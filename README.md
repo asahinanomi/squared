@@ -74,7 +74,7 @@ In the app the meanings read, in the owner's words: **green** "Here, and it matt
 | **Solid black pill** | The one main action of a screen or sheet. Never more than one per view. | continue with Google, start painting, close, done (note), now, paint today |
 | **Solid dark grey** (`--grey-4`) | Destructive actions. Grey, not red: colour belongs to paint only. | delete (note), delete (alert) |
 | **Keyline** (2px ink outline, no fill) | A secondary, neutral action beside or after the main one. | cancel, add new note |
-| **Dashed, light** | An empty slot in a list, waiting to be filled (like future day squares). | + add (what matters) |
+| **Dashed, on white** | An empty slot in a list, waiting to be filled (white with a dashed edge, like future day squares). | + add (what matters) |
 | **Faded keyline + "soon"** | Not built yet; not tappable. | share my pie, download |
 | **Text link** | Quiet navigation, not an action. | today (zoom bar), the dotted "meaningful", back arrows |
 | **Segmented control** | Switching between views of the same content. | years · months · days; whole life · days I lived · painted only |

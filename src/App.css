@@ -955,11 +955,13 @@ button.settings-row:active { background: var(--grey-1); }
   display: flex;
   align-items: center;
   gap: 7px;
-  border: 1.5px dashed #dadad3;
+  /* An empty slot, like a day still to come: white, with the day squares' dashed edge. */
+  background: #fff;
+  border: 1.5px dashed #b0b0a8;
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 13px;
-  color: #9a9a93;
+  color: var(--grey-4);
 }
 .matters-add span { font-size: 16px; line-height: 1; margin-top: -1px; }
 .matters-go { margin: 30px 0 0; }
