@@ -118,7 +118,13 @@ export function Year({ days, profile, born, focus, onPick, onIn, onOut }: Props)
         </section>
       </div>
 
-      <ZoomBar profile={profile} onIn={onIn} onOut={onOut} onToday={toToday.away ? toToday.back : undefined} />
+      <ZoomBar
+        profile={profile}
+        unit="months"
+        onIn={onIn}
+        onOut={onOut}
+        onToday={toToday.away ? toToday.back : undefined}
+      />
     </main>
   )
 }

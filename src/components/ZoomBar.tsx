@@ -6,6 +6,8 @@ import type { Profile } from '../lib/profile'
 type Props = {
   /** The life the bar shows (no bar until birth date and lifespan are set). */
   profile?: Profile | null
+  /** What the squares on this screen are, so the count speaks the same unit (days by default). */
+  unit?: Unit
   /** Zoom out one level (see more); absent when there's no level further out yet. */
   onOut?: () => void
   /** Zoom in one level (see less, closer). */
@@ -52,12 +54,14 @@ export const ZoomInIcon = () => (
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
+type Unit = 'days' | 'months' | 'years'
+
 /**
  * The life glass: an hourglass whose sand is your life — the top holds the squares left, the bottom
- * the ones spent. Just the icon until tapped; a tap shows "14,620 left · 42%", another hides it.
+ * the ones spent. Just the icon until tapped; a tap shows "14,620 days (42%) to paint!" (in years or months where the squares are), another hides it.
  * Every half minute a few grains fall, a small nudge that time is moving.
  */
-function LifeGlass({ profile }: { profile: Profile }) {
+function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
   const [open, setOpen] = useState(false)
   const [falling, setFalling] = useState(true) // trickle once on arrival…
   useEffect(() => {
@@ -74,6 +78,9 @@ function LifeGlass({ profile }: { profile: Profile }) {
   }, [])
   const c = lifeCounts(profile.born, profile.lifespan, todayIso())
   const left = c.left / c.total
+  // In years or months, counted from the squares so spent + to paint always add up to the life.
+  const per = unit === 'years' ? profile.lifespan : unit === 'months' ? profile.lifespan * 12 : 0
+  const count = per ? `${fmt(per - Math.round((c.sofar / c.total) * per))} ${unit}` : `${fmt(c.left)} days`
   // Sand piles are triangles: area grows with height squared.
   const top = 7.5 * Math.sqrt(left)
   const bottom = 7.5 * Math.sqrt(1 - left)
@@ -81,7 +88,7 @@ function LifeGlass({ profile }: { profile: Profile }) {
     <button
       className={'lifeglass' + (falling ? ' is-falling' : '')}
       onClick={() => setOpen(!open)}
-      aria-label={`${fmt(c.left)} squares left, ${c.percentLeft}%`}
+      aria-label={`${count} (${c.percentLeft}%) to paint`}
       aria-expanded={open}
     >
       <svg viewBox="0 0 24 28" aria-hidden="true">
@@ -101,7 +108,7 @@ function LifeGlass({ profile }: { profile: Profile }) {
       </svg>
       {open && (
         <span className="lifeglass-count" aria-hidden="true">
-          {fmt(c.left)} left · {c.percentLeft}%
+          {count} ({c.percentLeft}%) to paint!
         </span>
       )}
     </button>
@@ -109,10 +116,10 @@ function LifeGlass({ profile }: { profile: Profile }) {
 }
 
 // Bottom of every zoom level: the life glass, and the zoom controls (out = expand, in = contract).
-export function ZoomBar({ profile, onOut, onIn, onToday }: Props) {
+export function ZoomBar({ profile, unit = 'days', onOut, onIn, onToday }: Props) {
   return (
     <div className="zoombar">
-      {profile ? <LifeGlass profile={profile} /> : <span />}
+      {profile ? <LifeGlass profile={profile} unit={unit} /> : <span />}
       <div className="zoombar-buttons">
         {onToday && (
           <button className="zoombar-today" onClick={onToday}>
