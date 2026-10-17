@@ -4,7 +4,15 @@ import { loadMatters, MAX_CHARS, newEntry, saveMatters, type Entry, type Kind, t
 import { paintHex } from '../lib/paints'
 import { Chevron } from './Today'
 
-type Props = { onBack: () => void; /** Where back leads: "settings" or "the idea". */ backLabel?: string }
+type Props = {
+  onBack: () => void
+  /** Where back leads: "settings" or "the idea". */
+  backLabel?: string
+  /** Off to today's square, compass in mind. */
+  onPaint: () => void
+  /** Today already has its colour (the link then just leads back). */
+  paintedToday: boolean
+}
 
 const LISTS: { kind: Kind; label: string; dot: string; hint: string }[] = [
   { kind: 'meaningful', label: 'meaningful', dot: paintHex('green'), hint: 'what does a meaningful day look like?' },
@@ -43,7 +51,7 @@ function EntryInput({ entry, onChange, onDone }: { entry: Entry; onChange: (t: s
 
 // What matters: two short lists — what a meaningful day and an empty day look like to you.
 // Your compass when you paint; it never judges or colours a day for you. Every change saves itself.
-export function WhatMatters({ onBack, backLabel = 'settings' }: Props) {
+export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedToday }: Props) {
   const [lists, setLists] = useState<Matters>(loadMatters)
   const [editing, setEditing] = useState<string | null>(null)
   const [swiped, setSwiped] = useState<string | null>(null)
@@ -110,6 +118,10 @@ export function WhatMatters({ onBack, backLabel = 'settings' }: Props) {
         </section>
       ))}
 
+      {/* A quiet way back to the square: reflect, then go live it. */}
+      <p className="matters-go">
+        <button onClick={onPaint}>{paintedToday ? 'back to today →' : 'now, paint today →'}</button>
+      </p>
       <p className="matters-foot">a guide, not a rule — you still choose the day's colour</p>
     </main>
   )

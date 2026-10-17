@@ -416,6 +416,8 @@ export default function App() {
           <WhatMatters
             onBack={() => setScreenValue(mattersFrom)}
             backLabel={mattersFrom === 'idea' ? 'the idea' : 'settings'}
+            onPaint={goToday}
+            paintedToday={!!days[todayIso()]}
           />
         ) : screen === 'year' ? (
           <Year
