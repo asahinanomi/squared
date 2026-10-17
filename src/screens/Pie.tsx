@@ -51,7 +51,13 @@ function wedge(a: number, b: number) {
   return `M${C} ${C} L${at(a)} A${R} ${R} 0 ${b - a > 0.5 ? 1 : 0} 1 ${at(b)} Z`
 }
 
-// A life pie, in slices: line art like the squares — keylines, paint in the painted wedges,
+/** The rim of a wedge alone, from turn a to turn b. */
+function rim(a: number, b: number) {
+  if (b - a >= 1 - 1e-9) return `M${C} ${C - R} A${R} ${R} 0 1 1 ${C} ${C + R} A${R} ${R} 0 1 1 ${C} ${C - R}`
+  return `M${at(a)} A${R} ${R} 0 ${b - a > 0.5 ? 1 : 0} 1 ${at(b)}`
+}
+
+// A life pie, in slices: line art like the squares — a 3px rim and 2px lines between the slices, paint in the painted wedges,
 // a dashed keyline round the days still to come. Numbers sit inside the wedges that have room for them.
 // Three denominators for the same chart; it always opens on the whole life. Zooming in (pinch or
 // the zoom buttons) steps closer: whole life → days I lived → painted only.
@@ -92,13 +98,19 @@ export function Pie({ days, profile, scope, onScope }: Props) {
       <div className="pie-body">
         <svg className="pie-chart" viewBox="0 0 250 250" role="img" aria-label={pieLabel(slices)}>
           {/* Nothing to count yet: just the keyline circle. */}
-          {!drawn.length && <circle cx={C} cy={C} r={R} fill="#fcfcfa" className="pie-slice" />}
+          {!drawn.length && <circle cx={C} cy={C} r={R} fill="#fcfcfa" className="pie-rim" />}
+          {/* Paint first, then the lines between slices (the pellets' 2px), then the rim (the hero's 3px). */}
+          {drawn.map((s) => (
+            <path key={s.id} d={wedge(s.a, s.b)} fill={FILL[s.id]} />
+          ))}
+          {drawn.length > 1 &&
+            drawn.map((s) => <path key={`edge-${s.id}`} d={`M${C} ${C} L${at(s.a)}`} className="pie-edge" />)}
           {drawn.map((s) => (
             <path
-              key={s.id}
-              d={wedge(s.a, s.b)}
-              fill={FILL[s.id]}
-              className={s.id === 'ahead' ? 'pie-slice is-ahead' : 'pie-slice'}
+              key={`rim-${s.id}`}
+              d={rim(s.a, s.b)}
+              fill="none"
+              className={s.id === 'ahead' ? 'pie-rim is-ahead' : 'pie-rim'}
             />
           ))}
           {labels.map((l) => (
