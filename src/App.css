@@ -944,14 +944,26 @@ button.settings-row:active { background: var(--grey-1); }
 .pie-scope { display: flex; gap: 4px; width: fit-content; margin: 18px auto 0; padding: 4px; border-radius: 999px; background: #efefea; flex-shrink: 0; }
 .pie-scope button { padding: 7px 15px; border-radius: 999px; font-size: 12.5px; color: #9a9a93; white-space: nowrap; }
 .pie-scope button.is-on { background: #fff; color: var(--ink); font-weight: 600; }
-/* The pie gives way first on a short screen, so the bar always stays in view. */
-.pie-chart { display: block; flex: 0 1 252px; min-height: 140px; width: 100%; margin: 22px 0 0; overflow: visible; }
-.pie-slice { stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+.pie-body {
+  flex: 1;
+  min-height: 0;
+  margin-top: 6px;
+  padding: 16px 0 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to bottom, transparent, #000 16px, #000 calc(100% - 20px), transparent);
+}
+.pie-body::-webkit-scrollbar { display: none; }
+/* As wide as the screen allows; the legend lines up with the pie's own edges (the circle is 96% of the drawing). */
+.pie-chart { display: block; width: min(100%, 360px); margin: 0 auto; overflow: visible; }
+.pie-legend { width: calc(min(100%, 360px) * 0.96); margin-left: auto; margin-right: auto; }
+.pie-slice { stroke: var(--ink); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
 .pie-slice.is-ahead { stroke-dasharray: 2 6; stroke-linecap: round; }
 .pie-ahead text { text-anchor: middle; font-family: inherit; }
-.pie-ahead-n { font-size: 17px; font-weight: 600; fill: #55554f; }
-.pie-ahead-unit { font-size: 10px; fill: #9a9a93; }
-.pie-legend { list-style: none; margin: 30px 0 0; flex-shrink: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+.pie-ahead-n { font-size: 15px; font-weight: 600; fill: #55554f; }
+.pie-ahead-unit { font-size: 8px; fill: #9a9a93; }
+.pie-legend { list-style: none; margin-top: 28px; margin-bottom: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
 .pie-legend li { display: flex; align-items: center; gap: 12px; font-size: 15px; }
 .pie-dot { width: 13px; height: 13px; flex-shrink: 0; box-sizing: border-box; border-radius: 50%; border: 1.5px solid var(--ink); }
 .pie-dot.is-ahead { border-style: dashed; }
@@ -980,8 +992,4 @@ button.settings-row:active { background: var(--grey-1); }
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-}
-@media (max-height: 700px) {
-  .pie-chart { margin-top: 14px; }
-  .pie-legend { margin-top: 18px; gap: 9px; }
 }

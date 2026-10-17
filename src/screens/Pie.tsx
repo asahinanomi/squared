@@ -77,7 +77,6 @@ export function Pie({ days, profile }: Props) {
     <main className="pie">
       <div className="life-head">
         <h1 className="life-title">a life pie, in slices</h1>
-        <p className="life-sub">how will you paint yours?</p>
       </div>
 
       <div className="pie-scope" role="group" aria-label="Count out of">
@@ -93,38 +92,41 @@ export function Pie({ days, profile }: Props) {
         ))}
       </div>
 
-      <svg className="pie-chart" viewBox="0 0 250 250" role="img" aria-label={pieLabel(slices)}>
-        {/* Nothing to count yet: just the keyline circle. */}
-        {!drawn.length && <circle cx={C} cy={C} r={R} fill="#fcfcfa" className="pie-slice" />}
-        {drawn.map((s) => (
-          <path
-            key={s.id}
-            d={wedge(s.a, s.b)}
-            fill={FILL[s.id]}
-            className={s.id === 'ahead' ? 'pie-slice is-ahead' : 'pie-slice'}
-          />
-        ))}
-        {label && ahead && (
-          <g className="pie-ahead" aria-hidden="true">
-            <text x={label[0]} y={label[1] - 7} className="pie-ahead-n">
-              {fmt(ahead.count)}
-            </text>
-            <text x={label[0]} y={label[1] + 9} className="pie-ahead-unit">
-              days to paint
-            </text>
-          </g>
-        )}
-      </svg>
+      {/* The pie and its legend share one width, and scroll together when they outgrow the screen. */}
+      <div className="pie-body">
+        <svg className="pie-chart" viewBox="0 0 250 250" role="img" aria-label={pieLabel(slices)}>
+          {/* Nothing to count yet: just the keyline circle. */}
+          {!drawn.length && <circle cx={C} cy={C} r={R} fill="#fcfcfa" className="pie-slice" />}
+          {drawn.map((s) => (
+            <path
+              key={s.id}
+              d={wedge(s.a, s.b)}
+              fill={FILL[s.id]}
+              className={s.id === 'ahead' ? 'pie-slice is-ahead' : 'pie-slice'}
+            />
+          ))}
+          {label && ahead && (
+            <g className="pie-ahead" aria-hidden="true">
+              <text x={label[0]} y={label[1] - 7} className="pie-ahead-n">
+                {fmt(ahead.count)}
+              </text>
+              <text x={label[0]} y={label[1] + 9} className="pie-ahead-unit">
+                days to paint
+              </text>
+            </g>
+          )}
+        </svg>
 
-      <ul className="pie-legend">
-        {slices.map((s) => (
-          <li key={s.id} className={s.id === 'unpainted' || s.id === 'ahead' ? 'is-quiet' : undefined}>
-            <span className={'pie-dot' + (s.id === 'ahead' ? ' is-ahead' : '')} style={{ background: FILL[s.id] }} />
-            <span className="pie-legend-label">{LABEL[s.id]}</span>
-            <span className="pie-legend-n">{fmt(s.count)}</span>
-          </li>
-        ))}
-      </ul>
+        <ul className="pie-legend">
+          {slices.map((s) => (
+            <li key={s.id} className={s.id === 'unpainted' || s.id === 'ahead' ? 'is-quiet' : undefined}>
+              <span className={'pie-dot' + (s.id === 'ahead' ? ' is-ahead' : '')} style={{ background: FILL[s.id] }} />
+              <span className="pie-legend-label">{LABEL[s.id]}</span>
+              <span className="pie-legend-n">{fmt(s.count)}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="pie-soon">
         <button disabled>
