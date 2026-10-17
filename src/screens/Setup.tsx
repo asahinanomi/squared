@@ -196,13 +196,8 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
           {c && (
             <>
               <div className="setup-line">
-                <span>{inYears ? `${spentYears} years` : fmt(c.sofar)} lived</span>
-                <span className="dot" aria-hidden="true">
-                  ·
-                </span>
-                <strong>
-                  {inYears ? `${lifespan - spentYears} years` : fmt(c.left)} ({c.percentLeft}%) to paint
-                </strong>
+                {inYears ? `${spentYears} years` : fmt(c.sofar)} lived,{' '}
+                {inYears ? `${lifespan - spentYears} years` : fmt(c.left)} ({c.percentLeft}%) to paint
               </div>
               {/* Two views of the same numbers; it opens on squares every time. */}
               <div className="seg setup-seg" role="group" aria-label="Count in">
