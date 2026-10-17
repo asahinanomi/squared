@@ -49,7 +49,7 @@ The UI in these screens should be kept; better treatments are welcome.
 
 Shades (from the phase 2 design): green `#6E9B7B`, grey `#8E8E87`, red `#C06A62`; a backfilled day (painted later than the day itself) shows one shade lighter in the zoomed-out views: `#A7C4B0`, `#AEAEA6`, `#D9A8A3`.
 
-In the app the meanings read, in the owner's words: **green** "Conscious, and meaningful." · **grey** "It went by, and I don't know where." · **red** "Conscious, but spent poorly." They show in the "meaningfully" sheet, and as a quiet grey line (led by a small dot of that paint) under the palette each time a color is dipped (it fades after a few seconds, or as soon as painting starts).
+In the app the meanings read, in the owner's words: **green** "Here, and it mattered." · **grey** "Gone before I noticed." · **red** "Here, but wasted." They show in the "meaningfully" sheet, and as a quiet grey line (led by a small dot of that paint) under the palette each time a color is dipped (it fades after a few seconds, or as soon as painting starts).
 
 ## The why note
 
@@ -71,7 +71,7 @@ In the app the meanings read, in the owner's words: **green** "Conscious, and me
 
 | Kind of text | Style | Examples |
 |---|---|---|
-| Statements and questions the app says to you | Sentence case | "Did I spend today meaningfully?", "Meaningfully" sheet, "Delete this note?" |
+| Statements and questions the app says to you | Sentence case | "did I spend Today meaningfully?" (the owner's wording), "Meaningfully" sheet, "Delete this note?" |
 | Dates | Normal date capitals | "Wednesday, Oct 14th, 2026", "Wed, Oct 14, 2026 · 4:52 pm" |
 | Buttons and controls | all lowercase | continue with Google, add new note, hide older, update, delete, cancel |
 | Quiet helper and error text | all lowercase | why?, tap anywhere to skip, 3 notes, couldn't save, sign-in didn't finish |
@@ -83,7 +83,7 @@ Proper names keep their capitals everywhere (Google, I).
 
 - A `days` table in Supabase: `date`, `color`, `note`, and a boolean for whether the square was painted on the day itself or backfilled later (set automatically).
 - Painted squares persist and reload when the app is reopened.
-- The question text ("Did I spend today meaningfully?") is stored as a single configurable value, not hardcoded in the UI.
+- The question text ("did I spend Today meaningfully?", set by 0006) is stored as a single configurable value, not hardcoded in the UI.
 
 ## Auth
 
@@ -102,11 +102,22 @@ Zoom levels (week/month/year/lifetime views), painting history before this month
 
 Build step by step; the owner reviews and gives feedback after each step before the next one starts.
 
+## Phase 3 — settings (in progress)
+
+Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: today · my squares · the idea · settings · sign out (sign out stays in the menu until the account phase).
+
+- Step 1 (done): **settings hub** — back arrow (returns to where you came from), "settings", four rows: square settings ("Oct 26, 1971 · 95 years · 34,699 squares", opens the square screen), and reminders / my data / account shown with a "soon" tag and not tappable. "squared.today" at the foot. The "how many squares?" menu item is gone.
+- Step 2 (done): square settings — one shared screen, two modes (first-run "how many squares?" + "start painting", which lands on today; from settings "square settings", back arrow, saves as you change it, quiet offline cue). Moving the birth date later hides earlier painted days, never deletes them.
+- Step 3 (done): life glass — replaces the hint text on every zoom level: an hourglass whose sand is your life (top = squares left, bottom = spent). Just the icon until tapped; a tap shows "14,620 days (42%) to paint!" in a soft pill — in years on a life · years, in months on a life · months and the year screen, another tap hides it. A few grains trickle on arrival and every 30 seconds (off with "reduce motion"). The glass, zoom icons and "today" are a soft dark grey (#55554F), not black. (It replaced a first try: a battery bar.)
+- **what matters** (done): settings → "what matters" — two short lists, meaningful and empty, of what each kind of day looks like to you. Your compass when you paint; a reference only, it never scores or colours a day. Tap "+ add" to write an entry (a line or two, up to 120 characters; Enter or tapping away saves), tap an entry to edit, swipe it left to delete, clear it to remove it. Saves itself on this device (`squared.matters` in local storage); it moves to the account once sync exists.
+- Step 4: polish & wrap-up.
+
 ## Setup (for future sessions)
 
 1. **Supabase**: run each file in `supabase/migrations/` in order (0001, 0002, …) in the SQL Editor. It creates `settings` (holds the `question` value) and `days` (row-level security: each person sees only their own rows; `painted_on_day` is set by a trigger on first paint).
 2. **Google sign-in**: Supabase → Authentication → Providers → Google, using an OAuth client from Google Cloud. Add the site URLs under Authentication → URL Configuration.
 3. **Env vars** (Vercel and local `.env`, see `.env.example`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. Without them, the app runs as a local demo (sign-in skipped, nothing saved).
+4. **Google screen says "squared.today"** (optional): set `VITE_GOOGLE_CLIENT_ID` to the same OAuth web client's ID, and in Google Cloud add `https://squared.today` to its Authorized JavaScript origins and `https://squared.today/` to its Authorized redirect URIs. The app then signs in with Google directly (ID token + nonce → `signInWithIdToken`). Without the variable it uses Supabase's redirect, whose Google screen shows the Supabase address.
 
 ## Phase 2 — the zoom (done)
 
@@ -120,7 +131,7 @@ Design: https://claude.ai/artifact/PFuFHaZmJXTG82GkJsT1NH. One zoom from a day o
 - Step 5 (done): **a life · in months** — ~1,140 banded month-squares, 12 to a row (each row a calendar year, Jan–Dec), drawn on a canvas that only paints the rows on screen (one frame per scroll step in tests). Opens with this month's row centred, this month outlined, months before birth and ahead blank. Tap a month → its days; zoom in → this year. The subheadline is now links: tap "years" / "months" to switch (the current one is bold; "days" arrives in step 6). Squares at least 44px wide print "Oct" over "2026" (shows once pinch makes them big, step 7). A life always lands on years.
 - Step 6 (done): **a life · in days** — one solid square per real day (lighter if backfilled), grouped into a labelled block per year (28 per row, a gap between years), birth to the hoped-for last day; opens with today in the middle (outlined), lived days behind, empty ahead. Canvas, only the rows on screen; tested with ~18,000 painted days: no dropped frames scrolling, 26 ms to jump to the birth year. Tap a day → a dark chip shows its date ("Friday, Oct 16th, 2026") with "open ›" to paint it. Squares 40px+ print the big date and "2026.10 Thu" (visible once pinch lands, step 7). Both canvas views share `useCanvasList`.
 - Step 7 (done): **pinch everywhere** (two fingers on a phone, trackpad pinch on desktop; the phone's own page zoom is off). One straight ladder: today → month → year → a life · years → a life · months → a life · days. Pinch **out** and the zoom-out button walk it outward (greyed at days, the edge). The zoom-in button walks it back. Pinch **in** enlarges the squares where there's more to read — month: 7 → 3 a row with "16 / 2026.10 Fri"; a life in months: 12 → 6 → 4 → 3 a row with "Oct / 2026"; a life in days: 28 → 14 → 7 → 3 a row with "16 / 2026.10 Fri" — and on today, year and a life · years it steps in a level. While pinching, the view scales under the fingers; on release it moves a notch or eases back, and the square under the fingers stays put. A pinch begun on the paint square takes back the stray stroke. Zoom is never remembered: every level starts at its own size.
-- After step 7: **"today"** — when today has scrolled out of view (month, year, a life in months or days, at any zoom), a "today" link appears left of the zoom buttons. Tap it and the same screen glides back to today's square (this month / this year), which pulses once; the link hides again. It stays on the screen you got lost in. Labels only appear at the deepest zoom, centred, clipped and only if they fit; the space between squares grows with them (7 and 3 a row match my squares).
+- After step 7: **"today"** — when today has scrolled out of view (month, year, a life in months or days, at any zoom), a "today" link appears left of the zoom buttons. Tap it and the same screen glides back to today's square (this month / this year), which pulses once; the link hides again. It stays on the screen you got lost in. Labels show as soon as they fit inside the square at a readable size (9px+): a life in months prints "Oct / 2026" from 6 a row; a life in days prints the number from 7 a row and "2026.10 Thu" at 3 a row; the space between squares grows with them (7 and 3 a row match my squares).
 - **Date labels on day squares (agreed):** big date number; a small line under it. Normal size: "Thu". Zoomed in: "2026.10 Thu" (year.month, then weekday — never "Oct '26", which reads like a date). Zoomed far out: color only, no text. Applies to the month view and "a life · in days" once pinch zoom lands (steps 6–7).
 - Step 8 (done): **ship** — full regression pass (paint, notes, swipe delete, instant save, every zoom level, pinch anchoring, labels, "today"), speed check with ~18,000 painted days, README wrapped up, PR merged into `main`.
 
@@ -129,5 +140,5 @@ Design: https://claude.ai/artifact/PFuFHaZmJXTG82GkJsT1NH. One zoom from a day o
 - App: **https://squared.today** (Vercel; `www.squared.today` redirects here). Backup URL: https://squared-peach.vercel.app
 - DNS at GoDaddy: `A @ → 76.76.21.21`, `CNAME www → cname.vercel-dns.com`. No other A/AAAA records for `@` (the GoDaddy "Parked" A record must stay deleted).
 - Supabase project `xsqpdmtruajdunawpxhk`: Site URL `https://squared.today`; Redirect URLs `https://squared.today/**` and `https://squared-peach.vercel.app/**`.
-- Google sign-in: the OAuth client's only redirect URI is `https://xsqpdmtruajdunawpxhk.supabase.co/auth/v1/callback`; its ID and secret live in Supabase → Authentication → Providers → Google.
+- Google sign-in: the OAuth client's redirect URIs are `https://xsqpdmtruajdunawpxhk.supabase.co/auth/v1/callback` and (for direct sign-in) `https://squared.today/`; its ID and secret live in Supabase → Authentication → Providers → Google.
 - Vercel env vars (Production + Preview): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (the publishable key of the project above). They are baked in at build time, so redeploy after changing them.

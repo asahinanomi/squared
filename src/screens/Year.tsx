@@ -1,6 +1,7 @@
 import { ZoomBar } from '../components/ZoomBar'
 import { isoDate, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
+import type { Profile } from '../lib/profile'
 import { useBackToToday } from '../lib/backToToday'
 import { bands, monthEnd } from '../lib/tally'
 import { useLadderScroll } from '../lib/useLadderScroll'
@@ -8,6 +9,8 @@ import { Chevron } from './Today'
 
 type Props = {
   days: Days
+  /** For the life bar at the bottom. */
+  profile?: Profile | null
   born?: string
   /** Year to open on (zooming in from a life); otherwise this year. */
   focus?: number
@@ -23,7 +26,7 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 
 // A year — twelve banded month-squares (6×2). Your years stack in one scroll, from the birth
 // year down to this one (next year peeks in faintly below). Opens centred on this year.
-export function Year({ days, born, focus, onPick, onIn, onOut }: Props) {
+export function Year({ days, profile, born, focus, onPick, onIn, onOut }: Props) {
   const today = todayIso()
   const thisYear = Number(today.slice(0, 4))
   const thisMonth = today.slice(0, 7)
@@ -116,7 +119,8 @@ export function Year({ days, born, focus, onPick, onIn, onOut }: Props) {
       </div>
 
       <ZoomBar
-        hint="tap a month to open its days"
+        profile={profile}
+        unit="months"
         onIn={onIn}
         onOut={onOut}
         onToday={toToday.away ? toToday.back : undefined}

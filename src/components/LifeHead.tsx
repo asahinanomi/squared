@@ -30,7 +30,7 @@ export function LifeHead({ profile, current, onPick, ready = ['years', 'months',
       <p className="life-sub">
         {items.map(([r, label], i) => (
           <span key={r}>
-            {i > 0 && <span className="dot"> · </span>}
+            {i > 0 && <span className="dot">·</span>}
             {r === current ? (
               <span className="is-on" aria-current="page">
                 {label}

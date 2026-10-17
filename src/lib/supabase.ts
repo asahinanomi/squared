@@ -37,23 +37,63 @@ if (supabase) {
   })
 }
 
+// Google sign-in straight from squared.today, so Google's screen says "continue to squared.today"
+// (not the Supabase address). Google sends an ID token back here; Supabase turns it into a session.
+// Without VITE_GOOGLE_CLIENT_ID it falls back to Supabase's own Google redirect.
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined
+const NONCE_KEY = 'squared.signin'
+
+const sha256 = async (text: string) =>
+  [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)))]
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
+
 export async function signInWithGoogle() {
   if (!supabase) return
-  await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: { redirectTo: window.location.origin },
+  if (!googleClientId) {
+    await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } })
+    return
+  }
+  // A one-time secret: Google signs its hash into the token, Supabase checks it against the original.
+  const nonce = crypto.randomUUID()
+  const state = crypto.randomUUID()
+  sessionStorage.setItem(NONCE_KEY, JSON.stringify({ nonce, state }))
+  const q = new URLSearchParams({
+    client_id: googleClientId,
+    redirect_uri: `${location.origin}/`,
+    response_type: 'id_token',
+    scope: 'openid email profile',
+    nonce: await sha256(nonce),
+    state,
+    prompt: 'select_account',
   })
+  location.assign(`https://accounts.google.com/o/oauth2/v2/auth?${q}`)
 }
 
 let finishing: Promise<string | null> | null = null
 
 /**
- * Completes a Google redirect: trades the ?code for a session and cleans the URL.
- * Returns a readable error when sign-in didn't finish. Runs once per page load.
+ * Completes a Google redirect — an ID token in the #hash (direct sign-in) or a ?code (Supabase's
+ * redirect) — then cleans the URL. Returns a readable error when sign-in didn't finish.
+ * Runs once per page load.
  */
 export function finishSignIn(): Promise<string | null> {
   finishing ??= (async () => {
     if (!supabase) return null
+    const hash = new URLSearchParams(location.hash.slice(1))
+    if (hash.has('id_token') || hash.has('error')) {
+      history.replaceState(null, '', location.pathname)
+      const saved = JSON.parse(sessionStorage.getItem(NONCE_KEY) ?? 'null') as { nonce: string; state: string } | null
+      sessionStorage.removeItem(NONCE_KEY)
+      if (hash.has('error')) return hash.get('error') === 'access_denied' ? null : 'Google sign-in didn’t finish.'
+      if (!saved || saved.state !== hash.get('state')) return 'Sign-in expired, please try again.'
+      const { error } = await supabase.auth.signInWithIdToken({
+        provider: 'google',
+        token: hash.get('id_token')!,
+        nonce: saved.nonce,
+      })
+      return error ? error.message : null
+    }
     const params = new URLSearchParams(location.search)
     const code = params.get('code')
     const failed = params.get('error_description')

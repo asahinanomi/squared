@@ -96,3 +96,15 @@ export function fitText(
   ctx.fillText(text, cx, y)
   return true
 }
+
+let measurer: CanvasRenderingContext2D | null = null
+/** Whether text fits a width in a font — for deciding, outside a paint, if labels will show. */
+export function textFits(text: string, font: string, maxW: number) {
+  measurer ??= document.createElement('canvas').getContext('2d')
+  if (!measurer) return false
+  measurer.font = font
+  return measurer.measureText(text).width <= maxW
+}
+
+/** Readable text is never smaller than this: below it, a square is colour only. */
+export const MIN_TEXT_PX = 9

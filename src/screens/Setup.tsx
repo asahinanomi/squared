@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Chevron } from './Today'
 import { fromIso, todayIso } from '../lib/dates'
 import { DEFAULT_LIFESPAN, lifeCounts } from '../lib/life'
@@ -6,6 +6,8 @@ import type { Profile } from '../lib/profile'
 
 type Props = {
   profile: Profile | null
+  /** First run asks "how many squares?" and ends on "start painting"; from settings every change saves itself. */
+  mode?: 'onboarding' | 'settings'
   onBack: () => void
   /** Rejects if it couldn't be saved. */
   onSave: (p: Profile) => Promise<void>
@@ -17,7 +19,7 @@ const fmt = (n: number) => n.toLocaleString('en-US')
 
 // "How many squares?": birth date and hoped-for lifespan, and what they add up to.
 // The one screen where a number belongs: it's there to feel how finite the squares are.
-export function Setup({ profile, onBack, onSave }: Props) {
+export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
   const today = todayIso()
   const [born, setBorn] = useState(profile?.born ?? '')
   const [lifespan, setLifespanValue] = useState(profile?.lifespan ?? DEFAULT_LIFESPAN)
@@ -32,6 +34,9 @@ export function Setup({ profile, onBack, onSave }: Props) {
 
   const valid = born > '1900-01-01' && born <= today
   const c = valid ? lifeCounts(born, lifespan, today) : null
+  const [inYears, setInYears] = useState(false)
+  // Years from the squares themselves, so lived + to paint always add up to the lifespan.
+  const spentYears = c ? Math.round((c.sofar / c.total) * lifespan) : 0
 
   const save = async () => {
     if (!valid) return
@@ -51,17 +56,59 @@ export function Setup({ profile, onBack, onSave }: Props) {
     }
   }
 
+  // From settings: save quietly a moment after the last change (rapid stepper taps become one save).
+  // If it fails (offline), say so softly and try again when the connection is back.
+  const editing = mode === 'settings'
+  const saved = useRef(profile ? `${profile.born}|${profile.lifespan}` : '')
+  const [offline, setOffline] = useState(false)
+  const latest = useRef({ born, lifespan, valid })
+  latest.current = { born, lifespan, valid }
+  const flush = async () => {
+    const { born, lifespan, valid } = latest.current
+    const key = `${born}|${lifespan}`
+    if (!valid || key === saved.current) return
+    try {
+      await onSave({ born, lifespan })
+      saved.current = key
+      setOffline(false)
+    } catch (e) {
+      console.error('Could not save profile', e)
+      setOffline(true)
+    }
+  }
+  useEffect(() => {
+    if (!editing) return
+    const t = setTimeout(flush, 600)
+    return () => clearTimeout(t)
+  }, [editing, born, lifespan]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!editing) return
+    const retry = () => void flush()
+    window.addEventListener('online', retry)
+    return () => window.removeEventListener('online', retry)
+  }, [editing]) // eslint-disable-line react-hooks/exhaustive-deps
+  const back = () => {
+    if (editing) void flush() // don't lose a change made just before leaving
+    onBack()
+  }
+
   return (
     <main className="setup">
-      <button className="setup-back" aria-label="Back" onClick={onBack}>
+      <button className="setup-back" aria-label="Back" onClick={back}>
         <Chevron dir="left" />
       </button>
 
       <div className="setup-body">
         <h1 className="setup-title">
-          how many
-          <br />
-          squares?
+          {editing ? (
+            'square settings'
+          ) : (
+            <>
+              how many
+              <br />
+              squares?
+            </>
+          )}
         </h1>
 
         <div className="setup-fields">
@@ -148,19 +195,29 @@ export function Setup({ profile, onBack, onSave }: Props) {
           <div className="setup-squares">squares</div>
           {c && (
             <div className="setup-line">
-              {c.age} years · {fmt(c.sofar)} so far ·{' '}
+              {inYears ? `${spentYears} years` : fmt(c.sofar)} lived ·{' '}
               <strong>
-                {fmt(c.left)} left · {c.percentLeft}%
-              </strong>
+                {inYears ? `${lifespan - spentYears} years` : fmt(c.left)} ({c.percentLeft}%) to paint
+              </strong>{' '}
+              · {/* Flip between squares and years; it opens on squares every time. */}
+              <button className="setup-unit" onClick={() => setInYears(!inYears)}>
+                {inYears ? 'in squares' : 'in years'}
+              </button>
             </div>
           )}
         </div>
       </div>
 
-      {error && <p className="setup-error">{error}</p>}
-      <button className="pill setup-go" disabled={!valid || busy} onClick={save}>
-        {busy ? 'saving…' : 'start painting'}
-      </button>
+      {editing ? (
+        offline && <p className="setup-error">couldn't save, check your connection</p>
+      ) : (
+        <>
+          {error && <p className="setup-error">{error}</p>}
+          <button className="pill setup-go" disabled={!valid || busy} onClick={save}>
+            {busy ? 'saving…' : 'start painting'}
+          </button>
+        </>
+      )}
     </main>
   )
 }

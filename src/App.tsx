@@ -3,6 +3,8 @@ import { usePinch, type Focal } from './lib/usePinch'
 import type { Session } from '@supabase/supabase-js'
 import { MeaningSheet } from './components/MeaningSheet'
 import { Topbar } from './components/Topbar'
+import { Settings } from './screens/Settings'
+import { WhatMatters } from './screens/WhatMatters'
 import { QUESTION } from './lib/config'
 import { todayIso } from './lib/dates'
 import { fetchAllDays, saveColor, type Days } from './lib/days'
@@ -33,7 +35,7 @@ import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import './App.css'
 
-type Screen = 'today' | 'month' | 'year' | 'life' | 'idea' | 'setup'
+type Screen = 'today' | 'month' | 'year' | 'life' | 'idea' | 'setup' | 'settings' | 'matters'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
 const LADDER: Screen[] = ['today', 'month', 'year', 'life']
 
@@ -63,6 +65,10 @@ export default function App() {
   const [monthAnchor, setMonthAnchor] = useState<{ iso?: string; y: number } | undefined>()
   // Where "how many squares?" returns to: a life, when it was asked for on the way there.
   const [afterSetup, setAfterSetup] = useState<Screen>('today')
+  // Where settings was opened from: its back arrow returns there.
+  const [settingsFrom, setSettingsFrom] = useState<Screen>('today')
+  // What matters opens from settings or from the idea; back returns there.
+  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea'>('settings')
   const [date, setDate] = useState(todayIso)
   const [days, setDays] = useState<Days>(() => (demo ? mockDays() : {}))
   const [loaded, setLoaded] = useState<Paint | null>(null)
@@ -269,9 +275,13 @@ export default function App() {
     setAfterSetup('life')
     setScreenValue('setup')
   }
-  const openSetup = () => {
-    setAfterSetup('today')
-    setScreen('setup')
+  const openSettings = () => {
+    if (screen !== 'settings' && screen !== 'setup' && screen !== 'matters') setSettingsFrom(screen)
+    setScreenValue('settings')
+  }
+  const openSquareSettings = () => {
+    setAfterSetup('settings')
+    setScreenValue('setup')
   }
 
   const signOut = () => {
@@ -323,7 +333,7 @@ export default function App() {
   return (
     // Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint).
     <div className={'app' + (screen === 'month' || screen === 'year' || screen === 'life' ? ' is-one-screen' : '')}>
-      {screen !== 'setup' && (
+      {screen !== 'setup' && screen !== 'settings' && screen !== 'matters' && (
         <Topbar
           onHome={goToday}
           onCalendar={() => goMonth()}
@@ -335,7 +345,7 @@ export default function App() {
                 : undefined
           }
           onIdea={() => setScreen('idea')}
-          onSetup={openSetup}
+          onSettings={openSettings}
           onSignOut={signOut}
         />
       )}
@@ -368,21 +378,51 @@ export default function App() {
             onZoomOut={() => goMonth()}
           />
         ) : screen === 'idea' ? (
-          <Idea />
+          <Idea
+            onMatters={() => {
+              setMattersFrom('idea')
+              setScreenValue('matters')
+            }}
+          />
         ) : screen === 'setup' ? (
           <Setup
             profile={profile}
-            onBack={() => (afterSetup === 'life' ? setScreen('year') : goToday())}
+            onBack={() =>
+              afterSetup === 'life'
+                ? setScreen('year')
+                : afterSetup === 'settings'
+                  ? setScreenValue('settings')
+                  : goToday()
+            }
+            mode={afterSetup === 'settings' ? 'settings' : 'onboarding'}
             onSave={async (p) => {
               await saveProfile(p)
               setProfile(p)
-              if (afterSetup === 'life') setScreen('life')
-              else goToday()
+              // First run ends on "start painting": straight to today's square.
+              if (afterSetup !== 'settings') goToday()
             }}
+          />
+        ) : screen === 'settings' ? (
+          <Settings
+            profile={profile}
+            onBack={() => setScreenValue(settingsFrom)}
+            onSquares={openSquareSettings}
+            onMatters={() => {
+              setMattersFrom('settings')
+              setScreenValue('matters')
+            }}
+          />
+        ) : screen === 'matters' ? (
+          <WhatMatters
+            onBack={() => setScreenValue(mattersFrom)}
+            backLabel={mattersFrom === 'idea' ? 'the idea' : 'settings'}
+            onPaint={goToday}
+            paintedToday={!!days[todayIso()]}
           />
         ) : screen === 'year' ? (
           <Year
             days={days}
+            profile={profile}
             born={profile?.born}
             focus={yearFocus}
             onPick={(m) => goMonth(m)}
@@ -427,6 +467,7 @@ export default function App() {
         ) : (
           <Month
             days={days}
+            profile={profile}
             born={profile?.born}
             focus={monthFocus}
             onPick={(iso) => {
