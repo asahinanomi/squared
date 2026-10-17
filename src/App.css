@@ -966,6 +966,25 @@ button.settings-row:active { background: var(--grey-1); }
 .matters-input { display: block; resize: none; overflow: hidden; border-color: var(--ink); outline: none; }
 .matters-input::placeholder { color: #bdbdb6; }
 .matters-list .swipe { border-radius: 10px; }
+/* Reorder: a quiet grip at the right of each entry; the row lifts while it moves. */
+.matters-row { position: relative; }
+.matters-row .matters-entry { padding-right: 44px; }
+.matters-row.is-moving { z-index: 3; }
+.matters-row.is-moving .swipe { box-shadow: 0 6px 18px rgba(20, 20, 19, 0.12); }
+.matters-grip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 44px;
+  display: grid;
+  place-items: center;
+  touch-action: none;
+  cursor: grab;
+  color: #b5b5ae;
+}
+.matters-row.is-moving .matters-grip { cursor: grabbing; color: var(--grey-4); }
+.matters-grip svg { width: 10px; height: 16px; fill: currentColor; }
 .matters-add {
   display: flex;
   align-items: center;

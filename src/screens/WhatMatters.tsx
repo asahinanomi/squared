@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { ConfirmDialog } from '../components/ConfirmDialog'
 import { SwipeRow } from '../components/SwipeRow'
 import {
   loadMatters,
@@ -67,6 +68,8 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
   const [lists, setLists] = useState<Matters>(loadMatters)
   const [editing, setEditing] = useState<string | null>(null)
   const [swiped, setSwiped] = useState<string | null>(null)
+  // A swipe-delete asks first, like a note does.
+  const [asking, setAsking] = useState<{ kind: Kind; id: string } | null>(null)
   // Only real edits are saved (not the lists arriving from the account).
   const edited = useRef(false)
 
@@ -102,6 +105,52 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
     setSwiped(null)
     setEditing(e.id)
   }
+  // Reorder: press the grip and drag. The row follows the finger; passing a neighbour's middle swaps them.
+  const [moving, setMoving] = useState<{ id: string; dy: number } | null>(null)
+  const grab = useRef<{ kind: Kind; id: string; y: number; list: HTMLElement } | null>(null)
+  const moveBy = (kind: Kind, id: string, step: -1 | 1) =>
+    update(kind, (l) => {
+      const i = l.findIndex((e) => e.id === id)
+      const j = i + step
+      if (i < 0 || j < 0 || j >= l.length) return l
+      const next = l.slice()
+      ;[next[i], next[j]] = [next[j], next[i]]
+      return next
+    })
+  const gripDown = (kind: Kind, id: string) => (e: React.PointerEvent) => {
+    e.stopPropagation() // not a swipe
+    e.currentTarget.setPointerCapture(e.pointerId)
+    const list = e.currentTarget.closest('.matters-list') as HTMLElement
+    grab.current = { kind, id, y: e.clientY, list }
+    setSwiped(null)
+    setMoving({ id, dy: 0 })
+  }
+  const gripMove = (e: React.PointerEvent) => {
+    const g = grab.current
+    if (!g) return
+    let dy = e.clientY - g.y
+    const rows = [...g.list.querySelectorAll<HTMLElement>('[data-entry]')]
+    const i = rows.findIndex((r) => r.dataset.entry === g.id)
+    const me = rows[i]
+    const below = rows[i + 1]
+    const above = rows[i - 1]
+    const gap = 7
+    if (below && dy > below.offsetHeight / 2) {
+      moveBy(g.kind, g.id, 1)
+      g.y += below.offsetHeight + gap
+      dy -= below.offsetHeight + gap
+    } else if (above && dy < -above.offsetHeight / 2) {
+      moveBy(g.kind, g.id, -1)
+      g.y -= above.offsetHeight + gap
+      dy += above.offsetHeight + gap
+    }
+    if (me) setMoving({ id: g.id, dy })
+  }
+  const gripUp = () => {
+    grab.current = null
+    setMoving(null)
+  }
+
   const done = (kind: Kind, id: string) => {
     // A cleared entry goes away.
     update(kind, (l) => l.map((e) => (e.id === id ? { ...e, text: e.text.trim() } : e)).filter((e) => e.text))
@@ -134,19 +183,43 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
                 onDone={() => done(kind, e.id)}
               />
             ) : (
-              <SwipeRow
+              <div
                 key={e.id}
-                open={swiped === e.id}
-                onOpenChange={(o) => setSwiped(o ? e.id : null)}
-                onDelete={() => {
-                  setSwiped(null)
-                  update(kind, (l) => l.filter((x) => x.id !== e.id))
-                }}
+                data-entry={e.id}
+                className={'matters-row' + (moving?.id === e.id ? ' is-moving' : '')}
+                style={moving?.id === e.id ? { transform: `translateY(${moving.dy}px)` } : undefined}
               >
-                <button className="matters-entry" onClick={() => setEditing(e.id)}>
-                  {e.text}
-                </button>
-              </SwipeRow>
+                <SwipeRow
+                  open={swiped === e.id}
+                  onOpenChange={(o) => setSwiped(o ? e.id : null)}
+                  onDelete={() => setAsking({ kind, id: e.id })}
+                >
+                  <button className="matters-entry" onClick={() => setEditing(e.id)}>
+                    {e.text}
+                  </button>
+                  {lists[kind].length > 1 && (
+                    <button
+                      className="matters-grip"
+                      aria-label={`move "${e.text}" — arrow keys up or down`}
+                      onPointerDown={gripDown(kind, e.id)}
+                      onPointerMove={gripMove}
+                      onPointerUp={gripUp}
+                      onPointerCancel={gripUp}
+                      onClick={(ev) => ev.stopPropagation()}
+                      onKeyDown={(ev) => {
+                        if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
+                          ev.preventDefault()
+                          moveBy(kind, e.id, ev.key === 'ArrowUp' ? -1 : 1)
+                        }
+                      }}
+                    >
+                      <svg viewBox="0 0 12 20" aria-hidden="true">
+                        {[4, 10, 16].map((y) => [3, 9].map((x) => <circle key={`${x}${y}`} cx={x} cy={y} r="1.4" />))}
+                      </svg>
+                    </button>
+                  )}
+                </SwipeRow>
+              </div>
             ),
           )}
           <button className="matters-add" onClick={() => add(kind)} aria-label={`add — ${hint}`}>
@@ -154,6 +227,23 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
           </button>
         </section>
       ))}
+
+      {asking && (
+        <ConfirmDialog
+          title="Delete this entry?"
+          body="It can't be undone."
+          confirm="delete"
+          onConfirm={() => {
+            update(asking.kind, (l) => l.filter((x) => x.id !== asking.id))
+            setAsking(null)
+            setSwiped(null)
+          }}
+          onCancel={() => {
+            setAsking(null)
+            setSwiped(null)
+          }}
+        />
+      )}
 
       {/* The way back to the square: reflect, then go paint it. */}
       <p className="matters-go">
