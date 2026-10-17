@@ -7,7 +7,7 @@ const COLOURS: [Paint, string][] = [
 ]
 
 // "the idea": why squared exists, in the maker's own words.
-export function Idea() {
+export function Idea({ onMatters }: { onMatters: () => void }) {
   return (
     <main className="idea">
       <h1 className="idea-title">the idea</h1>
@@ -30,6 +30,10 @@ export function Idea() {
         fewer than we think.
       </p>
       <p>I hope to make mine as green as I can. I hope squared can help you too.</p>
+      {/* A very soft invitation, not a button. */}
+      <p className="idea-nudge">
+        <button onClick={onMatters}>(if it helps, name what matters to you →)</button>
+      </p>
       <p className="idea-sign">— nomi</p>
     </main>
   )

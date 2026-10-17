@@ -67,6 +67,8 @@ export default function App() {
   const [afterSetup, setAfterSetup] = useState<Screen>('today')
   // Where settings was opened from: its back arrow returns there.
   const [settingsFrom, setSettingsFrom] = useState<Screen>('today')
+  // What matters opens from settings or from the idea; back returns there.
+  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea'>('settings')
   const [date, setDate] = useState(todayIso)
   const [days, setDays] = useState<Days>(() => (demo ? mockDays() : {}))
   const [loaded, setLoaded] = useState<Paint | null>(null)
@@ -376,7 +378,12 @@ export default function App() {
             onZoomOut={() => goMonth()}
           />
         ) : screen === 'idea' ? (
-          <Idea />
+          <Idea
+            onMatters={() => {
+              setMattersFrom('idea')
+              setScreenValue('matters')
+            }}
+          />
         ) : screen === 'setup' ? (
           <Setup
             profile={profile}
@@ -400,10 +407,16 @@ export default function App() {
             profile={profile}
             onBack={() => setScreenValue(settingsFrom)}
             onSquares={openSquareSettings}
-            onMatters={() => setScreenValue('matters')}
+            onMatters={() => {
+              setMattersFrom('settings')
+              setScreenValue('matters')
+            }}
           />
         ) : screen === 'matters' ? (
-          <WhatMatters onBack={() => setScreenValue('settings')} />
+          <WhatMatters
+            onBack={() => setScreenValue(mattersFrom)}
+            backLabel={mattersFrom === 'idea' ? 'the idea' : 'settings'}
+          />
         ) : screen === 'year' ? (
           <Year
             days={days}

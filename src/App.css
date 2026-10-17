@@ -440,6 +440,8 @@
 .idea-colours { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-direction: column; gap: 6px; }
 .idea-colours li { font-size: 20px; line-height: 1.5; }
 .idea-colours .whisper-dot { width: 12px; height: 12px; margin-right: 12px; vertical-align: 1px; }
+.idea p.idea-nudge { margin-top: -10px; }
+.idea-nudge button { font: inherit; font-size: 16px; color: #9a9a93; text-align: left; text-decoration: underline dotted #cfcfc8; text-underline-offset: 4px; }
 .idea p.idea-sign { font-style: italic; color: var(--ink-soft); }
 
 /* ---------- calendar ---------- */

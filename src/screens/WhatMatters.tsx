@@ -4,7 +4,7 @@ import { loadMatters, MAX_CHARS, newEntry, saveMatters, type Entry, type Kind, t
 import { paintHex } from '../lib/paints'
 import { Chevron } from './Today'
 
-type Props = { onBack: () => void }
+type Props = { onBack: () => void; /** Where back leads: "settings" or "the idea". */ backLabel?: string }
 
 const LISTS: { kind: Kind; label: string; dot: string; hint: string }[] = [
   { kind: 'meaningful', label: 'meaningful', dot: paintHex('green'), hint: 'what does a meaningful day look like?' },
@@ -43,7 +43,7 @@ function EntryInput({ entry, onChange, onDone }: { entry: Entry; onChange: (t: s
 
 // What matters: two short lists — what a meaningful day and an empty day look like to you.
 // Your compass when you paint; it never judges or colours a day for you. Every change saves itself.
-export function WhatMatters({ onBack }: Props) {
+export function WhatMatters({ onBack, backLabel = 'settings' }: Props) {
   const [lists, setLists] = useState<Matters>(loadMatters)
   const [editing, setEditing] = useState<string | null>(null)
   const [swiped, setSwiped] = useState<string | null>(null)
@@ -65,9 +65,9 @@ export function WhatMatters({ onBack }: Props) {
 
   return (
     <main className="matters">
-      <button className="back-btn matters-back" onClick={onBack} aria-label="Back to settings">
+      <button className="back-btn matters-back" onClick={onBack} aria-label={`Back to ${backLabel}`}>
         <Chevron dir="left" />
-        settings
+        {backLabel}
       </button>
       <h1 className="settings-title">what matters</h1>
       <p className="matters-lede">
