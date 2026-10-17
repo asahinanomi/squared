@@ -510,18 +510,18 @@
   100% { box-shadow: 0 0 0 12px rgba(20, 20, 19, 0); }
 }
 
-.today-zoomout {
+.today-zoom {
+  --zoom-ink: #55554f;
   position: fixed;
   z-index: 20;
   right: max(var(--gutter), calc((100vw - 560px) / 2 + var(--gutter)));
   bottom: calc(env(safe-area-inset-bottom) + 16px);
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  color: var(--grey-4);
+  display: flex;
+  gap: 6px;
 }
-.today-zoomout svg { width: 26px; height: 26px; }
+.today-zoom button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
+.today-zoom button:disabled { opacity: 0.25; }
+.today-zoom svg { width: 30px; height: 30px; }
 
 /* ---------- my squares: a month ---------- */
 .app.is-one-screen { flex: none; height: 100dvh; min-height: 0; box-sizing: border-box; overflow: hidden; }

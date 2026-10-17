@@ -4,7 +4,7 @@ import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
-import { ZoomOutIcon } from '../components/ZoomBar'
+import { ZoomInIcon, ZoomOutIcon } from '../components/ZoomBar'
 import { addDays, longDate, monthCells, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
@@ -143,11 +143,17 @@ export function Today(props: Props) {
           )}
         </div>
       </div>
-      {/* The way out to the month, like every other level's (quiet here; hidden while writing). */}
+      {/* The zoom pair, as on every other level (hidden while writing). */}
       {!why && (
-        <button className="today-zoomout" aria-label="Zoom out" onClick={onZoomOut}>
-          <ZoomOutIcon />
-        </button>
+        <div className="today-zoom">
+          <button aria-label="Zoom out" onClick={onZoomOut}>
+            <ZoomOutIcon />
+          </button>
+          {/* Already as close as it gets: shown, greyed, like the far end of the ladder. */}
+          <button aria-label="Zoom in" disabled>
+            <ZoomInIcon />
+          </button>
+        </div>
       )}
     </main>
   )
