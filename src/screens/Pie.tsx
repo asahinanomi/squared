@@ -75,7 +75,7 @@ export function Pie({ days, profile, scope, onScope }: Props) {
         <h1 className="life-title">a life pie, in slices</h1>
       </div>
 
-      <div className="pie-scope" role="group" aria-label="Count out of">
+      <div className="seg" role="group" aria-label="Count out of">
         {SCOPE_ORDER.map((id) => (
           <button
             key={id}
@@ -117,7 +117,7 @@ export function Pie({ days, profile, scope, onScope }: Props) {
 
         <ul className="pie-legend">
           {slices.map((s) => (
-            <li key={s.id} className={s.id === 'ahead' ? 'is-quiet' : undefined}>
+            <li key={s.id}>
               <span className={'pie-dot' + (s.id === 'ahead' ? ' is-ahead' : '')} style={{ background: FILL[s.id] }} />
               <span className="pie-legend-label">{LABEL[s.id]}</span>
               <span className="pie-legend-n">{fmt(s.count)}</span>

@@ -15,8 +15,8 @@ type Props = {
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
-// "a life", and under it "95 years · 1,140 months · 34,699 days": the current one highlighted,
-// the others links straight to that view.
+// "a life", and under it a quiet segmented control — 95 years · 1,140 months · 34,699 days —
+// the current one raised, the others straight to that view (the same control as the pie's filter).
 export function LifeHead({ profile, current, onPick, ready = ['years', 'months', 'days'] }: Props) {
   const { total } = lifeCounts(profile.born, profile.lifespan, todayIso())
   const items: [Resolution, string][] = [
@@ -27,24 +27,19 @@ export function LifeHead({ profile, current, onPick, ready = ['years', 'months',
   return (
     <div className="life-head">
       <h1 className="life-title">a life</h1>
-      <p className="life-sub">
-        {items.map(([r, label], i) => (
-          <span key={r}>
-            {i > 0 && <span className="dot">·</span>}
-            {r === current ? (
-              <span className="is-on" aria-current="page">
-                {label}
-              </span>
-            ) : ready.includes(r) ? (
-              <button className="life-link" onClick={() => onPick(r)}>
-                {label}
-              </button>
-            ) : (
-              <span>{label}</span>
-            )}
-          </span>
+      <div className="seg" role="group" aria-label="A life in">
+        {items.map(([r, label]) => (
+          <button
+            key={r}
+            className={r === current ? 'is-on' : undefined}
+            aria-pressed={r === current}
+            disabled={r !== current && !ready.includes(r)}
+            onClick={() => r !== current && onPick(r)}
+          >
+            {label}
+          </button>
         ))}
-      </p>
+      </div>
     </div>
   )
 }

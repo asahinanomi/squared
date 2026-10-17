@@ -553,9 +553,6 @@
 /* ---------- a life, in years ---------- */
 .life-head { text-align: center; margin-top: 6px; }
 .life-title { margin: 0; font-size: 27px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
-.life-sub { margin: 6px 0 0; font-size: 13px; color: #9a9a93; }
-.life-sub .is-on { color: var(--ink); font-weight: 600; }
-.life-sub .dot { margin: 0 7px; color: #b5b5ae; }
 /* Rows keep their squares' height: on a short, wide window the grid scrolls instead of squashing. */
 .life-years {
   margin-top: 16px;
@@ -585,7 +582,6 @@
 .life-year-name { position: relative; color: #1f1f1d; text-shadow: 0 0 3px rgba(255, 255, 255, 0.65); }
 .life-year.is-blank .life-year-name { color: #9a9a93; text-shadow: none; }
 .life .zoombar { margin-top: auto; }
-.life-link { font: inherit; color: inherit; text-decoration: underline dotted #cfcfc8; text-underline-offset: 3px; }
 .life-canvas {
   position: relative;
   flex: 1;
@@ -942,10 +938,11 @@ button.settings-row:active { background: var(--grey-1); }
 
 /* ---------- a life pie ---------- */
 .pie { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.pie-scope { display: flex; gap: 2px; width: fit-content; margin: 14px auto 0; padding: 3px; border-radius: 999px; background: #efefea; flex-shrink: 0; }
-.pie-scope button { padding: 4px 13px; border-radius: 999px; font-size: 12.5px; color: #9a9a93; white-space: nowrap; }
-.pie-scope button:focus:not(:focus-visible) { outline: none; }
-.pie-scope button.is-on { background: #fff; color: var(--ink); font-weight: 600; }
+/* A quiet segmented control: a life's years · months · days, and the pie's filter. */
+.seg { display: flex; gap: 2px; width: fit-content; margin: 14px auto 0; padding: 3px; border-radius: 999px; background: #efefea; flex-shrink: 0; }
+.seg button { padding: 4px 13px; border-radius: 999px; font-size: 12.5px; color: #9a9a93; white-space: nowrap; }
+.seg button:focus:not(:focus-visible) { outline: none; }
+.seg button.is-on { background: #fff; color: var(--ink); font-weight: 600; }
 .pie-body {
   flex: 1;
   min-height: 0;
@@ -975,7 +972,6 @@ button.settings-row:active { background: var(--grey-1); }
 .pie-dot { width: 13px; height: 13px; flex-shrink: 0; box-sizing: border-box; border-radius: 50%; border: 1.5px solid var(--ink); }
 .pie-dot.is-ahead { border-style: dashed; }
 .pie-legend-n { margin-left: auto; font-size: 14px; font-weight: 500; color: #55554f; font-variant-numeric: tabular-nums; }
-.pie-legend .is-quiet .pie-legend-label, .pie-legend .is-quiet .pie-legend-n { color: #9a9a93; font-weight: 400; }
 .pie-soon { margin-top: auto; padding-top: 24px; flex-shrink: 0; display: flex; gap: 10px; justify-content: center; }
 .pie-soon button,
 .pie-soon button:disabled {
