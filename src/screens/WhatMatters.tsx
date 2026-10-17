@@ -68,6 +68,8 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
   const [lists, setLists] = useState<Matters>(loadMatters)
   const [editing, setEditing] = useState<string | null>(null)
   const [swiped, setSwiped] = useState<string | null>(null)
+  // Which lists show: both, or just one (a long list is easier to read alone). Opens on all.
+  const [show, setShow] = useState<Kind | 'all'>('all')
   // A swipe-delete asks first, like a note does.
   const [asking, setAsking] = useState<{ kind: Kind; id: string } | null>(null)
   // Only real edits are saved (not the lists arriving from the account).
@@ -168,7 +170,28 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
         what does a meaningful day look like to you? and what feels empty? this is your compass to paint.
       </p>
 
-      {LISTS.map(({ kind, label, dot, hint }) => (
+      <div className="seg matters-seg" role="group" aria-label="Show">
+        <button
+          className={show === 'all' ? 'is-on' : undefined}
+          aria-pressed={show === 'all'}
+          onClick={() => setShow('all')}
+        >
+          all
+        </button>
+        {LISTS.map(({ kind, label, dot }) => (
+          <button
+            key={kind}
+            className={show === kind ? 'is-on' : undefined}
+            aria-pressed={show === kind}
+            onClick={() => setShow(kind)}
+          >
+            <span className="matters-dot" style={{ background: dot }} aria-hidden="true" />
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {LISTS.filter((l) => show === 'all' || show === l.kind).map(({ kind, label, dot, hint }) => (
         <section key={kind} className="matters-list" aria-label={label}>
           <h2 className="matters-head">
             <span className="matters-dot" style={{ background: dot }} aria-hidden="true" />

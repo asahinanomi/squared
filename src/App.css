@@ -949,6 +949,9 @@ button.settings-row:active { background: var(--grey-1); }
 .matters-list + .matters-list { margin-top: 24px; }
 .matters-head { display: flex; align-items: center; gap: 9px; margin: 0 0 4px; font-size: 16px; font-weight: 600; }
 .matters-dot { width: 10px; height: 10px; border-radius: 50%; }
+.matters-seg { margin-top: 18px; }
+.matters-seg button { display: inline-flex; align-items: center; gap: 6px; }
+.matters-seg .matters-dot { width: 7px; height: 7px; }
 .matters-entry,
 .matters-input {
   width: 100%;
