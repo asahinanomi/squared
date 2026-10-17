@@ -1,8 +1,9 @@
+import { useState } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { paintHex } from '../lib/paints'
-import { lifeSlices, type Slice, type SliceId } from '../lib/pie'
+import { lifeSlices, type Scope, type Slice, type SliceId } from '../lib/pie'
 import type { Profile } from '../lib/profile'
 
 type Props = {
@@ -19,6 +20,12 @@ const LABEL: Record<SliceId, string> = {
   unpainted: 'lived, not painted',
   ahead: 'still to come',
 }
+
+const SCOPES: [Scope, string][] = [
+  ['life', 'whole life'],
+  ['started', 'since I started'],
+  ['painted', 'painted only'],
+]
 
 const FILL: Record<SliceId, string> = {
   green: paintHex('green'),
@@ -44,8 +51,10 @@ function wedge(a: number, b: number) {
 
 // A life pie, in slices: line art like the squares — keylines, paint in the painted wedges,
 // a dashed keyline round the days still to come (which carry their own count).
+// Three denominators for the same chart; it always opens on the whole life.
 export function Pie({ days, profile }: Props) {
-  const slices = lifeSlices(days, profile.born, profile.lifespan, todayIso())
+  const [scope, setScope] = useState<Scope>('life')
+  const slices = lifeSlices(days, profile.born, profile.lifespan, todayIso(), scope)
   const total = slices.reduce((s, x) => s + x.count, 0)
   let turn = 0
   const drawn = slices
@@ -71,7 +80,22 @@ export function Pie({ days, profile }: Props) {
         <p className="life-sub">how will you paint yours?</p>
       </div>
 
+      <div className="pie-scope" role="group" aria-label="Count out of">
+        {SCOPES.map(([id, label]) => (
+          <button
+            key={id}
+            className={id === scope ? 'is-on' : undefined}
+            aria-pressed={id === scope}
+            onClick={() => setScope(id)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       <svg className="pie-chart" viewBox="0 0 250 250" role="img" aria-label={pieLabel(slices)}>
+        {/* Nothing to count yet: just the keyline circle. */}
+        {!drawn.length && <circle cx={C} cy={C} r={R} fill="#fcfcfa" className="pie-slice" />}
         {drawn.map((s) => (
           <path
             key={s.id}
