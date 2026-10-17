@@ -115,6 +115,7 @@
   flex-direction: column;
   align-items: center;
   padding-top: clamp(8px, 4vh, 48px);
+  padding-bottom: 56px; /* the last note scrolls clear of the zoom band */
 }
 .question {
   font-size: clamp(28px, 8vw, 36px);
@@ -462,7 +463,7 @@
   justify-content: space-between;
   gap: 12px;
   /* Down to the phone's home bar, no further (a little room on phones without one). */
-  padding: 10px 0 calc(max(env(safe-area-inset-bottom), 12px) + 2px);
+  padding: 6px 0 max(env(safe-area-inset-bottom), 10px);
 }
 /* App controls get their own ground: plain paper (no dot grid) and a hairline above, edge to edge. */
 .zoombar::before {
@@ -474,11 +475,11 @@
   left: 50%;
   width: 100vw;
   transform: translateX(-50%);
-  background: var(--paper);
-  border-top: 1px solid var(--grey-1);
+  background: var(--bg);
+  border-top: 1px solid rgba(20, 20, 19, 0.08);
 }
 .lifeglass { position: relative; display: flex; align-items: center; min-height: 44px; padding: 0; }
-.lifeglass svg { width: 26px; height: 30px; flex: none; overflow: visible; }
+.lifeglass svg { width: 22px; height: 26px; flex: none; overflow: visible; }
 .lifeglass-frame { fill: none; stroke: var(--zoom-ink); stroke-width: 2.6; stroke-linecap: round; }
 .lifeglass-glass { fill: none; stroke: var(--zoom-ink); stroke-width: 2; stroke-linecap: round; }
 .lifeglass-sand { fill: var(--zoom-ink); }
@@ -517,15 +518,15 @@
 }
 @keyframes fade-in { from { opacity: 0; } }
 .zoombar-view { width: 44px; height: 44px; display: grid; place-items: center; flex-shrink: 0; color: var(--zoom-ink); }
-.zoombar-view svg { width: 30px; height: 30px; }
+.zoombar-view svg { width: 26px; height: 26px; }
 .zoombar-buttons { display: flex; gap: 6px; flex-shrink: 0; }
 .zoombar-buttons button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
 .zoombar-buttons button:disabled { opacity: 0.25; }
-.zoombar-buttons svg { width: 30px; height: 30px; }
+.zoombar-buttons svg { width: 26px; height: 26px; }
 .zoombar-buttons .zoombar-today {
   width: auto;
   padding: 0 10px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -544,14 +545,20 @@
   --zoom-ink: #55554f;
   position: fixed;
   z-index: 20;
-  right: max(var(--gutter), calc((100vw - 560px) / 2 + var(--gutter)));
-  bottom: calc(env(safe-area-inset-bottom) + 16px);
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
+  justify-content: flex-end;
   gap: 6px;
+  /* The same band as the zoom bar on every other level: plain ground, a hairline, the pair on the right. */
+  padding: 6px max(var(--gutter), calc((100vw - 560px) / 2 + var(--gutter))) max(env(safe-area-inset-bottom), 10px);
+  background: var(--bg);
+  border-top: 1px solid rgba(20, 20, 19, 0.08);
 }
 .today-zoom button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
 .today-zoom button:disabled { opacity: 0.25; }
-.today-zoom svg { width: 30px; height: 30px; }
+.today-zoom svg { width: 26px; height: 26px; }
 
 /* ---------- my squares: a month ---------- */
 /* The zoom bar runs to the bottom edge and carries the safe-area room itself. */
