@@ -398,8 +398,10 @@
   padding: 9px 18px;
   border-radius: 999px;
   font-size: 16px;
+  background: var(--ink);
+  color: #fff;
+  min-width: 88px;
 }
-.why-done { background: var(--ink); color: #fff; min-width: 88px; }
 .why-done:disabled { opacity: 0.35; }
 .why-delete {
   padding: 9px 18px;
@@ -1017,9 +1019,8 @@ button.settings-row:active { background: var(--grey-1); }
   mask-image: linear-gradient(to bottom, transparent, #000 12px, #000 calc(100% - 20px), transparent);
 }
 .pie-body::-webkit-scrollbar { display: none; }
-/* Large, a touch inside the screen's width; the legend lines up with the pie's own edges (the circle is 96% of the drawing). */
+/* Large, a touch inside the screen's width; the legend (below) lines up with the pie's own edges (the circle is 96% of the drawing). */
 .pie-chart { display: block; flex-shrink: 0; aspect-ratio: 1; width: min(88%, 310px); margin: 0 auto; overflow: visible; }
-.pie-legend { width: calc(min(88%, 310px) * 0.96); margin-left: auto; margin-right: auto; }
 /* The rim is the hero's keyline, like today's square (3px); the lines between slices match the paint pellets (2px). */
 .pie-rim { stroke: var(--ink); stroke-width: 3; vector-effect: non-scaling-stroke; stroke-linecap: round; }
 .pie-rim.is-ahead { stroke-dasharray: 2 7; }
@@ -1029,7 +1030,7 @@ button.settings-row:active { background: var(--grey-1); }
 .pie-label-unit { font-size: 8px; fill: #9a9a93; }
 /* On paint, ink reads better than grey. */
 .pie-label.is-on-paint .pie-label-n, .pie-label.is-on-paint .pie-label-unit { fill: var(--ink); }
-.pie-legend { list-style: none; margin-top: 28px; margin-bottom: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+.pie-legend { list-style: none; width: calc(min(88%, 310px) * 0.96); margin: 28px auto 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
 .pie-legend li { display: flex; align-items: center; gap: 12px; font-size: 15px; }
 .pie-dot { width: 13px; height: 13px; flex-shrink: 0; box-sizing: border-box; border-radius: 50%; border: 1.5px solid var(--ink); }
 .pie-dot.is-ahead { border-style: dashed; }
