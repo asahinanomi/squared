@@ -9,7 +9,7 @@ export type Unit = 'days' | 'months' | 'years'
 
 /**
  * The life glass: an hourglass whose sand is your life — the top holds the squares left, the bottom
- * the ones spent. Just the icon until tapped; a tap shows "14,620 days (42%) to paint!" (in years or months where the squares are), another hides it.
+ * the ones spent. Just the icon until tapped; a tap shows "14,620 days to paint!" (in years or months where the squares are), another hides it.
  * Every half minute a few grains fall, a small nudge that time is moving. It sits beside "a life" in the
  * title: information about your life, not a control.
  */
@@ -40,7 +40,7 @@ export function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
     <button
       className={'lifeglass' + (falling ? ' is-falling' : '')}
       onClick={() => setOpen(!open)}
-      aria-label={`${count} (${c.percentLeft}%) to paint`}
+      aria-label={`${count} to paint`}
       aria-expanded={open}
     >
       <svg viewBox="0 0 24 28" aria-hidden="true">
@@ -60,7 +60,7 @@ export function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
       </svg>
       {open && (
         <span className="lifeglass-count" aria-hidden="true">
-          {count} ({c.percentLeft}%) to paint!
+          {count} to paint!
         </span>
       )}
     </button>
