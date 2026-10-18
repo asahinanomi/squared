@@ -141,17 +141,16 @@ export function Today(props: Props) {
     }
   }, [])
 
-  const peek = (iso: string, dir: -1 | 1) => {
-    const d = days[iso]
-    return (
-      <button
-        className={'peek' + (d ? ' is-painted' : '')}
-        style={d ? { background: paintHex(d.color) } : undefined}
-        aria-label={`${dir < 0 ? 'Previous' : 'Next'} day, ${longDate(iso)}`}
-        onClick={() => step(dir)}
-      />
-    )
-  }
+  // A quiet light-grey arrow either side of the square: tap to step a day (and the screen reader's day buttons).
+  const peek = (iso: string, dir: -1 | 1) => (
+    <button
+      className="peek"
+      aria-label={`${dir < 0 ? 'Previous' : 'Next'} day, ${longDate(iso)}`}
+      onClick={() => step(dir)}
+    >
+      <Chevron dir={dir < 0 ? 'left' : 'right'} />
+    </button>
+  )
 
   return (
     <main className="today">

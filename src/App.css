@@ -122,6 +122,7 @@
 /* The question, the square and the palette, together in the middle of the first screen; notes follow below. */
 .today-stage {
   width: 100%;
+  padding-top: clamp(20px, 5vh, 44px); /* room between the question and the top bar */
   min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 170px);
   display: flex;
   flex-direction: column;
@@ -170,23 +171,15 @@
 @media (prefers-reduced-motion: reduce) {
   .easel-square, .day-label { animation: none !important; }
 }
-/* A neighbouring day, small and faint: its paint, or a dashed edge if it's blank. Tap to step to it. */
-.peek {
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  border: 1.5px dashed #b0b0a8;
-  background: #fff;
-  opacity: 0.55;
-}
-.peek.is-painted { border: 2px solid var(--ink); }
+/* Step a day: a large, light grey arrow either side (none toward tomorrow on today). */
+.peek { flex: none; width: 44px; height: 64px; display: grid; place-items: center; color: #c4c4bd; }
+.peek svg { width: 36px; height: 36px; }
 .peek.is-none { visibility: hidden; }
-.peek:active { transform: scale(0.94); }
+.peek:active { color: var(--grey-3); }
 .canvas {
   position: relative;
   z-index: 1;
-  width: min(38vw, 146px);
+  width: min(46vw, 176px); /* the palette below is drawn to the same width */
   aspect-ratio: 1;
   background: #fff;
   border: 3px solid var(--ink); /* the hero: heavier than the 2px keyline */
