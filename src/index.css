@@ -28,6 +28,8 @@
 * { box-sizing: border-box; }
 
 html, body, #root { min-height: 100%; margin: 0; }
+/* Edge-to-edge bands (the zoom bar) never make the page scroll sideways. */
+body { overflow-x: clip; }
 #root { min-height: 100dvh; display: flex; flex-direction: column; }
 
 body {
