@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { NotesList } from '../components/NotesList'
 import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
@@ -142,6 +142,23 @@ export function Today(props: Props) {
   }, [])
 
   // A quiet light-grey arrow either side of the square: tap to step a day (and the screen reader's day buttons).
+  // The question, square and palette sit in the middle of the first screen. Placed by measuring, not by
+  // filling the screen, so the notes follow right after the palette and the square never moves with them.
+  const trio = useRef<HTMLDivElement>(null)
+  const [lift, setLift] = useState<number>()
+  useLayoutEffect(() => {
+    const fit = () => {
+      const el = trio.current
+      if (!el) return
+      const top = el.parentElement!.getBoundingClientRect().top + window.scrollY
+      const band = document.querySelector('.today-zoom')?.getBoundingClientRect().height ?? 0
+      setLift(Math.max(20, (window.innerHeight - top - band - el.offsetHeight) / 2))
+    }
+    fit()
+    window.addEventListener('resize', fit)
+    return () => window.removeEventListener('resize', fit)
+  }, [])
+
   const peek = (iso: string, dir: -1 | 1) => (
     <button
       className="peek"
@@ -156,6 +173,7 @@ export function Today(props: Props) {
     <main className="today">
       <div
         className="today-stage"
+        style={lift === undefined ? undefined : { paddingTop: lift }}
         onPointerDown={swipeDown}
         onPointerMove={swipeMove}
         onPointerUp={swipeUp}
@@ -164,55 +182,57 @@ export function Today(props: Props) {
           setPull(0)
         }}
       >
-        <Question text={question} onDefine={onDefine} />
+        <div className="today-trio" ref={trio}>
+          <Question text={question} onDefine={onDefine} />
 
-        <div className="day-nav">
-          <DayLabel key={date} iso={date} slide={slide} />
-        </div>
-
-        <div className="easel" onPointerDown={() => setWhispering(false)}>
-          {hasPrev ? peek(prev, -1) : <span className="peek is-none" />}
-          <div
-            key={date}
-            className={'easel-square' + (slide ? ` is-${slide}` : '') + (pull ? ' is-pulled' : '')}
-            style={pull ? { transform: `translateX(${pull}px)` } : undefined}
-          >
-            <PaintCanvas
-              key={`${date}:${day?.color ?? ''}`}
-              saved={day?.color}
-              loaded={loaded}
-              onDryBrush={onDryBrush}
-              onFilled={onFilled}
-            />
+          <div className="day-nav">
+            <DayLabel key={date} iso={date} slide={slide} />
           </div>
-          {hasNext ? peek(next, 1) : <span className="peek is-none" />}
-        </div>
 
-        <div className="tray">
-          {why ? (
-            <WhyBubble
-              key={`${why.note?.id ?? 'new'}:${why.n ?? 0}`}
-              initial={why.draft ?? why.note?.body}
-              original={why.note?.body}
-              initialError={why.error}
-              editing={!!why.note}
-              onSave={(text) => onSaveNote(why.note, text)}
-              onDelete={why.note ? () => onDeleteNote(why.note!) : undefined}
-              onCancel={onCloseWhy}
-            />
-          ) : (
-            <>
-              <Palette loaded={loaded} nudge={nudge} onLoad={dip} />
-              <p className={'whisper' + (whispering ? ' is-on' : '')} aria-live="polite">
-                {whisper && (
-                  <>
-                    <span className="whisper-dot" style={{ background: paintHex(whisper.paint) }} />
-                    {PAINTS.find((x) => x.id === whisper.paint)!.meaning}
-                  </>
-                )}
-              </p>
-            </>
-          )}
+          <div className="easel" onPointerDown={() => setWhispering(false)}>
+            {hasPrev ? peek(prev, -1) : <span className="peek is-none" />}
+            <div
+              key={date}
+              className={'easel-square' + (slide ? ` is-${slide}` : '') + (pull ? ' is-pulled' : '')}
+              style={pull ? { transform: `translateX(${pull}px)` } : undefined}
+            >
+              <PaintCanvas
+                key={`${date}:${day?.color ?? ''}`}
+                saved={day?.color}
+                loaded={loaded}
+                onDryBrush={onDryBrush}
+                onFilled={onFilled}
+              />
+            </div>
+            {hasNext ? peek(next, 1) : <span className="peek is-none" />}
+          </div>
+
+          <div className="tray">
+            {why ? (
+              <WhyBubble
+                key={`${why.note?.id ?? 'new'}:${why.n ?? 0}`}
+                initial={why.draft ?? why.note?.body}
+                original={why.note?.body}
+                initialError={why.error}
+                editing={!!why.note}
+                onSave={(text) => onSaveNote(why.note, text)}
+                onDelete={why.note ? () => onDeleteNote(why.note!) : undefined}
+                onCancel={onCloseWhy}
+              />
+            ) : (
+              <>
+                <Palette loaded={loaded} nudge={nudge} onLoad={dip} />
+                <p className={'whisper' + (whispering ? ' is-on' : '')} aria-live="polite">
+                  {whisper && (
+                    <>
+                      <span className="whisper-dot" style={{ background: paintHex(whisper.paint) }} />
+                      {PAINTS.find((x) => x.id === whisper.paint)!.meaning}
+                    </>
+                  )}
+                </p>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
