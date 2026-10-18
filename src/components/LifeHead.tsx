@@ -1,3 +1,4 @@
+import { LifeGlass } from './LifeGlass'
 import { todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
 import type { Profile } from '../lib/profile'
@@ -26,7 +27,10 @@ export function LifeHead({ profile, current, onPick, ready = ['years', 'months',
   ]
   return (
     <div className="life-head">
-      <h1 className="life-title">a life</h1>
+      <div className="life-title-row">
+        <h1 className="life-title">a life</h1>
+        <LifeGlass profile={profile} unit={current} />
+      </div>
       <div className="seg" role="group" aria-label="A life in">
         {items.map(([r, label]) => (
           <button

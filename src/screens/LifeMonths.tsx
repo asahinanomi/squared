@@ -217,7 +217,7 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
         <canvas ref={canvas} style={{ width: size.w, height: size.h }} aria-hidden="true" />
         <div style={{ height: Math.max(0, rows * pitch - gapFor(cols) - size.h) }} />
       </div>
-      <ZoomBar profile={profile} unit="months" onIn={onIn} onOut={onOut} onToday={away ? backToToday : undefined} />
+      <ZoomBar onIn={onIn} onOut={onOut} onRecenter={away ? backToToday : undefined} />
     </main>
   )
 }

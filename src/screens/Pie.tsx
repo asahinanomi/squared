@@ -158,7 +158,6 @@ export function Pie({ days, profile, scope, onScope }: Props) {
       </div>
 
       <ZoomBar
-        profile={profile}
         onIn={step < SCOPE_ORDER.length - 1 ? () => onScope(SCOPE_ORDER[step + 1]) : undefined}
         onOut={step > 0 ? () => onScope(SCOPE_ORDER[step - 1]) : undefined}
       />

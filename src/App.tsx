@@ -370,7 +370,7 @@ export default function App() {
 
   return (
     // Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint).
-    <ViewSwitch.Provider value={{ pie: screen === 'pie', toggle: togglePie }}>
+    <ViewSwitch.Provider value={{ pie: screen === 'pie', toggle: togglePie, goToday }}>
       <div
         className={
           'app' +
@@ -471,7 +471,6 @@ export default function App() {
           ) : screen === 'year' ? (
             <Year
               days={days}
-              profile={profile}
               born={profile?.born}
               focus={yearFocus}
               onPick={(m) => goMonth(m)}
@@ -516,7 +515,6 @@ export default function App() {
           ) : (
             <Month
               days={days}
-              profile={profile}
               born={profile?.born}
               focus={monthFocus}
               onPick={(iso) => {

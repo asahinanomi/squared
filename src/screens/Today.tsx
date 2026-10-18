@@ -251,6 +251,18 @@ export function Today(props: Props) {
       {/* The zoom pair, as on every other level (hidden while writing). */}
       {!why && (
         <div className="today-zoom">
+          {/* On a past day, the way back to today, in the centre as on every other bar. */}
+          {date !== today && (
+            <button
+              className="zoombar-today"
+              onClick={() => {
+                setSlide('from-right')
+                onDate(today)
+              }}
+            >
+              today
+            </button>
+          )}
           <button aria-label="Zoom out" onClick={onZoomOut}>
             <ZoomOutIcon />
           </button>

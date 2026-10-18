@@ -59,7 +59,7 @@ export function Life({ days, profile, onPick, onIn, onResolution, onOut }: Props
         })}
       </div>
 
-      <ZoomBar profile={profile} unit="years" onIn={onIn} onOut={onOut} />
+      <ZoomBar onIn={onIn} onOut={onOut} />
     </main>
   )
 }

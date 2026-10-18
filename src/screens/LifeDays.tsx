@@ -269,7 +269,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
           )}
         </div>
       )}
-      <ZoomBar profile={profile} onIn={onIn} onToday={away ? backToToday : undefined} />
+      <ZoomBar onIn={onIn} onRecenter={away ? backToToday : undefined} />
     </main>
   )
 }

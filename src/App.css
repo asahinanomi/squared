@@ -497,7 +497,7 @@
   45% { transform: rotate(0); }
 }
 .lifeglass-count {
-  /* Floats just above the glass, so the bar's icons never move or hide. */
+  /* A soft pill by the glass. */
   position: absolute;
   z-index: 6;
   left: -4px;
@@ -515,21 +515,26 @@
 @keyframes fade-in { from { opacity: 0; } }
 .zoombar-view { width: 44px; height: 44px; display: grid; place-items: center; flex-shrink: 0; color: var(--zoom-ink); }
 .zoombar-view svg { width: 26px; height: 26px; }
-.zoombar-buttons { display: flex; gap: 6px; flex-shrink: 0; }
+.zoombar-buttons { display: flex; gap: 2px; flex-shrink: 0; }
 .zoombar-buttons button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
 .zoombar-buttons button:disabled { opacity: 0.25; }
 .zoombar-buttons svg { width: 26px; height: 26px; }
-.zoombar-buttons .zoombar-today {
-  width: auto;
-  padding: 0 10px;
+.zoombar-recenter svg { width: 24px; height: 24px; }
+/* "today" — go paint it — pinned to the bar's centre, whatever shows either side. */
+.zoombar-today {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  height: 44px;
+  transform: translateX(-50%);
+  padding: 0 6px;
+  color: var(--zoom-ink);
   font-size: 14px;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 4px;
   text-decoration-thickness: 1.5px;
-  animation: today-in 0.25s ease-out;
 }
-@keyframes today-in { from { opacity: 0; } }
 /* Just came back to today: the square pulses once, so the eye lands on it. */
 .is-pulse { animation: today-pulse 0.9s ease-out; }
 @keyframes today-pulse {
@@ -553,6 +558,7 @@
   border-top: 1px solid rgba(20, 20, 19, 0.08);
 }
 .today-zoom button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
+.today-zoom .zoombar-today { width: auto; top: 6px; }
 .today-zoom button:disabled { opacity: 0.25; }
 .today-zoom svg { width: 26px; height: 26px; }
 
@@ -580,6 +586,11 @@
 
 /* ---------- a life, in years ---------- */
 .life-head { text-align: center; margin-top: 6px; }
+.life-title-row { display: flex; align-items: center; justify-content: center; gap: 8px; }
+/* The life glass beside "a life": information, not a control. Its count opens right beside it, in the row. */
+.life-title-row .lifeglass { --zoom-ink: #55554f; min-height: 32px; }
+.life-title-row .lifeglass svg { width: 18px; height: 22px; }
+.life-title-row .lifeglass-count { position: static; margin-left: 8px; padding: 5px 11px; font-size: 13px; }
 .life-title { margin: 0; font-size: 27px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
 /* Rows keep their squares' height: on a short, wide window the grid scrolls instead of squashing. */
 .life-years {
