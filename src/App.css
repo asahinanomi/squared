@@ -172,10 +172,10 @@
   .easel-square, .day-label { animation: none !important; }
 }
 /* Step a day: a large, light grey arrow either side (none toward tomorrow on today). */
-.peek { flex: none; width: 48px; height: 72px; display: grid; place-items: center; color: #d6d6cf; }
-/* Bigger and bolder, so it can be lighter and still read. */
-.peek svg { width: 48px; height: 48px; }
-.peek svg path { stroke-width: 3.5; }
+.peek { flex: none; width: 52px; height: 84px; display: grid; place-items: center; color: #e0e0d9; }
+/* Big and bold, so it can be very light and still read. */
+.peek svg { width: 64px; height: 64px; overflow: visible; }
+.peek svg path { stroke-width: 5; }
 .peek.is-none { visibility: hidden; }
 .peek:active { color: var(--grey-3); }
 .canvas {
