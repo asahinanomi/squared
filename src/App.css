@@ -519,7 +519,6 @@
 .zoombar-buttons button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
 .zoombar-buttons button:disabled { opacity: 0.25; }
 .zoombar-buttons svg { width: 26px; height: 26px; }
-.zoombar-recenter svg { width: 24px; height: 24px; }
 /* "today" — go paint it — pinned to the bar's centre, whatever shows either side. */
 .zoombar-today {
   position: absolute;
