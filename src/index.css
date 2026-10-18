@@ -1,7 +1,6 @@
 :root {
   /* Ink & paper — the only non-paint colors in the app. */
   --paper: #fafaf8;
-  --veil: #cacac5;
   --ink: #141413;
   --ink-soft: #3d3d3a;
   --grey-1: #e3e3df;
@@ -42,9 +41,6 @@ body {
   transition: background-color 0.3s;
 }
 
-/* The painting screen sits on a soft grey veil so the white square glows. */
-body[data-screen='today'] { --bg: var(--veil); --dot: #b2b2ac; }
-html[data-screen='today'] { background: var(--veil); }
 
 button {
   font: inherit;

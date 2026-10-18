@@ -117,8 +117,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: clamp(8px, 4vh, 48px);
   padding-bottom: 56px; /* the last note scrolls clear of the zoom band */
+}
+/* The question, the square and the palette, together in the middle of the first screen; notes follow below. */
+.today-stage {
+  width: 100%;
+  padding-top: clamp(20px, 5vh, 44px); /* room between the question and the top bar */
+  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 170px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  touch-action: pan-y; /* vertical stays the page's; sideways is a day */
 }
 .question {
   font-size: clamp(28px, 8vw, 36px);
@@ -137,62 +147,42 @@
   text-decoration-thickness: 2.5px;
   text-underline-offset: 8px;
 }
-.day-nav {
-  position: relative;
-  z-index: 2;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 18px;
-  width: 100%;
-}
-.day-nav button { pointer-events: auto; width: 44px; height: 44px; display: grid; place-items: center; }
+/* Optically centred between the question's dotted underline and the square. */
+.day-nav { display: flex; justify-content: center; margin-top: 18px; width: 100%; }
 .day-label { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; min-width: 15em; text-align: center; }
 .day-label sup { font-size: 0.6em; line-height: 0; margin-left: 1px; }
 
-/* The month grid takes its own space; the square floats centered on top of it. */
+/* The square, with yesterday peeking on the left and tomorrow (until today) on the right. */
 .easel {
-  position: relative;
-  width: 100%;
-  margin-top: 18px;
-}
-.ghost-grid {
-  position: relative;
-  left: 50%;
-  width: min(100vw - 16px, 540px);
-  transform: translateX(-50%);
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
-  pointer-events: none;
-}
-.ghost {
-  aspect-ratio: 1;
-  flex-direction: column;
+  display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
-  border-radius: 7px;
-  border: 1.5px solid rgba(20, 20, 19, 0.07);
-  pointer-events: auto;
-  display: flex;
-  font-size: 15px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  color: rgba(20, 20, 19, 0.38);
+  gap: clamp(18px, 7vw, 36px);
+  width: 100%;
+  margin-top: 14px;
 }
-.ghost-wd { margin-top: 2px; font-size: 8px; letter-spacing: 0.02em; opacity: 0.75; }
-.ghost.is-painted { border-color: transparent; color: rgba(20, 20, 19, 0.5); }
-.ghost.is-current { border-color: var(--ink); border-width: var(--keyline); color: var(--ink); }
-.ghost:disabled { opacity: 1; color: rgba(20, 20, 19, 0.16); }
-.ghost:not(:disabled):active { transform: scale(0.94); }
-
+.easel-square { position: relative; transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.easel-square.is-pulled { transition: none; }
+.easel-square.is-from-left,
+.day-label.is-from-left { animation: day-from-left 0.28s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.easel-square.is-from-right,
+.day-label.is-from-right { animation: day-from-right 0.28s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes day-from-left { from { opacity: 0; transform: translateX(-40px); } }
+@keyframes day-from-right { from { opacity: 0; transform: translateX(40px); } }
+@media (prefers-reduced-motion: reduce) {
+  .easel-square, .day-label { animation: none !important; }
+}
+/* Step a day: a large, light grey arrow either side (none toward tomorrow on today). */
+.peek { flex: none; width: 52px; height: 84px; display: grid; place-items: center; color: #e9e9e3; }
+/* Big and bold, so it can be very light and still read. */
+.peek svg { width: 64px; height: 64px; overflow: visible; }
+.peek svg path { stroke-width: 5; }
+.peek.is-none { visibility: hidden; }
+.peek:active { color: var(--grey-3); }
 .canvas {
   position: relative;
   z-index: 1;
-  width: min(38vw, 146px);
+  width: min(46vw, 176px); /* the palette below is drawn to the same width */
   aspect-ratio: 1;
   background: #fff;
   border: 3px solid var(--ink); /* the hero: heavier than the 2px keyline */
@@ -214,13 +204,7 @@
   animation: fade-in 0.4s ease-out;
 }
 .canvas-word.is-painted { color: rgba(20, 20, 19, 0.55); }
-.paint-wrap {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-}
+.paint-wrap { position: relative; z-index: 1; }
 .paint-surface {
   position: absolute;
   inset: 0;
@@ -249,16 +233,12 @@
 .tray {
   position: relative;
   z-index: 2;
-  pointer-events: none;
   width: 100%;
-  min-height: 170px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 5px;
+  margin-top: 18px;
 }
-
-.tray > * { pointer-events: auto; }
 .tray-rest { width: 100%; display: flex; flex-direction: column; align-items: center; }
 .tray-rest[hidden] { display: none; }
 .whisper {

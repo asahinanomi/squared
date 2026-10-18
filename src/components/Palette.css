@@ -1,5 +1,5 @@
 .palette {
-  width: min(52vw, 200px);
+  width: min(46vw, 176px); /* never wider than the square above it */
   height: auto;
   overflow: visible;
   touch-action: manipulation;

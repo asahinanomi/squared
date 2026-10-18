@@ -9,8 +9,6 @@ type Props = {
   loaded: Paint | null
   onDryBrush: () => void
   onFilled: (p: Paint) => void
-  /** A quick tap in the margin around the square (not a stroke), in page coordinates. */
-  onMarginTap?: (clientX: number, clientY: number) => void
 }
 
 // A quiet word in the middle of the square: what it holds, or that it's waiting.
@@ -28,13 +26,13 @@ function brushCursor(tip: string) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 4 36, crosshair`
 }
 
-export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }: Props) {
+export function PaintCanvas({ saved, loaded, onDryBrush, onFilled }: Props) {
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const covered = useRef(new Uint8Array(GRID * GRID))
   const last = useRef<{ x: number; y: number } | null>(null)
-  // A press that began in the margin: a stroke once it moves, a tap if it doesn't.
-  const pending = useRef<{ x: number; y: number; cx: number; cy: number } | null>(null)
+  // A press that began in the margin: a stroke once it moves; a tap there does nothing.
+  const pending = useRef<{ x: number; y: number } | null>(null)
   const size = useRef(0)
   // Fingers on the square, and the paint as it was before this stroke: a second finger means a
   // pinch (zooming out), so the stroke the first finger began is taken back.
@@ -119,7 +117,7 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
     const s = size.current
     e.currentTarget.setPointerCapture(e.pointerId)
     if (p.x < 0 || p.y < 0 || p.x > s || p.y > s) {
-      pending.current = { ...p, cx: e.clientX, cy: e.clientY }
+      pending.current = p
       return
     }
     if (!loaded) {
@@ -161,10 +159,8 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
   const up = (e?: React.PointerEvent) => {
     if (e) fingers.current.delete(e.pointerId)
     if (fingers.current.size > 0) return
-    const tap = pending.current
-    if (tap) {
+    if (pending.current) {
       pending.current = null
-      onMarginTap?.(tap.cx, tap.cy)
       return
     }
     if (!last.current) return
@@ -201,7 +197,7 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled, onMarginTap }
           </span>
         )}
       </div>
-      {/* Strokes may start a little outside the square; a quick tap here reaches the grid day beneath. */}
+      {/* Strokes may start a little outside the square. */}
       <div
         className="paint-reach"
         style={{ cursor: brushCursor(loaded ? paintHex(loaded) : '#f4f4f1') }}
