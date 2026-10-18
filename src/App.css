@@ -234,7 +234,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 18px;
+  margin-top: 15px; /* 16px of ink from the square to the brush tip, like question → date → square */
 }
 .tray-rest { width: 100%; display: flex; flex-direction: column; align-items: center; }
 .tray-rest[hidden] { display: none; }
@@ -262,7 +262,7 @@
 /* ---------- note under the square ---------- */
 .notes {
   width: min(100%, 360px);
-  margin-top: 6px; /* just past the colour's meaning line under the palette */
+  margin-top: 8px; /* 16px of ink below the colour's meaning line, the same rhythm as above */
   display: flex;
   flex-direction: column;
   align-items: center;
