@@ -147,7 +147,8 @@
   text-decoration-thickness: 2.5px;
   text-underline-offset: 8px;
 }
-.day-nav { display: flex; justify-content: center; margin-top: 10px; width: 100%; }
+/* Optically centred between the question's dotted underline and the square. */
+.day-nav { display: flex; justify-content: center; margin-top: 18px; width: 100%; }
 .day-label { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; min-width: 15em; text-align: center; }
 .day-label sup { font-size: 0.6em; line-height: 0; margin-left: 1px; }
 
@@ -158,7 +159,7 @@
   justify-content: center;
   gap: clamp(18px, 7vw, 36px);
   width: 100%;
-  margin-top: 22px;
+  margin-top: 14px;
 }
 .easel-square { position: relative; transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .easel-square.is-pulled { transition: none; }
@@ -172,7 +173,7 @@
   .easel-square, .day-label { animation: none !important; }
 }
 /* Step a day: a large, light grey arrow either side (none toward tomorrow on today). */
-.peek { flex: none; width: 52px; height: 84px; display: grid; place-items: center; color: #e0e0d9; }
+.peek { flex: none; width: 52px; height: 84px; display: grid; place-items: center; color: #e9e9e3; }
 /* Big and bold, so it can be very light and still read. */
 .peek svg { width: 64px; height: 64px; overflow: visible; }
 .peek svg path { stroke-width: 5; }
