@@ -145,7 +145,7 @@
   text-underline-offset: 8px;
 }
 /* Optically centred between the question's dotted underline and the square. */
-.day-nav { display: flex; justify-content: center; margin-top: 21px; /* a breath more under the question: it is the headline, date + square are one group */ width: 100%; }
+.day-nav { display: flex; justify-content: center; margin-top: 42px; /* 40px of ink under the question, the same as palette → notes: the question stands alone, date + square + palette are one group */ width: 100%; }
 .day-label { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; min-width: 15em; text-align: center; }
 .day-label sup { font-size: 0.6em; line-height: 0; margin-left: 1px; }
 
