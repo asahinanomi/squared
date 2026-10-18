@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NotesList } from '../components/NotesList'
 import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { ZoomInIcon, ZoomOutIcon } from '../components/ZoomBar'
-import { addDays, longDate, monthCells, shortDateParts, shortWeekday, todayIso } from '../lib/dates'
+import { addDays, longDate, shortDateParts, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
@@ -58,90 +58,176 @@ export function Today(props: Props) {
     setWhisper({ paint: p, at: Date.now() })
   }
 
-  // A tap just outside the square goes to the grid day underneath it.
-  const tapGridDay = (x: number, y: number) => {
-    const cell = document.elementsFromPoint(x, y).find((el) => el.classList.contains('ghost'))
-    if (cell instanceof HTMLButtonElement && !cell.disabled) cell.click()
+  // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
+  const hasPrev = !born || prev >= born
+  const hasNext = next <= today
+  const [slide, setSlide] = useState<'from-left' | 'from-right' | null>(null)
+  const step = (dir: -1 | 1) => {
+    if (dir < 0 ? !hasPrev : !hasNext) return false
+    setSlide(dir < 0 ? 'from-left' : 'from-right')
+    onDate(dir < 0 ? prev : next)
+    return true
   }
+
+  // A finger swipe across the top part (never on the square, a note, or Safari's back edge): one day per swipe.
+  const swipe = useRef<{ id: number; x: number; y: number; on: boolean } | null>(null)
+  const [pull, setPull] = useState(0)
+  const swipeDown = (e: React.PointerEvent) => {
+    if (why || e.pointerType === 'mouse') return
+    if (swipe.current) return (swipe.current = null) // a second finger: a pinch, not a swipe
+    const t = e.target as Element
+    if (t.closest('.paint-reach, .why')) return
+    if (e.clientX < 24 || e.clientX > window.innerWidth - 24) return
+    swipe.current = { id: e.pointerId, x: e.clientX, y: e.clientY, on: false }
+  }
+  const swipeMove = (e: React.PointerEvent) => {
+    const s = swipe.current
+    if (!s || s.id !== e.pointerId) return
+    const dx = e.clientX - s.x
+    const dy = e.clientY - s.y
+    if (!s.on) {
+      if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) return (swipe.current = null) // scrolling the page
+      if (Math.abs(dx) < 10) return
+      s.on = true
+      e.currentTarget.setPointerCapture(e.pointerId)
+    }
+    // Follows the finger; past the last day it only gives a little (a soft stop at today).
+    const can = dx > 0 ? hasPrev : hasNext
+    setPull(dx * (can ? 0.5 : 0.18))
+  }
+  const swipeUp = (e: React.PointerEvent) => {
+    const s = swipe.current
+    if (!s || s.id !== e.pointerId) return
+    swipe.current = null
+    const dx = e.clientX - s.x
+    setPull(0)
+    if (s.on && Math.abs(dx) > 56 && step(dx > 0 ? -1 : 1)) navigator.vibrate?.(8)
+  }
+
+  // Trackpad (a sideways two-finger swipe) and the arrow keys: also one day at a time.
+  const stepRef = useRef(step)
+  stepRef.current = step
+  useEffect(() => {
+    let acc = 0
+    let quiet: ReturnType<typeof setTimeout> | undefined
+    let locked = false
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return
+      e.preventDefault() // not the browser's back/forward swipe
+      clearTimeout(quiet)
+      quiet = setTimeout(() => {
+        locked = false
+        acc = 0
+      }, 260)
+      if (locked) return
+      acc += e.deltaX
+      if (Math.abs(acc) > 40) {
+        locked = true
+        stepRef.current(acc > 0 ? 1 : -1)
+      }
+    }
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement
+      if (t.closest('input, textarea, [contenteditable]') || document.querySelector('.why, .confirm')) return
+      if (e.key === 'ArrowLeft') stepRef.current(-1)
+      else if (e.key === 'ArrowRight') stepRef.current(1)
+    }
+    window.addEventListener('wheel', onWheel, { passive: false })
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('wheel', onWheel)
+      window.removeEventListener('keydown', onKey)
+      clearTimeout(quiet)
+    }
+  }, [])
+
+  const peek = (iso: string, dir: -1 | 1) => {
+    const d = days[iso]
+    return (
+      <button
+        className={'peek' + (d ? ' is-painted' : '')}
+        style={d ? { background: paintHex(d.color) } : undefined}
+        aria-label={`${dir < 0 ? 'Previous' : 'Next'} day, ${longDate(iso)}`}
+        onClick={() => step(dir)}
+      />
+    )
+  }
+
   return (
     <main className="today">
-      <Question text={question} onDefine={onDefine} />
+      <div
+        className="today-stage"
+        onPointerDown={swipeDown}
+        onPointerMove={swipeMove}
+        onPointerUp={swipeUp}
+        onPointerCancel={() => {
+          swipe.current = null
+          setPull(0)
+        }}
+      >
+        <Question text={question} onDefine={onDefine} />
 
-      <div className="day-nav">
-        <button aria-label="Previous day" disabled={!!born && prev < born} onClick={() => onDate(prev)}>
-          <Chevron dir="left" />
-        </button>
-        <DayLabel iso={date} />
-        <button aria-label="Next day" disabled={next > today} onClick={() => onDate(next)}>
-          <Chevron dir="right" />
-        </button>
-      </div>
+        <div className="day-nav">
+          <DayLabel key={date} iso={date} slide={slide} />
+        </div>
 
-      <div className="easel" onPointerDown={() => setWhispering(false)}>
-        {/* The month behind the square: tap a day to go to it (not future days). */}
-        <div className="ghost-grid">
-          {monthCells(date).map((iso, i) =>
-            iso ? (
-              <button
-                key={iso}
-                className={'ghost' + (days[iso] ? ' is-painted' : '') + (iso === date ? ' is-current' : '')}
-                style={days[iso] ? { background: paintHex(days[iso].color) + '4d' } : undefined}
-                disabled={iso > today}
-                aria-label={longDate(iso)}
-                onClick={() => onDate(iso)}
-              >
-                {Number(iso.slice(8))}
-                <span className="ghost-wd">{shortWeekday(iso)}</span>
-              </button>
-            ) : (
-              <span key={`b${i}`} />
-            ),
+        <div className="easel" onPointerDown={() => setWhispering(false)}>
+          {hasPrev ? peek(prev, -1) : <span className="peek is-none" />}
+          <div
+            key={date}
+            className={'easel-square' + (slide ? ` is-${slide}` : '') + (pull ? ' is-pulled' : '')}
+            style={pull ? { transform: `translateX(${pull}px)` } : undefined}
+          >
+            <PaintCanvas
+              key={`${date}:${day?.color ?? ''}`}
+              saved={day?.color}
+              loaded={loaded}
+              onDryBrush={onDryBrush}
+              onFilled={onFilled}
+            />
+          </div>
+          {hasNext ? peek(next, 1) : <span className="peek is-none" />}
+        </div>
+
+        <div className="tray">
+          {why ? (
+            <WhyBubble
+              key={`${why.note?.id ?? 'new'}:${why.n ?? 0}`}
+              initial={why.draft ?? why.note?.body}
+              original={why.note?.body}
+              initialError={why.error}
+              editing={!!why.note}
+              onSave={(text) => onSaveNote(why.note, text)}
+              onDelete={why.note ? () => onDeleteNote(why.note!) : undefined}
+              onCancel={onCloseWhy}
+            />
+          ) : (
+            <>
+              <Palette loaded={loaded} nudge={nudge} onLoad={dip} />
+              <p className={'whisper' + (whispering ? ' is-on' : '')} aria-live="polite">
+                {whisper && (
+                  <>
+                    <span className="whisper-dot" style={{ background: paintHex(whisper.paint) }} />
+                    {PAINTS.find((x) => x.id === whisper.paint)!.meaning}
+                  </>
+                )}
+              </p>
+            </>
           )}
         </div>
-        <PaintCanvas
-          key={`${date}:${day?.color ?? ''}`}
-          saved={day?.color}
-          loaded={loaded}
-          onDryBrush={onDryBrush}
-          onFilled={onFilled}
-          onMarginTap={tapGridDay}
-        />
       </div>
 
-      <div className="tray">
-        {why && (
-          <WhyBubble
-            key={`${why.note?.id ?? 'new'}:${why.n ?? 0}`}
-            initial={why.draft ?? why.note?.body}
-            original={why.note?.body}
-            initialError={why.error}
-            editing={!!why.note}
-            onSave={(text) => onSaveNote(why.note, text)}
-            onDelete={why.note ? () => onDeleteNote(why.note!) : undefined}
-            onCancel={onCloseWhy}
+      {/* Notes stay just as they were, below; kept mounted (hidden) while writing so opened notes stay open. */}
+      <div className="tray-rest" hidden={!!why}>
+        {(day || notes.length > 0) && (
+          <NotesList
+            key={date}
+            notes={notes}
+            onOpen={(n) => onOpenWhy(n)}
+            onAdd={() => onOpenWhy()}
+            onDelete={onDeleteNote}
           />
         )}
-        {/* Kept mounted (just hidden) while writing, so opened notes stay open afterwards. */}
-        <div className="tray-rest" hidden={!!why}>
-          <Palette loaded={loaded} nudge={nudge} onLoad={dip} />
-          <p className={'whisper' + (whispering ? ' is-on' : '')} aria-live="polite">
-            {whisper && (
-              <>
-                <span className="whisper-dot" style={{ background: paintHex(whisper.paint) }} />
-                {PAINTS.find((x) => x.id === whisper.paint)!.meaning}
-              </>
-            )}
-          </p>
-          {(day || notes.length > 0) && (
-            <NotesList
-              key={date}
-              notes={notes}
-              onOpen={(n) => onOpenWhy(n)}
-              onAdd={() => onOpenWhy()}
-              onDelete={onDeleteNote}
-            />
-          )}
-        </div>
       </div>
       {/* The zoom pair, as on every other level (hidden while writing). */}
       {!why && (
@@ -175,11 +261,11 @@ export function Chevron({ dir }: { dir: 'left' | 'right' }) {
   )
 }
 
-/** "Sat, Oct 17th, 2026" with the "th" raised; read aloud in full. */
-function DayLabel({ iso }: { iso: string }) {
+/** "Sat, Oct 17th, 2026" with the "th" raised; read aloud in full. It slides in with its day. */
+function DayLabel({ iso, slide }: { iso: string; slide: 'from-left' | 'from-right' | null }) {
   const p = shortDateParts(iso)
   return (
-    <span className="day-label" aria-label={longDate(iso)}>
+    <span className={'day-label' + (slide ? ` is-${slide}` : '')} aria-label={longDate(iso)} aria-live="polite">
       <span aria-hidden="true">
         {p.weekday}, {p.monthDay}
         <sup>{p.suffix}</sup>, {p.year}
