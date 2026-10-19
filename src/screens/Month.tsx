@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import {
   fromIso,
@@ -70,15 +70,11 @@ function DayCard({
   onPick: (iso: string) => void
 }) {
   const [open, setOpen] = useState(false)
-  const [clipped, setClipped] = useState(false)
-  const preview = useRef<HTMLParagraphElement>(null)
   const latest = notes.at(-1)
-  useLayoutEffect(() => {
-    const el = preview.current
-    setClipped(!!el && el.scrollHeight > el.clientHeight + 1)
-  }, [latest?.body])
   const { weekday, monthDay, suffix } = shortDateParts(iso)
-  const more = notes.length > 1 || clipped
+  // More to read: older notes, or a latest one longer than its two-line preview (judged by its length, not
+  // measured — a list can hold thousands of cards).
+  const more = notes.length > 1 || (!!latest && (latest.body.length > PREVIEW_CHARS || latest.body.includes('\n')))
   return (
     <article className={'day-card' + (day ? ' is-painted' : '') + (iso === today ? ' is-today' : '')} data-iso={iso}>
       <span
@@ -103,11 +99,7 @@ function DayCard({
                 {n.body}
               </p>
             ))
-          : latest && (
-              <p ref={preview} className="day-card-note">
-                {latest.body}
-              </p>
-            )}
+          : latest && <p className="day-card-note">{latest.body}</p>}
         {more && (
           <button className="day-card-more" aria-expanded={open} onClick={() => setOpen(!open)}>
             {open ? 'less ⌃' : notes.length > 1 ? `more · ${notes.length} notes ⌄` : 'more ⌄'}
@@ -117,6 +109,9 @@ function DayCard({
     </article>
   )
 }
+
+/** About what two lines of a card's note hold on a phone. */
+const PREVIEW_CHARS = 80
 
 /** Every day of the month containing `iso`, first to last. */
 const monthDays = (iso: string) => monthCells(iso).filter((d): d is string => !!d)

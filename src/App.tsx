@@ -68,6 +68,8 @@ export default function App() {
   const [mag, setMag] = useState(0)
   // The month as a list of days, to read (a view, beside the pie — not a zoom level).
   const [monthList, setMonthList] = useState(false)
+  // Where the list was opened from: the month's squares, or a life · days (its squares icon goes back there).
+  const [listFrom, setListFrom] = useState<'month' | 'life'>('month')
   const [focal, setFocal] = useState<Focal | undefined>()
   const [monthAnchor, setMonthAnchor] = useState<{ iso?: string; y: number } | undefined>()
   // Where "how many squares?" returns to: a life, when it was asked for on the way there.
@@ -501,6 +503,11 @@ export default function App() {
                 onResolution={setLifeRes}
                 cols={[28, 14, 7, 3][mag]}
                 focal={focal}
+                onList={(iso) => {
+                  setListFrom('life')
+                  setMonthList(true)
+                  goMonth(iso)
+                }}
               />
             ) : lifeRes === 'months' ? (
               <LifeMonths
@@ -536,7 +543,11 @@ export default function App() {
               onOut={() => goYear()}
               zoomed={mag > 0}
               list={monthList}
-              onList={() => setMonthList(!monthList)}
+              onList={() => {
+                if (monthList && listFrom === 'life') return setScreen('life')
+                setListFrom('month')
+                setMonthList(!monthList)
+              }}
               notes={notes}
               onMonthShown={loadNotes}
               anchor={monthAnchor}

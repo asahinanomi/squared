@@ -7,7 +7,7 @@ type Props = {
   onIn?: () => void
   /** Back to today's square on this same screen — shown (as ◎) only once it has scrolled out of view. */
   onRecenter?: () => void
-  /** The month's squares ↔ list switch, beside the pie's (`on` = the list is showing). */
+  /** The days' squares ↔ list switch, beside the pie's (`on` = the list is showing): on the month and a life · days. */
   list?: { on: boolean; toggle: () => void }
 }
 
@@ -66,15 +66,15 @@ export const SquaresIcon = () => (
   </svg>
 )
 
-/** Lines, each led by a little square: the days as a list, to read. Drawn to the zoom icons' height. */
+/** Lines, each led by a dot: the days as a list, to read. Drawn to the zoom icons' height. */
 export const ListIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
-    <rect x="3.5" y="4" width="4" height="4" rx="1" />
-    <rect x="3.5" y="10" width="4" height="4" rx="1" />
-    <rect x="3.5" y="16" width="4" height="4" rx="1" />
-    <line x1="11" y1="6" x2="20.5" y2="6" />
-    <line x1="11" y1="12" x2="20.5" y2="12" />
-    <line x1="11" y1="18" x2="20.5" y2="18" />
+    <circle cx="4.5" cy="5.5" r="1.4" fill="currentColor" stroke="none" />
+    <circle cx="4.5" cy="12" r="1.4" fill="currentColor" stroke="none" />
+    <circle cx="4.5" cy="18.5" r="1.4" fill="currentColor" stroke="none" />
+    <line x1="9.5" y1="5.5" x2="20.5" y2="5.5" />
+    <line x1="9.5" y1="12" x2="20.5" y2="12" />
+    <line x1="9.5" y1="18.5" x2="20.5" y2="18.5" />
   </svg>
 )
 

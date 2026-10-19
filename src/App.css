@@ -732,6 +732,8 @@
 /* The month as a list: one short card per day, to read. Colour stays in the swatch; ink on paper.
    A tap anywhere opens the day (the date button is stretched over the card); "more" opens it in place. */
 .month.is-list .month-block.is-faint { display: none; }
+/* Months off screen aren't laid out or painted until they scroll near (a list can reach back decades). */
+.month.is-list .month-block { content-visibility: auto; contain-intrinsic-size: auto 1400px; }
 .month.is-list .ladder-scroll::after { content: ""; display: block; height: 30vh; }
 .month-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .day-card { position: relative; display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-radius: 16px; color: var(--ink); }
