@@ -113,7 +113,7 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
-  height: 54px; /* the one height for every full-width black pill (Google's sign-in button is the exception) */
+  height: 54px; /* the one height for every black pill, Google sign-in included */
   padding: 0 32px;
   border-radius: 999px;
   background: var(--ink);
