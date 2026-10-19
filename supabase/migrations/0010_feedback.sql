@@ -16,3 +16,12 @@ drop policy if exists "own feedback: insert" on public.feedback;
 drop policy if exists "own feedback: select" on public.feedback;
 create policy "own feedback: insert" on public.feedback for insert to authenticated with check (user_id = auth.uid());
 create policy "own feedback: select" on public.feedback for select to authenticated using (user_id = auth.uid());
+
+-- For reading: each note with who sent it and when, newest first (Dashboard → SQL Editor:
+-- `select * from feedback_inbox;`). Only the dashboard (service role) can read it, never the app.
+create or replace view public.feedback_inbox with (security_invoker = true) as
+  select f.created_at, u.email, f.body
+  from public.feedback f
+  join auth.users u on u.id = f.user_id
+  order by f.created_at desc;
+revoke all on public.feedback_inbox from anon, authenticated;

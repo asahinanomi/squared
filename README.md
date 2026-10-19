@@ -124,7 +124,19 @@ Build step by step; the owner reviews and gives feedback after each step before 
 
 ## Phase 3 — settings (in progress)
 
-Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: today · my squares · settings · sign out — the things about you — and, set apart at its foot under a hairline in quieter grey, "the idea" (about the app). Under it, as quiet, **send feedback** — a screen in squared: "what confused you, or felt off? what did your squares show you? anything helps.", one box, and a black "send" pill; then "Thank you. I read every one. — nomi" and "done". Notes save to the `feedback` table (migration 0010); each person can only add their own, and nomi reads them in Supabase (Table Editor → feedback). In the local demo nothing is saved. The sign-in screen also carries a quiet "the idea" link under the Google button, for someone new; opened from there it has a "‹ sign in" back arrow and no link on to what matters.
+Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: today · my squares · settings · sign out — the things about you — and, set apart at its foot under a hairline in quieter grey, "the idea" (about the app). Under it, as quiet, **send feedback** — a screen in squared: "what confused you, or felt off? what did your squares show you? anything helps.", one box, and a black "send" pill; then "Thank you. I read every one. — nomi" and "done". Notes save to the `feedback` table (migration 0010); each person can only add their own, and nomi reads them in Supabase (Table Editor → feedback). In the local demo nothing is saved. To read them all with who sent them: SQL Editor → `select * from feedback_inbox;` (a view, also in 0010).
+
+### Feedback by email (one-time setup)
+
+Each new note is also emailed to the maker; the table keeps them all either way.
+
+1. **Resend** (resend.com, free): sign up with the address the emails should go to, and create an API key.
+2. **Supabase → Edge Functions → Deploy a new function → Via editor**: name it `feedback-email`, paste `supabase/functions/feedback-email/index.ts`, deploy.
+3. **Edge Functions → Secrets**: add `RESEND_API_KEY` (the key) and `FEEDBACK_TO` (the address to email). Optional: `FEEDBACK_FROM`, once a domain is verified in Resend (until then it sends from Resend's test sender, which can only email the Resend account's own address).
+4. **Database → Webhooks → Create**: table `feedback`, event *Insert*, type *Supabase Edge Functions*, function `feedback-email`.
+5. Send yourself a note from the app to check.
+
+The address lives only in Supabase secrets, never in the (public) code. The sign-in screen also carries a quiet "the idea" link under the Google button, for someone new; opened from there it has a "‹ sign in" back arrow and no link on to what matters.
 
 - Step 1 (done): **settings hub** — back arrow (returns to where you came from), "settings", four rows: square settings ("Oct 26, 1971 · 95 years · 34,699 squares", opens the square screen), and reminders / my data / account shown with a "soon" tag and not tappable. "squared.today" at the foot. The "how many squares?" menu item is gone.
 - Step 2 (done): square settings — one shared screen, two modes (first-run "how many squares?" + "start painting", which lands on today; from settings "square settings", back arrow, saves as you change it, quiet offline cue). Moving the birth date later hides earlier painted days, never deletes them.
