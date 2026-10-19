@@ -521,7 +521,7 @@
 @keyframes fade-in { from { opacity: 0; } }
 /* Squares · pie · list: one small capsule, like the years · months · days filter; the view showing is raised. */
 .zoombar-switch { display: flex; gap: 2px; flex-shrink: 0; padding: 3px; border-radius: 999px; background: #efefea; }
-.zoombar-switch button { width: 36px; height: 32px; display: grid; place-items: center; border-radius: 999px; color: #9a9a93; }
+.zoombar-switch button { width: 36px; height: 30px; display: grid; place-items: center; border-radius: 999px; color: #9a9a93; }
 .zoombar-switch button.is-on { background: #fff; color: var(--zoom-ink); }
 .zoombar-switch svg { width: 20px; height: 20px; }
 .zoombar-buttons { display: flex; gap: 2px; flex-shrink: 0; }
@@ -531,8 +531,8 @@
   position: absolute;
   right: 0;
   bottom: calc(100% + 12px);
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -541,17 +541,17 @@
   box-shadow: inset 0 0 0 1px #e4e4dd, 0 4px 14px rgba(20, 20, 19, 0.1);
   animation: fade-in 0.25s ease-out;
 }
-.zoombar-recenter svg { width: 24px; height: 24px; }
+.zoombar-recenter svg { width: 20px; height: 20px; }
 .zoombar-recenter:active { transform: scale(0.95); }
-.zoombar-buttons button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
+.zoombar-buttons button { width: 40px; height: 40px; display: grid; place-items: center; color: var(--zoom-ink); }
 .zoombar-buttons button:disabled { opacity: 0.25; }
-.zoombar-buttons svg { width: 26px; height: 26px; }
+.zoombar-buttons svg { width: 20px; height: 20px; }
 /* "today" — go paint it — pinned to the bar's centre, whatever shows either side. */
 .zoombar-today {
   position: absolute;
   left: 50%;
   top: 6px;
-  height: 44px;
+  height: 40px;
   transform: translateX(-50%);
   padding: 0 12px;
   color: var(--zoom-ink);
@@ -561,7 +561,7 @@
 }
 /* A soft capsule, like the years · months · days filter: the bar's one action reads as something to tap.
    Drawn inside the 44px tap area. */
-.zoombar-today::before { content: ""; position: absolute; inset: 7px 0; z-index: -1; border-radius: 999px; background: #efefea; }
+.zoombar-today::before { content: ""; position: absolute; inset: 2px 0; z-index: -1; border-radius: 999px; background: #efefea; }
 .zoombar-today:active::before { background: #e6e6e0; }
 /* Just came back to today: the square pulses once, so the eye lands on it. */
 .is-pulse { animation: today-pulse 0.9s ease-out; }
@@ -585,10 +585,10 @@
   background: var(--bg);
   border-top: 1px solid rgba(20, 20, 19, 0.08);
 }
-.today-zoom button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
+.today-zoom button { width: 40px; height: 40px; display: grid; place-items: center; color: var(--zoom-ink); }
 .today-zoom .zoombar-today { width: auto; top: 6px; }
 .today-zoom button:disabled { opacity: 0.25; }
-.today-zoom svg { width: 26px; height: 26px; }
+.today-zoom svg { width: 20px; height: 20px; }
 
 /* ---------- my squares: a month ---------- */
 /* The zoom bar runs to the bottom edge and carries the safe-area room itself. */

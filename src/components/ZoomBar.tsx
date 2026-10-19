@@ -98,7 +98,7 @@ export const ViewSwitch = createContext<{
   goToday: () => void
 } | null>(null)
 
-// Bottom of every zoom level, controls only: on the left one switch for the three views — squares · pie · list,
+// Bottom of every zoom level, controls only: on the left one switch for the three views — squares · list · pie,
 // the one showing raised — then "today" (go paint it)
 // pinned to the centre, and the zoom pair on the right. ◎ (back to today's square, once it's out of view) floats
 // just above the bar's right end.
@@ -107,13 +107,13 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
   return (
     <div className="zoombar">
       {view ? (
-        // One switch for the three ways to look: squares · pie · list. The one showing is raised.
+        // One switch for the three ways to look: squares · list · pie (the days, then the summary). The one showing is raised.
         <div className="zoombar-switch" role="group" aria-label="View">
           {(
             [
               ['squares', 'Squares', <SquaresIcon key="s" />],
-              ['pie', 'Pie view', <PieIcon key="p" />],
               ['list', 'List view', <ListIcon key="l" />],
+              ['pie', 'Pie view', <PieIcon key="p" />],
             ] as const
           ).map(([id, label, icon]) => {
             const now = view.pie ? 'pie' : view.list ? 'list' : 'squares'
