@@ -1,17 +1,17 @@
 # squared.today — Design System (visual identity)
 
-_Pairs with `brand-story.md` (voice & copy). This doc = look: logo, color, type, components. v1 · Oct 19, 2026_
+_Pairs with `brand-story.md` (voice & copy). This doc = look: logo, color, type, components. v1.1 · Oct 19, 2026 · matches the app_
 
 ---
 
 ## Logo
 
 - **Mark:** a rounded square with a wave filling from low-left to high-right — life's ups and downs / a life filling up. Black on paper. (Original mark — keep.)
-- **SVG (reference):**
+- **SVG (as in the app — `public/logo.svg`, `src/components/Logo.tsx`):**
   ```
   <svg viewBox="0 0 100 100">
-    <path d="M10 76 C30 72, 38 52, 60 50 C76 48.5, 82 44, 90 41 L90 76 Q90 90 76 90 L24 90 Q10 90 10 76 Z" fill="#141413"/>
-    <rect x="10" y="10" width="80" height="80" rx="13" fill="none" stroke="#141413" stroke-width="7"/>
+    <path d="M8 80C22 64 34 57 48 55C62 53 70 51 76 46C81 42 86 40 92 39V80Q92 92 80 92H20Q8 92 8 80Z" fill="#141413"/>
+    <rect x="7" y="7" width="86" height="86" rx="18" fill="none" stroke="#141413" stroke-width="10"/>
   </svg>
   ```
 - **Wordmark:** `squared.today` — Inter 600, letter-spacing −0.02em; render `.today` in grey **#A3A39E**. On the home screen ~27px.
@@ -25,12 +25,12 @@ _Pairs with `brand-story.md` (voice & copy). This doc = look: logo, color, type,
 **App palette**
 | role | hex |
 |---|---|
-| paper (background) | #FCFCFA |
+| paper (background) | #FAFAF8 |
 | ink (text, mark) | #141413 |
-| ink-soft | #55554F |
+| ink-soft | #3D3D3A |
 | muted (secondary text, links) | #8A8A82 |
 | hairline / border | #E2E2DB |
-| dot grid | #DBDBD3 |
+| dot grid | #DDDCD6 |
 | .today grey | #A3A39E |
 
 **Paint colors (semantic — the three answers)**
@@ -52,7 +52,7 @@ Two voices (full mapping in `brand-story.md` §9). Both free on Google Fonts.
 - **Accent:** a **dotted** underline (2.5px dotted ink) under the key word in a reflective line ("Today", "meaningful") — never a solid underline.
 
 ## Background
-squared's signature ground: **dotted grid** — `radial-gradient(#DBDBD3 1.3px, transparent 1.3px)`, 22px tile, 11px offset, over paper. No calendars or busy textures behind content.
+squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, transparent 1.4px)`, 22px tile, 11px offset, over paper. No calendars or busy textures behind content.
 
 ## Components
 - **Surface:** paper + dotted grid.
