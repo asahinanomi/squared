@@ -98,8 +98,8 @@ export const ViewSwitch = createContext<{
   goToday: () => void
 } | null>(null)
 
-// Bottom of every zoom level, controls only: the pie and list switches on the left (each turns into a squares
-// icon while its view is showing — the way back), "today" (go paint it)
+// Bottom of every zoom level, controls only: on the left one switch for the three views — squares · pie · list,
+// the one showing raised — then "today" (go paint it)
 // pinned to the centre, and the zoom pair on the right. ◎ (back to today's square, once it's out of view) floats
 // just above the bar's right end.
 export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
@@ -107,17 +107,33 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
   return (
     <div className="zoombar">
       {view ? (
-        <div className="zoombar-views">
-          <button className="zoombar-view" aria-label={view.pie ? 'Squares' : 'Pie view'} onClick={view.toggle}>
-            {view.pie ? <SquaresIcon /> : <PieIcon />}
-          </button>
-          <button
-            className="zoombar-view"
-            aria-label={view.list ? 'Squares' : 'List view'}
-            onClick={() => view.toggleList(listAt?.())}
-          >
-            {view.list ? <SquaresIcon /> : <ListIcon />}
-          </button>
+        // One switch for the three ways to look: squares · pie · list. The one showing is raised.
+        <div className="zoombar-switch" role="group" aria-label="View">
+          {(
+            [
+              ['squares', 'Squares', <SquaresIcon key="s" />],
+              ['pie', 'Pie view', <PieIcon key="p" />],
+              ['list', 'List view', <ListIcon key="l" />],
+            ] as const
+          ).map(([id, label, icon]) => {
+            const now = view.pie ? 'pie' : view.list ? 'list' : 'squares'
+            const go = () => {
+              if (id === now) return
+              if (id === 'pie' || (id === 'squares' && now === 'pie')) view.toggle()
+              else view.toggleList(listAt?.())
+            }
+            return (
+              <button
+                key={id}
+                className={id === now ? 'is-on' : undefined}
+                aria-label={label}
+                aria-pressed={id === now}
+                onClick={go}
+              >
+                {icon}
+              </button>
+            )
+          })}
         </div>
       ) : (
         <span />

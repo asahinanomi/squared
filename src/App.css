@@ -519,9 +519,11 @@
   animation: fade-in 0.2s ease-out;
 }
 @keyframes fade-in { from { opacity: 0; } }
-.zoombar-views { display: flex; gap: 2px; flex-shrink: 0; }
-.zoombar-view { width: 44px; height: 44px; display: grid; place-items: center; flex-shrink: 0; color: var(--zoom-ink); }
-.zoombar-view svg { width: 26px; height: 26px; }
+/* Squares · pie · list: one small capsule, like the years · months · days filter; the view showing is raised. */
+.zoombar-switch { display: flex; gap: 2px; flex-shrink: 0; padding: 3px; border-radius: 999px; background: #efefea; }
+.zoombar-switch button { width: 36px; height: 32px; display: grid; place-items: center; border-radius: 999px; color: #9a9a93; }
+.zoombar-switch button.is-on { background: #fff; color: var(--zoom-ink); }
+.zoombar-switch svg { width: 20px; height: 20px; }
 .zoombar-buttons { display: flex; gap: 2px; flex-shrink: 0; }
 /* ◎ floats over the content, just above the bar's right end: a small paper chip, ink only, there while today is
    out of view. */
