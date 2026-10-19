@@ -8,6 +8,7 @@ Read `README.md` first: it is the product spec and the record of every phase bui
 - When I ask "what do you think / if you agree do it, if not say no": give a short opinion; build only on "go" (or if I said to just do it).
 - Ask before changing my design. Design boards: https://claude.ai/artifact/PFuFHaZmJXTG82GkJsT1NH
 - Keep `README.md` up to date with whatever ships.
+- Once a change is deployed to squared.today, say so plainly: "It's live, you can test." Don't send me messages about background notices (bot comments, merge echoes) that need nothing from me.
 
 ## House rules
 
