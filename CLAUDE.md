@@ -1,6 +1,6 @@
 # squared — working notes for Claude
 
-Read `README.md` first: it is the product spec and the record of every phase built so far.
+Read `README.md` first: it is the product spec and the record of every phase built so far. The visual identity (logo, colour, type, components) is `docs/design-system.md`.
 
 ## Who & how
 
