@@ -138,35 +138,54 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 0;
-  padding: var(--gutter);
+  padding: max(9vh, 48px) var(--gutter) max(5vh, 28px);
+}
+.signin-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .wordmark {
-  font-size: 27px;
+  font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.02em;
-  margin: 12px 0 0;
+  margin: 10px 0 0;
 }
 .wordmark span {
   color: #a3a39e;
 }
-.signin-line {
-  margin: 36px 0 0;
-  max-width: 320px;
+.signin-message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 0;
   text-align: center;
+}
+/* The hero: how many days a life holds. */
+.signin-number {
+  margin: 0;
+  font-size: 68px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.signin-line {
+  margin: 12px 0 0;
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.4;
   color: #8a8a82;
 }
-/* The hero: the question, in the reflective face. "Today", the day it's about, gets a dotted ink underline. */
+/* Then the question it raises, in the reflective face. "Today" gets a dotted ink underline. */
 .signin-question {
-  margin: 14px 0 0;
-  max-width: 340px;
-  text-align: center;
+  margin: 44px 0 0;
+  max-width: 300px;
   font-family: var(--font-reflect);
   font-optical-sizing: auto;
-  font-size: 34px;
+  font-size: 28px;
   font-weight: 450;
   line-height: 1.22;
   letter-spacing: -0.005em;
@@ -177,9 +196,13 @@
   text-decoration-thickness: 2.5px;
   text-underline-offset: 6px;
 }
-/* Sign-in is quiet: a white keyline pill, so the question stays the hero. */
+.signin-go {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Sign-in is quiet: a white keyline pill, so the message leads. */
 .signin-google {
-  margin-top: 40px;
   min-height: 50px;
   display: flex;
   align-items: center;
@@ -193,7 +216,7 @@
   color: var(--ink);
 }
 .signin-links {
-  margin-top: 28px;
+  margin-top: 22px;
   display: flex;
   align-items: center;
   gap: 10px;

@@ -14,30 +14,37 @@ export function SignIn({
 }) {
   return (
     <main className="signin">
-      {/* The brand, modest: the wave above the wordmark. */}
-      <Logo size={48} />
-      <h1 className="wordmark">
-        squared<span>.today</span>
-      </h1>
-      {/* What squared is, for someone who's never seen it — then the question, the hero. */}
-      <p className="signin-line">a life of 80 years is about 29,200 days. each one counts.</p>
-      <p className="signin-question">
-        did I spend <u>Today</u> meaningfully?
-      </p>
-      <button className="signin-google" onClick={onSignIn}>
-        <GoogleG />
-        continue with Google
-      </button>
-      {error && <p className="signin-error">sign-in didn't finish: {error}</p>}
-      {/* For someone new: why squared exists, and what it keeps, before signing in. */}
-      <div className="signin-links">
-        <button className="signin-idea" onClick={onIdea}>
-          the idea
+      {/* Three zones: the brand, small and high; the message in the middle; sign-in low, under the thumb. */}
+      <header className="signin-brand">
+        <Logo size={40} />
+        <h1 className="wordmark">
+          squared<span>.today</span>
+        </h1>
+      </header>
+      {/* The number first — a life is finite — then the question it raises. */}
+      <div className="signin-message">
+        <p className="signin-number">29,200</p>
+        <p className="signin-line">days in an 80-year life</p>
+        <p className="signin-question">
+          did I spend <u>Today</u> meaningfully?
+        </p>
+      </div>
+      <div className="signin-go">
+        <button className="signin-google" onClick={onSignIn}>
+          <GoogleG />
+          continue with Google
         </button>
-        <span aria-hidden="true">·</span>
-        <button className="signin-idea" onClick={onPrivacy}>
-          privacy
-        </button>
+        {error && <p className="signin-error">sign-in didn't finish: {error}</p>}
+        {/* For someone new: why squared exists, and what it keeps, before signing in. */}
+        <div className="signin-links">
+          <button className="signin-idea" onClick={onIdea}>
+            the idea
+          </button>
+          <span aria-hidden="true">·</span>
+          <button className="signin-idea" onClick={onPrivacy}>
+            privacy
+          </button>
+        </div>
       </div>
     </main>
   )
