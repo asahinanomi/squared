@@ -103,7 +103,9 @@ export function DaysList({ days, notes, born, focus, onPick, onMonthShown, onIn,
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const first = born ? shiftMonth(born, 0) : shiftMonth(today, -120)
-  const start = shiftMonth(focus, 0)
+  // Open on the day you were looking at — but never ahead of today (nothing to list yet) or before birth.
+  const at = focus > today ? today : born && focus < born ? born : focus
+  const start = shiftMonth(at, 0)
   const [range, setRange] = useState(() => ({
     from: monthsBetween(first, start) > 1 ? shiftMonth(start, -1) : first,
     to: start < current ? shiftMonth(start, 1) : current,
@@ -124,7 +126,7 @@ export function DaysList({ days, notes, born, focus, onPick, onMonthShown, onIn,
   }
 
   // Open on the focus day, in the middle.
-  useLayoutEffect(() => centre(focus > today ? today : focus), []) // eslint-disable-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => centre(at), []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Months added above keep what you're reading in place; a day waiting to be centred is centred.
   useLayoutEffect(() => {
