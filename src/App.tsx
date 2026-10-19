@@ -31,9 +31,11 @@ import { Life } from './screens/Life'
 import { Pie } from './screens/Pie'
 import { SCOPE_ORDER, type Scope } from './lib/pie'
 import { LifeMonths } from './screens/LifeMonths'
+import { Account } from './screens/Account'
 import { DaysList } from './screens/DaysList'
 import { Feedback } from './screens/Feedback'
 import { PeriodList } from './screens/PeriodList'
+import { Privacy } from './screens/Privacy'
 import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
@@ -53,6 +55,8 @@ type Screen =
   | 'settings'
   | 'matters'
   | 'feedback'
+  | 'account'
+  | 'privacy'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
 const LADDER: Screen[] = ['today', 'month', 'year', 'life']
 
@@ -67,6 +71,7 @@ export default function App() {
   const [demoIn, setDemoIn] = useState(false)
   // "the idea", opened from the sign-in screen.
   const [ideaOut, setIdeaOut] = useState(false)
+  const [privacyOut, setPrivacyOut] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
   const [question, setQuestion] = useState(QUESTION)
   const [screen, setScreenValue] = useState<Screen>('today')
@@ -283,11 +288,16 @@ export default function App() {
       <div className="app">
         <Idea onBack={() => setIdeaOut(false)} />
       </div>
+    ) : privacyOut ? (
+      <div className="app">
+        <Privacy onBack={() => setPrivacyOut(false)} backLabel="sign in" />
+      </div>
     ) : (
       <SignIn
         error={authError}
         onSignIn={demo ? () => setDemoIn(true) : signInWithGoogle}
         onIdea={() => setIdeaOut(true)}
+        onPrivacy={() => setPrivacyOut(true)}
       />
     )
 
@@ -368,7 +378,12 @@ export default function App() {
     setScreen('list')
   }
   const listIn = (at: string) => {
-    if (listRes === 'days') return goToday()
+    // From the days: today's square, and zooming out of it comes back here.
+    if (listRes === 'days') {
+      setDate(todayIso())
+      setScreen('today')
+      return setDayFromList(true)
+    }
     setListZoomed(true)
     setListFocus(at)
     setListRes(listRes === 'years' ? 'months' : 'days')
@@ -389,7 +404,7 @@ export default function App() {
     setListRes(listRes === 'days' ? 'months' : 'years')
   }
   const openSettings = () => {
-    if (screen !== 'settings' && screen !== 'setup' && screen !== 'matters') setSettingsFrom(screen)
+    if (!['settings', 'setup', 'matters', 'account', 'privacy'].includes(screen)) setSettingsFrom(screen)
     setScreenValue('settings')
   }
   const openSquareSettings = () => {
@@ -467,26 +482,31 @@ export default function App() {
             : '')
         }
       >
-        {screen !== 'setup' && screen !== 'settings' && screen !== 'matters' && screen !== 'feedback' && (
-          <Topbar
-            onHome={goToday}
-            onCalendar={() => goMonth()}
-            back={
-              screen === 'month'
-                ? { label: todayIso().slice(0, 4), onBack: () => goYear() }
-                : screen === 'year'
-                  ? { label: 'a life', onBack: goLife }
-                  : undefined
-            }
-            onIdea={() => setScreen('idea')}
-            onFeedback={() => {
-              setFeedbackFrom(screen)
-              setScreenValue('feedback')
-            }}
-            onSettings={openSettings}
-            onSignOut={signOut}
-          />
-        )}
+        {screen !== 'setup' &&
+          screen !== 'settings' &&
+          screen !== 'matters' &&
+          screen !== 'feedback' &&
+          screen !== 'account' &&
+          screen !== 'privacy' && (
+            <Topbar
+              onHome={goToday}
+              onCalendar={() => goMonth()}
+              back={
+                screen === 'month'
+                  ? { label: todayIso().slice(0, 4), onBack: () => goYear() }
+                  : screen === 'year'
+                    ? { label: 'a life', onBack: goLife }
+                    : undefined
+              }
+              onIdea={() => setScreen('idea')}
+              onFeedback={() => {
+                setFeedbackFrom(screen)
+                setScreenValue('feedback')
+              }}
+              onSettings={openSettings}
+              onSignOut={signOut}
+            />
+          )}
         <div
           className={'stage' + (motion ? ` is-zoom-${motion}` : '')}
           key={screen === 'life' ? `life-${lifeRes}` : screen}
@@ -554,7 +574,18 @@ export default function App() {
                 setMattersFrom('settings')
                 setScreenValue('matters')
               }}
+              onAccount={() => setScreenValue('account')}
+              onPrivacy={() => setScreenValue('privacy')}
             />
+          ) : screen === 'account' ? (
+            <Account
+              email={session?.user.email}
+              onBack={() => setScreenValue('settings')}
+              onSignOut={signOut}
+              onDeleted={signOut}
+            />
+          ) : screen === 'privacy' ? (
+            <Privacy onBack={() => setScreenValue('settings')} backLabel="settings" />
           ) : screen === 'matters' ? (
             <WhatMatters
               onBack={() => setScreenValue(mattersFrom)}
@@ -580,7 +611,7 @@ export default function App() {
                   setScreen('today')
                 }}
                 onMonthShown={loadNotes}
-                onIn={goToday}
+                onIn={() => listIn(listMid.current())}
                 onOut={() => listOut(listMid.current())}
               />
             ) : (

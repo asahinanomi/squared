@@ -9,12 +9,14 @@ type Props = {
   onBack: () => void
   onSquares: () => void
   onMatters: () => void
+  onAccount: () => void
+  onPrivacy: () => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 // Settings: one quiet list; each row opens its own screen.
-export function Settings({ profile, onBack, onSquares, onMatters }: Props) {
+export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onPrivacy }: Props) {
   const summary = profile
     ? [
         fromIso(profile.born).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -44,8 +46,18 @@ export function Settings({ profile, onBack, onSquares, onMatters }: Props) {
           </span>
           <Chevron dir="right" />
         </button>
+        <button className="settings-row" onClick={onAccount}>
+          <span>
+            <span className="settings-label">account</span>
+            <span className="settings-sub">sign out · delete my account</span>
+          </span>
+          <Chevron dir="right" />
+        </button>
       </div>
 
+      <div className="settings-foot-links">
+        <button onClick={onPrivacy}>privacy</button>
+      </div>
       <p className="settings-foot">squared.today</p>
     </main>
   )
