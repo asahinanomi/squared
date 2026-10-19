@@ -14,7 +14,7 @@ _Pairs with `brand-story.md` (voice & copy). This doc = look: logo, color, type,
     <rect x="7" y="7" width="86" height="86" rx="18" fill="none" stroke="#141413" stroke-width="10"/>
   </svg>
   ```
-- **Wordmark:** `squared.today` — Inter 600, letter-spacing −0.02em; render `.today` in grey **#A3A39E**. On the home screen ~22px, small and high.
+- **Wordmark:** `squared.today` — Inter 600, letter-spacing −0.02em; render `.today` in grey **#A3A39E**. On the home screen ~22px.
 - **Lockups:**
   - **Stacked** (icon above wordmark, gap ~12px) — sign-in / splash / brand moments. *(The chosen home treatment.)*
   - **Horizontal** (icon left, wordmark right, gap ~10px) — in-app header, compact spaces.
@@ -48,7 +48,7 @@ Two voices (full mapping in `brand-story.md` §9). Both free on Google Fonts.
 - **Reflective voice — Fraunces (serif).** The Google serif closest to Unmet's Denton. `font-optical-sizing: auto`. Use: the daily question, the definition, nomi's prose. Weights 400–500.
   - Question: ~34–35px on the day screen, ~28px on sign-in (under the number) · weight 450 · line-height 1.22 · letter-spacing −0.005em.
 - **System voice — Inter (sans).** Use: wordmark, UI, buttons, labels, data. Weights 400 / 500 / 600.
-  - Wordmark 22/600 on sign-in (−0.02em) · hero number 68/600 (−0.035em) · framing & body 16/400 · button 15.5/500 · links 12.5.
+  - Wordmark 22/600 on sign-in (−0.02em) · hero number 56/600 (−0.035em) · its caption 18/400 ink-soft · framing & body 16/400 · button 15.5/500 · links 12.5.
 - **Accent:** a **dotted** underline (2.5px dotted ink) under the key word in a reflective line ("Today", "meaningful") — never a solid underline.
 
 ## Background
@@ -60,7 +60,7 @@ squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, 
 - **Links / dividers:** 1px dotted hairlines.
 
 ## Layout — sign-in / home
-Three zones. **Top** — brand (stacked), small and high. **Middle** — the number as hero ("29,200", Inter 600 ~68px), its caption ("days in an 80-year life", muted 16px), then the question (Fraunces ~28px, 450, dotted "Today"). **Then** — sign-in (quiet pill) and faint links, 56px under the question; message and sign-in are one group, centred in the space under the brand. The number hits first, the question stays; brand modest; sign-in quiet.
+Three groups in one vertically centred column. **Brand** (stacked, small). 64px, then **the message** — the number as hero ("29,200", Inter 600 56px), its caption ("days in an 80-year life", ink-soft 18px), then the question (Fraunces ~28px, 450, dotted "Today"). 56px, then **sign-in** (quiet pill) and faint links. The number hits first, the question stays; brand modest; sign-in quiet.
 
 ## Keep it squared (not Unmet)
 squared shares Unmet's *type thinking* and Inter, but keeps its own skin — paper, dotted grid, wave mark, black-on-off-white. Never Unmet's lime/green. Cousins, not twins.

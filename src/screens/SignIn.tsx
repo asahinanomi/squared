@@ -14,7 +14,7 @@ export function SignIn({
 }) {
   return (
     <main className="signin">
-      {/* The brand, small and high; under it, the message and sign-in as one group. */}
+      {/* Three groups in one centred column: the brand, the message, sign-in. */}
       <header className="signin-brand">
         <Logo size={40} />
         <h1 className="wordmark">
