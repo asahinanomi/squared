@@ -32,6 +32,7 @@ import { Pie } from './screens/Pie'
 import { SCOPE_ORDER, type Scope } from './lib/pie'
 import { LifeMonths } from './screens/LifeMonths'
 import { DaysList } from './screens/DaysList'
+import { PeriodList } from './screens/PeriodList'
 import { LifeDays } from './screens/LifeDays'
 import type { Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
@@ -76,6 +77,11 @@ export default function App() {
   // The list of days sits beside the ladder too: where it was opened from, and the day it opens on.
   const [listFrom, setListFrom] = useState<Screen>('month')
   const [listFocus, setListFocus] = useState(todayIso)
+  // The list zooms too, within itself: years → months → days (→ the day). And the level it was opened at.
+  const [listRes, setListRes] = useState<Resolution>('days')
+  const [listZoomed, setListZoomed] = useState(false) // zoomed within the list since it opened
+  // The list keeps this pointed at the day in the middle of the screen, for a pinch to open on.
+  const listMid = useRef(() => todayIso())
   // A day opened from the list goes back to the list when you zoom out of it.
   const [dayFromList, setDayFromList] = useState(false)
   // Which days the pie is out of; it always opens on the whole life.
@@ -327,11 +333,35 @@ export default function App() {
     setScreenValue('setup')
   }
   // The list of days, the same way: open it on the day you were looking at, and its switch takes you back.
+  // It opens at the level that matches the squares (a life → years, a year → months, a month → days); its
+  // switch goes back where you came from, or — if you zoomed within the list — to the squares at that level.
   const toggleList = (at?: string) => {
-    if (screen === 'list') return setScreen(listFrom)
-    setListFrom(screen === 'pie' ? pieFrom : screen)
-    setListFocus(at ?? todayIso())
+    const day = at ?? todayIso()
+    if (screen === 'list') {
+      if (!listZoomed) return setScreen(listFrom)
+      if (listRes === 'days') return goMonth(day)
+      if (listRes === 'months') return goYear(Number(day.slice(0, 4)))
+      return goLife()
+    }
+    const from = screen === 'pie' ? pieFrom : screen
+    const res: Resolution = from === 'life' ? lifeRes : from === 'year' ? 'months' : 'days'
+    setListFrom(from)
+    setListRes(res)
+    setListZoomed(false)
+    setListFocus(day)
     setScreen('list')
+  }
+  const listIn = (at: string) => {
+    if (listRes === 'days') return goToday()
+    setListZoomed(true)
+    setListFocus(at)
+    setListRes(listRes === 'years' ? 'months' : 'days')
+  }
+  const listOut = (at: string) => {
+    if (listRes === 'years') return false
+    setListZoomed(true)
+    setListFocus(at)
+    setListRes(listRes === 'days' ? 'months' : 'years')
   }
   const openSettings = () => {
     if (screen !== 'settings' && screen !== 'setup' && screen !== 'matters') setSettingsFrom(screen)
@@ -355,7 +385,7 @@ export default function App() {
   const MONTH_NOTCHES = 2
   const LIFE_NOTCHES = 4
   const pinchIn = (at: Focal) => {
-    if (screen === 'list') goToday()
+    if (screen === 'list') return listIn(listMid.current())
     else if (screen === 'month') {
       if (mag >= MONTH_NOTCHES - 1) return false
       const hit = document.elementsFromPoint(at.x, at.y).find((el) => (el as HTMLElement).dataset?.iso) as HTMLElement
@@ -376,7 +406,7 @@ export default function App() {
   }
   const pinchOut = (at: Focal) => {
     if (screen === 'today') outOfDay()
-    else if (screen === 'list') setScreen(listFrom)
+    else if (screen === 'list') return listOut(listMid.current())
     else if (screen === 'month') {
       if (mag === 0) return goYear()
       const hit = document.elementsFromPoint(at.x, at.y).find((el) => (el as HTMLElement).dataset?.iso) as HTMLElement
@@ -502,20 +532,36 @@ export default function App() {
               paintedToday={!!days[todayIso()]}
             />
           ) : screen === 'list' ? (
-            <DaysList
-              days={days}
-              notes={notes}
-              born={profile?.born}
-              focus={listFocus}
-              onPick={(iso) => {
-                setDate(iso)
-                setDayFromList(true)
-                setScreen('today')
-              }}
-              onMonthShown={loadNotes}
-              onIn={goToday}
-              onOut={() => setScreen(listFrom)}
-            />
+            listRes === 'days' ? (
+              <DaysList
+                key="days"
+                mid={listMid}
+                days={days}
+                notes={notes}
+                born={profile?.born}
+                focus={listFocus}
+                onPick={(iso) => {
+                  setDate(iso)
+                  setDayFromList(true)
+                  setScreen('today')
+                }}
+                onMonthShown={loadNotes}
+                onIn={goToday}
+                onOut={() => listOut(listMid.current())}
+              />
+            ) : (
+              <PeriodList
+                key={listRes}
+                res={listRes}
+                mid={listMid}
+                days={days}
+                born={profile?.born}
+                focus={listFocus}
+                onOpen={(first) => listIn(first)}
+                onIn={() => listIn(listMid.current())}
+                onOut={listRes === 'months' ? () => listOut(listMid.current()) : undefined}
+              />
+            )
           ) : screen === 'pie' && profile ? (
             <Pie days={days} profile={profile} scope={pieScope} onScope={setPieScope} />
           ) : screen === 'year' ? (

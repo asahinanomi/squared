@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { glide, pulse } from '../lib/backToToday'
 import { isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, todayIso } from '../lib/dates'
@@ -19,8 +19,10 @@ type Props = {
   onMonthShown: (iso: string) => void
   /** Zoom in: today's square. */
   onIn: () => void
-  /** Zoom out: back to the squares you came from. */
+  /** Zoom out: the months. */
   onOut: () => void
+  /** Kept up to date with the day in the middle of the screen, so a zoom or a switch opens there. */
+  mid: MutableRefObject<() => string>
 }
 
 const WORD: Record<Paint, string> = { green: 'mattered', red: 'empty', grey: 'slipped' }
@@ -96,10 +98,10 @@ function DayCard({
   )
 }
 
-// A life, day by day: the days as a list of short cards, oldest at the top, today at the foot. A view beside the
-// pie, not a zoom level. Only a window of months is drawn — the one you opened on and a few around it — and more
+// A life, day by day: the days as a list of short cards, oldest at the top, today at the foot — the closest level
+// of the list (zoom out for months, then years), a view beside the pie. Only a window of months is drawn — the one you opened on and a few around it — and more
 // are added as you scroll toward either end, so it opens at once however far back you are.
-export function DaysList({ days, notes, born, focus, onPick, onMonthShown, onIn, onOut }: Props) {
+export function DaysList({ days, notes, born, focus, onPick, onMonthShown, onIn, onOut, mid }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const first = born ? shiftMonth(born, 0) : shiftMonth(today, -120)
@@ -159,6 +161,15 @@ export function DaysList({ days, notes, born, focus, onPick, onMonthShown, onIn,
     )
   }
 
+  mid.current = () => {
+    const el = scroller.current
+    if (!el) return at
+    const y = el.scrollTop + el.clientHeight / 2
+    for (const card of el.querySelectorAll<HTMLElement>('.day-card'))
+      if (card.offsetTop + card.offsetHeight > y) return card.dataset.iso!
+    return today
+  }
+
   // ◎: back to today, at the foot of the list (drawing its month first if it isn't on the page yet).
   const backToToday = () => {
     if (range.to < current) {
@@ -189,7 +200,7 @@ export function DaysList({ days, notes, born, focus, onPick, onMonthShown, onIn,
           </section>
         ))}
       </div>
-      <ZoomBar onIn={onIn} onOut={onOut} onRecenter={away ? backToToday : undefined} />
+      <ZoomBar onIn={onIn} onOut={onOut} onRecenter={away ? backToToday : undefined} listAt={() => mid.current()} />
     </main>
   )
 }
