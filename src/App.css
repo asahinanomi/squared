@@ -458,7 +458,7 @@
 @media (prefers-reduced-motion: reduce) { .stage { animation: none !important; } }
 
 .zoombar {
-  --zoom-ink: #55554f;
+  --zoom-ink: #2f2f2b;
   position: relative;
   isolation: isolate;
   display: flex;
@@ -521,8 +521,8 @@
 }
 @keyframes fade-in { from { opacity: 0; } }
 /* Squares · pie · list: one small capsule, like the years · months · days filter; the view showing is raised. */
-.zoombar-switch { display: flex; gap: 2px; flex-shrink: 0; padding: 3px; border-radius: 999px; background: #efefea; }
-.zoombar-switch button { width: 36px; height: 30px; display: grid; place-items: center; border-radius: 999px; color: #9a9a93; }
+.zoombar-switch { display: flex; gap: 2px; flex-shrink: 0; padding: 3px; border-radius: 999px; background: #e9e9e3; }
+.zoombar-switch button { width: 36px; height: 30px; display: grid; place-items: center; border-radius: 999px; color: #6f6f69; }
 .zoombar-switch button.is-on { background: #fff; color: var(--zoom-ink); }
 .zoombar-switch svg { width: 20px; height: 20px; }
 .zoombar-buttons { display: flex; gap: 2px; flex-shrink: 0; }
@@ -562,7 +562,7 @@
 }
 /* A soft capsule, like the years · months · days filter: the bar's one action reads as something to tap.
    Drawn inside the 44px tap area. */
-.zoombar-today::before { content: ""; position: absolute; inset: 2px 0; z-index: -1; border-radius: 999px; background: #efefea; }
+.zoombar-today::before { content: ""; position: absolute; inset: 2px 0; z-index: -1; border-radius: 999px; background: #e9e9e3; }
 .zoombar-today:active::before { background: #e6e6e0; }
 /* Just came back to today: the square pulses once, so the eye lands on it. */
 .is-pulse { animation: today-pulse 0.9s ease-out; }
@@ -572,7 +572,7 @@
 }
 
 .today-zoom {
-  --zoom-ink: #55554f;
+  --zoom-ink: #2f2f2b;
   position: fixed;
   z-index: 20;
   left: 0;
