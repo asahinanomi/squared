@@ -60,7 +60,7 @@ squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, 
 - **Links / dividers:** 1px dotted hairlines.
 
 ## Layout — sign-in / home
-Three zones. **Top** — brand (stacked), small and high. **Middle** — the number as hero ("29,200", Inter 600 ~68px), its caption ("days in an 80-year life", muted 16px), then the question (Fraunces ~28px, 450, dotted "Today"). **Bottom** — sign-in (quiet pill) and faint links, low under the thumb. The number hits first, the question stays; brand modest; sign-in quiet.
+Three zones. **Top** — brand (stacked), small and high. **Middle** — the number as hero ("29,200", Inter 600 ~68px), its caption ("days in an 80-year life", muted 16px), then the question (Fraunces ~28px, 450, dotted "Today"). **Then** — sign-in (quiet pill) and faint links, 56px under the question; message and sign-in are one group, centred in the space under the brand. The number hits first, the question stays; brand modest; sign-in quiet.
 
 ## Keep it squared (not Unmet)
 squared shares Unmet's *type thinking* and Inter, but keeps its own skin — paper, dotted grid, wave mark, black-on-off-white. Never Unmet's lime/green. Cousins, not twins.

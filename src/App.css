@@ -154,13 +154,13 @@
 .wordmark span {
   color: #a3a39e;
 }
+/* The message and sign-in, one group, centred together in the space under the brand. */
 .signin-message {
-  flex: 1;
+  margin-top: auto;
+  padding-top: 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 32px 0;
   text-align: center;
 }
 /* The hero: how many days a life holds. */
@@ -197,6 +197,7 @@
   text-underline-offset: 6px;
 }
 .signin-go {
+  margin: 56px 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;

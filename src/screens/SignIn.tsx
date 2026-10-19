@@ -14,7 +14,7 @@ export function SignIn({
 }) {
   return (
     <main className="signin">
-      {/* Three zones: the brand, small and high; the message in the middle; sign-in low, under the thumb. */}
+      {/* The brand, small and high; under it, the message and sign-in as one group. */}
       <header className="signin-brand">
         <Logo size={40} />
         <h1 className="wordmark">
