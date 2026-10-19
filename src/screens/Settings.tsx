@@ -13,13 +13,6 @@ type Props = {
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
-/** Rows that arrive in later phases: shown, quietly, but not tappable yet. */
-const SOON: [string, string][] = [
-  ['reminders', 'a gentle daily nudge to paint'],
-  ['my data', 'export & back up your squares'],
-  ['account', 'email · sign out'],
-]
-
 // Settings: one quiet list; each row opens its own screen.
 export function Settings({ profile, onBack, onSquares, onMatters }: Props) {
   const summary = profile
@@ -51,17 +44,6 @@ export function Settings({ profile, onBack, onSquares, onMatters }: Props) {
           </span>
           <Chevron dir="right" />
         </button>
-        {SOON.map(([label, sub]) => (
-          <div key={label} className="settings-row is-soon" aria-disabled="true">
-            <span>
-              <span className="settings-label">
-                {label} <span className="settings-soon">soon</span>
-              </span>
-              <span className="settings-sub">{sub}</span>
-            </span>
-            <Chevron dir="right" />
-          </div>
-        ))}
       </div>
 
       <p className="settings-foot">squared.today</p>

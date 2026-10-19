@@ -100,6 +100,7 @@
   margin: 0 0 8px;
 }
 .wordmark span { color: var(--grey-3); }
+.signin-line { margin: -16px 0 0; max-width: 300px; text-align: center; font-size: 16px; line-height: 1.45; color: var(--ink-soft); }
 .signin-idea { font-size: 15px; color: var(--grey-3); text-decoration: underline dotted #cfcfc8; text-underline-offset: 4px; }
 .idea-back { align-self: flex-start; margin: 0 0 18px -6px; }
 .signin-error { color: var(--grey-3); font-size: 15px; text-align: center; max-width: 30em; margin: 0; }
@@ -446,8 +447,8 @@
 .idea-colours { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-direction: column; gap: 6px; }
 .idea-colours li { font-size: 20px; line-height: 1.5; }
 .idea-colours .whisper-dot { width: 12px; height: 12px; margin-right: 12px; vertical-align: 1px; }
-.idea p.idea-nudge { margin-top: -10px; }
-.idea-nudge button { font: inherit; font-size: 16px; color: #9a9a93; text-align: left; text-decoration: underline dotted #cfcfc8; text-underline-offset: 4px; }
+.idea-go { margin-top: 8px; padding: 10px 18px; border-radius: 999px; font-size: 15px; white-space: nowrap; color: var(--ink); box-shadow: inset 0 0 0 var(--keyline) var(--ink); }
+.idea-go:active { transform: scale(0.98); }
 .idea p.idea-sign { font-style: italic; color: var(--ink-soft); }
 
 /* ---------- calendar ---------- */
@@ -952,18 +953,6 @@ button.settings-row:active { background: var(--grey-1); }
 .settings-label { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 500; }
 .settings-sub { font-size: 12.5px; color: #9a9a93; }
 .settings-row svg { flex: none; width: 20px; height: 20px; color: #c7c7c0; }
-.settings-row.is-soon .settings-label { color: #9a9a93; }
-.settings-row.is-soon svg { color: #dadad3; }
-.settings-soon {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #aeaea6;
-  background: #f2f2ec;
-  border-radius: 5px;
-  padding: 2px 6px;
-}
 .settings-foot { margin: auto 0 0; padding-top: 24px; text-align: center; font-size: 12px; letter-spacing: 0.04em; color: #c7c7c0; }
 
 /* ---------- what matters ---------- */
@@ -1088,7 +1077,7 @@ button.settings-row:active { background: var(--grey-1); }
   flex: 1;
   min-height: 0;
   padding: 12px 0 20px;
-  /* The pie, its legend, and the "soon" buttons at the foot (pushed down when there's room). */
+  /* The pie and its legend. */
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -1121,27 +1110,3 @@ button.settings-row:active { background: var(--grey-1); }
 .pie-dot { width: 13px; height: 13px; flex-shrink: 0; box-sizing: border-box; border-radius: 50%; border: 1.5px solid var(--ink); }
 .pie-dot.is-ahead { border-style: dashed; }
 .pie-legend-n { margin-left: auto; font-size: 14px; font-weight: 500; color: #55554f; font-variant-numeric: tabular-nums; }
-.pie-soon { margin-top: auto; padding-top: 24px; flex-shrink: 0; display: flex; gap: 10px; justify-content: center; }
-.pie-soon button,
-.pie-soon button:disabled {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 13px;
-  border: 1.5px solid #e6e6e0;
-  border-radius: 999px;
-  font-size: 12.5px;
-  color: #b6b6af;
-  opacity: 1;
-}
-.pie-soon svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.pie-soon-tag {
-  padding: 1px 5px;
-  border-radius: 4px;
-  background: #f2f2ec;
-  color: #c4c4bd;
-  font-size: 8.5px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}

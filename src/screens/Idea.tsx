@@ -48,13 +48,13 @@ export function Idea({ onMatters, onBack }: Props) {
         life, the days we have fewer than we think.
       </p>
       <p>I’ll try to make mine as green as I can. I hope squared helps you too.</p>
-      {/* A very soft invitation, not a button. */}
-      {onMatters && (
-        <p className="idea-nudge">
-          <button onClick={onMatters}>(start by naming what matters to you →)</button>
-        </p>
-      )}
       <p className="idea-sign">— nomi</p>
+      {/* The page's one action, after the letter: a keyline pill (secondary), gentle on a quiet page. */}
+      {onMatters && (
+        <button className="idea-go" onClick={onMatters}>
+          start by naming what matters to you →
+        </button>
+      )}
     </main>
   )
 }

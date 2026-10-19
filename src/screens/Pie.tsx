@@ -184,25 +184,6 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
             </li>
           ))}
         </ul>
-
-        <div className="pie-soon">
-          <button disabled>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 15V4" />
-              <path d="M8 7l4-4 4 4" />
-              <path d="M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" />
-            </svg>
-            share my pie <span className="pie-soon-tag">soon</span>
-          </button>
-          <button disabled>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 4v11" />
-              <path d="M8 11l4 4 4-4" />
-              <path d="M5 20h14" />
-            </svg>
-            download <span className="pie-soon-tag">soon</span>
-          </button>
-        </div>
       </div>
 
       <ZoomBar
