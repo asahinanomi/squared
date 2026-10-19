@@ -877,8 +877,8 @@
 .setup-total { font-size: 48px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; margin: 4px 0; font-variant-numeric: tabular-nums; }
 .setup-squares { font-size: 20px; font-weight: 500; }
 /* One calm line under the big number: one ink, one weight, one size. */
-.setup-line { margin-top: 10px; font-size: 15px; color: var(--ink); }
-.setup-seg { margin-top: 14px; }
+.setup-line { margin-top: 20px; /* the line + capsule are one group, set apart from "squares" */ font-size: 15px; color: var(--ink); }
+.setup-seg { margin-top: 8px; }
 .setup-error { margin: 0 0 12px; text-align: center; font-size: 15px; color: var(--ink-soft); }
 .setup-go:disabled { opacity: 0.35; }
 
