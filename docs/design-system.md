@@ -50,6 +50,7 @@ Two voices (full mapping in `brand-story.md` §9). Both free on Google Fonts.
   - Question: ~34–35px on the day screen, ~28px on sign-in (under the number) · weight 450 · line-height 1.22 · letter-spacing −0.005em.
 - **System voice — Inter (sans).** Use: wordmark, UI, buttons, labels, data. Weights 400 / 500 / 600.
   - Wordmark 22/600 on sign-in (−0.02em) · hero number 56/600 (−0.035em) · its caption 18/400 ink-soft · framing & body 16/400 · button 15.5/500 · links 12.5.
+- **Scale (Inter):** 12 labels & timestamps · 14 secondary · 16 body & controls · 18–20 reading text (notes, idea, privacy) · 28 screen titles · 36 the idea's title · 56 hero numbers. Weights 400 / 500 / 600 only. The wordmark (22) sits outside the scale, as a logo.
 - **Floor:** nothing you read is under 12px; inputs are at least 16px (iOS zooms smaller ones).
 - **Accent:** a **dotted** underline (2.5px dotted ink) under the key word in a reflective line ("Today", "meaningful") — never a solid underline.
 
