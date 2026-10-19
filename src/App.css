@@ -583,6 +583,8 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   mask-image: linear-gradient(to bottom, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+  /* Older items added above keep your place by hand (Safari has no scroll anchoring); stop Chrome's doing it too. */
+  overflow-anchor: none;
 }
 .ladder-scroll::-webkit-scrollbar { display: none; }
 .month-block { padding: 14px 0 10px; }
@@ -1008,9 +1010,18 @@ button.settings-row:active { background: var(--grey-1); }
 /* A life, day by day: the days as short cards, beside the pie. Colour stays in the swatch; ink on paper.
    A tap anywhere on a card opens the day (the date button is stretched over it); "more" opens it in place. */
 .days-list { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.days-scroll { flex: 1; min-height: 0; margin-top: 14px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; mask-image: linear-gradient(to bottom, transparent, #000 20px, #000 calc(100% - 20px), transparent); }
+.days-scroll { position: relative; overflow-anchor: none; flex: 1; min-height: 0; margin-top: 14px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; mask-image: linear-gradient(to bottom, transparent, #000 20px, #000 calc(100% - 20px), transparent); }
 .days-scroll::-webkit-scrollbar { display: none; }
 .days-month { padding: 14px 0 10px; }
+/* A month or a year in the list: its name, its colours as a band on its side (the same shares as its square), and
+   how many days of each. A tap anywhere zooms in on it (the name button is stretched over the card). */
+.period-card { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border-radius: 16px; background: #fff; box-shadow: inset 0 0 0 1px #ecece5; color: var(--ink); }
+.period-card:active { transform: scale(0.99); }
+.period-card.is-today { box-shadow: inset 0 0 0 1.5px var(--ink); }
+.period-card-open { align-self: flex-start; font-size: 15px; font-weight: 600; color: inherit; }
+.period-card-open::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.period-band { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: #efefea; }
+.period-counts { font-size: 13px; color: #55554f; }
 .month-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .day-card { position: relative; display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-radius: 16px; color: var(--ink); }
 .day-card.is-painted, .day-card:has(.day-card-note) { background: #fff; box-shadow: inset 0 0 0 1px #ecece5; }
