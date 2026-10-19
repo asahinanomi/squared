@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { sendFeedback } from '../lib/feedback'
+import { supabase } from '../lib/supabase'
 import { Chevron } from './Today'
 
 type Props = { onBack: () => void }
@@ -25,7 +26,9 @@ export function Feedback({ onBack }: Props) {
       <h1 className="settings-title">send feedback</h1>
       {state === 'sent' ? (
         <>
-          <p className="feedback-lede">Thank you. I read every one. — nomi</p>
+          <p className="feedback-lede">
+            {supabase ? 'Thank you. I read every one. — nomi' : 'This is a demo, so nothing was sent.'}
+          </p>
           <button className="pill feedback-send" onClick={onBack}>
             done
           </button>
