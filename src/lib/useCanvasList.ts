@@ -107,4 +107,4 @@ export function textFits(text: string, font: string, maxW: number) {
 }
 
 /** Readable text is never smaller than this: below it, a square is colour only. */
-export const MIN_TEXT_PX = 9
+export const MIN_TEXT_PX = 12

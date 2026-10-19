@@ -81,8 +81,8 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
         const y0 = b * block - top
         ctx.textAlign = 'left'
         ctx.textBaseline = 'alphabetic'
-        ctx.font = `600 11px ${FONT}`
-        ctx.fillStyle = String(year) === today.slice(0, 4) ? INK : '#c7c7c0'
+        ctx.font = `600 12px ${FONT}`
+        ctx.fillStyle = String(year) === today.slice(0, 4) ? INK : '#6f6f6a'
         ctx.fillText(String(year), 0, y0 + 12)
         const n = daysInYear(year)
         const rowFrom = Math.max(0, Math.floor((-y0 - LABEL_H) / pitch)) // first row on screen

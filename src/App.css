@@ -92,13 +92,13 @@
   border-top: 1px solid var(--grey-1);
   border-radius: 0 0 12px 12px;
   font-size: 15px;
-  color: var(--grey-3);
+  color: var(--muted);
 }
 /* Under "the idea", as quiet: a form to tell the maker what confused you (shown once its link is set). */
 .menu .menu-feedback {
   padding: 4px 18px 8px;
   font-size: 15px;
-  color: var(--grey-3);
+  color: var(--muted);
 }
 @keyframes pop {
   from {
@@ -222,11 +222,11 @@
   align-items: center;
   gap: 10px;
   font-size: 12.5px;
-  color: #8a8a82;
+  color: var(--muted);
 }
 .signin-idea {
   font-size: 12.5px;
-  color: #8a8a82;
+  color: var(--muted);
 }
 .idea-back {
   align-self: flex-start;
@@ -399,7 +399,7 @@
 }
 /* A late square's first-paint date, under the word: smaller and softer still. */
 .canvas-painted {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   letter-spacing: 0;
   opacity: 0.8;
@@ -753,7 +753,7 @@
 .privacy p.privacy-date {
   margin: -20px 0 24px;
   font-size: 13px;
-  color: var(--grey-3);
+  color: var(--muted);
 }
 .privacy-head {
   margin: 30px 0 10px;
@@ -1108,7 +1108,7 @@
   text-align: center;
   font-size: 12px;
   letter-spacing: 0.06em;
-  color: #9a9a93;
+  color: var(--muted);
 }
 .month-block.is-faint {
   padding-bottom: 40vh;
@@ -1171,10 +1171,10 @@
   overflow: hidden;
   display: grid;
   place-items: center;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   background: #eeeee8;
-  color: #9a9a93;
+  color: var(--muted);
 }
 .life-year.is-ahead {
   background: #efefea;
@@ -1346,7 +1346,7 @@
 .month-grid.is-weekdays > span {
   aspect-ratio: auto;
   text-align: center;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.06em;
   color: #55554f;
 }
@@ -1612,7 +1612,7 @@
   margin: 8px 0 0;
   font-size: 13px;
   line-height: 1.4;
-  color: var(--grey-3);
+  color: var(--muted);
 }
 .setup-label {
   display: block;
@@ -1842,7 +1842,7 @@ button.settings-row:active {
 }
 .settings-sub {
   font-size: 12.5px;
-  color: #9a9a93;
+  color: var(--muted);
 }
 .settings-row svg {
   flex: none;
@@ -1858,7 +1858,7 @@ button.settings-row:active {
 }
 .settings-foot-links button {
   font-size: 13px;
-  color: var(--grey-3);
+  color: var(--muted);
   text-decoration: underline dotted #cfcfc8;
   text-underline-offset: 4px;
 }
@@ -1981,7 +1981,7 @@ button.settings-row:active {
   border-radius: 10px;
   padding: 11px 14px;
   font: inherit;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.3;
   color: var(--ink);
   text-align: left;
@@ -2057,9 +2057,9 @@ button.settings-row:active {
   margin: auto 0 0;
   padding-top: 28px;
   text-align: center;
-  font-size: 11.5px;
+  font-size: 12px;
   line-height: 1.4;
-  color: #c7c7c0;
+  color: var(--muted);
 }
 
 /* ---------- a life pie ---------- */
@@ -2240,7 +2240,7 @@ button.settings-row:active {
 }
 .day-card-painted {
   font-size: 12px;
-  color: #9a9a93;
+  color: var(--muted);
 }
 .day-card-note {
   margin: 2px 0 0;
@@ -2264,7 +2264,7 @@ button.settings-row:active {
 }
 .day-card-time {
   font-size: 12px;
-  color: #9a9a93;
+  color: var(--muted);
 }
 .day-card-more {
   position: relative;
@@ -2293,7 +2293,7 @@ button.settings-row:active {
   padding: 4px 13px;
   border-radius: 999px;
   font-size: 12.5px;
-  color: #9a9a93;
+  color: var(--muted);
   white-space: nowrap;
 }
 .seg button:focus:not(:focus-visible) {
