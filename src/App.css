@@ -156,17 +156,25 @@
   display: block;
 }
 .signin-line strong {
-  margin-top: 2px;
+  margin-top: 10px;
+  font-size: 21px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
   font-weight: 600;
   color: var(--ink);
 }
 .signin-line {
   margin: -16px 0 0;
-  max-width: 300px;
+  max-width: 340px;
   text-align: center;
-  font-size: 15px;
-  line-height: 1.55;
-  color: var(--ink-soft);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+/* "Today", the day the question is about, underlined in ink. */
+.signin-line u {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
 }
 .signin-links {
   display: flex;
@@ -191,13 +199,14 @@
 }
 .pill-google {
   width: auto;
-  padding: 0 30px 0 12px;
-  height: 64px;
-  font-size: 21px;
+  gap: 12px;
+  padding: 0 26px 0 10px;
+  height: 54px;
+  font-size: 18px;
 }
 .g-badge {
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: #fff;
   display: grid;

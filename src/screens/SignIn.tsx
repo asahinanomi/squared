@@ -14,7 +14,7 @@ export function SignIn({
 }) {
   return (
     <main className="signin">
-      <Logo size={64} />
+      <Logo size={48} />
       <h1 className="wordmark">
         squared<span>.today</span>
       </h1>
@@ -23,7 +23,9 @@ export function SignIn({
         <span>A life of 80 years is about 29,200 days.</span>
         <span>Each one is a square.</span>
         <span>Paint one a day:</span>
-        <strong>did I spend Today meaningfully?</strong>
+        <strong>
+          did I spend <u>Today</u> meaningfully?
+        </strong>
       </p>
       <button className="pill pill-google" onClick={onSignIn}>
         <span className="g-badge">
