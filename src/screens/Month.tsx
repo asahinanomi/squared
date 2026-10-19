@@ -33,6 +33,8 @@ type Props = {
   zoomed?: boolean
   /** Pinched in once more: one row per day, to read — its word, the latest note, when it was painted. */
   reading?: boolean
+  /** Pinched in once more: the rows open into a journal — every note in full, with when it was written. */
+  journal?: boolean
   notes?: Notes
   /** A month came into view while reading: load its notes. */
   onMonthShown?: (iso: string) => void
@@ -42,6 +44,13 @@ type Props = {
 
 const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const WORD: Record<Paint, string> = { green: 'mattered', red: 'empty', grey: 'slipped' }
+
+/** When a note was written: the time, or the date too if it was written on another day. */
+function writtenWhen(at: string, iso: string) {
+  const d = new Date(at)
+  const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()
+  return isoDate(d) === iso ? time : `${plainDate(isoDate(d))} · ${time}`
+}
 
 /** Every day of the month containing `iso`, first to last. */
 const monthDays = (iso: string) => monthCells(iso).filter((d): d is string => !!d)
@@ -65,6 +74,7 @@ export function Month({
   onOut,
   zoomed = false,
   reading = false,
+  journal = false,
   notes = {},
   onMonthShown,
   anchor,
@@ -104,10 +114,14 @@ export function Month({
     if (!target) return
     const r = target.getBoundingClientRect()
     el.scrollTop += r.top + r.height / 2 - anchor.y
-  }, [zoomed, reading]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [zoomed, reading, journal]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <main className={'month' + (zoomed ? ' is-zoomed' : '') + (reading ? ' is-reading' : '')}>
+    <main
+      className={
+        'month' + (zoomed ? ' is-zoomed' : '') + (reading ? ' is-reading' : '') + (journal ? ' is-journal' : '')
+      }
+    >
       <div className="ladder-head">
         <button
           aria-label="Previous month"
@@ -169,10 +183,17 @@ export function Month({
                               <sup>{suffix}</sup>
                               {day && <span className="month-row-word"> · {WORD[day.color]}</span>}
                             </span>
-                            {note && <span className="month-row-note">{note}</span>}
                             {day?.backfilled && day.paintedOn && (
                               <span className="month-row-painted">painted {plainDate(day.paintedOn)}</span>
                             )}
+                            {journal
+                              ? notes[iso]?.map((n) => (
+                                  <span key={n.id} className="month-row-entry">
+                                    <span className="month-row-time">{writtenWhen(n.writtenAt, iso)}</span>
+                                    {n.body}
+                                  </span>
+                                ))
+                              : note && <span className="month-row-note">{note}</span>}
                           </span>
                         </button>
                       </li>

@@ -330,7 +330,7 @@ export default function App() {
 
   // Pinch: out walks the ladder outward (today → month → year → a life in years → months → days);
   // in enlarges the squares where there's more to read (month, a life in months or days), else steps in.
-  const MONTH_NOTCHES = 3 // 7 to a row · 3 to a row · one row per day, to read
+  const MONTH_NOTCHES = 4 // 7 to a row · 3 to a row · one row per day, to read · the full journal
   const LIFE_NOTCHES = 4
   const pinchIn = (at: Focal) => {
     if (screen === 'month') {
@@ -532,6 +532,7 @@ export default function App() {
               onOut={() => goYear()}
               zoomed={mag > 0}
               reading={mag > 1}
+              journal={mag > 2}
               notes={notes}
               onMonthShown={loadNotes}
               anchor={monthAnchor}
