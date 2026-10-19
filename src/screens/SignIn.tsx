@@ -20,7 +20,7 @@ export function SignIn({
       </h1>
       {/* What squared is, for someone who's never seen it: the number, the square, the habit, the question. */}
       <p className="signin-line">
-        <span>A life of 95 years is about 34,700 days.</span>
+        <span>A life of 80 years is about 29,200 days.</span>
         <span>Each one is a square.</span>
         <span>Paint one a day:</span>
         <strong>did I spend Today meaningfully?</strong>
