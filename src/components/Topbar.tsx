@@ -1,19 +1,20 @@
 import { useState } from 'react'
 import { Logo } from './Logo'
 import { Chevron } from '../screens/Today'
-import { FEEDBACK_URL } from '../lib/config'
 
 type Props = {
   onHome: () => void
   onCalendar: () => void
   onIdea: () => void
+  /** "send feedback": a note to the maker. */
+  onFeedback: () => void
   onSettings: () => void
   onSignOut: () => void
   /** On a zoom level: one level out, labelled with where it lands ("2026", "a life"). Replaces the logo. */
   back?: { label: string; onBack: () => void }
 }
 
-export function Topbar({ onHome, onCalendar, onIdea, onSettings, onSignOut, back }: Props) {
+export function Topbar({ onHome, onCalendar, onIdea, onFeedback, onSettings, onSignOut, back }: Props) {
   const [open, setOpen] = useState(false)
   const go = (fn: () => void) => () => {
     setOpen(false)
@@ -51,11 +52,9 @@ export function Topbar({ onHome, onCalendar, onIdea, onSettings, onSignOut, back
             <button className="menu-idea" onClick={go(onIdea)}>
               the idea
             </button>
-            {FEEDBACK_URL && (
-              <a className="menu-feedback" href={FEEDBACK_URL} target="_blank" rel="noopener noreferrer">
-                send feedback
-              </a>
-            )}
+            <button className="menu-feedback" onClick={go(onFeedback)}>
+              send feedback
+            </button>
           </nav>
         </div>
       )}

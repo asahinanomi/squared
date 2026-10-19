@@ -32,6 +32,7 @@ import { Pie } from './screens/Pie'
 import { SCOPE_ORDER, type Scope } from './lib/pie'
 import { LifeMonths } from './screens/LifeMonths'
 import { DaysList } from './screens/DaysList'
+import { Feedback } from './screens/Feedback'
 import { PeriodList } from './screens/PeriodList'
 import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
@@ -40,7 +41,18 @@ import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import './App.css'
 
-type Screen = 'today' | 'month' | 'year' | 'life' | 'pie' | 'list' | 'idea' | 'setup' | 'settings' | 'matters'
+type Screen =
+  | 'today'
+  | 'month'
+  | 'year'
+  | 'life'
+  | 'pie'
+  | 'list'
+  | 'idea'
+  | 'setup'
+  | 'settings'
+  | 'matters'
+  | 'feedback'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
 const LADDER: Screen[] = ['today', 'month', 'year', 'life']
 
@@ -76,6 +88,7 @@ export default function App() {
   const [pieFrom, setPieFrom] = useState<Screen>('life')
   // The list of days sits beside the ladder too: where it was opened from, and the day it opens on.
   const [listFrom, setListFrom] = useState<Screen>('month')
+  const [feedbackFrom, setFeedbackFrom] = useState<Screen>('today')
   const [listFocus, setListFocus] = useState(todayIso)
   // The list zooms too, within itself: years → months → days (→ the day). And the level it was opened at.
   const [listRes, setListRes] = useState<Resolution>('days')
@@ -454,7 +467,7 @@ export default function App() {
             : '')
         }
       >
-        {screen !== 'setup' && screen !== 'settings' && screen !== 'matters' && (
+        {screen !== 'setup' && screen !== 'settings' && screen !== 'matters' && screen !== 'feedback' && (
           <Topbar
             onHome={goToday}
             onCalendar={() => goMonth()}
@@ -466,6 +479,10 @@ export default function App() {
                   : undefined
             }
             onIdea={() => setScreen('idea')}
+            onFeedback={() => {
+              setFeedbackFrom(screen)
+              setScreenValue('feedback')
+            }}
             onSettings={openSettings}
             onSignOut={signOut}
           />
@@ -526,6 +543,8 @@ export default function App() {
                 else if (afterSetup !== 'settings') goToday()
               }}
             />
+          ) : screen === 'feedback' ? (
+            <Feedback onBack={() => setScreenValue(feedbackFrom)} />
           ) : screen === 'settings' ? (
             <Settings
               profile={profile}
