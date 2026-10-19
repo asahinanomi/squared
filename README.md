@@ -49,7 +49,7 @@ The UI in these screens should be kept; better treatments are welcome.
 
 Shades (from the phase 2 design): green `#6E9B7B`, grey `#8E8E87`, red `#C06A62`; a backfilled day (painted later than the day itself) shows one shade lighter in the zoomed-out views: `#A7C4B0`, `#AEAEA6`, `#D9A8A3`.
 
-In the app the meanings read, in the brand story's words: **green** "yes — I spent it on what matters." · **red** "no — I was busy, but none of it mattered." · **grey** "I don't know — I wasn't paying attention." Short labels, everywhere space is tight (the word in the square, legends, filters): **mattered** · **empty** · **slipped**. They show in the "meaningfully" sheet, and as a quiet grey line (led by a small dot of that paint) under the palette each time a color is dipped (it fades after a few seconds, or as soon as painting starts).
+In the app the meanings read, in the brand story's words: **green** "yes — I spent it on what matters." · **red** "no — I was busy, but none of it mattered." · **grey** "I don't know — I wasn't paying attention." Short labels, everywhere space is tight (the word in the square, legends, filters): **mattered** · **empty** · **slipped**. Always listed green, red, grey. They show in the "meaningfully" sheet, and as a quiet grey line (led by a small dot of that paint) under the palette each time a color is dipped (it fades after a few seconds, or as soon as painting starts).
 
 ## The why note
 

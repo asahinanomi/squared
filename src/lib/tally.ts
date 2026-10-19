@@ -27,7 +27,9 @@ export function bands(days: Days, from: string, to: string, today: string, born?
     }
   }
   const out: Band[] = []
-  for (const p of PAINTS)
+  // The bands keep their own stacking: green, grey, red.
+  for (const id of ['green', 'grey', 'red'] as const) {
+    const p = PAINTS.find((x) => x.id === id)!
     for (const [suffix, fill] of [
       ['', p.hex],
       [':tint', p.tint],
@@ -35,6 +37,7 @@ export function bands(days: Days, from: string, to: string, today: string, born?
       const n = counts.get(p.id + suffix) ?? 0
       if (n) out.push({ fill, share: n / lived })
     }
+  }
   return out
 }
 
