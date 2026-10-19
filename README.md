@@ -132,8 +132,8 @@ Each new note is also emailed to the maker; the table keeps them all either way.
 
 1. **Resend** (resend.com, free): sign up with the address the emails should go to, and create an API key.
 2. **Supabase → Edge Functions → Deploy a new function → Via editor**: name it `feedback-email`, paste `supabase/functions/feedback-email/index.ts`, deploy.
-3. **Edge Functions → Secrets**: add `RESEND_API_KEY` (the key) and `FEEDBACK_TO` (the address to email). Optional: `FEEDBACK_FROM`, once a domain is verified in Resend (until then it sends from Resend's test sender, which can only email the Resend account's own address).
-4. **Database → Webhooks → Create**: table `feedback`, event *Insert*, type *Supabase Edge Functions*, function `feedback-email`.
+3. **Edge Functions → Secrets**: add `RESEND_API_KEY` (the key), `FEEDBACK_TO` (the address to email) and `FEEDBACK_SECRET` (any long random text). In the function's **Settings**, turn **Verify JWT** off — the secret is the check instead (projects on Supabase's newer API keys reject the old JWT anyway). Optional: `FEEDBACK_FROM`, once a domain is verified in Resend (until then it sends from Resend's test sender, which can only email the Resend account's own address).
+4. **Integrations → Database Webhooks → Create** (enable webhooks first if asked): table `feedback`, event *Insert*, type *Supabase Edge Functions*, function `feedback-email`, and an HTTP header `x-feedback-secret` with the same text as `FEEDBACK_SECRET`.
 5. Send yourself a note from the app to check.
 
 The address lives only in Supabase secrets, never in the (public) code. The sign-in screen also carries a quiet "the idea" link under the Google button, for someone new; opened from there it has a "‹ sign in" back arrow and no link on to what matters.

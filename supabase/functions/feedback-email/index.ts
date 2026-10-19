@@ -1,12 +1,18 @@
 // squared.today — email each new feedback note to the maker.
 // Called by a Supabase Database Webhook on INSERT into public.feedback (see README → "Feedback by email").
 // Secrets (Dashboard → Edge Functions → Secrets): RESEND_API_KEY, FEEDBACK_TO (where the email goes),
+// FEEDBACK_SECRET (any long random text; the webhook sends it as an `x-feedback-secret` header), and
 // optionally FEEDBACK_FROM (a verified Resend sender; defaults to Resend's test sender).
+// The function's own "Verify JWT" is off: the shared secret is the check instead.
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
 type Payload = { type: string; table: string; record: { user_id: string; body: string; created_at: string } }
 
 Deno.serve(async (req) => {
+  // Only the database webhook knows this (it sends it as a header); anyone else is turned away.
+  const secret = Deno.env.get('FEEDBACK_SECRET')
+  if (!secret || req.headers.get('x-feedback-secret') !== secret) return new Response('unauthorized', { status: 401 })
+
   const { type, table, record } = (await req.json()) as Payload
   if (type !== 'INSERT' || table !== 'feedback') return new Response('ignored', { status: 200 })
 
