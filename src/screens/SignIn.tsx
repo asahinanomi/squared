@@ -23,9 +23,11 @@ export function SignIn({
         <span>A life of 80 years is about 29,200 days.</span>
         <span>Each one is a square.</span>
         <span>Paint one a day:</span>
-        <strong>
-          did I spend <u>Today</u> meaningfully?
-        </strong>
+      </p>
+      <p className="signin-question">
+        did I spend <u>Today</u>
+        <br />
+        meaningfully?
       </p>
       <button className="pill pill-google" onClick={onSignIn}>
         <span className="g-badge">
