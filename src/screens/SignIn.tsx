@@ -4,10 +4,12 @@ import { Logo } from '../components/Logo'
 export function SignIn({
   onSignIn,
   onIdea,
+  onPrivacy,
   error,
 }: {
   onSignIn: () => void
   onIdea: () => void
+  onPrivacy: () => void
   error?: string | null
 }) {
   return (
@@ -26,9 +28,14 @@ export function SignIn({
       </button>
       {error && <p className="signin-error">sign-in didn't finish: {error}</p>}
       {/* For someone new: why squared exists, before signing in. */}
-      <button className="signin-idea" onClick={onIdea}>
-        the idea
-      </button>
+      <div className="signin-links">
+        <button className="signin-idea" onClick={onIdea}>
+          the idea
+        </button>
+        <button className="signin-idea" onClick={onPrivacy}>
+          privacy
+        </button>
+      </div>
     </main>
   )
 }
