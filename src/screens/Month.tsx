@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import {
   fromIso,
@@ -11,8 +11,8 @@ import {
   shortWeekday,
   todayIso,
 } from '../lib/dates'
-import type { Days } from '../lib/days'
-import type { Notes } from '../lib/notes'
+import type { Day, Days } from '../lib/days'
+import type { Note, Notes } from '../lib/notes'
 import { useBackToToday } from '../lib/backToToday'
 import { paintHex, paintTint, type Paint } from '../lib/paints'
 import { useLadderScroll } from '../lib/useLadderScroll'
@@ -31,12 +31,11 @@ type Props = {
   onOut?: () => void
   /** Pinched in: bigger day squares (3 to a row) that print their full date. */
   zoomed?: boolean
-  /** Pinched in once more: one row per day, to read — its word, the latest note, when it was painted. */
-  reading?: boolean
-  /** Pinched in once more: the rows open into a journal — every note in full, with when it was written. */
-  journal?: boolean
+  /** The days as a list of short cards, to read (switched from the bar, beside the pie). */
+  list?: boolean
+  onList?: () => void
   notes?: Notes
-  /** A month came into view while reading: load its notes. */
+  /** A month came into view in the list: load its notes. */
   onMonthShown?: (iso: string) => void
   /** The day under the fingers when the zoom changed, kept where it was on screen. */
   anchor?: { iso?: string; y: number }
@@ -50,6 +49,73 @@ function writtenWhen(at: string, iso: string) {
   const d = new Date(at)
   const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()
   return isoDate(d) === iso ? time : `${plainDate(isoDate(d))} · ${time}`
+}
+
+/**
+ * One day in the list: a short card — its colour, date and word, when a late one was first painted, and the
+ * latest note cut to two lines. A tap anywhere opens the day (as a square does); "more" opens the card in place
+ * to show every note in full, when there's more to read.
+ */
+function DayCard({
+  iso,
+  day,
+  notes = [],
+  today,
+  onPick,
+}: {
+  iso: string
+  day?: Day
+  notes?: Note[]
+  today: string
+  onPick: (iso: string) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const [clipped, setClipped] = useState(false)
+  const preview = useRef<HTMLParagraphElement>(null)
+  const latest = notes.at(-1)
+  useLayoutEffect(() => {
+    const el = preview.current
+    setClipped(!!el && el.scrollHeight > el.clientHeight + 1)
+  }, [latest?.body])
+  const { weekday, monthDay, suffix } = shortDateParts(iso)
+  const more = notes.length > 1 || clipped
+  return (
+    <article className={'day-card' + (day ? ' is-painted' : '') + (iso === today ? ' is-today' : '')} data-iso={iso}>
+      <span
+        className="day-card-swatch"
+        style={day ? { background: day.backfilled ? paintTint(day.color) : paintHex(day.color) } : undefined}
+        aria-hidden="true"
+      />
+      <div className="day-card-text">
+        {/* The whole card is this button (stretched over it); "more" sits above it. */}
+        <button className="day-card-open" aria-label={`Open ${longDate(iso)}`} onClick={() => onPick(iso)}>
+          {weekday}, {monthDay}
+          <sup>{suffix}</sup>
+          {day && <span className="day-card-word"> · {WORD[day.color]}</span>}
+        </button>
+        {day?.backfilled && day.paintedOn && (
+          <span className="day-card-painted">painted {plainDate(day.paintedOn)}</span>
+        )}
+        {open
+          ? notes.map((n) => (
+              <p key={n.id} className="day-card-note is-full">
+                <span className="day-card-time">{writtenWhen(n.writtenAt, iso)}</span>
+                {n.body}
+              </p>
+            ))
+          : latest && (
+              <p ref={preview} className="day-card-note">
+                {latest.body}
+              </p>
+            )}
+        {more && (
+          <button className="day-card-more" aria-expanded={open} onClick={() => setOpen(!open)}>
+            {open ? 'less ⌃' : notes.length > 1 ? `more · ${notes.length} notes ⌄` : 'more ⌄'}
+          </button>
+        )}
+      </div>
+    </article>
+  )
 }
 
 /** Every day of the month containing `iso`, first to last. */
@@ -73,8 +139,8 @@ export function Month({
   onIn,
   onOut,
   zoomed = false,
-  reading = false,
-  journal = false,
+  list = false,
+  onList,
   notes = {},
   onMonthShown,
   anchor,
@@ -90,13 +156,13 @@ export function Month({
     focusBack: monthsBetween(start, current),
   })
 
-  const toToday = useBackToToday(scroller, '.month-day.is-today, .month-row.is-today')
+  const toToday = useBackToToday(scroller, '.month-day.is-today, .day-card.is-today')
 
   // Reading: the month in view and its neighbours bring their notes.
   useEffect(() => {
-    if (!reading || !onMonthShown) return
+    if (!list || !onMonthShown) return
     for (const n of [-1, 0, 1]) if (shiftMonth(visible, n) <= current) onMonthShown(shiftMonth(visible, n))
-  }, [reading, visible]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [list, visible]) // eslint-disable-line react-hooks/exhaustive-deps
   const months = Array.from({ length: back + 1 }, (_, i) => shiftMonth(current, i - back))
   const step = (n: number) => {
     const target = shiftMonth(visible, n)
@@ -114,14 +180,10 @@ export function Month({
     if (!target) return
     const r = target.getBoundingClientRect()
     el.scrollTop += r.top + r.height / 2 - anchor.y
-  }, [zoomed, reading, journal]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [zoomed, list]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <main
-      className={
-        'month' + (zoomed ? ' is-zoomed' : '') + (reading ? ' is-reading' : '') + (journal ? ' is-journal' : '')
-      }
-    >
+    <main className={'month' + (zoomed && !list ? ' is-zoomed' : '') + (list ? ' is-list' : '')}>
       <div className="ladder-head">
         <button
           aria-label="Previous month"
@@ -135,7 +197,7 @@ export function Month({
           <Chevron dir="right" />
         </button>
       </div>
-      <div className="month-grid is-weekdays" aria-hidden="true" hidden={zoomed}>
+      <div className="month-grid is-weekdays" aria-hidden="true" hidden={zoomed || list}>
         {WEEKDAYS.map((d, i) => (
           <span key={i}>{d}</span>
         ))}
@@ -152,53 +214,15 @@ export function Month({
         {months.map((m) => (
           <section key={m} className="month-block" data-key={m}>
             <div className="ladder-label">{monthTitle(m)}</div>
-            {reading ? (
-              <ol className="month-rows">
+            {list ? (
+              <ol className="month-list">
                 {monthDays(m)
                   .filter((iso) => iso <= today && (!born || iso >= born))
-                  .map((iso) => {
-                    const day = days[iso]
-                    const note = notes[iso]?.at(-1)?.body.split('\n')[0]
-                    const { weekday, monthDay, suffix } = shortDateParts(iso)
-                    return (
-                      <li key={iso}>
-                        <button
-                          className={'month-row' + (day ? ' is-painted' : '') + (iso === today ? ' is-today' : '')}
-                          aria-label={longDate(iso)}
-                          data-iso={iso}
-                          onClick={() => onPick(iso)}
-                        >
-                          <span
-                            className="month-row-swatch"
-                            style={
-                              day
-                                ? { background: day.backfilled ? paintTint(day.color) : paintHex(day.color) }
-                                : undefined
-                            }
-                            aria-hidden="true"
-                          />
-                          <span className="month-row-text">
-                            <span className="month-row-date">
-                              {weekday}, {monthDay}
-                              <sup>{suffix}</sup>
-                              {day && <span className="month-row-word"> · {WORD[day.color]}</span>}
-                            </span>
-                            {day?.backfilled && day.paintedOn && (
-                              <span className="month-row-painted">painted {plainDate(day.paintedOn)}</span>
-                            )}
-                            {journal
-                              ? notes[iso]?.map((n) => (
-                                  <span key={n.id} className="month-row-entry">
-                                    <span className="month-row-time">{writtenWhen(n.writtenAt, iso)}</span>
-                                    {n.body}
-                                  </span>
-                                ))
-                              : note && <span className="month-row-note">{note}</span>}
-                          </span>
-                        </button>
-                      </li>
-                    )
-                  })}
+                  .map((iso) => (
+                    <li key={iso}>
+                      <DayCard iso={iso} day={days[iso]} notes={notes[iso]} today={today} onPick={onPick} />
+                    </li>
+                  ))}
               </ol>
             ) : (
               <div className="month-grid">
@@ -238,7 +262,12 @@ export function Month({
         </section>
       </div>
 
-      <ZoomBar onIn={onIn} onOut={onOut} onRecenter={toToday.away ? toToday.back : undefined} />
+      <ZoomBar
+        onIn={onIn}
+        onOut={onOut}
+        onRecenter={toToday.away ? toToday.back : undefined}
+        list={onList && { on: list, toggle: onList }}
+      />
     </main>
   )
 }

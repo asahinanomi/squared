@@ -519,6 +519,7 @@
   animation: fade-in 0.2s ease-out;
 }
 @keyframes fade-in { from { opacity: 0; } }
+.zoombar-views { display: flex; gap: 2px; flex-shrink: 0; }
 .zoombar-view { width: 44px; height: 44px; display: grid; place-items: center; flex-shrink: 0; color: var(--zoom-ink); }
 .zoombar-view svg { width: 26px; height: 26px; }
 .zoombar-buttons { display: flex; gap: 2px; flex-shrink: 0; }
@@ -728,26 +729,29 @@
 .month.is-zoomed .month-day { border-radius: 11px; }
 .month.is-zoomed .month-num { font-size: 30px; }
 .month.is-zoomed .month-wd { margin-top: 6px; font-size: 12px; letter-spacing: 0.01em; }
-/* Reading: one row per day — its colour, its date and word, the latest note's first line, and when a
-   late one was first painted. Ink on paper; the colour stays in the swatch. Unpainted days stay one quiet line. */
-.month-rows { list-style: none; margin: 0; padding: 0; }
-.month-rows li + li { border-top: 1px solid #ecece5; }
-.month-row { display: flex; align-items: flex-start; gap: 14px; width: 100%; padding: 12px 4px; text-align: left; color: var(--ink); }
-.month-row:active { background: rgba(20, 20, 19, 0.03); }
-.month-row-swatch { flex-shrink: 0; width: 26px; height: 26px; border-radius: 7px; box-shadow: inset 0 0 0 1.5px #d9d9d2; }
-.month-row.is-painted .month-row-swatch { box-shadow: none; }
-.month-row.is-today .month-row-swatch { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--ink); }
-.month-row-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; padding-top: 3px; }
-.month-row-date { font-size: 15px; font-weight: 600; }
-.month-row-date sup { font-size: 0.6em; line-height: 0; margin-left: 1px; }
-.month-row-word { font-weight: 400; color: #55554f; }
-.month-row:not(.is-painted) .month-row-date { font-weight: 400; color: #9a9a93; }
-.month-row-note { font-size: 14px; color: #55554f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.month-row-painted { font-size: 12px; color: #9a9a93; }
-/* Journal: every note in full, oldest first, each with when it was written. */
-.month-row-entry { display: flex; flex-direction: column; gap: 2px; margin-top: 6px; font-size: 15px; line-height: 1.45; color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; }
-.month-row-time { font-size: 12px; color: #9a9a93; }
-.month.is-journal .month-row-text { flex: 1; }
+/* The month as a list: one short card per day, to read. Colour stays in the swatch; ink on paper.
+   A tap anywhere opens the day (the date button is stretched over the card); "more" opens it in place. */
+.month.is-list .month-block.is-faint { display: none; }
+.month.is-list .ladder-scroll::after { content: ""; display: block; height: 30vh; }
+.month-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.day-card { position: relative; display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-radius: 16px; color: var(--ink); }
+.day-card.is-painted, .day-card:has(.day-card-note) { background: #fff; box-shadow: inset 0 0 0 1px #ecece5; }
+.day-card:not(.is-painted):not(:has(.day-card-note)) { padding-top: 6px; padding-bottom: 6px; }
+.day-card:active { transform: scale(0.99); }
+.day-card-swatch { flex-shrink: 0; width: 26px; height: 26px; border-radius: 7px; box-shadow: inset 0 0 0 1.5px #d9d9d2; }
+.day-card.is-painted .day-card-swatch { box-shadow: none; }
+.day-card.is-today .day-card-swatch { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--ink); }
+.day-card-text { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; flex: 1; padding-top: 3px; }
+.day-card-open { font-size: 15px; font-weight: 600; text-align: left; color: inherit; }
+.day-card-open::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.day-card-open sup { font-size: 0.6em; line-height: 0; margin-left: 1px; }
+.day-card-word { font-weight: 400; color: #55554f; }
+.day-card:not(.is-painted) .day-card-open { font-weight: 400; color: #9a9a93; }
+.day-card-painted { font-size: 12px; color: #9a9a93; }
+.day-card-note { margin: 2px 0 0; font-size: 14px; line-height: 1.45; color: #55554f; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
+.day-card-note.is-full { display: flex; flex-direction: column; gap: 2px; -webkit-line-clamp: none; font-size: 15px; color: var(--ink); white-space: pre-wrap; }
+.day-card-time { font-size: 12px; color: #9a9a93; }
+.day-card-more { position: relative; z-index: 1; margin-top: 2px; padding: 6px 10px 6px 0; font-size: 13px; color: #55554f; text-decoration: underline; text-decoration-color: #c9c9c2; text-underline-offset: 3px; }
 .month-wd { max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: clip; margin-top: 2px; font-size: 8px; font-weight: 500; letter-spacing: 0.02em; opacity: 0.7; }
 
 /* ---------- confirm alert ---------- */

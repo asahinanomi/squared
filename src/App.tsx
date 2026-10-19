@@ -66,6 +66,8 @@ export default function App() {
   // Pinched in within a level (bigger squares, with labels): a notch, 0 = the level's own size.
   // Never remembered: every move to another level starts back at 0.
   const [mag, setMag] = useState(0)
+  // The month as a list of days, to read (a view, beside the pie — not a zoom level).
+  const [monthList, setMonthList] = useState(false)
   const [focal, setFocal] = useState<Focal | undefined>()
   const [monthAnchor, setMonthAnchor] = useState<{ iso?: string; y: number } | undefined>()
   // Where "how many squares?" returns to: a life, when it was asked for on the way there.
@@ -269,6 +271,7 @@ export default function App() {
     const b = LADDER.indexOf(next)
     setMotion(a < 0 || b < 0 || a === b ? null : b > a ? 'out' : 'in')
     setMag(0)
+    if (next !== 'month' && next !== 'today') setMonthList(false) // open a day from the list, come back to the list
     setScreenValue(next)
   }
 
@@ -330,10 +333,11 @@ export default function App() {
 
   // Pinch: out walks the ladder outward (today → month → year → a life in years → months → days);
   // in enlarges the squares where there's more to read (month, a life in months or days), else steps in.
-  const MONTH_NOTCHES = 4 // 7 to a row · 3 to a row · one row per day, to read · the full journal
+  const MONTH_NOTCHES = 2
   const LIFE_NOTCHES = 4
   const pinchIn = (at: Focal) => {
-    if (screen === 'month') {
+    if (screen === 'month' && monthList) goToday()
+    else if (screen === 'month') {
       if (mag >= MONTH_NOTCHES - 1) return false
       const hit = document.elementsFromPoint(at.x, at.y).find((el) => (el as HTMLElement).dataset?.iso) as HTMLElement
       setMonthAnchor({ iso: hit?.dataset.iso, y: at.y })
@@ -354,7 +358,7 @@ export default function App() {
   const pinchOut = (at: Focal) => {
     if (screen === 'today') goMonth()
     else if (screen === 'month') {
-      if (mag === 0) return goYear()
+      if (mag === 0 || monthList) return goYear()
       const hit = document.elementsFromPoint(at.x, at.y).find((el) => (el as HTMLElement).dataset?.iso) as HTMLElement
       setMonthAnchor({ iso: hit?.dataset.iso, y: at.y })
       setMag(mag - 1)
@@ -531,8 +535,8 @@ export default function App() {
               onIn={goToday}
               onOut={() => goYear()}
               zoomed={mag > 0}
-              reading={mag > 1}
-              journal={mag > 2}
+              list={monthList}
+              onList={() => setMonthList(!monthList)}
               notes={notes}
               onMonthShown={loadNotes}
               anchor={monthAnchor}
