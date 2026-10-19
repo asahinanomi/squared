@@ -22,7 +22,7 @@ Everything squared relies on outside its own code, what it's for, and where its 
 | Service | What it does for squared | Settings & secrets |
 |---|---|---|
 | **GitHub** — `asahinanomi/squared` | The code. `main` is what's live. | github.com/asahinanomi/squared |
-| **Vercel** | Hosts squared.today; deploys `main` on every push, and a preview for every branch / PR (previews run as the demo — they have no Supabase keys). | Vercel → project `squared` → Settings → Environment Variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (production) |
+| **Vercel** | Hosts squared.today; deploys `main` on every push, and a preview for every branch / PR (previews run as the demo — they have no Supabase keys). | Vercel → project `squared` → Settings → Environment Variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_GOOGLE_CLIENT_ID` (production) |
 | **Supabase** | The account (Google sign-in), the database (days, notes, profile, what matters, feedback — each person sees only their own rows), the SQL migrations in `supabase/migrations/`, and the `feedback-email` edge function. | supabase.com → project → SQL Editor (migrations), Authentication → Providers (Google), Edge Functions → Secrets, Integrations → Database Webhooks |
 | **Google Cloud** | "continue with Google": the OAuth client Supabase signs people in with. | Google Cloud Console → APIs & Services → Credentials (client ID & secret, also entered in Supabase → Authentication → Providers → Google) |
 | **Resend** | Emails each new feedback note to the maker. | resend.com → API Keys. In Supabase → Edge Functions → Secrets: `RESEND_API_KEY`, `FEEDBACK_TO` (the address), `FEEDBACK_SECRET` (the shared secret the feedback webhook sends as `x-feedback-secret`), optional `FEEDBACK_FROM` |
