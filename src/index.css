@@ -7,7 +7,7 @@
   --grey-2: #c4c4bf;
   --grey-3: #8f8f8a;
   --grey-4: #6f6f6a; /* deepest grey: readable with white text (5:1) */
-  --dot: #c8c8c3;
+  --dot: #dddcd6; /* the paper's dots: a texture you barely notice, never competing with text */
   --bg: var(--paper);
 
   --font: 'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
