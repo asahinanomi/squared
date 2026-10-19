@@ -85,20 +85,27 @@ function DayCard({
         {day?.backfilled && day.paintedOn && (
           <span className="day-card-painted">painted {plainDate(day.paintedOn)}</span>
         )}
-        {open
-          ? notes.map((n) => (
-              <p key={n.id} className="day-card-note is-full">
-                <span className="day-card-time">{writtenWhen(n.writtenAt, iso)}</span>
-                {n.body}
-              </p>
-            ))
-          : latest && <p className="day-card-note">{latest.body}</p>}
-        {more && (
-          <button className="day-card-more" aria-expanded={open} onClick={() => setOpen(!open)}>
-            {open ? 'less ⌃' : notes.length > 1 ? `more · ${notes.length} notes ⌄` : 'more ⌄'}
+        {!open && latest && <p className="day-card-note">{latest.body}</p>}
+        {more && !open && (
+          <button className="day-card-more" aria-expanded={false} onClick={() => setOpen(true)}>
+            {notes.length > 1 ? `more · ${notes.length} notes ⌄` : 'more ⌄'}
           </button>
         )}
       </div>
+      {/* Open, the notes take the card's full width, each its own block: its time, then its words. */}
+      {open && (
+        <div className="day-card-notes">
+          {notes.map((n) => (
+            <div key={n.id} className="day-card-entry">
+              <span className="day-card-time">{writtenWhen(n.writtenAt, iso)}</span>
+              <p className="day-card-note is-full">{n.body}</p>
+            </div>
+          ))}
+          <button className="day-card-more" aria-expanded={true} onClick={() => setOpen(false)}>
+            less ⌃
+          </button>
+        </div>
+      )}
     </article>
   )
 }
