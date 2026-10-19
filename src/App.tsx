@@ -7,7 +7,7 @@ import { ViewSwitch } from './components/ZoomBar'
 import { Settings } from './screens/Settings'
 import { WhatMatters } from './screens/WhatMatters'
 import { QUESTION } from './lib/config'
-import { todayIso } from './lib/dates'
+import { paintedFresh, todayIso } from './lib/dates'
 import { fetchAllDays, saveColor, type Days } from './lib/days'
 import { mockDays } from './lib/mock'
 import {
@@ -161,10 +161,11 @@ export default function App() {
       let before: Days[string]
       setDays((d) => {
         before = d[date]
-        // A first paint counts as backfilled unless it's today's (the database decides for good).
+        // A first paint is fresh on the day or until noon the next day (the database decides for good);
+        // repaints keep the first paint's shade and date.
         return {
           ...d,
-          [date]: { backfilled: date !== todayIso(), ...d[date], color },
+          [date]: { backfilled: !paintedFresh(date), paintedOn: todayIso(), ...d[date], color },
         }
       })
       saveColor(date, color).catch((e) => {

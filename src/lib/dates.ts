@@ -18,6 +18,20 @@ export function addDays(iso: string, n: number): string {
   return isoDate(d)
 }
 
+/** "Oct 21, 2026" */
+export const plainDate = (iso: string) =>
+  fromIso(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+
+/**
+ * A first paint is fresh (full colour) on the day itself, or on the next morning, until noon:
+ * still an honest memory. Later, it is painted from further away and takes the lighter shade.
+ * The database decides for good (migration 0009); this is the same rule for the optimistic paint.
+ */
+export function paintedFresh(date: string, now = new Date()): boolean {
+  const today = isoDate(now)
+  return date === today || (date === addDays(today, -1) && now.getHours() < 12)
+}
+
 function ordinal(n: number): string {
   const s = ['th', 'st', 'nd', 'rd']
   const v = n % 100

@@ -13,7 +13,11 @@ export function mockDays(): Days {
     const r = rand()
     if (r < 0.18) continue // a day left blank
     const color: Paint = r < 0.62 ? 'green' : r < 0.86 ? 'grey' : 'red'
-    out[addDays(today, -i)] = { color, backfilled: rand() < (i > 60 ? 0.5 : 0.15) }
+    const backfilled = rand() < (i > 60 ? 0.5 : 0.15)
+    const date = addDays(today, -i)
+    // Backfilled days were first painted some days later (never after today).
+    const later = addDays(date, 2 + (i % 40))
+    out[date] = { color, backfilled, paintedOn: backfilled ? (later < today ? later : today) : date }
   }
   return out
 }

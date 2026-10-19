@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { brushTip } from '../lib/brush'
+import { plainDate } from '../lib/dates'
 import { paintHex, type Paint } from '../lib/paints'
 
 type Props = {
@@ -7,6 +8,8 @@ type Props = {
   saved?: Paint
   /** Paint currently on the brush. */
   loaded: Paint | null
+  /** First painted later, on this date: shown small under the word, like a journal entry's date. */
+  paintedOn?: string
   onDryBrush: () => void
   onFilled: (p: Paint) => void
 }
@@ -26,7 +29,7 @@ function brushCursor(tip: string) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 4 36, crosshair`
 }
 
-export function PaintCanvas({ saved, loaded, onDryBrush, onFilled }: Props) {
+export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled }: Props) {
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const covered = useRef(new Uint8Array(GRID * GRID))
@@ -194,6 +197,7 @@ export function PaintCanvas({ saved, loaded, onDryBrush, onFilled }: Props) {
         {!touched && !settling && (
           <span className={'canvas-word' + (saved ? ' is-painted' : '')} aria-hidden="true">
             {saved ? WORD[saved] : 'to paint'}
+            {saved && paintedOn && <small className="canvas-painted">painted {plainDate(paintedOn)}</small>}
           </span>
         )}
       </div>
