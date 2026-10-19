@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
+import { useLayoutEffect, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { glide, pulse } from '../lib/backToToday'
 import { fromIso, isoDate, monthTitle, todayIso } from '../lib/dates'
@@ -20,6 +20,8 @@ type Props = {
   onOut?: () => void
   /** Kept up to date with the day in the middle of the screen, so a zoom or a switch opens there. */
   mid: MutableRefObject<() => string>
+  /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */
+  head?: ReactNode
 }
 
 const WORDS: [Paint, string][] = [
@@ -94,7 +96,7 @@ function PeriodCard({
 
 // A life, month by month (or year by year): the zoomed-out levels of the list. Every month — or year — from birth
 // to now, oldest at the top, as cards with their colour band and counts. Few enough to draw all at once.
-export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid }: Props) {
+export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid, head }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const first = born ? shiftMonth(born, 0) : shiftMonth(today, -120)
@@ -149,9 +151,11 @@ export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid }:
 
   return (
     <main className="days-list">
-      <div className="life-head">
-        <h1 className="life-title">{res === 'years' ? 'a life, year by year' : 'a life, month by month'}</h1>
-      </div>
+      {head ?? (
+        <div className="life-head">
+          <h1 className="life-title">a life</h1>
+        </div>
+      )}
       <div className="days-scroll" ref={scroller} onScroll={onScroll}>
         {res === 'years' ? (
           <ol className="month-list is-periods">{years.map((y) => card(y, y, `${y}-01-01`, `${y}-12-31`))}</ol>

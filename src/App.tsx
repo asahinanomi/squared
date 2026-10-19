@@ -34,7 +34,7 @@ import { LifeMonths } from './screens/LifeMonths'
 import { DaysList } from './screens/DaysList'
 import { PeriodList } from './screens/PeriodList'
 import { LifeDays } from './screens/LifeDays'
-import type { Resolution } from './components/LifeHead'
+import { LifeHead, type Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
@@ -357,6 +357,13 @@ export default function App() {
     setListFocus(at)
     setListRes(listRes === 'years' ? 'months' : 'days')
   }
+  // The capsule under the life's title jumps straight to a level of the list, where you are.
+  const listTo = (r: Resolution) => {
+    setListZoomed(true)
+    setListFocus(listMid.current())
+    setListRes(r)
+  }
+  const listHead = profile && <LifeHead profile={profile} current={listRes} onPick={listTo} />
   const listOut = (at: string) => {
     if (listRes === 'years') return false
     setListZoomed(true)
@@ -536,6 +543,7 @@ export default function App() {
               <DaysList
                 key="days"
                 mid={listMid}
+                head={listHead}
                 days={days}
                 notes={notes}
                 born={profile?.born}
@@ -554,6 +562,7 @@ export default function App() {
                 key={listRes}
                 res={listRes}
                 mid={listMid}
+                head={listHead}
                 days={days}
                 born={profile?.born}
                 focus={listFocus}
