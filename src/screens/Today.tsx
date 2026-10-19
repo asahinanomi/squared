@@ -199,6 +199,7 @@ export function Today(props: Props) {
               <PaintCanvas
                 key={`${date}:${day?.color ?? ''}`}
                 saved={day?.color}
+                paintedOn={day?.backfilled ? day.paintedOn : undefined}
                 loaded={loaded}
                 onDryBrush={onDryBrush}
                 onFilled={onFilled}
