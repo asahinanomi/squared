@@ -31,7 +31,7 @@ export function Idea({ onMatters, onBack }: Props) {
       </p>
       <p>
         the hard part wasn’t the bad days. it was the busy, even productive days I spent on things that didn’t matter;
-        or even worse — days I didn’t even notice them go.
+        or even worse — days slipped by that I didn’t even notice.
       </p>
       <p>squared asks one thing each day: did I spend Today meaningfully?</p>
       <ul className="idea-colours">
