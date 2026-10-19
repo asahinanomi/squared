@@ -132,7 +132,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
             ctx.clip()
             ctx.textAlign = 'center'
             ctx.textBaseline = 'middle'
-            ctx.fillStyle = ahead ? '#bdbdb6' : day && !day.backfilled ? '#fff' : '#24241f'
+            ctx.fillStyle = ahead ? '#bdbdb6' : '#24241f' // ink on every square, fresh or late, as on the month
             const pad = cell * 0.08
             ctx.font = `600 ${Math.round(cell * 0.32)}px ${FONT}`
             const ny = withDate ? y + cell * 0.42 : y + cell / 2
@@ -214,6 +214,9 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
     if (i >= daysInYear(year)) return
     const iso = isoDate(new Date(year, 0, 1 + i))
     if (iso < born || iso >= end) return
+    // Big enough to show its number, there's no doubt which day it is: open it, as on the month.
+    // Tiny squares (and days ahead) show the date first.
+    if (cell >= NUM_MIN && iso <= today) return onPick(iso)
     setPicked(iso)
   }
 
