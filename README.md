@@ -76,7 +76,8 @@ In the app the meanings read, in the brand story's words: **green** "yes — I s
 | **Keyline** (2px ink outline, no fill) | A secondary, neutral action beside or after the main one. | cancel, add new note |
 | **Dashed, on white** | An empty slot in a list, waiting to be filled (white with a dashed edge, like future day squares). | + add (what matters) |
 | **Faded keyline + "soon"** | Not built yet; not tappable. | share my pie, download |
-| **Text link** | Quiet navigation, not an action. | today (zoom bar), the dotted "meaningful", back arrows |
+| **Text link** | Quiet navigation, not an action. | the dotted "meaningful", back arrows |
+| **Soft capsule** | The bar's one action: light grey fill (#efefea), ink text, no outline — the same look as the years · months · days filter. | today (zoom bar) |
 | **Segmented control** | Switching between views of the same content. | years · months · days; whole life · days I lived · painted only |
 
 Width and size:

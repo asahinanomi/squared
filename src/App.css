@@ -522,7 +522,7 @@
 .zoombar-views { display: flex; gap: 2px; flex-shrink: 0; }
 .zoombar-view { width: 44px; height: 44px; display: grid; place-items: center; flex-shrink: 0; color: var(--zoom-ink); }
 .zoombar-view svg { width: 26px; height: 26px; }
-.zoombar-buttons { display: flex; gap: 2px; flex-shrink: 0; }
+.zoombar-buttons { display: flex; gap: 0; flex-shrink: 0; }
 .zoombar-buttons button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
 .zoombar-buttons button:disabled { opacity: 0.25; }
 .zoombar-buttons svg { width: 26px; height: 26px; }
@@ -533,14 +533,16 @@
   top: 6px;
   height: 44px;
   transform: translateX(-50%);
-  padding: 0 6px;
+  padding: 0 12px;
   color: var(--zoom-ink);
   font-size: 14px;
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1.5px;
+  isolation: isolate;
 }
+/* A soft capsule, like the years · months · days filter: the bar's one action reads as something to tap.
+   Drawn inside the 44px tap area. */
+.zoombar-today::before { content: ""; position: absolute; inset: 7px 0; z-index: -1; border-radius: 999px; background: #efefea; }
+.zoombar-today:active::before { background: #e6e6e0; }
 /* Just came back to today: the square pulses once, so the eye lands on it. */
 .is-pulse { animation: today-pulse 0.9s ease-out; }
 @keyframes today-pulse {
