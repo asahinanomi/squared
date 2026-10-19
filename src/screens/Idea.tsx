@@ -2,9 +2,9 @@ import { paintHex, type Paint } from '../lib/paints'
 import { Chevron } from './Today'
 
 const COLOURS: [Paint, string][] = [
-  ['green', 'mattered — yes, I spent it on what matters.'],
-  ['red', 'empty — no, I was busy, but none of it mattered.'],
-  ['grey', 'slipped — I don’t know, I wasn’t paying attention.'],
+  ['green', 'yes, I spent it on what matters.'],
+  ['red', 'no, I was busy, but none of it mattered.'],
+  ['grey', 'I don’t know… I wasn’t paying attention.'],
 ]
 
 type Props = {
