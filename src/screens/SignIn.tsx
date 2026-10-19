@@ -14,13 +14,15 @@ export function SignIn({
 }) {
   return (
     <main className="signin">
-      <Logo size={96} />
+      <Logo size={64} />
       <h1 className="wordmark">
         squared<span>.today</span>
       </h1>
-      {/* What squared is, in one line, for someone who's never seen it. */}
+      {/* What squared is, for someone who's never seen it: the number, the square, the habit, the question. */}
       <p className="signin-line">
-        Paint one square a day:
+        <span>A life of 95 years is about 34,700 days.</span>
+        <span>Each one is a square.</span>
+        <span>Paint one a day:</span>
         <strong>did I spend Today meaningfully?</strong>
       </p>
       <button className="pill pill-google" onClick={onSignIn}>
