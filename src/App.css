@@ -151,6 +151,11 @@
 .wordmark span {
   color: var(--grey-3);
 }
+.signin-line strong {
+  display: block;
+  font-weight: 600;
+  color: var(--ink);
+}
 .signin-line {
   margin: -16px 0 0;
   max-width: 300px;

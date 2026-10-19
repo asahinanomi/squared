@@ -19,7 +19,10 @@ export function SignIn({
         squared<span>.today</span>
       </h1>
       {/* What squared is, in one line, for someone who's never seen it. */}
-      <p className="signin-line">Paint one square a day: did I spend Today meaningfully?</p>
+      <p className="signin-line">
+        Paint one square a day:
+        <strong>did I spend Today meaningfully?</strong>
+      </p>
       <button className="pill pill-google" onClick={onSignIn}>
         <span className="g-badge">
           <GoogleG />
