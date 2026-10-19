@@ -29,7 +29,7 @@
   height: 44px;
   margin-left: -8px;
   padding-right: 8px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
 }
 .back-btn svg {
@@ -91,13 +91,13 @@
   padding: 12px 18px 8px;
   border-top: 1px solid var(--grey-1);
   border-radius: 0 0 12px 12px;
-  font-size: 15px;
+  font-size: 16px;
   color: var(--muted);
 }
 /* Under "the idea", as quiet: a form to tell the maker what confused you (shown once its link is set). */
 .menu .menu-feedback {
   padding: 4px 18px 8px;
-  font-size: 15px;
+  font-size: 16px;
   color: var(--muted);
 }
 @keyframes pop {
@@ -212,7 +212,7 @@
   border-radius: 999px;
   background: #fff;
   border: 1.5px solid #e2e2db;
-  font-size: 15.5px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--ink);
 }
@@ -221,11 +221,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--muted);
 }
 .signin-idea {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--muted);
 }
 .idea-back {
@@ -233,8 +233,8 @@
   margin: 0 0 18px -6px;
 }
 .signin-error {
-  color: var(--grey-3);
-  font-size: 15px;
+  color: var(--muted);
+  font-size: 14px;
   text-align: center;
   max-width: 30em;
   margin: 18px 0 0;
@@ -288,7 +288,7 @@
   width: 100%;
 }
 .day-label {
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.01em;
   min-width: 15em;
@@ -388,7 +388,7 @@
   align-content: center;
   gap: 3px;
   pointer-events: none;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.01em;
   color: #a8a8a1;
@@ -458,7 +458,7 @@
 .whisper {
   min-height: 1.4em;
   margin: 6px 0 0;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.4;
   color: var(--ink-soft);
   text-align: center;
@@ -497,7 +497,7 @@
   margin-bottom: 12px; /* 24px clear of the first note, so a tap on the toggle never lands on it */
 }
 .notes-count {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--ink-soft);
 }
 .notes-toggle {
@@ -506,7 +506,7 @@
   gap: 6px;
   padding: 7px 14px;
   border-radius: 999px;
-  font-size: 15px;
+  font-size: 16px;
   color: var(--ink);
   box-shadow: inset 0 0 0 var(--keyline) var(--ink);
 }
@@ -559,7 +559,7 @@
 .note-text {
   display: block;
   margin: 0;
-  font-size: 19px;
+  font-size: 18px;
   line-height: 1.5;
   color: var(--ink);
   white-space: pre-wrap;
@@ -610,7 +610,7 @@
 }
 .why-label {
   display: block;
-  font-size: 19px;
+  font-size: 18px;
   color: var(--ink-soft);
   margin-bottom: 12px;
 }
@@ -622,7 +622,7 @@
   resize: none;
   line-height: 1.45;
   font: inherit;
-  font-size: 19px;
+  font-size: 18px;
   color: var(--ink);
   border: 0;
   border-bottom: 1.5px solid var(--grey-1);
@@ -668,7 +668,7 @@
 }
 .why-error {
   margin: 12px 0 0;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.4;
   color: var(--ink-soft);
 }
@@ -697,8 +697,8 @@
 }
 .idea-title {
   margin: 0 0 28px;
-  font-size: clamp(34px, 10vw, 44px);
-  font-weight: 650;
+  font-size: 36px;
+  font-weight: 600;
   letter-spacing: -0.035em;
 }
 .idea p {
@@ -732,7 +732,7 @@
   margin-top: 8px;
   padding: 10px 18px;
   border-radius: 999px;
-  font-size: 15px;
+  font-size: 16px;
   white-space: nowrap;
   color: var(--ink);
   box-shadow: inset 0 0 0 var(--keyline) var(--ink);
@@ -747,12 +747,12 @@
 /* Privacy: the idea page's paper, a size smaller (it's for reading closely, not once). */
 .privacy p,
 .privacy li {
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.55;
 }
 .privacy p.privacy-date {
   margin: -20px 0 24px;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
 }
 .privacy-head {
@@ -1116,7 +1116,7 @@
 }
 .month-block.is-faint .ladder-label,
 .year-block.is-faint .ladder-label {
-  color: #c9c9c2;
+  color: var(--faint);
 }
 
 /* ---------- a life, in years ---------- */
@@ -1144,11 +1144,11 @@
   position: static;
   margin-left: 8px;
   padding: 5px 11px;
-  font-size: 13px;
+  font-size: 14px;
 }
 .life-title {
   margin: 0;
-  font-size: 27px;
+  font-size: 28px;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1;
@@ -1172,13 +1172,13 @@
   display: grid;
   place-items: center;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   background: #eeeee8;
   color: var(--muted);
 }
 .life-year.is-ahead {
   background: #efefea;
-  color: #bfbfb8;
+  color: var(--faint);
   font-weight: 600;
 }
 .life-year.is-current {
@@ -1195,7 +1195,7 @@
   text-shadow: 0 0 3px rgba(255, 255, 255, 0.65);
 }
 .life-year.is-blank .life-year-name {
-  color: #9a9a93;
+  color: var(--muted);
   text-shadow: none;
 }
 .life .zoombar {
@@ -1233,7 +1233,7 @@
   border-radius: 999px;
   background: var(--ink);
   color: #fff;
-  font-size: 15px;
+  font-size: 14px;
   white-space: nowrap;
   box-shadow: 0 6px 24px rgba(20, 20, 19, 0.2);
   animation: chip-in 0.18s ease-out;
@@ -1275,11 +1275,11 @@
   font-size: 14px;
   font-weight: 600;
   background: #eeeee8; /* lived, nothing painted */
-  color: #9a9a93;
+  color: var(--muted);
 }
 .year-month.is-ahead {
   background: #efefea;
-  color: #bfbfb8;
+  color: var(--faint);
 }
 .year-month.is-before {
   background: transparent;
@@ -1287,7 +1287,7 @@
 }
 .year-block.is-faint .year-month.is-ahead {
   background: #f1f1ec;
-  color: #c7c7c0;
+  color: var(--faint);
   font-size: 12px;
 }
 .year-month.is-current {
@@ -1316,7 +1316,7 @@
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
 }
 .year-month.is-blank .year-month-name {
-  color: #9a9a93;
+  color: var(--muted);
   text-shadow: none;
 }
 .month-grid {
@@ -1334,7 +1334,7 @@
   place-items: center;
   font-size: 12px;
   font-weight: 500;
-  color: #cbcbc4;
+  color: var(--faint);
 }
 .month-grid.is-weekdays {
   margin: 12px 0 0;
@@ -1348,7 +1348,7 @@
   text-align: center;
   font-size: 12px;
   letter-spacing: 0.06em;
-  color: #55554f;
+  color: var(--ink-soft);
 }
 .ladder-head {
   display: flex;
@@ -1382,7 +1382,7 @@
   line-height: 1;
   background: #fff;
   border: 1.5px dashed #b0b0a8;
-  color: #9a9a93;
+  color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
 .month-day.is-painted {
@@ -1420,7 +1420,7 @@
   border-radius: 11px;
 }
 .month.is-zoomed .month-num {
-  font-size: 30px;
+  font-size: 28px;
 }
 .month.is-zoomed .month-wd {
   margin-top: 6px;
@@ -1460,8 +1460,8 @@
 }
 .confirm-title {
   margin: 0;
-  font-size: 21px;
-  font-weight: 650;
+  font-size: 20px;
+  font-weight: 600;
   letter-spacing: -0.01em;
 }
 .confirm-body {
@@ -1526,13 +1526,13 @@
   margin: 0 auto 22px;
 }
 .sheet-title {
-  font-size: 32px;
-  font-weight: 650;
+  font-size: 28px;
+  font-weight: 600;
   letter-spacing: -0.03em;
   margin: 0 0 12px;
 }
 .sheet-body {
-  font-size: 19px;
+  font-size: 18px;
   line-height: 1.5;
   color: var(--ink-soft);
   margin: 0 0 24px;
@@ -1598,7 +1598,7 @@
 }
 .setup-title {
   margin: 0;
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.15;
@@ -1610,7 +1610,7 @@
 }
 .setup-hint {
   margin: 8px 0 0;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.4;
   color: var(--muted);
 }
@@ -1683,8 +1683,8 @@
   height: 44px;
   border-radius: 9px;
   background: #f2f2ec;
-  font-size: 22px;
-  color: #55554f;
+  font-size: 24px;
+  color: var(--ink-soft);
 }
 .setup-stepper button:disabled {
   opacity: 0.4;
@@ -1714,11 +1714,11 @@
   text-align: center;
 }
 .setup-thats {
-  font-size: 15px;
-  color: #55554f;
+  font-size: 16px;
+  color: var(--ink-soft);
 }
 .setup-total {
-  font-size: 48px;
+  font-size: 56px;
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -1732,7 +1732,7 @@
 /* One calm line under the big number: one ink, one weight, one size. */
 .setup-line {
   margin-top: 20px; /* the line + capsule are one group, set apart from "squares" */
-  font-size: 15px;
+  font-size: 16px;
   color: var(--ink);
 }
 .setup-seg {
@@ -1741,7 +1741,7 @@
 .setup-error {
   margin: 0 0 12px;
   text-align: center;
-  font-size: 15px;
+  font-size: 14px;
   color: var(--ink-soft);
 }
 .setup-go:disabled {
@@ -1760,7 +1760,7 @@
 }
 .settings-title {
   margin: 10px 0 0;
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -1769,7 +1769,7 @@
 .feedback-lede {
   margin: 10px 0 0;
   max-width: 340px;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.45;
   color: var(--ink-soft);
 }
@@ -1792,7 +1792,7 @@
   box-shadow: inset 0 0 0 1.5px var(--grey-3);
 }
 .feedback-input::placeholder {
-  color: #bdbdb6;
+  color: var(--faint);
 }
 .feedback-error {
   margin: 10px 0 0;
@@ -1841,14 +1841,14 @@ button.settings-row:active {
   font-weight: 500;
 }
 .settings-sub {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--muted);
 }
 .settings-row svg {
   flex: none;
   width: 20px;
   height: 20px;
-  color: #c7c7c0;
+  color: var(--faint);
 }
 .settings-foot-links {
   margin: auto 0 0;
@@ -1857,7 +1857,7 @@ button.settings-row:active {
   justify-content: center;
 }
 .settings-foot-links button {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
   text-decoration: underline dotted #cfcfc8;
   text-underline-offset: 4px;
@@ -1911,7 +1911,7 @@ button.settings-row:active {
   text-align: center;
   font-size: 12px;
   letter-spacing: 0.04em;
-  color: #c7c7c0;
+  color: var(--faint);
 }
 
 /* ---------- what matters ---------- */
@@ -1934,7 +1934,7 @@ button.settings-row:active {
 .matters-lede {
   margin: 10px 0 0;
   max-width: 340px;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.45;
   color: var(--ink-soft);
 }
@@ -1994,7 +1994,7 @@ button.settings-row:active {
   outline: none;
 }
 .matters-input::placeholder {
-  color: #bdbdb6;
+  color: var(--faint);
 }
 .matters-list .swipe {
   border-radius: 10px;
@@ -2022,7 +2022,7 @@ button.settings-row:active {
   place-items: center;
   touch-action: none;
   cursor: grab;
-  color: #b5b5ae;
+  color: var(--faint);
 }
 .matters-row.is-moving .matters-grip {
   cursor: grabbing;
@@ -2042,7 +2042,7 @@ button.settings-row:active {
   border: 1.5px dashed #b0b0a8;
   border-radius: 10px;
   padding: 10px 14px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--grey-4);
 }
 .matters-add span {
@@ -2104,7 +2104,7 @@ button.settings-row:active {
   padding: 6px 14px;
   border-radius: 999px;
   background: #efefea;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--ink);
 }
@@ -2115,7 +2115,7 @@ button.settings-row:active {
 }
 .days-only span[aria-hidden] {
   font-weight: 400;
-  color: #55554f;
+  color: var(--ink-soft);
   margin-left: 2px;
 }
 /* A month or a year in the list: its name, its colours as a band on its side (the same shares as its square), and
@@ -2139,7 +2139,7 @@ button.settings-row:active {
 }
 .period-card-open {
   align-self: flex-start;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: inherit;
 }
@@ -2157,8 +2157,9 @@ button.settings-row:active {
   background: #efefea;
 }
 .period-counts {
-  font-size: 13px;
-  color: #55554f;
+  font-size: 14px;
+  text-wrap: balance;
+  color: var(--ink-soft);
 }
 .month-list {
   list-style: none;
@@ -2214,7 +2215,7 @@ button.settings-row:active {
   padding-top: 3px;
 }
 .day-card-open {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   text-align: left;
   color: inherit;
@@ -2232,11 +2233,11 @@ button.settings-row:active {
 }
 .day-card-word {
   font-weight: 400;
-  color: #55554f;
+  color: var(--ink-soft);
 }
 .day-card:not(.is-painted) .day-card-open {
   font-weight: 400;
-  color: #9a9a93;
+  color: var(--muted);
 }
 .day-card-painted {
   font-size: 12px;
@@ -2244,9 +2245,9 @@ button.settings-row:active {
 }
 .day-card-note {
   margin: 2px 0 0;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.45;
-  color: #55554f;
+  color: var(--ink-soft);
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -2258,7 +2259,7 @@ button.settings-row:active {
   flex-direction: column;
   gap: 2px;
   -webkit-line-clamp: none;
-  font-size: 15px;
+  font-size: 16px;
   color: var(--ink);
   white-space: pre-wrap;
 }
@@ -2271,8 +2272,8 @@ button.settings-row:active {
   z-index: 1;
   margin-top: 2px;
   padding: 6px 10px 6px 0;
-  font-size: 13px;
-  color: #55554f;
+  font-size: 14px;
+  color: var(--ink-soft);
   text-decoration: underline;
   text-decoration-color: #c9c9c2;
   text-underline-offset: 3px;
@@ -2292,7 +2293,7 @@ button.settings-row:active {
 .seg button {
   padding: 4px 13px;
   border-radius: 999px;
-  font-size: 12.5px;
+  font-size: 14px;
   color: var(--muted);
   white-space: nowrap;
 }
@@ -2349,7 +2350,7 @@ button.settings-row:active {
   font-family: inherit;
 }
 .pie-label-n {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   fill: #55554f;
 }
@@ -2367,7 +2368,7 @@ button.settings-row:active {
   gap: 13px;
 }
 .pie-legend li {
-  font-size: 15px;
+  font-size: 16px;
   transition: opacity 0.2s;
 }
 .pie-legend-row {
@@ -2397,14 +2398,14 @@ button.settings-row:active {
   opacity: 0.3;
 }
 .pie-pick.is-totals {
-  color: #9a9a93;
+  color: var(--muted);
   animation: none;
 }
 .pie-pick {
   margin: 16px 0 -12px;
   text-align: center;
   font-size: 14px;
-  color: #55554f;
+  color: var(--ink-soft);
   animation: fade-in 0.2s ease-out;
 }
 .pie-pick button {
@@ -2430,6 +2431,6 @@ button.settings-row:active {
   margin-left: auto;
   font-size: 14px;
   font-weight: 500;
-  color: #55554f;
+  color: var(--ink-soft);
   font-variant-numeric: tabular-nums;
 }
