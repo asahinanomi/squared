@@ -136,19 +136,25 @@ export default function App() {
       .catch((e) => console.error('Could not load days', e))
   }, [userId])
 
-  // Notes load a month at a time, as you visit days in it.
+  // Notes load a month at a time, as you visit days in it (or read past them on the month).
   const notesLoaded = useRef(new Set<string>())
+  const loadNotes = useCallback(
+    (iso: string) => {
+      const m = iso.slice(0, 7)
+      if (!userId || notesLoaded.current.has(m)) return
+      notesLoaded.current.add(m)
+      fetchMonthNotes(iso)
+        .then((n) => n && setNotes((all) => ({ ...all, ...n })))
+        .catch((e) => {
+          notesLoaded.current.delete(m)
+          console.error('Could not load notes', e)
+        })
+    },
+    [userId],
+  )
   useEffect(() => {
-    const m = date.slice(0, 7)
-    if (!userId || notesLoaded.current.has(m)) return
-    notesLoaded.current.add(m)
-    fetchMonthNotes(date)
-      .then((n) => n && setNotes((all) => ({ ...all, ...n })))
-      .catch((e) => {
-        notesLoaded.current.delete(m)
-        console.error('Could not load notes', e)
-      })
-  }, [userId, date])
+    loadNotes(date)
+  }, [loadNotes, date])
 
   useEffect(() => {
     document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'
@@ -324,7 +330,7 @@ export default function App() {
 
   // Pinch: out walks the ladder outward (today → month → year → a life in years → months → days);
   // in enlarges the squares where there's more to read (month, a life in months or days), else steps in.
-  const MONTH_NOTCHES = 2
+  const MONTH_NOTCHES = 3 // 7 to a row · 3 to a row · one row per day, to read
   const LIFE_NOTCHES = 4
   const pinchIn = (at: Focal) => {
     if (screen === 'month') {
@@ -525,6 +531,9 @@ export default function App() {
               onIn={goToday}
               onOut={() => goYear()}
               zoomed={mag > 0}
+              reading={mag > 1}
+              notes={notes}
+              onMonthShown={loadNotes}
               anchor={monthAnchor}
             />
           )}
