@@ -1566,6 +1566,12 @@
   flex-direction: column;
   gap: 22px;
 }
+.setup-hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--grey-3);
+}
 .setup-label {
   display: block;
   font-size: 14px;
