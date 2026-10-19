@@ -718,6 +718,9 @@
 .idea-colours li {
   font-size: 20px;
   line-height: 1.5;
+  /* A wrapped line lines up with the text, not the dot (12px dot + 12px gap). */
+  padding-left: 24px;
+  text-indent: -24px;
 }
 .idea-colours .whisper-dot {
   width: 12px;
