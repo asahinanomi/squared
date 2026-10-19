@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
-import { paintHex } from '../lib/paints'
+import { paintHex, WORD } from '../lib/paints'
 import { lifeSlices, SCOPE_ORDER, type Scope, type Slice, type SliceId } from '../lib/pie'
 import type { Profile } from '../lib/profile'
 
@@ -19,9 +19,7 @@ type Props = {
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 const LABEL: Record<SliceId, string> = {
-  green: 'mattered',
-  red: 'empty',
-  grey: 'slipped',
+  ...WORD,
   unpainted: 'unpainted',
   ahead: 'ahead',
 }

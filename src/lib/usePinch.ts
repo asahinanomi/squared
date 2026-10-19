@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 export type Focal = { x: number; y: number }
 /** Returns false when there's nothing further that way (the view springs back). */
-export type PinchHandler = (at: Focal) => boolean | void
+type PinchHandler = (at: Focal) => boolean | void
 
 type Handlers = { onIn?: PinchHandler; onOut?: PinchHandler }
 

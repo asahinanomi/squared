@@ -10,7 +10,7 @@ export type Why = { note?: Note; draft?: string; error?: string; n?: number }
 type Row = { id: string; date: string; body: string; written_at: string }
 const toNote = (r: Row): Note => ({ id: r.id, date: r.date, body: r.body, writtenAt: r.written_at })
 
-export function groupByDay(list: Note[]): Notes {
+function groupByDay(list: Note[]): Notes {
   const out: Notes = {}
   for (const n of [...list].sort((a, b) => a.writtenAt.localeCompare(b.writtenAt))) (out[n.date] ??= []).push(n)
   return out

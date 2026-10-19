@@ -5,7 +5,7 @@ import type { Profile } from '../lib/profile'
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
-export type Unit = 'days' | 'months' | 'years'
+type Unit = 'days' | 'months' | 'years'
 
 /**
  * The life glass: an hourglass whose sand is your life — the top holds the squares left, the bottom

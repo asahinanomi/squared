@@ -4,7 +4,7 @@ import { glide, pulse } from '../lib/backToToday'
 import { isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, todayIso } from '../lib/dates'
 import type { Day, Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
-import { paintHex, paintTint, type Paint } from '../lib/paints'
+import { paintHex, paintTint, WORD, type Paint } from '../lib/paints'
 import { monthsBetween, shiftMonth } from './Month'
 
 type Props = {
@@ -30,7 +30,6 @@ type Props = {
   onAll?: () => void
 }
 
-const WORD: Record<Paint, string> = { green: 'mattered', red: 'empty', grey: 'slipped' }
 const WORD_OF: Record<Paint | 'unpainted', string> = { ...WORD, unpainted: 'unpainted' }
 /** About what two lines of a card's note hold on a phone. */
 const PREVIEW_CHARS = 80

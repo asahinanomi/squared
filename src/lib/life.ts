@@ -20,7 +20,7 @@ export function addYears(iso: string, n: number): string {
 }
 
 /** Full years lived on `today`. */
-export function age(born: string, today: string): number {
+function age(born: string, today: string): number {
   const years = Number(today.slice(0, 4)) - Number(born.slice(0, 4))
   return today.slice(5) < born.slice(5) ? years - 1 : years
 }

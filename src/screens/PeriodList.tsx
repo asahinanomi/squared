@@ -3,8 +3,8 @@ import { ZoomBar } from '../components/ZoomBar'
 import { glide, pulse } from '../lib/backToToday'
 import { fromIso, isoDate, monthTitle, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
-import type { Paint } from '../lib/paints'
-import { bands } from '../lib/tally'
+import { PAINTS, WORD } from '../lib/paints'
+import { bands, monthEnd } from '../lib/tally'
 import { monthsBetween, shiftMonth } from './Month'
 
 type Props = {
@@ -22,17 +22,6 @@ type Props = {
   mid: MutableRefObject<() => string>
   /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */
   head?: ReactNode
-}
-
-const WORDS: [Paint, string][] = [
-  ['green', 'mattered'],
-  ['red', 'empty'],
-  ['grey', 'slipped'],
-]
-
-const lastDay = (month: string) => {
-  const d = fromIso(month)
-  return isoDate(new Date(d.getFullYear(), d.getMonth() + 1, 0))
 }
 
 /** How a stretch of days was painted: each colour, and the days lived but not painted. */
@@ -76,7 +65,7 @@ function PeriodCard({
 }) {
   const bs = bands(days, from, to, today, born)
   const c = counts(days, from, to, today, born)
-  const parts = WORDS.filter(([p]) => c[p]).map(([p, w]) => `${c[p]} ${w}`)
+  const parts = PAINTS.filter((p) => c[p.id]).map((p) => `${c[p.id]} ${WORD[p.id]}`)
   if (c.unpainted) parts.push(`${c.unpainted} unpainted`)
   const now = from <= today && today <= to
   return (
@@ -164,7 +153,7 @@ export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid, h
             <section key={y} className="days-month">
               <div className="ladder-label">{y}</div>
               <ol className="month-list is-periods">
-                {months.filter((m) => m.startsWith(y)).map((m) => card(m, monthTitle(m).split(' ')[0], m, lastDay(m)))}
+                {months.filter((m) => m.startsWith(y)).map((m) => card(m, monthTitle(m).split(' ')[0], m, monthEnd(m)))}
               </ol>
             </section>
           ))

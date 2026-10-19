@@ -45,7 +45,7 @@ function keepLocal(m: Saved) {
 const missingColumn = (code?: string) => code === '42703' || code === 'PGRST204'
 
 /** The account's copy: null when there's none yet, or no account to keep it in (demo, or 0007 not run). */
-export async function fetchMatters(): Promise<Saved | null> {
+async function fetchMatters(): Promise<Saved | null> {
   if (!supabase) return null
   const { data, error } = await supabase.from('matters').select('*').maybeSingle()
   if (error?.code === 'PGRST205' || error?.code === '42P01') return null

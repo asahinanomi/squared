@@ -6,7 +6,7 @@ export type SliceId = Paint | 'unpainted' | 'ahead'
 export type Slice = { id: SliceId; count: number }
 
 /** Clockwise from 12 o'clock, and the legend's order. */
-export const SLICE_ORDER: SliceId[] = ['green', 'red', 'grey', 'unpainted', 'ahead']
+const SLICE_ORDER: SliceId[] = ['green', 'red', 'grey', 'unpainted', 'ahead']
 
 /** Which days the pie is out of, widest first: a whole life, the days lived so far, or the painted days only. */
 export type Scope = 'life' | 'lived' | 'painted'

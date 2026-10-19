@@ -8,6 +8,9 @@ export const PAINTS: { id: Paint; hex: string; tint: string; meaning: string }[]
   { id: 'grey', hex: '#8E8E87', tint: '#AEAEA6', meaning: 'I don’t know — I wasn’t paying attention.' },
 ]
 
+/** Each colour's short label, wherever space is tight (the brand story's words). */
+export const WORD: Record<Paint, string> = { green: 'mattered', red: 'empty', grey: 'slipped' }
+
 export const paintHex = (p: Paint) => PAINTS.find((x) => x.id === p)!.hex
 
 export const paintTint = (p: Paint) => PAINTS.find((x) => x.id === p)!.tint

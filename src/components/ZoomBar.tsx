@@ -48,7 +48,7 @@ export const ZoomInIcon = () => (
 )
 
 /** A pie: the whole life in slices. Drawn to the zoom icons' height. */
-export const PieIcon = () => (
+const PieIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
     <circle cx="12" cy="12" r="8.5" />
     <line x1="12" y1="12" x2="12" y2="3.5" />
@@ -57,7 +57,7 @@ export const PieIcon = () => (
 )
 
 /** Squares, one painted: back to the zoom levels. Drawn to the zoom icons' height. */
-export const SquaresIcon = () => (
+const SquaresIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
     <rect x="3.5" y="3.5" width="6" height="6" rx="1.2" />
     <rect x="14.5" y="3.5" width="6" height="6" rx="1.2" fill="currentColor" />
@@ -67,7 +67,7 @@ export const SquaresIcon = () => (
 )
 
 /** Lines, each led by a dot: the days as a list, to read. Drawn to the zoom icons' height. */
-export const ListIcon = () => (
+const ListIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
     <circle cx="4.5" cy="5.5" r="1.4" fill="currentColor" stroke="none" />
     <circle cx="4.5" cy="12" r="1.4" fill="currentColor" stroke="none" />
@@ -79,7 +79,7 @@ export const ListIcon = () => (
 )
 
 /** A target: back to where today is. */
-export const RecenterIcon = () => (
+const RecenterIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
     <circle cx="12" cy="12" r="8.5" />
     <circle cx="12" cy="12" r="3" fill="currentColor" />

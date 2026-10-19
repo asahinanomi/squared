@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { brushTip } from '../lib/brush'
 import { plainDate } from '../lib/dates'
-import { paintHex, type Paint } from '../lib/paints'
+import { paintHex, WORD, type Paint } from '../lib/paints'
 
 type Props = {
   /** Color already saved for this day (shown solid until painted over). */
@@ -15,7 +15,6 @@ type Props = {
 }
 
 // A quiet word in the middle of the square: what it holds, or that it's waiting.
-const WORD: Record<Paint, string> = { green: 'mattered', red: 'empty', grey: 'slipped' }
 
 // Brush diameter as a share of the square: two side-by-side swipes cover it.
 const BRUSH = 0.58
