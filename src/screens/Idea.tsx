@@ -26,8 +26,8 @@ export function Idea({ onMatters, onBack }: Props) {
       )}
       <h1 className="idea-title">the idea</h1>
       <p>
-        I live a very busy life. one day, I looked up and saw so many days had slipped past that I couldn’t say where or
-        how they went.
+        I live a very busy life. one day, I looked up and saw so many days had gone that I couldn’t say where or how.
+        scary.
       </p>
       <p>
         the hard part wasn’t the bad days. it was the busy, even productive days I spent on things that didn’t matter;
