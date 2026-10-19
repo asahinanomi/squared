@@ -116,7 +116,12 @@ export function Year({ days, born, focus, onPick, onIn, onOut }: Props) {
         </section>
       </div>
 
-      <ZoomBar onIn={onIn} onOut={onOut} onRecenter={toToday.away ? toToday.back : undefined} />
+      <ZoomBar
+        onIn={onIn}
+        onOut={onOut}
+        onRecenter={toToday.away ? toToday.back : undefined}
+        listAt={() => `${visible}-07-01`}
+      />
     </main>
   )
 }

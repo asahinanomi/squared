@@ -7,6 +7,8 @@ type Props = {
   onIn?: () => void
   /** Back to today's square on this same screen — shown (as ◎) only once it has scrolled out of view. */
   onRecenter?: () => void
+  /** The day the list should open on if switched to from here (default: today). */
+  listAt?: () => string
 }
 
 const stroke = {
@@ -64,6 +66,18 @@ export const SquaresIcon = () => (
   </svg>
 )
 
+/** Lines, each led by a dot: the days as a list, to read. Drawn to the zoom icons' height. */
+export const ListIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
+    <circle cx="4.5" cy="5.5" r="1.4" fill="currentColor" stroke="none" />
+    <circle cx="4.5" cy="12" r="1.4" fill="currentColor" stroke="none" />
+    <circle cx="4.5" cy="18.5" r="1.4" fill="currentColor" stroke="none" />
+    <line x1="9.5" y1="5.5" x2="20.5" y2="5.5" />
+    <line x1="9.5" y1="12" x2="20.5" y2="12" />
+    <line x1="9.5" y1="18.5" x2="20.5" y2="18.5" />
+  </svg>
+)
+
 /** A target: back to where today is. */
 export const RecenterIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
@@ -72,19 +86,38 @@ export const RecenterIcon = () => (
   </svg>
 )
 
-/** What every bar needs from the app: the pie ↔ squares switch (`pie` = the pie is showing), and the way to today. */
-export const ViewSwitch = createContext<{ pie: boolean; toggle: () => void; goToday: () => void } | null>(null)
+/**
+ * What every bar needs from the app: the two other views beside the squares — the pie (`pie` = it's showing) and
+ * the list of days (`list` = it's showing; `toggleList` takes the day to open on) — and the way to today.
+ */
+export const ViewSwitch = createContext<{
+  pie: boolean
+  toggle: () => void
+  list: boolean
+  toggleList: (at?: string) => void
+  goToday: () => void
+} | null>(null)
 
-// Bottom of every zoom level, controls only: the pie ↔ squares switch on the left, "today" (go paint it)
+// Bottom of every zoom level, controls only: the pie and list switches on the left (each turns into a squares
+// icon while its view is showing — the way back), "today" (go paint it)
 // pinned to the centre, and on the right ◎ (back to today's square, once it's out of view) and the zoom pair.
-export function ZoomBar({ onOut, onIn, onRecenter }: Props) {
+export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
   const view = useContext(ViewSwitch)
   return (
     <div className="zoombar">
       {view ? (
-        <button className="zoombar-view" aria-label={view.pie ? 'Squares' : 'Pie view'} onClick={view.toggle}>
-          {view.pie ? <SquaresIcon /> : <PieIcon />}
-        </button>
+        <div className="zoombar-views">
+          <button className="zoombar-view" aria-label={view.pie ? 'Squares' : 'Pie view'} onClick={view.toggle}>
+            {view.pie ? <SquaresIcon /> : <PieIcon />}
+          </button>
+          <button
+            className="zoombar-view"
+            aria-label={view.list ? 'Squares' : 'List view'}
+            onClick={() => view.toggleList(listAt?.())}
+          >
+            {view.list ? <SquaresIcon /> : <ListIcon />}
+          </button>
+        </div>
       ) : (
         <span />
       )}

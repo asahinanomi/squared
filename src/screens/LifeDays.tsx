@@ -272,7 +272,14 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
           )}
         </div>
       )}
-      <ZoomBar onIn={onIn} onRecenter={away ? backToToday : undefined} />
+      <ZoomBar
+        onIn={onIn}
+        onRecenter={away ? backToToday : undefined}
+        listAt={() => {
+          const el = scroller.current
+          return el ? dayAt(size.w / 2, el.scrollTop + el.clientHeight / 2, cols) : today
+        }}
+      />
     </main>
   )
 }

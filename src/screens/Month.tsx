@@ -1,20 +1,9 @@
-import { useEffect, useLayoutEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
-import {
-  fromIso,
-  isoDate,
-  longDate,
-  monthCells,
-  monthTitle,
-  plainDate,
-  shortDateParts,
-  shortWeekday,
-  todayIso,
-} from '../lib/dates'
+import { fromIso, isoDate, longDate, monthCells, monthTitle, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
-import type { Notes } from '../lib/notes'
 import { useBackToToday } from '../lib/backToToday'
-import { paintHex, paintTint, type Paint } from '../lib/paints'
+import { paintHex, paintTint } from '../lib/paints'
 import { useLadderScroll } from '../lib/useLadderScroll'
 import { Chevron } from './Today'
 
@@ -31,29 +20,11 @@ type Props = {
   onOut?: () => void
   /** Pinched in: bigger day squares (3 to a row) that print their full date. */
   zoomed?: boolean
-  /** Pinched in once more: one row per day, to read — its word, the latest note, when it was painted. */
-  reading?: boolean
-  /** Pinched in once more: the rows open into a journal — every note in full, with when it was written. */
-  journal?: boolean
-  notes?: Notes
-  /** A month came into view while reading: load its notes. */
-  onMonthShown?: (iso: string) => void
   /** The day under the fingers when the zoom changed, kept where it was on screen. */
   anchor?: { iso?: string; y: number }
 }
 
 const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-const WORD: Record<Paint, string> = { green: 'mattered', red: 'empty', grey: 'slipped' }
-
-/** When a note was written: the time, or the date too if it was written on another day. */
-function writtenWhen(at: string, iso: string) {
-  const d = new Date(at)
-  const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()
-  return isoDate(d) === iso ? time : `${plainDate(isoDate(d))} · ${time}`
-}
-
-/** Every day of the month containing `iso`, first to last. */
-const monthDays = (iso: string) => monthCells(iso).filter((d): d is string => !!d)
 
 /** First of the month `n` months away from the month containing `iso`. */
 export const shiftMonth = (iso: string, n: number) => {
@@ -65,20 +36,7 @@ export const monthsBetween = (a: string, b: string) =>
 
 // My squares — your months, one after another in a single scroll, from the birth month
 // down to this one (next month peeks in faintly below). Opens centred on this month.
-export function Month({
-  days,
-  born,
-  focus,
-  onPick,
-  onIn,
-  onOut,
-  zoomed = false,
-  reading = false,
-  journal = false,
-  notes = {},
-  onMonthShown,
-  anchor,
-}: Props) {
+export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, anchor }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const maxBack = born ? monthsBetween(shiftMonth(born, 0), current) : Infinity
@@ -90,13 +48,7 @@ export function Month({
     focusBack: monthsBetween(start, current),
   })
 
-  const toToday = useBackToToday(scroller, '.month-day.is-today, .month-row.is-today')
-
-  // Reading: the month in view and its neighbours bring their notes.
-  useEffect(() => {
-    if (!reading || !onMonthShown) return
-    for (const n of [-1, 0, 1]) if (shiftMonth(visible, n) <= current) onMonthShown(shiftMonth(visible, n))
-  }, [reading, visible]) // eslint-disable-line react-hooks/exhaustive-deps
+  const toToday = useBackToToday(scroller, '.month-day.is-today')
   const months = Array.from({ length: back + 1 }, (_, i) => shiftMonth(current, i - back))
   const step = (n: number) => {
     const target = shiftMonth(visible, n)
@@ -114,14 +66,10 @@ export function Month({
     if (!target) return
     const r = target.getBoundingClientRect()
     el.scrollTop += r.top + r.height / 2 - anchor.y
-  }, [zoomed, reading, journal]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [zoomed]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <main
-      className={
-        'month' + (zoomed ? ' is-zoomed' : '') + (reading ? ' is-reading' : '') + (journal ? ' is-journal' : '')
-      }
-    >
+    <main className={'month' + (zoomed ? ' is-zoomed' : '')}>
       <div className="ladder-head">
         <button
           aria-label="Previous month"
@@ -152,79 +100,29 @@ export function Month({
         {months.map((m) => (
           <section key={m} className="month-block" data-key={m}>
             <div className="ladder-label">{monthTitle(m)}</div>
-            {reading ? (
-              <ol className="month-rows">
-                {monthDays(m)
-                  .filter((iso) => iso <= today && (!born || iso >= born))
-                  .map((iso) => {
-                    const day = days[iso]
-                    const note = notes[iso]?.at(-1)?.body.split('\n')[0]
-                    const { weekday, monthDay, suffix } = shortDateParts(iso)
-                    return (
-                      <li key={iso}>
-                        <button
-                          className={'month-row' + (day ? ' is-painted' : '') + (iso === today ? ' is-today' : '')}
-                          aria-label={longDate(iso)}
-                          data-iso={iso}
-                          onClick={() => onPick(iso)}
-                        >
-                          <span
-                            className="month-row-swatch"
-                            style={
-                              day
-                                ? { background: day.backfilled ? paintTint(day.color) : paintHex(day.color) }
-                                : undefined
-                            }
-                            aria-hidden="true"
-                          />
-                          <span className="month-row-text">
-                            <span className="month-row-date">
-                              {weekday}, {monthDay}
-                              <sup>{suffix}</sup>
-                              {day && <span className="month-row-word"> · {WORD[day.color]}</span>}
-                            </span>
-                            {day?.backfilled && day.paintedOn && (
-                              <span className="month-row-painted">painted {plainDate(day.paintedOn)}</span>
-                            )}
-                            {journal
-                              ? notes[iso]?.map((n) => (
-                                  <span key={n.id} className="month-row-entry">
-                                    <span className="month-row-time">{writtenWhen(n.writtenAt, iso)}</span>
-                                    {n.body}
-                                  </span>
-                                ))
-                              : note && <span className="month-row-note">{note}</span>}
-                          </span>
-                        </button>
-                      </li>
-                    )
-                  })}
-              </ol>
-            ) : (
-              <div className="month-grid">
-                {monthCells(m).map((iso, i) => {
-                  if (!iso) return zoomed ? null : <span key={`b${i}`} className="is-blank" />
-                  const day = days[iso]
-                  const fill = day ? (day.backfilled ? paintTint(day.color) : paintHex(day.color)) : undefined
-                  return (
-                    <button
-                      key={iso}
-                      className={'month-day' + (day ? ' is-painted' : '') + (iso === today ? ' is-today' : '')}
-                      style={fill ? { background: fill } : undefined}
-                      disabled={iso > today || (!!born && iso < born)}
-                      aria-label={longDate(iso)}
-                      data-iso={iso}
-                      onClick={() => onPick(iso)}
-                    >
-                      <span className="month-num">{Number(iso.slice(8))}</span>
-                      <span className="month-wd">
-                        {zoomed ? `${iso.slice(0, 4)}.${iso.slice(5, 7)} ${shortWeekday(iso)}` : shortWeekday(iso)}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            )}
+            <div className="month-grid">
+              {monthCells(m).map((iso, i) => {
+                if (!iso) return zoomed ? null : <span key={`b${i}`} className="is-blank" />
+                const day = days[iso]
+                const fill = day ? (day.backfilled ? paintTint(day.color) : paintHex(day.color)) : undefined
+                return (
+                  <button
+                    key={iso}
+                    className={'month-day' + (day ? ' is-painted' : '') + (iso === today ? ' is-today' : '')}
+                    style={fill ? { background: fill } : undefined}
+                    disabled={iso > today || (!!born && iso < born)}
+                    aria-label={longDate(iso)}
+                    data-iso={iso}
+                    onClick={() => onPick(iso)}
+                  >
+                    <span className="month-num">{Number(iso.slice(8))}</span>
+                    <span className="month-wd">
+                      {zoomed ? `${iso.slice(0, 4)}.${iso.slice(5, 7)} ${shortWeekday(iso)}` : shortWeekday(iso)}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
           </section>
         ))}
         {/* Next month peeks in, faint: there's more ahead, not yet lived. */}
@@ -238,7 +136,12 @@ export function Month({
         </section>
       </div>
 
-      <ZoomBar onIn={onIn} onOut={onOut} onRecenter={toToday.away ? toToday.back : undefined} />
+      <ZoomBar
+        onIn={onIn}
+        onOut={onOut}
+        onRecenter={toToday.away ? toToday.back : undefined}
+        listAt={() => `${visible.slice(0, 8)}15`}
+      />
     </main>
   )
 }
