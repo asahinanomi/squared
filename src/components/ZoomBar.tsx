@@ -100,7 +100,8 @@ export const ViewSwitch = createContext<{
 
 // Bottom of every zoom level, controls only: the pie and list switches on the left (each turns into a squares
 // icon while its view is showing — the way back), "today" (go paint it)
-// pinned to the centre, and on the right ◎ (back to today's square, once it's out of view) and the zoom pair.
+// pinned to the centre, and the zoom pair on the right. ◎ (back to today's square, once it's out of view) floats
+// just above the bar's right end.
 export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
   const view = useContext(ViewSwitch)
   return (
@@ -126,12 +127,13 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
           today
         </button>
       )}
+      {/* Floats just above the bar's right end, over the content, only while today is out of view. */}
+      {onRecenter && (
+        <button className="zoombar-recenter" aria-label="Back to today's square" onClick={onRecenter}>
+          <RecenterIcon />
+        </button>
+      )}
       <div className="zoombar-buttons">
-        {onRecenter && (
-          <button className="zoombar-recenter" aria-label="Back to today's square" onClick={onRecenter}>
-            <RecenterIcon />
-          </button>
-        )}
         <button aria-label="Zoom out" disabled={!onOut} onClick={onOut}>
           <ZoomOutIcon />
         </button>

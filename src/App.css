@@ -522,7 +522,25 @@
 .zoombar-views { display: flex; gap: 2px; flex-shrink: 0; }
 .zoombar-view { width: 44px; height: 44px; display: grid; place-items: center; flex-shrink: 0; color: var(--zoom-ink); }
 .zoombar-view svg { width: 26px; height: 26px; }
-.zoombar-buttons { display: flex; gap: 0; flex-shrink: 0; }
+.zoombar-buttons { display: flex; gap: 2px; flex-shrink: 0; }
+/* ◎ floats over the content, just above the bar's right end: a small paper chip, ink only, there while today is
+   out of view. */
+.zoombar-recenter {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--zoom-ink);
+  box-shadow: inset 0 0 0 1px #e4e4dd, 0 4px 14px rgba(20, 20, 19, 0.1);
+  animation: fade-in 0.25s ease-out;
+}
+.zoombar-recenter svg { width: 24px; height: 24px; }
+.zoombar-recenter:active { transform: scale(0.95); }
 .zoombar-buttons button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--zoom-ink); }
 .zoombar-buttons button:disabled { opacity: 0.25; }
 .zoombar-buttons svg { width: 26px; height: 26px; }
