@@ -36,7 +36,7 @@ const NUM_MIN = 40 // squares at least this big print their day number…
 // …and "2026.10 Thu" under it as soon as that fits at a readable size (checked with the widest weekday).
 const dated = (cell: number) => cell >= NUM_MIN && textFits('2026.10 Wed', `400 ${MIN_TEXT_PX}px ${FONT}`, cell * 0.84)
 const PULSE_MS = 900
-const FONT = "'Schibsted Grotesk', system-ui, sans-serif"
+const FONT = "'Inter', system-ui, sans-serif"
 
 const daysInYear = (y: number) => (new Date(y, 1, 29).getDate() === 29 ? 366 : 365)
 

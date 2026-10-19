@@ -10,7 +10,9 @@
   --dot: #dddcd6; /* the paper's dots: a texture you barely notice, never competing with text */
   --bg: var(--paper);
 
-  --font: 'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Reflective text — the daily question (later the definition and the idea page's prose). */
+  --font-reflect: 'Fraunces', Georgia, serif;
   --gutter: 24px;
   /* The one outline weight used everywhere (square, current day, palette, brush, icons).
      Whole pixels only: browsers round box borders but not SVG strokes, so 2.5px would not match. */

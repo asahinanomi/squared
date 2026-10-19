@@ -33,7 +33,7 @@ const AHEAD = '#f1f1ec'
 const BEFORE = '#f6f6f2'
 const INK = '#141413'
 const PULSE_MS = 900
-const FONT = "'Schibsted Grotesk', system-ui, sans-serif"
+const FONT = "'Inter', system-ui, sans-serif"
 
 // A life, in months — about 1,140 banded month-squares, twelve to a row so each row is a year,
 // read top to bottom. Drawn on a canvas (only the rows on screen), opening on this month.

@@ -14,33 +14,27 @@ export function SignIn({
 }) {
   return (
     <main className="signin">
+      {/* The brand, modest: the wave above the wordmark. */}
       <Logo size={48} />
       <h1 className="wordmark">
         squared<span>.today</span>
       </h1>
-      {/* What squared is, for someone who's never seen it: the number, the square, the habit, the question. */}
-      <p className="signin-line">
-        <span>A life of 80 years is about 29,200 days.</span>
-        <span>Each one is a square.</span>
-        <span>Paint one a day:</span>
-      </p>
+      {/* What squared is, for someone who's never seen it — then the question, the hero. */}
+      <p className="signin-line">a life of 80 years is about 29,200 days. each one counts.</p>
       <p className="signin-question">
-        did I spend <u>Today</u>
-        <br />
-        meaningfully?
+        did I spend <u>Today</u> meaningfully?
       </p>
-      <button className="pill pill-google" onClick={onSignIn}>
-        <span className="g-badge">
-          <GoogleG />
-        </span>
+      <button className="signin-google" onClick={onSignIn}>
+        <GoogleG />
         continue with Google
       </button>
       {error && <p className="signin-error">sign-in didn't finish: {error}</p>}
-      {/* For someone new: why squared exists, before signing in. */}
+      {/* For someone new: why squared exists, and what it keeps, before signing in. */}
       <div className="signin-links">
         <button className="signin-idea" onClick={onIdea}>
           the idea
         </button>
+        <span aria-hidden="true">·</span>
         <button className="signin-idea" onClick={onPrivacy}>
           privacy
         </button>
