@@ -1095,9 +1095,8 @@ button.settings-row:active { background: var(--grey-1); }
 .pie-edge { stroke: var(--ink); stroke-width: var(--keyline); vector-effect: non-scaling-stroke; stroke-linecap: round; }
 .pie-label text { text-anchor: middle; font-family: inherit; }
 .pie-label-n { font-size: 15px; font-weight: 600; fill: #55554f; }
-.pie-label-unit { font-size: 8px; fill: #9a9a93; }
 /* On paint, ink reads better than grey. */
-.pie-label.is-on-paint .pie-label-n, .pie-label.is-on-paint .pie-label-unit { fill: var(--ink); }
+.pie-label.is-on-paint .pie-label-n { fill: var(--ink); }
 .pie-legend { list-style: none; width: calc(min(88%, 310px) * 0.96); margin: 28px auto 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
 .pie-legend li { font-size: 15px; transition: opacity 0.2s; }
 .pie-legend-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 0; text-align: left; color: inherit; font: inherit; }
@@ -1106,6 +1105,7 @@ button.settings-row:active { background: var(--grey-1); }
 .pie-wedge { transition: opacity 0.2s; }
 .pie-wedge.is-tappable { cursor: pointer; }
 .pie-wedge.is-faded, .pie-label.is-faded, .pie-legend li.is-faded { opacity: 0.3; }
+.pie-pick.is-totals { color: #9a9a93; animation: none; }
 .pie-pick { margin: 16px 0 -12px; text-align: center; font-size: 14px; color: #55554f; animation: fade-in 0.2s ease-out; }
 .pie-pick button { font: inherit; font-weight: 600; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #c9c9c2; }
 .pie-dot { width: 13px; height: 13px; flex-shrink: 0; box-sizing: border-box; border-radius: 50%; border: 1.5px solid var(--ink); }

@@ -77,8 +77,30 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
       turn += s.count / total
       return { ...s, a, b: turn }
     })
-  const labels = pieLabels(drawn, scope)
+  const labels = pieLabels(drawn)
   const chosen = drawn.find((s) => s.id === picked && s.count > 0)
+  const lived = slices.filter((s) => s.id !== 'ahead').reduce((n, s) => n + s.count, 0)
+  const ahead = slices.find((s) => s.id === 'ahead')?.count ?? 0
+  const totals =
+    scope === 'painted'
+      ? `${fmt(lived)} ${lived === 1 ? 'day' : 'days'} painted`
+      : `${fmt(lived)} days lived` + (scope === 'life' ? ` · ${fmt(ahead)} to paint` : '')
+
+  // A tap on the pie picks the slice under it — or a thin one beside it: a sliver within a few degrees of the
+  // tap wins over the wide slice next to it, so the smallest slices can still be reached.
+  const onPie = (e: React.MouseEvent<SVGSVGElement>) => {
+    const box = e.currentTarget.getBoundingClientRect()
+    const x = ((e.clientX - box.left) / box.width) * 250 - C
+    const y = ((e.clientY - box.top) / box.height) * 250 - C
+    if (Math.hypot(x, y) > R + 8) return
+    const t = (Math.atan2(x, -y) / (2 * Math.PI) + 1) % 1
+    const near = (s: Drawn) => Math.min(Math.abs(t - (s.a + s.b) / 2), 1 - Math.abs(t - (s.a + s.b) / 2))
+    const thin = drawn
+      .filter((s) => s.id !== 'ahead' && s.b - s.a < THIN && near(s) < (s.b - s.a) / 2 + REACH)
+      .sort((p, q) => near(p) - near(q))[0]
+    const hit = thin ?? drawn.find((s) => t >= s.a && t < s.b)
+    if (hit) pick(hit.id)
+  }
   const faded = (id: SliceId) => (chosen && chosen.id !== id ? ' is-faded' : '')
 
   return (
@@ -102,7 +124,7 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
 
       {/* The pie and its legend share one width, and scroll together when they outgrow the screen. */}
       <div className="pie-body">
-        <svg className="pie-chart" viewBox="0 0 250 250" role="img" aria-label={pieLabel(slices)}>
+        <svg className="pie-chart" viewBox="0 0 250 250" role="img" aria-label={pieLabel(slices)} onClick={onPie}>
           {/* Nothing to count yet: just the keyline circle. */}
           {!drawn.length && <circle cx={C} cy={C} r={R} fill="#fcfcfa" className="pie-rim" />}
           {/* Paint first, then the lines between slices (the pellets' 2px), then the rim (the hero's 3px). */}
@@ -112,7 +134,6 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
               d={wedge(s.a, s.b)}
               fill={FILL[s.id]}
               className={'pie-wedge' + (s.id === 'ahead' ? '' : ' is-tappable') + faded(s.id)}
-              onClick={() => pick(s.id)}
             />
           ))}
           {drawn.length > 1 &&
@@ -127,23 +148,21 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
           ))}
           {labels.map((l) => (
             <g key={l.id} className={'pie-label' + (l.onPaint ? ' is-on-paint' : '') + faded(l.id)} aria-hidden="true">
-              <text x={l.x} y={l.unit ? l.y - 7 : l.y + 5} className="pie-label-n">
+              <text x={l.x} y={l.y + 5} className="pie-label-n">
                 {fmt(l.n)}
               </text>
-              {l.unit && (
-                <text x={l.x} y={l.y + 9} className="pie-label-unit">
-                  {l.unit}
-                </text>
-              )}
             </g>
           ))}
         </svg>
 
-        {chosen && chosen.id !== 'ahead' && (
+        {/* One line under the pie: the totals — or, once a slice is picked, the way to its days. */}
+        {chosen && chosen.id !== 'ahead' ? (
           <p className="pie-pick">
             {fmt(chosen.count)} {LABEL[chosen.id]} {chosen.count === 1 ? 'day' : 'days'} ·{' '}
             <button onClick={() => onSee(chosen.id as Exclude<SliceId, 'ahead'>)}>see them →</button>
           </p>
+        ) : (
+          <p className="pie-pick is-totals">{totals}</p>
         )}
 
         <ul className="pie-legend">
@@ -195,34 +214,24 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
 }
 
 type Drawn = Slice & { a: number; b: number }
-type Label = { id: SliceId; x: number; y: number; n: number; unit?: string; onPaint: boolean }
+type Label = { id: SliceId; x: number; y: number; n: number; onPaint: boolean }
 
-// A wedge holds a number when it's wide enough: two lines need more room than a bare count.
-const ROOM = { withUnit: 0.12, bare: 0.06 }
+// A wedge holds its number when it's wide enough.
+const ROOM = 0.06
+// A slice thinner than this is a sliver: a tap within REACH of it (both in turns) picks it.
+const THIN = 0.03
+const REACH = 0.015
 
-/**
- * The numbers inside the pie. Whole life: the days to paint in their wedge, and the days lived in the
- * widest lived wedge. Days I lived: the days lived, the same way. Painted only: each slice its own count.
- */
-function pieLabels(drawn: Drawn[], scope: Scope): Label[] {
-  const place = (s: Drawn, n: number, unit?: string): Label | null => {
-    if (s.b - s.a < (unit ? ROOM.withUnit : ROOM.bare)) return null
-    const [x, y] = at((s.a + s.b) / 2, R * (unit ? 0.5 : 0.6))
-      .split(' ')
-      .map(Number)
-    return { id: s.id, x, y, n, unit, onPaint: s.id !== 'unpainted' && s.id !== 'ahead' }
-  }
-  const out: (Label | null)[] = []
-  if (scope === 'painted') out.push(...drawn.map((s) => place(s, s.count)))
-  else {
-    const lived = drawn.filter((s) => s.id !== 'ahead')
-    const widest = lived.reduce<Drawn | null>((w, s) => (!w || s.count > w.count ? s : w), null)
-    const livedDays = lived.reduce((n, s) => n + s.count, 0)
-    if (widest) out.push(place(widest, livedDays, 'days lived'))
-    const ahead = drawn.find((s) => s.id === 'ahead')
-    if (ahead) out.push(place(ahead, ahead.count, 'days to paint'))
-  }
-  return out.filter((l): l is Label => !!l)
+/** The numbers inside the pie: each slice its own count, where there's room — a number never names another slice. */
+function pieLabels(drawn: Drawn[]): Label[] {
+  return drawn
+    .filter((s) => s.b - s.a >= ROOM)
+    .map((s) => {
+      const [x, y] = at((s.a + s.b) / 2, R * 0.6)
+        .split(' ')
+        .map(Number)
+      return { id: s.id, x, y, n: s.count, onPaint: s.id !== 'unpainted' && s.id !== 'ahead' }
+    })
 }
 
 const pieLabel = (slices: Slice[]) =>
