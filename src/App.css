@@ -62,8 +62,7 @@
 .menu button:active { background: var(--grey-1); }
 .menu .menu-idea { margin-top: 6px; padding: 12px 18px 8px; border-top: 1px solid var(--grey-1); border-radius: 0 0 12px 12px; font-size: 15px; color: var(--grey-3); }
 /* Under "the idea", as quiet: a form to tell the maker what confused you (shown once its link is set). */
-.menu .menu-feedback { padding: 4px 18px 8px; font-size: 15px; color: var(--grey-3); text-decoration: none; }
-.menu .menu-feedback:active { color: var(--ink); }
+.menu .menu-feedback { padding: 4px 18px 8px; font-size: 15px; color: var(--grey-3); }
 @keyframes pop { from { opacity: 0; transform: translateY(-6px); } }
 
 /* ---------- shared ---------- */
@@ -926,6 +925,14 @@
   padding: 8px 4px 32px;
 }
 .settings-title { margin: 10px 0 0; font-size: 30px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+/* Send feedback: one box and the one black pill. */
+.feedback-lede { margin: 10px 0 0; max-width: 340px; font-size: 15px; line-height: 1.45; color: var(--ink-soft); }
+.feedback-input { margin-top: 22px; min-height: 180px; padding: 14px 16px; border: 0; border-radius: 16px; background: #fff; box-shadow: inset 0 0 0 1px #ecece5; font: inherit; font-size: 16px; line-height: 1.45; color: var(--ink); resize: vertical; }
+.feedback-input:focus { outline: none; box-shadow: inset 0 0 0 1.5px var(--grey-3); }
+.feedback-input::placeholder { color: #bdbdb6; }
+.feedback-error { margin: 10px 0 0; font-size: 14px; color: var(--ink-soft); }
+.feedback-send { margin-top: 18px; }
+.feedback-send:disabled { opacity: 0.35; }
 .settings-rows { display: flex; flex-direction: column; gap: 11px; margin-top: 28px; }
 .settings-row {
   width: 100%;
