@@ -1195,7 +1195,7 @@
   text-shadow: 0 0 3px rgba(255, 255, 255, 0.65);
 }
 .life-year.is-blank .life-year-name {
-  color: var(--muted);
+  color: var(--ink-soft); /* on a grey tile: soft ink stays readable (muted drops under 4.5:1) */
   text-shadow: none;
 }
 .life .zoombar {
@@ -1316,7 +1316,7 @@
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
 }
 .year-month.is-blank .year-month-name {
-  color: var(--muted);
+  color: var(--ink-soft); /* on a grey tile */
   text-shadow: none;
 }
 .month-grid {
@@ -1436,7 +1436,6 @@
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.02em;
-  opacity: 0.7;
 }
 
 /* ---------- confirm alert ---------- */
@@ -2294,7 +2293,7 @@ button.settings-row:active {
   padding: 4px 13px;
   border-radius: 999px;
   font-size: 14px;
-  color: var(--muted);
+  color: var(--ink-soft); /* on the capsule's grey */
   white-space: nowrap;
 }
 .seg button:focus:not(:focus-visible) {
