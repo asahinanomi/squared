@@ -80,6 +80,8 @@ export default function App() {
   // The list zooms too, within itself: years → months → days (→ the day). And the level it was opened at.
   const [listRes, setListRes] = useState<Resolution>('days')
   const [listZoomed, setListZoomed] = useState(false) // zoomed within the list since it opened
+  // Only one slice's days (from the pie's "see them →"), until cleared or the list zooms out.
+  const [listOnly, setListOnly] = useState<Paint | 'unpainted' | null>(null)
   // The list keeps this pointed at the day in the middle of the screen, for a pinch to open on.
   const listMid = useRef(() => todayIso())
   // A day opened from the list goes back to the list when you zoom out of it.
@@ -346,6 +348,7 @@ export default function App() {
     const from = screen === 'pie' ? pieFrom : screen
     const res: Resolution = from === 'life' ? lifeRes : from === 'year' ? 'months' : 'days'
     setListFrom(from)
+    setListOnly(null)
     setListRes(res)
     setListZoomed(false)
     setListFocus(day)
@@ -359,6 +362,7 @@ export default function App() {
   }
   // The capsule under the life's title jumps straight to a level of the list, where you are.
   const listTo = (r: Resolution) => {
+    setListOnly(null)
     setListZoomed(true)
     setListFocus(listMid.current())
     setListRes(r)
@@ -366,6 +370,7 @@ export default function App() {
   const listHead = profile && <LifeHead profile={profile} current={listRes} onPick={listTo} />
   const listOut = (at: string) => {
     if (listRes === 'years') return false
+    setListOnly(null)
     setListZoomed(true)
     setListFocus(at)
     setListRes(listRes === 'days' ? 'months' : 'years')
@@ -541,7 +546,9 @@ export default function App() {
           ) : screen === 'list' ? (
             listRes === 'days' ? (
               <DaysList
-                key="days"
+                key={`days-${listOnly}`}
+                only={listOnly ?? undefined}
+                onAll={() => setListOnly(null)}
                 mid={listMid}
                 head={listHead}
                 days={days}
@@ -572,7 +579,21 @@ export default function App() {
               />
             )
           ) : screen === 'pie' && profile ? (
-            <Pie days={days} profile={profile} scope={pieScope} onScope={setPieScope} />
+            <Pie
+              days={days}
+              profile={profile}
+              scope={pieScope}
+              onScope={setPieScope}
+              onSee={(id) => {
+                // The slice's days, in the list; its squares icon goes back to where the pie was opened from.
+                setListFrom(pieFrom)
+                setListRes('days')
+                setListZoomed(false)
+                setListFocus(todayIso())
+                setListOnly(id)
+                setScreen('list')
+              }}
+            />
           ) : screen === 'year' ? (
             <Year
               days={days}

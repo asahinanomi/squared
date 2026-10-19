@@ -25,9 +25,13 @@ type Props = {
   mid: MutableRefObject<() => string>
   /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */
   head?: ReactNode
+  /** Only the days of one colour (or the unpainted ones) — from a slice of the pie — and the way back to all. */
+  only?: Paint | 'unpainted'
+  onAll?: () => void
 }
 
 const WORD: Record<Paint, string> = { green: 'mattered', red: 'empty', grey: 'slipped' }
+const WORD_OF: Record<Paint | 'unpainted', string> = { ...WORD, unpainted: 'unpainted' }
 /** About what two lines of a card's note hold on a phone. */
 const PREVIEW_CHARS = 80
 /** Months added at a time as you scroll toward either end. */
@@ -103,7 +107,20 @@ function DayCard({
 // A life, day by day: the days as a list of short cards, oldest at the top, today at the foot — the closest level
 // of the list (zoom out for months, then years), a view beside the pie. Only a window of months is drawn — the one you opened on and a few around it — and more
 // are added as you scroll toward either end, so it opens at once however far back you are.
-export function DaysList({ days, notes, born, focus, onPick, onMonthShown, onIn, onOut, mid, head }: Props) {
+export function DaysList({
+  days,
+  notes,
+  born,
+  focus,
+  onPick,
+  onMonthShown,
+  onIn,
+  onOut,
+  mid,
+  head,
+  only,
+  onAll,
+}: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const first = born ? shiftMonth(born, 0) : shiftMonth(today, -120)
@@ -115,6 +132,7 @@ export function DaysList({ days, notes, born, focus, onPick, onMonthShown, onIn,
     to: start < current ? shiftMonth(start, 1) : current,
   }))
   const months = Array.from({ length: monthsBetween(range.from, range.to) + 1 }, (_, i) => shiftMonth(range.from, i))
+  const shown = (iso: string) => !only || (only === 'unpainted' ? !days[iso] : days[iso]?.color === only)
   const scroller = useRef<HTMLDivElement>(null)
   const heightBefore = useRef<number | null>(null) // set when months are added above, to keep your place
   const pending = useRef<string | null>(null) // a day to bring to the middle once it's drawn
@@ -140,6 +158,12 @@ export function DaysList({ days, notes, born, focus, onPick, onMonthShown, onIn,
     if (pending.current) {
       centre(pending.current, true)
       pending.current = null
+    }
+    // Filtered, a few months may hold too little to scroll: keep adding older months until there's room to.
+    if (el && only && el.scrollHeight <= el.clientHeight + NEAR && range.from > first) {
+      heightBefore.current = el.scrollHeight
+      const from = shiftMonth(range.from, -STEP * 4)
+      setRange({ ...range, from: from < first ? first : from })
     }
   }, [range]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -188,23 +212,37 @@ export function DaysList({ days, notes, born, focus, onPick, onMonthShown, onIn,
           <h1 className="life-title">a life</h1>
         </div>
       )}
+      {only && onAll && (
+        <button className="days-only" onClick={onAll} aria-label={`Show all days, not only ${WORD_OF[only]}`}>
+          {only !== 'unpainted' && <span className="days-only-dot" style={{ background: paintHex(only) }} />}
+          only {WORD_OF[only]} <span aria-hidden="true">×</span>
+        </button>
+      )}
       <div className="days-scroll" ref={scroller} onScroll={onScroll}>
-        {months.map((m) => (
-          <section key={m} className="days-month" data-key={m}>
-            <div className="ladder-label">{monthTitle(m)}</div>
-            <ol className="month-list">
-              {monthCells(m)
-                .filter((iso): iso is string => !!iso && iso <= today && (!born || iso >= born))
-                .map((iso) => (
+        {months.map((m) => {
+          const list = monthCells(m).filter(
+            (iso): iso is string => !!iso && iso <= today && (!born || iso >= born) && shown(iso),
+          )
+          return (
+            <section key={m} className="days-month" data-key={m} hidden={!list.length}>
+              <div className="ladder-label">{monthTitle(m)}</div>
+              <ol className="month-list">
+                {list.map((iso) => (
                   <li key={iso}>
                     <DayCard iso={iso} day={days[iso]} notes={notes[iso]} today={today} onPick={onPick} />
                   </li>
                 ))}
-            </ol>
-          </section>
-        ))}
+              </ol>
+            </section>
+          )
+        })}
       </div>
-      <ZoomBar onIn={onIn} onOut={onOut} onRecenter={away ? backToToday : undefined} listAt={() => mid.current()} />
+      <ZoomBar
+        onIn={onIn}
+        onOut={onOut}
+        onRecenter={away && !only ? backToToday : undefined}
+        listAt={() => mid.current()}
+      />
     </main>
   )
 }
