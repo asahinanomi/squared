@@ -7,8 +7,8 @@ type Props = {
   onIn?: () => void
   /** Back to today's square on this same screen — shown (as ◎) only once it has scrolled out of view. */
   onRecenter?: () => void
-  /** The days' squares ↔ list switch, beside the pie's (`on` = the list is showing): on the month and a life · days. */
-  list?: { on: boolean; toggle: () => void }
+  /** The day the list should open on if switched to from here (default: today). */
+  listAt?: () => string
 }
 
 const stroke = {
@@ -86,13 +86,22 @@ export const RecenterIcon = () => (
   </svg>
 )
 
-/** What every bar needs from the app: the pie ↔ squares switch (`pie` = the pie is showing), and the way to today. */
-export const ViewSwitch = createContext<{ pie: boolean; toggle: () => void; goToday: () => void } | null>(null)
+/**
+ * What every bar needs from the app: the two other views beside the squares — the pie (`pie` = it's showing) and
+ * the list of days (`list` = it's showing; `toggleList` takes the day to open on) — and the way to today.
+ */
+export const ViewSwitch = createContext<{
+  pie: boolean
+  toggle: () => void
+  list: boolean
+  toggleList: (at?: string) => void
+  goToday: () => void
+} | null>(null)
 
-// Bottom of every zoom level, controls only: the pie ↔ squares switch on the left (and, on the month, the
-// squares ↔ list switch beside it), "today" (go paint it)
+// Bottom of every zoom level, controls only: the pie and list switches on the left (each turns into a squares
+// icon while its view is showing — the way back), "today" (go paint it)
 // pinned to the centre, and on the right ◎ (back to today's square, once it's out of view) and the zoom pair.
-export function ZoomBar({ onOut, onIn, onRecenter, list }: Props) {
+export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
   const view = useContext(ViewSwitch)
   return (
     <div className="zoombar">
@@ -101,11 +110,13 @@ export function ZoomBar({ onOut, onIn, onRecenter, list }: Props) {
           <button className="zoombar-view" aria-label={view.pie ? 'Squares' : 'Pie view'} onClick={view.toggle}>
             {view.pie ? <SquaresIcon /> : <PieIcon />}
           </button>
-          {list && (
-            <button className="zoombar-view" aria-label={list.on ? 'Squares' : 'List view'} onClick={list.toggle}>
-              {list.on ? <SquaresIcon /> : <ListIcon />}
-            </button>
-          )}
+          <button
+            className="zoombar-view"
+            aria-label={view.list ? 'Squares' : 'List view'}
+            onClick={() => view.toggleList(listAt?.())}
+          >
+            {view.list ? <SquaresIcon /> : <ListIcon />}
+          </button>
         </div>
       ) : (
         <span />

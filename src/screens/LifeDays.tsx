@@ -22,8 +22,6 @@ type Props = {
   cols?: number
   /** Where the fingers were when the size changed: the day under them stays put. */
   focal?: Focal
-  /** Switch to the list of days, opening at the day in the middle of the screen. */
-  onList?: (iso: string) => void
 }
 
 // Space between squares grows with them, so big squares stay apart (7 and 3 a row match my squares).
@@ -45,7 +43,7 @@ const daysInYear = (y: number) => (new Date(y, 1, 29).getDate() === 29 ? 366 : 3
 // A life, in days — one solid square per real day, grouped into a block per year (each labelled,
 // with a gap between years). Long by design: you scroll your whole life, year by year.
 // Drawn on a canvas, only the rows on screen. Opens on today, where lived days meet the empty ones.
-export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28, focal, onList }: Props) {
+export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28, focal }: Props) {
   const today = todayIso()
   const { born, lifespan } = profile
   const end = addYears(born, lifespan) // the first day after the hoped-for last one
@@ -277,16 +275,10 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
       <ZoomBar
         onIn={onIn}
         onRecenter={away ? backToToday : undefined}
-        list={
-          onList && {
-            on: false,
-            toggle: () => {
-              const el = scroller.current
-              const mid = el ? dayAt(size.w / 2, el.scrollTop + el.clientHeight / 2, cols) : today
-              onList(mid > today ? today : mid < born ? born : mid)
-            },
-          }
-        }
+        listAt={() => {
+          const el = scroller.current
+          return el ? dayAt(size.w / 2, el.scrollTop + el.clientHeight / 2, cols) : today
+        }}
       />
     </main>
   )
