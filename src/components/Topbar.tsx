@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Logo } from './Logo'
 import { Chevron } from '../screens/Today'
+import { FEEDBACK_URL } from '../lib/config'
 
 type Props = {
   onHome: () => void
@@ -50,6 +51,11 @@ export function Topbar({ onHome, onCalendar, onIdea, onSettings, onSignOut, back
             <button className="menu-idea" onClick={go(onIdea)}>
               the idea
             </button>
+            {FEEDBACK_URL && (
+              <a className="menu-feedback" href={FEEDBACK_URL} target="_blank" rel="noopener noreferrer">
+                send feedback
+              </a>
+            )}
           </nav>
         </div>
       )}

@@ -124,7 +124,7 @@ Build step by step; the owner reviews and gives feedback after each step before 
 
 ## Phase 3 — settings (in progress)
 
-Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: today · my squares · settings · sign out — the things about you — and, set apart at its foot under a hairline in quieter grey, "the idea" (about the app). The sign-in screen also carries a quiet "the idea" link under the Google button, for someone new; opened from there it has a "‹ sign in" back arrow and no link on to what matters.
+Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: today · my squares · settings · sign out — the things about you — and, set apart at its foot under a hairline in quieter grey, "the idea" (about the app). Under it, as quiet, **send feedback** — a link to a form (opens in a new tab), shown once `FEEDBACK_URL` in `src/lib/config.ts` is set. The sign-in screen also carries a quiet "the idea" link under the Google button, for someone new; opened from there it has a "‹ sign in" back arrow and no link on to what matters.
 
 - Step 1 (done): **settings hub** — back arrow (returns to where you came from), "settings", four rows: square settings ("Oct 26, 1971 · 95 years · 34,699 squares", opens the square screen), and reminders / my data / account shown with a "soon" tag and not tappable. "squared.today" at the foot. The "how many squares?" menu item is gone.
 - Step 2 (done): square settings — one shared screen, two modes (first-run "how many squares?" + "start painting", which lands on today; from settings "square settings", back arrow, saves as you change it, quiet offline cue). Moving the birth date later hides earlier painted days, never deletes them.
