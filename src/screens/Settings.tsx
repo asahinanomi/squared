@@ -47,7 +47,7 @@ export function Settings({ profile, onBack, onSquares, onMatters }: Props) {
         <button className="settings-row" onClick={onMatters}>
           <span>
             <span className="settings-label">what matters</span>
-            <span className="settings-sub">meaningful &amp; empty — your compass</span>
+            <span className="settings-sub">mattered &amp; empty — your compass</span>
           </span>
           <Chevron dir="right" />
         </button>

@@ -12,7 +12,7 @@ type Props = {
 }
 
 // A quiet word in the middle of the square: what it holds, or that it's waiting.
-const WORD: Record<Paint, string> = { green: 'meaningful', red: 'wasted', grey: 'slipped by' }
+const WORD: Record<Paint, string> = { green: 'mattered', red: 'empty', grey: 'slipped' }
 
 // Brush diameter as a share of the square: two side-by-side swipes cover it.
 const BRUSH = 0.58

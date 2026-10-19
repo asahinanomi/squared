@@ -16,11 +16,11 @@ type Props = {
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 const LABEL: Record<SliceId, string> = {
-  green: 'lived, it mattered',
-  red: 'here, but wasted',
-  grey: 'slipped by',
-  unpainted: 'lived, not painted',
-  ahead: 'still to come',
+  green: 'mattered',
+  red: 'empty',
+  grey: 'slipped',
+  unpainted: 'unpainted',
+  ahead: 'ahead',
 }
 
 const SCOPE_LABEL: Record<Scope, string> = {
