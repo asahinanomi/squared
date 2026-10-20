@@ -259,7 +259,7 @@ export function Today(props: Props) {
           {/* Painted the wrong day? A quiet way back to blank, right under the square. */}
           {day && !why && (
             <button className="day-wipe" onClick={() => setWiping(true)}>
-              wipe this square
+              start over
             </button>
           )}
 
@@ -306,9 +306,9 @@ export function Today(props: Props) {
         )}
         {wiping && (
           <ConfirmDialog
-            title="Wipe this square?"
+            title="Start this day over?"
             body="Its colour goes. Your notes for the day stay."
-            confirm="wipe"
+            confirm="start over"
             onConfirm={() => {
               setWiping(false)
               props.onWipe()
