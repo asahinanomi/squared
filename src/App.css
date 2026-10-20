@@ -882,6 +882,7 @@
 .idea p.idea-sign {
   font-style: italic;
   color: var(--ink-soft);
+  text-align: right; /* signed at the foot, like a letter */
 }
 /* Privacy: the idea page's paper, a size smaller (it's for reading closely, not once). */
 .privacy p,
