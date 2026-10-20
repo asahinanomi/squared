@@ -1,7 +1,7 @@
-import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { glide, pulse } from '../lib/backToToday'
-import { isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, todayIso } from '../lib/dates'
+import { addDays, isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, todayIso } from '../lib/dates'
 import type { Day, Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
 import { paintHex, paintTint, WORD, type Paint } from '../lib/paints'
@@ -38,6 +38,24 @@ const PREVIEW_CHARS = 80
 const STEP = 6
 /** How close (px) to an end of the list before more months are added. */
 const NEAR = 900
+
+/** A run of unpainted days, folded into one quiet row: "Sep 14 – 21 · 8 unpainted days ⌄". */
+function Fold({ run, open, onToggle }: { run: string[]; open: boolean; onToggle: () => void }) {
+  const from = shortDateParts(run[0])
+  const to = shortDateParts(run.at(-1)!)
+  const sameMonth = run[0].slice(0, 7) === run.at(-1)!.slice(0, 7)
+  return (
+    <button className="day-fold" aria-expanded={open} onClick={onToggle}>
+      <span className="day-card-swatch" aria-hidden="true" />
+      <span className="day-fold-text">
+        {from.monthDay} – {sameMonth ? to.monthDay.split(' ')[1] : to.monthDay} · {run.length} unpainted days
+      </span>
+      <span className="day-fold-chevron" aria-hidden="true">
+        {open ? '⌃' : '⌄'}
+      </span>
+    </button>
+  )
+}
 
 /** When a note was written: the time, or the date too if it was written on another day. */
 function writtenWhen(at: string, iso: string) {
@@ -149,6 +167,33 @@ export function DaysList({
   const pending = useRef<string | null>(null) // a day to bring to the middle once it's drawn
   const [away, setAway] = useState(false)
 
+  // Runs of unpainted days (no notes, not today or yesterday, not a special day) fold into one quiet row, so the
+  // painted days read like a journal. A tap opens a run; the run you opened the list on starts open.
+  const yesterday = addDays(today, -1)
+  const quiet = (iso: string) =>
+    !days[iso] && !notes[iso]?.length && iso !== today && iso !== yesterday && !specialDay(iso, born)
+  const runs = (list: string[]) => {
+    const out: string[][] = []
+    for (const iso of list) {
+      const last = out.at(-1)
+      if (only !== 'unpainted' && quiet(iso) && last && quiet(last[0])) last.push(iso)
+      else out.push([iso])
+    }
+    return out
+  }
+  const [open, setOpen] = useState<Set<string>>(() => {
+    const month = monthCells(start).filter((iso): iso is string => !!iso && iso <= today && (!born || iso >= born))
+    const mine = runs(month).find((run) => run.includes(at))
+    return new Set(mine ? [mine[0]] : [])
+  })
+  const toggle = (key: string) =>
+    setOpen((s) => {
+      const next = new Set(s)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+
   const centre = (iso: string, smooth = false) => {
     const el = scroller.current
     const card = el?.querySelector<HTMLElement>(`[data-iso="${iso}"]`)
@@ -238,11 +283,33 @@ export function DaysList({
             <section key={m} className="days-month" data-key={m} hidden={!list.length}>
               <div className="ladder-label">{monthTitle(m)}</div>
               <ol className="month-list">
-                {list.map((iso) => (
-                  <li key={iso}>
-                    <DayCard iso={iso} day={days[iso]} notes={notes[iso]} today={today} born={born} onPick={onPick} />
-                  </li>
-                ))}
+                {runs(list).map((run) =>
+                  run.length > 1 && !open.has(run[0]) ? (
+                    <li key={run[0]}>
+                      <Fold run={run} open={false} onToggle={() => toggle(run[0])} />
+                    </li>
+                  ) : (
+                    <Fragment key={run[0]}>
+                      {run.length > 1 && (
+                        <li>
+                          <Fold run={run} open onToggle={() => toggle(run[0])} />
+                        </li>
+                      )}
+                      {run.map((iso) => (
+                        <li key={iso}>
+                          <DayCard
+                            iso={iso}
+                            day={days[iso]}
+                            notes={notes[iso]}
+                            today={today}
+                            born={born}
+                            onPick={onPick}
+                          />
+                        </li>
+                      ))}
+                    </Fragment>
+                  ),
+                )}
               </ol>
             </section>
           )
