@@ -121,29 +121,11 @@ export function settleSound(paint: Paint) {
     note(a, 523.25, now, 0.5, 0.9)
     note(a, 880, now + 0.09, 0.4, 1.1)
   } else if (paint === 'red') {
-    // Empty: a tone that sinks — it slides down a fifth as it fades, darkened, with a slow start: a sigh,
-    // nothing bright in it. Its octave keeps it audible on a phone's small speaker.
-    const dark = a.createBiquadFilter()
-    dark.type = 'lowpass'
-    dark.frequency.value = 1100
-    dark.connect(master)
-    for (const [mult, share] of [
-      [1, 1],
-      [2, 0.35],
-    ]) {
-      const osc = a.createOscillator()
-      osc.type = 'sine'
-      osc.frequency.setValueAtTime(370 * mult, now)
-      osc.frequency.exponentialRampToValueAtTime(247 * mult, now + 0.75)
-      const g = a.createGain()
-      g.gain.setValueAtTime(0, now)
-      g.gain.linearRampToValueAtTime(0.28 * share, now + 0.06)
-      g.gain.setValueAtTime(0.28 * share, now + 0.25)
-      g.gain.exponentialRampToValueAtTime(0.0001, now + 1.2)
-      osc.connect(g).connect(dark)
-      osc.start(now)
-      osc.stop(now + 1.25)
-    }
+    // Empty: the same soft bell as mattered, but stepping down a minor chord (A → F → D) — clearly down,
+    // a little sad. Clean notes, nothing slides or buzzes, nothing too low for a phone's speaker.
+    note(a, 440, now, 0.34, 0.7)
+    note(a, 349.23, now + 0.17, 0.36, 0.8)
+    note(a, 293.66, now + 0.34, 0.4, 1.2)
   } else {
     // Slipped: sand running out — a trickle of tiny grains that thins away, like an hourglass emptying.
     const src = a.createBufferSource()
@@ -151,10 +133,10 @@ export function settleSound(paint: Paint) {
     // Soft grains, not sharp ticks: the top is rounded off, and it sits under mattered's level.
     const filter = a.createBiquadFilter()
     filter.type = 'bandpass'
-    filter.frequency.value = 1800
-    filter.Q.value = 0.6
+    filter.frequency.value = 900 // lower and rounder: sand, not sizzle
+    filter.Q.value = 0.7
     const g = a.createGain()
-    g.gain.value = 0.75
+    g.gain.value = 0.6
     src.connect(filter).connect(g).connect(master)
     src.start(now)
   }
@@ -171,7 +153,7 @@ function sand(a: AudioContext): AudioBuffer {
     // Grains bunch at the start and thin out toward the end (t² spacing).
     const t = Math.random() ** 2 * 1.0
     const at = Math.round(t * rate)
-    const length = Math.round(rate * (0.004 + Math.random() * 0.008))
+    const length = Math.round(rate * (0.006 + Math.random() * 0.01))
     const level = (0.25 + Math.random() * 0.75) * (1 - t * 0.85)
     for (let i = 0; i < length && at + i < data.length; i++) {
       const env = Math.sin((Math.PI * i) / length) // each grain a soft tick, not a click
