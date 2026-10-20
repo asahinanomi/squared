@@ -99,17 +99,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
       </button>
 
       <div className="setup-body">
-        <h1 className="setup-title">
-          {editing ? (
-            'square settings'
-          ) : (
-            <>
-              how many
-              <br />
-              squares?
-            </>
-          )}
-        </h1>
+        <h1 className="setup-title">{editing ? 'square settings' : 'how many squares?'}</h1>
 
         <div className="setup-fields">
           <div>

@@ -94,9 +94,10 @@ In the app the meanings read, in the brand story's words: **green** "yes — I s
 | **Segmented control** | Switching between views of the same content. | years · months · days; whole life · days I lived · painted only |
 
 Width and size:
-- **Full width**: the main action that ends a screen or sheet, at its foot. Every full-width black pill is 54px tall with 18px text (the Google sign-in button, 64px, is the one exception).
+- **One width for every main action**: 250px, centred (narrower only on a narrower screen), 54px tall with 18px text: start painting, now paint today, send, close, every onboarding step. The white Google sign-in pill is the same 250px wide (50px tall).
 - **Hugs its text**: actions inside a card or bubble (done / delete, at least 88px; add new note).
 - **Equal halves**: a two-choice dialog (cancel | delete).
+- Questions and titles never have a hard line break: they wrap where the screen ends.
 - Tap targets are never smaller than 44px.
 
 ## Capitalization

@@ -52,6 +52,7 @@ Two voices (full mapping in `brand-story.md` §9). Both free on Google Fonts.
   - Wordmark 22/600 on sign-in (−0.02em) · hero number 56/600 (−0.035em) · its caption 18/400 ink-soft · framing & body 16/400 · button 15.5/500 · links 12.5.
 - **Scale (Inter):** 12 labels & timestamps · 14 secondary · 16 body & controls · 18–20 reading text (notes, idea, privacy) · 28 screen titles · 36 the idea's title · 56 hero numbers. Weights 400 / 500 / 600 only. The wordmark (22) sits outside the scale, as a logo.
 - **Floor:** nothing you read is under 12px; inputs are at least 16px (iOS zooms smaller ones).
+- **No hard line breaks** in questions or titles: they wrap where the screen ends.
 - **Accent:** a **dotted** underline (2.5px dotted ink) under the key word in a reflective line ("Today", "meaningful") — never a solid underline.
 
 ## Background
@@ -59,7 +60,8 @@ squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, 
 
 ## Components
 - **Surface:** paper + dotted grid.
-- **Sign-in button (secondary / quiet):** white fill, 1.5px #E2E2DB border, pill (radius 999), min-height 50px, Inter 500, real Google "G". Deliberately understated so the question leads — never a solid black button.
+- **Main button:** one solid black pill per view, 250px wide and centred (narrower only on a narrower screen), 54px tall, 18px/500 text. Small actions in a card hug their text; a two-choice dialog splits into equal halves.
+- **Sign-in button (secondary / quiet):** white fill, 1.5px #E2E2DB border, pill (radius 999), 250px wide, min-height 50px, Inter 500, real Google "G". Deliberately understated so the question leads — never a solid black button.
 - **The day's canvas:** the one square you paint on is a canvas — a clean ink edge (2.5px, nearly square corners), a thin raw-canvas margin inside it (7px, #EBE6DA) where the priming stops, and a primed face with a fine linen weave while blank (smooth paint once painted, kept inside the margin). Flat, with a short desk shadow; no 3D, no wobble. Every other square (month, list, life) is a gallery thumbnail and keeps the plain rounded square.
 - **Control bar:** its own surface, #FCFCFA with no dot grid, lifted by a soft shadow cast upward (0 −4px 14px, ink at 7%) — never a hairline.
 - **Pie labels:** every label (number, word under it) sits on the line from the centre to the rim through the middle of its wedge, halfway out.
