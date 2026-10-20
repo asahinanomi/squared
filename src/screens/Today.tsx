@@ -394,10 +394,10 @@ export function Chevron({ dir }: { dir: 'left' | 'right' }) {
   )
 }
 
-/** A small down chevron: the date opens a picker. */
-function ChevronDown() {
+/** A small down chevron: the date opens a picker; a folded run of days opens. */
+export function ChevronDown({ className = 'day-pick-chevron' }: { className?: string }) {
   return (
-    <svg className="day-pick-chevron" viewBox="0 0 12 12" aria-hidden="true">
+    <svg className={className} viewBox="0 0 12 12" aria-hidden="true">
       <path
         d="M3 4.5 L6 7.5 L9 4.5"
         fill="none"

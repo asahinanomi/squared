@@ -67,9 +67,27 @@ function blob(r: number, ripples: [number, number, number][]) {
 // Drops spilled over the dipped well's rim, as [angle°, distance from centre, radius]. Each well's set
 // avoids its neighbours and the brush.
 const SPLASH: Record<Paint, [number, number, number][]> = {
-  green: [[18, 22, 6], [46, 23, 4.2], [74, 22.5, 3], [-12, 23, 2.6], [32, 30, 1.8]],
-  grey: [[8, 22, 5.8], [38, 23, 4], [-22, 23, 2.8], [66, 22.5, 2.6], [22, 30, 1.8]],
-  red: [[104, 22, 5.8], [136, 23, 4.2], [162, 22.5, 2.8], [78, 23, 2.6], [120, 30, 1.8]],
+  green: [
+    [18, 22, 6],
+    [46, 23, 4.2],
+    [74, 22.5, 3],
+    [-12, 23, 2.6],
+    [32, 30, 1.8],
+  ],
+  grey: [
+    [8, 22, 5.8],
+    [38, 23, 4],
+    [-22, 23, 2.8],
+    [66, 22.5, 2.6],
+    [22, 30, 1.8],
+  ],
+  red: [
+    [104, 22, 5.8],
+    [136, 23, 4.2],
+    [162, 22.5, 2.8],
+    [78, 23, 2.6],
+    [120, 30, 1.8],
+  ],
 }
 
 /** A spiral from radius r0 to r1 over the given turns, starting at angle a0 (radians). */
@@ -99,7 +117,10 @@ const DROPS: Record<Paint, { x: number; y: number; r: number; d: string }[]> = O
         x: dist * Math.cos(a),
         y: dist * Math.sin(a),
         r,
-        d: blob(r, [[0.12, 2, i + w], [0.07, 3, 2 * i + 1]]),
+        d: blob(r, [
+          [0.12, 2, i + w],
+          [0.07, 3, 2 * i + 1],
+        ]),
       }
     }),
   ]),
@@ -169,7 +190,12 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
                     <g key={i} transform={`translate(${p.x.toFixed(2)} ${p.y.toFixed(2)})`}>
                       <g className="drop" style={{ transitionDelay: `${i * 40}ms` }}>
                         <path d={p.d} fill={hex} className="drop-paint" />
-                        <circle cx={-p.r * 0.35} cy={-p.r * 0.35} r={Math.max(0.5, p.r * 0.28)} className="drop-glint" />
+                        <circle
+                          cx={-p.r * 0.35}
+                          cy={-p.r * 0.35}
+                          r={Math.max(0.5, p.r * 0.28)}
+                          className="drop-glint"
+                        />
                       </g>
                     </g>
                   ))}

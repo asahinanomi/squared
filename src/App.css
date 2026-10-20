@@ -2653,8 +2653,7 @@ button.settings-row:active {
 .pie-legend li.is-faded {
   opacity: 0.3;
 }
-.pie-pick.is-totals {
-  color: var(--muted);
+.pie-pick.is-empty {
   animation: none;
 }
 .pie-pick {

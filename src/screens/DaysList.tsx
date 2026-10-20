@@ -7,6 +7,7 @@ import type { Note, Notes } from '../lib/notes'
 import { paintHex, paintTint, WORD, type Paint } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { monthsBetween, shiftMonth } from './Month'
+import { ChevronDown } from './Today'
 
 type Props = {
   days: Days
@@ -49,16 +50,7 @@ function Fold({ run, open, onToggle }: { run: string[]; open: boolean; onToggle:
       <span className="day-fold-text">
         {from.monthDay} – {sameMonth ? to.monthDay.split(' ')[1] : to.monthDay} · {run.length} unpainted days
       </span>
-      <svg className={'day-fold-chevron' + (open ? ' is-open' : '')} viewBox="0 0 12 12" aria-hidden="true">
-        <path
-          d="M3 4.5 L6 7.5 L9 4.5"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+      <ChevronDown className={'day-fold-chevron' + (open ? ' is-open' : '')} />
     </button>
   )
 }

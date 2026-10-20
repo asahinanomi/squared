@@ -35,7 +35,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
   const valid = born > '1900-01-01' && born <= today
   const c = valid ? lifeCounts(born, lifespan, today) : null
   const [inYears, setInYears] = useState(false)
-  // Years from the squares themselves, so lived + to paint always add up to the lifespan.
+  // Years from the squares themselves, so lived + ahead always add up to the lifespan.
   const spentYears = c ? Math.round((c.sofar / c.total) * lifespan) : 0
 
   const save = async () => {

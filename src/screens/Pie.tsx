@@ -191,7 +191,7 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
             <button onClick={() => onSee(chosen.id as Exclude<SliceId, 'ahead'>)}>see them →</button>
           </p>
         ) : (
-          <p className="pie-pick is-totals" aria-hidden="true" />
+          <p className="pie-pick is-empty" aria-hidden="true" />
         )}
 
         <ul className="pie-legend">

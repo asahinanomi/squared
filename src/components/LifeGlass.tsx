@@ -9,7 +9,7 @@ type Unit = 'days' | 'months' | 'years'
 
 /**
  * The life glass: an hourglass whose sand is your life — the top holds the squares left, the bottom
- * the ones spent. Just the icon until tapped; a tap shows "14,620 days to paint!" (in years or months where the squares are), another hides it.
+ * the ones spent. Just the icon until tapped; a tap shows "14,620 days ahead!" (in years or months where the squares are), another hides it.
  * Every half minute a few grains fall, a small nudge that time is moving. It sits beside "a life" in the
  * title: information about your life, not a control.
  */
@@ -30,7 +30,7 @@ export function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
   }, [])
   const c = lifeCounts(profile.born, profile.lifespan, todayIso())
   const left = c.left / c.total
-  // In years or months, counted from the squares so spent + to paint always add up to the life.
+  // In years or months, counted from the squares so spent + ahead always add up to the life.
   const per = unit === 'years' ? profile.lifespan : unit === 'months' ? profile.lifespan * 12 : 0
   const count = per ? `${fmt(per - Math.round((c.sofar / c.total) * per))} ${unit}` : `${fmt(c.left)} days`
   return (
