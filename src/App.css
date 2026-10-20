@@ -171,31 +171,12 @@
   line-height: 1.4;
   vertical-align: 3px;
 }
-.menu-legal {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 18px;
-  font-size: 12px;
-  color: var(--muted);
-}
-.menu .menu-legal button {
-  min-height: 44px; /* a full tap target, small text */
-  padding: 0;
-  font-size: 12px;
-  color: var(--muted);
-}
 .settings-foot-links {
   gap: 8px;
   font-size: 12px;
   color: var(--muted);
 }
-.menu-beta {
-  padding: 8px 18px 6px;
-  font-size: 12px;
-  color: var(--muted);
-}
-.menu-beta .beta {
+.settings-foot .beta {
   margin-left: 4px;
   vertical-align: 0;
 }

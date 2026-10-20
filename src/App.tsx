@@ -569,8 +569,6 @@ export default function App() {
                 setSupportFrom(screen)
                 setScreenValue('support')
               }}
-              onPrivacy={() => openLegal('privacy', screen)}
-              onTerms={() => openLegal('terms', screen)}
               onSettings={openSettings}
               onSignOut={signOut}
             />

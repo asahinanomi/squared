@@ -75,7 +75,9 @@ export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onP
         <span aria-hidden="true">·</span>
         <button onClick={onTerms}>terms</button>
       </div>
-      <p className="settings-foot">squared.today</p>
+      <p className="settings-foot">
+        squared.today <b className="beta">beta</b>
+      </p>
     </main>
   )
 }
