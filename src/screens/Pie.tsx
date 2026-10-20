@@ -77,7 +77,11 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
       turn += s.count / total
       return { ...s, a, b: turn }
     })
-  const labels = pieLabels(drawn)
+  // Whole life is two halves first: the days behind you (painted and unpainted) and the days ahead.
+  const whole = scope === 'life'
+  const lived = slices.filter((s) => s.id !== 'ahead').reduce((n, s) => n + s.count, 0)
+  const livedEnd = drawn.find((s) => s.id === 'ahead')?.a ?? 1
+  const labels = whole ? halfLabels(drawn, lived, livedEnd) : pieLabels(drawn)
   const chosen = drawn.find((s) => s.id === picked && s.count > 0)
 
   // A tap on the pie picks the slice under it — or a thin one beside it: a sliver within a few degrees of the
@@ -131,7 +135,13 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
             />
           ))}
           {drawn.length > 1 &&
-            drawn.map((s) => <path key={`edge-${s.id}`} d={`M${C} ${C} L${at(s.a)}`} className="pie-edge" />)}
+            drawn.map((s) => (
+              <path
+                key={`edge-${s.id}`}
+                d={`M${C} ${C} L${at(s.a)}`}
+                className={'pie-edge' + (whole && (s.id === 'ahead' || s.a === 0) && lived ? ' is-divide' : '')}
+              />
+            ))}
           {drawn.map((s) => (
             <path
               key={`rim-${s.id}`}
@@ -141,13 +151,17 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
             />
           ))}
           {labels.map((l) => (
-            <g key={l.id} className={'pie-label' + (l.onPaint ? ' is-on-paint' : '') + faded(l.id)} aria-hidden="true">
+            <g
+              key={l.id}
+              className={'pie-label' + (l.onPaint ? ' is-on-paint' : '') + (l.text ? '' : faded(l.id))}
+              aria-hidden="true"
+            >
               <text x={l.x} y={l.word ? l.y - 1 : l.y + 5} className="pie-label-n">
                 {fmt(l.n)}
               </text>
               {l.word && (
                 <text x={l.x} y={l.y + 13} className="pie-label-word">
-                  {LABEL[l.id]}
+                  {l.text ?? LABEL[l.id]}
                 </text>
               )}
             </g>
@@ -165,23 +179,44 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
         )}
 
         <ul className="pie-legend">
-          {slices.map((s) => (
-            <li key={s.id} className={faded(s.id).trim() || undefined}>
-              <button
-                className="pie-legend-row"
-                disabled={s.id === 'ahead' || !s.count}
-                aria-pressed={picked === s.id}
-                onClick={() => pick(s.id)}
-              >
-                <span
-                  className={'pie-dot' + (s.id === 'ahead' ? ' is-ahead' : '')}
-                  style={{ background: FILL[s.id] }}
-                />
-                <span className="pie-legend-label">{LABEL[s.id]}</span>
-                <span className="pie-legend-n">{fmt(s.count)}</span>
-              </button>
-            </li>
-          ))}
+          {/* Whole life: days ahead, then days lived with what's inside it, indented under it. */}
+          {whole && (
+            <>
+              <li>
+                <span className="pie-legend-row">
+                  <span className="pie-dot is-ahead" style={{ background: FILL.ahead }} />
+                  <span className="pie-legend-label">days ahead</span>
+                  <span className="pie-legend-n">{fmt(slices.find((s) => s.id === 'ahead')?.count ?? 0)}</span>
+                </span>
+              </li>
+              <li className="is-group">
+                <span className="pie-legend-row">
+                  <span className="pie-dot is-lived" />
+                  <span className="pie-legend-label">days lived</span>
+                  <span className="pie-legend-n">{fmt(lived)}</span>
+                </span>
+              </li>
+            </>
+          )}
+          {slices
+            .filter((s) => !whole || s.id !== 'ahead')
+            .map((s) => (
+              <li key={s.id} className={(faded(s.id).trim() + (whole ? ' is-inside' : '')).trim() || undefined}>
+                <button
+                  className="pie-legend-row"
+                  disabled={s.id === 'ahead' || !s.count}
+                  aria-pressed={picked === s.id}
+                  onClick={() => pick(s.id)}
+                >
+                  <span
+                    className={'pie-dot' + (s.id === 'ahead' ? ' is-ahead' : '')}
+                    style={{ background: FILL[s.id] }}
+                  />
+                  <span className="pie-legend-label">{LABEL[s.id]}</span>
+                  <span className="pie-legend-n">{fmt(s.count)}</span>
+                </button>
+              </li>
+            ))}
         </ul>
       </div>
 
@@ -194,7 +229,7 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
 }
 
 type Drawn = Slice & { a: number; b: number }
-type Label = { id: SliceId; x: number; y: number; n: number; onPaint: boolean; word: boolean }
+type Label = { id: SliceId; x: number; y: number; n: number; onPaint: boolean; word: boolean; text?: string }
 
 // A wedge holds its number when it's wide enough, and its word under it when wider still.
 const ROOM = 0.06
@@ -220,6 +255,25 @@ function pieLabels(drawn: Drawn[]): Label[] {
         word: s.b - s.a >= WORD_ROOM,
       }
     })
+}
+
+/** Whole life: one label per half — "days lived" in the middle of the lived side, "days ahead" in the future wedge. */
+function halfLabels(drawn: Drawn[], lived: number, livedEnd: number): Label[] {
+  const out: Label[] = []
+  const point = (turn: number) =>
+    at(turn, R * 0.6)
+      .split(' ')
+      .map(Number)
+  if (lived && livedEnd >= ROOM) {
+    const [x, y] = point(livedEnd / 2)
+    out.push({ id: 'unpainted', x, y, n: lived, onPaint: true, word: true, text: 'days lived' })
+  }
+  const ahead = drawn.find((s) => s.id === 'ahead')
+  if (ahead && ahead.b - ahead.a >= ROOM) {
+    const [x, y] = point((ahead.a + ahead.b) / 2)
+    out.push({ id: 'ahead', x, y, n: ahead.count, onPaint: false, word: true, text: 'days ahead' })
+  }
+  return out
 }
 
 const pieLabel = (slices: Slice[]) =>

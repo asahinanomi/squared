@@ -2439,6 +2439,10 @@ button.settings-row:active {
   vector-effect: non-scaling-stroke;
   stroke-linecap: round;
 }
+/* Whole life: where the days lived meet the days ahead, the line is the rim's weight. */
+.pie-edge.is-divide {
+  stroke-width: 3px;
+}
 .pie-label text {
   text-anchor: middle;
   font-family: inherit;
@@ -2479,6 +2483,18 @@ button.settings-row:active {
   text-align: left;
   color: inherit;
   font: inherit;
+}
+/* Whole life: "days lived" heads the group, and what's inside it sits indented under it. */
+.pie-legend li.is-group .pie-legend-label,
+.pie-legend li.is-group .pie-legend-n {
+  font-weight: 600;
+}
+.pie-legend li.is-inside {
+  padding-left: 25px;
+}
+.pie-dot.is-lived {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--ink);
 }
 .pie-legend-row:disabled {
   opacity: 1;
