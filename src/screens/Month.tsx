@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { fromIso, isoDate, longDate, monthCells, monthTitle, shortWeekday, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
@@ -56,8 +56,14 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
   }
   const next = shiftMonth(current, 1)
 
-  // After zooming, put the day that was under the fingers back under them.
+  // After zooming, put the day that was under the fingers back under them — only on a zoom, never on
+  // arrival (an old anchor would pull a freshly opened month away to wherever you last pinched).
+  const arrived = useRef(false)
   useLayoutEffect(() => {
+    if (!arrived.current) {
+      arrived.current = true
+      return
+    }
     const el = scroller.current
     if (!el || !anchor) return
     const target =
