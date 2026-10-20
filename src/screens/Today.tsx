@@ -197,8 +197,12 @@ export function Today(props: Props) {
                 max={today}
                 value={date}
                 onChange={(e) => {
-                  const iso = e.target.value
-                  if (!iso || iso > today || (born && iso < born)) return
+                  // Clamp, never refuse: iPhone's wheels change the year first, keeping today's month and day,
+                  // so 1971 can first arrive as a day before you were born — it lands on your birthday instead.
+                  let iso = e.target.value
+                  if (!iso) return
+                  if (born && iso < born) iso = born
+                  if (iso > today) iso = today
                   setSlide(null)
                   onDate(iso)
                 }}
