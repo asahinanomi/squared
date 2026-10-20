@@ -39,6 +39,8 @@ import { Privacy } from './screens/Privacy'
 import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
+import { Welcome, welcomed } from './screens/Welcome'
+import { loadMatters, syncMatters } from './lib/matters'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import './App.css'
@@ -57,6 +59,7 @@ type Screen =
   | 'feedback'
   | 'account'
   | 'privacy'
+  | 'welcome'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
 const LADDER: Screen[] = ['today', 'month', 'year', 'life']
 
@@ -166,6 +169,11 @@ export default function App() {
       .then(([d, n]) => {
         setDays(d)
         setNotes(n ?? legacyNotes(d))
+        // Someone new (nothing painted, no compass yet, here or in the account): a pause before the first square.
+        if (Object.keys(d).length || welcomed()) return
+        return syncMatters(loadMatters()).then(
+          (m) => !m.meaningful.length && !m.wasted.length && setScreenValue('welcome'),
+        )
       })
       .catch((e) => console.error('Could not load days', e))
   }, [userId])
@@ -502,6 +510,7 @@ export default function App() {
         }
       >
         {screen !== 'setup' &&
+          screen !== 'welcome' &&
           screen !== 'settings' &&
           screen !== 'matters' &&
           screen !== 'feedback' &&
@@ -583,6 +592,8 @@ export default function App() {
                 else if (afterSetup !== 'settings') goToday()
               }}
             />
+          ) : screen === 'welcome' ? (
+            <Welcome onDone={goToday} />
           ) : screen === 'feedback' ? (
             <Feedback onBack={() => setScreenValue(feedbackFrom)} />
           ) : screen === 'settings' ? (
