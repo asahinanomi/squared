@@ -39,20 +39,26 @@ const STEP = 6
 /** How close (px) to an end of the list before more months are added. */
 const NEAR = 900
 
-/** A run of unpainted days, folded into one quiet row: "Sep 14 – 21 · 8 unpainted days ⌄". */
+/** A run of unpainted days, folded into one quiet gap marker: "┈ Sep 14 – 21 · 8 unpainted days ⌄ ┈". */
 function Fold({ run, open, onToggle }: { run: string[]; open: boolean; onToggle: () => void }) {
   const from = shortDateParts(run[0])
   const to = shortDateParts(run.at(-1)!)
   const sameMonth = run[0].slice(0, 7) === run.at(-1)!.slice(0, 7)
   return (
     <button className="day-fold" aria-expanded={open} onClick={onToggle}>
-      <span className="day-card-swatch" aria-hidden="true" />
       <span className="day-fold-text">
         {from.monthDay} – {sameMonth ? to.monthDay.split(' ')[1] : to.monthDay} · {run.length} unpainted days
       </span>
-      <span className="day-fold-chevron" aria-hidden="true">
-        {open ? '⌃' : '⌄'}
-      </span>
+      <svg className={'day-fold-chevron' + (open ? ' is-open' : '')} viewBox="0 0 12 12" aria-hidden="true">
+        <path
+          d="M3 4.5 L6 7.5 L9 4.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
     </button>
   )
 }

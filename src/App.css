@@ -2295,8 +2295,7 @@ button.settings-row:active {
   box-shadow: none;
 }
 /* Unpainted: the month view's empty square — dashed, an empty slot to fill, never a checkbox. */
-.day-card:not(.is-painted) .day-card-swatch,
-.day-fold .day-card-swatch {
+.day-card:not(.is-painted) .day-card-swatch {
   box-shadow: none;
   border: 1.5px dashed #b0b0a8;
   background: #fff;
@@ -2306,23 +2305,33 @@ button.settings-row:active {
   border-color: var(--ink);
   box-shadow: none;
 }
-/* A folded run of unpainted days: one quiet row; a tap opens it into its days. */
+/* A folded run of unpainted days: not a day, a gap — quiet text between two dotted hairlines; a tap opens it. */
 .day-fold {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   width: 100%;
-  padding: 6px 16px;
-  text-align: left;
+  padding: 10px 4px;
   color: var(--muted);
+}
+.day-fold::before,
+.day-fold::after {
+  content: '';
+  flex: 1;
+  border-top: 1px dotted #c9c9c2;
 }
 .day-fold-text {
-  flex: 1;
-  font-size: 16px;
+  font-size: 14px;
+  white-space: nowrap;
 }
 .day-fold-chevron {
-  font-size: 14px;
-  color: var(--muted);
+  width: 14px;
+  height: 14px;
+  margin-left: -4px;
+  transition: transform 0.2s;
+}
+.day-fold-chevron.is-open {
+  transform: rotate(180deg);
 }
 .day-card.is-today .day-card-swatch {
   box-shadow:
