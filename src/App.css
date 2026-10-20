@@ -157,6 +157,38 @@
 .wordmark span {
   color: #a3a39e;
 }
+/* "beta": a small soft capsule, ink on paper (no colour), wherever it's said. */
+.beta {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #e9e9e3;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.4;
+  vertical-align: 3px;
+}
+.menu-beta {
+  padding: 8px 18px 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.menu-beta .beta {
+  margin-left: 4px;
+  vertical-align: 0;
+}
+.support-beta {
+  margin: -14px 0 22px !important;
+  font-size: 16px !important;
+  color: var(--muted) !important;
+}
+.support-beta .beta {
+  margin: 0 6px 0 0;
+  vertical-align: 1px;
+}
 /* The whole page is one centred column: brand, then the message, then sign-in, each its own group. */
 .signin-message {
   margin-top: 64px;

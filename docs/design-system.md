@@ -65,6 +65,7 @@ squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, 
 - **The day's canvas:** the one square you paint on is a canvas — a clean ink edge (2.5px, nearly square corners), a thin raw-canvas margin inside it (7px, #EBE6DA) where the priming stops, and a primed face with a fine linen weave while blank (smooth paint once painted, kept inside the margin). Flat, with a short desk shadow; no 3D, no wobble. Every other square (month, list, life) is a gallery thumbnail and keeps the plain rounded square.
 - **Control bar:** its own surface, #FCFCFA with no dot grid, lifted by a soft shadow cast upward (0 −4px 14px, ink at 7%) — never a hairline.
 - **Pie labels:** every label (number, word under it) sits on the line from the centre to the rim through the middle of its wedge, halfway out.
+- **Beta mark:** a small soft capsule, lowercase "beta", 12px/500 ink on #E9E9E3, radius 999. Beside the wordmark on sign-in and at the menu's foot; never on the day screen.
 - **Links / dividers:** 1px dotted hairlines.
 
 ## Layout — sign-in / home

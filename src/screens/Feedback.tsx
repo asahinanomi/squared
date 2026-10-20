@@ -36,7 +36,8 @@ export function Feedback({ onBack }: Props) {
       ) : (
         <>
           <p className="feedback-lede">
-            what confused you, or felt off? what did your squares show you? anything helps.
+            squared is in beta, so your feedback shapes it. what confused you, or felt off? what did your squares show
+            you? anything helps.
           </p>
           <textarea
             className="feedback-input"

@@ -12,6 +12,9 @@ export function Support({ onBack }: Props) {
         <Chevron dir="left" />
       </button>
       <h1 className="idea-title">help build squared</h1>
+      <p className="support-beta">
+        <b className="beta">beta</b> squared is new, and still growing.
+      </p>
       <p>
         I’m building squared myself, one square a day. I hate to see my days, my life, go by unnoticed. How sad that
         would be.

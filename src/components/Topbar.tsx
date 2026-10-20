@@ -59,6 +59,9 @@ export function Topbar({ onHome, onCalendar, onIdea, onFeedback, onSupport, onSe
             <button className="menu-feedback" onClick={go(onSupport)}>
               support squared
             </button>
+            <span className="menu-beta">
+              squared <b className="beta">beta</b>
+            </span>
           </nav>
         </div>
       )}

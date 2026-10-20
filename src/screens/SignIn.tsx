@@ -19,6 +19,7 @@ export function SignIn({
         <Logo size={40} />
         <h1 className="wordmark">
           squared<span>.today</span>
+          <b className="beta">beta</b>
         </h1>
       </header>
       {/* The number first — a life is finite — then the question it raises. */}
