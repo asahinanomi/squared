@@ -910,7 +910,8 @@
   /* Down to the phone's home bar, no further (a little room on phones without one). */
   padding: 6px 0 max(env(safe-area-inset-bottom), 10px);
 }
-/* App controls get their own ground: plain paper (no dot grid) and a hairline above, edge to edge. */
+/* App controls get their own ground: a lighter plain surface (no dot grid), lifted by a soft shadow cast up over
+   the content — the ◎ chip's shadow — so the bar reads as its own layer, edge to edge. */
 .zoombar::before {
   content: '';
   position: absolute;
@@ -920,8 +921,8 @@
   left: 50%;
   width: 100vw;
   transform: translateX(-50%);
-  background: var(--bg);
-  border-top: 1px solid rgba(20, 20, 19, 0.08);
+  background: var(--bar);
+  box-shadow: var(--bar-shadow);
 }
 .lifeglass {
   position: relative;
@@ -1136,10 +1137,10 @@
   display: flex;
   justify-content: flex-end;
   gap: 6px;
-  /* The same band as the zoom bar on every other level: plain ground, a hairline, the pair on the right. */
+  /* The same band as the zoom bar on every other level: its own lifted surface, the pair on the right. */
   padding: 6px max(var(--gutter), calc((100vw - 560px) / 2 + var(--gutter))) max(env(safe-area-inset-bottom), 10px);
-  background: var(--bg);
-  border-top: 1px solid rgba(20, 20, 19, 0.08);
+  background: var(--bar);
+  box-shadow: var(--bar-shadow);
 }
 .today-zoom button {
   width: 40px;
