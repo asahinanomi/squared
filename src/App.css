@@ -577,44 +577,107 @@
 
 /* Torn between green and red: a question to settle it, and one line of your own compass. */
 .torn {
-  margin: 4px 0 0;
-  max-width: 300px;
+  margin: 12px 0 0;
+  width: min(100%, 320px);
   text-align: center;
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--ink-soft);
   animation: fade-in 0.3s ease-out;
 }
 .torn p {
   margin: 0;
 }
+.torn-ask {
+  font-size: 13px;
+  color: var(--muted);
+}
+/* In the app's own voice (Inter), so it sits with the palette instead of over it. */
 .torn-question {
-  font-family: var(--font-reflect);
-  font-optical-sizing: auto;
-  font-size: 18px;
-  font-weight: 450;
+  margin-top: 2px !important;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--ink);
 }
-.torn-compass {
-  margin-top: 6px !important;
+/* The bridge to your list: a small label between two dotted hairlines. */
+.torn-said {
+  margin-top: 10px !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
   color: var(--muted);
 }
-.torn-compass ul {
-  list-style: none;
-  margin: 0 0 2px;
-  padding: 0;
-  color: var(--ink-soft);
+.torn-said::before,
+.torn-said::after {
+  content: '';
+  flex: 1;
+  border-top: 1px dotted #c9c9c2;
 }
-.torn-compass li::before {
-  content: '·';
-  margin-right: 6px;
+.torn-mine {
+  margin-top: 4px !important;
+  font-size: 14px;
+  line-height: 1.45;
   color: var(--muted);
 }
-.torn-compass button {
-  font: inherit;
+.torn-mine:has(.torn-pick) {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+/* One line of yours, cut short if long; the whole list is a tap away. */
+.torn-pick {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.torn-mine button {
+  flex: none;
   color: var(--ink-soft);
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
+}
+/* Your whole compass, in a sheet. */
+.compass-sub {
+  margin: -6px 0 0;
+  font-size: 16px;
+  color: var(--ink-soft);
+}
+.compass-edit {
+  margin-top: 4px;
+  padding: 4px 0;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
+}
+.compass-rule {
+  border: 0;
+  border-top: 1px dotted #c9c9c2;
+  margin: 14px 0 18px;
+}
+.compass-list {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 46vh;
+  overflow-y: auto;
+}
+.compass-list li {
+  display: flex;
+  gap: 12px;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.compass-dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  margin-top: 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--ink);
 }
 
 /* ---------- note under the square ---------- */

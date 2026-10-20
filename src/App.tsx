@@ -117,8 +117,8 @@ export default function App() {
   const [pieScope, setPieScope] = useState<Scope>('life')
   // Where settings was opened from: its back arrow returns there.
   const [settingsFrom, setSettingsFrom] = useState<Screen>('today')
-  // What matters opens from settings or from the idea; back returns there.
-  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea'>('settings')
+  // What matters opens from settings, the idea or the day's compass; back returns there.
+  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea' | 'today'>('settings')
   const [date, setDate] = useState(todayIso)
   const [days, setDays] = useState<Days>(() => (demo ? mockDays() : {}))
   daysNow.current = days
@@ -578,6 +578,10 @@ export default function App() {
               onFilled={onFilled}
               onWipe={onWipe}
               onZoomOut={outOfDay}
+              onMatters={() => {
+                setMattersFrom('today')
+                setScreenValue('matters')
+              }}
             />
           ) : screen === 'idea' ? (
             <Idea
@@ -643,7 +647,7 @@ export default function App() {
           ) : screen === 'matters' ? (
             <WhatMatters
               onBack={() => setScreenValue(mattersFrom)}
-              backLabel={mattersFrom === 'idea' ? 'the idea' : 'settings'}
+              backLabel={mattersFrom === 'idea' ? 'the idea' : mattersFrom}
               onPaint={goToday}
               paintedToday={!!days[todayIso()]}
             />

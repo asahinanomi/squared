@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { NotesList } from '../components/NotesList'
+import { Sheet } from '../components/Sheet'
 import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
@@ -39,6 +40,8 @@ type Props = {
   onFilled: (p: Paint) => void
   /** Zoom out to the month. */
   onZoomOut: () => void
+  /** Off to settings → what matters, to edit the compass. */
+  onMatters: () => void
 }
 
 export function Today(props: Props) {
@@ -74,7 +77,6 @@ export function Today(props: Props) {
   useEffect(() => {
     switches.current = { last: null, n: 0 }
     setTorn(false)
-    setCompassOpen(false)
   }, [date])
   const dip = (p: Paint) => {
     onLoad(p)
@@ -84,7 +86,7 @@ export function Today(props: Props) {
     s.last = p
     if (s.n >= 2) setTorn(true)
   }
-  // Your own "mattered" entries; one is shown (the same all day, so it doesn't flicker), all on "see all".
+  // Your own "mattered" entries; one is shown (the same all day, so it doesn't flicker), all in a sheet.
   const compass = torn
     ? loadMatters()
         .meaningful.map((e) => e.text.trim())
@@ -92,6 +94,7 @@ export function Today(props: Props) {
     : []
   const pick = [...date].reduce((h, ch) => h + ch.charCodeAt(0), 0)
   const [compassOpen, setCompassOpen] = useState(false)
+  useEffect(() => setCompassOpen(false), [date])
 
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
   const hasPrev = !born || prev >= born
@@ -316,28 +319,21 @@ export function Today(props: Props) {
                 </p>
                 {torn && (
                   <div className="torn" aria-live="polite">
-                    <p>torn? ask:</p>
+                    <p className="torn-ask">torn? ask yourself</p>
                     <p className="torn-question">did what mattered count most?</p>
-                    {/* Your compass, right here — it opens in place, so you never leave the day. */}
+                    {/* Your compass: one line here, all of it in a sheet, so the day never grows. */}
                     {compass.length ? (
-                      <div className="torn-compass">
-                        {compassOpen ? (
-                          <ul>
-                            {compass.map((text, i) => (
-                              <li key={i}>{text}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <span>your compass: “{compass[pick % compass.length]}” · </span>
-                        )}
-                        {compass.length > 1 && (
-                          <button aria-expanded={compassOpen} onClick={() => setCompassOpen(!compassOpen)}>
-                            {compassOpen ? 'less' : 'see all'}
-                          </button>
-                        )}
-                      </div>
+                      <>
+                        <p className="torn-said">you said these matter to you</p>
+                        <p className="torn-mine">
+                          <span className="torn-pick">“{compass[pick % compass.length]}”</span>
+                          {compass.length > 1 && (
+                            <button onClick={() => setCompassOpen(true)}>see all {compass.length}</button>
+                          )}
+                        </p>
+                      </>
                     ) : (
-                      <p className="torn-compass">name what matters to you in settings → what matters</p>
+                      <p className="torn-mine">name what matters to you in settings → what matters</p>
                     )}
                   </div>
                 )}
@@ -358,6 +354,25 @@ export function Today(props: Props) {
             onDelete={onDeleteNote}
           />
         )}
+        <Sheet open={compassOpen} onClose={() => setCompassOpen(false)}>
+          <h2 className="sheet-title">what matters to you</h2>
+          <p className="compass-sub">you said these matter to you</p>
+          <button className="compass-edit" onClick={props.onMatters}>
+            edit in settings → what matters
+          </button>
+          <hr className="compass-rule" />
+          <ul className="compass-list">
+            {compass.map((text, i) => (
+              <li key={i}>
+                <span className="compass-dot" style={{ background: paintHex('green') }} aria-hidden="true" />
+                {text}
+              </li>
+            ))}
+          </ul>
+          <button className="pill" onClick={() => setCompassOpen(false)}>
+            close
+          </button>
+        </Sheet>
         {wiping && (
           <ConfirmDialog
             title="Start this day over?"
