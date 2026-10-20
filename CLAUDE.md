@@ -22,6 +22,7 @@ Read `README.md` first: it is the product spec and the record of every phase bui
 
 - Stack: React 19 + Vite + TypeScript, Supabase (Google auth), Vercel.
 - Vercel's production branch deploys squared.today on every push — verify before pushing.
+- Vercel's free plan allows 100 deployments a day, and every push to any branch is one. Batch small tweaks into one push, push `main` only, and sync the `claude/` branch only when opening a PR. If a deploy says "rate limited", tell me — it isn't live.
 - Before pushing: `npm run build` (runs `tsc -b`) and `npm run lint`. Format with `npx prettier --no-semi --single-quote --print-width 120 --write <files>`.
 - Check UI changes in a real browser at phone size (390×844 and 375×667). Playwright: use `playwright-core` with `executablePath: '/opt/pw-browsers/chromium'` against `npx vite preview`.
 - New SQL goes in `supabase/migrations/` as the next numbered file; tell me to run it in Supabase.
