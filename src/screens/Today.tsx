@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { ConfirmDialog } from '../components/ConfirmDialog'
 import { NotesList } from '../components/NotesList'
 import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
@@ -22,6 +23,8 @@ type Props = {
   why: Why | null
   nudge: boolean
   onDate: (iso: string) => void
+  /** Wipe the day's square back to blank (after a confirm). */
+  onWipe: () => void
   onLoad: (p: Paint) => void
   onDefine: () => void
   /** Saves a new note, or updates `note` (instantly; a failure reopens the box). */
@@ -47,6 +50,7 @@ export function Today(props: Props) {
   // On each dip, the color's meaning whispers under the palette, then fades (sooner if painting starts).
   const [whisper, setWhisper] = useState<{ paint: Paint; at: number } | null>(null)
   const [whispering, setWhispering] = useState(false)
+  const [wiping, setWiping] = useState(false)
   useEffect(() => {
     if (!whisper) return
     setWhispering(true)
@@ -274,6 +278,24 @@ export function Today(props: Props) {
             onOpen={(n) => onOpenWhy(n)}
             onAdd={() => onOpenWhy()}
             onDelete={onDeleteNote}
+          />
+        )}
+        {/* Painted the wrong day? A quiet way back to blank, set apart at the foot. */}
+        {day && (
+          <button className="day-wipe" onClick={() => setWiping(true)}>
+            wipe this square
+          </button>
+        )}
+        {wiping && (
+          <ConfirmDialog
+            title="Wipe this square?"
+            body="Its colour goes. Your notes for the day stay."
+            confirm="wipe"
+            onConfirm={() => {
+              setWiping(false)
+              props.onWipe()
+            }}
+            onCancel={() => setWiping(false)}
           />
         )}
       </div>

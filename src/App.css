@@ -494,6 +494,16 @@
 .tray-rest[hidden] {
   display: none;
 }
+/* Wipe a square: a quiet text link at the foot of the day, set apart from painting. */
+.day-wipe {
+  display: block;
+  margin: 32px auto 0;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
+}
 .whisper {
   min-height: 1.4em;
   margin: 6px 0 0;

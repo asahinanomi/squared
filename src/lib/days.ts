@@ -60,6 +60,13 @@ export async function fetchAllDays(): Promise<Days> {
   }
 }
 
+/** Wipe a day back to blank: its square goes (its notes, in their own table, stay). */
+export async function wipeDay(date: string): Promise<void> {
+  if (!supabase) return
+  const { error } = await supabase.from('days').delete().eq('date', date)
+  if (error) throw error
+}
+
 /** Paint (or repaint) a day. The database decides painted_on_day on first paint. */
 export async function saveColor(date: string, color: Paint): Promise<void> {
   if (!supabase) return

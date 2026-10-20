@@ -8,7 +8,7 @@ import { Settings } from './screens/Settings'
 import { WhatMatters } from './screens/WhatMatters'
 import { QUESTION } from './lib/config'
 import { paintedFresh, todayIso } from './lib/dates'
-import { fetchAllDays, saveColor, type Days } from './lib/days'
+import { fetchAllDays, saveColor, wipeDay, type Days } from './lib/days'
 import { mockDays } from './lib/mock'
 import {
   addNote,
@@ -219,6 +219,23 @@ export default function App() {
     },
     [date],
   )
+
+  // Wipe: the square goes blank at once and leaves every count; put back if the save fails.
+  const onWipe = () => {
+    const day = date
+    const before = days[day]
+    if (!before) return
+    setWhy(null)
+    setDays((d) => {
+      const next = { ...d }
+      delete next[day]
+      return next
+    })
+    wipeDay(day).catch((e) => {
+      console.error('Could not wipe day', e)
+      setDays((d) => ({ ...d, [day]: before }))
+    })
+  }
 
   // Notes save instantly: the change shows at once and saves in the background. If saving fails,
   // it's undone and the box reopens on that day with the text and a quiet message.
@@ -533,6 +550,7 @@ export default function App() {
               onOpenWhy={(note) => setWhy({ note })}
               onDryBrush={onDryBrush}
               onFilled={onFilled}
+              onWipe={onWipe}
               onZoomOut={outOfDay}
             />
           ) : screen === 'idea' ? (
