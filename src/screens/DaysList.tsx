@@ -182,7 +182,7 @@ export function DaysList({
     const out: string[][] = []
     for (const iso of list) {
       const last = out.at(-1)
-      if (only !== 'unpainted' && quiet(iso) && last && quiet(last[0])) last.push(iso)
+      if (quiet(iso) && last && quiet(last[0])) last.push(iso)
       else out.push([iso])
     }
     return out
