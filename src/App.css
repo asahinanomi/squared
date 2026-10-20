@@ -1152,6 +1152,10 @@
 .today-zoom .today-sound {
   margin-right: auto; /* on the left, apart from the zoom pair */
 }
+.today-zoom .today-sound svg {
+  width: 23px;
+  height: 23px;
+}
 .today-zoom .today-sound[aria-pressed='false'] {
   color: var(--muted);
 }

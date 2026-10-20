@@ -367,11 +367,11 @@ function SpeakerIcon({ on }: { on: boolean }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M4 9.5 H7.5 L12 5.5 V18.5 L7.5 14.5 H4 Z" />
+      <path d="M2.5 8.5 H7 L12.5 3.5 V20.5 L7 15.5 H2.5 Z" />
       {on ? (
-        <path d="M15.5 9 C16.8 10.6 16.8 13.4 15.5 15 M18.2 6.5 C21 9.8 21 14.2 18.2 17.5" />
+        <path d="M16 8.5 C17.6 10.4 17.6 13.6 16 15.5 M19 5.5 C22.4 9.4 22.4 14.6 19 18.5" />
       ) : (
-        <path d="M16 9.5 L21 14.5 M21 9.5 L16 14.5" />
+        <path d="M16 9 L22 15 M22 9 L16 15" />
       )}
     </svg>
   )
