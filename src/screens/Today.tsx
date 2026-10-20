@@ -320,7 +320,7 @@ export function Today(props: Props) {
                 {torn && (
                   <div className="torn" aria-live="polite">
                     <p className="torn-ask">torn? ask yourself:</p>
-                    <p className="torn-question">did what mattered count most?</p>
+                    <p className="torn-question">did what mattered outweigh the rest?</p>
                     {/* Your compass: one line here, all of it in a sheet, so the day never grows. */}
                     {compass.length ? (
                       <>
