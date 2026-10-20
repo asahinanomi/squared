@@ -2149,6 +2149,18 @@ button.settings-row:active {
 .days-month {
   padding: 14px 0 10px;
 }
+/* The year (or month) you're in stays pinned at the top while you scroll its cards: a small paper capsule. */
+.days-month > .ladder-label {
+  position: sticky;
+  top: 22px; /* just clear of the list's soft top fade */
+  z-index: 2;
+  width: fit-content;
+  margin: 0 auto 8px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--paper);
+  box-shadow: 0 0 0 1px #ecece5;
+}
 /* "only empty ×": the list holds one slice's days (from the pie); tap it for all days again. A soft capsule. */
 .days-only {
   display: inline-flex;
