@@ -102,6 +102,7 @@ export default function App() {
   const [listOnly, setListOnly] = useState<Paint | 'unpainted' | null>(null)
   // The list keeps this pointed at the day in the middle of the screen, for a pinch to open on.
   const listMid = useRef(() => todayIso())
+  const daysNow = useRef<Days>({}) // the days as they are now, for callbacks that mustn't change with them
   // A day opened from the list goes back to the list when you zoom out of it.
   const [dayFromList, setDayFromList] = useState(false)
   // Which days the pie is out of; it always opens on the whole life.
@@ -112,6 +113,7 @@ export default function App() {
   const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea'>('settings')
   const [date, setDate] = useState(todayIso)
   const [days, setDays] = useState<Days>(() => (demo ? mockDays() : {}))
+  daysNow.current = days
   const [loaded, setLoaded] = useState<Paint | null>(null)
   const [defining, setDefining] = useState(false)
   const [notes, setNotes] = useState<Notes>({})
@@ -195,7 +197,7 @@ export default function App() {
   // Optimistic: show the paint at once, save in the background, roll back if it fails.
   const onFilled = useCallback(
     (color: Paint) => {
-      setWhy({ settled: color, fresh: !days[date] })
+      setWhy({ settled: color, fresh: !daysNow.current[date] })
       let before: Days[string]
       setDays((d) => {
         before = d[date]
@@ -217,7 +219,7 @@ export default function App() {
         })
       })
     },
-    [date, days],
+    [date],
   )
 
   // Wipe: the square goes blank at once and leaves every count; put back if the save fails.

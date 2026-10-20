@@ -194,12 +194,15 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled }: 
     up(e)
   }
 
-  // Once filled, the last-dipped color settles evenly over the square.
+  // Once filled, the last-dipped color settles evenly over the square — and is saved once, however often
+  // the parent hands down a new onFilled meanwhile.
+  const filled = useRef(onFilled)
+  filled.current = onFilled
   useEffect(() => {
     if (!settling) return
-    const t = setTimeout(() => onFilled(settling), 520)
+    const t = setTimeout(() => filled.current(settling), 520)
     return () => clearTimeout(t)
-  }, [settling, onFilled])
+  }, [settling])
 
   return (
     <div className="paint-wrap">
