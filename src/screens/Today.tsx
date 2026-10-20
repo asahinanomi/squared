@@ -187,7 +187,11 @@ export function Today(props: Props) {
         }}
       >
         <div className="today-trio" ref={trio}>
-          <Question text={question} onDefine={onDefine} />
+          {/* "Today" belongs to now: on any other day, the question asks about "this day" — the date under it. */}
+          <Question
+            text={date === today ? question : question.replace(/\bToday\b/, 'this\u00a0day')}
+            onDefine={onDefine}
+          />
 
           <div className="day-nav">
             {/* Tap the date to jump to any day you've lived: the phone's own date picker, birth to today. */}
