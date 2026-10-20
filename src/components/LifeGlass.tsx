@@ -33,9 +33,6 @@ export function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
   // In years or months, counted from the squares so spent + to paint always add up to the life.
   const per = unit === 'years' ? profile.lifespan : unit === 'months' ? profile.lifespan * 12 : 0
   const count = per ? `${fmt(per - Math.round((c.sofar / c.total) * per))} ${unit}` : `${fmt(c.left)} days`
-  // Sand piles are triangles: area grows with height squared.
-  const top = 7.5 * Math.sqrt(left)
-  const bottom = 7.5 * Math.sqrt(1 - left)
   return (
     <button
       className={'lifeglass' + (falling ? ' is-falling' : '')}
@@ -43,26 +40,36 @@ export function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
       aria-label={`${count} ahead`}
       aria-expanded={open}
     >
-      <svg viewBox="0 0 24 28" aria-hidden="true">
-        <path d="M5 3 H19 M5 25 H19" className="lifeglass-frame" />
-        <path
-          d="M7 3.5 C7 9 11 11.5 11.4 14 C11 16.5 7 19 7 24.5 M17 3.5 C17 9 13 11.5 12.6 14 C13 16.5 17 19 17 24.5"
-          className="lifeglass-glass"
-        />
-        <path d={`M${12 - top * 0.55} ${13.2 - top} H${12 + top * 0.55} L12 13.2 Z`} className="lifeglass-sand" />
-        <path
-          d={`M${12 - bottom * 0.62} 23.6 H${12 + bottom * 0.62} L12 ${23.6 - bottom} Z`}
-          className="lifeglass-sand"
-        />
-        <circle cx="12" cy="15" r="0.9" className="lifeglass-grain" />
-        <circle cx="12" cy="15" r="0.9" className="lifeglass-grain" />
-        <circle cx="12" cy="15" r="0.9" className="lifeglass-grain" />
-      </svg>
+      <Glass left={left} />
       {open && (
         <span className="lifeglass-count" aria-hidden="true">
           {count} ahead!
         </span>
       )}
     </button>
+  )
+}
+
+/** The hourglass drawing: `left` is the share of sand still on top. Its grains fall when a parent has `is-falling`. */
+export function Glass({ left }: { left: number }) {
+  // Sand piles are triangles: area grows with height squared.
+  const top = 7.5 * Math.sqrt(left)
+  const bottom = 7.5 * Math.sqrt(1 - left)
+  return (
+    <svg viewBox="0 0 24 28" aria-hidden="true">
+      <path d="M5 3 H19 M5 25 H19" className="lifeglass-frame" />
+      <path
+        d="M7 3.5 C7 9 11 11.5 11.4 14 C11 16.5 7 19 7 24.5 M17 3.5 C17 9 13 11.5 12.6 14 C13 16.5 17 19 17 24.5"
+        className="lifeglass-glass"
+      />
+      <path d={`M${12 - top * 0.55} ${13.2 - top} H${12 + top * 0.55} L12 13.2 Z`} className="lifeglass-sand" />
+      <path
+        d={`M${12 - bottom * 0.62} 23.6 H${12 + bottom * 0.62} L12 ${23.6 - bottom} Z`}
+        className="lifeglass-sand"
+      />
+      <circle cx="12" cy="15" r="0.9" className="lifeglass-grain" />
+      <circle cx="12" cy="15" r="0.9" className="lifeglass-grain" />
+      <circle cx="12" cy="15" r="0.9" className="lifeglass-grain" />
+    </svg>
   )
 }

@@ -1,3 +1,4 @@
+import type { Paint } from './paints'
 import type { Days } from './days'
 import { supabase } from './supabase'
 
@@ -5,7 +6,15 @@ export type Note = { id: string; date: string; body: string; writtenAt: string }
 /** Notes per day (YYYY-MM-DD), oldest first. */
 export type Notes = Record<string, Note[]>
 /** The open "why?" box: a new note, or an existing one; after a failed save it carries the text and why. */
-export type Why = { note?: Note; draft?: string; error?: string; n?: number }
+export type Why = {
+  note?: Note
+  draft?: string
+  error?: string
+  n?: number
+  /** Just painted: the colour, and whether it's a new square (not a repaint) — for the reveal line. */
+  settled?: Paint
+  fresh?: boolean
+}
 
 type Row = { id: string; date: string; body: string; written_at: string }
 const toNote = (r: Row): Note => ({ id: r.id, date: r.date, body: r.body, writtenAt: r.written_at })

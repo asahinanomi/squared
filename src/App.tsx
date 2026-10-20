@@ -195,7 +195,7 @@ export default function App() {
   // Optimistic: show the paint at once, save in the background, roll back if it fails.
   const onFilled = useCallback(
     (color: Paint) => {
-      setWhy({})
+      setWhy({ settled: color, fresh: !days[date] })
       let before: Days[string]
       setDays((d) => {
         before = d[date]
@@ -217,7 +217,7 @@ export default function App() {
         })
       })
     },
-    [date],
+    [date, days],
   )
 
   // Wipe: the square goes blank at once and leaves every count; put back if the save fails.

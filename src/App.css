@@ -683,6 +683,29 @@
   transform: translateX(-50%) rotate(45deg);
   border-top-left-radius: 4px;
 }
+/* Just painted: a tiny hourglass and "your 3rd mattered day this month" — the square joins your life. */
+.why-reveal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -6px 0 14px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.lifeglass.is-mini {
+  min-height: 0;
+  --zoom-ink: var(--ink-soft);
+}
+.lifeglass.is-mini svg {
+  width: 14px;
+  height: 17px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lifeglass.is-mini.is-falling svg,
+  .lifeglass.is-mini.is-falling .lifeglass-grain {
+    animation: none;
+  }
+}
 .why-label {
   display: block;
   font-size: 18px;

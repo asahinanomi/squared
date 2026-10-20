@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ConfirmDialog } from './ConfirmDialog'
+import { Glass } from './LifeGlass'
 
 type Props = {
   /** Text to start with: the note being edited, or text whose save failed; empty for a new note. */
@@ -14,11 +15,22 @@ type Props = {
   onSave: (text: string) => void
   onDelete?: () => void
   onCancel: () => void
+  /** Just painted: "your 3rd mattered day this month", with a tiny hourglass whose grains fall for a new square. */
+  reveal?: { text: string; fresh: boolean }
 }
 
 // Gentle "why?" bubble under the square. Write as much as you like; Enter makes a new line.
 // It closes at once; if saving fails, the app reopens it with the text and a quiet message.
-export function WhyBubble({ initial = '', original, initialError, editing = false, onSave, onDelete, onCancel }: Props) {
+export function WhyBubble({
+  initial = '',
+  original,
+  initialError,
+  editing = false,
+  onSave,
+  onDelete,
+  onCancel,
+  reveal,
+}: Props) {
   const [text, setText] = useState(initial)
   const error = initialError
   const [confirming, setConfirming] = useState(false)
@@ -66,6 +78,14 @@ export function WhyBubble({ initial = '', original, initialError, editing = fals
     <>
       <div className="why-catcher" onClick={outside} />
       <div className="why">
+        {reveal && (
+          <p className="why-reveal">
+            <span className={'lifeglass is-mini' + (reveal.fresh ? ' is-falling' : '')}>
+              <Glass left={0.55} />
+            </span>
+            {reveal.text}
+          </p>
+        )}
         <label className="why-label" htmlFor="why">
           why?
         </label>

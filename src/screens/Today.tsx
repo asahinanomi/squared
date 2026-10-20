@@ -6,10 +6,10 @@ import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { ZoomInIcon, ZoomOutIcon } from '../components/ZoomBar'
-import { addDays, longDate, shortDateParts, todayIso } from '../lib/dates'
+import { addDays, longDate, ordinal, shortDateParts, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
-import { PAINTS, paintHex, type Paint } from '../lib/paints'
+import { PAINTS, paintHex, WORD, type Paint } from '../lib/paints'
 import { specialDay } from '../lib/special'
 
 type Props = {
@@ -48,6 +48,12 @@ export function Today(props: Props) {
   const next = addDays(date, 1)
   const day = days[date]
   const special = specialDay(date, born)
+  // Just painted: which of this month's days of that colour it is — "your 3rd mattered day this month".
+  const reveal = (paint: Paint, fresh: boolean) => {
+    const month = date.slice(0, 7)
+    const n = Object.entries(days).filter(([iso, d]) => iso.startsWith(month) && d.color === paint).length
+    return n ? { text: `your ${ordinal(n)} ${WORD[paint]} day this month`, fresh } : undefined
+  }
 
   // On each dip, the color's meaning whispers under the palette, then fades (sooner if painting starts).
   const [whisper, setWhisper] = useState<{ paint: Paint; at: number } | null>(null)
@@ -265,6 +271,7 @@ export function Today(props: Props) {
                 onSave={(text) => onSaveNote(why.note, text)}
                 onDelete={why.note ? () => onDeleteNote(why.note!) : undefined}
                 onCancel={onCloseWhy}
+                reveal={why.settled && reveal(why.settled, !!why.fresh)}
               />
             ) : (
               <>
