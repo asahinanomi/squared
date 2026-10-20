@@ -84,7 +84,7 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
   const totals =
     scope === 'painted'
       ? `${fmt(lived)} ${lived === 1 ? 'day' : 'days'} painted`
-      : `${fmt(lived)} days lived` + (scope === 'life' ? ` · ${fmt(ahead)} to paint` : '')
+      : `${fmt(lived)} days lived` + (scope === 'life' ? ` · ${fmt(ahead)} days ahead` : '')
 
   // A tap on the pie picks the slice under it — or a thin one beside it: a sliver within a few degrees of the
   // tap wins over the wide slice next to it, so the smallest slices can still be reached.
