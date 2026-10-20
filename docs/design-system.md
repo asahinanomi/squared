@@ -60,6 +60,7 @@ squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, 
 ## Components
 - **Surface:** paper + dotted grid.
 - **Sign-in button (secondary / quiet):** white fill, 1.5px #E2E2DB border, pill (radius 999), min-height 50px, Inter 500, real Google "G". Deliberately understated so the question leads — never a solid black button.
+- **The day's canvas:** the one square you paint on is a stretched canvas — linen weave while blank, square corners, ink face edge, sides showing below and right in grey line (in the paint once painted), a short desk shadow. Every other square (month, list, life) is a gallery thumbnail and keeps the plain rounded square.
 - **Control bar:** its own surface, #FCFCFA with no dot grid, lifted by a soft shadow cast upward (0 −4px 14px, ink at 7%) — never a hairline.
 - **Pie labels:** every label (number, word under it) sits on the line from the centre to the rim through the middle of its wedge, halfway out.
 - **Links / dividers:** 1px dotted hairlines.

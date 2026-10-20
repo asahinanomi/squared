@@ -13,6 +13,8 @@ type Props = {
   paintedOn?: string
   onDryBrush: () => void
   onFilled: (p: Paint) => void
+  /** The quiet word on a blank square: "paint your day" (today) or "paint this day". */
+  blank?: string
 }
 
 // A quiet word in the middle of the square: what it holds, or that it's waiting.
@@ -29,7 +31,7 @@ function brushCursor(tip: string) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 4 36, crosshair`
 }
 
-export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled }: Props) {
+export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled, blank = 'paint your day' }: Props) {
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const covered = useRef(new Uint8Array(GRID * GRID))
@@ -206,6 +208,16 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled }: 
 
   return (
     <div className="paint-wrap">
+      {/* A stretched canvas: its sides, wrapped round the frame, show below and to the right — in the paint once
+          it's painted. Drawn in grey, quieter than the face's ink edge, so the face stays in front. */}
+      <svg className="canvas-sides" viewBox="0 0 105 105" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          d="M100 0 L105 5 L105 105 L5 105 L0 100 L100 100 Z"
+          fill={settling ? paintHex(settling) : saved ? paintHex(saved) : '#e9e6dc'}
+        />
+        <path d="M100 0 L105 5 L105 105 L5 105 L0 100 L100 100 Z" fill="rgba(20, 20, 19, 0.16)" />
+        <path d="M100 0 L105 5 L105 105 L5 105 L0 100 M100 100 L105 105" className="canvas-sides-line" />
+      </svg>
       <div
         ref={box}
         className={'canvas' + (settling ? ' is-settling' : '')}
@@ -216,7 +228,7 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled }: 
         {settling && <div className="settle" style={{ background: paintHex(settling) }} />}
         {!touched && !settling && (
           <span className={'canvas-word' + (saved ? ' is-painted' : '')} aria-hidden="true">
-            {saved ? WORD[saved] : 'to paint'}
+            {saved ? WORD[saved] : blank}
             {saved && paintedOn && <small className="canvas-painted">painted {plainDate(paintedOn)}</small>}
           </span>
         )}

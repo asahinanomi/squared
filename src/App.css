@@ -412,18 +412,36 @@
 .peek:active {
   color: var(--grey-3);
 }
+/* The day's square is a stretched canvas: a primed off-white face with a fine linen weave (only while blank —
+   painted, it's smooth paint), square corners, an ink edge, and its sides showing below and to the right. */
 .canvas {
   position: relative;
   z-index: 1;
   width: min(46vw, 176px); /* the palette below is drawn to the same width */
   aspect-ratio: 1;
-  background: #fff;
-  border: 3px solid var(--ink); /* the hero: heavier than the 2px keyline */
-  border-radius: 12px;
-  box-shadow:
-    0 2px 0 rgba(20, 20, 19, 0.04),
-    0 18px 40px rgba(20, 20, 19, 0.08);
+  background-color: #f7f5ef;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(120, 110, 90, 0.1) 0 1px, transparent 1px 2.6px),
+    repeating-linear-gradient(90deg, rgba(120, 110, 90, 0.08) 0 1px, transparent 1px 2.6px);
+  border: 2.5px solid var(--ink);
+  border-radius: 2px;
   overflow: hidden;
+}
+.canvas-sides {
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  top: 0;
+  width: calc(100% * 1.05);
+  height: calc(100% * 1.05);
+  overflow: visible;
+}
+.canvas-sides-line {
+  fill: none;
+  stroke: #8f8f8a;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 /* A quiet word in the middle of the square, under the brush (it never takes a touch). */
 .canvas-word {
@@ -453,6 +471,9 @@
 .paint-wrap {
   position: relative;
   z-index: 1;
+  /* Lying on the desk: a short soft shadow under the canvas and its sides, not an app tile's float. */
+  filter: drop-shadow(0 6px 8px rgba(20, 20, 19, 0.08));
+  margin: 0 9px 9px 0; /* room for the canvas's sides, so the whole canvas sits centred */
 }
 .paint-surface {
   position: absolute;

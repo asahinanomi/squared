@@ -250,6 +250,7 @@ export function Today(props: Props) {
                 loaded={loaded}
                 onDryBrush={onDryBrush}
                 onFilled={onFilled}
+                blank={date === today ? 'paint your day' : 'paint this day'}
               />
             </div>
             {hasNext ? peek(next, 1) : <span className="peek is-none" />}
