@@ -93,7 +93,16 @@ export function brushStop() {
 }
 
 /** A soft bell-like note: a sine and a quieter octave, quick in, slow out (`octave`: how much octave it carries). */
-function note(a: AudioContext, freq: number, at: number, level: number, length: number, octave = 0.18) {
+function note(
+  a: AudioContext,
+  freq: number,
+  at: number,
+  level: number,
+  length: number,
+  octave = 0.18,
+  out: AudioNode = master!,
+  attack = 0.012,
+) {
   for (const [mult, share] of [
     [1, 1],
     [2, octave],
@@ -103,42 +112,51 @@ function note(a: AudioContext, freq: number, at: number, level: number, length: 
     osc.frequency.value = freq * mult
     const g = a.createGain()
     g.gain.setValueAtTime(0, at)
-    g.gain.linearRampToValueAtTime(level * share, at + 0.012)
+    g.gain.linearRampToValueAtTime(level * share, at + attack)
     g.gain.exponentialRampToValueAtTime(0.0001, at + length)
-    osc.connect(g).connect(master!)
+    osc.connect(g).connect(out)
     osc.start(at)
     osc.stop(at + length + 0.05)
   }
 }
 
-/** The square settles: one short tone, its own for each colour. */
+const STEP = 0.16 // seconds between a settle's two notes
+
+/** The square settles: two short notes, their own for each colour. */
 export function settleSound(paint: Paint) {
   const a = audio()
   if (!a || !master) return
   const now = a.currentTime + 0.02
+  // Every colour is two notes, the same distance apart: the first sets off, the second answers.
   if (paint === 'green') {
-    // Mattered: warm and bright — two notes a sixth apart, the second just after.
+    // Mattered: flat, then up — a soft bell rising a sixth.
     note(a, 523.25, now, 0.5, 0.9)
-    note(a, 880, now + 0.09, 0.4, 1.1)
+    note(a, 880, now + STEP, 0.4, 1.1)
   } else if (paint === 'red') {
-    // Empty: the same soft bell as mattered, but stepping down a minor chord (A → F → D) — clearly down,
-    // a little sad. Clean notes, nothing slides or buzzes, nothing too low for a phone's speaker.
-    note(a, 440, now, 0.34, 0.7)
-    note(a, 349.23, now + 0.17, 0.36, 0.8)
-    note(a, 293.66, now + 0.34, 0.4, 1.2)
+    // Empty: flat, then down — the same bell, falling a minor third.
+    note(a, 523.25, now, 0.5, 0.9)
+    note(a, 440, now + STEP, 0.4, 1.1)
   } else {
-    // Slipped: sand running out — a trickle of tiny grains that thins away, like an hourglass emptying.
+    // Slipped: down, then down again — two muffled notes, like sand falling and settling on the floor, with a
+    // short soft trickle of grains under the first.
+    const muffle = a.createBiquadFilter()
+    muffle.type = 'lowpass'
+    muffle.frequency.value = 1300
+    muffle.connect(master)
+    note(a, 392, now, 0.42, 0.6, 0.35, muffle, 0.03)
+    note(a, 329.63, now + STEP, 0.44, 0.9, 0.35, muffle, 0.03)
     const src = a.createBufferSource()
     src.buffer = sand(a)
-    // Soft grains, not sharp ticks: the top is rounded off, and it sits under mattered's level.
     const filter = a.createBiquadFilter()
     filter.type = 'bandpass'
-    filter.frequency.value = 900 // lower and rounder: sand, not sizzle
+    filter.frequency.value = 900
     filter.Q.value = 0.7
     const g = a.createGain()
-    g.gain.value = 0.6
+    g.gain.setValueAtTime(0.35, now)
+    g.gain.exponentialRampToValueAtTime(0.0001, now + STEP + 0.1)
     src.connect(filter).connect(g).connect(master)
     src.start(now)
+    src.stop(now + STEP + 0.15)
   }
 }
 
