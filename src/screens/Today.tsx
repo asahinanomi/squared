@@ -71,20 +71,20 @@ export function Today(props: Props) {
     const t = setTimeout(() => setWhispering(false), 3500)
     return () => clearTimeout(t)
   }, [whisper])
-  // Torn between green and red (dipped back and forth twice): a question to settle it, and your own compass.
-  const switches = useRef<{ last: Paint | null; n: number }>({ last: null, n: 0 })
+  // Torn between green and red: on the third dip into them (both among them), whatever the brush held before,
+  // a question to settle it, and your own compass. Grey dips don't count.
+  const dips = useRef<Paint[]>([])
   const [torn, setTorn] = useState(false)
   useEffect(() => {
-    switches.current = { last: null, n: 0 }
+    dips.current = []
     setTorn(false)
   }, [date])
   const dip = (p: Paint) => {
     onLoad(p)
     setWhisper({ paint: p, at: Date.now() })
-    const s = switches.current
-    if (s.last && s.last !== p && p !== 'grey' && s.last !== 'grey') s.n++
-    s.last = p
-    if (s.n >= 2) setTorn(true)
+    if (p === 'grey') return
+    const d = (dips.current = [...dips.current, p])
+    if (d.length >= 3 && d.includes('green') && d.includes('red')) setTorn(true)
   }
   // Your own "mattered" entries; one is shown (the same all day, so it doesn't flicker), all in a sheet.
   const compass = torn
