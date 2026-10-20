@@ -1397,6 +1397,12 @@
   opacity: 1;
   cursor: default;
 }
+/* Before you were born: no square, just a faint number, as on the year view. */
+.month-day.is-before {
+  background: transparent;
+  border-color: transparent;
+  color: #d4d4cd;
+}
 .month-day:not(:disabled):active {
   transform: scale(0.94);
 }

@@ -105,12 +105,18 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
                 if (!iso) return zoomed ? null : <span key={`b${i}`} className="is-blank" />
                 const day = days[iso]
                 const fill = day ? (day.backfilled ? paintTint(day.color) : paintHex(day.color)) : undefined
+                const before = !!born && iso < born // not part of your life: faded, so your first day reads as day one
                 return (
                   <button
                     key={iso}
-                    className={'month-day' + (day ? ' is-painted' : '') + (iso === today ? ' is-today' : '')}
+                    className={
+                      'month-day' +
+                      (day ? ' is-painted' : '') +
+                      (iso === today ? ' is-today' : '') +
+                      (before ? ' is-before' : '')
+                    }
                     style={fill ? { background: fill } : undefined}
-                    disabled={iso > today || (!!born && iso < born)}
+                    disabled={iso > today || before}
                     aria-label={longDate(iso)}
                     data-iso={iso}
                     onClick={() => onPick(iso)}
