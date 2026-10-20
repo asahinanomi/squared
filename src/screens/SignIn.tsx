@@ -5,11 +5,13 @@ export function SignIn({
   onSignIn,
   onIdea,
   onPrivacy,
+  onTerms,
   error,
 }: {
   onSignIn: () => void
   onIdea: () => void
   onPrivacy: () => void
+  onTerms: () => void
   error?: string | null
 }) {
   return (
@@ -44,6 +46,10 @@ export function SignIn({
           <span aria-hidden="true">·</span>
           <button className="signin-idea" onClick={onPrivacy}>
             privacy
+          </button>
+          <span aria-hidden="true">·</span>
+          <button className="signin-idea" onClick={onTerms}>
+            terms
           </button>
         </div>
       </div>

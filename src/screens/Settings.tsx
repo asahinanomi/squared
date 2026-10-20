@@ -13,12 +13,13 @@ type Props = {
   onMatters: () => void
   onAccount: () => void
   onPrivacy: () => void
+  onTerms: () => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 // Settings: one quiet list; each row opens its own screen.
-export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onPrivacy }: Props) {
+export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onPrivacy, onTerms }: Props) {
   const summary = profile
     ? [
         fromIso(profile.born).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -71,6 +72,8 @@ export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onP
 
       <div className="settings-foot-links">
         <button onClick={onPrivacy}>privacy</button>
+        <span aria-hidden="true">·</span>
+        <button onClick={onTerms}>terms</button>
       </div>
       <p className="settings-foot">squared.today</p>
     </main>

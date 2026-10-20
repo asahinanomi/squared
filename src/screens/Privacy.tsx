@@ -13,7 +13,7 @@ export function Privacy({ onBack, backLabel }: Props) {
       <h1 className="idea-title">privacy</h1>
       <p className="privacy-date">last updated Oct 19, 2026</p>
       <p>squared is a private journal. Here’s exactly what it keeps, and what it doesn’t.</p>
-      <p>squared is in beta. Your squares and notes carry over when it leaves beta.</p>
+      <p>squared is in beta. I’ll do my best to carry your squares and notes over when it leaves beta (see terms).</p>
 
       <h2 className="privacy-head">what squared keeps</h2>
       <ul className="privacy-list">

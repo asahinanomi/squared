@@ -37,6 +37,7 @@ import { Feedback } from './screens/Feedback'
 import { PeriodList } from './screens/PeriodList'
 import { Privacy } from './screens/Privacy'
 import { Support } from './screens/Support'
+import { Terms } from './screens/Terms'
 import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
@@ -60,6 +61,7 @@ type Screen =
   | 'feedback'
   | 'account'
   | 'privacy'
+  | 'terms'
   | 'welcome'
   | 'support'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
@@ -81,6 +83,9 @@ export default function App() {
   // "the idea", opened from the sign-in screen.
   const [ideaOut, setIdeaOut] = useState(false)
   const [privacyOut, setPrivacyOut] = useState(false)
+  const [termsOut, setTermsOut] = useState(false)
+  // Where privacy and terms were opened from (settings or the menu): back returns there.
+  const [legalFrom, setLegalFrom] = useState<Screen>('settings')
   const [authError, setAuthError] = useState<string | null>(null)
   const [question, setQuestion] = useState(QUESTION)
   const [screen, setScreenValue] = useState<Screen>(tryWelcome ? 'welcome' : trySquaresAtStart ? 'setup' : 'today')
@@ -332,12 +337,17 @@ export default function App() {
       <div className="app">
         <Privacy onBack={() => setPrivacyOut(false)} backLabel="sign in" />
       </div>
+    ) : termsOut ? (
+      <div className="app">
+        <Terms onBack={() => setTermsOut(false)} backLabel="sign in" />
+      </div>
     ) : (
       <SignIn
         error={authError}
         onSignIn={demo ? () => setDemoIn(true) : signInWithGoogle}
         onIdea={() => setIdeaOut(true)}
         onPrivacy={() => setPrivacyOut(true)}
+        onTerms={() => setTermsOut(true)}
       />
     )
 
@@ -444,13 +454,17 @@ export default function App() {
     setListRes(listRes === 'days' ? 'months' : 'years')
   }
   const openSettings = () => {
-    if (!['settings', 'setup', 'matters', 'account', 'privacy'].includes(screen)) setSettingsFrom(screen)
+    if (!['settings', 'setup', 'matters', 'account', 'privacy', 'terms'].includes(screen)) setSettingsFrom(screen)
     setScreenValue('settings')
   }
   const endTrySquares = () => {
     setTrySquares(false)
     history.replaceState(null, '', location.pathname)
     goToday()
+  }
+  const openLegal = (page: 'privacy' | 'terms', from: Screen) => {
+    setLegalFrom(from)
+    setScreenValue(page)
   }
   const openSquareSettings = () => {
     setAfterSetup('settings')
@@ -534,7 +548,8 @@ export default function App() {
           screen !== 'matters' &&
           screen !== 'feedback' &&
           screen !== 'account' &&
-          screen !== 'privacy' && (
+          screen !== 'privacy' &&
+          screen !== 'terms' && (
             <Topbar
               onHome={goToday}
               onCalendar={() => goMonth()}
@@ -554,6 +569,8 @@ export default function App() {
                 setSupportFrom(screen)
                 setScreenValue('support')
               }}
+              onPrivacy={() => openLegal('privacy', screen)}
+              onTerms={() => openLegal('terms', screen)}
               onSettings={openSettings}
               onSignOut={signOut}
             />
@@ -647,7 +664,8 @@ export default function App() {
                 setScreenValue('matters')
               }}
               onAccount={() => setScreenValue('account')}
-              onPrivacy={() => setScreenValue('privacy')}
+              onPrivacy={() => openLegal('privacy', 'settings')}
+              onTerms={() => openLegal('terms', 'settings')}
             />
           ) : screen === 'account' ? (
             <Account
@@ -657,7 +675,15 @@ export default function App() {
               onDeleted={signOut}
             />
           ) : screen === 'privacy' ? (
-            <Privacy onBack={() => setScreenValue('settings')} backLabel="settings" />
+            <Privacy
+              onBack={() => setScreenValue(legalFrom)}
+              backLabel={legalFrom === 'settings' ? 'settings' : 'back'}
+            />
+          ) : screen === 'terms' ? (
+            <Terms
+              onBack={() => setScreenValue(legalFrom)}
+              backLabel={legalFrom === 'settings' ? 'settings' : 'back'}
+            />
           ) : screen === 'matters' ? (
             <WhatMatters
               onBack={() => setScreenValue(mattersFrom)}

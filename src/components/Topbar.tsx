@@ -9,13 +9,26 @@ type Props = {
   /** "send feedback": a note to the maker. */
   onFeedback: () => void
   onSupport: () => void
+  onPrivacy: () => void
+  onTerms: () => void
   onSettings: () => void
   onSignOut: () => void
   /** On a zoom level: one level out, labelled with where it lands ("2026", "a life"). Replaces the logo. */
   back?: { label: string; onBack: () => void }
 }
 
-export function Topbar({ onHome, onCalendar, onIdea, onFeedback, onSupport, onSettings, onSignOut, back }: Props) {
+export function Topbar({
+  onHome,
+  onCalendar,
+  onIdea,
+  onFeedback,
+  onSupport,
+  onPrivacy,
+  onTerms,
+  onSettings,
+  onSignOut,
+  back,
+}: Props) {
   const [open, setOpen] = useState(false)
   const go = (fn: () => void) => () => {
     setOpen(false)
@@ -59,6 +72,11 @@ export function Topbar({ onHome, onCalendar, onIdea, onFeedback, onSupport, onSe
             <button className="menu-feedback" onClick={go(onSupport)}>
               support squared
             </button>
+            <span className="menu-legal">
+              <button onClick={go(onPrivacy)}>privacy</button>
+              <span aria-hidden="true">·</span>
+              <button onClick={go(onTerms)}>terms</button>
+            </span>
             <span className="menu-beta">
               squared <b className="beta">beta</b>
             </span>
