@@ -69,6 +69,8 @@ const byTime = (a: Note, b: Note) => a.writtenAt.localeCompare(b.writtenAt)
 const demo = !supabase
 // squared.today/?welcome opens onboarding on any account, to try it: nothing is saved.
 const tryWelcome = new URLSearchParams(location.search).has('welcome')
+// squared.today/?squares opens "how many squares?" as the first time shows it, to try it: nothing is saved.
+const trySquaresAtStart = new URLSearchParams(location.search).has('squares')
 
 export default function App() {
   // undefined = still checking; null = signed out.
@@ -79,7 +81,7 @@ export default function App() {
   const [privacyOut, setPrivacyOut] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
   const [question, setQuestion] = useState(QUESTION)
-  const [screen, setScreenValue] = useState<Screen>(tryWelcome ? 'welcome' : 'today')
+  const [screen, setScreenValue] = useState<Screen>(tryWelcome ? 'welcome' : trySquaresAtStart ? 'setup' : 'today')
   // Which way the last move went, so the new level can zoom in or out into place.
   const [motion, setMotion] = useState<'in' | 'out' | null>(null)
   // The month to open on when zooming in from a year (zooming out always lands on today's).
@@ -93,7 +95,8 @@ export default function App() {
   const [focal, setFocal] = useState<Focal | undefined>()
   const [monthAnchor, setMonthAnchor] = useState<{ iso?: string; y: number } | undefined>()
   // Where "how many squares?" returns to: a life, when it was asked for on the way there.
-  const [afterSetup, setAfterSetup] = useState<Screen>('today')
+  const [afterSetup, setAfterSetup] = useState<Screen>(trySquaresAtStart ? 'life' : 'today')
+  const [trySquares, setTrySquares] = useState(trySquaresAtStart)
   // The zoom level the pie was opened from: the switch returns there.
   const [pieFrom, setPieFrom] = useState<Screen>('life')
   // The list of days sits beside the ladder too: where it was opened from, and the day it opens on.
@@ -128,7 +131,7 @@ export default function App() {
   const [profile, setProfile] = useState<Profile | null>(null)
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
-  const [checking, setChecking] = useState(() => !tryWelcome && !welcomed())
+  const [checking, setChecking] = useState(() => !tryWelcome && !trySquaresAtStart && !welcomed())
 
   useEffect(() => {
     if (!supabase) return
@@ -175,7 +178,7 @@ export default function App() {
         setDays(d)
         setNotes(n ?? legacyNotes(d))
         // Someone new (nothing painted, no compass yet, here or in the account): a pause before the first square.
-        if (tryWelcome || welcomed()) return
+        if (tryWelcome || trySquaresAtStart || welcomed()) return
         if (Object.keys(d).length) return markWelcomed()
         return syncMatters(loadMatters()).then((m) =>
           m.meaningful.length || m.wasted.length ? markWelcomed() : setScreenValue('welcome'),
@@ -441,6 +444,11 @@ export default function App() {
     if (!['settings', 'setup', 'matters', 'account', 'privacy'].includes(screen)) setSettingsFrom(screen)
     setScreenValue('settings')
   }
+  const endTrySquares = () => {
+    setTrySquares(false)
+    history.replaceState(null, '', location.pathname)
+    goToday()
+  }
   const openSquareSettings = () => {
     setAfterSetup('settings')
     setScreenValue('setup')
@@ -578,6 +586,8 @@ export default function App() {
                 setScreenValue('matters')
               }}
             />
+          ) : screen === 'setup' && trySquares ? (
+            <Setup profile={null} onBack={endTrySquares} onSave={async () => endTrySquares()} />
           ) : screen === 'setup' ? (
             <Setup
               profile={profile}
