@@ -1148,6 +1148,12 @@
   place-items: center;
   color: var(--zoom-ink);
 }
+.today-zoom .today-sound {
+  margin-right: auto; /* on the left, apart from the zoom pair */
+}
+.today-zoom .today-sound[aria-pressed='false'] {
+  color: var(--muted);
+}
 .today-zoom .zoombar-today {
   width: auto;
   top: 6px;

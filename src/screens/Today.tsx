@@ -10,6 +10,7 @@ import { addDays, longDate, ordinal, shortDateParts, todayIso } from '../lib/dat
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, WORD, type Paint } from '../lib/paints'
+import { setSoundOn, soundOn } from '../lib/sound'
 import { specialDay } from '../lib/special'
 
 type Props = {
@@ -59,6 +60,7 @@ export function Today(props: Props) {
   const [whisper, setWhisper] = useState<{ paint: Paint; at: number } | null>(null)
   const [whispering, setWhispering] = useState(false)
   const [wiping, setWiping] = useState(false)
+  const [sound, setSound] = useState(soundOn)
   useEffect(() => {
     if (!whisper) return
     setWhispering(true)
@@ -317,6 +319,18 @@ export function Today(props: Props) {
       {/* The zoom pair, as on every other level (hidden while writing). */}
       {!why && (
         <div className="today-zoom">
+          {/* Sound on or off, one tap from painting (the same switch as in settings). */}
+          <button
+            className="today-sound"
+            aria-label={sound ? 'Sound on: tap to mute' : 'Sound off: tap to turn on'}
+            aria-pressed={sound}
+            onClick={() => {
+              setSoundOn(!sound)
+              setSound(!sound)
+            }}
+          >
+            <SpeakerIcon on={sound} />
+          </button>
           {/* On a past day, the way back to today, in the centre as on every other bar. */}
           {date !== today && (
             <button
@@ -339,6 +353,27 @@ export function Today(props: Props) {
         </div>
       )}
     </main>
+  )
+}
+
+/** A small speaker: sound waves when on, a cross when muted — drawn like the bar's other icons. */
+function SpeakerIcon({ on }: { on: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 9.5 H7.5 L12 5.5 V18.5 L7.5 14.5 H4 Z" />
+      {on ? (
+        <path d="M15.5 9 C16.8 10.6 16.8 13.4 15.5 15 M18.2 6.5 C21 9.8 21 14.2 18.2 17.5" />
+      ) : (
+        <path d="M16 9.5 L21 14.5 M21 9.5 L16 14.5" />
+      )}
+    </svg>
   )
 }
 
