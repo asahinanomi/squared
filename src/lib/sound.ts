@@ -121,23 +121,41 @@ export function settleSound(paint: Paint) {
     note(a, 523.25, now, 0.5, 0.9)
     note(a, 880, now + 0.09, 0.4, 1.1)
   } else if (paint === 'red') {
-    // Empty: lower and softer than mattered, one note — but not so low a phone's small speaker loses it,
-    // and with more octave in it, so it sounds as loud.
-    note(a, 293.66, now, 0.65, 0.85, 0.5)
+    // Empty: a falling minor third, slow and soft — a small sigh down. Pitched high enough for a phone's
+    // speaker, with more octave in it, so it's as loud as mattered.
+    note(a, 349.23, now, 0.5, 0.7, 0.45)
+    note(a, 293.66, now + 0.22, 0.52, 1.1, 0.45)
   } else {
-    // Slipped: a breath — a soft swell of noise, no note.
-    if (!noise) return
+    // Slipped: sand running out — a trickle of tiny grains that thins away, like an hourglass emptying.
     const src = a.createBufferSource()
-    src.buffer = noise
+    src.buffer = sand(a)
     const filter = a.createBiquadFilter()
-    filter.type = 'lowpass'
-    filter.frequency.value = 1800 // bright enough for a phone speaker to carry
+    filter.type = 'highpass'
+    filter.frequency.value = 1200
     const g = a.createGain()
-    g.gain.setValueAtTime(0, now)
-    g.gain.linearRampToValueAtTime(1.4, now + 0.15)
-    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.7)
+    g.gain.value = 0.9
     src.connect(filter).connect(g).connect(master)
     src.start(now)
-    src.stop(now + 0.75)
   }
+}
+
+let grains: AudioBuffer | null = null
+/** About a second of falling sand: many tiny clicks of noise, thick at first, then thinning out. */
+function sand(a: AudioContext): AudioBuffer {
+  if (grains) return grains
+  const rate = a.sampleRate
+  grains = a.createBuffer(1, Math.round(rate * 1.1), rate)
+  const data = grains.getChannelData(0)
+  for (let n = 0; n < 260; n++) {
+    // Grains bunch at the start and thin out toward the end (t² spacing).
+    const t = Math.random() ** 2 * 1.0
+    const at = Math.round(t * rate)
+    const length = Math.round(rate * (0.002 + Math.random() * 0.004))
+    const level = (0.25 + Math.random() * 0.75) * (1 - t * 0.85)
+    for (let i = 0; i < length && at + i < data.length; i++) {
+      const env = Math.sin((Math.PI * i) / length) // each grain a soft tick, not a click
+      data[at + i] += (Math.random() * 2 - 1) * env * level
+    }
+  }
+  return grains
 }
