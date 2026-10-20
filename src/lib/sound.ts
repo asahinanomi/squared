@@ -92,11 +92,11 @@ export function brushStop() {
   b.src.stop(ctx.currentTime + 0.3)
 }
 
-/** A soft bell-like note: a sine and a quieter octave, quick in, slow out. */
-function note(a: AudioContext, freq: number, at: number, level: number, length: number) {
+/** A soft bell-like note: a sine and a quieter octave, quick in, slow out (`octave`: how much octave it carries). */
+function note(a: AudioContext, freq: number, at: number, level: number, length: number, octave = 0.18) {
   for (const [mult, share] of [
     [1, 1],
-    [2, 0.18],
+    [2, octave],
   ]) {
     const osc = a.createOscillator()
     osc.type = 'sine'
@@ -121,8 +121,9 @@ export function settleSound(paint: Paint) {
     note(a, 523.25, now, 0.5, 0.9)
     note(a, 880, now + 0.09, 0.4, 1.1)
   } else if (paint === 'red') {
-    // Empty: low and soft, one note.
-    note(a, 196, now, 0.6, 0.8)
+    // Empty: lower and softer than mattered, one note — but not so low a phone's small speaker loses it,
+    // and with more octave in it, so it sounds as loud.
+    note(a, 293.66, now, 0.65, 0.85, 0.5)
   } else {
     // Slipped: a breath — a soft swell of noise, no note.
     if (!noise) return
@@ -130,10 +131,10 @@ export function settleSound(paint: Paint) {
     src.buffer = noise
     const filter = a.createBiquadFilter()
     filter.type = 'lowpass'
-    filter.frequency.value = 900
+    filter.frequency.value = 1800 // bright enough for a phone speaker to carry
     const g = a.createGain()
     g.gain.setValueAtTime(0, now)
-    g.gain.linearRampToValueAtTime(0.5, now + 0.15)
+    g.gain.linearRampToValueAtTime(1.4, now + 0.15)
     g.gain.exponentialRampToValueAtTime(0.0001, now + 0.7)
     src.connect(filter).connect(g).connect(master)
     src.start(now)
