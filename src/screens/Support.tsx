@@ -13,8 +13,8 @@ export function Support({ onBack }: Props) {
       </button>
       <h1 className="idea-title">help build squared</h1>
       <p>
-        I’m building squared myself, one square a day. I don’t want my days, the squares of my life, to go by unnoticed.
-        How sad that would be.
+        I’m building squared myself, one square a day. I don’t want my limited days to go by unnoticed. How sad that
+        would be.
       </p>
       <p>If you feel the same, help me build it.</p>
       <p className="idea-sign">— nomi</p>
