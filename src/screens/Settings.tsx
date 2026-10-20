@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { fromIso, todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
 import type { Profile } from '../lib/profile'
+import { setSoundOn, soundOn } from '../lib/sound'
 import { Chevron } from './Today'
 
 type Props = {
@@ -24,6 +26,11 @@ export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onP
         `${fmt(lifeCounts(profile.born, profile.lifespan, todayIso()).total)} squares`,
       ].join(' · ')
     : 'birth date & lifespan'
+  const [sound, setSound] = useState(soundOn)
+  const toggleSound = () => {
+    setSoundOn(!sound)
+    setSound(!sound)
+  }
   return (
     <main className="settings">
       <button className="setup-back" aria-label="Back" onClick={onBack}>
@@ -45,6 +52,13 @@ export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onP
             <span className="settings-sub">mattered &amp; empty — your compass</span>
           </span>
           <Chevron dir="right" />
+        </button>
+        <button className="settings-row" role="switch" aria-checked={sound} onClick={() => toggleSound()}>
+          <span>
+            <span className="settings-label">sound</span>
+            <span className="settings-sub">the brush on paper · a soft tone when done</span>
+          </span>
+          <span className="settings-switch">{sound ? 'on' : 'off'}</span>
         </button>
         <button className="settings-row" onClick={onAccount}>
           <span>

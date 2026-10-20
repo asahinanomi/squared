@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { brushTip } from '../lib/brush'
 import { plainDate } from '../lib/dates'
 import { paintHex, WORD, type Paint } from '../lib/paints'
+import { brushSound, brushStop, settleSound, wakeSound } from '../lib/sound'
 
 type Props = {
   /** Color already saved for this day (shown solid until painted over). */
@@ -41,6 +42,7 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled }: 
   const fingers = useRef(new Set<number>())
   const before = useRef<{ img: ImageData; covered: Uint8Array } | null>(null)
   const [settling, setSettling] = useState<Paint | null>(null)
+  const moved = useRef<{ x: number; y: number; t: number } | null>(null)
   // The word steps aside once the brush touches the square (a new color is on its way).
   const [touched, setTouched] = useState(false)
 
@@ -112,6 +114,7 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled }: 
       }
       last.current = null
       pending.current = null
+      brushStop()
       return
     }
     if (settling) return
@@ -131,6 +134,8 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled }: 
   }
 
   const begin = () => {
+    wakeSound()
+    moved.current = null
     const c = canvas.current!
     before.current = {
       img: c.getContext('2d')!.getImageData(0, 0, c.width, c.height),
@@ -156,6 +161,14 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled }: 
     if (!last.current || !loaded) return
     const events = e.nativeEvent.getCoalescedEvents?.() ?? [e.nativeEvent]
     for (const ev of events.length ? events : [e.nativeEvent]) strokeTo(point(ev))
+    // The bristles' sound follows the brush's speed (in squares per second).
+    const p = point(e)
+    const prev = moved.current
+    if (prev) {
+      const dt = Math.max(1, e.timeStamp - prev.t) / 1000
+      brushSound(Math.hypot(p.x - prev.x, p.y - prev.y) / size.current / dt)
+    }
+    moved.current = { ...p, t: e.timeStamp }
   }
 
   const up = (e?: React.PointerEvent) => {
@@ -167,8 +180,13 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled }: 
     }
     if (!last.current) return
     last.current = null
+    brushStop()
+    wakeSound() // iPhone allows sound from a lifted finger, if the touch-down was too early
     const done = covered.current.reduce((a, b) => a + b, 0) / covered.current.length
-    if (done >= FILLED && loaded) setSettling(loaded)
+    if (done >= FILLED && loaded) {
+      setSettling(loaded)
+      settleSound(loaded)
+    }
   }
 
   const cancel = (e: React.PointerEvent) => {
@@ -187,7 +205,7 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled }: 
     <div className="paint-wrap">
       <div
         ref={box}
-        className="canvas"
+        className={'canvas' + (settling ? ' is-settling' : '')}
         style={saved ? { background: paintHex(saved) } : undefined}
         aria-label={saved ? `Painted ${saved}` : 'Unpainted square'}
       >
