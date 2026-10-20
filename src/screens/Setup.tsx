@@ -203,7 +203,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
             <>
               <div className="setup-line">
                 {inYears ? `${spentYears} years` : fmt(c.sofar)} lived,{' '}
-                {inYears ? `${lifespan - spentYears} years` : fmt(c.left)} ({c.percentLeft}%) to paint
+                {inYears ? `${lifespan - spentYears} years` : fmt(c.left)} ({c.percentLeft}%) ahead
               </div>
               {/* Two views of the same numbers; it opens on squares every time. */}
               <div className="seg setup-seg" role="group" aria-label="Count in">

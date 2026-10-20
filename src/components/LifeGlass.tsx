@@ -40,7 +40,7 @@ export function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
     <button
       className={'lifeglass' + (falling ? ' is-falling' : '')}
       onClick={() => setOpen(!open)}
-      aria-label={`${count} to paint`}
+      aria-label={`${count} ahead`}
       aria-expanded={open}
     >
       <svg viewBox="0 0 24 28" aria-hidden="true">
@@ -60,7 +60,7 @@ export function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
       </svg>
       {open && (
         <span className="lifeglass-count" aria-hidden="true">
-          {count} to paint!
+          {count} ahead!
         </span>
       )}
     </button>

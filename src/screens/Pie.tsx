@@ -148,9 +148,14 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
           ))}
           {labels.map((l) => (
             <g key={l.id} className={'pie-label' + (l.onPaint ? ' is-on-paint' : '') + faded(l.id)} aria-hidden="true">
-              <text x={l.x} y={l.y + 5} className="pie-label-n">
+              <text x={l.x} y={l.word ? l.y - 1 : l.y + 5} className="pie-label-n">
                 {fmt(l.n)}
               </text>
+              {l.word && (
+                <text x={l.x} y={l.y + 13} className="pie-label-word">
+                  {LABEL[l.id]}
+                </text>
+              )}
             </g>
           ))}
         </svg>
@@ -195,10 +200,11 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
 }
 
 type Drawn = Slice & { a: number; b: number }
-type Label = { id: SliceId; x: number; y: number; n: number; onPaint: boolean }
+type Label = { id: SliceId; x: number; y: number; n: number; onPaint: boolean; word: boolean }
 
-// A wedge holds its number when it's wide enough.
+// A wedge holds its number when it's wide enough, and its word under it when wider still.
 const ROOM = 0.06
+const WORD_ROOM = 0.15
 // A slice thinner than this is a sliver: a tap within REACH of it (both in turns) picks it.
 const THIN = 0.03
 const REACH = 0.015
@@ -211,7 +217,14 @@ function pieLabels(drawn: Drawn[]): Label[] {
       const [x, y] = at((s.a + s.b) / 2, R * 0.6)
         .split(' ')
         .map(Number)
-      return { id: s.id, x, y, n: s.count, onPaint: s.id !== 'unpainted' && s.id !== 'ahead' }
+      return {
+        id: s.id,
+        x,
+        y,
+        n: s.count,
+        onPaint: s.id !== 'unpainted' && s.id !== 'ahead',
+        word: s.b - s.a >= WORD_ROOM,
+      }
     })
 }
 
