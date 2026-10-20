@@ -211,9 +211,12 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled, bl
       <div
         ref={box}
         className={'canvas' + (settling ? ' is-settling' : '')}
-        style={saved ? { background: paintHex(saved) } : undefined}
+        style={saved ? ({ '--paint': paintHex(saved) } as React.CSSProperties) : undefined}
         aria-label={saved ? `Painted ${saved}` : 'Unpainted square'}
       >
+        {/* The primed face, inside a thin raw-canvas margin where the priming stops: weave while blank, the
+            day's paint once painted. Strokes and the settle stay inside it too. */}
+        <div className={'canvas-face' + (saved ? ' is-painted' : '')} />
         <canvas ref={canvas} className="paint-surface" />
 
         {settling && <div className="settle" style={{ background: paintHex(settling) }} />}
@@ -224,10 +227,6 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled, bl
           </span>
         )}
       </div>
-      {/* A hand-drawn ink edge, in the palette's line: slightly wobbly, soft corners — a canvas, not an app tile. */}
-      <svg className="canvas-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M4.8 1.9 L23.2 2.1 L40.5 1.3 L58.6 1.2 L77.3 1.6 L95.2 1.4 Q98.4 1.6 98.6 4.8 L97.9 22.3 L98.8 41.3 L98.7 59.4 L97.6 76.5 L98.1 95.2 Q98.4 98.4 95.2 98.6 L77.4 98.8 L59.0 98.4 L41.1 98.5 L23.5 98.8 L4.8 98.1 Q1.6 98.4 1.4 95.2 L2.2 77.8 L1.5 58.9 L2.2 41.4 L2.2 23.3 L1.9 4.8 Q1.6 1.6 4.8 1.9 Z" />
-      </svg>
       {/* Strokes may start a little outside the square. */}
       <div
         className="paint-reach"

@@ -412,37 +412,33 @@
 .peek:active {
   color: var(--grey-3);
 }
-/* The day's square is a canvas: a primed off-white face with a fine linen weave (only while blank — painted,
-   it's smooth paint) inside a hand-drawn ink edge, like the palette's line. Flat, like everything else. */
+/* The day's square is a canvas: a clean ink edge with nearly square corners, a thin raw-canvas margin inside
+   it where the priming stops, and the primed face — a fine linen weave while blank, smooth paint once painted. */
 .canvas {
+  --margin: 7px;
   position: relative;
   z-index: 1;
   width: min(46vw, 176px); /* the palette below is drawn to the same width */
   aspect-ratio: 1;
+  background: #ebe6da; /* the raw canvas */
+  border: 2.5px solid var(--ink);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.canvas-face {
+  position: absolute;
+  inset: var(--margin);
   background-color: #f7f5ef;
   background-image:
     repeating-linear-gradient(0deg, rgba(120, 110, 90, 0.1) 0 1px, transparent 1px 2.6px),
     repeating-linear-gradient(90deg, rgba(120, 110, 90, 0.08) 0 1px, transparent 1px 2.6px);
-  border-radius: 6px;
-  overflow: hidden;
-  clip-path: inset(1px round 5px); /* paint stays inside the drawn line */
 }
-.canvas-edge {
-  position: absolute;
-  z-index: 2;
-  inset: -2.5px;
-  width: calc(100% + 5px);
-  height: calc(100% + 5px);
-  pointer-events: none;
-  overflow: visible;
+.canvas-face.is-painted {
+  background: var(--paint);
 }
-.canvas-edge path {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 2.8;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
+.canvas .paint-surface,
+.canvas .settle {
+  clip-path: inset(var(--margin));
 }
 /* A quiet word in the middle of the square, under the brush (it never takes a touch). */
 .canvas-word {
