@@ -133,9 +133,9 @@ export function settleSound(paint: Paint) {
     note(a, 523.25, now, 0.5, 0.9)
     note(a, 880, now + STEP, 0.4, 1.1)
   } else if (paint === 'red') {
-    // Empty: flat, then down — the same bell, falling a minor third.
+    // Empty: flat, then down — the same bell, falling a fourth.
     note(a, 523.25, now, 0.5, 0.9)
-    note(a, 440, now + STEP, 0.4, 1.1)
+    note(a, 392, now + STEP, 0.42, 1.1)
   } else {
     // Slipped: down, then down again — two muffled notes, like sand falling and settling on the floor, with a
     // short soft trickle of grains under the first.
@@ -143,8 +143,8 @@ export function settleSound(paint: Paint) {
     muffle.type = 'lowpass'
     muffle.frequency.value = 1300
     muffle.connect(master)
-    note(a, 392, now, 0.42, 0.6, 0.35, muffle, 0.03)
-    note(a, 329.63, now + STEP, 0.44, 0.9, 0.35, muffle, 0.03)
+    note(a, 329.63, now, 0.44, 0.6, 0.5, muffle, 0.03)
+    note(a, 277.18, now + STEP, 0.48, 0.9, 0.5, muffle, 0.03)
     const src = a.createBufferSource()
     src.buffer = sand(a)
     const filter = a.createBiquadFilter()
