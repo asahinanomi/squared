@@ -658,7 +658,7 @@ export default function App() {
                 setListRes('days')
                 setListZoomed(false)
                 setListFocus(todayIso())
-                setListOnly(id)
+                setListOnly(id === 'lived' ? null : id)
                 setScreen('list')
               }}
             />

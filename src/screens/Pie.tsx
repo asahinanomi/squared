@@ -13,7 +13,7 @@ type Props = {
   scope: Scope
   onScope: (s: Scope) => void
   /** "see them →": the days of a slice, in the list. */
-  onSee: (id: Exclude<SliceId, 'ahead'>) => void
+  onSee: (id: Exclude<SliceId, 'ahead'> | 'lived') => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
@@ -65,7 +65,17 @@ function rim(a: number, b: number) {
 export function Pie({ days, profile, scope, onScope, onSee }: Props) {
   // A tapped slice (or legend row) lifts and the rest fade; a line under the pie leads to those days.
   const [picked, setPicked] = useState<SliceId | null>(null)
-  const pick = (id: SliceId) => id !== 'ahead' && setPicked(picked === id ? null : id)
+  const pick = (id: SliceId) => {
+    if (id === 'ahead') return
+    setLivedPicked(false)
+    setPicked(picked === id ? null : id)
+  }
+  // Whole life: the lived side (or its legend row) picks all the days lived, not just the unpainted ones.
+  const [livedPicked, setLivedPicked] = useState(false)
+  const pickLived = () => {
+    setPicked(null)
+    setLivedPicked(!livedPicked)
+  }
   const step = SCOPE_ORDER.indexOf(scope)
   const slices = lifeSlices(days, profile.born, profile.lifespan, todayIso(), scope)
   const total = slices.reduce((s, x) => s + x.count, 0)
@@ -83,6 +93,7 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
   const livedEnd = drawn.find((s) => s.id === 'ahead')?.a ?? 1
   const labels = whole ? halfLabels(drawn, lived, livedEnd) : pieLabels(drawn)
   const chosen = drawn.find((s) => s.id === picked && s.count > 0)
+  const allLived = whole && livedPicked && lived > 0
 
   // A tap on the pie picks the slice under it — or a thin one beside it: a sliver within a few degrees of the
   // tap wins over the wide slice next to it, so the smallest slices can still be reached.
@@ -97,9 +108,10 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
       .filter((s) => s.id !== 'ahead' && s.b - s.a < THIN && near(s) < (s.b - s.a) / 2 + REACH)
       .sort((p, q) => near(p) - near(q))[0]
     const hit = thin ?? drawn.find((s) => t >= s.a && t < s.b)
-    if (hit) pick(hit.id)
+    if (hit && whole && hit.id === 'unpainted') pickLived()
+    else if (hit) pick(hit.id)
   }
-  const faded = (id: SliceId) => (chosen && chosen.id !== id ? ' is-faded' : '')
+  const faded = (id: SliceId) => ((chosen && chosen.id !== id) || (allLived && id === 'ahead') ? ' is-faded' : '')
 
   return (
     <main className="pie">
@@ -169,7 +181,11 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
         </svg>
 
         {/* Once a slice is picked, one line under the pie: the way to its days (the pie names its own wedges). */}
-        {chosen && chosen.id !== 'ahead' ? (
+        {allLived ? (
+          <p className="pie-pick">
+            {fmt(lived)} days lived · <button onClick={() => onSee('lived')}>see them →</button>
+          </p>
+        ) : chosen && chosen.id !== 'ahead' ? (
           <p className="pie-pick">
             {fmt(chosen.count)} {LABEL[chosen.id]} {chosen.count === 1 ? 'day' : 'days'} ·{' '}
             <button onClick={() => onSee(chosen.id as Exclude<SliceId, 'ahead'>)}>see them →</button>
@@ -190,11 +206,11 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
                 </span>
               </li>
               <li className="is-group">
-                <span className="pie-legend-row">
+                <button className="pie-legend-row" disabled={!lived} aria-pressed={allLived} onClick={pickLived}>
                   <span className="pie-dot is-lived" />
                   <span className="pie-legend-label">days lived</span>
                   <span className="pie-legend-n">{fmt(lived)}</span>
-                </span>
+                </button>
               </li>
             </>
           )}
