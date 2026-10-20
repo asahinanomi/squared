@@ -11,6 +11,7 @@ import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, WORD, type Paint } from '../lib/paints'
 import { setSoundOn, soundOn } from '../lib/sound'
+import { loadMatters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 
 type Props = {
@@ -25,6 +26,8 @@ type Props = {
   why: Why | null
   nudge: boolean
   onDate: (iso: string) => void
+  /** Open what matters (your compass), coming back to this day. */
+  onMatters: () => void
   /** Wipe the day's square back to blank (after a confirm). */
   onWipe: () => void
   onLoad: (p: Paint) => void
@@ -43,7 +46,7 @@ type Props = {
 export function Today(props: Props) {
   const { question, born, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } =
     props
-  const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut } = props
+  const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut, onMatters } = props
   const today = todayIso()
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
@@ -67,10 +70,22 @@ export function Today(props: Props) {
     const t = setTimeout(() => setWhispering(false), 3500)
     return () => clearTimeout(t)
   }, [whisper])
+  // Torn between green and red (dipped back and forth twice): a question to settle it, and your own compass.
+  const switches = useRef<{ last: Paint | null; n: number }>({ last: null, n: 0 })
+  const [torn, setTorn] = useState(false)
+  useEffect(() => {
+    switches.current = { last: null, n: 0 }
+    setTorn(false)
+  }, [date])
   const dip = (p: Paint) => {
     onLoad(p)
     setWhisper({ paint: p, at: Date.now() })
+    const s = switches.current
+    if (s.last && s.last !== p && p !== 'grey' && s.last !== 'grey') s.n++
+    s.last = p
+    if (s.n >= 2) setTorn(true)
   }
+  const compass = torn ? pickCompass(date) : null
 
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
   const hasPrev = !born || prev >= born
@@ -236,7 +251,13 @@ export function Today(props: Props) {
           </div>
           {special && <p className="day-special">{special}</p>}
 
-          <div className="easel" onPointerDown={() => setWhispering(false)}>
+          <div
+            className="easel"
+            onPointerDown={() => {
+              setWhispering(false)
+              setTorn(false)
+            }}
+          >
             {hasPrev ? peek(prev, -1) : <span className="peek is-none" />}
             <div
               key={date}
@@ -287,6 +308,15 @@ export function Today(props: Props) {
                     </>
                   )}
                 </p>
+                {torn && (
+                  <div className="torn" aria-live="polite">
+                    <p>torn? ask: did what mattered outweigh the rest?</p>
+                    <p className="torn-compass">
+                      {compass && <>your compass: “{compass}” · </>}
+                      <button onClick={onMatters}>{compass ? 'see all →' : 'name what matters to you →'}</button>
+                    </p>
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -392,6 +422,14 @@ export function Chevron({ dir }: { dir: 'left' | 'right' }) {
       />
     </svg>
   )
+}
+
+/** One of your own "mattered" entries, the same one all day (so it doesn't flicker), or null if you haven't any. */
+function pickCompass(date: string): string | null {
+  const list = loadMatters().meaningful.filter((e) => e.text.trim())
+  if (!list.length) return null
+  const n = [...date].reduce((h, ch) => h + ch.charCodeAt(0), 0)
+  return list[n % list.length].text
 }
 
 /** A small down chevron: the date opens a picker; a folded run of days opens. */

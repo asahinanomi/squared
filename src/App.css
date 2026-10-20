@@ -571,6 +571,30 @@
   transition-duration: 0.25s;
 }
 
+/* Torn between green and red: a question to settle it, and one line of your own compass. */
+.torn {
+  margin: 4px 0 0;
+  max-width: 300px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  animation: fade-in 0.3s ease-out;
+}
+.torn p {
+  margin: 0;
+}
+.torn-compass {
+  margin-top: 4px !important;
+  color: var(--muted);
+}
+.torn-compass button {
+  font: inherit;
+  color: var(--ink-soft);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
+}
+
 /* ---------- note under the square ---------- */
 .notes {
   width: min(100%, 360px);
