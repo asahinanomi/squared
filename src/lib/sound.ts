@@ -129,9 +129,9 @@ export function settleSound(paint: Paint) {
   const now = a.currentTime + 0.02
   // Every colour is two notes, the same distance apart: the first sets off, the second answers.
   if (paint === 'green') {
-    // Mattered: flat, then up — a soft bell rising a sixth.
-    note(a, 523.25, now, 0.5, 0.9)
-    note(a, 880, now + STEP, 0.4, 1.1)
+    // Mattered: flat, then up — a bright bell leaping a major sixth, higher and with more shine than the others.
+    note(a, 587.33, now, 0.45, 0.9, 0.3)
+    note(a, 987.77, now + STEP, 0.38, 1.2, 0.3)
   } else if (paint === 'red') {
     // Empty: flat, then down — the same bell, falling a fourth.
     note(a, 523.25, now, 0.5, 0.9)
