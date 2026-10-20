@@ -579,7 +579,7 @@
 .torn {
   margin: 12px 0 36px; /* a clear pause before the day's notes, so the two never read as one block */
   width: min(100%, 300px);
-  text-align: center;
+  text-align: left; /* reads like a note to yourself, top to bottom */
   animation: fade-in 0.3s ease-out;
 }
 .torn p {
@@ -597,29 +597,14 @@
   color: var(--ink);
 }
 /* The bridge to your list: a small label between two dotted hairlines. */
-.torn-said {
-  margin-top: 10px !important;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: var(--muted);
-}
-.torn-said::before,
-.torn-said::after {
-  content: '';
-  flex: 1;
-  border-top: 1px dotted #c9c9c2;
-}
 .torn-mine {
-  margin-top: 4px !important;
+  margin-top: 6px !important;
   font-size: 16px;
   line-height: 1.45;
   color: var(--ink-soft);
 }
 .torn-mine:has(.torn-pick) {
   display: flex;
-  justify-content: center;
   gap: 8px;
 }
 /* One line of yours, cut short if long; the whole list is a tap away. */

@@ -319,14 +319,13 @@ export function Today(props: Props) {
                 </p>
                 {torn && (
                   <div className="torn" aria-live="polite">
-                    <p className="torn-ask">torn? ask yourself</p>
+                    <p className="torn-ask">torn? ask yourself:</p>
                     <p className="torn-question">did what mattered count most?</p>
                     {/* Your compass: one line here, all of it in a sheet, so the day never grows. */}
                     {compass.length ? (
                       <>
-                        <p className="torn-said">you said these matter to you</p>
                         <p className="torn-mine">
-                          <span className="torn-pick">“{compass[pick % compass.length]}”</span>
+                          <span className="torn-pick">you said: “{compass[pick % compass.length]}”</span>
                           {compass.length > 1 && (
                             <button onClick={() => setCompassOpen(true)}>see all {compass.length}</button>
                           )}
