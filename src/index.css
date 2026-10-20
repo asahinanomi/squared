@@ -28,14 +28,30 @@
   background: var(--paper);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+  /* Phones never enlarge text on their own (Chrome's font boosting): sizes stay as designed. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body, #root { min-height: 100%; margin: 0; }
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
 /* Edge-to-edge bands (the zoom bar) never make the page scroll sideways. */
-body { overflow-x: clip; }
-#root { min-height: 100dvh; display: flex; flex-direction: column; }
+body {
+  overflow-x: clip;
+}
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
 
 body {
   background-color: var(--bg);
@@ -47,7 +63,6 @@ body {
   transition: background-color 0.3s;
 }
 
-
 button {
   font: inherit;
   color: inherit;
@@ -56,4 +71,7 @@ button {
   padding: 0;
   cursor: pointer;
 }
-button:disabled { opacity: 0.2; cursor: default; }
+button:disabled {
+  opacity: 0.2;
+  cursor: default;
+}

@@ -19,7 +19,7 @@ export function welcomed(): boolean {
   }
 }
 
-function markWelcomed() {
+export function markWelcomed() {
   try {
     localStorage.setItem(KEY, 'yes')
   } catch {
@@ -181,12 +181,7 @@ export function Welcome({ onDone }: Props) {
           </div>
         </section>
       ) : (
-        // The button sits right under a short compass, at the foot only when both lists are there.
-        <section
-          className={'welcome-step' + (m.length && e.length ? '' : ' is-short')}
-          key="ready"
-          aria-label="Step 4 of 4"
-        >
+        <section className="welcome-step" key="ready" aria-label="Step 4 of 4">
           <h1 className="welcome-q">{m.length ? 'great start!' : 'no rush.'}</h1>
           <p className="welcome-where">you can always add more later in settings → what&nbsp;matters</p>
           {m.length > 0 && (

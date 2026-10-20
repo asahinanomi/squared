@@ -2880,24 +2880,19 @@ button.settings-row:active {
 .welcome-compass ul {
   margin: 0;
   padding-left: 22px;
+  font-size: 16px;
   color: var(--ink-soft);
   line-height: 1.6;
 }
-/* Every step's button: the same 250px pill, centred. */
+/* Every step's button: the same 250px pill, centred, the same 36px under what's above it. */
 .welcome-foot {
-  margin-top: auto;
-  padding-top: 28px;
+  margin-top: 36px;
   align-self: center;
   width: min(100%, 250px);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-}
-.is-pause .welcome-foot,
-.is-short .welcome-foot {
-  margin-top: 36px;
-  padding-top: 0;
 }
 .welcome-foot .pill:disabled {
   opacity: 0.35;

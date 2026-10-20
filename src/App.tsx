@@ -39,7 +39,7 @@ import { Privacy } from './screens/Privacy'
 import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
-import { Welcome, welcomed } from './screens/Welcome'
+import { markWelcomed, Welcome, welcomed } from './screens/Welcome'
 import { loadMatters, syncMatters } from './lib/matters'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
@@ -124,6 +124,9 @@ export default function App() {
   const [why, setWhy] = useState<Why | null>(null)
   const [nudge, setNudge] = useState(false)
   const [profile, setProfile] = useState<Profile | null>(null)
+  // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
+  // anything, so today never flashes up before the welcome.
+  const [checking, setChecking] = useState(() => !welcomed())
 
   useEffect(() => {
     if (!supabase) return
@@ -170,12 +173,14 @@ export default function App() {
         setDays(d)
         setNotes(n ?? legacyNotes(d))
         // Someone new (nothing painted, no compass yet, here or in the account): a pause before the first square.
-        if (Object.keys(d).length || welcomed()) return
-        return syncMatters(loadMatters()).then(
-          (m) => !m.meaningful.length && !m.wasted.length && setScreenValue('welcome'),
+        if (welcomed()) return
+        if (Object.keys(d).length) return markWelcomed()
+        return syncMatters(loadMatters()).then((m) =>
+          m.meaningful.length || m.wasted.length ? markWelcomed() : setScreenValue('welcome'),
         )
       })
       .catch((e) => console.error('Could not load days', e))
+      .finally(() => setChecking(false))
   }, [userId])
 
   // Notes load a month at a time, as you visit days in it (or read past them on the month).
@@ -309,7 +314,7 @@ export default function App() {
     setTimeout(() => setNudge(false), 750)
   }
 
-  if (session === undefined) return null
+  if (session === undefined || (userId && checking)) return null
   if (!signedIn)
     return ideaOut ? (
       <div className="app">
