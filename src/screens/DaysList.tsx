@@ -5,6 +5,7 @@ import { isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, t
 import type { Day, Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
 import { paintHex, paintTint, WORD, type Paint } from '../lib/paints'
+import { specialDay } from '../lib/special'
 import { monthsBetween, shiftMonth } from './Month'
 
 type Props = {
@@ -55,14 +56,17 @@ function DayCard({
   day,
   notes = [],
   today,
+  born,
   onPick,
 }: {
   iso: string
   day?: Day
   notes?: Note[]
   today: string
+  born?: string
   onPick: (iso: string) => void
 }) {
+  const special = specialDay(iso, born)
   const [open, setOpen] = useState(false)
   const latest = notes.at(-1)
   const { weekday, monthDay, suffix } = shortDateParts(iso)
@@ -82,6 +86,7 @@ function DayCard({
           <sup>{suffix}</sup>
           {day && <span className="day-card-word"> · {WORD[day.color]}</span>}
         </button>
+        {special && <span className="day-card-special">{special}</span>}
         {day?.backfilled && day.paintedOn && (
           <span className="day-card-painted">painted {plainDate(day.paintedOn)}</span>
         )}
@@ -235,7 +240,7 @@ export function DaysList({
               <ol className="month-list">
                 {list.map((iso) => (
                   <li key={iso}>
-                    <DayCard iso={iso} day={days[iso]} notes={notes[iso]} today={today} onPick={onPick} />
+                    <DayCard iso={iso} day={days[iso]} notes={notes[iso]} today={today} born={born} onPick={onPick} />
                   </li>
                 ))}
               </ol>

@@ -287,6 +287,13 @@
   margin-top: 42px; /* 40px of ink under the question, the same as palette → notes: the question stands alone, date + square + palette are one group */
   width: 100%;
 }
+/* A special day (your birthday, New Year's Day, Christmas): a quiet line under the date. */
+.day-special {
+  margin: 2px 0 6px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
 .day-label {
   font-size: 20px;
   font-weight: 600;
@@ -1423,7 +1430,18 @@
   letter-spacing: -0.03em;
   line-height: 1;
 }
+/* A special day on the month: a tiny ink dot in the square's corner (ink, not colour). */
+.month-special {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink);
+}
 .month-day {
+  position: relative;
   overflow: hidden;
   border-radius: 5px;
   display: flex;
@@ -2309,6 +2327,11 @@ button.settings-row:active {
 }
 .day-card-word {
   font-weight: 400;
+  color: var(--ink-soft);
+}
+/* A special day: its own line under the date, as on the day screen. */
+.day-card-special {
+  font-size: 14px;
   color: var(--ink-soft);
 }
 .day-card:not(.is-painted) .day-card-open {

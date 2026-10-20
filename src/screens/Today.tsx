@@ -10,6 +10,7 @@ import { addDays, longDate, shortDateParts, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
+import { specialDay } from '../lib/special'
 
 type Props = {
   question: string
@@ -46,6 +47,7 @@ export function Today(props: Props) {
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
   const day = days[date]
+  const special = specialDay(date, born)
 
   // On each dip, the color's meaning whispers under the palette, then fades (sooner if painting starts).
   const [whisper, setWhisper] = useState<{ paint: Paint; at: number } | null>(null)
@@ -224,6 +226,7 @@ export function Today(props: Props) {
               />
             </label>
           </div>
+          {special && <p className="day-special">{special}</p>}
 
           <div className="easel" onPointerDown={() => setWhispering(false)}>
             {hasPrev ? peek(prev, -1) : <span className="peek is-none" />}
