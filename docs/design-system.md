@@ -60,6 +60,7 @@ squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, 
 ## Components
 - **Surface:** paper + dotted grid.
 - **Sign-in button (secondary / quiet):** white fill, 1.5px #E2E2DB border, pill (radius 999), min-height 50px, Inter 500, real Google "G". Deliberately understated so the question leads — never a solid black button.
+- **Pie labels:** every label (number, word under it) sits on the line from the centre to the rim through the middle of its wedge, halfway out.
 - **Links / dividers:** 1px dotted hairlines.
 
 ## Layout — sign-in / home

@@ -243,7 +243,7 @@ function pieLabels(drawn: Drawn[]): Label[] {
   return drawn
     .filter((s) => s.b - s.a >= ROOM)
     .map((s) => {
-      const [x, y] = at((s.a + s.b) / 2, labelR(s.b - s.a))
+      const [x, y] = at((s.a + s.b) / 2, labelR())
         .split(' ')
         .map(Number)
       return {
@@ -257,27 +257,22 @@ function pieLabels(drawn: Drawn[]): Label[] {
     })
 }
 
-/**
- * How far out a wedge's label sits: at the wedge's balance point (its centroid, ⅔·R·sin(θ/2)/(θ/2)), so a wide
- * wedge's label moves in toward the middle and looks centred in it — never closer than a third, nor past 0.62.
- */
-function labelR(span: number) {
-  const half = Math.PI * span
-  const centroid = ((2 / 3) * Math.sin(half)) / half
-  return R * Math.min(0.62, Math.max(0.33, centroid))
+/** The rule for every label on the pie: on the line from the centre to the rim through the middle of its wedge, halfway out. */
+function labelR() {
+  return R * 0.5
 }
 
 /** Whole life: one label per half — "days lived" in the middle of the lived side, "days ahead" in the future wedge. */
 function halfLabels(drawn: Drawn[], lived: number, livedEnd: number): Label[] {
   const out: Label[] = []
-  const point = (turn: number, span: number) => at(turn, labelR(span)).split(' ').map(Number)
+  const point = (turn: number) => at(turn, labelR()).split(' ').map(Number)
   if (lived && livedEnd >= ROOM) {
-    const [x, y] = point(livedEnd / 2, livedEnd)
+    const [x, y] = point(livedEnd / 2)
     out.push({ id: 'unpainted', x, y, n: lived, onPaint: true, word: true, text: 'days lived' })
   }
   const ahead = drawn.find((s) => s.id === 'ahead')
   if (ahead && ahead.b - ahead.a >= ROOM) {
-    const [x, y] = point((ahead.a + ahead.b) / 2, ahead.b - ahead.a)
+    const [x, y] = point((ahead.a + ahead.b) / 2)
     out.push({ id: 'ahead', x, y, n: ahead.count, onPaint: false, word: true, text: 'days ahead' })
   }
   return out
