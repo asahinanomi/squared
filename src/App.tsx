@@ -67,6 +67,8 @@ const byTime = (a: Note, b: Note) => a.writtenAt.localeCompare(b.writtenAt)
 
 // Without Supabase env vars the app runs as a local demo: no sign-in, fake days, nothing saved.
 const demo = !supabase
+// squared.today/?welcome opens onboarding on any account, to try it: nothing is saved.
+const tryWelcome = new URLSearchParams(location.search).has('welcome')
 
 export default function App() {
   // undefined = still checking; null = signed out.
@@ -77,7 +79,7 @@ export default function App() {
   const [privacyOut, setPrivacyOut] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
   const [question, setQuestion] = useState(QUESTION)
-  const [screen, setScreenValue] = useState<Screen>('today')
+  const [screen, setScreenValue] = useState<Screen>(tryWelcome ? 'welcome' : 'today')
   // Which way the last move went, so the new level can zoom in or out into place.
   const [motion, setMotion] = useState<'in' | 'out' | null>(null)
   // The month to open on when zooming in from a year (zooming out always lands on today's).
@@ -126,7 +128,7 @@ export default function App() {
   const [profile, setProfile] = useState<Profile | null>(null)
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
-  const [checking, setChecking] = useState(() => !welcomed())
+  const [checking, setChecking] = useState(() => !tryWelcome && !welcomed())
 
   useEffect(() => {
     if (!supabase) return
@@ -173,7 +175,7 @@ export default function App() {
         setDays(d)
         setNotes(n ?? legacyNotes(d))
         // Someone new (nothing painted, no compass yet, here or in the account): a pause before the first square.
-        if (welcomed()) return
+        if (tryWelcome || welcomed()) return
         if (Object.keys(d).length) return markWelcomed()
         return syncMatters(loadMatters()).then((m) =>
           m.meaningful.length || m.wasted.length ? markWelcomed() : setScreenValue('welcome'),
@@ -598,7 +600,13 @@ export default function App() {
               }}
             />
           ) : screen === 'welcome' ? (
-            <Welcome onDone={goToday} />
+            <Welcome
+              tryOut={tryWelcome}
+              onDone={() => {
+                if (tryWelcome) history.replaceState(null, '', location.pathname)
+                goToday()
+              }}
+            />
           ) : screen === 'feedback' ? (
             <Feedback onBack={() => setScreenValue(feedbackFrom)} />
           ) : screen === 'settings' ? (

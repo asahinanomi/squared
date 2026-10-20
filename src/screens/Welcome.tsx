@@ -4,6 +4,8 @@ import { paintHex } from '../lib/paints'
 import { Chevron } from './Today'
 
 type Props = {
+  /** Opened with ?welcome to try it: nothing is saved. */
+  tryOut?: boolean
   /** Off to today's square (onboarding is over, whichever way it ended). */
   onDone: () => void
 }
@@ -85,7 +87,7 @@ function Lines({
 // Onboarding, shown once to someone new (nothing painted, nothing written yet): a pause before the
 // first square to name what a meaningful day and an empty one look like. The lines go straight into
 // settings → what matters; skipping leaves it empty, to fill in later.
-export function Welcome({ onDone }: Props) {
+export function Welcome({ tryOut, onDone }: Props) {
   const [step, setStep] = useState(0)
   const [meaningful, setMeaningful] = useState(['', '', ''])
   const [wasted, setWasted] = useState(['', '', ''])
@@ -94,7 +96,7 @@ export function Welcome({ onDone }: Props) {
 
   // Reaching the end keeps what was written (the same lists as settings → what matters).
   const finish = (mine: string[], empty: string[]) => {
-    if (mine.length) {
+    if (mine.length && !tryOut) {
       const saved = saveMatters({
         meaningful: mine.map((text) => ({ ...newEntry(), text })),
         wasted: empty.map((text) => ({ ...newEntry(), text })),
@@ -104,7 +106,7 @@ export function Welcome({ onDone }: Props) {
     setStep(3)
   }
   const done = () => {
-    markWelcomed()
+    if (!tryOut) markWelcomed()
     onDone()
   }
   const back = (to: number) => (
