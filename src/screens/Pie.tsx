@@ -79,12 +79,6 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
     })
   const labels = pieLabels(drawn)
   const chosen = drawn.find((s) => s.id === picked && s.count > 0)
-  const lived = slices.filter((s) => s.id !== 'ahead').reduce((n, s) => n + s.count, 0)
-  const ahead = slices.find((s) => s.id === 'ahead')?.count ?? 0
-  const totals =
-    scope === 'painted'
-      ? `${fmt(lived)} ${lived === 1 ? 'day' : 'days'} painted`
-      : `${fmt(lived)} days lived` + (scope === 'life' ? ` · ${fmt(ahead)} days ahead` : '')
 
   // A tap on the pie picks the slice under it — or a thin one beside it: a sliver within a few degrees of the
   // tap wins over the wide slice next to it, so the smallest slices can still be reached.
@@ -160,14 +154,14 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
           ))}
         </svg>
 
-        {/* One line under the pie: the totals — or, once a slice is picked, the way to its days. */}
+        {/* Once a slice is picked, one line under the pie: the way to its days (the pie names its own wedges). */}
         {chosen && chosen.id !== 'ahead' ? (
           <p className="pie-pick">
             {fmt(chosen.count)} {LABEL[chosen.id]} {chosen.count === 1 ? 'day' : 'days'} ·{' '}
             <button onClick={() => onSee(chosen.id as Exclude<SliceId, 'ahead'>)}>see them →</button>
           </p>
         ) : (
-          <p className="pie-pick is-totals">{totals}</p>
+          <p className="pie-pick is-totals" aria-hidden="true" />
         )}
 
         <ul className="pie-legend">
