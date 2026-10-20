@@ -577,8 +577,8 @@
 
 /* Torn between green and red: a question to settle it, and one line of your own compass. */
 .torn {
-  margin: 12px 0 0;
-  width: min(100%, 320px);
+  margin: 12px 0 36px; /* a clear pause before the day's notes, so the two never read as one block */
+  width: min(100%, 300px);
   text-align: center;
   animation: fade-in 0.3s ease-out;
 }
