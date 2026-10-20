@@ -186,7 +186,31 @@ export function Today(props: Props) {
           <Question text={question} onDefine={onDefine} />
 
           <div className="day-nav">
-            <DayLabel key={date} iso={date} slide={slide} />
+            {/* Tap the date to jump to any day you've lived: the phone's own date picker, birth to today. */}
+            <label className="day-pick">
+              <DayLabel key={date} iso={date} slide={slide} />
+              <ChevronDown />
+              <input
+                type="date"
+                aria-label="Go to a day"
+                min={born}
+                max={today}
+                value={date}
+                onChange={(e) => {
+                  const iso = e.target.value
+                  if (!iso || iso > today || (born && iso < born)) return
+                  setSlide(null)
+                  onDate(iso)
+                }}
+                onClick={(e) => {
+                  try {
+                    e.currentTarget.showPicker()
+                  } catch {
+                    /* older browsers open it themselves */
+                  }
+                }}
+              />
+            </label>
           </div>
 
           <div className="easel" onPointerDown={() => setWhispering(false)}>
@@ -286,6 +310,22 @@ export function Chevron({ dir }: { dir: 'left' | 'right' }) {
         stroke="currentColor"
         strokeWidth="2"
         vectorEffect="non-scaling-stroke"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+/** A small down chevron: the date opens a picker. */
+function ChevronDown() {
+  return (
+    <svg className="day-pick-chevron" viewBox="0 0 12 12" aria-hidden="true">
+      <path
+        d="M3 4.5 L6 7.5 L9 4.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
