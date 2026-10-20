@@ -13,7 +13,7 @@ export function Support({ onBack }: Props) {
       </button>
       <h1 className="idea-title">help build squared</h1>
       <p>
-        I’m building squared myself, one square a day. I don’t want my limited days to go by unnoticed. How sad that
+        I’m building squared myself, one square a day. I hate to see my days, my life, go by unnoticed. How sad that
         would be.
       </p>
       <p>If you feel the same, help me build it.</p>
