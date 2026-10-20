@@ -970,6 +970,25 @@
   color: var(--ink-soft);
   text-align: right; /* signed at the foot, like a letter */
 }
+/* The idea's quiet second link, under its one action. */
+.idea-support {
+  margin: 18px 0 0 !important;
+}
+.idea-support button {
+  font-size: 16px;
+  color: var(--muted);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
+}
+/* Help build squared: the idea's letter, then the one black pill. */
+.support-go {
+  margin-top: 36px;
+  text-decoration: none;
+}
+.support .idea-back {
+  margin-left: -10px;
+}
+
 /* Privacy: the idea page's paper, a size smaller (it's for reading closely, not once). */
 .privacy p,
 .privacy li {

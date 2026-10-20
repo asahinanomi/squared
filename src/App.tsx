@@ -36,6 +36,7 @@ import { DaysList } from './screens/DaysList'
 import { Feedback } from './screens/Feedback'
 import { PeriodList } from './screens/PeriodList'
 import { Privacy } from './screens/Privacy'
+import { Support } from './screens/Support'
 import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
@@ -60,6 +61,7 @@ type Screen =
   | 'account'
   | 'privacy'
   | 'welcome'
+  | 'support'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
 const LADDER: Screen[] = ['today', 'month', 'year', 'life']
 
@@ -102,6 +104,7 @@ export default function App() {
   // The list of days sits beside the ladder too: where it was opened from, and the day it opens on.
   const [listFrom, setListFrom] = useState<Screen>('month')
   const [feedbackFrom, setFeedbackFrom] = useState<Screen>('today')
+  const [supportFrom, setSupportFrom] = useState<Screen>('today')
   const [listFocus, setListFocus] = useState(todayIso)
   // The list zooms too, within itself: years → months → days (→ the day). And the level it was opened at.
   const [listRes, setListRes] = useState<Resolution>('days')
@@ -526,6 +529,7 @@ export default function App() {
       >
         {screen !== 'setup' &&
           screen !== 'welcome' &&
+          screen !== 'support' &&
           screen !== 'settings' &&
           screen !== 'matters' &&
           screen !== 'feedback' &&
@@ -545,6 +549,10 @@ export default function App() {
               onFeedback={() => {
                 setFeedbackFrom(screen)
                 setScreenValue('feedback')
+              }}
+              onSupport={() => {
+                setSupportFrom(screen)
+                setScreenValue('support')
               }}
               onSettings={openSettings}
               onSignOut={signOut}
@@ -589,6 +597,10 @@ export default function App() {
                 setMattersFrom('idea')
                 setScreenValue('matters')
               }}
+              onSupport={() => {
+                setSupportFrom('idea')
+                setScreenValue('support')
+              }}
             />
           ) : screen === 'setup' && trySquares ? (
             <Setup profile={null} onBack={endTrySquares} onSave={async () => endTrySquares()} />
@@ -621,6 +633,8 @@ export default function App() {
                 goToday()
               }}
             />
+          ) : screen === 'support' ? (
+            <Support onBack={() => setScreenValue(supportFrom)} />
           ) : screen === 'feedback' ? (
             <Feedback onBack={() => setScreenValue(feedbackFrom)} />
           ) : screen === 'settings' ? (

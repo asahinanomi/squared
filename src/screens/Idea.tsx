@@ -12,10 +12,12 @@ type Props = {
   onMatters?: () => void
   /** Opened from the sign-in screen: the way back to it. */
   onBack?: () => void
+  /** Signed in: a quiet link on to "help build squared". */
+  onSupport?: () => void
 }
 
 // "the idea": why squared exists, in the maker's own words.
-export function Idea({ onMatters, onBack }: Props) {
+export function Idea({ onMatters, onBack, onSupport }: Props) {
   return (
     <main className="idea">
       {onBack && (
@@ -55,6 +57,11 @@ export function Idea({ onMatters, onBack }: Props) {
         <button className="idea-go" onClick={onMatters}>
           start by naming what matters to you →
         </button>
+      )}
+      {onSupport && (
+        <p className="idea-support">
+          <button onClick={onSupport}>help build squared</button>
+        </p>
       )}
     </main>
   )
