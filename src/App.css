@@ -494,11 +494,13 @@
 .tray-rest[hidden] {
   display: none;
 }
-/* Wipe a square: a quiet text link at the foot of the day, set apart from painting. */
+/* Wipe a square: a quiet text link just under a painted square. */
 .day-wipe {
+  position: relative;
+  z-index: 3; /* above the brush's reach around the square (a drag never clicks it) */
   display: block;
-  margin: 32px auto 0;
-  padding: 8px 12px;
+  margin: 6px auto -8px;
+  padding: 6px 12px;
   font-size: 14px;
   color: var(--muted);
   text-decoration: underline dotted #c9c9c2;

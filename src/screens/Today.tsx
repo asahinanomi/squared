@@ -240,6 +240,13 @@ export function Today(props: Props) {
             {hasNext ? peek(next, 1) : <span className="peek is-none" />}
           </div>
 
+          {/* Painted the wrong day? A quiet way back to blank, right under the square. */}
+          {day && !why && (
+            <button className="day-wipe" onClick={() => setWiping(true)}>
+              wipe this square
+            </button>
+          )}
+
           <div className="tray">
             {why ? (
               <WhyBubble
@@ -279,12 +286,6 @@ export function Today(props: Props) {
             onAdd={() => onOpenWhy()}
             onDelete={onDeleteNote}
           />
-        )}
-        {/* Painted the wrong day? A quiet way back to blank, set apart at the foot. */}
-        {day && (
-          <button className="day-wipe" onClick={() => setWiping(true)}>
-            wipe this square
-          </button>
         )}
         {wiping && (
           <ConfirmDialog
