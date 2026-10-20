@@ -586,13 +586,13 @@
   margin: 0;
 }
 .torn-ask {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
 }
 /* In the app's own voice (Inter), so it sits with the palette instead of over it. */
 .torn-question {
   margin-top: 2px !important;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--ink);
 }
@@ -602,7 +602,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted);
 }
 .torn-said::before,
@@ -613,9 +613,9 @@
 }
 .torn-mine {
   margin-top: 4px !important;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.45;
-  color: var(--muted);
+  color: var(--ink-soft);
 }
 .torn-mine:has(.torn-pick) {
   display: flex;
@@ -663,6 +663,7 @@
   gap: 12px;
   max-height: 46vh;
   overflow-y: auto;
+  padding: 2px; /* room for the dots' keylines, which the scroll edge would clip */
 }
 .compass-list li {
   display: flex;
