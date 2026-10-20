@@ -584,8 +584,26 @@
 .torn p {
   margin: 0;
 }
+.torn-question {
+  font-family: var(--font-reflect);
+  font-optical-sizing: auto;
+  font-size: 18px;
+  font-weight: 450;
+  color: var(--ink);
+}
 .torn-compass {
-  margin-top: 4px !important;
+  margin-top: 6px !important;
+  color: var(--muted);
+}
+.torn-compass ul {
+  list-style: none;
+  margin: 0 0 2px;
+  padding: 0;
+  color: var(--ink-soft);
+}
+.torn-compass li::before {
+  content: '·';
+  margin-right: 6px;
   color: var(--muted);
 }
 .torn-compass button {

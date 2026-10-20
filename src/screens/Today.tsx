@@ -26,8 +26,6 @@ type Props = {
   why: Why | null
   nudge: boolean
   onDate: (iso: string) => void
-  /** Open what matters (your compass), coming back to this day. */
-  onMatters: () => void
   /** Wipe the day's square back to blank (after a confirm). */
   onWipe: () => void
   onLoad: (p: Paint) => void
@@ -46,7 +44,7 @@ type Props = {
 export function Today(props: Props) {
   const { question, born, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } =
     props
-  const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut, onMatters } = props
+  const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut } = props
   const today = todayIso()
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
@@ -76,6 +74,7 @@ export function Today(props: Props) {
   useEffect(() => {
     switches.current = { last: null, n: 0 }
     setTorn(false)
+    setCompassOpen(false)
   }, [date])
   const dip = (p: Paint) => {
     onLoad(p)
@@ -85,7 +84,14 @@ export function Today(props: Props) {
     s.last = p
     if (s.n >= 2) setTorn(true)
   }
-  const compass = torn ? pickCompass(date) : null
+  // Your own "mattered" entries; one is shown (the same all day, so it doesn't flicker), all on "see all".
+  const compass = torn
+    ? loadMatters()
+        .meaningful.map((e) => e.text.trim())
+        .filter(Boolean)
+    : []
+  const pick = [...date].reduce((h, ch) => h + ch.charCodeAt(0), 0)
+  const [compassOpen, setCompassOpen] = useState(false)
 
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
   const hasPrev = !born || prev >= born
@@ -310,11 +316,29 @@ export function Today(props: Props) {
                 </p>
                 {torn && (
                   <div className="torn" aria-live="polite">
-                    <p>torn? ask: did what mattered outweigh the rest?</p>
-                    <p className="torn-compass">
-                      {compass && <>your compass: “{compass}” · </>}
-                      <button onClick={onMatters}>{compass ? 'see all →' : 'name what matters to you →'}</button>
-                    </p>
+                    <p>torn? ask:</p>
+                    <p className="torn-question">did what mattered count most?</p>
+                    {/* Your compass, right here — it opens in place, so you never leave the day. */}
+                    {compass.length ? (
+                      <div className="torn-compass">
+                        {compassOpen ? (
+                          <ul>
+                            {compass.map((text, i) => (
+                              <li key={i}>{text}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span>your compass: “{compass[pick % compass.length]}” · </span>
+                        )}
+                        {compass.length > 1 && (
+                          <button aria-expanded={compassOpen} onClick={() => setCompassOpen(!compassOpen)}>
+                            {compassOpen ? 'less' : 'see all'}
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="torn-compass">name what matters to you in settings → what matters</p>
+                    )}
                   </div>
                 )}
               </>
@@ -422,14 +446,6 @@ export function Chevron({ dir }: { dir: 'left' | 'right' }) {
       />
     </svg>
   )
-}
-
-/** One of your own "mattered" entries, the same one all day (so it doesn't flicker), or null if you haven't any. */
-function pickCompass(date: string): string | null {
-  const list = loadMatters().meaningful.filter((e) => e.text.trim())
-  if (!list.length) return null
-  const n = [...date].reduce((h, ch) => h + ch.charCodeAt(0), 0)
-  return list[n % list.length].text
 }
 
 /** A small down chevron: the date opens a picker; a folded run of days opens. */

@@ -110,7 +110,7 @@ export default function App() {
   // Where settings was opened from: its back arrow returns there.
   const [settingsFrom, setSettingsFrom] = useState<Screen>('today')
   // What matters opens from settings or from the idea; back returns there.
-  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea' | 'today'>('settings')
+  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea'>('settings')
   const [date, setDate] = useState(todayIso)
   const [days, setDays] = useState<Days>(() => (demo ? mockDays() : {}))
   daysNow.current = days
@@ -553,10 +553,6 @@ export default function App() {
               onDryBrush={onDryBrush}
               onFilled={onFilled}
               onWipe={onWipe}
-              onMatters={() => {
-                setMattersFrom('today')
-                setScreenValue('matters')
-              }}
               onZoomOut={outOfDay}
             />
           ) : screen === 'idea' ? (
@@ -613,7 +609,7 @@ export default function App() {
           ) : screen === 'matters' ? (
             <WhatMatters
               onBack={() => setScreenValue(mattersFrom)}
-              backLabel={mattersFrom === 'idea' ? 'the idea' : mattersFrom === 'today' ? 'the day' : 'settings'}
+              backLabel={mattersFrom === 'idea' ? 'the idea' : 'settings'}
               onPaint={goToday}
               paintedToday={!!days[todayIso()]}
             />
