@@ -31,6 +31,7 @@ type Props = {
 const gapFor = (n: number) => ({ 28: 2, 14: 4, 7: 9, 3: 10 })[n] ?? 2
 const LABEL_H = 18 // year label above each block
 const BLOCK_GAP = 16 // space between years
+const TOP = 24 // room above the first year, clear of the top fade (its label and painting icon stay easy to tap)
 const LIVED_BLANK = '#eeeee8'
 const AHEAD = '#f1f1ec'
 const AHEAD_EDGE = '#e4e4dd'
@@ -74,14 +75,14 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
   const { scroller, canvas, size, onScroll } = useCanvasList(
     (ctx, top, w, h) => {
       const { cell, pitch, block } = geometry(w)
-      const b0 = Math.max(0, Math.floor(top / block))
-      const b1 = Math.min(years - 1, Math.floor((top + h) / block))
+      const b0 = Math.max(0, Math.floor((top - TOP) / block))
+      const b1 = Math.min(years - 1, Math.floor((top - TOP + h) / block))
       const radius = Math.min(8, Math.max(2, cell * 0.18))
       const labels = cell >= NUM_MIN
       const withDate = dated(cell)
       for (let b = b0; b <= b1; b++) {
         const year = firstYear + b
-        const y0 = b * block - top
+        const y0 = b * block + TOP - top
         ctx.textAlign = 'left'
         ctx.textBaseline = 'alphabetic'
         ctx.font = `600 12px ${FONT}`
@@ -158,7 +159,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
     (w, h) => {
       const { pitch, block } = geometry(w)
       const p = place(today)
-      return p.b * block + LABEL_H + p.r * pitch - h / 2
+      return TOP + p.b * block + LABEL_H + p.r * pitch - h / 2
     },
   )
 
@@ -167,8 +168,8 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
   /** The day at a point in the scroll box, under a given layout (null in a gap or a label). */
   const dayAt = (x: number, yAll: number, n: number) => {
     const g = geometry(size.w, n)
-    const b = Math.floor(yAll / g.block)
-    const yIn = yAll - b * g.block - LABEL_H
+    const b = Math.floor((yAll - TOP) / g.block)
+    const yIn = yAll - TOP - b * g.block - LABEL_H
     const c = Math.min(n - 1, Math.max(0, Math.floor(x / g.pitch)))
     const r = Math.max(0, Math.floor(yIn / g.pitch))
     const year = firstYear + Math.max(0, Math.min(years - 1, b))
@@ -191,7 +192,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
     const fx = focal ? focal.x - box.left : el.clientWidth / 2
     const iso = dayAt(fx, topBefore.current + fy, was)
     const p = place(iso)
-    el.scrollTop = p.b * block + LABEL_H + p.r * pitch + cell / 2 - fy
+    el.scrollTop = TOP + p.b * block + LABEL_H + p.r * pitch + cell / 2 - fy
   }, [cols]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // A tapped day shows its date for a moment (scrolling clears it).
@@ -206,7 +207,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
     if (!el || !cell) return
     const box = el.getBoundingClientRect()
     const x = e.clientX - box.left
-    const yAll = e.clientY - box.top + el.scrollTop
+    const yAll = e.clientY - box.top + el.scrollTop - TOP
     const b = Math.floor(yAll / block)
     const yIn = yAll - b * block - LABEL_H
     const c = Math.floor(x / pitch)
@@ -226,7 +227,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
   // "today": glide back to today's square on this same screen, then pulse it.
   const todayTop = () => {
     const p = place(today)
-    return p.b * block + LABEL_H + p.r * pitch
+    return TOP + p.b * block + LABEL_H + p.r * pitch
   }
   const checkAway = () => {
     const el = scroller.current
@@ -248,7 +249,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
     })
   }
 
-  const totalH = years * block - BLOCK_GAP
+  const totalH = TOP + years * block - BLOCK_GAP
   return (
     <main className="life">
       <LifeHead profile={profile} current="days" onPick={onResolution} />
@@ -271,7 +272,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
             <span
               key={y}
               className="life-paint"
-              style={{ top: (Number(y) - firstYear) * block - 9 }} // centred on the label's line
+              style={{ top: TOP + (Number(y) - firstYear) * block - 9 }} // centred on the label's line
               onClick={(e) => e.stopPropagation()}
             >
               <PaintingButton period={y} label={y} onOpen={onPainting} />

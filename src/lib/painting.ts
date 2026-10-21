@@ -78,7 +78,7 @@ export async function drawPainting(c: HTMLCanvasElement, month: string, days: Da
   const gauss = () => Math.sqrt(-2 * Math.log(r() + 1e-9)) * Math.cos(2 * Math.PI * r())
 
   // The frame (flat warm grey), the thin mat, then the painting inside.
-  const f = Math.round(px * 0.055)
+  const f = Math.round(px * 0.035)
   const x = f + Math.round(px * 0.03)
   const s = px - 2 * x
   ctx.fillStyle = '#9c9a93'

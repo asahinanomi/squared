@@ -51,7 +51,7 @@ import { loadMatters, syncMatters } from './lib/matters'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import { Paintings } from './screens/Paintings'
-import { keepPainting, keptPaintings } from './lib/kept'
+import { keepPainting, keptPaintings, unkeepPainting } from './lib/kept'
 import './App.css'
 
 type Screen =
@@ -766,6 +766,7 @@ export default function App() {
               days={days}
               name={painter}
               onBack={() => setScreenValue('settings')}
+              onRemove={(p) => unkeepPainting(p, session?.user.user_metadata?.kept_paintings).then(setKept)}
               onOpen={(m) => {
                 setPaintedArrived(false)
                 setPaintedMonth(m)

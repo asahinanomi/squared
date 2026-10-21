@@ -19,10 +19,14 @@ export function keptPaintings(fromAccount: unknown): string[] {
   return [...new Set([...acc, ...read()])].sort().reverse()
 }
 
-export async function keepPainting(period: string, fromAccount: unknown): Promise<string[]> {
-  const list = keptPaintings(fromAccount)
-  if (list.includes(period)) return list
-  const next = [...list, period].sort().reverse()
+export const keepPainting = (period: string, fromAccount: unknown) =>
+  save([...keptPaintings(fromAccount).filter((p) => p !== period), period].sort().reverse())
+
+/** Taken down from my paintings (it can always be kept again). */
+export const unkeepPainting = (period: string, fromAccount: unknown) =>
+  save(keptPaintings(fromAccount).filter((p) => p !== period))
+
+async function save(next: string[]): Promise<string[]> {
   try {
     localStorage.setItem(KEY, JSON.stringify(next))
   } catch {

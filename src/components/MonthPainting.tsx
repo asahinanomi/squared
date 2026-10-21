@@ -35,7 +35,10 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep }: P
     try {
       const blob = await paintingImage(month, days, name)
       const file = new File([blob], `squared-${month}.png`, { type: 'image/png' })
-      if (navigator.canShare?.({ files: [file] })) await navigator.share({ files: [file] }).catch(() => undefined)
+      // On a phone, the share sheet (Save to Photos, or send it); on a computer, straight to downloads.
+      const phone = matchMedia('(pointer: coarse)').matches
+      if (phone && navigator.canShare?.({ files: [file] }))
+        await navigator.share({ files: [file] }).catch(() => undefined)
       else save(blob, file.name)
     } finally {
       setBusy(false)
