@@ -21,8 +21,8 @@ const QA: [string, string][] = [
     'You painted the day while it was still close: on the day itself, or the next day. Later than that, the square remembers when you painted it, and it’s a shade lighter. Memories soften too.',
   ],
   [
-    'Why does a square say “changed”?',
-    'You changed its colour after that window. That’s fine, nothing is locked. The square just keeps an honest record: what you felt then, and that you see it differently now.',
+    'Why does a square say “repainted”?',
+    'You repainted it in another colour after that window. That’s fine, nothing is locked. The square just keeps an honest record: what you felt then, and that you see it differently now.',
   ],
   [
     'Can I paint days I missed?',

@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { glide } from '../lib/backToToday'
 import { LifeHead, type Resolution } from '../components/LifeHead'
 import { ZoomBar } from '../components/ZoomBar'
-import { isoDate, longDate, shortWeekday, todayIso } from '../lib/dates'
+import { dayCaption, isoDate, longDate, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { addYears, daysBetween } from '../lib/life'
 import { paintHex, paintTint } from '../lib/paints'
@@ -138,7 +138,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
             const ny = withDate ? y + cell * 0.42 : y + cell / 2
             fitText(ctx, String(Number(iso.slice(8))), x + cell / 2, ny, cell - pad * 2)
             if (withDate) {
-              const d = `${iso.slice(0, 4)}.${iso.slice(5, 7)} ${shortWeekday(iso)}`
+              const d = dayCaption(iso)
               const font = (px: number) => `400 ${px}px ${FONT}`
               fitText(ctx, d, x + cell / 2, y + cell * 0.72, cell - pad * 2, {
                 font,

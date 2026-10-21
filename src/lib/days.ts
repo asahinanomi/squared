@@ -17,12 +17,12 @@ export type Day = {
 
 /**
  * The one honest line under a painted square's word: "painted on time", "painted Oct 21" (late), or
- * "changed Oct 23" once its colour changed after the grace window (the day after it was first painted,
+ * "repainted Oct 23" once its colour changed after the grace window (the day after it was first painted,
  * or after the day itself, whichever is later).
  */
 export function stampLine(date: string, day: Day): string {
   const grace = [addDays(date, 1), day.paintedOn ? addDays(day.paintedOn, 1) : ''].sort().pop()!
-  if (day.changedOn && day.changedOn > grace) return `changed ${plainDate(day.changedOn)}`
+  if (day.changedOn && day.changedOn > grace) return `repainted ${plainDate(day.changedOn)}`
   if (day.backfilled && day.paintedOn) return `painted ${plainDate(day.paintedOn)}`
   return 'painted on time'
 }

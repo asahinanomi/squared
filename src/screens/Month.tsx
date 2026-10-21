@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
-import { fromIso, isoDate, longDate, monthCells, monthTitle, shortWeekday, todayIso } from '../lib/dates'
+import { fromIso, isoDate, longDate, monthCells, monthTitle, shortWeekday, todayIso, dayCaption } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { useBackToToday } from '../lib/backToToday'
 import { paintHex, paintTint } from '../lib/paints'
@@ -130,9 +130,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
                   >
                     {!before && specialDay(iso, born) && <span className="month-special" aria-hidden="true" />}
                     <span className="month-num">{Number(iso.slice(8))}</span>
-                    <span className="month-wd">
-                      {zoomed ? `${iso.slice(0, 4)}.${iso.slice(5, 7)} ${shortWeekday(iso)}` : shortWeekday(iso)}
-                    </span>
+                    <span className="month-wd">{zoomed ? dayCaption(iso) : shortWeekday(iso)}</span>
                   </button>
                 )
               })}
