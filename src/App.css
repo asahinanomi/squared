@@ -3561,45 +3561,22 @@ button.settings-row:active {
   text-underline-offset: 4px;
 }
 
-/* my paintings: the gallery wall. Every painted month, framed, two to a row, newest first. Centred: you look at it. */
-.gallery {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8px 0 48px;
-}
-.gallery-title {
-  margin: 8px 0 26px;
-  text-align: center;
-}
+/* my paintings (in settings): the kept paintings, one to a row, as big as the page. No labels: each is signed. */
 .gallery-wall {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 26px 20px;
-}
-.gallery-item {
+  margin-top: 24px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: var(--ink-soft);
+  gap: 28px;
 }
 .gallery-item canvas {
   width: 100%;
   aspect-ratio: 1;
   display: block;
-  filter: drop-shadow(0 6px 10px rgba(20, 20, 19, 0.12));
-}
-.gallery-item small {
-  font-size: 14px;
-  color: var(--muted);
+  filter: drop-shadow(0 8px 14px rgba(20, 20, 19, 0.12));
 }
 .gallery-empty {
-  margin: 0;
-  max-width: 280px;
-  text-align: center;
+  margin: 20px 0 0;
+  max-width: 320px;
   font-size: 16px;
   line-height: 1.5;
   color: var(--ink-soft);

@@ -51,6 +51,7 @@ import { loadMatters, syncMatters } from './lib/matters'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import { Paintings } from './screens/Paintings'
+import { keepPainting, keptPaintings } from './lib/kept'
 import './App.css'
 
 type Screen =
@@ -162,6 +163,9 @@ export default function App() {
   const [frameError, setFrameError] = useState<string | null>(null)
   // A new month: the last one, shown once as a painting (on the first visit of the month, if it holds any squares).
   const [paintedMonth, setPaintedMonth] = useState<string | null>(null)
+  // The paintings you kept, for my paintings (with your account, and on this device).
+  const [kept, setKept] = useState<string[]>([])
+  useEffect(() => setKept(keptPaintings(session?.user.user_metadata?.kept_paintings)), [session])
   const [paintedArrived, setPaintedArrived] = useState(false) // shown by the new month, not opened from the month view
   const [profile, setProfile] = useState<Profile | null>(null)
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
@@ -577,7 +581,11 @@ export default function App() {
     setListRes(listRes === 'days' ? 'months' : 'years')
   }
   const openSettings = () => {
-    if (!['settings', 'setup', 'matters', 'account', 'privacy', 'terms', 'questions', 'export'].includes(screen))
+    if (
+      !['settings', 'setup', 'matters', 'account', 'privacy', 'terms', 'questions', 'export', 'paintings'].includes(
+        screen,
+      )
+    )
       setSettingsFrom(screen)
     setScreenValue('settings')
   }
@@ -689,7 +697,8 @@ export default function App() {
           screen !== 'privacy' &&
           screen !== 'terms' &&
           screen !== 'questions' &&
-          screen !== 'export' && (
+          screen !== 'export' &&
+          screen !== 'paintings' && (
             <Topbar
               onHome={goToday}
               onCalendar={() => goMonth()}
@@ -701,7 +710,6 @@ export default function App() {
                     : undefined
               }
               onIdea={() => setScreen('idea')}
-              onPaintings={() => setScreen('paintings')}
               onSettings={openSettings}
               onSignOut={signOut}
             />
@@ -754,8 +762,10 @@ export default function App() {
             />
           ) : screen === 'paintings' ? (
             <Paintings
+              kept={kept}
               days={days}
               name={painter}
+              onBack={() => setScreenValue('settings')}
               onOpen={(m) => {
                 setPaintedArrived(false)
                 setPaintedMonth(m)
@@ -813,6 +823,7 @@ export default function App() {
               onPrivacy={() => openLegal('privacy', 'settings')}
               onTerms={() => openLegal('terms', 'settings')}
               onExport={() => setScreenValue('export')}
+              onPaintings={() => setScreenValue('paintings')}
             />
           ) : screen === 'export' ? (
             <Export
@@ -984,6 +995,7 @@ export default function App() {
             days={days}
             name={painter}
             onClose={() => setPaintedMonth(null)}
+            onKeep={(p) => keepPainting(p, session?.user.user_metadata?.kept_paintings).then(setKept)}
           />
         )}
       </div>

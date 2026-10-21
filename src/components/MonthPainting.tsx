@@ -13,11 +13,13 @@ type Props = {
   /** The signature: the painter's first name. */
   name: string
   onClose: () => void
+  /** Kept: it hangs in my paintings. */
+  onKeep?: (month: string) => void
 }
 
 // A new month: the last one, shown once as a finished painting (see lib/painting), framed and signed. Any finished
-// month opens it again from the month view or the gallery (my paintings); this month shows "so far", unsigned. No counts: it's a painting, not a score. "keep this painting" saves it as a picture (on a phone, the share sheet: Save to Photos, or send it).
-export function MonthPainting({ month, days, name, onClose, arrived }: Props) {
+// month opens it again from its picture icon; kept ones hang in my paintings (settings); this month shows "so far", unsigned. No counts: it's a painting, not a score. "keep this painting" saves it as a picture (on a phone, the share sheet: Save to Photos, or send it).
+export function MonthPainting({ month, days, name, onClose, arrived, onKeep }: Props) {
   const [busy, setBusy] = useState(false)
   const art = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
@@ -29,6 +31,7 @@ export function MonthPainting({ month, days, name, onClose, arrived }: Props) {
   const title = `${monthName(month)}, ${inProgress(month) ? 'so far' : 'painted'}`
   const keep = async () => {
     setBusy(true)
+    onKeep?.(month)
     try {
       const blob = await paintingImage(month, days, name)
       const file = new File([blob], `squared-${month}.png`, { type: 'image/png' })

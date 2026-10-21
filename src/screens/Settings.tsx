@@ -16,12 +16,23 @@ type Props = {
   onPrivacy: () => void
   onTerms: () => void
   onExport: () => void
+  onPaintings: () => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 // Settings: one quiet list; each row opens its own screen.
-export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onPrivacy, onTerms, onExport }: Props) {
+export function Settings({
+  profile,
+  onBack,
+  onSquares,
+  onMatters,
+  onAccount,
+  onPrivacy,
+  onTerms,
+  onExport,
+  onPaintings,
+}: Props) {
   const summary = profile
     ? [
         fromIso(profile.born).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -64,6 +75,13 @@ export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onP
           <span className="settings-switch" aria-hidden="true">
             <SpeakerIcon on={sound} />
           </span>
+        </button>
+        <button className="settings-row" onClick={onPaintings}>
+          <span>
+            <span className="settings-label">my paintings</span>
+            <span className="settings-sub">the paintings you kept</span>
+          </span>
+          <Chevron dir="right" />
         </button>
         <button className="settings-row" onClick={onExport}>
           <span>

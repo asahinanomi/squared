@@ -1,31 +1,36 @@
 import type { Days } from '../lib/days'
-import { monthTitle } from '../lib/dates'
-import { inProgress } from '../lib/painting'
+import { monthName, inProgress } from '../lib/painting'
 import { PaintingThumb } from '../components/PaintingThumb'
+import { Chevron } from './Today'
 
-type Props = { days: Days; name: string; onOpen: (month: string) => void }
+type Props = { kept: string[]; days: Days; name: string; onOpen: (period: string) => void; onBack: () => void }
 
-// my paintings: every month you've painted, hung framed on one wall, newest first (this month "so far").
-// Tap one to look at it and keep it. Centred: it's a page you look at.
-export function Paintings({ days, name, onOpen }: Props) {
-  const months = [...new Set(Object.keys(days).map((iso) => iso.slice(0, 7)))].sort().reverse()
+// my paintings (in settings): the paintings you kept, one to a row, big, newest first. No labels: each is signed.
+// Tap one to look at it again and keep it again.
+export function Paintings({ kept, days, name, onOpen, onBack }: Props) {
   return (
-    <main className="gallery">
-      <h1 className="settings-title gallery-title">my paintings</h1>
-      {months.length ? (
+    <main className="settings gallery">
+      <button className="setup-back" aria-label="Back" onClick={onBack}>
+        <Chevron dir="left" />
+      </button>
+      <h1 className="settings-title">my paintings</h1>
+      {kept.length ? (
         <div className="gallery-wall">
-          {months.map((m) => (
-            <button key={m} className="gallery-item" onClick={() => onOpen(m)}>
-              <PaintingThumb month={m} days={days} name={name} />
-              <span>
-                {monthTitle(`${m}-01`)}
-                {inProgress(m) && <small> · so far</small>}
-              </span>
+          {kept.map((p) => (
+            <button
+              key={p}
+              className="gallery-item"
+              onClick={() => onOpen(p)}
+              aria-label={`${monthName(p)}${p.length === 4 ? '' : ` ${p.slice(0, 4)}`}, ${inProgress(p) ? 'so far' : 'painted'}`}
+            >
+              <PaintingThumb month={p} days={days} name={name} />
             </button>
           ))}
         </div>
       ) : (
-        <p className="gallery-empty">Every month you paint becomes a painting. Your first one hangs here.</p>
+        <p className="gallery-empty">
+          The paintings you keep hang here. Open a month's painting from its picture icon and tap "keep this painting".
+        </p>
       )}
     </main>
   )
