@@ -187,13 +187,14 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
 
         <div className="setup-hero" aria-live="polite">
           <div className="setup-thats">that's</div>
-          <div className="setup-total">{c ? fmt(c.total) : '—'}</div>
-          <div className="setup-squares">squares</div>
+          <div className="setup-total">
+            {c ? fmt(c.total) : '—'} <span className="setup-squares">squares</span>
+          </div>
           {c && (
             <>
               <div className="setup-line">
-                {inYears ? `${spentYears} years` : fmt(c.sofar)} lived,{' '}
-                {inYears ? `${lifespan - spentYears} years` : fmt(c.left)} ({c.percentLeft}%) ahead
+                {inYears ? `${spentYears} years` : fmt(c.sofar)} lived ·{' '}
+                {inYears ? `${lifespan - spentYears} years` : fmt(c.left)} ahead ({c.percentLeft}%)
               </div>
               {/* Two views of the same numbers; it opens on squares every time. */}
               <div className="seg setup-seg" role="group" aria-label="Count in">

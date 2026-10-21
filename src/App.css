@@ -2160,37 +2160,38 @@
 .setup-years input:focus {
   border-bottom-color: var(--ink);
 }
+/* What it adds up to: left-aligned with the fields above, the number and its word on one line. */
 .setup-hero {
-  text-align: center;
+  text-align: left;
 }
 .setup-thats {
-  font-size: 16px;
-  color: var(--ink-soft);
+  font-size: 14px;
+  color: var(--muted);
 }
 .setup-total {
   font-size: 56px;
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1;
-  margin: 4px 0;
+  margin: 6px 0 0;
   font-variant-numeric: tabular-nums;
 }
 .setup-squares {
   font-size: 20px;
   font-weight: 500;
+  letter-spacing: 0;
 }
 /* One calm line under the big number: one ink, one weight, one size. */
 .setup-line {
-  margin-top: 20px; /* the line + capsule are one group, set apart from "squares" */
+  margin-top: 10px;
   font-size: 16px;
-  color: var(--ink);
+  color: var(--ink-soft);
 }
-.setup-seg {
-  margin-top: 8px;
+.setup-hero .setup-seg {
+  margin: 14px 0 0;
 }
 .setup-error {
   margin: 0 0 12px;
-  text-align: center;
   font-size: 14px;
   color: var(--ink-soft);
 }
