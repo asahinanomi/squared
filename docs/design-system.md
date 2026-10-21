@@ -67,6 +67,7 @@ squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, 
 - **Control bar:** its own surface, #FCFCFA with no dot grid, lifted by a soft shadow cast upward (0 −4px 14px, ink at 7%) — never a hairline.
 - **Pie labels:** every label (number, word under it) sits on the line from the centre to the rim through the middle of its wedge, halfway out.
 - **Beta mark:** a small soft capsule, lowercase "beta", 12px/500 ink on #E9E9E3, radius 999. Beside the wordmark on sign-in and at the settings foot; never in the menu or on the day screen.
+- **Capsules (segmented control):** left-aligned on text pages (what matters, the idea's tabs, how many squares); centred only on the centred views (a life, the pie).
 - **Footer:** one component everywhere: dotted hairline, small print (12px, muted, dot-separated), then "© year squared.today" with the beta capsule. Left-aligned with the page; centred (no hairline) only on sign-in.
 - **Links / dividers:** 1px dotted hairlines.
 

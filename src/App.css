@@ -976,7 +976,7 @@
   flex-direction: column;
 }
 .about-tabs {
-  margin: 8px auto 0;
+  margin: 8px 0 0;
   max-width: 100%;
 }
 .about-tabs {
@@ -2410,8 +2410,8 @@ button.settings-row:active {
   height: 10px;
   border-radius: 50%;
 }
-.matters-seg {
-  margin-top: 18px;
+.matters .matters-seg {
+  margin: 18px 0 0; /* left, with the page's text */
 }
 .matters-seg button {
   display: inline-flex;
