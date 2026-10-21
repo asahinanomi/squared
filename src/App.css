@@ -612,7 +612,7 @@
     inset 0 0 0 4px #ebe6da !important;
 }
 .month-day.is-framed {
-  background: #53735c !important; /* the frame's own green, a sliver of raw canvas inside, a light number */
+  background: #6e9b7b !important; /* the day's own green paint, framed: a dark green ring, a raw sliver, a light number */
   color: #f7f5ef;
   box-shadow:
     inset 0 0 0 2.5px #53735c,
