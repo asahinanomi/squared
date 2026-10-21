@@ -876,6 +876,10 @@ export default function App() {
                 onOpen={(first) => listIn(first)}
                 onIn={() => listIn(listMid.current())}
                 onOut={listRes === 'months' ? () => listOut(listMid.current()) : undefined}
+                onPainting={(p) => {
+                  setPaintedArrived(false)
+                  setPaintedMonth(p)
+                }}
               />
             )
           ) : screen === 'pie' && profile ? (
@@ -902,6 +906,10 @@ export default function App() {
               onPick={(m) => goMonth(m)}
               onIn={() => goMonth()}
               onOut={goLife}
+              onPainting={(p) => {
+                setPaintedArrived(false)
+                setPaintedMonth(p)
+              }}
             />
           ) : screen === 'life' && profile ? (
             lifeRes === 'days' ? (
@@ -959,7 +967,7 @@ export default function App() {
           )}
         </div>
         <MeaningSheet open={defining} onClose={() => setDefining(false)} />
-        {(screen === 'today' || screen === 'month' || screen === 'list' || screen === 'paintings') && (
+        {(['today', 'month', 'year', 'list', 'paintings'] as Screen[]).includes(screen) && (
           <MonthPainting
             month={paintedMonth}
             arrived={paintedArrived}

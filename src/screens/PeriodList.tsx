@@ -6,6 +6,7 @@ import type { Days } from '../lib/days'
 import { PAINTS, WORD } from '../lib/paints'
 import { bands, monthEnd } from '../lib/tally'
 import { monthsBetween, shiftMonth } from './Month'
+import { PaintingButton } from '../components/PaintingButton'
 
 type Props = {
   /** Months: one card per month, under its year. Years: one card per year. */
@@ -22,6 +23,8 @@ type Props = {
   mid: MutableRefObject<() => string>
   /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */
   head?: ReactNode
+  /** A month's or a year's painting ("YYYY-MM" or "YYYY"): opens it, to look at and keep. */
+  onPainting?: (period: string) => void
 }
 
 /** How a stretch of days was painted: each colour, and the days lived but not painted. */
@@ -53,6 +56,7 @@ function PeriodCard({
   today,
   born,
   onOpen,
+  onPainting,
 }: {
   id: string
   title: string
@@ -62,7 +66,9 @@ function PeriodCard({
   today: string
   born?: string
   onOpen: (first: string) => void
+  onPainting?: (period: string) => void
 }) {
+  const period = id.length === 4 ? id : id.slice(0, 7)
   const bs = bands(days, from, to, today, born)
   const c = counts(days, from, to, today, born)
   const parts = PAINTS.filter((p) => c[p.id]).map((p) => `${c[p.id]} ${WORD[p.id]}`)
@@ -79,13 +85,19 @@ function PeriodCard({
         ))}
       </span>
       <span className="period-counts">{parts.join(' · ')}</span>
+      {/* Its painting, at the card's top right, once it holds any squares. */}
+      {onPainting && Object.keys(days).some((iso) => iso.startsWith(period)) && (
+        <span className="period-paint">
+          <PaintingButton period={period} label={title.length === 4 ? title : monthTitle(from)} onOpen={onPainting} />
+        </span>
+      )}
     </article>
   )
 }
 
 // A life, month by month (or year by year): the zoomed-out levels of the list. Every month — or year — from birth
 // to now, oldest at the top, as cards with their colour band and counts. Few enough to draw all at once.
-export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid, head }: Props) {
+export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid, head, onPainting }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const first = born ? shiftMonth(born, 0) : shiftMonth(today, -120)
@@ -134,7 +146,17 @@ export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid, h
 
   const card = (id: string, title: string, from: string, to: string) => (
     <li key={id}>
-      <PeriodCard id={id} title={title} from={from} to={to} days={days} today={today} born={born} onOpen={onOpen} />
+      <PeriodCard
+        id={id}
+        title={title}
+        from={from}
+        to={to}
+        days={days}
+        today={today}
+        born={born}
+        onOpen={onOpen}
+        onPainting={onPainting}
+      />
     </li>
   )
 
@@ -151,7 +173,12 @@ export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid, h
         ) : (
           years.map((y) => (
             <section key={y} className="days-month">
-              <div className="ladder-label">{y}</div>
+              <div className="ladder-label month-label">
+                {y}
+                {onPainting && Object.keys(days).some((iso) => iso.startsWith(y)) && (
+                  <PaintingButton period={y} label={y} onOpen={onPainting} />
+                )}
+              </div>
               <ol className="month-list is-periods">
                 {months.filter((m) => m.startsWith(y)).map((m) => card(m, monthTitle(m).split(' ')[0], m, monthEnd(m)))}
               </ol>

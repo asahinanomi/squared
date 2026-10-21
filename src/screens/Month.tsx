@@ -6,6 +6,7 @@ import { useBackToToday } from '../lib/backToToday'
 import { squareFill } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { useLadderScroll } from '../lib/useLadderScroll'
+import { PaintingButton } from '../components/PaintingButton'
 import { Chevron } from './Today'
 
 type Props = {
@@ -112,16 +113,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
               {monthTitle(m)}
               {/* A month with squares in it: its painting (this one so far), to open, look at and keep. */}
               {onPainting && m <= current && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) && (
-                <button
-                  className="month-paint"
-                  onClick={() => onPainting(m.slice(0, 7))}
-                  aria-label={`${monthTitle(m)}, ${m < current ? 'painted' : 'so far'}`}
-                >
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <rect x="3.5" y="4.5" width="17" height="15" rx="1.5" />
-                    <path d="M7 15.5 L10.5 11.5 L13 14 L15 12 L17 15.5" />
-                  </svg>
-                </button>
+                <PaintingButton period={m.slice(0, 7)} label={monthTitle(m)} onOpen={onPainting} />
               )}
             </div>
             <div className="month-grid">

@@ -2942,6 +2942,13 @@ button.settings-row:active {
   inset: 0;
   border-radius: inherit;
 }
+/* A card's painting: the ink picture icon at its top right, above the card's own tap. */
+.period-paint {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  z-index: 1;
+}
 .period-band {
   display: flex;
   height: 10px;

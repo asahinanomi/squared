@@ -4,6 +4,7 @@ import type { Days } from '../lib/days'
 import { useBackToToday } from '../lib/backToToday'
 import { bands, monthEnd } from '../lib/tally'
 import { useLadderScroll } from '../lib/useLadderScroll'
+import { PaintingButton } from '../components/PaintingButton'
 import { Chevron } from './Today'
 
 type Props = {
@@ -18,13 +19,15 @@ type Props = {
   onIn: () => void
   /** Zoom out to a life (absent until that level exists). */
   onOut?: () => void
+  /** A year's painting ("YYYY"; this one so far): opens it, to look at and keep. */
+  onPainting?: (year: string) => void
 }
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 // A year — twelve banded month-squares (6×2). Your years stack in one scroll, from the birth
 // year down to this one (next year peeks in faintly below). Opens centred on this year.
-export function Year({ days, born, focus, onPick, onIn, onOut }: Props) {
+export function Year({ days, born, focus, onPick, onIn, onOut, onPainting }: Props) {
   const today = todayIso()
   const thisYear = Number(today.slice(0, 4))
   const thisMonth = today.slice(0, 7)
@@ -99,7 +102,13 @@ export function Year({ days, born, focus, onPick, onIn, onOut }: Props) {
       >
         {years.map((y) => (
           <section key={y} className="year-block" data-key={String(y)}>
-            <div className="ladder-label">{y}</div>
+            <div className="ladder-label month-label">
+              {y}
+              {/* As on the months: the year's painting, at the right edge. */}
+              {onPainting && Object.keys(days).some((iso) => iso.startsWith(String(y))) && (
+                <PaintingButton period={String(y)} label={String(y)} onOpen={onPainting} />
+              )}
+            </div>
             <div className="year-grid">{MONTHS.map((_, m) => square(y, m))}</div>
           </section>
         ))}

@@ -1,4 +1,4 @@
-import { fromIso, monthCells, todayIso } from './dates'
+import { fromIso, isoDate, monthCells, todayIso } from './dates'
 import type { Days } from './days'
 import { FRAME, PAINTS } from './paints'
 
@@ -7,11 +7,14 @@ import { FRAME, PAINTS } from './paints'
 // signed in the hand. The random numbers come from the month itself: same month, same painting, every time.
 // The sheet shows it and the picture you keep is it, exactly.
 
-export const monthName = (month: string) => fromIso(`${month}-01`).toLocaleDateString('en-US', { month: 'long' })
-/** A month still being painted: shown "so far", and not signed until it ends. */
-export const inProgress = (month: string) => month >= todayIso().slice(0, 7)
-export const shortMonth = (month: string) =>
-  fromIso(`${month}-01`).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+// A painting is of a month ("YYYY-MM") or, the same way, a whole year ("YYYY").
+const isYear = (p: string) => p.length === 4
+export const monthName = (p: string) =>
+  isYear(p) ? p : fromIso(`${p}-01`).toLocaleDateString('en-US', { month: 'long' })
+/** A month (or year) still being painted: shown "so far", and not signed until it ends. */
+export const inProgress = (p: string) => p >= todayIso().slice(0, p.length)
+export const shortMonth = (p: string) =>
+  isYear(p) ? p : fromIso(`${p}-01`).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 
 type Rgb = [number, number, number]
 const RAW: Rgb = [227, 220, 203]
@@ -47,9 +50,17 @@ function soft(ctx: CanvasRenderingContext2D, x: number, y: number, rad: number, 
   ctx.fill()
 }
 
-/** The month's paint, day by day: a colour per lived day (null before the 1st), framed green deeper. */
+/** Every day of a year, Jan 1 to Dec 31. */
+function yearDays(y: string) {
+  const out: string[] = []
+  for (let d = new Date(Number(y), 0, 1); d.getFullYear() === Number(y); d.setDate(d.getDate() + 1))
+    out.push(isoDate(d))
+  return out
+}
+
+/** The paint, day by day: a colour per lived day (null before the 1st), framed green deeper. */
 function colours(month: string, days: Days): (Rgb | null)[] {
-  return monthCells(`${month}-01`).map((iso) => {
+  return (isYear(month) ? yearDays(month) : monthCells(`${month}-01`)).map((iso) => {
     if (!iso || iso > todayIso()) return null // before the 1st, or not lived yet (this month, so far)
     const d = days[iso]
     if (!d) return RAW
@@ -81,8 +92,9 @@ export async function drawPainting(c: HTMLCanvasElement, month: string, days: Da
   ctx.clip()
   ctx.fillStyle = rgba(RAW, 1)
   ctx.fillRect(x, x, s, s)
-  const rows = Math.ceil(list.length / 7)
-  const cw = s / 7
+  const cols = isYear(month) ? 19 : 7 // a month in its calendar; a year's days in rows, nearly square
+  const rows = Math.ceil(list.length / cols)
+  const cw = s / cols
   const ch = s / rows
   const u = Math.max(cw, ch)
   const at = list.flatMap((c, k) =>
@@ -90,8 +102,8 @@ export async function drawPainting(c: HTMLCanvasElement, month: string, days: Da
       ? [
           {
             c,
-            x: x + ((k % 7) + 0.5) * cw + gauss() * cw * 0.25,
-            y: x + (Math.floor(k / 7) + 0.5) * ch + gauss() * ch * 0.25,
+            x: x + ((k % cols) + 0.5) * cw + gauss() * cw * 0.25,
+            y: x + (Math.floor(k / cols) + 0.5) * ch + gauss() * ch * 0.25,
           },
         ]
       : [],

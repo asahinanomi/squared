@@ -8,6 +8,7 @@ import type { Note, Notes } from '../lib/notes'
 import { paintHex, squareFill, WORD, type Paint } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { monthsBetween, shiftMonth } from './Month'
+import { PaintingButton } from '../components/PaintingButton'
 import { ChevronDown } from './Today'
 
 type Props = {
@@ -363,16 +364,7 @@ export function DaysList({
                 {monthTitle(m)}
                 {/* As in the month view: the month's painting, at the right edge. */}
                 {onPainting && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) && (
-                  <button
-                    className="month-paint"
-                    onClick={() => onPainting(m.slice(0, 7))}
-                    aria-label={`${monthTitle(m)}, ${m < current ? 'painted' : 'so far'}`}
-                  >
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="3.5" y="4.5" width="17" height="15" rx="1.5" />
-                      <path d="M7 15.5 L10.5 11.5 L13 14 L15 12 L17 15.5" />
-                    </svg>
-                  </button>
+                  <PaintingButton period={m.slice(0, 7)} label={monthTitle(m)} onOpen={onPainting} />
                 )}
               </div>
               <ol className="month-list">
