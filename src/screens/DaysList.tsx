@@ -1,10 +1,11 @@
 import { Fragment, useEffect, useLayoutEffect, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
+import { Sheet } from '../components/Sheet'
 import { glide, pulse } from '../lib/backToToday'
 import { addDays, isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Day, type Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
-import { FRAME, paintHex, paintTint, WORD, type Paint } from '../lib/paints'
+import { paintHex, paintTint, WORD, type Paint } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { monthsBetween, shiftMonth } from './Month'
 import { ChevronDown } from './Today'
@@ -29,9 +30,27 @@ type Props = {
   head?: ReactNode
   /** Only the days of one colour (or the unpainted ones) — from a slice of the pie — and the way back to all. */
   only?: Paint | 'unpainted' | 'framed'
-  onAll?: () => void
-  /** A card's "framed" tag: show only the framed days. */
-  onFramed?: () => void
+  /** Choose what the list shows: one kind of day, or all (null). */
+  onOnly?: (only: Only | null) => void
+}
+
+type Only = Paint | 'unpainted' | 'framed'
+/** The filter's choices, in the order the app always lists colours. */
+const FILTERS: [Only | null, string][] = [
+  [null, 'all days'],
+  ['framed', 'framed'],
+  ['green', 'mattered'],
+  ['red', 'empty'],
+  ['grey', 'slipped'],
+  ['unpainted', 'unpainted'],
+]
+
+/** A filter row's mark: the colour's dot, a little frame, or an empty dashed square. */
+function FilterMark({ id }: { id: Only | null }) {
+  if (!id) return <span className="filter-mark is-all" aria-hidden="true" />
+  if (id === 'unpainted') return <span className="filter-mark is-unpainted" aria-hidden="true" />
+  if (id === 'framed') return <span className="filter-mark is-framed" aria-hidden="true" />
+  return <span className="filter-mark" style={{ background: paintHex(id) }} aria-hidden="true" />
 }
 
 const WORD_OF: Record<Paint | 'unpainted' | 'framed', string> = { ...WORD, unpainted: 'unpainted', framed: 'framed' }
@@ -162,9 +181,9 @@ export function DaysList({
   mid,
   head,
   only,
-  onAll,
-  onFramed,
+  onOnly,
 }: Props) {
+  const [picking, setPicking] = useState(false)
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const first = born ? shiftMonth(born, 0) : shiftMonth(today, -120)
@@ -284,23 +303,41 @@ export function DaysList({
           <h1 className="life-title">a life</h1>
         </div>
       )}
-      {/* All your framed days, one tap away: a capsule once there's at least one (not over a pie slice's list). */}
-      {(!only || only === 'framed') && onFramed && onAll && Object.values(days).some((d) => d.framed) && (
-        <div className="seg days-framed-seg" role="group" aria-label="Show">
-          <button className={only ? undefined : 'is-on'} aria-pressed={!only} onClick={onAll}>
-            all
+      {/* The one filter: a quiet line under the zoom capsule; its choices open in a sheet. */}
+      {onOnly && (
+        <div className="days-filter">
+          <button className="days-filter-open" onClick={() => setPicking(true)} aria-haspopup="dialog">
+            {only ? `only ${WORD_OF[only]}` : 'all days'}
+            <ChevronDown className="days-filter-chevron" />
           </button>
-          <button className={only ? 'is-on' : undefined} aria-pressed={only === 'framed'} onClick={onFramed}>
-            <span className="days-only-dot" style={{ background: FRAME }} aria-hidden="true" />
-            framed
-          </button>
+          {only && (
+            <button className="days-filter-clear" onClick={() => onOnly(null)} aria-label="Show all days">
+              ×
+            </button>
+          )}
         </div>
       )}
-      {only && only !== 'framed' && onAll && (
-        <button className="days-only" onClick={onAll} aria-label={`Show all days, not only ${WORD_OF[only]}`}>
-          {only !== 'unpainted' && <span className="days-only-dot" style={{ background: paintHex(only) }} />}
-          only {WORD_OF[only]} <span aria-hidden="true">×</span>
-        </button>
+      {onOnly && (
+        <Sheet open={picking} onClose={() => setPicking(false)}>
+          <h2 className="sheet-title">show</h2>
+          <ul className="filter-list">
+            {FILTERS.map(([id, label]) => (
+              <li key={id ?? 'all'}>
+                <button
+                  className={'filter-row' + (only === id || (!only && !id) ? ' is-on' : '')}
+                  onClick={() => {
+                    setPicking(false)
+                    onOnly(id)
+                  }}
+                >
+                  <FilterMark id={id} />
+                  <span className="filter-label">{label}</span>
+                  {(only === id || (!only && !id)) && <span aria-label="shown">✓</span>}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </Sheet>
       )}
       <div className="days-scroll" ref={scroller} onScroll={onScroll}>
         {months.map((m) => {
@@ -332,7 +369,7 @@ export function DaysList({
                             today={today}
                             born={born}
                             onPick={onPick}
-                            onFramed={only === 'framed' ? undefined : onFramed}
+                            onFramed={only === 'framed' || !onOnly ? undefined : () => onOnly('framed')}
                           />
                         </li>
                       ))}

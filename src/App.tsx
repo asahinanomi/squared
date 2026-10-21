@@ -774,8 +774,7 @@ export default function App() {
               <DaysList
                 key={`days-${listOnly}`}
                 only={listOnly ?? undefined}
-                onAll={() => setListOnly(null)}
-                onFramed={() => setListOnly('framed')}
+                onOnly={setListOnly}
                 mid={listMid}
                 head={listHead}
                 days={days}

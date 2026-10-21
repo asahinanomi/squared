@@ -606,15 +606,6 @@
     display: none;
   }
 }
-/* The list's "all · framed" capsule: left, with the list. */
-.days-framed-seg {
-  margin: 12px 0 0;
-}
-.days-framed-seg button {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
 .day-card .day-card-swatch.is-framed {
   box-shadow:
     inset 0 0 0 2px #53735c,
@@ -2662,28 +2653,74 @@ button.settings-row:active {
   color: var(--ink);
 }
 /* "only empty ×": the list holds one slice's days (from the pie); tap it for all days again. A soft capsule. */
-.days-only {
+.days-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 8px;
+}
+.days-filter-open {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  align-self: center;
-  margin-top: 12px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: #efefea;
+  gap: 5px;
+  min-height: 36px;
+  padding: 0 6px;
   font-size: 14px;
-  font-weight: 600;
-  color: var(--ink);
+  color: var(--muted);
 }
-.days-only-dot {
-  width: 9px;
-  height: 9px;
+.days-filter-chevron {
+  width: 12px;
+  height: 12px;
+}
+.days-filter-clear {
+  min-width: 32px;
+  min-height: 36px;
+  font-size: 16px;
+  color: var(--muted);
+}
+/* The filter's sheet: one row per kind of day, its mark, its word, a tick on the one shown. */
+.filter-list {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+}
+.filter-row {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  font-size: 18px;
+  color: var(--ink);
+  border-bottom: 1px dotted #e2e2db;
+}
+.filter-row.is-on {
+  font-weight: 600;
+}
+.filter-label {
+  flex: 1;
+}
+.filter-mark {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+}
+.filter-mark.is-all {
+  background: conic-gradient(#6e9b7b 0 50%, #c06a62 50% 75%, #8e8e87 75%);
   border-radius: 50%;
 }
-.days-only span[aria-hidden] {
-  font-weight: 400;
-  color: var(--ink-soft);
-  margin-left: 2px;
+.filter-mark.is-unpainted {
+  box-shadow: inset 0 0 0 1.5px #c4c4bf;
+  border: 1px dashed transparent;
+}
+.filter-mark.is-framed {
+  background: #6e9b7b;
+  box-shadow:
+    inset 0 0 0 2px #53735c,
+    inset 0 0 0 4px #ebe6da;
 }
 /* A month or a year in the list: its name, its colours as a band on its side (the same shares as its square), and
    how many days of each. A tap anywhere zooms in on it (the name button is stretched over the card). */
