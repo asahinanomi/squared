@@ -1041,7 +1041,16 @@
 }
 .about .settings {
   flex: none;
-  padding-top: 20px;
+  width: 100%;
+  max-width: 30em;
+  padding-top: 28px; /* the same place as the other tabs, so nothing jumps */
+}
+/* The same 28px from each title to what follows. */
+.about .feedback .feedback-lede {
+  margin-top: 0;
+}
+.about .privacy section:first-of-type .privacy-head {
+  margin-top: 0;
 }
 .about .idea-foot {
   width: 100%;
