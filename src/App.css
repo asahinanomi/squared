@@ -491,15 +491,26 @@
   color: #a8a8a1;
   animation: fade-in 0.4s ease-out;
 }
-.canvas-word.is-painted {
-  color: rgba(20, 20, 19, 0.55);
+/* The word is written on the canvas by hand (Caveat), a little tilted, like a title on a painting; once
+   painted, in a deeper shade of its own paint (tone on tone). */
+.canvas-hand {
+  font-family: var(--font-hand);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+  white-space: nowrap;
+  transform: rotate(-3deg);
 }
-/* A late square's first-paint date, under the word: smaller and softer still. */
+.canvas-word.is-painted .canvas-hand {
+  font-size: 34px;
+}
+/* The honest line under the word (painted on time, late, changed): small, in the same tone. */
 .canvas-painted {
+  margin-top: 2px;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0;
-  opacity: 0.8;
 }
 .paint-wrap {
   position: relative;

@@ -14,3 +14,11 @@ export const WORD: Record<Paint, string> = { green: 'mattered', red: 'empty', gr
 export const paintHex = (p: Paint) => PAINTS.find((x) => x.id === p)!.hex
 
 export const paintTint = (p: Paint) => PAINTS.find((x) => x.id === p)!.tint
+
+/** A deeper shade of a paint (its hue, mixed toward ink): the word written on its square, tone on tone. */
+export function paintDeep(p: Paint): string {
+  const n = parseInt(paintHex(p).slice(1), 16)
+  const ink = [20, 20, 19]
+  const c = [n >> 16, (n >> 8) & 255, n & 255].map((v, i) => Math.round(v + (ink[i] - v) * 0.55))
+  return `rgb(${c.join(', ')})`
+}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { brushTip } from '../lib/brush'
-import { paintHex, WORD, type Paint } from '../lib/paints'
+import { paintDeep, paintHex, WORD, type Paint } from '../lib/paints'
 import { brushSound, brushStop, settleSound, wakeSound } from '../lib/sound'
 
 type Props = {
@@ -231,8 +231,12 @@ export function PaintCanvas({ saved, loaded, stamp, onDryBrush, onFilled, blank 
 
         {settling && <div className="settle" style={{ background: paintHex(settling) }} />}
         {!touched && !settling && (
-          <span className={'canvas-word' + (saved ? ' is-painted' : '')} aria-hidden="true">
-            {saved ? WORD[saved] : blank}
+          <span
+            className={'canvas-word' + (saved ? ' is-painted' : '')}
+            style={saved ? { color: paintDeep(saved) } : undefined}
+            aria-hidden="true"
+          >
+            <span className="canvas-hand">{saved ? WORD[saved] : blank}</span>
             {saved && stamp && <small className="canvas-painted">{stamp}</small>}
           </span>
         )}
