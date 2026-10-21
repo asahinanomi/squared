@@ -46,7 +46,7 @@ export function About({ onMatters, onLegal }: Props) {
       ) : tab === 'questions' ? (
         <Questions onTouch={() => show('touch')} onSupport={() => show('support')} />
       ) : tab === 'touch' ? (
-        <Feedback embedded onBack={() => show('idea')} />
+        <Feedback onDone={() => show('idea')} />
       ) : (
         <Support />
       )}

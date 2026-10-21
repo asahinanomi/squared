@@ -1,18 +1,10 @@
 import { KOFI_URL } from '../lib/config'
-import { Chevron } from './Today'
-
-type Props = { onBack?: () => void }
 
 // "help build squared": a short letter from the maker, and the way to support it (on Ko-fi, in a new tab).
 // Found, never pushed: a tab of the idea page.
-export function Support({ onBack }: Props) {
+export function Support() {
   return (
     <main className="idea support">
-      {onBack && (
-        <button className="back-btn idea-back" onClick={onBack} aria-label="Back">
-          <Chevron dir="left" />
-        </button>
-      )}
       <h1 className="idea-title">help build squared</h1>
       <p className="support-beta">
         <b className="beta">beta</b> squared is new, and still growing.

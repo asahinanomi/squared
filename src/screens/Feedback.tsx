@@ -1,16 +1,15 @@
 import { useState } from 'react'
 import { sendFeedback } from '../lib/feedback'
 import { supabase } from '../lib/supabase'
-import { Chevron } from './Today'
 
 type Props = {
-  onBack: () => void
-  /** Inside the idea page: no back arrow (the tabs lead on). */
-  embedded?: boolean
+  /** After it's sent, "done" leads on (back to the idea). */
+  onDone: () => void
 }
 
-// Get in touch: one box, straight to the maker, for anything (feedback, questions, bugs, hello). Thanks once sent.
-export function Feedback({ onBack, embedded }: Props) {
+// Get in touch (a tab of the idea): one box, straight to the maker, for anything (feedback, questions, bugs,
+// hello). Thanks once sent.
+export function Feedback({ onDone }: Props) {
   const [text, setText] = useState('')
   const [state, setState] = useState<'writing' | 'sending' | 'sent' | 'failed'>('writing')
   const send = () => {
@@ -24,18 +23,13 @@ export function Feedback({ onBack, embedded }: Props) {
   }
   return (
     <main className="settings feedback">
-      {!embedded && (
-        <button className="setup-back" aria-label="Back" onClick={onBack}>
-          <Chevron dir="left" />
-        </button>
-      )}
-      <h1 className={embedded ? 'idea-title' : 'settings-title'}>get in touch</h1>
+      <h1 className="idea-title">get in touch</h1>
       {state === 'sent' ? (
         <>
           <p className="feedback-lede">
             {supabase ? 'Thank you. I read every one. — nomi' : 'This is a demo, so nothing was sent.'}
           </p>
-          <button className="pill feedback-send" onClick={onBack}>
+          <button className="pill feedback-send" onClick={onDone}>
             done
           </button>
         </>

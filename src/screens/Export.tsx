@@ -41,6 +41,11 @@ export function Export({ onBack, gather }: Props) {
       <button className="export-json" disabled={state === 'working'} onClick={() => run(exportJson)}>
         also download a full copy (.json)
       </button>
+      {/* Most people won't know what a .json is: say what it's for, plainly. */}
+      <p className="export-why">
+        the full copy is a backup, not for reading. it keeps everything exactly, so your squares can be brought back one
+        day, into squared or another app.
+      </p>
     </main>
   )
 }

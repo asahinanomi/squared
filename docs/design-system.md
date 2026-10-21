@@ -61,7 +61,7 @@ squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, 
 
 ## Components
 - **Surface:** paper + dotted grid.
-- **Main button:** one solid black pill per view, 250px wide and centred (narrower only on a narrower screen), 54px tall, 18px/500 text. Small actions in a card hug their text; a two-choice dialog splits into equal halves.
+- **Main button:** one solid black pill per view, 250px wide (narrower only on a narrower screen), left-aligned with the page's text (centred only on onboarding and sign-in), 54px tall, 18px/500 text. Small actions in a card hug their text; a two-choice dialog splits into equal halves.
 - **Sign-in button (secondary / quiet):** white fill, 1.5px #E2E2DB border, pill (radius 999), 250px wide, min-height 50px, Inter 500, real Google "G". Deliberately understated so the question leads — never a solid black button.
 - **The day's canvas:** the one square you paint on is a canvas — a clean ink edge (2.5px, nearly square corners), a thin raw-canvas margin inside it (7px, #EBE6DA) where the priming stops, and a primed face with a fine linen weave while blank (smooth paint once painted, kept inside the margin). Flat, with a short desk shadow; no 3D, no wobble. Every other square (month, list, life) is a gallery thumbnail and keeps the plain rounded square.
 - **Control bar:** its own surface, #FCFCFA with no dot grid, lifted by a soft shadow cast upward (0 −4px 14px, ink at 7%) — never a hairline.

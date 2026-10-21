@@ -115,9 +115,9 @@
   color: #fff;
   font-size: 18px;
   font-weight: 500;
-  /* One width for every main action: 250px, centred (narrower only on a narrower screen). */
+  /* One width for every main action: 250px (narrower only on a narrower screen), left-aligned with the page's
+     text. Only onboarding and sign-in, whose pages are centred, centre it. */
   width: min(100%, 250px);
-  margin-inline: auto;
 }
 .pill:active {
   transform: scale(0.98);
@@ -985,39 +985,10 @@
   margin-right: 12px;
   vertical-align: 1px;
 }
-.idea-go {
-  margin-top: 8px;
-  padding: 10px 18px;
-  border-radius: 999px;
-  font-size: 16px;
-  white-space: nowrap;
-  color: var(--ink);
-  box-shadow: inset 0 0 0 var(--keyline) var(--ink);
-}
-.idea-go:active {
-  transform: scale(0.98);
-}
 .idea p.idea-sign {
   font-style: italic;
   color: var(--ink-soft);
   text-align: right; /* signed at the foot, like a letter */
-}
-/* The idea's quiet second link, under its one action. */
-.idea-support {
-  margin: 18px 0 0 !important;
-}
-.idea-support {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  font-size: 16px;
-  color: var(--muted);
-}
-.idea-support button {
-  font-size: 16px;
-  color: var(--muted);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
 }
 /* The idea, squared's about page: its four tabs, then the page under them. */
 .about {
@@ -1169,9 +1140,6 @@
   margin-top: 36px;
   text-decoration: none;
 }
-.support .idea-back {
-  margin-left: -10px;
-}
 
 /* Export: the main pill, then the full copy as a quiet link. */
 .export-go {
@@ -1181,12 +1149,20 @@
   opacity: 0.35;
 }
 .export-json {
-  margin: 16px auto 0;
+  margin: 16px 0 0;
+  align-self: flex-start;
   padding: 6px;
   font-size: 14px;
   color: var(--muted);
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
+}
+.export-why {
+  margin: 6px 0 0;
+  max-width: 320px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--muted);
 }
 .export-note {
   margin: 18px 0 0;
