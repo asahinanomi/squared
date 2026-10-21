@@ -568,6 +568,13 @@
   justify-content: center;
   gap: 6px;
 }
+/* Framing didn't save: said quietly under the square. */
+.day-frame-error {
+  margin: 10px 0 -4px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+}
 /* A framed day: the canvas edge in a darker green (its paint, a third toward ink), thicker. */
 .canvas.is-framed {
   border: 5px solid #53735c;

@@ -151,6 +151,7 @@ export default function App() {
   // The open "why?" bubble: a new note ({}), or an existing note being edited.
   const [why, setWhy] = useState<Why | null>(null)
   const [nudge, setNudge] = useState(false)
+  const [frameError, setFrameError] = useState<string | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
@@ -293,6 +294,9 @@ export default function App() {
     saveFramed(day, !was).catch((e) => {
       console.error('Could not frame day', e)
       put(was)
+      // Said, not silent: a quiet line under the square for a few seconds.
+      setFrameError(was ? "couldn't unframe, check your connection" : "couldn't frame, check your connection")
+      setTimeout(() => setFrameError(null), 4000)
     })
   }
 
@@ -679,6 +683,7 @@ export default function App() {
               onFilled={onFilled}
               onWipe={onWipe}
               onFrame={onFrame}
+              frameError={frameError}
               onZoomOut={outOfDay}
               onMatters={() => {
                 setMattersFrom('today')

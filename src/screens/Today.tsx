@@ -31,6 +31,8 @@ type Props = {
   onWipe: () => void
   /** Frame (or unframe) a day that mattered most. */
   onFrame: () => void
+  /** Framing didn't save: what to say, quietly, under the square. */
+  frameError?: string | null
   onLoad: (p: Paint) => void
   onDefine: () => void
   /** Saves a new note, or updates `note` (instantly; a failure reopens the box). */
@@ -303,6 +305,7 @@ export function Today(props: Props) {
               )}
             </div>
           )}
+          {props.frameError && <p className="day-frame-error">{props.frameError}</p>}
 
           <div className="tray">
             {why ? (
