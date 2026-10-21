@@ -15,6 +15,9 @@ import { setSoundOn, soundOn } from '../lib/sound'
 import { loadMatters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 
+// squared.today/?brush shows the ghost brush on any blank square, to try it (it changes nothing).
+const TRY_BRUSH = new URLSearchParams(location.search).has('brush')
+
 type Props = {
   question: string
   /** Birth date, if known: the earliest day you can step back to. */
@@ -290,7 +293,7 @@ export function Today(props: Props) {
                 onDryBrush={onDryBrush}
                 onFilled={onFilled}
                 blank={date === today ? 'paint your day' : 'paint this day'}
-                hint={Object.keys(days).length === 0}
+                hint={TRY_BRUSH || Object.keys(days).length === 0}
               />
             </div>
             {hasNext ? peek(next, 1) : <span className="peek is-none" />}
