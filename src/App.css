@@ -471,14 +471,10 @@
 .canvas .settle {
   clip-path: inset(var(--margin));
 }
-/* A quiet word in the middle of the square, under the brush (it never takes a touch). */
+/* The word on the square, under the brush (it never takes a touch). */
 .canvas-word {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 3px;
   pointer-events: none;
   font-size: 14px;
   font-weight: 500;
@@ -486,23 +482,33 @@
   color: #a8a8a1;
   animation: fade-in 0.4s ease-out;
 }
-/* The word is written on the canvas by hand (Caveat), a little tilted, like a title on a painting; once
-   painted, in a deeper shade of its own paint (tone on tone). */
+/* The word is signed by hand (Caveat) in the lower-right corner, like a painting: the same space below as to
+   the right. Once painted, in a deeper shade of its own paint (tone on tone). */
+.canvas-sign {
+  position: absolute;
+  right: 15%;
+  bottom: 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
 .canvas-hand {
   font-family: var(--font-hand);
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 600;
   letter-spacing: 0;
   line-height: 1;
   white-space: nowrap;
-  transform: rotate(-3deg);
+  transform: rotate(-4deg);
+  transform-origin: right bottom;
 }
 .canvas-word.is-painted .canvas-hand {
-  font-size: 34px;
+  font-size: 30px;
 }
 /* The honest line under the word (painted on time, late, changed): small, in the same tone. */
 .canvas-painted {
-  margin-top: 2px;
+  margin-top: 4px;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0;
@@ -1010,6 +1016,43 @@
 .idea-support button {
   font-size: 16px;
   color: var(--muted);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
+}
+/* The idea, squared's about page: its four tabs, then the page under them. */
+.about {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.about-tabs {
+  margin: 8px auto 0;
+  max-width: 100%;
+}
+.about-tabs {
+  gap: 0;
+}
+.about-tabs button {
+  padding: 5px 10px; /* all four fit one row on a 375px phone */
+}
+.about .idea {
+  flex: none;
+  padding-top: 28px;
+}
+.about .settings {
+  flex: none;
+  padding-top: 20px;
+}
+.about .idea-foot {
+  width: 100%;
+  max-width: 30em;
+  margin: auto auto 0;
+  box-sizing: border-box;
+  padding: 14px 4px 8px;
+}
+.idea-inline {
+  font: inherit;
+  color: inherit;
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
 }

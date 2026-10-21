@@ -236,8 +236,10 @@ export function PaintCanvas({ saved, loaded, stamp, onDryBrush, onFilled, blank 
             style={saved ? { color: paintDeep(saved) } : undefined}
             aria-hidden="true"
           >
-            <span className="canvas-hand">{saved ? WORD[saved] : blank}</span>
-            {saved && stamp && <small className="canvas-painted">{stamp}</small>}
+            <span className="canvas-sign">
+              <span className="canvas-hand">{saved ? WORD[saved] : blank}</span>
+              {saved && stamp && <small className="canvas-painted">{stamp}</small>}
+            </span>
           </span>
         )}
       </div>

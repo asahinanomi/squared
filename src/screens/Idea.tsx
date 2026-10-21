@@ -12,16 +12,12 @@ type Props = {
   onMatters?: () => void
   /** Opened from the sign-in screen: the way back to it. */
   onBack?: () => void
-  /** Signed in: a quiet link on to "help build squared". */
-  onSupport?: () => void
-  /** Signed in: "get in touch", the one way to reach the maker. */
-  onFeedback?: () => void
-  /** Signed in: the small print, in the page's footer. */
-  onLegal?: (page: 'questions' | 'privacy' | 'terms') => void
+  /** Inside the idea page's tabs: no title (the tab says it). */
+  embedded?: boolean
 }
 
 // "the idea": why squared exists, in the maker's own words.
-export function Idea({ onMatters, onBack, onSupport, onFeedback, onLegal }: Props) {
+export function Idea({ onMatters, onBack, embedded }: Props) {
   return (
     <main className="idea">
       {onBack && (
@@ -30,7 +26,7 @@ export function Idea({ onMatters, onBack, onSupport, onFeedback, onLegal }: Prop
           sign in
         </button>
       )}
-      <h1 className="idea-title">the idea</h1>
+      {!embedded && <h1 className="idea-title">the idea</h1>}
       <p>
         I live a very busy life. one day, I looked up and saw so many days had gone that I couldn’t say where or how.
         scary.
@@ -61,23 +57,6 @@ export function Idea({ onMatters, onBack, onSupport, onFeedback, onLegal }: Prop
         <button className="idea-go" onClick={onMatters}>
           start by naming what matters to you →
         </button>
-      )}
-      {/* squared's about page: the ways to reach and help, then the small print. */}
-      {onSupport && onFeedback && (
-        <p className="idea-support">
-          <button onClick={onSupport}>help build squared</button>
-          <span aria-hidden="true">·</span>
-          <button onClick={onFeedback}>get in touch</button>
-        </p>
-      )}
-      {onLegal && (
-        <footer className="idea-foot">
-          <button onClick={() => onLegal('questions')}>questions</button>
-          <span aria-hidden="true">·</span>
-          <button onClick={() => onLegal('privacy')}>privacy</button>
-          <span aria-hidden="true">·</span>
-          <button onClick={() => onLegal('terms')}>terms</button>
-        </footer>
       )}
     </main>
   )

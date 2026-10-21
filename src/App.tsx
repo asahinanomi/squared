@@ -34,10 +34,9 @@ import { SCOPE_ORDER, type Scope } from './lib/pie'
 import { LifeMonths } from './screens/LifeMonths'
 import { Account } from './screens/Account'
 import { DaysList } from './screens/DaysList'
-import { Feedback } from './screens/Feedback'
 import { PeriodList } from './screens/PeriodList'
 import { Privacy } from './screens/Privacy'
-import { Support } from './screens/Support'
+import { About } from './screens/About'
 import { Terms } from './screens/Terms'
 import { Questions } from './screens/Questions'
 import { Export } from './screens/Export'
@@ -61,14 +60,12 @@ type Screen =
   | 'setup'
   | 'settings'
   | 'matters'
-  | 'feedback'
   | 'account'
   | 'privacy'
   | 'terms'
   | 'questions'
   | 'export'
   | 'welcome'
-  | 'support'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
 const LADDER: Screen[] = ['today', 'month', 'year', 'life']
 
@@ -82,7 +79,11 @@ const tryWelcome = new URLSearchParams(location.search).has('welcome')
 const trySquaresAtStart = new URLSearchParams(location.search).has('squares')
 // squared.today/privacy and /terms open those pages directly (signed in or not): links for Google's sign-in screen.
 const legalAtStart = (
-  ['/privacy', '/terms', '/questions'].includes(location.pathname) ? location.pathname.slice(1) : null
+  ['/privacy', '/terms', '/questions'].includes(location.pathname)
+    ? location.pathname.slice(1)
+    : location.pathname === '/faq'
+      ? 'questions'
+      : null
 ) as 'privacy' | 'terms' | 'questions' | null
 const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
 
@@ -122,8 +123,6 @@ export default function App() {
   const [pieFrom, setPieFrom] = useState<Screen>('life')
   // The list of days sits beside the ladder too: where it was opened from, and the day it opens on.
   const [listFrom, setListFrom] = useState<Screen>('month')
-  const [feedbackFrom, setFeedbackFrom] = useState<Screen>('today')
-  const [supportFrom, setSupportFrom] = useState<Screen>('today')
   const [listFocus, setListFocus] = useState(todayIso)
   // The list zooms too, within itself: years → months → days (→ the day). And the level it was opened at.
   const [listRes, setListRes] = useState<Resolution>('days')
@@ -599,10 +598,8 @@ export default function App() {
       >
         {screen !== 'setup' &&
           screen !== 'welcome' &&
-          screen !== 'support' &&
           screen !== 'settings' &&
           screen !== 'matters' &&
-          screen !== 'feedback' &&
           screen !== 'account' &&
           screen !== 'privacy' &&
           screen !== 'terms' &&
@@ -657,18 +654,10 @@ export default function App() {
               }}
             />
           ) : screen === 'idea' ? (
-            <Idea
+            <About
               onMatters={() => {
                 setMattersFrom('idea')
                 setScreenValue('matters')
-              }}
-              onSupport={() => {
-                setSupportFrom('idea')
-                setScreenValue('support')
-              }}
-              onFeedback={() => {
-                setFeedbackFrom('idea')
-                setScreenValue('feedback')
               }}
               onLegal={(page) => openLegal(page, 'idea')}
             />
@@ -703,10 +692,6 @@ export default function App() {
                 goToday()
               }}
             />
-          ) : screen === 'support' ? (
-            <Support onBack={() => setScreenValue(supportFrom)} />
-          ) : screen === 'feedback' ? (
-            <Feedback onBack={() => setScreenValue(feedbackFrom)} />
           ) : screen === 'settings' ? (
             <Settings
               profile={profile}

@@ -47,7 +47,7 @@ export function SignIn({
           </button>
           <span aria-hidden="true">·</span>
           <button className="signin-idea" onClick={onQuestions}>
-            questions
+            faq
           </button>
           <span aria-hidden="true">·</span>
           <button className="signin-idea" onClick={onPrivacy}>

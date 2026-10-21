@@ -3,10 +3,14 @@ import { sendFeedback } from '../lib/feedback'
 import { supabase } from '../lib/supabase'
 import { Chevron } from './Today'
 
-type Props = { onBack: () => void }
+type Props = {
+  onBack: () => void
+  /** Inside the idea page: no back arrow or title (the tab says it). */
+  embedded?: boolean
+}
 
 // Get in touch: one box, straight to the maker, for anything (feedback, questions, bugs, hello). Thanks once sent.
-export function Feedback({ onBack }: Props) {
+export function Feedback({ onBack, embedded }: Props) {
   const [text, setText] = useState('')
   const [state, setState] = useState<'writing' | 'sending' | 'sent' | 'failed'>('writing')
   const send = () => {
@@ -20,10 +24,14 @@ export function Feedback({ onBack }: Props) {
   }
   return (
     <main className="settings feedback">
-      <button className="setup-back" aria-label="Back" onClick={onBack}>
-        <Chevron dir="left" />
-      </button>
-      <h1 className="settings-title">get in touch</h1>
+      {!embedded && (
+        <>
+          <button className="setup-back" aria-label="Back" onClick={onBack}>
+            <Chevron dir="left" />
+          </button>
+          <h1 className="settings-title">get in touch</h1>
+        </>
+      )}
       {state === 'sent' ? (
         <>
           <p className="feedback-lede">

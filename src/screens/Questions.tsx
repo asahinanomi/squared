@@ -1,6 +1,11 @@
 import { Chevron } from './Today'
 
-type Props = { onBack: () => void; backLabel: string }
+type Props = {
+  onBack?: () => void
+  backLabel?: string
+  /** Inside the idea page: "get in touch" switches to its tab. */
+  onTouch?: () => void
+}
 
 const QA: [string, string][] = [
   [
@@ -54,14 +59,18 @@ const QA: [string, string][] = [
 ]
 
 // Questions: the few rules squared has, answered once, so the screens can stay quiet. Privacy's paper.
-export function Questions({ onBack, backLabel }: Props) {
+export function Questions({ onBack, backLabel = 'back', onTouch }: Props) {
   return (
     <main className="idea privacy">
-      <button className="back-btn idea-back" onClick={onBack} aria-label={`Back to ${backLabel}`}>
-        <Chevron dir="left" />
-        {backLabel}
-      </button>
-      <h1 className="idea-title">questions</h1>
+      {onBack && (
+        <>
+          <button className="back-btn idea-back" onClick={onBack} aria-label={`Back to ${backLabel}`}>
+            <Chevron dir="left" />
+            {backLabel}
+          </button>
+          <h1 className="idea-title">faq</h1>
+        </>
+      )}
       {QA.map(([q, a]) => (
         <section key={q}>
           <h2 className="privacy-head">{q}</h2>
@@ -69,7 +78,19 @@ export function Questions({ onBack, backLabel }: Props) {
         </section>
       ))}
       <h2 className="privacy-head">Something else?</h2>
-      <p>Ask me: the idea → get in touch. I read every one.</p>
+      <p>
+        {onTouch ? (
+          <>
+            Ask me:{' '}
+            <button className="idea-inline" onClick={onTouch}>
+              get in touch
+            </button>
+            . I read every one.
+          </>
+        ) : (
+          'Ask me: the idea → get in touch. I read every one.'
+        )}
+      </p>
       <p className="idea-sign">— nomi</p>
     </main>
   )

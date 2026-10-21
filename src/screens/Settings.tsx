@@ -90,7 +90,7 @@ export function Settings({
       </div>
 
       <div className="settings-foot-links">
-        <button onClick={onQuestions}>questions</button>
+        <button onClick={onQuestions}>faq</button>
         <span aria-hidden="true">·</span>
         <button onClick={onPrivacy}>privacy</button>
         <span aria-hidden="true">·</span>
