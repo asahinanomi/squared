@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Days } from '../lib/days'
 import { save } from '../lib/exportData'
-import { CANVAS, cells, counts, monthName, paintingImage, shortMonth } from '../lib/painting'
+import { drawPainting, monthName, paintingImage } from '../lib/painting'
 import { Sheet } from './Sheet'
 
 type Props = {
@@ -15,10 +15,16 @@ type Props = {
   onClose: () => void
 }
 
-// A new month: the last one, shown once as a finished painting. Its squares dab in one by one on squared's canvas,
-// signed. Any finished month opens it again from the month view. "keep this painting" saves it as a picture (on a phone, the share sheet: Save to Photos, or send it).
+// A new month: the last one, shown once as a finished painting (see lib/painting), framed and signed. Any finished
+// month opens it again from the month view. No counts: it's a painting, not a score. "keep this painting" saves it as a picture (on a phone, the share sheet: Save to Photos, or send it).
 export function MonthPainting({ month, days, name, onClose, arrived }: Props) {
   const [busy, setBusy] = useState(false)
+  const art = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const c = art.current
+    if (!month || !c) return
+    drawPainting(c, month, days, name, Math.round(c.clientWidth * (window.devicePixelRatio || 1)))
+  }, [month, days, name])
   if (!month) return null
   const keep = async () => {
     setBusy(true)
@@ -36,31 +42,7 @@ export function MonthPainting({ month, days, name, onClose, arrived }: Props) {
       <div className="painting">
         {arrived && <p className="painting-kicker">a new month. here's the last one —</p>}
         <p className="painting-title">{monthName(month)}, painted</p>
-        <div className="painting-art">
-          <div className="painting-face" style={{ background: CANVAS }}>
-            {cells(month, days).map((cell, i) => (
-              <i
-                key={i}
-                className={
-                  cell === null ? 'is-none' : cell === 'blank' ? 'is-blank' : cell.framed ? 'is-framed' : undefined
-                }
-                style={{
-                  background: cell && cell !== 'blank' ? cell.fill : undefined,
-                  animationDelay: `${0.4 + i * 0.04}s`,
-                }}
-              />
-            ))}
-          </div>
-          <span className="painting-sign">{[name, shortMonth(month)].filter(Boolean).join(' · ')}</span>
-        </div>
-        <p className="painting-counts">
-          {counts(month, days).map((p) => (
-            <span key={p.id}>
-              <i style={{ background: p.hex }} />
-              {p.n} {p.id === 'green' ? 'mattered' : p.id === 'red' ? 'empty' : 'slipped'}
-            </span>
-          ))}
-        </p>
+        <canvas ref={art} className="painting-art" role="img" aria-label={`${monthName(month)}, painted`} />
         <button className="pill painting-keep" onClick={keep} disabled={busy}>
           keep this painting
           <svg

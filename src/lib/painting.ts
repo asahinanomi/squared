@@ -1,119 +1,152 @@
 import { fromIso, monthCells } from './dates'
 import type { Days } from './days'
-import { PAINTS, squareFill } from './paints'
+import { FRAME, PAINTS } from './paints'
 
-// A finished month, as a painting: its days as a mosaic on squared's canvas, signed. The same picture is drawn
-// on screen (as squares) and into an image to keep (here).
+// A finished month, as a painting: each day a soft pool of its paint where it falls in the month, the brush's
+// bristles as round drops on top, unpainted days in the raw canvas's linen. Framed in flat grey with a thin mat,
+// signed in the hand. The random numbers come from the month itself: same month, same painting, every time.
+// The sheet shows it and the picture you keep is it, exactly.
 
 export const monthName = (month: string) => fromIso(`${month}-01`).toLocaleDateString('en-US', { month: 'long' })
 export const shortMonth = (month: string) =>
   fromIso(`${month}-01`).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 
-/** One cell of the mosaic: a painted day's fill (and whether it's framed), a blank lived day, or no day (the lead). */
-export type Cell = { fill: string; framed?: boolean } | 'blank' | null
-export const RAW = '#ebe6da'
-export const CANVAS = '#f7f5ef'
-export const BLANK = '#efebe1'
+type Rgb = [number, number, number]
+const RAW: Rgb = [227, 220, 203]
+const hexRgb = (h: string): Rgb => {
+  const n = parseInt(h.slice(1), 16)
+  return [n >> 16, (n >> 8) & 255, n & 255]
+}
+const tone = (c: Rgb, k: number) => c.map((v) => Math.max(0, Math.min(255, Math.round(v + k * 255)))) as Rgb
+const rgba = (c: Rgb, a: number) => `rgba(${c[0]},${c[1]},${c[2]},${a})`
 
-export function cells(month: string, days: Days): Cell[] {
+function seeded(str: string) {
+  let h = 1779033703
+  for (const ch of str) {
+    h = Math.imul(h ^ ch.charCodeAt(0), 3432918353)
+    h = (h << 13) | (h >>> 19)
+  }
+  return () => {
+    h = Math.imul(h ^ (h >>> 16), 2246822507)
+    h = Math.imul(h ^ (h >>> 13), 3266489909)
+    h ^= h >>> 16
+    return (h >>> 0) / 4294967296
+  }
+}
+
+function soft(ctx: CanvasRenderingContext2D, x: number, y: number, rad: number, c: Rgb, a: number, hold: number) {
+  const g = ctx.createRadialGradient(x, y, 0, x, y, rad)
+  g.addColorStop(0, rgba(c, a))
+  g.addColorStop(hold, rgba(c, a))
+  g.addColorStop(1, rgba(c, 0))
+  ctx.fillStyle = g
+  ctx.beginPath()
+  ctx.arc(x, y, rad, 0, Math.PI * 2)
+  ctx.fill()
+}
+
+/** The month's paint, day by day: a colour per lived day (null before the 1st), framed green deeper. */
+function colours(month: string, days: Days): (Rgb | null)[] {
   return monthCells(`${month}-01`).map((iso) => {
     if (!iso) return null
     const d = days[iso]
-    return d ? { fill: squareFill(d.color, d.framed), framed: d.framed && d.color === 'green' } : 'blank'
+    if (!d) return RAW
+    return hexRgb(d.framed && d.color === 'green' ? FRAME : PAINTS.find((p) => p.id === d.color)!.hex)
   })
 }
 
-export function counts(month: string, days: Days) {
-  return PAINTS.map((p) => ({
-    id: p.id,
-    hex: p.hex,
-    n: Object.entries(days).filter(([iso, d]) => iso.startsWith(month) && d.color === p.id).length,
-  }))
-}
-
-/** The painting as an image (1080×1350): the title, the signed canvas, and the month's counts. */
-export async function paintingImage(month: string, days: Days, name: string): Promise<Blob> {
-  await document.fonts.load('600 80px Caveat').catch(() => undefined)
-  const W = 1080
-  const H = 1350
-  const c = document.createElement('canvas')
-  c.width = W
-  c.height = H
+/** Draws the framed, signed painting into a square canvas of `px` pixels. */
+export async function drawPainting(c: HTMLCanvasElement, month: string, days: Days, name: string, px: number) {
+  await document.fonts.load('600 40px Caveat').catch(() => undefined)
+  c.width = c.height = px
   const ctx = c.getContext('2d')!
-  ctx.fillStyle = '#fafaf8'
-  ctx.fillRect(0, 0, W, H)
-  ctx.fillStyle = '#dddcd6'
-  for (let y = 24; y < H; y += 48) for (let x = 24; x < W; x += 48) ctx.fillRect(x - 2, y - 2, 4, 4)
+  const list = colours(month, days)
+  const r = seeded(month + list.map((c) => (c ? c.join('.') : '-')).join(','))
+  const gauss = () => Math.sqrt(-2 * Math.log(r() + 1e-9)) * Math.cos(2 * Math.PI * r())
 
-  // Everything, centred on the page: the title, the canvas, the counts.
-  const list = cells(month, days)
-  const rows = Math.ceil(list.length / 7)
-  const size = 128
-  const pad = 30
-  const foot = 96
-  const gw = size * 7
-  const gh = size * rows
-  const aw = gw + pad * 2
-  const ah = gh + pad + foot
-  const block = 130 + 60 + ah + 120
-  const top = (H - block) / 2
-  const ax = (W - aw) / 2
-  const ay = top + 190
+  // The frame (flat warm grey), the thin mat, then the painting inside.
+  const f = Math.round(px * 0.055)
+  const x = f + Math.round(px * 0.03)
+  const s = px - 2 * x
+  ctx.fillStyle = '#9c9a93'
+  ctx.fillRect(0, 0, px, px)
+  ctx.fillStyle = '#f6f3ec'
+  ctx.fillRect(f, f, px - 2 * f, px - 2 * f)
 
-  ctx.fillStyle = '#141413'
-  ctx.textAlign = 'center'
   ctx.save()
-  ctx.translate(W / 2, top + 100)
-  ctx.rotate((-3 * Math.PI) / 180)
-  ctx.font = '600 104px Caveat, cursive'
-  ctx.fillText(`${monthName(month)}, painted`, 0, 0)
+  ctx.beginPath()
+  ctx.rect(x, x, s, s)
+  ctx.clip()
+  ctx.fillStyle = rgba(RAW, 1)
+  ctx.fillRect(x, x, s, s)
+  const rows = Math.ceil(list.length / 7)
+  const cw = s / 7
+  const ch = s / rows
+  const u = Math.max(cw, ch)
+  const at = list.flatMap((c, k) =>
+    c
+      ? [
+          {
+            c,
+            x: x + ((k % 7) + 0.5) * cw + gauss() * cw * 0.25,
+            y: x + (Math.floor(k / 7) + 0.5) * ch + gauss() * ch * 0.25,
+          },
+        ]
+      : [],
+  )
+  for (const p of at)
+    for (let i = 0; i < 7; i++)
+      soft(ctx, p.x + gauss() * u * 0.12, p.y + gauss() * u * 0.12, u * (0.85 + r() * 0.25), p.c, 0.5, 0.6)
+  for (const p of at)
+    for (let i = 0; i < 11; i++) {
+      const a = r() * Math.PI * 2
+      const d = Math.sqrt(r()) * u * 1.05
+      const rad = u * (0.06 + r() ** 1.4 * 0.16)
+      soft(
+        ctx,
+        p.x + Math.cos(a) * d,
+        p.y + Math.sin(a) * d,
+        rad,
+        tone(p.c, (r() - 0.35) * 0.16),
+        0.35 + r() * 0.4,
+        0.86,
+      )
+    }
+  // A fine grain, like canvas.
+  const im = ctx.getImageData(x, x, s, s)
+  const d = im.data
+  for (let i = 0; i < d.length; i += 4) {
+    const n = (r() - 0.5) * 10
+    d[i] += n
+    d[i + 1] += n
+    d[i + 2] += n
+  }
+  ctx.putImageData(im, x, x)
   ctx.restore()
 
-  // The canvas: ink edge, raw margin (deeper at the foot, for the signature), then the mosaic.
-  ctx.fillStyle = 'rgba(20,20,19,0.12)'
-  ctx.fillRect(ax + 6, ay + 18, aw, ah)
-  ctx.fillStyle = RAW
-  ctx.fillRect(ax, ay, aw, ah)
-  ctx.fillStyle = CANVAS
-  ctx.fillRect(ax + pad, ay + pad, gw, gh)
-  list.forEach((cell, i) => {
-    if (!cell) return
-    const x = ax + pad + (i % 7) * size
-    const y = ay + pad + Math.floor(i / 7) * size
-    ctx.fillStyle = cell === 'blank' ? BLANK : cell.fill
-    ctx.fillRect(x, y, size, size)
-    if (cell !== 'blank' && cell.framed) {
-      ctx.lineWidth = 9
-      ctx.strokeStyle = '#53735c'
-      ctx.strokeRect(x + 10, y + 10, size - 20, size - 20)
-      ctx.lineWidth = 5
-      ctx.strokeStyle = RAW
-      ctx.strokeRect(x + 17, y + 17, size - 34, size - 34)
-    }
-  })
-  ctx.lineWidth = 7
-  ctx.strokeStyle = '#141413'
-  ctx.strokeRect(ax, ay, aw, ah)
+  ctx.strokeStyle = 'rgba(20,20,19,0.22)'
+  ctx.lineWidth = Math.max(1, px / 540)
+  ctx.strokeRect(f + 1, f + 1, px - 2 * f - 2, px - 2 * f - 2)
+  ctx.strokeRect(x - 1, x - 1, s + 2, s + 2)
 
-  // Signed in the margin, lower right.
+  // Signed in the hand, low in the lower right: the title, and the painter under it.
   ctx.save()
-  ctx.translate(ax + aw - pad, ay + ah - 30)
+  ctx.translate(x + s * 0.93, x + s * 0.95)
   ctx.rotate((-4 * Math.PI) / 180)
   ctx.textAlign = 'right'
   ctx.fillStyle = 'rgba(20,20,19,0.6)'
-  ctx.font = '600 58px Caveat, cursive'
-  ctx.fillText([name, shortMonth(month)].filter(Boolean).join(' · '), 0, 0)
+  ctx.font = `600 ${Math.round(s * 0.058)}px Caveat, cursive`
+  ctx.fillText(shortMonth(month), 0, name ? -s * 0.045 : 0)
+  if (name) {
+    ctx.font = `600 ${Math.round(s * 0.04)}px Caveat, cursive`
+    ctx.fillText(name, 0, 0)
+  }
   ctx.restore()
+}
 
-  ctx.textAlign = 'center'
-  ctx.font = '500 34px Inter, system-ui, sans-serif'
-  ctx.fillStyle = '#3d3d3a'
-  const line = counts(month, days)
-    .map((p) => `${p.n} ${p.id === 'green' ? 'mattered' : p.id === 'red' ? 'empty' : 'slipped'}`)
-    .join('  ·  ')
-  ctx.fillText(line, W / 2, ay + ah + 100)
-  ctx.font = '500 28px Inter, system-ui, sans-serif'
-  ctx.fillStyle = '#8f8f8a'
-  ctx.fillText('squared.today', W / 2, H - 60)
+/** The painting as a picture to keep: exactly what's in the frame, 1080×1080. */
+export async function paintingImage(month: string, days: Days, name: string): Promise<Blob> {
+  const c = document.createElement('canvas')
+  await drawPainting(c, month, days, name, 1080)
   return new Promise((ok) => c.toBlob((b) => ok(b!), 'image/png'))
 }
