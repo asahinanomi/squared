@@ -3494,15 +3494,13 @@ button.settings-row:active {
   font-size: 14px;
   color: var(--muted);
 }
-/* The title in the question's face; the hand is only for what's on the canvas. */
+/* The title as a page title (the hand is only for what's on the canvas). */
 .painting-title {
-  margin: 4px 0 18px;
-  font-family: var(--font-reflect);
-  font-optical-sizing: auto;
-  font-size: 30px;
-  font-weight: 450;
-  letter-spacing: -0.005em;
-  line-height: 1.22;
+  margin: 6px 0 20px;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 .painting-art {
   display: block;
