@@ -28,8 +28,8 @@ const BRUSH = 0.58
 const GRID = 24
 const FILLED = 0.88
 
-// The ghost brush's stroke: three sweeps across the square, like painting it.
-const GHOST = 'M18 26 L82 30 L20 52 L80 56 L22 78 L82 80'
+// The ghost brush's stroke: three sweeps across the square, each rising from left to right, like painting it.
+const GHOST = 'M18 40 L82 22 L18 62 L82 44 L18 84 L82 66'
 
 // Desktop cursor: a little brush whose tip carries the loaded paint; hotspot at the tip.
 function brushCursor(tip: string) {
