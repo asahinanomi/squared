@@ -795,6 +795,64 @@
   box-shadow: 0 0 0 1.5px var(--ink);
 }
 
+/* The ghost brush (for someone new): a faint green trail drawn as the brush sweeps, then it fades and repeats. */
+.ghost {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.ghost-trail {
+  fill: none;
+  stroke: rgba(110, 155, 123, 0.28);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: ghost-trail 6.6s 0.8s ease-in-out infinite;
+}
+.ghost-brush {
+  stroke: #141413;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+  opacity: 0;
+  animation: ghost-brush 6.6s 0.8s ease-in-out infinite;
+}
+@keyframes ghost-brush {
+  0%,
+  39% {
+    opacity: 0.85;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes ghost-trail {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  39% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  55%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ghost {
+    display: none;
+  }
+}
+
 /* On this day: a quiet glimpse of a year (or a month) ago, under the palette; a tap opens that day. */
 .glimpse {
   width: min(100%, 360px);

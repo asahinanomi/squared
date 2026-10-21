@@ -16,6 +16,8 @@ type Props = {
   onFilled: (p: Paint) => void
   /** The quiet word on a blank square: "paint your day" (today) or "paint this day". */
   blank?: string
+  /** Someone new (nothing painted yet): a ghost brush shows the stroke, until they touch the square. */
+  hint?: boolean
 }
 
 // A quiet word in the middle of the square: what it holds, or that it's waiting.
@@ -26,13 +28,25 @@ const BRUSH = 0.58
 const GRID = 24
 const FILLED = 0.88
 
+// The ghost brush's stroke: three sweeps across the square, like painting it.
+const GHOST = 'M18 26 L82 30 L20 52 L80 56 L22 78 L82 80'
+
 // Desktop cursor: a little brush whose tip carries the loaded paint; hotspot at the tip.
 function brushCursor(tip: string) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><g stroke="#141413" stroke-width="1.6" stroke-linejoin="round"><path d="M34 3c2-1.5 4 .5 2.5 2.5L22 21l-3-3z" fill="#8c8c87"/><path d="M19 18l3 3-3.5 4L15 21.5z" fill="#d9d9d4"/><path d="M15 21.5l3.5 3.5C17 31 12 35.5 5 37c-1.5.3-2.3-.7-1.8-2C5.5 28.5 9 23.5 15 21.5z" fill="${tip}"/></g></svg>`
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 4 36, crosshair`
 }
 
-export function PaintCanvas({ saved, framed, loaded, stamp, onDryBrush, onFilled, blank = 'paint your day' }: Props) {
+export function PaintCanvas({
+  saved,
+  framed,
+  loaded,
+  stamp,
+  onDryBrush,
+  onFilled,
+  blank = 'paint your day',
+  hint,
+}: Props) {
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const covered = useRef(new Uint8Array(GRID * GRID))
@@ -250,6 +264,18 @@ export function PaintCanvas({ saved, framed, loaded, stamp, onDryBrush, onFilled
         <canvas ref={canvas} className="paint-surface" />
 
         {settling && <div className="settle" style={{ background: paintHex(settling) }} />}
+        {/* For someone new: a ghost brush sweeps across, leaving a faint trail, so the square reads as "paint me". */}
+        {hint && !saved && !touched && (
+          <svg className="ghost" viewBox="0 0 100 100" aria-hidden="true">
+            <path className="ghost-trail" pathLength="1" d={GHOST} />
+            <g className="ghost-brush">
+              <path d="M30 -27c2-1.5 4 .5 2.5 2.5L18 -9l-3-3z" fill="#8c8c87" />
+              <path d="M15 -12l3 3-3.5 4L11 -8.5z" fill="#d9d9d4" />
+              <path d="M11 -8.5l3.5 3.5C13 1 8 5.5 1 7c-1.5.3-2.3-.7-1.8-2C1.5-1.5 5-6.5 11-8.5z" fill="#6e9b7b" />
+              <animateMotion dur="2.6s" begin="0.8s;ghost.end+4s" id="ghost" fill="freeze" path={GHOST} />
+            </g>
+          </svg>
+        )}
         {!touched && !settling && (
           <span
             className={'canvas-word' + (saved ? ' is-painted' : '')}
