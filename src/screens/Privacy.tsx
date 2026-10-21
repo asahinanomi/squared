@@ -21,7 +21,7 @@ export function Privacy({ onBack, backLabel }: Props) {
         <li>Your birth date and how long you hope to live, to count your squares.</li>
         <li>The squares you paint, when you first painted each, and your notes.</li>
         <li>Your “what matters” lists.</li>
-        <li>Anything you send through “send feedback”.</li>
+        <li>Anything you send through “get in touch”.</li>
       </ul>
       <p>A copy of your settings and lists also stays on your phone, so squared opens quickly.</p>
 
@@ -48,7 +48,7 @@ export function Privacy({ onBack, backLabel }: Props) {
       </p>
 
       <h2 className="privacy-head">questions</h2>
-      <p>Use “send feedback” in the menu, or reply to any email from me.</p>
+      <p>Use “get in touch” (on the idea page), or reply to any email from me.</p>
       <p className="idea-sign">— nomi</p>
     </main>
   )

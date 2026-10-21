@@ -510,7 +510,13 @@ export default function App() {
     goToday()
   }
   // Back from the small print: "settings" when opened there, "back" from the menu, "today" from its web address.
-  const legalBack = !legalOpened.current ? 'today' : legalFrom === 'settings' ? 'settings' : 'back'
+  const legalBack = !legalOpened.current
+    ? 'today'
+    : legalFrom === 'settings'
+      ? 'settings'
+      : legalFrom === 'idea'
+        ? 'the idea'
+        : 'back'
   const openLegal = (page: 'privacy' | 'terms' | 'questions', from: Screen) => {
     legalOpened.current = true
     setLegalFrom(from)
@@ -613,15 +619,6 @@ export default function App() {
                     : undefined
               }
               onIdea={() => setScreen('idea')}
-              onFeedback={() => {
-                setFeedbackFrom(screen)
-                setScreenValue('feedback')
-              }}
-              onSupport={() => {
-                setSupportFrom(screen)
-                setScreenValue('support')
-              }}
-              onLegal={(page) => openLegal(page, screen)}
               onSettings={openSettings}
               onSignOut={signOut}
             />
@@ -669,6 +666,11 @@ export default function App() {
                 setSupportFrom('idea')
                 setScreenValue('support')
               }}
+              onFeedback={() => {
+                setFeedbackFrom('idea')
+                setScreenValue('feedback')
+              }}
+              onLegal={(page) => openLegal(page, 'idea')}
             />
           ) : screen === 'setup' && trySquares ? (
             <Setup profile={null} onBack={endTrySquares} onSave={async () => endTrySquares()} />

@@ -45,7 +45,7 @@ const QA: [string, string][] = [
   ],
   [
     'Does squared cost anything?',
-    'No, it’s free while in beta. I’m building it myself, one square a day. If it helps you, you can help build it: menu → support squared.',
+    'No, it’s free while in beta. I’m building it myself, one square a day. If it helps you, you can help build it: the idea → help build squared.',
   ],
   [
     'How do I keep it on my home screen?',
@@ -69,7 +69,7 @@ export function Questions({ onBack, backLabel }: Props) {
         </section>
       ))}
       <h2 className="privacy-head">Something else?</h2>
-      <p>Ask me through “send feedback” in the menu. I read every one.</p>
+      <p>Ask me: the idea → get in touch. I read every one.</p>
       <p className="idea-sign">— nomi</p>
     </main>
   )

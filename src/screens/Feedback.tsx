@@ -5,7 +5,7 @@ import { Chevron } from './Today'
 
 type Props = { onBack: () => void }
 
-// Send feedback: one box, straight to the maker. Thanks once it's sent.
+// Get in touch: one box, straight to the maker, for anything (feedback, questions, bugs, hello). Thanks once sent.
 export function Feedback({ onBack }: Props) {
   const [text, setText] = useState('')
   const [state, setState] = useState<'writing' | 'sending' | 'sent' | 'failed'>('writing')
@@ -23,7 +23,7 @@ export function Feedback({ onBack }: Props) {
       <button className="setup-back" aria-label="Back" onClick={onBack}>
         <Chevron dir="left" />
       </button>
-      <h1 className="settings-title">send feedback</h1>
+      <h1 className="settings-title">get in touch</h1>
       {state === 'sent' ? (
         <>
           <p className="feedback-lede">
@@ -36,8 +36,8 @@ export function Feedback({ onBack }: Props) {
       ) : (
         <>
           <p className="feedback-lede">
-            squared is in beta, so your feedback shapes it. what confused you, or felt off? what did your squares show
-            you? anything helps.
+            a question, a bug, an idea, or just hello. squared is in beta, so what you tell me shapes it. I read every
+            one.
           </p>
           <textarea
             className="feedback-input"

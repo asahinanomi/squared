@@ -14,10 +14,14 @@ type Props = {
   onBack?: () => void
   /** Signed in: a quiet link on to "help build squared". */
   onSupport?: () => void
+  /** Signed in: "get in touch", the one way to reach the maker. */
+  onFeedback?: () => void
+  /** Signed in: the small print, in the page's footer. */
+  onLegal?: (page: 'questions' | 'privacy' | 'terms') => void
 }
 
 // "the idea": why squared exists, in the maker's own words.
-export function Idea({ onMatters, onBack, onSupport }: Props) {
+export function Idea({ onMatters, onBack, onSupport, onFeedback, onLegal }: Props) {
   return (
     <main className="idea">
       {onBack && (
@@ -58,10 +62,22 @@ export function Idea({ onMatters, onBack, onSupport }: Props) {
           start by naming what matters to you →
         </button>
       )}
-      {onSupport && (
+      {/* squared's about page: the ways to reach and help, then the small print. */}
+      {onSupport && onFeedback && (
         <p className="idea-support">
           <button onClick={onSupport}>help build squared</button>
+          <span aria-hidden="true">·</span>
+          <button onClick={onFeedback}>get in touch</button>
         </p>
+      )}
+      {onLegal && (
+        <footer className="idea-foot">
+          <button onClick={() => onLegal('questions')}>questions</button>
+          <span aria-hidden="true">·</span>
+          <button onClick={() => onLegal('privacy')}>privacy</button>
+          <span aria-hidden="true">·</span>
+          <button onClick={() => onLegal('terms')}>terms</button>
+        </footer>
       )}
     </main>
   )

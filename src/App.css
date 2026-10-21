@@ -86,21 +86,6 @@
 .menu button:active {
   background: var(--grey-1);
 }
-.menu-legal {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 2px;
-  padding: 0 18px;
-  font-size: 12px;
-  color: var(--muted);
-}
-.menu .menu-legal button {
-  min-height: 40px;
-  padding: 0;
-  font-size: 12px;
-  color: var(--muted);
-}
 .menu .menu-idea {
   margin-top: 6px;
   padding: 12px 18px 8px;
@@ -110,11 +95,6 @@
   color: var(--muted);
 }
 /* Under "the idea", as quiet: a form to tell the maker what confused you (shown once its link is set). */
-.menu .menu-feedback {
-  padding: 4px 18px 8px;
-  font-size: 16px;
-  color: var(--muted);
-}
 @keyframes pop {
   from {
     opacity: 0;
@@ -1020,12 +1000,36 @@
 .idea-support {
   margin: 18px 0 0 !important;
 }
+.idea-support {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 16px;
+  color: var(--muted);
+}
 .idea-support button {
   font-size: 16px;
   color: var(--muted);
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
 }
+/* The idea's footer: the small print. */
+.idea-foot {
+  margin-top: 48px;
+  padding-top: 14px;
+  border-top: 1px dotted #c9c9c2;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.idea-foot button {
+  min-height: 40px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
 /* Help build squared: the idea's letter, then the one black pill. */
 .support-go {
   margin-top: 36px;
