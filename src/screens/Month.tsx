@@ -3,7 +3,7 @@ import { ZoomBar } from '../components/ZoomBar'
 import { fromIso, isoDate, longDate, monthCells, monthTitle, shortWeekday, todayIso, dayCaption } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { useBackToToday } from '../lib/backToToday'
-import { paintHex } from '../lib/paints'
+import { squareFill } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { useLadderScroll } from '../lib/useLadderScroll'
 import { Chevron } from './Today'
@@ -111,7 +111,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
               {monthCells(m).map((iso, i) => {
                 if (!iso) return zoomed ? null : <span key={`b${i}`} className="is-blank" />
                 const day = days[iso]
-                const fill = day ? paintHex(day.color) : undefined
+                const fill = day ? squareFill(day.color, day.framed) : undefined
                 const before = !!born && iso < born // not part of your life: faded, so your first day reads as day one
                 return (
                   <button

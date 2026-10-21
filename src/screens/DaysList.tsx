@@ -5,7 +5,7 @@ import { glide, pulse } from '../lib/backToToday'
 import { addDays, isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Day, type Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
-import { paintHex, WORD, type Paint } from '../lib/paints'
+import { paintHex, squareFill, WORD, type Paint } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { monthsBetween, shiftMonth } from './Month'
 import { ChevronDown } from './Today'
@@ -122,7 +122,7 @@ function DayCard({
     >
       <span
         className={'day-card-swatch' + (day?.framed ? ' is-framed' : '')}
-        style={day ? { background: paintHex(day.color) } : undefined}
+        style={day ? { background: squareFill(day.color, day.framed) } : undefined}
         aria-hidden="true"
       />
       <div className="day-card-text">

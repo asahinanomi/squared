@@ -32,7 +32,7 @@ export function bands(days: Days, from: string, to: string, today: string, born?
     const p = PAINTS.find((x) => x.id === id)!
     for (const [suffix, fill] of [
       [':framed', FRAME],
-      ['', p.hex],
+      ['', p.soft],
     ] as const) {
       const n = counts.get(p.id + suffix) ?? 0
       if (n) out.push({ fill, share: n / lived })

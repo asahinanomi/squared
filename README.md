@@ -60,7 +60,7 @@ The UI in these screens should be kept; better treatments are welcome.
 - **Grey** — I wasn't conscious. The day just slipped by.
 - **Red** — I was conscious, but I didn't spend the day meaningfully.
 
-Shades (from the phase 2 design): green `#6E9B7B`, grey `#8E8E87`, red `#C06A62`. One shade per colour, however late a day was painted (its line under the word says when). Only a framed day goes darker: `#53735C`, as a frame on the canvas, the month and the list, and as a solid square where squares are too small for a frame (a life in days, and its own band at the bottom of green in the year, month and life bands).
+Shades (from the phase 2 design): green `#6E9B7B`, grey `#8E8E87`, red `#C06A62` — the paint itself, on the day's canvas. Every square in the overviews (month, list, year and life bands, a life in days) uses one softer shade instead (`#A7C4B0`, `#AEAEA6`, `#D9A8A3`), however late it was painted (its line says when), so a full month reads calm. A framed day keeps the full paint there, framed in `#53735C` (or filled with it where squares are too small for a frame, and as its own strip at the bottom of green in the bands), so it pops among the soft ones.
 
 In the app the meanings read, in the brand story's words: **green** "yes — I spent it on what matters." · **red** "no — I was busy, but none of it mattered." · **grey** "I don't know — I wasn't paying attention." Short labels, everywhere space is tight (the word in the square, legends, filters): **mattered** · **empty** · **slipped**. Always listed green, red, grey. They show in the "meaningful" sheet, and as a quiet grey line (led by a small dot of that paint) under the palette each time a color is dipped (it fades after a few seconds, or as soon as painting starts).
 

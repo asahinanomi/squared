@@ -1,17 +1,22 @@
 export type Paint = 'green' | 'grey' | 'red'
 
 // Always in this order: green, red, grey (mattered, empty, slipped).
-// One shade per colour, however late a day was painted (its line says when); only framed days go darker (FRAME).
-export const PAINTS: { id: Paint; hex: string; meaning: string }[] = [
-  { id: 'green', hex: '#6E9B7B', meaning: 'yes — I spent it on what matters.' },
-  { id: 'red', hex: '#C06A62', meaning: 'no — I was busy, but none of it mattered.' },
-  { id: 'grey', hex: '#8E8E87', meaning: 'I don’t know — I wasn’t paying attention.' },
+// hex: the paint itself, on the day's canvas. soft: one shade lighter, every square in the overviews (month, list,
+// year, a life), however late it was painted. A framed day keeps the full paint there, framed in FRAME.
+export const PAINTS: { id: Paint; hex: string; soft: string; meaning: string }[] = [
+  { id: 'green', hex: '#6E9B7B', soft: '#A7C4B0', meaning: 'yes — I spent it on what matters.' },
+  { id: 'red', hex: '#C06A62', soft: '#D9A8A3', meaning: 'no — I was busy, but none of it mattered.' },
+  { id: 'grey', hex: '#8E8E87', soft: '#AEAEA6', meaning: 'I don’t know — I wasn’t paying attention.' },
 ]
 
 /** Each colour's short label, wherever space is tight (the brand story's words). */
 export const WORD: Record<Paint, string> = { green: 'mattered', red: 'empty', grey: 'slipped' }
 
 export const paintHex = (p: Paint) => PAINTS.find((x) => x.id === p)!.hex
+
+/** A square in an overview: the soft shade, or the full paint for a framed day (it pops among the soft ones). */
+export const squareFill = (p: Paint, framed?: boolean) =>
+  framed && p === 'green' ? paintHex(p) : PAINTS.find((x) => x.id === p)!.soft
 
 /** A deeper shade of a paint (its hue, mixed toward ink): the word written on its square, tone on tone. */
 /** A framed day's frame: its paint, a third of the way toward ink (#53735C for green). */
