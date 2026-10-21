@@ -1,4 +1,4 @@
-import { fromIso, monthCells } from './dates'
+import { fromIso, monthCells, todayIso } from './dates'
 import type { Days } from './days'
 import { FRAME, PAINTS } from './paints'
 
@@ -8,6 +8,8 @@ import { FRAME, PAINTS } from './paints'
 // The sheet shows it and the picture you keep is it, exactly.
 
 export const monthName = (month: string) => fromIso(`${month}-01`).toLocaleDateString('en-US', { month: 'long' })
+/** A month still being painted: shown "so far", and not signed until it ends. */
+export const inProgress = (month: string) => month >= todayIso().slice(0, 7)
 export const shortMonth = (month: string) =>
   fromIso(`${month}-01`).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 
@@ -48,7 +50,7 @@ function soft(ctx: CanvasRenderingContext2D, x: number, y: number, rad: number, 
 /** The month's paint, day by day: a colour per lived day (null before the 1st), framed green deeper. */
 function colours(month: string, days: Days): (Rgb | null)[] {
   return monthCells(`${month}-01`).map((iso) => {
-    if (!iso) return null
+    if (!iso || iso > todayIso()) return null // before the 1st, or not lived yet (this month, so far)
     const d = days[iso]
     if (!d) return RAW
     return hexRgb(d.framed && d.color === 'green' ? FRAME : PAINTS.find((p) => p.id === d.color)!.hex)
@@ -112,7 +114,12 @@ export async function drawPainting(c: HTMLCanvasElement, month: string, days: Da
         0.86,
       )
     }
-  // A fine grain, like canvas.
+  // A fine grain, like canvas (too fine to see on a thumbnail).
+  if (px < 200) {
+    ctx.restore()
+    frameLines(ctx, px, f, x, s)
+    return
+  }
   const im = ctx.getImageData(x, x, s, s)
   const d = im.data
   for (let i = 0; i < d.length; i += 4) {
@@ -124,12 +131,10 @@ export async function drawPainting(c: HTMLCanvasElement, month: string, days: Da
   ctx.putImageData(im, x, x)
   ctx.restore()
 
-  ctx.strokeStyle = 'rgba(20,20,19,0.22)'
-  ctx.lineWidth = Math.max(1, px / 540)
-  ctx.strokeRect(f + 1, f + 1, px - 2 * f - 2, px - 2 * f - 2)
-  ctx.strokeRect(x - 1, x - 1, s + 2, s + 2)
+  frameLines(ctx, px, f, x, s)
 
-  // Signed in the hand, low in the lower right: the title, and the painter under it.
+  // Signed in the hand, low in the lower right, once the month is done: the title, and the painter under it.
+  if (inProgress(month)) return
   ctx.save()
   ctx.translate(x + s * 0.93, x + s * 0.95)
   ctx.rotate((-4 * Math.PI) / 180)
@@ -142,6 +147,13 @@ export async function drawPainting(c: HTMLCanvasElement, month: string, days: Da
     ctx.fillText(name, 0, 0)
   }
   ctx.restore()
+}
+
+function frameLines(ctx: CanvasRenderingContext2D, px: number, f: number, x: number, s: number) {
+  ctx.strokeStyle = 'rgba(20,20,19,0.22)'
+  ctx.lineWidth = Math.max(1, px / 540)
+  ctx.strokeRect(f + 1, f + 1, px - 2 * f - 2, px - 2 * f - 2)
+  ctx.strokeRect(x - 1, x - 1, s + 2, s + 2)
 }
 
 /** The painting as a picture to keep: exactly what's in the frame, 1080×1080. */

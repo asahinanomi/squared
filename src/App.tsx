@@ -50,6 +50,7 @@ import { markWelcomed, Welcome, welcomed } from './screens/Welcome'
 import { loadMatters, syncMatters } from './lib/matters'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
+import { Paintings } from './screens/Paintings'
 import './App.css'
 
 type Screen =
@@ -68,6 +69,7 @@ type Screen =
   | 'terms'
   | 'questions'
   | 'export'
+  | 'paintings'
   | 'welcome'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
 const LADDER: Screen[] = ['today', 'month', 'year', 'life']
@@ -464,6 +466,8 @@ export default function App() {
       />
     )
 
+  // The painter's signature on a month's painting: the first name.
+  const painter = (session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? '').split(' ')[0]
   const setScreen = (next: Screen) => {
     const a = LADDER.indexOf(screen)
     const b = LADDER.indexOf(next)
@@ -691,6 +695,7 @@ export default function App() {
                     : undefined
               }
               onIdea={() => setScreen('idea')}
+              onPaintings={() => setScreen('paintings')}
               onSettings={openSettings}
               onSignOut={signOut}
             />
@@ -739,6 +744,15 @@ export default function App() {
               onMatters={() => {
                 setMattersFrom('today')
                 setScreenValue('matters')
+              }}
+            />
+          ) : screen === 'paintings' ? (
+            <Paintings
+              days={days}
+              name={painter}
+              onOpen={(m) => {
+                setPaintedArrived(false)
+                setPaintedMonth(m)
               }}
             />
           ) : screen === 'idea' ? (
@@ -941,12 +955,12 @@ export default function App() {
           )}
         </div>
         <MeaningSheet open={defining} onClose={() => setDefining(false)} />
-        {(screen === 'today' || screen === 'month') && (
+        {(screen === 'today' || screen === 'month' || screen === 'paintings') && (
           <MonthPainting
             month={paintedMonth}
             arrived={paintedArrived}
             days={days}
-            name={(session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? '').split(' ')[0]}
+            name={painter}
             onClose={() => setPaintedMonth(null)}
           />
         )}

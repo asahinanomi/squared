@@ -6,6 +6,7 @@ import { useBackToToday } from '../lib/backToToday'
 import { squareFill } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { useLadderScroll } from '../lib/useLadderScroll'
+import { PaintingThumb } from '../components/PaintingThumb'
 import { Chevron } from './Today'
 
 type Props = {
@@ -110,17 +111,14 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
           <section key={m} className="month-block" data-key={m}>
             <div className="ladder-label">
               {monthTitle(m)}
-              {/* A finished month, with squares in it: its painting, any time, to look at and keep. */}
-              {onPainting && m < current && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) && (
+              {/* A month with squares in it: its painting, small (this one so far), to open, look at and keep. */}
+              {onPainting && m <= current && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) && (
                 <button
                   className="month-paint"
                   onClick={() => onPainting(m.slice(0, 7))}
-                  aria-label={`${monthTitle(m)}, painted`}
+                  aria-label={`${monthTitle(m)}, ${m < current ? 'painted' : 'so far'}`}
                 >
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <rect x="3.5" y="4.5" width="17" height="15" rx="1.5" />
-                    <path d="M7 15.5 L10.5 11.5 L13 14 L15 12 L17 15.5" />
-                  </svg>
+                  <PaintingThumb month={m.slice(0, 7)} days={days} />
                 </button>
               )}
             </div>

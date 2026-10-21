@@ -1748,23 +1748,19 @@
   justify-content: center;
   gap: 4px;
 }
-/* A finished month's painting, beside its name: a small picture icon in ink. */
+/* A month's painting, beside its name: the painting itself, small (this month's so far). */
 .month-paint {
-  width: 32px;
-  height: 32px;
-  margin: -8px 0;
+  width: 36px;
+  height: 36px;
+  margin: -10px 0;
   display: grid;
   place-items: center;
-  color: var(--ink-soft);
 }
-.month-paint svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.month-paint canvas {
+  width: 24px;
+  height: 24px;
+  display: block;
+  box-shadow: 0 1px 3px rgba(20, 20, 19, 0.18);
 }
 .month-block.is-faint {
   padding-bottom: 40vh;
@@ -3534,4 +3530,48 @@ button.settings-row:active {
   color: var(--muted);
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
+}
+
+/* my paintings: the gallery wall. Every painted month, framed, two to a row, newest first. Centred: you look at it. */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0 48px;
+}
+.gallery-title {
+  margin: 8px 0 26px;
+  text-align: center;
+}
+.gallery-wall {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px 20px;
+}
+.gallery-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.gallery-item canvas {
+  width: 100%;
+  aspect-ratio: 1;
+  display: block;
+  filter: drop-shadow(0 6px 10px rgba(20, 20, 19, 0.12));
+}
+.gallery-item small {
+  font-size: 14px;
+  color: var(--muted);
+}
+.gallery-empty {
+  margin: 0;
+  max-width: 280px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink-soft);
 }
