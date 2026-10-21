@@ -8,7 +8,7 @@ import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { ZoomInIcon, ZoomOutIcon } from '../components/ZoomBar'
 import { addDays, longDate, ordinal, shortDateParts, todayIso } from '../lib/dates'
-import type { Days } from '../lib/days'
+import { stampLine, type Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, WORD, type Paint } from '../lib/paints'
 import { setSoundOn, soundOn } from '../lib/sound'
@@ -276,7 +276,7 @@ export function Today(props: Props) {
               <PaintCanvas
                 key={`${date}:${day?.color ?? ''}`}
                 saved={day?.color}
-                paintedOn={day?.backfilled ? day.paintedOn : undefined}
+                stamp={day && stampLine(date, day)}
                 loaded={loaded}
                 onDryBrush={onDryBrush}
                 onFilled={onFilled}

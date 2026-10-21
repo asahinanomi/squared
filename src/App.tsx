@@ -236,11 +236,13 @@ export default function App() {
       let before: Days[string]
       setDays((d) => {
         before = d[date]
-        // A first paint is fresh on the day or until noon the next day (the database decides for good);
+        // A first paint is on time on the day or the next day (the database decides for good);
         // repaints keep the first paint's shade and date.
         return {
           ...d,
-          [date]: { backfilled: !paintedFresh(date), paintedOn: todayIso(), ...d[date], color },
+          [date]: d[date]
+            ? { ...d[date], color, changedOn: d[date].color !== color ? todayIso() : d[date].changedOn }
+            : { backfilled: !paintedFresh(date), paintedOn: todayIso(), color },
         }
       })
       saveColor(date, color).catch((e) => {

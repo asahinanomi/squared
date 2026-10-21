@@ -2,7 +2,7 @@ import { Fragment, useEffect, useLayoutEffect, useRef, useState, type MutableRef
 import { ZoomBar } from '../components/ZoomBar'
 import { glide, pulse } from '../lib/backToToday'
 import { addDays, isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, todayIso } from '../lib/dates'
-import type { Day, Days } from '../lib/days'
+import { stampLine, type Day, type Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
 import { paintHex, paintTint, WORD, type Paint } from '../lib/paints'
 import { specialDay } from '../lib/special'
@@ -83,6 +83,7 @@ function DayCard({
   onPick: (iso: string) => void
 }) {
   const special = specialDay(iso, born)
+  const stamp = day && stampLine(iso, day)
   const [open, setOpen] = useState(false)
   const latest = notes.at(-1)
   const { weekday, monthDay, suffix } = shortDateParts(iso)
@@ -103,9 +104,8 @@ function DayCard({
           {day && <span className="day-card-word"> · {WORD[day.color]}</span>}
         </button>
         {special && <span className="day-card-special">{special}</span>}
-        {day?.backfilled && day.paintedOn && (
-          <span className="day-card-painted">painted {plainDate(day.paintedOn)}</span>
-        )}
+        {/* Only what's worth saying in a list: a late square, or one changed later (on time is the norm). */}
+        {stamp && stamp !== 'painted on time' && <span className="day-card-painted">{stamp}</span>}
         {!open && latest && <p className="day-card-note">{latest.body}</p>}
         {more && !open && (
           <button className="day-card-more" aria-expanded={false} onClick={() => setOpen(true)}>

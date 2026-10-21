@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { brushTip } from '../lib/brush'
-import { plainDate } from '../lib/dates'
 import { paintHex, WORD, type Paint } from '../lib/paints'
 import { brushSound, brushStop, settleSound, wakeSound } from '../lib/sound'
 
@@ -9,8 +8,8 @@ type Props = {
   saved?: Paint
   /** Paint currently on the brush. */
   loaded: Paint | null
-  /** First painted later, on this date: shown small under the word, like a journal entry's date. */
-  paintedOn?: string
+  /** The honest line under a painted square's word: when it was painted, or last changed. */
+  stamp?: string
   onDryBrush: () => void
   onFilled: (p: Paint) => void
   /** The quiet word on a blank square: "paint your day" (today) or "paint this day". */
@@ -31,7 +30,7 @@ function brushCursor(tip: string) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 4 36, crosshair`
 }
 
-export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled, blank = 'paint your day' }: Props) {
+export function PaintCanvas({ saved, loaded, stamp, onDryBrush, onFilled, blank = 'paint your day' }: Props) {
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const covered = useRef(new Uint8Array(GRID * GRID))
@@ -234,7 +233,7 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled, bl
         {!touched && !settling && (
           <span className={'canvas-word' + (saved ? ' is-painted' : '')} aria-hidden="true">
             {saved ? WORD[saved] : blank}
-            {saved && paintedOn && <small className="canvas-painted">painted {plainDate(paintedOn)}</small>}
+            {saved && stamp && <small className="canvas-painted">{stamp}</small>}
           </span>
         )}
       </div>
