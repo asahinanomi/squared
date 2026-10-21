@@ -284,11 +284,21 @@ export function DaysList({
           <h1 className="life-title">a life</h1>
         </div>
       )}
-      {only && onAll && (
+      {/* All your framed days, one tap away: a capsule once there's at least one (not over a pie slice's list). */}
+      {(!only || only === 'framed') && onFramed && onAll && Object.values(days).some((d) => d.framed) && (
+        <div className="seg days-framed-seg" role="group" aria-label="Show">
+          <button className={only ? undefined : 'is-on'} aria-pressed={!only} onClick={onAll}>
+            all
+          </button>
+          <button className={only ? 'is-on' : undefined} aria-pressed={only === 'framed'} onClick={onFramed}>
+            <span className="days-only-dot" style={{ background: FRAME }} aria-hidden="true" />
+            framed
+          </button>
+        </div>
+      )}
+      {only && only !== 'framed' && onAll && (
         <button className="days-only" onClick={onAll} aria-label={`Show all days, not only ${WORD_OF[only]}`}>
-          {only !== 'unpainted' && (
-            <span className="days-only-dot" style={{ background: only === 'framed' ? FRAME : paintHex(only) }} />
-          )}
+          {only !== 'unpainted' && <span className="days-only-dot" style={{ background: paintHex(only) }} />}
           only {WORD_OF[only]} <span aria-hidden="true">×</span>
         </button>
       )}

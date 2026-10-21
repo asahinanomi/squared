@@ -574,6 +574,47 @@
 }
 /* A framed square, small (the list's swatch, the month's day): a dark green frame, a sliver of raw canvas, then
    the paint — a little framed canvas. */
+/* Framing: a soft band of light sweeps once across the canvas, like light catching glass. */
+.canvas.is-shining::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.55) 46%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0.55) 54%,
+    transparent 70%
+  );
+  background-size: 260% 100%;
+  animation: shine 0.9s ease-out both;
+}
+@keyframes shine {
+  from {
+    background-position: 130% 0;
+  }
+  to {
+    background-position: -30% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .canvas.is-shining::after {
+    animation: none;
+    display: none;
+  }
+}
+/* The list's "all · framed" capsule: left, with the list. */
+.days-framed-seg {
+  margin: 12px 0 0;
+}
+.days-framed-seg button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
 .day-card .day-card-swatch.is-framed {
   box-shadow:
     inset 0 0 0 2px #53735c,

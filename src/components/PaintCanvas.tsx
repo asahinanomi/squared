@@ -49,6 +49,19 @@ export function PaintCanvas({ saved, framed, loaded, stamp, onDryBrush, onFilled
   // The word steps aside once the brush touches the square (a new color is on its way).
   const [touched, setTouched] = useState(false)
 
+  // Just framed: a soft light sweeps once across the canvas (never on unframing, or on opening a framed day).
+  const [shining, setShining] = useState(false)
+  const wasFramed = useRef(framed)
+  useEffect(() => {
+    if (framed && !wasFramed.current) {
+      setShining(true)
+      const t = setTimeout(() => setShining(false), 1000)
+      wasFramed.current = framed
+      return () => clearTimeout(t)
+    }
+    wasFramed.current = framed
+  }, [framed])
+
   // Size the backing store to the element at device resolution.
   useEffect(() => {
     const el = box.current!
@@ -222,7 +235,12 @@ export function PaintCanvas({ saved, framed, loaded, stamp, onDryBrush, onFilled
     <div className="paint-wrap">
       <div
         ref={box}
-        className={'canvas' + (settling ? ' is-settling' : '') + (framed && saved === 'green' ? ' is-framed' : '')}
+        className={
+          'canvas' +
+          (settling ? ' is-settling' : '') +
+          (framed && saved === 'green' ? ' is-framed' : '') +
+          (shining ? ' is-shining' : '')
+        }
         style={saved ? ({ '--paint': paintHex(saved) } as React.CSSProperties) : undefined}
         aria-label={saved ? `Painted ${saved}` : 'Unpainted square'}
       >
