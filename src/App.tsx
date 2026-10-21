@@ -14,6 +14,7 @@ import {
   addNote,
   deleteNote,
   draftNote,
+  fetchAllNotes,
   fetchMonthNotes,
   legacyNotes,
   replaceNote,
@@ -38,6 +39,7 @@ import { PeriodList } from './screens/PeriodList'
 import { Privacy } from './screens/Privacy'
 import { Support } from './screens/Support'
 import { Terms } from './screens/Terms'
+import { Export } from './screens/Export'
 import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
@@ -62,6 +64,7 @@ type Screen =
   | 'account'
   | 'privacy'
   | 'terms'
+  | 'export'
   | 'welcome'
   | 'support'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
@@ -454,7 +457,8 @@ export default function App() {
     setListRes(listRes === 'days' ? 'months' : 'years')
   }
   const openSettings = () => {
-    if (!['settings', 'setup', 'matters', 'account', 'privacy', 'terms'].includes(screen)) setSettingsFrom(screen)
+    if (!['settings', 'setup', 'matters', 'account', 'privacy', 'terms', 'export'].includes(screen))
+      setSettingsFrom(screen)
     setScreenValue('settings')
   }
   const endTrySquares = () => {
@@ -549,7 +553,8 @@ export default function App() {
           screen !== 'feedback' &&
           screen !== 'account' &&
           screen !== 'privacy' &&
-          screen !== 'terms' && (
+          screen !== 'terms' &&
+          screen !== 'export' && (
             <Topbar
               onHome={goToday}
               onCalendar={() => goMonth()}
@@ -664,6 +669,18 @@ export default function App() {
               onAccount={() => setScreenValue('account')}
               onPrivacy={() => openLegal('privacy', 'settings')}
               onTerms={() => openLegal('terms', 'settings')}
+              onExport={() => setScreenValue('export')}
+            />
+          ) : screen === 'export' ? (
+            <Export
+              onBack={() => setScreenValue('settings')}
+              gather={async () => ({
+                days,
+                // Every note (the day screen loads them a month at a time); the demo has only what's on screen.
+                notes: (await fetchAllNotes()) ?? (demo ? notes : legacyNotes(days)),
+                matters: await syncMatters(loadMatters()).catch(() => loadMatters()),
+                profile,
+              })}
             />
           ) : screen === 'account' ? (
             <Account

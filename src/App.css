@@ -1006,6 +1006,27 @@
   margin-left: -10px;
 }
 
+/* Export: the main pill, then the full copy as a quiet link. */
+.export-go {
+  margin-top: 36px;
+}
+.export-go:disabled {
+  opacity: 0.35;
+}
+.export-json {
+  margin: 16px auto 0;
+  padding: 6px;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
+}
+.export-note {
+  margin: 18px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
 /* Privacy: the idea page's paper, a size smaller (it's for reading closely, not once). */
 .privacy p,
 .privacy li {

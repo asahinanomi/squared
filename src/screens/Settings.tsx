@@ -14,12 +14,13 @@ type Props = {
   onAccount: () => void
   onPrivacy: () => void
   onTerms: () => void
+  onExport: () => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 // Settings: one quiet list; each row opens its own screen.
-export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onPrivacy, onTerms }: Props) {
+export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onPrivacy, onTerms, onExport }: Props) {
   const summary = profile
     ? [
         fromIso(profile.born).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -60,6 +61,13 @@ export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onP
             <span className="settings-sub">the brush on paper · a soft tone when done</span>
           </span>
           <span className="settings-switch">{sound ? 'on' : 'off'}</span>
+        </button>
+        <button className="settings-row" onClick={onExport}>
+          <span>
+            <span className="settings-label">export my data</span>
+            <span className="settings-sub">a Word copy of your squares and notes</span>
+          </span>
+          <Chevron dir="right" />
         </button>
         <button className="settings-row" onClick={onAccount}>
           <span>

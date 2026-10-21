@@ -23,7 +23,7 @@ export function Terms({ onBack, backLabel }: Props) {
       <h2 className="privacy-head">lost data</h2>
       <p>
         I’m not responsible for any lost or damaged data, or for anything that follows from it. If something matters to
-        you, keep your own copy too.
+        you, keep your own copy too (settings → export my data).
       </p>
 
       <h2 className="privacy-head">your words are yours</h2>

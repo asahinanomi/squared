@@ -50,6 +50,24 @@ export async function fetchMonthNotes(iso: string): Promise<Notes | null> {
   return groupByDay((data as Row[]).map(toNote))
 }
 
+/** Every note, all of a life (fetched a page at a time), or null if the notes table doesn't exist yet. */
+export async function fetchAllNotes(): Promise<Notes | null> {
+  if (!supabase) return null
+  const all: Row[] = []
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await supabase
+      .from('notes')
+      .select('id, date, body, written_at')
+      .order('written_at')
+      .range(from, from + 999)
+    if (error?.code === 'PGRST205' || error?.code === '42P01') return null
+    if (error) throw error
+    all.push(...(data as Row[]))
+    if (!data || data.length < 1000) break
+  }
+  return groupByDay(all.map(toNote))
+}
+
 /** A note made on this device, shown at once while it saves. */
 export const draftNote = (date: string, body: string): Note => ({
   id: crypto.randomUUID(),
