@@ -1,3 +1,4 @@
+import { Footer } from '../components/Footer'
 import { GoogleG } from '../components/GoogleG'
 import { Logo } from '../components/Logo'
 
@@ -41,23 +42,15 @@ export function SignIn({
         </button>
         {error && <p className="signin-error">sign-in didn't finish: {error}</p>}
         {/* For someone new: why squared exists, and what it keeps, before signing in. */}
-        <div className="signin-links">
-          <button className="signin-idea" onClick={onIdea}>
-            the idea
-          </button>
-          <span aria-hidden="true">·</span>
-          <button className="signin-idea" onClick={onQuestions}>
-            faq
-          </button>
-          <span aria-hidden="true">·</span>
-          <button className="signin-idea" onClick={onPrivacy}>
-            privacy
-          </button>
-          <span aria-hidden="true">·</span>
-          <button className="signin-idea" onClick={onTerms}>
-            terms
-          </button>
-        </div>
+        <Footer
+          centred
+          links={[
+            ['the idea', onIdea],
+            ['faq', onQuestions],
+            ['privacy', onPrivacy],
+            ['terms', onTerms],
+          ]}
+        />
       </div>
     </main>
   )

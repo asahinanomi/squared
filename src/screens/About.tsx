@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Footer } from '../components/Footer'
 import { Feedback } from './Feedback'
 import { Idea } from './Idea'
 import { Questions } from './Questions'
@@ -50,11 +51,12 @@ export function About({ onMatters, onLegal }: Props) {
       ) : (
         <Support />
       )}
-      <footer className="idea-foot">
-        <button onClick={() => onLegal('privacy')}>privacy</button>
-        <span aria-hidden="true">·</span>
-        <button onClick={() => onLegal('terms')}>terms</button>
-      </footer>
+      <Footer
+        links={[
+          ['privacy', () => onLegal('privacy')],
+          ['terms', () => onLegal('terms')],
+        ]}
+      />
     </div>
   )
 }

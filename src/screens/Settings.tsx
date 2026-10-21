@@ -1,3 +1,4 @@
+import { Footer } from '../components/Footer'
 import { useState } from 'react'
 import { fromIso, todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
@@ -89,16 +90,13 @@ export function Settings({
         </button>
       </div>
 
-      <div className="settings-foot-links">
-        <button onClick={onQuestions}>faq</button>
-        <span aria-hidden="true">·</span>
-        <button onClick={onPrivacy}>privacy</button>
-        <span aria-hidden="true">·</span>
-        <button onClick={onTerms}>terms</button>
-      </div>
-      <p className="settings-foot">
-        squared.today <b className="beta">beta</b>
-      </p>
+      <Footer
+        links={[
+          ['faq', onQuestions],
+          ['privacy', onPrivacy],
+          ['terms', onTerms],
+        ]}
+      />
     </main>
   )
 }

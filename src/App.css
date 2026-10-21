@@ -166,15 +166,6 @@
   line-height: 1.4;
   vertical-align: 3px;
 }
-.settings-foot-links {
-  gap: 8px;
-  font-size: 12px;
-  color: var(--muted);
-}
-.settings-foot .beta {
-  margin-left: 4px;
-  vertical-align: 0;
-}
 .support-beta {
   margin: -14px 0 22px !important;
   font-size: 16px !important;
@@ -246,18 +237,6 @@
   font-size: 16px;
   font-weight: 500;
   color: var(--ink);
-}
-.signin-links {
-  margin-top: 22px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  color: var(--muted);
-}
-.signin-idea {
-  font-size: 12px;
-  color: var(--muted);
 }
 .idea-back {
   align-self: flex-start;
@@ -1097,13 +1076,6 @@
 .about .feedback .feedback-lede {
   margin-top: 0;
 }
-.about .idea-foot {
-  width: 100%;
-  max-width: 30em;
-  margin: auto auto 0;
-  box-sizing: border-box;
-  padding: 14px 4px 8px;
-}
 .idea p.idea-ps {
   margin-top: 8px;
   font-size: 16px;
@@ -1114,22 +1086,6 @@
   color: inherit;
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
-}
-/* The idea's footer: the small print. */
-.idea-foot {
-  margin-top: 48px;
-  padding-top: 14px;
-  border-top: 1px dotted #c9c9c2;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  font-size: 12px;
-  color: var(--muted);
-}
-.idea-foot button {
-  min-height: 40px;
-  font-size: 12px;
-  color: var(--muted);
 }
 
 /* Help build squared: the idea's letter, then the one black pill. */
@@ -2312,22 +2268,61 @@ button.settings-row:active {
   height: 20px;
   color: var(--faint);
 }
-.settings-foot-links {
+/* The one footer (sign-in, settings, the idea): a dotted hairline, the small print, then the mark. */
+.foot {
+  width: 100%;
+  max-width: 30em;
   margin: auto 0 0;
-  padding-top: 24px;
-  display: flex;
-  justify-content: center;
-}
-.settings-foot-links button {
+  padding: 14px 0 4px;
+  border-top: 1px dotted #c9c9c2;
   font-size: 12px;
   color: var(--muted);
-  text-decoration: underline dotted #cfcfc8;
-  text-underline-offset: 4px;
 }
-.settings-foot-links + .settings-foot {
-  margin-top: 10px;
+.foot p {
+  margin: 0;
+}
+.foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.foot-links > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 8px;
+}
+.foot-links button {
+  min-height: 32px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.foot-mark {
+  margin-top: 2px !important;
+  color: var(--faint);
+}
+.foot-mark .beta {
+  margin-left: 4px;
+  vertical-align: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+/* Sign-in is centred: its footer too, without the hairline. */
+.foot.is-centred {
+  margin: 22px auto 0;
   padding-top: 0;
+  border-top: 0;
+  text-align: center;
 }
+.foot.is-centred .foot-links {
+  justify-content: center;
+}
+.about .foot {
+  margin: auto auto 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
 /* Account: who you are, sign out (keyline), and — set apart — delete (dark grey, the destructive pill). */
 .account-email {
   margin: 14px 0 0;
@@ -2367,14 +2362,6 @@ button.settings-row:active {
 }
 .account-delete:disabled {
   opacity: 0.5;
-}
-.settings-foot {
-  margin: auto 0 0;
-  padding-top: 24px;
-  text-align: center;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  color: var(--faint);
 }
 
 /* ---------- what matters ---------- */
