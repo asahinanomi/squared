@@ -857,6 +857,10 @@ export default function App() {
                   setScreen('today')
                 }}
                 onMonthShown={loadNotes}
+                onPainting={(m) => {
+                  setPaintedArrived(false)
+                  setPaintedMonth(m)
+                }}
                 onIn={() => listIn(listMid.current())}
                 onOut={() => listOut(listMid.current())}
               />
@@ -955,7 +959,7 @@ export default function App() {
           )}
         </div>
         <MeaningSheet open={defining} onClose={() => setDefining(false)} />
-        {(screen === 'today' || screen === 'month' || screen === 'paintings') && (
+        {(screen === 'today' || screen === 'month' || screen === 'list' || screen === 'paintings') && (
           <MonthPainting
             month={paintedMonth}
             arrived={paintedArrived}
