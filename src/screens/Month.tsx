@@ -6,7 +6,6 @@ import { useBackToToday } from '../lib/backToToday'
 import { squareFill } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { useLadderScroll } from '../lib/useLadderScroll'
-import { PaintingThumb } from '../components/PaintingThumb'
 import { Chevron } from './Today'
 
 type Props = {
@@ -109,16 +108,19 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
       >
         {months.map((m) => (
           <section key={m} className="month-block" data-key={m}>
-            <div className="ladder-label">
+            <div className="ladder-label month-label">
               {monthTitle(m)}
-              {/* A month with squares in it: its painting, small (this one so far), to open, look at and keep. */}
+              {/* A month with squares in it: its painting (this one so far), to open, look at and keep. */}
               {onPainting && m <= current && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) && (
                 <button
                   className="month-paint"
                   onClick={() => onPainting(m.slice(0, 7))}
                   aria-label={`${monthTitle(m)}, ${m < current ? 'painted' : 'so far'}`}
                 >
-                  <PaintingThumb month={m.slice(0, 7)} days={days} />
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3.5" y="4.5" width="17" height="15" rx="1.5" />
+                    <path d="M7 15.5 L10.5 11.5 L13 14 L15 12 L17 15.5" />
+                  </svg>
                 </button>
               )}
             </div>
@@ -156,7 +158,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
         ))}
         {/* Next month peeks in, faint: there's more ahead, not yet lived. */}
         <section className="month-block is-faint" aria-hidden="true">
-          <div className="ladder-label">{monthTitle(next)}</div>
+          <div className="ladder-label month-label">{monthTitle(next)}</div>
           <div className="month-grid is-faint">
             {monthCells(next).map((d, i) =>
               d ? <span key={d}>{Number(d.slice(8))}</span> : <span key={`b${i}`} className="is-blank" />,

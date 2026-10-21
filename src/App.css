@@ -1742,25 +1742,32 @@
   letter-spacing: 0.06em;
   color: var(--muted);
 }
-.ladder-label:has(.month-paint) {
+/* In the month view each month's name is a section header, on the grid's lines: the name at the first column,
+   its painting (a small picture icon in ink) at the last. */
+.ladder-label.month-label {
+  min-height: 32px;
+  margin-bottom: 2px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
+  justify-content: space-between;
+  text-align: left;
 }
-/* A month's painting, beside its name: the painting itself, small (this month's so far). */
 .month-paint {
-  width: 36px;
-  height: 36px;
-  margin: -10px 0;
+  width: 32px;
+  height: 32px;
+  margin-right: -7px; /* the icon's edge on the last column's edge */
   display: grid;
   place-items: center;
+  color: var(--ink-soft);
 }
-.month-paint canvas {
-  width: 24px;
-  height: 24px;
-  display: block;
-  box-shadow: 0 1px 3px rgba(20, 20, 19, 0.18);
+.month-paint svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .month-block.is-faint {
   padding-bottom: 40vh;
