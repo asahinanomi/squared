@@ -5,7 +5,7 @@ import { Chevron } from './Today'
 
 type Props = {
   onBack: () => void
-  /** Inside the idea page: no back arrow or title (the tab says it). */
+  /** Inside the idea page: no back arrow (the tabs lead on). */
   embedded?: boolean
 }
 
@@ -25,13 +25,11 @@ export function Feedback({ onBack, embedded }: Props) {
   return (
     <main className="settings feedback">
       {!embedded && (
-        <>
-          <button className="setup-back" aria-label="Back" onClick={onBack}>
-            <Chevron dir="left" />
-          </button>
-          <h1 className="settings-title">get in touch</h1>
-        </>
+        <button className="setup-back" aria-label="Back" onClick={onBack}>
+          <Chevron dir="left" />
+        </button>
       )}
+      <h1 className={embedded ? 'idea-title' : 'settings-title'}>get in touch</h1>
       {state === 'sent' ? (
         <>
           <p className="feedback-lede">

@@ -42,7 +42,7 @@ export function About({ onMatters, onLegal }: Props) {
         ))}
       </div>
       {tab === 'idea' ? (
-        <Idea onMatters={onMatters} embedded />
+        <Idea onMatters={onMatters} />
       ) : tab === 'questions' ? (
         <Questions onTouch={() => show('touch')} />
       ) : tab === 'touch' ? (

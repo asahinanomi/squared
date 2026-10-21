@@ -1050,6 +1050,11 @@
   box-sizing: border-box;
   padding: 14px 4px 8px;
 }
+.idea p.idea-ps {
+  margin-top: 8px;
+  font-size: 16px;
+  color: var(--muted);
+}
 .idea-inline {
   font: inherit;
   color: inherit;

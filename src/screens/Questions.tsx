@@ -63,14 +63,12 @@ export function Questions({ onBack, backLabel = 'back', onTouch }: Props) {
   return (
     <main className="idea privacy">
       {onBack && (
-        <>
-          <button className="back-btn idea-back" onClick={onBack} aria-label={`Back to ${backLabel}`}>
-            <Chevron dir="left" />
-            {backLabel}
-          </button>
-          <h1 className="idea-title">faq</h1>
-        </>
+        <button className="back-btn idea-back" onClick={onBack} aria-label={`Back to ${backLabel}`}>
+          <Chevron dir="left" />
+          {backLabel}
+        </button>
       )}
+      <h1 className="idea-title">faq</h1>
       {QA.map(([q, a]) => (
         <section key={q}>
           <h2 className="privacy-head">{q}</h2>

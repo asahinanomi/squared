@@ -12,12 +12,10 @@ type Props = {
   onMatters?: () => void
   /** Opened from the sign-in screen: the way back to it. */
   onBack?: () => void
-  /** Inside the idea page's tabs: no title (the tab says it). */
-  embedded?: boolean
 }
 
 // "the idea": why squared exists, in the maker's own words.
-export function Idea({ onMatters, onBack, embedded }: Props) {
+export function Idea({ onMatters, onBack }: Props) {
   return (
     <main className="idea">
       {onBack && (
@@ -26,7 +24,7 @@ export function Idea({ onMatters, onBack, embedded }: Props) {
           sign in
         </button>
       )}
-      {!embedded && <h1 className="idea-title">the idea</h1>}
+      <h1 className="idea-title">the idea</h1>
       <p>
         I live a very busy life. one day, I looked up and saw so many days had gone that I couldn’t say where or how.
         scary.
@@ -52,11 +50,14 @@ export function Idea({ onMatters, onBack, embedded }: Props) {
       </p>
       <p>I’ll try to make mine as green as I can. I hope squared helps you too.</p>
       <p className="idea-sign">— nomi</p>
-      {/* The page's one action, after the letter: a keyline pill (secondary), gentle on a quiet page. */}
+      {/* The way on, as a letter would end: a quiet p.s. under the signature. */}
       {onMatters && (
-        <button className="idea-go" onClick={onMatters}>
-          start by naming what matters to you →
-        </button>
+        <p className="idea-ps">
+          p.s.{' '}
+          <button className="idea-inline" onClick={onMatters}>
+            start by naming what matters to you →
+          </button>
+        </p>
       )}
     </main>
   )
