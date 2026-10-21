@@ -167,6 +167,18 @@ Design: board "16 · Pie — line art (final)". Built step by step; I check each
 - Step 3 (done): **ship** — regression pass at 390×844 and 375×667 (the switch on month, year and a life in years, months and days, back to the same level each time; zoom buttons greyed on the pie; every scope adds up — whole life to the life's total; filter resets to whole life; menu from the pie; no birth date → "how many squares?" and back; the glass count leaves the switch in place), README wrapped up, PR ready to merge into `main`.
 - Later (own phase): share my pie, download my pie.
 
+## Testing as someone new (hidden links)
+
+Open these on squared.today while signed in. Each one shows a first-time moment on your own account and saves nothing.
+
+| Link | What it shows |
+|---|---|
+| squared.today/?welcome | Onboarding: the four screens before the first square (the lines you type aren't saved). |
+| squared.today/?squares | "how many squares?" as a new person sees it: blank, saving nothing. |
+| squared.today/?brush | The ghost brush on any blank square (go to an unpainted day). |
+
+Direct pages (anyone, signed in or not): squared.today/faq, squared.today/privacy, squared.today/terms.
+
 ## Setup (for future sessions)
 
 1. **Supabase**: run each file in `supabase/migrations/` in order (0001, 0002, …) in the SQL Editor. It creates `settings` (holds the `question` value) and `days` (row-level security: each person sees only their own rows; `painted_on_day` is set by a trigger on first paint).
