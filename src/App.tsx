@@ -78,6 +78,9 @@ const demo = !supabase
 const tryWelcome = new URLSearchParams(location.search).has('welcome')
 // squared.today/?squares opens "how many squares?" as the first time shows it, to try it: nothing is saved.
 const trySquaresAtStart = new URLSearchParams(location.search).has('squares')
+// squared.today/privacy and /terms open those pages directly (signed in or not): links for Google's sign-in screen.
+const legalAtStart = location.pathname === '/privacy' ? 'privacy' : location.pathname === '/terms' ? 'terms' : null
+const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
 
 export default function App() {
   // undefined = still checking; null = signed out.
@@ -85,13 +88,16 @@ export default function App() {
   const [demoIn, setDemoIn] = useState(false)
   // "the idea", opened from the sign-in screen.
   const [ideaOut, setIdeaOut] = useState(false)
-  const [privacyOut, setPrivacyOut] = useState(false)
-  const [termsOut, setTermsOut] = useState(false)
+  const [privacyOut, setPrivacyOut] = useState(legalAtStart === 'privacy')
+  const [termsOut, setTermsOut] = useState(legalAtStart === 'terms')
   // Where privacy and terms were opened from (settings or the menu): back returns there.
   const [legalFrom, setLegalFrom] = useState<Screen>('settings')
+  const legalOpened = useRef(false) // opened from inside the app (not straight from its web address)
   const [authError, setAuthError] = useState<string | null>(null)
   const [question, setQuestion] = useState(QUESTION)
-  const [screen, setScreenValue] = useState<Screen>(tryWelcome ? 'welcome' : trySquaresAtStart ? 'setup' : 'today')
+  const [screen, setScreenValue] = useState<Screen>(
+    legalAtStart ?? (tryWelcome ? 'welcome' : trySquaresAtStart ? 'setup' : 'today'),
+  )
   // Which way the last move went, so the new level can zoom in or out into place.
   const [motion, setMotion] = useState<'in' | 'out' | null>(null)
   // The month to open on when zooming in from a year (zooming out always lands on today's).
@@ -142,7 +148,7 @@ export default function App() {
   const [profile, setProfile] = useState<Profile | null>(null)
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
-  const [checking, setChecking] = useState(() => !tryWelcome && !trySquaresAtStart && !welcomed())
+  const [checking, setChecking] = useState(() => !legalAtStart && !tryWelcome && !trySquaresAtStart && !welcomed())
 
   useEffect(() => {
     if (!supabase) return
@@ -189,7 +195,7 @@ export default function App() {
         setDays(d)
         setNotes(n ?? legacyNotes(d))
         // Someone new (nothing painted, no compass yet, here or in the account): a pause before the first square.
-        if (tryWelcome || trySquaresAtStart || welcomed()) return
+        if (legalAtStart || tryWelcome || trySquaresAtStart || welcomed()) return
         if (Object.keys(d).length) return markWelcomed()
         return syncMatters(loadMatters()).then((m) =>
           m.meaningful.length || m.wasted.length ? markWelcomed() : setScreenValue('welcome'),
@@ -338,11 +344,23 @@ export default function App() {
       </div>
     ) : privacyOut ? (
       <div className="app">
-        <Privacy onBack={() => setPrivacyOut(false)} backLabel="sign in" />
+        <Privacy
+          onBack={() => {
+            leaveLegalUrl()
+            setPrivacyOut(false)
+          }}
+          backLabel="sign in"
+        />
       </div>
     ) : termsOut ? (
       <div className="app">
-        <Terms onBack={() => setTermsOut(false)} backLabel="sign in" />
+        <Terms
+          onBack={() => {
+            leaveLegalUrl()
+            setTermsOut(false)
+          }}
+          backLabel="sign in"
+        />
       </div>
     ) : (
       <SignIn
@@ -466,7 +484,15 @@ export default function App() {
     history.replaceState(null, '', location.pathname)
     goToday()
   }
+  // Back from privacy or terms: where it was opened from, or today when it came straight from its web address.
+  const closeLegal = () => {
+    if (legalOpened.current) return setScreenValue(legalFrom)
+    leaveLegalUrl()
+    legalOpened.current = true
+    goToday()
+  }
   const openLegal = (page: 'privacy' | 'terms', from: Screen) => {
+    legalOpened.current = true
     setLegalFrom(from)
     setScreenValue(page)
   }
@@ -691,13 +717,13 @@ export default function App() {
             />
           ) : screen === 'privacy' ? (
             <Privacy
-              onBack={() => setScreenValue(legalFrom)}
-              backLabel={legalFrom === 'settings' ? 'settings' : 'back'}
+              onBack={closeLegal}
+              backLabel={legalFrom === 'settings' && legalOpened.current ? 'settings' : 'today'}
             />
           ) : screen === 'terms' ? (
             <Terms
-              onBack={() => setScreenValue(legalFrom)}
-              backLabel={legalFrom === 'settings' ? 'settings' : 'back'}
+              onBack={closeLegal}
+              backLabel={legalFrom === 'settings' && legalOpened.current ? 'settings' : 'today'}
             />
           ) : screen === 'matters' ? (
             <WhatMatters
