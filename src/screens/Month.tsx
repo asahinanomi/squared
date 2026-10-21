@@ -120,7 +120,8 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
                       'month-day' +
                       (day ? ' is-painted' : '') +
                       (iso === today ? ' is-today' : '') +
-                      (before ? ' is-before' : '')
+                      (before ? ' is-before' : '') +
+                      (day?.framed ? ' is-framed' : '')
                     }
                     style={fill ? { background: fill } : undefined}
                     disabled={iso > today || before}

@@ -572,8 +572,37 @@
 .canvas.is-framed {
   border: 5px solid #53735c;
 }
+/* A framed square, small (the list's swatch, the month's day): a dark green frame, a sliver of raw canvas, then
+   the paint — a little framed canvas. */
 .day-card .day-card-swatch.is-framed {
-  box-shadow: inset 0 0 0 3.5px #53735c !important; /* the same darker green frame, small */
+  box-shadow:
+    inset 0 0 0 2px #53735c,
+    inset 0 0 0 4px #ebe6da !important;
+}
+.month-day.is-framed {
+  box-shadow:
+    inset 0 0 0 2.5px #53735c,
+    inset 0 0 0 5px #ebe6da;
+}
+/* A framed day's card in the list: the frame's dark green, light text, like its pinned note. */
+.day-card.is-framed {
+  background: #53735c !important;
+  color: #f7f5ef;
+}
+.day-card.is-framed .day-card-word,
+.day-card.is-framed .day-card-painted,
+.day-card.is-framed .day-card-note,
+.day-card.is-framed .day-card-more,
+.day-card.is-framed .day-card-time,
+.day-card.is-framed .day-card-special {
+  color: rgba(247, 245, 239, 0.82);
+}
+.day-card.is-framed .day-card-open {
+  color: #f7f5ef;
+}
+.day-card.is-framed .day-card-framed {
+  background: rgba(247, 245, 239, 0.18);
+  color: #f7f5ef;
 }
 .day-card-framed {
   position: relative;

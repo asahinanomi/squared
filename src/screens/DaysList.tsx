@@ -89,12 +89,18 @@ function DayCard({
   const special = specialDay(iso, born)
   const stamp = day && stampLine(iso, day)
   const [open, setOpen] = useState(false)
-  const latest = notes.at(-1)
+  // A framed day's pinned note ("to remember") is the one shown; otherwise the latest.
+  const latest = notes.find((n) => n.pinned) ?? notes.at(-1)
   const { weekday, monthDay, suffix } = shortDateParts(iso)
   // More to read: older notes, or a latest one longer than its two-line preview (judged by its length).
   const more = notes.length > 1 || (!!latest && (latest.body.length > PREVIEW_CHARS || latest.body.includes('\n')))
   return (
-    <article className={'day-card' + (day ? ' is-painted' : '') + (iso === today ? ' is-today' : '')} data-iso={iso}>
+    <article
+      className={
+        'day-card' + (day ? ' is-painted' : '') + (iso === today ? ' is-today' : '') + (day?.framed ? ' is-framed' : '')
+      }
+      data-iso={iso}
+    >
       <span
         className={'day-card-swatch' + (day?.framed ? ' is-framed' : '')}
         style={day ? { background: day.backfilled ? paintTint(day.color) : paintHex(day.color) } : undefined}
