@@ -2359,6 +2359,7 @@ button.settings-row:active {
   color: var(--ink-soft);
 }
 .account-delete {
+  width: min(100%, 250px); /* the main-button width, left-aligned, like every pill */
   height: 54px;
   border-radius: 999px;
   background: var(--grey-4);
