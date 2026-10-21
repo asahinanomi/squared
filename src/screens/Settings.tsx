@@ -15,24 +15,13 @@ type Props = {
   onAccount: () => void
   onPrivacy: () => void
   onTerms: () => void
-  onQuestions: () => void
   onExport: () => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 // Settings: one quiet list; each row opens its own screen.
-export function Settings({
-  profile,
-  onBack,
-  onSquares,
-  onMatters,
-  onAccount,
-  onPrivacy,
-  onTerms,
-  onQuestions,
-  onExport,
-}: Props) {
+export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onPrivacy, onTerms, onExport }: Props) {
   const summary = profile
     ? [
         fromIso(profile.born).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -92,7 +81,6 @@ export function Settings({
 
       <Footer
         links={[
-          ['faq', onQuestions],
           ['privacy', onPrivacy],
           ['terms', onTerms],
         ]}

@@ -385,7 +385,6 @@ export default function App() {
         onIdea={() => setIdeaOut(true)}
         onPrivacy={() => setPrivacyOut(true)}
         onTerms={() => setTermsOut(true)}
-        onQuestions={() => setQuestionsOut(true)}
       />
     )
 
@@ -704,7 +703,6 @@ export default function App() {
               onAccount={() => setScreenValue('account')}
               onPrivacy={() => openLegal('privacy', 'settings')}
               onTerms={() => openLegal('terms', 'settings')}
-              onQuestions={() => openLegal('questions', 'settings')}
               onExport={() => setScreenValue('export')}
             />
           ) : screen === 'export' ? (

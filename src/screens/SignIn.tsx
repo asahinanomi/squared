@@ -7,14 +7,12 @@ export function SignIn({
   onIdea,
   onPrivacy,
   onTerms,
-  onQuestions,
   error,
 }: {
   onSignIn: () => void
   onIdea: () => void
   onPrivacy: () => void
   onTerms: () => void
-  onQuestions: () => void
   error?: string | null
 }) {
   return (
@@ -46,7 +44,6 @@ export function SignIn({
           centred
           links={[
             ['the idea', onIdea],
-            ['faq', onQuestions],
             ['privacy', onPrivacy],
             ['terms', onTerms],
           ]}
