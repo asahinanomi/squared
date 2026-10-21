@@ -9,13 +9,25 @@ type Props = {
   /** "send feedback": a note to the maker. */
   onFeedback: () => void
   onSupport: () => void
+  /** The small print, one quiet line at the menu's foot. */
+  onLegal: (page: 'questions' | 'privacy' | 'terms') => void
   onSettings: () => void
   onSignOut: () => void
   /** On a zoom level: one level out, labelled with where it lands ("2026", "a life"). Replaces the logo. */
   back?: { label: string; onBack: () => void }
 }
 
-export function Topbar({ onHome, onCalendar, onIdea, onFeedback, onSupport, onSettings, onSignOut, back }: Props) {
+export function Topbar({
+  onHome,
+  onCalendar,
+  onIdea,
+  onFeedback,
+  onSupport,
+  onLegal,
+  onSettings,
+  onSignOut,
+  back,
+}: Props) {
   const [open, setOpen] = useState(false)
   const go = (fn: () => void) => () => {
     setOpen(false)
@@ -59,6 +71,13 @@ export function Topbar({ onHome, onCalendar, onIdea, onFeedback, onSupport, onSe
             <button className="menu-feedback" onClick={go(onSupport)}>
               support squared
             </button>
+            <span className="menu-legal">
+              <button onClick={go(() => onLegal('questions'))}>questions</button>
+              <span aria-hidden="true">·</span>
+              <button onClick={go(() => onLegal('privacy'))}>privacy</button>
+              <span aria-hidden="true">·</span>
+              <button onClick={go(() => onLegal('terms'))}>terms</button>
+            </span>
           </nav>
         </div>
       )}

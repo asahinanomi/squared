@@ -86,6 +86,21 @@
 .menu button:active {
   background: var(--grey-1);
 }
+.menu-legal {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  padding: 0 18px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.menu .menu-legal button {
+  min-height: 40px;
+  padding: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
 .menu .menu-idea {
   margin-top: 6px;
   padding: 12px 18px 8px;

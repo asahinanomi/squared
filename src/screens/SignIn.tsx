@@ -6,12 +6,14 @@ export function SignIn({
   onIdea,
   onPrivacy,
   onTerms,
+  onQuestions,
   error,
 }: {
   onSignIn: () => void
   onIdea: () => void
   onPrivacy: () => void
   onTerms: () => void
+  onQuestions: () => void
   error?: string | null
 }) {
   return (
@@ -42,6 +44,10 @@ export function SignIn({
         <div className="signin-links">
           <button className="signin-idea" onClick={onIdea}>
             the idea
+          </button>
+          <span aria-hidden="true">·</span>
+          <button className="signin-idea" onClick={onQuestions}>
+            questions
           </button>
           <span aria-hidden="true">·</span>
           <button className="signin-idea" onClick={onPrivacy}>

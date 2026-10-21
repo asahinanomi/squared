@@ -39,6 +39,7 @@ import { PeriodList } from './screens/PeriodList'
 import { Privacy } from './screens/Privacy'
 import { Support } from './screens/Support'
 import { Terms } from './screens/Terms'
+import { Questions } from './screens/Questions'
 import { Export } from './screens/Export'
 import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
@@ -64,6 +65,7 @@ type Screen =
   | 'account'
   | 'privacy'
   | 'terms'
+  | 'questions'
   | 'export'
   | 'welcome'
   | 'support'
@@ -79,7 +81,9 @@ const tryWelcome = new URLSearchParams(location.search).has('welcome')
 // squared.today/?squares opens "how many squares?" as the first time shows it, to try it: nothing is saved.
 const trySquaresAtStart = new URLSearchParams(location.search).has('squares')
 // squared.today/privacy and /terms open those pages directly (signed in or not): links for Google's sign-in screen.
-const legalAtStart = location.pathname === '/privacy' ? 'privacy' : location.pathname === '/terms' ? 'terms' : null
+const legalAtStart = (
+  ['/privacy', '/terms', '/questions'].includes(location.pathname) ? location.pathname.slice(1) : null
+) as 'privacy' | 'terms' | 'questions' | null
 const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
 
 export default function App() {
@@ -90,6 +94,7 @@ export default function App() {
   const [ideaOut, setIdeaOut] = useState(false)
   const [privacyOut, setPrivacyOut] = useState(legalAtStart === 'privacy')
   const [termsOut, setTermsOut] = useState(legalAtStart === 'terms')
+  const [questionsOut, setQuestionsOut] = useState(legalAtStart === 'questions')
   // Where privacy and terms were opened from (settings or the menu): back returns there.
   const [legalFrom, setLegalFrom] = useState<Screen>('settings')
   const legalOpened = useRef(false) // opened from inside the app (not straight from its web address)
@@ -354,6 +359,16 @@ export default function App() {
           backLabel="sign in"
         />
       </div>
+    ) : questionsOut ? (
+      <div className="app">
+        <Questions
+          onBack={() => {
+            leaveLegalUrl()
+            setQuestionsOut(false)
+          }}
+          backLabel="sign in"
+        />
+      </div>
     ) : termsOut ? (
       <div className="app">
         <Terms
@@ -371,6 +386,7 @@ export default function App() {
         onIdea={() => setIdeaOut(true)}
         onPrivacy={() => setPrivacyOut(true)}
         onTerms={() => setTermsOut(true)}
+        onQuestions={() => setQuestionsOut(true)}
       />
     )
 
@@ -477,7 +493,7 @@ export default function App() {
     setListRes(listRes === 'days' ? 'months' : 'years')
   }
   const openSettings = () => {
-    if (!['settings', 'setup', 'matters', 'account', 'privacy', 'terms', 'export'].includes(screen))
+    if (!['settings', 'setup', 'matters', 'account', 'privacy', 'terms', 'questions', 'export'].includes(screen))
       setSettingsFrom(screen)
     setScreenValue('settings')
   }
@@ -493,7 +509,9 @@ export default function App() {
     legalOpened.current = true
     goToday()
   }
-  const openLegal = (page: 'privacy' | 'terms', from: Screen) => {
+  // Back from the small print: "settings" when opened there, "back" from the menu, "today" from its web address.
+  const legalBack = !legalOpened.current ? 'today' : legalFrom === 'settings' ? 'settings' : 'back'
+  const openLegal = (page: 'privacy' | 'terms' | 'questions', from: Screen) => {
     legalOpened.current = true
     setLegalFrom(from)
     setScreenValue(page)
@@ -582,6 +600,7 @@ export default function App() {
           screen !== 'account' &&
           screen !== 'privacy' &&
           screen !== 'terms' &&
+          screen !== 'questions' &&
           screen !== 'export' && (
             <Topbar
               onHome={goToday}
@@ -602,6 +621,7 @@ export default function App() {
                 setSupportFrom(screen)
                 setScreenValue('support')
               }}
+              onLegal={(page) => openLegal(page, screen)}
               onSettings={openSettings}
               onSignOut={signOut}
             />
@@ -697,6 +717,7 @@ export default function App() {
               onAccount={() => setScreenValue('account')}
               onPrivacy={() => openLegal('privacy', 'settings')}
               onTerms={() => openLegal('terms', 'settings')}
+              onQuestions={() => openLegal('questions', 'settings')}
               onExport={() => setScreenValue('export')}
             />
           ) : screen === 'export' ? (
@@ -718,15 +739,11 @@ export default function App() {
               onDeleted={signOut}
             />
           ) : screen === 'privacy' ? (
-            <Privacy
-              onBack={closeLegal}
-              backLabel={legalFrom === 'settings' && legalOpened.current ? 'settings' : 'today'}
-            />
+            <Privacy onBack={closeLegal} backLabel={legalBack} />
           ) : screen === 'terms' ? (
-            <Terms
-              onBack={closeLegal}
-              backLabel={legalFrom === 'settings' && legalOpened.current ? 'settings' : 'today'}
-            />
+            <Terms onBack={closeLegal} backLabel={legalBack} />
+          ) : screen === 'questions' ? (
+            <Questions onBack={closeLegal} backLabel={legalBack} />
           ) : screen === 'matters' ? (
             <WhatMatters
               onBack={() => setScreenValue(mattersFrom)}
