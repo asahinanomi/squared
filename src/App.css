@@ -847,8 +847,8 @@
 }
 /* A framed day's pinned note: the frame's dark green, light text, "to remember" on top. */
 .note-card.is-pinned {
-  background: #6e9b7b; /* the day's own green, as on its canvas */
-  box-shadow: none;
+  background: #6e9b7b; /* the day's own green, as on its canvas, framed in the frame's green like the card */
+  box-shadow: inset 0 0 0 3px #53735c;
 }
 .note-pin {
   display: block;
