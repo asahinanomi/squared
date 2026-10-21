@@ -930,6 +930,10 @@ export default function App() {
                 onResolution={setLifeRes}
                 cols={[28, 14, 7, 3][mag]}
                 focal={focal}
+                onPainting={(p) => {
+                  setPaintedArrived(false)
+                  setPaintedMonth(p)
+                }}
               />
             ) : lifeRes === 'months' ? (
               <LifeMonths
@@ -973,7 +977,7 @@ export default function App() {
           )}
         </div>
         <MeaningSheet open={defining} onClose={() => setDefining(false)} />
-        {(['today', 'month', 'year', 'list', 'paintings'] as Screen[]).includes(screen) && (
+        {(['today', 'month', 'year', 'life', 'list', 'paintings'] as Screen[]).includes(screen) && (
           <MonthPainting
             month={paintedMonth}
             arrived={paintedArrived}

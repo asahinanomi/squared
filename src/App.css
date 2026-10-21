@@ -1752,6 +1752,15 @@
   justify-content: space-between;
   text-align: left;
 }
+/* On the squares (month and year), the name is a chapter: ink, bold, like the list's, with room above. */
+.month-block .month-label,
+.year-block .month-label {
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
 .month-paint {
   width: 32px;
   height: 32px;
@@ -1870,6 +1879,12 @@
   scrollbar-width: none;
   cursor: pointer;
   mask-image: linear-gradient(to bottom, transparent, #000 20px, #000 calc(100% - 20px), transparent);
+}
+/* A year's painting, on its label's line at the right edge, scrolling with its year. */
+.life-paint {
+  position: absolute;
+  right: 0;
+  z-index: 1;
 }
 .life-canvas::-webkit-scrollbar {
   display: none;

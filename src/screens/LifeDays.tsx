@@ -8,6 +8,7 @@ import { addYears, daysBetween } from '../lib/life'
 import { FRAME, squareFill } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 import { fitText, MIN_TEXT_PX, roundRect, textFits, useCanvasList } from '../lib/useCanvasList'
+import { PaintingButton } from '../components/PaintingButton'
 import type { Focal } from '../lib/usePinch'
 
 type Props = {
@@ -22,6 +23,8 @@ type Props = {
   cols?: number
   /** Where the fingers were when the size changed: the day under them stays put. */
   focal?: Focal
+  /** A year's painting ("YYYY"; this one so far): opens it, to look at and keep. */
+  onPainting?: (year: string) => void
 }
 
 // Space between squares grows with them, so big squares stay apart (7 and 3 a row match my squares).
@@ -43,7 +46,7 @@ const daysInYear = (y: number) => (new Date(y, 1, 29).getDate() === 29 ? 366 : 3
 // A life, in days — one solid square per real day, grouped into a block per year (each labelled,
 // with a gap between years). Long by design: you scroll your whole life, year by year.
 // Drawn on a canvas, only the rows on screen. Opens on today, where lived days meet the empty ones.
-export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28, focal }: Props) {
+export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28, focal, onPainting }: Props) {
   const today = todayIso()
   const { born, lifespan } = profile
   const end = addYears(born, lifespan) // the first day after the hoped-for last one
@@ -261,6 +264,19 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
       >
         <canvas ref={canvas} style={{ width: size.w, height: size.h }} aria-hidden="true" />
         <div style={{ height: Math.max(0, totalH - size.h) }} />
+        {/* Each year with squares in it: its painting, at the right edge of its label. */}
+        {onPainting &&
+          cell > 0 &&
+          [...new Set(Object.keys(days).map((iso) => iso.slice(0, 4)))].map((y) => (
+            <span
+              key={y}
+              className="life-paint"
+              style={{ top: (Number(y) - firstYear) * block - 9 }} // centred on the label's line
+              onClick={(e) => e.stopPropagation()}
+            >
+              <PaintingButton period={y} label={y} onOpen={onPainting} />
+            </span>
+          ))}
       </div>
       {picked && (
         <div className="day-chip" role="status">
