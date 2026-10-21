@@ -1897,7 +1897,7 @@
   transform: scale(0.94);
 }
 .month-num {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
 }
 .month.is-zoomed .month-block:not(.is-faint) .month-grid {

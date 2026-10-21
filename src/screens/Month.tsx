@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
-import { fromIso, isoDate, longDate, monthCells, monthTitle, shortWeekday, todayIso, dayCaption } from '../lib/dates'
+import { fromIso, isoDate, longDate, monthCells, monthTitle, todayIso, dayCaption } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { useBackToToday } from '../lib/backToToday'
 import { squareFill } from '../lib/paints'
@@ -131,7 +131,8 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
                   >
                     {!before && specialDay(iso, born) && <span className="month-special" aria-hidden="true" />}
                     <span className="month-num">{Number(iso.slice(8))}</span>
-                    <span className="month-wd">{zoomed ? dayCaption(iso) : shortWeekday(iso)}</span>
+                    {/* Seven across, the row of weekday letters above says it; pinched in, each square says its date. */}
+                    {zoomed && <span className="month-wd">{dayCaption(iso)}</span>}
                   </button>
                 )
               })}
