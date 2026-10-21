@@ -23,6 +23,8 @@ type Props = {
   zoomed?: boolean
   /** The day under the fingers when the zoom changed, kept where it was on screen. */
   anchor?: { iso?: string; y: number }
+  /** A finished month's painting ("YYYY-MM"): opens it, to look at and keep. */
+  onPainting?: (month: string) => void
 }
 
 const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
@@ -37,7 +39,7 @@ export const monthsBetween = (a: string, b: string) =>
 
 // My squares — your months, one after another in a single scroll, from the birth month
 // down to this one (next month peeks in faintly below). Opens centred on this month.
-export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, anchor }: Props) {
+export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, anchor, onPainting }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const maxBack = born ? monthsBetween(shiftMonth(born, 0), current) : Infinity
@@ -106,7 +108,22 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
       >
         {months.map((m) => (
           <section key={m} className="month-block" data-key={m}>
-            <div className="ladder-label">{monthTitle(m)}</div>
+            <div className="ladder-label">
+              {monthTitle(m)}
+              {/* A finished month, with squares in it: its painting, any time, to look at and keep. */}
+              {onPainting && m < current && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) && (
+                <button
+                  className="month-paint"
+                  onClick={() => onPainting(m.slice(0, 7))}
+                  aria-label={`${monthTitle(m)}, painted`}
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3.5" y="4.5" width="17" height="15" rx="1.5" />
+                    <path d="M7 15.5 L10.5 11.5 L13 14 L15 12 L17 15.5" />
+                  </svg>
+                </button>
+              )}
+            </div>
             <div className="month-grid">
               {monthCells(m).map((iso, i) => {
                 if (!iso) return zoomed ? null : <span key={`b${i}`} className="is-blank" />

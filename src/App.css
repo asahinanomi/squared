@@ -1742,6 +1742,30 @@
   letter-spacing: 0.06em;
   color: var(--muted);
 }
+.ladder-label:has(.month-paint) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+/* A finished month's painting, beside its name: a small picture icon in ink. */
+.month-paint {
+  width: 32px;
+  height: 32px;
+  margin: -8px 0;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+}
+.month-paint svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .month-block.is-faint {
   padding-bottom: 40vh;
   mask-image: linear-gradient(to bottom, #000, transparent 60%);

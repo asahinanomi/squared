@@ -158,6 +158,7 @@ export default function App() {
   const [frameError, setFrameError] = useState<string | null>(null)
   // A new month: the last one, shown once as a painting (on the first visit of the month, if it holds any squares).
   const [paintedMonth, setPaintedMonth] = useState<string | null>(null)
+  const [paintedArrived, setPaintedArrived] = useState(false) // shown by the new month, not opened from the month view
   const [profile, setProfile] = useState<Profile | null>(null)
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
@@ -251,6 +252,7 @@ export default function App() {
     if (!tryMonth && seen === now) return
     if (!Object.keys(days).some((iso) => iso.startsWith(last))) return
     setPaintedMonth(last)
+    setPaintedArrived(true)
     try {
       localStorage.setItem(PAINTED_KEY, now)
     } catch {
@@ -931,13 +933,18 @@ export default function App() {
               onOut={() => goYear()}
               zoomed={mag > 0}
               anchor={monthAnchor}
+              onPainting={(m) => {
+                setPaintedArrived(false)
+                setPaintedMonth(m)
+              }}
             />
           )}
         </div>
         <MeaningSheet open={defining} onClose={() => setDefining(false)} />
-        {screen === 'today' && (
+        {(screen === 'today' || screen === 'month') && (
           <MonthPainting
             month={paintedMonth}
+            arrived={paintedArrived}
             days={days}
             name={(session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? '').split(' ')[0]}
             onClose={() => setPaintedMonth(null)}

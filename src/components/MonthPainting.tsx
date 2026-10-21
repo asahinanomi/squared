@@ -7,6 +7,8 @@ import { Sheet } from './Sheet'
 type Props = {
   /** The finished month, "YYYY-MM". */
   month: string | null
+  /** Shown by the new month's arrival (with its line), rather than opened from the month view. */
+  arrived?: boolean
   days: Days
   /** The signature: the painter's first name. */
   name: string
@@ -14,8 +16,8 @@ type Props = {
 }
 
 // A new month: the last one, shown once as a finished painting. Its squares dab in one by one on squared's canvas,
-// signed; "keep this painting" saves it as a picture (on a phone, the share sheet: Save to Photos, or send it).
-export function MonthPainting({ month, days, name, onClose }: Props) {
+// signed. Any finished month opens it again from the month view. "keep this painting" saves it as a picture (on a phone, the share sheet: Save to Photos, or send it).
+export function MonthPainting({ month, days, name, onClose, arrived }: Props) {
   const [busy, setBusy] = useState(false)
   if (!month) return null
   const keep = async () => {
@@ -32,7 +34,7 @@ export function MonthPainting({ month, days, name, onClose }: Props) {
   return (
     <Sheet open onClose={onClose}>
       <div className="painting">
-        <p className="painting-kicker">a new month. here's the last one —</p>
+        {arrived && <p className="painting-kicker">a new month. here's the last one —</p>}
         <p className="painting-title">{monthName(month)}, painted</p>
         <div className="painting-art">
           <div className="painting-face" style={{ background: CANVAS }}>
