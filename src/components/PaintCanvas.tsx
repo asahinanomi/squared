@@ -55,7 +55,7 @@ export function PaintCanvas({ saved, framed, loaded, stamp, onDryBrush, onFilled
   useEffect(() => {
     if (framed && !wasFramed.current) {
       setShining(true)
-      const t = setTimeout(() => setShining(false), 1000)
+      const t = setTimeout(() => setShining(false), 1200)
       wasFramed.current = framed
       return () => clearTimeout(t)
     }
