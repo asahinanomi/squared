@@ -118,8 +118,12 @@ export function WhyBubble({
             </button>
           )}
           {editing && onPin && (
-            <button className="why-pin" onClick={onPin}>
-              {isPinned ? 'unpin' : 'pin'}
+            <button
+              className="why-pin"
+              onClick={onPin}
+              aria-label={isPinned ? 'Unpin this note' : 'Pin this note to the top'}
+            >
+              <PinIcon off={isPinned} />
             </button>
           )}
         </div>
@@ -135,5 +139,26 @@ export function WhyBubble({
       )}
       <p className="why-skip">{editing ? 'tap anywhere to leave it as it was' : 'tap anywhere to skip'}</p>
     </>
+  )
+}
+
+/** A push pin; crossed through when tapping it would unpin. Drawn like the bar's other icons. */
+function PinIcon({ off }: { off?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="22"
+      height="22"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M9 3.5 H15 L14 9.5 L17.5 13 H6.5 L10 9.5 Z" />
+      <path d="M12 13 V20.5" />
+      {off && <path d="M4 4 L20 20" />}
+    </svg>
   )
 }

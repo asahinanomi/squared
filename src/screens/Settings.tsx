@@ -4,7 +4,7 @@ import { fromIso, todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
 import type { Profile } from '../lib/profile'
 import { setSoundOn, soundOn } from '../lib/sound'
-import { Chevron } from './Today'
+import { Chevron, SpeakerIcon } from './Today'
 
 type Props = {
   profile: Profile | null
@@ -61,7 +61,9 @@ export function Settings({ profile, onBack, onSquares, onMatters, onAccount, onP
             <span className="settings-label">sound</span>
             <span className="settings-sub">the brush on paper · a soft tone when done</span>
           </span>
-          <span className="settings-switch">{sound ? 'on' : 'off'}</span>
+          <span className="settings-switch" aria-hidden="true">
+            <SpeakerIcon on={sound} />
+          </span>
         </button>
         <button className="settings-row" onClick={onExport}>
           <span>

@@ -446,7 +446,7 @@ export function Today(props: Props) {
 }
 
 /** A small speaker: sound waves when on, a cross when muted — drawn like the bar's other icons. */
-function SpeakerIcon({ on }: { on: boolean }) {
+export function SpeakerIcon({ on }: { on: boolean }) {
   return (
     <svg
       viewBox="0 0 24 24"

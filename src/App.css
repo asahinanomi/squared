@@ -1019,11 +1019,11 @@
 }
 .why-pin {
   margin-left: auto;
-  padding: 6px 4px;
-  font-size: 15px;
-  color: var(--muted);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
 }
 .why-delete {
   padding: 9px 18px;
@@ -2384,9 +2384,18 @@ button.settings-row:active {
 /* A switch row's state, where the chevron would be: "on" in ink, "off" muted. */
 .settings-switch {
   flex-shrink: 0;
-  font-size: 14px;
-  font-weight: 600;
+  display: grid;
+  width: 26px;
+  height: 26px;
   color: var(--ink);
+}
+.settings-row .settings-switch svg {
+  width: 26px;
+  height: 26px;
+  color: var(--ink);
+}
+.settings-row[aria-checked='false'] .settings-switch svg {
+  color: var(--muted);
 }
 .settings-row[aria-checked='false'] .settings-switch {
   font-weight: 400;
