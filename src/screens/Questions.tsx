@@ -133,7 +133,6 @@ export function Questions({ onBack, backLabel = 'back', onTouch, onSupport }: Pr
           )}
         </section>
       ))}
-      <p className="idea-sign">— nomi</p>
     </main>
   )
 }
