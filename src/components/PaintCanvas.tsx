@@ -104,6 +104,8 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled, bl
   }
 
   const down = (e: React.PointerEvent) => {
+    // The first finger of a new touch: forget any finger whose lift was never seen (it would read as a pinch).
+    if (e.isPrimary) fingers.current.clear()
     fingers.current.add(e.pointerId)
     if (fingers.current.size > 1) {
       // A pinch, not a stroke: undo what the first finger painted.
@@ -200,9 +202,18 @@ export function PaintCanvas({ saved, loaded, paintedOn, onDryBrush, onFilled, bl
   // the parent hands down a new onFilled meanwhile.
   const filled = useRef(onFilled)
   filled.current = onFilled
+  // Then the square is ready for the next coat. A new colour remounts it anyway; the same colour again
+  // (dipped back to what it already holds) keeps it, so it must clear itself or it would never take paint again.
   useEffect(() => {
     if (!settling) return
-    const t = setTimeout(() => filled.current(settling), 520)
+    const t = setTimeout(() => {
+      filled.current(settling)
+      const c = canvas.current
+      if (c) c.getContext('2d')!.clearRect(0, 0, c.width, c.height)
+      covered.current.fill(0)
+      setTouched(false)
+      setSettling(null)
+    }, 520)
     return () => clearTimeout(t)
   }, [settling])
 
