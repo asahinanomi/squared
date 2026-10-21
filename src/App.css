@@ -641,6 +641,9 @@
   letter-spacing: 0.04em;
   color: #53735c; /* the frame's green: the note it keeps */
 }
+.day-card-pin.is-plain {
+  color: var(--muted);
+}
 .day-card-entry .day-card-pin {
   margin-top: 0;
 }
@@ -864,7 +867,7 @@
   color: var(--ink-soft);
 }
 /* A framed day's pinned note: the frame's dark green, light text, "to remember" on top. */
-.note-card.is-pinned {
+.note-card.is-remember {
   background: #6e9b7b; /* the day's own green, as on its canvas */
   box-shadow: none;
   /* The same thin keyline as every note (1px), in the frame's green; a border, so it follows the corners. */
@@ -876,12 +879,13 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.is-remember .note-pin,
+.is-remember .note-stamp {
   color: rgba(255, 255, 255, 0.85);
 }
-.is-pinned .note-stamp {
-  color: rgba(255, 255, 255, 0.85);
-}
-.is-pinned .note-text {
+.is-remember .note-text {
   color: #fff;
   font-weight: 500; /* a touch heavier, to read clearly on the green */
 }
@@ -1006,6 +1010,14 @@
 }
 .why-done:disabled {
   opacity: 0.35;
+}
+.why-pin {
+  margin-left: auto;
+  padding: 6px 4px;
+  font-size: 15px;
+  color: var(--muted);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
 }
 .why-delete {
   padding: 9px 18px;

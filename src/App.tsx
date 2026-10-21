@@ -281,16 +281,11 @@ export default function App() {
     const was = !!days[day]?.framed
     const put = (framed: boolean) => setDays((d) => (d[day] ? { ...d, [day]: { ...d[day], framed } } : d))
     put(!was)
+    // A little magic, and a pinned note: what do you want to remember? (skippable). Unframing keeps notes pinned.
     if (!was) {
-      // A little magic, and the pinned note: what do you want to remember? (skippable)
       frameSound()
       if (!(notes[day] ?? []).some((n) => n.pinned)) setWhy({ pinned: true })
-    } else
-      // Unframed: its pinned note stays, as an ordinary note.
-      for (const n of (notes[day] ?? []).filter((n) => n.pinned)) {
-        swap(day, n.id, { ...n, pinned: undefined })
-        setPinned(n, false).catch((e) => console.error('Could not unpin note', e))
-      }
+    }
     saveFramed(day, !was).catch((e) => {
       console.error('Could not frame day', e)
       put(was)
@@ -360,6 +355,17 @@ export default function App() {
         reopen(draft.date, { draft: text, error: failure(e, 'save') })
       }
     }
+  }
+
+  // Pin a note to the top of its day (or unpin it): shown at once, saved in the background, put back if it fails.
+  const onPinNote = (note: Note) => {
+    setWhy(null)
+    const pinned = !note.pinned
+    swap(note.date, note.id, { ...note, pinned: pinned || undefined })
+    setPinned(note, pinned).catch((e) => {
+      console.error('Could not pin note', e)
+      swap(note.date, note.id, note)
+    })
   }
 
   const onDeleteNote = async (note: Note) => {
@@ -683,6 +689,7 @@ export default function App() {
               onFilled={onFilled}
               onWipe={onWipe}
               onFrame={onFrame}
+              onPinNote={onPinNote}
               frameError={frameError}
               onZoomOut={outOfDay}
               onMatters={() => {

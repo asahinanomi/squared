@@ -4,7 +4,14 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { NoteCard } from './NoteCard'
 import { SwipeRow } from './SwipeRow'
 
-type Props = { notes: Note[]; onOpen: (n: Note) => void; onAdd: () => void; onDelete: (n: Note) => Promise<void> }
+type Props = {
+  notes: Note[]
+  /** A framed day: its pinned notes are the green "to remember" cards. */
+  framed?: boolean
+  onOpen: (n: Note) => void
+  onAdd: () => void
+  onDelete: (n: Note) => Promise<void>
+}
 
 // Show/hide is remembered on this device (a convenience; fine if storage is unavailable).
 const KEY = 'squared.olderHidden'
@@ -24,7 +31,7 @@ const writeHidden = (hidden: boolean) => {
 }
 
 // A day's notes, oldest to newest. The latest always shows; older ones can be tucked away.
-export function NotesList({ notes, onOpen, onAdd, onDelete }: Props) {
+export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
   const [hidden, setHidden] = useState(readHidden)
   // Only one row is swiped open at a time; deleting always asks first.
   const [swiped, setSwiped] = useState<string | null>(null)
@@ -37,7 +44,7 @@ export function NotesList({ notes, onOpen, onAdd, onDelete }: Props) {
       onOpenChange={(o) => setSwiped(o ? n.id : null)}
       onDelete={() => setAsking(n)}
     >
-      <NoteCard note={n} onOpen={() => onOpen(n)} />
+      <NoteCard note={n} framed={framed} onOpen={() => onOpen(n)} />
     </SwipeRow>
   )
 
@@ -56,7 +63,7 @@ export function NotesList({ notes, onOpen, onAdd, onDelete }: Props) {
     writeHidden(!hidden)
     setHidden(!hidden)
   }
-  // A framed day's pinned note always comes first, and always shows; the rest keep their order.
+  // Pinned notes always come first (oldest first) and always show; the rest keep their order.
   const pinned = notes.filter((n) => n.pinned)
   const rest = notes.filter((n) => !n.pinned)
   const older = rest.slice(0, -1)

@@ -141,7 +141,11 @@ function DayCard({
         {special && <span className="day-card-special">{special}</span>}
         {/* Only what's worth saying in a list: a late square, or one changed later (on time is the norm). */}
         {stamp && stamp !== 'painted on time' && <span className="day-card-painted">{stamp}</span>}
-        {!open && latest?.pinned && <span className="day-card-pin">to remember</span>}
+        {!open && latest?.pinned && (
+          <span className={'day-card-pin' + (day?.framed ? '' : ' is-plain')}>
+            {day?.framed ? 'to remember' : 'pinned'}
+          </span>
+        )}
         {!open && latest && <p className="day-card-note">{latest.body}</p>}
         {more && !open && (
           <button className="day-card-more" aria-expanded={false} onClick={() => setOpen(true)}>
@@ -154,7 +158,11 @@ function DayCard({
         <div className="day-card-notes">
           {[...notes.filter((n) => n.pinned), ...notes.filter((n) => !n.pinned)].map((n) => (
             <div key={n.id} className="day-card-entry">
-              {n.pinned && <span className="day-card-pin">to remember</span>}
+              {n.pinned && (
+                <span className={'day-card-pin' + (day?.framed ? '' : ' is-plain')}>
+                  {day?.framed ? 'to remember' : 'pinned'}
+                </span>
+              )}
               <span className="day-card-time">{writtenWhen(n.writtenAt, iso)}</span>
               <p className="day-card-note is-full">{n.body}</p>
             </div>

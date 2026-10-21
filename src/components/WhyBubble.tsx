@@ -19,6 +19,9 @@ type Props = {
   reveal?: { text: string; fresh: boolean }
   /** A framed day's note: it asks "what do you want to remember?" instead of "why?". */
   pinned?: boolean
+  /** Editing a note: pin it to the top of its day, or unpin it. */
+  onPin?: () => void
+  isPinned?: boolean
 }
 
 // Gentle "why?" bubble under the square. Write as much as you like; Enter makes a new line.
@@ -33,6 +36,8 @@ export function WhyBubble({
   onCancel,
   reveal,
   pinned,
+  onPin,
+  isPinned,
 }: Props) {
   const [text, setText] = useState(initial)
   const error = initialError
@@ -110,6 +115,11 @@ export function WhyBubble({
           {editing && (
             <button className="why-delete" onClick={() => setConfirming(true)}>
               delete
+            </button>
+          )}
+          {editing && onPin && (
+            <button className="why-pin" onClick={onPin}>
+              {isPinned ? 'unpin' : 'pin'}
             </button>
           )}
         </div>

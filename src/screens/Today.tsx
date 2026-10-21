@@ -31,6 +31,8 @@ type Props = {
   onWipe: () => void
   /** Frame (or unframe) a day that mattered most. */
   onFrame: () => void
+  /** Pin a note to the top of its day, or unpin it. */
+  onPinNote: (note: Note) => void
   /** Framing didn't save: what to say, quietly, under the square. */
   frameError?: string | null
   onLoad: (p: Paint) => void
@@ -319,7 +321,9 @@ export function Today(props: Props) {
                 onDelete={why.note ? () => onDeleteNote(why.note!) : undefined}
                 onCancel={onCloseWhy}
                 reveal={why.settled && reveal(why.settled, !!why.fresh)}
-                pinned={why.pinned || why.note?.pinned}
+                pinned={(why.pinned || why.note?.pinned) && !!day?.framed}
+                isPinned={why.note?.pinned}
+                onPin={why.note ? () => props.onPinNote(why.note!) : undefined}
               />
             ) : (
               <>
@@ -363,6 +367,7 @@ export function Today(props: Props) {
           <NotesList
             key={date}
             notes={notes}
+            framed={!!day?.framed}
             onOpen={(n) => onOpenWhy(n)}
             onAdd={() => onOpenWhy()}
             onDelete={onDeleteNote}
