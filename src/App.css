@@ -847,7 +847,7 @@
 }
 /* A framed day's pinned note: the frame's dark green, light text, "to remember" on top. */
 .note-card.is-pinned {
-  background: #53735c;
+  background: #6e9b7b; /* the day's own green, as on its canvas */
   box-shadow: none;
 }
 .note-pin {
@@ -856,13 +856,14 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: rgba(247, 245, 239, 0.75);
+  color: rgba(255, 255, 255, 0.85);
 }
 .is-pinned .note-stamp {
-  color: rgba(247, 245, 239, 0.75);
+  color: rgba(255, 255, 255, 0.85);
 }
 .is-pinned .note-text {
-  color: #f7f5ef;
+  color: #fff;
+  font-weight: 500; /* a touch heavier, to read clearly on the green */
 }
 .note-text {
   display: block;
