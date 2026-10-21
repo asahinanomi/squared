@@ -7,7 +7,7 @@ import { ViewSwitch } from './components/ZoomBar'
 import { Settings } from './screens/Settings'
 import { WhatMatters } from './screens/WhatMatters'
 import { QUESTION } from './lib/config'
-import { paintedFresh, todayIso } from './lib/dates'
+import { monthsAgo, paintedFresh, todayIso } from './lib/dates'
 import { fetchAllDays, saveColor, saveFramed, wipeDay, type Days } from './lib/days'
 import { mockDays } from './lib/mock'
 import {
@@ -231,6 +231,12 @@ export default function App() {
   useEffect(() => {
     loadNotes(date)
   }, [loadNotes, date])
+
+  // On this day: today's screen offers a glimpse of a year ago (or, if that's blank, a month ago).
+  const glimpseIso = [12, 1].map((n) => monthsAgo(todayIso(), n)).find((iso) => iso && days[iso]) ?? null
+  useEffect(() => {
+    if (glimpseIso) loadNotes(glimpseIso)
+  }, [loadNotes, glimpseIso])
 
   useEffect(() => {
     document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'
@@ -689,6 +695,16 @@ export default function App() {
               onFilled={onFilled}
               onWipe={onWipe}
               onFrame={onFrame}
+              glimpse={
+                date === todayIso() && glimpseIso
+                  ? {
+                      iso: glimpseIso,
+                      day: days[glimpseIso],
+                      note: (notes[glimpseIso] ?? []).find((n) => n.pinned) ?? notes[glimpseIso]?.at(-1),
+                      ago: glimpseIso === monthsAgo(todayIso(), 12) ? 'a year ago today' : 'a month ago today',
+                    }
+                  : undefined
+              }
               onPinNote={onPinNote}
               frameError={frameError}
               onZoomOut={outOfDay}

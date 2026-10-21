@@ -79,3 +79,10 @@ export const shortWeekday = (iso: string) =>
 /** Under a big day number: "Sat, Oct 2026" (the date written normally, around the number). */
 export const dayCaption = (iso: string) =>
   `${shortWeekday(iso)}, ${fromIso(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`
+
+/** The same date some months back ("2026-10-21" → "2025-10-21" for -12), or null if that month has no such day. */
+export function monthsAgo(iso: string, n: number): string | null {
+  const [y, m, d] = iso.split('-').map(Number)
+  const t = new Date(y, m - 1 - n, d)
+  return t.getDate() === d ? isoDate(t) : null
+}
