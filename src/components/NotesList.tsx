@@ -56,8 +56,11 @@ export function NotesList({ notes, onOpen, onAdd, onDelete }: Props) {
     writeHidden(!hidden)
     setHidden(!hidden)
   }
-  const older = notes.slice(0, -1)
-  const latest = notes.at(-1)
+  // A framed day's pinned note always comes first, and always shows; the rest keep their order.
+  const pinned = notes.filter((n) => n.pinned)
+  const rest = notes.filter((n) => !n.pinned)
+  const older = rest.slice(0, -1)
+  const latest = rest.at(-1)
   return (
     <div className="notes">
       {notes.length > 0 && (
@@ -81,6 +84,7 @@ export function NotesList({ notes, onOpen, onAdd, onDelete }: Props) {
           )}
         </div>
       )}
+      {pinned.map(row)}
       {!hidden && older.map(row)}
       {latest && row(latest)}
       <button className="note-add" onClick={onAdd}>

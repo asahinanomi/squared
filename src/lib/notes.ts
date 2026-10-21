@@ -2,7 +2,14 @@ import type { Paint } from './paints'
 import type { Days } from './days'
 import { supabase } from './supabase'
 
-export type Note = { id: string; date: string; body: string; writtenAt: string }
+export type Note = {
+  id: string
+  date: string
+  body: string
+  writtenAt: string
+  /** A framed day's note, "what do you want to remember?": always first, in the frame's green. */
+  pinned?: boolean
+}
 /** Notes per day (YYYY-MM-DD), oldest first. */
 export type Notes = Record<string, Note[]>
 /** The open "why?" box: a new note, or an existing one; after a failed save it carries the text and why. */
@@ -14,10 +21,31 @@ export type Why = {
   /** Just painted: the colour, and whether it's a new square (not a repaint) — for the reveal line. */
   settled?: Paint
   fresh?: boolean
+  /** A new note for a day just framed: it's pinned, and asks "what do you want to remember?". */
+  pinned?: boolean
 }
 
-type Row = { id: string; date: string; body: string; written_at: string }
-const toNote = (r: Row): Note => ({ id: r.id, date: r.date, body: r.body, writtenAt: r.written_at })
+type Row = { id: string; date: string; body: string; written_at: string; pinned?: boolean }
+const toNote = (r: Row): Note => ({
+  id: r.id,
+  date: r.date,
+  body: r.body,
+  writtenAt: r.written_at,
+  pinned: r.pinned || undefined,
+})
+
+// The columns to read, with pinned once migration 0014 has run (until then, notes load without it).
+let withPinned = true
+const cols = () => (withPinned ? 'id, date, body, written_at, pinned' : 'id, date, body, written_at')
+/** Run a query; if the pinned column doesn't exist yet, remember that and run it again without. */
+async function tryPinned<T extends { error: { code?: string } | null }>(run: () => PromiseLike<T>): Promise<T> {
+  const res = await run()
+  if (withPinned && res.error?.code === '42703') {
+    withPinned = false
+    return run()
+  }
+  return res
+}
 
 function groupByDay(list: Note[]): Notes {
   const out: Notes = {}
@@ -39,15 +67,13 @@ export async function fetchMonthNotes(iso: string): Promise<Notes | null> {
   const [y, m] = iso.split('-').map(Number)
   const first = `${iso.slice(0, 7)}-01`
   const last = `${iso.slice(0, 7)}-${String(new Date(y, m, 0).getDate()).padStart(2, '0')}`
-  const { data, error } = await supabase
-    .from('notes')
-    .select('id, date, body, written_at')
-    .gte('date', first)
-    .lte('date', last)
-    .order('written_at')
+  const sb = supabase
+  const { data, error } = await tryPinned(() =>
+    sb.from('notes').select(cols()).gte('date', first).lte('date', last).order('written_at'),
+  )
   if (error?.code === 'PGRST205' || error?.code === '42P01') return null
   if (error) throw error
-  return groupByDay((data as Row[]).map(toNote))
+  return groupByDay((data as unknown as Row[]).map(toNote))
 }
 
 /** Every note, all of a life (fetched a page at a time), or null if the notes table doesn't exist yet. */
@@ -55,51 +81,63 @@ export async function fetchAllNotes(): Promise<Notes | null> {
   if (!supabase) return null
   const all: Row[] = []
   for (let from = 0; ; from += 1000) {
-    const { data, error } = await supabase
-      .from('notes')
-      .select('id, date, body, written_at')
-      .order('written_at')
-      .range(from, from + 999)
+    const sb = supabase
+    const { data, error } = await tryPinned(() =>
+      sb
+        .from('notes')
+        .select(cols())
+        .order('written_at')
+        .range(from, from + 999),
+    )
     if (error?.code === 'PGRST205' || error?.code === '42P01') return null
     if (error) throw error
-    all.push(...(data as Row[]))
+    all.push(...(data as unknown as Row[]))
     if (!data || data.length < 1000) break
   }
   return groupByDay(all.map(toNote))
 }
 
 /** A note made on this device, shown at once while it saves. */
-export const draftNote = (date: string, body: string): Note => ({
+export const draftNote = (date: string, body: string, pinned?: boolean): Note => ({
   id: crypto.randomUUID(),
   date,
   body,
   writtenAt: new Date().toISOString(),
+  pinned,
 })
 
 /** Save a new note. Its id is made here, so a retried insert can't create a twin. */
 export async function addNote(note: Note): Promise<Note> {
   if (!supabase) return note
-  const { data, error } = await supabase
-    .from('notes')
-    .insert({ id: note.id, date: note.date, body: note.body })
-    .select('id, date, body, written_at')
-    .single()
+  const sb = supabase
+  const { data, error } = await tryPinned(() =>
+    sb
+      .from('notes')
+      .insert({ id: note.id, date: note.date, body: note.body, ...(withPinned && note.pinned ? { pinned: true } : {}) })
+      .select(cols())
+      .single(),
+  )
   if (error?.code === '23505') return note // the first try got through after all
   if (error) throw error
-  return toNote(data as Row)
+  return { ...toNote(data as unknown as Row), pinned: note.pinned }
 }
 
 /** Overwrite a note's text; the database refreshes its time. */
 export async function replaceNote(note: Note, body: string): Promise<Note> {
   if (!supabase) return { ...note, body, writtenAt: new Date().toISOString() }
-  const { data, error } = await supabase
-    .from('notes')
-    .update({ body })
-    .eq('id', note.id)
-    .select('id, date, body, written_at')
-    .single()
+  const sb = supabase
+  const { data, error } = await tryPinned(() =>
+    sb.from('notes').update({ body }).eq('id', note.id).select(cols()).single(),
+  )
   if (error) throw error
-  return toNote(data as Row)
+  return { ...toNote(data as unknown as Row), pinned: note.pinned }
+}
+
+/** Pin or unpin a note (a framed day's note; unframing the day unpins it). */
+export async function setPinned(note: Note, pinned: boolean): Promise<void> {
+  if (!supabase || !withPinned) return
+  const { error } = await supabase.from('notes').update({ pinned }).eq('id', note.id)
+  if (error) throw error
 }
 
 export async function deleteNote(note: Note): Promise<void> {

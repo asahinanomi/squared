@@ -298,7 +298,7 @@ export function Today(props: Props) {
               {/* A day that mattered most: framed in a darker green. Green days only. */}
               {day.color === 'green' && (
                 <button className="day-wipe" onClick={props.onFrame} aria-pressed={!!day.framed}>
-                  {day.framed ? 'framed · unframe' : 'frame this day'}
+                  {day.framed ? 'unframe' : 'frame this day'}
                 </button>
               )}
             </div>
@@ -316,6 +316,7 @@ export function Today(props: Props) {
                 onDelete={why.note ? () => onDeleteNote(why.note!) : undefined}
                 onCancel={onCloseWhy}
                 reveal={why.settled && reveal(why.settled, !!why.fresh)}
+                pinned={why.pinned || why.note?.pinned}
               />
             ) : (
               <>

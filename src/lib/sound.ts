@@ -232,6 +232,18 @@ function sand(a: AudioContext, out: AudioNode, at: number) {
   puff.stop(end + 0.25)
 }
 
+/** A day framed: a little magic — three kalimba notes rising, then a soft shimmer of high bells. */
+export function frameSound() {
+  const a = audio()
+  if (!a || !master) return
+  const out = a.createGain()
+  out.gain.value = SETTLE
+  out.connect(master)
+  const t = a.currentTime + 0.03
+  ;[1046.5, 1318.5, 1568].forEach((f, i) => kalimba(a, out, t + i * 0.11, f, 0.34))
+  for (let i = 0; i < 7; i++) kalimba(a, out, t + 0.36 + i * 0.045, 2093 * (1 + (i % 3) * 0.25), 0.07)
+}
+
 /** The square settles: its colour's sound — a drop, a knock, or sand. */
 export function settleSound(paint: Paint) {
   const a = audio()

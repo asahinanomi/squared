@@ -17,6 +17,8 @@ type Props = {
   onCancel: () => void
   /** Just painted: "your 3rd mattered day this month", with a tiny hourglass whose grains fall for a new square. */
   reveal?: { text: string; fresh: boolean }
+  /** A framed day's note: it asks "what do you want to remember?" instead of "why?". */
+  pinned?: boolean
 }
 
 // Gentle "why?" bubble under the square. Write as much as you like; Enter makes a new line.
@@ -30,6 +32,7 @@ export function WhyBubble({
   onDelete,
   onCancel,
   reveal,
+  pinned,
 }: Props) {
   const [text, setText] = useState(initial)
   const error = initialError
@@ -87,7 +90,7 @@ export function WhyBubble({
           </p>
         )}
         <label className="why-label" htmlFor="why">
-          why?
+          {pinned ? 'what do you want to remember?' : 'why?'}
         </label>
         <textarea
           id="why"

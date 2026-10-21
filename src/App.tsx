@@ -15,6 +15,7 @@ import {
   deleteNote,
   draftNote,
   fetchAllNotes,
+  setPinned,
   fetchMonthNotes,
   legacyNotes,
   replaceNote,
@@ -24,6 +25,7 @@ import {
 } from './lib/notes'
 import type { Paint } from './lib/paints'
 import { fetchProfile, saveProfile, type Profile } from './lib/profile'
+import { frameSound } from './lib/sound'
 import { fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/supabase'
 import { Idea } from './screens/Idea'
 import { Month } from './screens/Month'
@@ -278,6 +280,16 @@ export default function App() {
     const was = !!days[day]?.framed
     const put = (framed: boolean) => setDays((d) => (d[day] ? { ...d, [day]: { ...d[day], framed } } : d))
     put(!was)
+    if (!was) {
+      // A little magic, and the pinned note: what do you want to remember? (skippable)
+      frameSound()
+      if (!(notes[day] ?? []).some((n) => n.pinned)) setWhy({ pinned: true })
+    } else
+      // Unframed: its pinned note stays, as an ordinary note.
+      for (const n of (notes[day] ?? []).filter((n) => n.pinned)) {
+        swap(day, n.id, { ...n, pinned: undefined })
+        setPinned(n, false).catch((e) => console.error('Could not unpin note', e))
+      }
     saveFramed(day, !was).catch((e) => {
       console.error('Could not frame day', e)
       put(was)
@@ -335,7 +347,7 @@ export default function App() {
         reopen(note.date, { note, draft: text, error: failure(e, 'save') })
       }
     } else {
-      const draft = draftNote(date, text)
+      const draft = draftNote(date, text, why?.pinned)
       putNotes(draft.date, (l) => [...l, draft])
       try {
         swap(draft.date, draft.id, await addNote(draft))

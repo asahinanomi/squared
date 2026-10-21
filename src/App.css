@@ -794,6 +794,25 @@
   font-size: 14px;
   color: var(--ink-soft);
 }
+/* A framed day's pinned note: the frame's dark green, light text, "to remember" on top. */
+.note-card.is-pinned {
+  background: #53735c;
+  box-shadow: none;
+}
+.note-pin {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(247, 245, 239, 0.75);
+}
+.is-pinned .note-stamp {
+  color: rgba(247, 245, 239, 0.75);
+}
+.is-pinned .note-text {
+  color: #f7f5ef;
+}
 .note-text {
   display: block;
   margin: 0;
