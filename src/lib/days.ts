@@ -4,7 +4,7 @@ import { supabase } from './supabase'
 
 export type Day = {
   color: Paint
-  /** first painted after the next day ended (shown one shade lighter) */
+  /** first painted after the next day ended (its line says when) */
   backfilled?: boolean
   /** the date it was first painted on (repaints keep it): a journal's entry date */
   paintedOn?: string

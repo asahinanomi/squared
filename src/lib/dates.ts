@@ -24,7 +24,7 @@ export const plainDate = (iso: string) =>
 
 /**
  * A first paint is on time (full colour) on the day itself or any time the next day: still an honest
- * memory. Later, it is painted from further away and takes the lighter shade. The database decides
+ * memory. Later, its square says when it was painted. The database decides
  * for good (migration 0012); this is the same rule for the optimistic paint.
  */
 export function paintedFresh(date: string, now = new Date()): boolean {

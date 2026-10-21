@@ -5,7 +5,7 @@ import { ZoomBar } from '../components/ZoomBar'
 import { dayCaption, isoDate, longDate, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { addYears, daysBetween } from '../lib/life'
-import { paintHex, paintTint } from '../lib/paints'
+import { FRAME, paintHex } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 import { fitText, MIN_TEXT_PX, roundRect, textFits, useCanvasList } from '../lib/useCanvasList'
 import type { Focal } from '../lib/usePinch'
@@ -98,8 +98,8 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
           const ahead = iso > today
           roundRect(ctx, x, y, cell, cell, radius)
           ctx.fillStyle = day
-            ? day.backfilled
-              ? paintTint(day.color)
+            ? day.framed && day.color === 'green'
+              ? FRAME // too small for a frame: a framed day fills in the frame's darker green
               : paintHex(day.color)
             : ahead
               ? AHEAD

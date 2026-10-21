@@ -46,7 +46,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'What does “painted on time” mean?',
-      'You painted the day while it was still close: on the day itself, or the next day. Later than that, the square remembers when you painted it, and it’s a shade lighter. Memories soften too.',
+      'You painted the day while it was still close: on the day itself, or the next day. Later than that, the square remembers when you painted it.',
     ],
     [
       'Why does a square say “repainted”?',

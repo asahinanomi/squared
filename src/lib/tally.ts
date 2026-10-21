@@ -1,13 +1,13 @@
 import { fromIso, isoDate } from './dates'
 import type { Days } from './days'
-import { PAINTS } from './paints'
+import { FRAME, PAINTS } from './paints'
 
 /** One band of an aggregate square: a color and its share of the lived days (0–1). */
 export type Band = { fill: string; share: number }
 
 /**
- * The rising bands for a stretch of days (a month, a year): green from the bottom, then grey,
- * then red — each split into days painted on the day (solid) and painted later (lighter).
+ * The rising bands for a stretch of days (a month, a year): green from the bottom (its framed days first, in the
+ * frame's darker green, so they show even in a whole life), then grey, then red.
  * Shares are of the days already lived in the stretch, so unpainted days stay empty at the top.
  */
 export function bands(days: Days, from: string, to: string, today: string, born?: string): Band[] {
@@ -22,7 +22,7 @@ export function bands(days: Days, from: string, to: string, today: string, born?
     lived++
     const day = days[iso]
     if (day) {
-      const key = day.color + (day.backfilled ? ':tint' : '')
+      const key = day.color + (day.framed && day.color === 'green' ? ':framed' : '')
       counts.set(key, (counts.get(key) ?? 0) + 1)
     }
   }
@@ -31,8 +31,8 @@ export function bands(days: Days, from: string, to: string, today: string, born?
   for (const id of ['green', 'grey', 'red'] as const) {
     const p = PAINTS.find((x) => x.id === id)!
     for (const [suffix, fill] of [
+      [':framed', FRAME],
       ['', p.hex],
-      [':tint', p.tint],
     ] as const) {
       const n = counts.get(p.id + suffix) ?? 0
       if (n) out.push({ fill, share: n / lived })
