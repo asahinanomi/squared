@@ -8,6 +8,8 @@ type Props = {
   saved?: Paint
   /** Paint currently on the brush. */
   loaded: Paint | null
+  /** A day that mattered most: its edge drawn in a darker green, thicker. */
+  framed?: boolean
   /** The honest line under a painted square's word: when it was painted, or last changed. */
   stamp?: string
   onDryBrush: () => void
@@ -30,7 +32,7 @@ function brushCursor(tip: string) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 4 36, crosshair`
 }
 
-export function PaintCanvas({ saved, loaded, stamp, onDryBrush, onFilled, blank = 'paint your day' }: Props) {
+export function PaintCanvas({ saved, framed, loaded, stamp, onDryBrush, onFilled, blank = 'paint your day' }: Props) {
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const covered = useRef(new Uint8Array(GRID * GRID))
@@ -220,7 +222,7 @@ export function PaintCanvas({ saved, loaded, stamp, onDryBrush, onFilled, blank 
     <div className="paint-wrap">
       <div
         ref={box}
-        className={'canvas' + (settling ? ' is-settling' : '')}
+        className={'canvas' + (settling ? ' is-settling' : '') + (framed && saved === 'green' ? ' is-framed' : '')}
         style={saved ? ({ '--paint': paintHex(saved) } as React.CSSProperties) : undefined}
         aria-label={saved ? `Painted ${saved}` : 'Unpainted square'}
       >

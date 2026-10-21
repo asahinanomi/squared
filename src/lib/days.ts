@@ -13,6 +13,8 @@ export type Day = {
   noteAt?: string
   /** the date its colour last changed (a repaint in a new colour), if ever */
   changedOn?: string
+  /** a day that mattered most, framed (green days only) */
+  framed?: boolean
 }
 
 /**
@@ -38,6 +40,7 @@ type Row = {
   note: string | null
   note_at?: string | null
   changed_at?: string | null
+  framed?: boolean
 }
 
 const PAGE = 1000 // Supabase returns at most this many rows per request
@@ -52,11 +55,15 @@ export async function fetchAllDays(): Promise<Days> {
       .select(cols)
       .order('date')
       .range(from, from + PAGE - 1)
-  let cols = 'date, color, painted_on_day, created_at, changed_at, note, note_at'
+  let cols = 'date, color, painted_on_day, created_at, changed_at, framed, note, note_at'
   const out: Days = {}
   for (let from = 0; ; from += PAGE) {
     let { data, error } = await page(cols, from)
-    // Before migration 0012 there's no changed_at yet; load the squares without it.
+    // Before migrations 0012 and 0013 there's no changed_at or framed yet; load the squares without them.
+    if (error?.code === '42703' && cols.includes('framed')) {
+      cols = cols.replace(' framed,', '')
+      ;({ data, error } = await page(cols, from))
+    }
     if (error?.code === '42703' && cols.includes('changed_at')) {
       cols = cols.replace(' changed_at,', '')
       ;({ data, error } = await page(cols, from))
@@ -76,6 +83,7 @@ export async function fetchAllDays(): Promise<Days> {
         note: r.note ?? undefined,
         noteAt: r.note_at ?? undefined,
         changedOn: r.changed_at ? isoDate(new Date(r.changed_at)) : undefined,
+        framed: r.framed || undefined,
       }
     if (rows.length < PAGE) return out
   }
@@ -85,6 +93,13 @@ export async function fetchAllDays(): Promise<Days> {
 export async function wipeDay(date: string): Promise<void> {
   if (!supabase) return
   const { error } = await supabase.from('days').delete().eq('date', date)
+  if (error) throw error
+}
+
+/** Frame (or unframe) a painted day. */
+export async function saveFramed(date: string, framed: boolean): Promise<void> {
+  if (!supabase) return
+  const { error } = await supabase.from('days').update({ framed }).eq('date', date)
   if (error) throw error
 }
 

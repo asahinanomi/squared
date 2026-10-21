@@ -16,6 +16,9 @@ export const paintHex = (p: Paint) => PAINTS.find((x) => x.id === p)!.hex
 export const paintTint = (p: Paint) => PAINTS.find((x) => x.id === p)!.tint
 
 /** A deeper shade of a paint (its hue, mixed toward ink): the word written on its square, tone on tone. */
+/** A framed day's frame: its paint, a third of the way toward ink (#53735C for green). */
+export const FRAME = '#53735C'
+
 export function paintDeep(p: Paint): string {
   const n = parseInt(paintHex(p).slice(1), 16)
   const ink = [20, 20, 19]

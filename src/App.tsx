@@ -8,7 +8,7 @@ import { Settings } from './screens/Settings'
 import { WhatMatters } from './screens/WhatMatters'
 import { QUESTION } from './lib/config'
 import { paintedFresh, todayIso } from './lib/dates'
-import { fetchAllDays, saveColor, wipeDay, type Days } from './lib/days'
+import { fetchAllDays, saveColor, saveFramed, wipeDay, type Days } from './lib/days'
 import { mockDays } from './lib/mock'
 import {
   addNote,
@@ -128,7 +128,7 @@ export default function App() {
   const [listRes, setListRes] = useState<Resolution>('days')
   const [listZoomed, setListZoomed] = useState(false) // zoomed within the list since it opened
   // Only one slice's days (from the pie's "see them →"), until cleared or the list zooms out.
-  const [listOnly, setListOnly] = useState<Paint | 'unpainted' | null>(null)
+  const [listOnly, setListOnly] = useState<Paint | 'unpainted' | 'framed' | null>(null)
   // The list keeps this pointed at the day in the middle of the screen, for a pinch to open on.
   const listMid = useRef(() => todayIso())
   const daysNow = useRef<Days>({}) // the days as they are now, for callbacks that mustn't change with them
@@ -245,10 +245,18 @@ export default function App() {
         return {
           ...d,
           [date]: d[date]
-            ? { ...d[date], color, changedOn: d[date].color !== color ? todayIso() : d[date].changedOn }
+            ? {
+                ...d[date],
+                color,
+                changedOn: d[date].color !== color ? todayIso() : d[date].changedOn,
+                // A frame is for a day that mattered most: painting it another colour takes it off.
+                framed: color === 'green' ? d[date].framed : undefined,
+              }
             : { backfilled: !paintedFresh(date), paintedOn: todayIso(), color },
         }
       })
+      if (color !== 'green' && daysNow.current[date]?.framed)
+        saveFramed(date, false).catch((e) => console.error('Could not unframe day', e))
       saveColor(date, color).catch((e) => {
         console.error('Could not save color', e)
         setWhy(null)
@@ -264,6 +272,18 @@ export default function App() {
   )
 
   // Wipe: the square goes blank at once and leaves every count; put back if the save fails.
+  // Frame (or unframe) a day that mattered most: shown at once, saved in the background, put back if it fails.
+  const onFrame = () => {
+    const day = date
+    const was = !!days[day]?.framed
+    const put = (framed: boolean) => setDays((d) => (d[day] ? { ...d, [day]: { ...d[day], framed } } : d))
+    put(!was)
+    saveFramed(day, !was).catch((e) => {
+      console.error('Could not frame day', e)
+      put(was)
+    })
+  }
+
   const onWipe = () => {
     const day = date
     const before = days[day]
@@ -646,6 +666,7 @@ export default function App() {
               onDryBrush={onDryBrush}
               onFilled={onFilled}
               onWipe={onWipe}
+              onFrame={onFrame}
               onZoomOut={outOfDay}
               onMatters={() => {
                 setMattersFrom('today')
@@ -742,6 +763,7 @@ export default function App() {
                 key={`days-${listOnly}`}
                 only={listOnly ?? undefined}
                 onAll={() => setListOnly(null)}
+                onFramed={() => setListOnly('framed')}
                 mid={listMid}
                 head={listHead}
                 days={days}

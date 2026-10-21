@@ -4,7 +4,7 @@ import { glide, pulse } from '../lib/backToToday'
 import { addDays, isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Day, type Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
-import { paintHex, paintTint, WORD, type Paint } from '../lib/paints'
+import { FRAME, paintHex, paintTint, WORD, type Paint } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { monthsBetween, shiftMonth } from './Month'
 import { ChevronDown } from './Today'
@@ -28,11 +28,13 @@ type Props = {
   /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */
   head?: ReactNode
   /** Only the days of one colour (or the unpainted ones) — from a slice of the pie — and the way back to all. */
-  only?: Paint | 'unpainted'
+  only?: Paint | 'unpainted' | 'framed'
   onAll?: () => void
+  /** A card's "framed" tag: show only the framed days. */
+  onFramed?: () => void
 }
 
-const WORD_OF: Record<Paint | 'unpainted', string> = { ...WORD, unpainted: 'unpainted' }
+const WORD_OF: Record<Paint | 'unpainted' | 'framed', string> = { ...WORD, unpainted: 'unpainted', framed: 'framed' }
 /** About what two lines of a card's note hold on a phone. */
 const PREVIEW_CHARS = 80
 /** Months added at a time as you scroll toward either end. */
@@ -74,6 +76,7 @@ function DayCard({
   today,
   born,
   onPick,
+  onFramed,
 }: {
   iso: string
   day?: Day
@@ -81,6 +84,7 @@ function DayCard({
   today: string
   born?: string
   onPick: (iso: string) => void
+  onFramed?: () => void
 }) {
   const special = specialDay(iso, born)
   const stamp = day && stampLine(iso, day)
@@ -92,7 +96,7 @@ function DayCard({
   return (
     <article className={'day-card' + (day ? ' is-painted' : '') + (iso === today ? ' is-today' : '')} data-iso={iso}>
       <span
-        className="day-card-swatch"
+        className={'day-card-swatch' + (day?.framed ? ' is-framed' : '')}
         style={day ? { background: day.backfilled ? paintTint(day.color) : paintHex(day.color) } : undefined}
         aria-hidden="true"
       />
@@ -103,6 +107,12 @@ function DayCard({
           <sup>{suffix}</sup>
           {day && <span className="day-card-word"> · {WORD[day.color]}</span>}
         </button>
+        {/* A framed day: a small tag that shows only the framed ones. */}
+        {day?.framed && onFramed && (
+          <button className="day-card-framed" onClick={onFramed} aria-label="Show only framed days">
+            framed
+          </button>
+        )}
         {special && <span className="day-card-special">{special}</span>}
         {/* Only what's worth saying in a list: a late square, or one changed later (on time is the norm). */}
         {stamp && stamp !== 'painted on time' && <span className="day-card-painted">{stamp}</span>}
@@ -147,6 +157,7 @@ export function DaysList({
   head,
   only,
   onAll,
+  onFramed,
 }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
@@ -159,7 +170,8 @@ export function DaysList({
     to: start < current ? shiftMonth(start, 1) : current,
   }))
   const months = Array.from({ length: monthsBetween(range.from, range.to) + 1 }, (_, i) => shiftMonth(range.from, i))
-  const shown = (iso: string) => !only || (only === 'unpainted' ? !days[iso] : days[iso]?.color === only)
+  const shown = (iso: string) =>
+    !only || (only === 'unpainted' ? !days[iso] : only === 'framed' ? !!days[iso]?.framed : days[iso]?.color === only)
   const scroller = useRef<HTMLDivElement>(null)
   const heightBefore = useRef<number | null>(null) // set when months are added above, to keep your place
   const pending = useRef<string | null>(null) // a day to bring to the middle once it's drawn
@@ -268,7 +280,9 @@ export function DaysList({
       )}
       {only && onAll && (
         <button className="days-only" onClick={onAll} aria-label={`Show all days, not only ${WORD_OF[only]}`}>
-          {only !== 'unpainted' && <span className="days-only-dot" style={{ background: paintHex(only) }} />}
+          {only !== 'unpainted' && (
+            <span className="days-only-dot" style={{ background: only === 'framed' ? FRAME : paintHex(only) }} />
+          )}
           only {WORD_OF[only]} <span aria-hidden="true">×</span>
         </button>
       )}
@@ -302,6 +316,7 @@ export function DaysList({
                             today={today}
                             born={born}
                             onPick={onPick}
+                            onFramed={only === 'framed' ? undefined : onFramed}
                           />
                         </li>
                       ))}

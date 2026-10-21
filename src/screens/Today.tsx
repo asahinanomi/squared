@@ -29,6 +29,8 @@ type Props = {
   onDate: (iso: string) => void
   /** Wipe the day's square back to blank (after a confirm). */
   onWipe: () => void
+  /** Frame (or unframe) a day that mattered most. */
+  onFrame: () => void
   onLoad: (p: Paint) => void
   onDefine: () => void
   /** Saves a new note, or updates `note` (instantly; a failure reopens the box). */
@@ -276,6 +278,7 @@ export function Today(props: Props) {
               <PaintCanvas
                 key={`${date}:${day?.color ?? ''}`}
                 saved={day?.color}
+                framed={day?.framed}
                 stamp={day && stampLine(date, day)}
                 loaded={loaded}
                 onDryBrush={onDryBrush}
@@ -288,9 +291,17 @@ export function Today(props: Props) {
 
           {/* Painted the wrong day? A quiet way back to blank, right under the square. */}
           {day && !why && (
-            <button className="day-wipe" onClick={() => setWiping(true)}>
-              start over
-            </button>
+            <div className="day-links">
+              <button className="day-wipe" onClick={() => setWiping(true)}>
+                start over
+              </button>
+              {/* A day that mattered most: framed in a darker green. Green days only. */}
+              {day.color === 'green' && (
+                <button className="day-wipe" onClick={props.onFrame} aria-pressed={!!day.framed}>
+                  {day.framed ? 'framed · unframe' : 'frame this day'}
+                </button>
+              )}
+            </div>
           )}
 
           <div className="tray">

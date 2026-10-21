@@ -562,12 +562,37 @@
 .tray-rest[hidden] {
   display: none;
 }
+/* Under a painted square: "start over", and on a green day "frame this day", side by side. */
+.day-links {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+/* A framed day: the canvas edge in a darker green (its paint, a third toward ink), thicker. */
+.canvas.is-framed {
+  border: 5px solid #53735c;
+}
+.day-card .day-card-swatch.is-framed {
+  box-shadow: inset 0 0 0 3.5px #53735c !important; /* the same darker green frame, small */
+}
+.day-card-framed {
+  position: relative;
+  z-index: 1; /* above the card's stretched button */
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: #e9e9e3;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+}
 /* Wipe a square: a quiet text link just under a painted square. */
 .day-wipe {
   position: relative;
   z-index: 3; /* above the brush's reach around the square (a drag never clicks it) */
   display: block;
-  margin: 6px auto -8px;
+  margin: 6px 0 -8px;
   padding: 6px 12px;
   font-size: 14px;
   color: var(--muted);
