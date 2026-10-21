@@ -27,6 +27,7 @@ export function SignIn({
       </header>
       {/* The number first — a life is finite — then the question it raises. */}
       <div className="signin-message">
+        <p className="signin-there">there are</p>
         <p className="signin-number">29,200</p>
         <p className="signin-line">days in an 80-year life</p>
         <p className="signin-question">

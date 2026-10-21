@@ -184,6 +184,12 @@
   text-align: center;
 }
 /* The hero: how many days a life holds. */
+/* A small grey lead-in, like "that's" on how many squares: the number stays the hero. */
+.signin-there {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
 .signin-number {
   margin: 0;
   font-size: 56px;
