@@ -3455,3 +3455,124 @@ button.settings-row:active {
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
 }
+
+/* ---------- a painted month ---------- */
+/* A new month: the last one as a finished painting — a mosaic of its days on squared's canvas, signed. Centred:
+   it's a picture to look at. */
+.painting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.painting-kicker {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.painting-title {
+  margin: 4px 0 16px;
+  font-family: var(--font-hand);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.1;
+  transform: rotate(-3deg);
+}
+.painting-art {
+  position: relative;
+  width: min(100%, 260px);
+  padding: 9px 9px 30px;
+  box-sizing: border-box;
+  background: #ebe6da;
+  border: 2.5px solid var(--ink);
+  border-radius: 3px;
+  filter: drop-shadow(0 8px 14px rgba(20, 20, 19, 0.12));
+  animation: painting-hang 0.9s cubic-bezier(0.2, 1, 0.3, 1) both;
+}
+@keyframes painting-hang {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+}
+.painting-face {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.painting-face i {
+  display: block;
+  aspect-ratio: 1;
+  opacity: 0;
+  animation: painting-dab 0.35s ease-out forwards;
+}
+@keyframes painting-dab {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.painting-face i.is-none {
+  visibility: hidden;
+}
+.painting-face i.is-blank {
+  background: #efebe1;
+}
+.painting-face i.is-framed {
+  box-shadow:
+    inset 0 0 0 2px #53735c,
+    inset 0 0 0 3.5px #ebe6da;
+}
+@media (prefers-reduced-motion: reduce) {
+  .painting-art,
+  .painting-face i {
+    animation: none;
+    opacity: 1;
+  }
+}
+.painting-sign {
+  position: absolute;
+  right: 12px;
+  bottom: 4px;
+  font-family: var(--font-hand);
+  font-size: 19px;
+  font-weight: 600;
+  color: rgba(20, 20, 19, 0.6);
+  transform: rotate(-4deg);
+  transform-origin: right bottom;
+}
+.painting-counts {
+  margin: 16px 0 0;
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.painting-counts span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.painting-counts i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.painting-keep {
+  margin: 20px auto 0;
+  gap: 10px;
+}
+.painting-keep:disabled {
+  opacity: 0.5;
+}
+.painting-close {
+  margin-top: 10px;
+  padding: 6px;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
+}

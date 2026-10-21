@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { usePinch, type Focal } from './lib/usePinch'
 import type { Session } from '@supabase/supabase-js'
 import { MeaningSheet } from './components/MeaningSheet'
+import { MonthPainting } from './components/MonthPainting'
 import { Topbar } from './components/Topbar'
 import { ViewSwitch } from './components/ZoomBar'
 import { Settings } from './screens/Settings'
@@ -87,6 +88,9 @@ const legalAtStart = (
       ? 'questions'
       : null
 ) as 'privacy' | 'terms' | 'questions' | null
+// squared.today/?month shows last month's painting, to try it (it changes nothing).
+const tryMonth = new URLSearchParams(location.search).has('month')
+const PAINTED_KEY = 'squared.paintedMonth' // the month whose arrival last showed a painting
 const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
 
 export default function App() {
@@ -152,6 +156,8 @@ export default function App() {
   const [why, setWhy] = useState<Why | null>(null)
   const [nudge, setNudge] = useState(false)
   const [frameError, setFrameError] = useState<string | null>(null)
+  // A new month: the last one, shown once as a painting (on the first visit of the month, if it holds any squares).
+  const [paintedMonth, setPaintedMonth] = useState<string | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
@@ -231,6 +237,26 @@ export default function App() {
   useEffect(() => {
     loadNotes(date)
   }, [loadNotes, date])
+
+  useEffect(() => {
+    if ((userId && checking) || !Object.keys(days).length) return
+    const now = todayIso().slice(0, 7)
+    const last = (monthsAgo(`${now}-01`, 1) ?? '').slice(0, 7)
+    let seen: string | null = null
+    try {
+      seen = localStorage.getItem(PAINTED_KEY)
+    } catch {
+      /* storage unavailable: it may show again, which is harmless */
+    }
+    if (!tryMonth && seen === now) return
+    if (!Object.keys(days).some((iso) => iso.startsWith(last))) return
+    setPaintedMonth(last)
+    try {
+      localStorage.setItem(PAINTED_KEY, now)
+    } catch {
+      /* fine */
+    }
+  }, [checking, days, userId])
 
   // On this day: today's screen offers a glimpse of a year ago (or, if that's blank, a month ago).
   const glimpseIso = [12, 1].map((n) => monthsAgo(todayIso(), n)).find((iso) => iso && days[iso]) ?? null
@@ -909,6 +935,14 @@ export default function App() {
           )}
         </div>
         <MeaningSheet open={defining} onClose={() => setDefining(false)} />
+        {screen === 'today' && (
+          <MonthPainting
+            month={paintedMonth}
+            days={days}
+            name={(session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? '').split(' ')[0]}
+            onClose={() => setPaintedMonth(null)}
+          />
+        )}
       </div>
     </ViewSwitch.Provider>
   )
