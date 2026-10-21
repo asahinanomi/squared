@@ -169,7 +169,7 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
               aria-hidden="true"
             >
               <text x={l.x} y={l.word ? l.y - 1 : l.y + 5} className="pie-label-n">
-                {fmt(l.n)}
+                {l.pct === undefined ? fmt(l.n) : `${l.pct}%`}
               </text>
               {l.word && (
                 <text x={l.x} y={l.y + 13} className="pie-label-word">
@@ -245,7 +245,16 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
 }
 
 type Drawn = Slice & { a: number; b: number }
-type Label = { id: SliceId; x: number; y: number; n: number; onPaint: boolean; word: boolean; text?: string }
+type Label = {
+  id: SliceId
+  x: number
+  y: number
+  n: number
+  onPaint: boolean
+  word: boolean
+  text?: string
+  pct?: number
+}
 
 // A wedge holds its number when it's wide enough, and its word under it when wider still.
 const ROOM = 0.06
@@ -278,18 +287,21 @@ function labelR() {
   return R * 0.5
 }
 
-/** Whole life: one label per half — "days lived" in the middle of the lived side, "days ahead" in the future wedge. */
+/** Whole life: one label per half, as a share of the life — "days lived" in the middle of the lived side, "days
+ *  ahead" in the future wedge. The two always add up to 100%; the legend keeps the counts. */
 function halfLabels(drawn: Drawn[], lived: number, livedEnd: number): Label[] {
   const out: Label[] = []
+  const all = drawn.reduce((n, s) => n + s.count, 0)
+  const livedPct = all ? Math.round((lived / all) * 100) : 0
   const point = (turn: number) => at(turn, labelR()).split(' ').map(Number)
   if (lived && livedEnd >= ROOM) {
     const [x, y] = point(livedEnd / 2)
-    out.push({ id: 'unpainted', x, y, n: lived, onPaint: true, word: true, text: 'days lived' })
+    out.push({ id: 'unpainted', x, y, n: lived, onPaint: true, word: true, text: 'days lived', pct: livedPct })
   }
   const ahead = drawn.find((s) => s.id === 'ahead')
   if (ahead && ahead.b - ahead.a >= ROOM) {
     const [x, y] = point((ahead.a + ahead.b) / 2)
-    out.push({ id: 'ahead', x, y, n: ahead.count, onPaint: false, word: true, text: 'days ahead' })
+    out.push({ id: 'ahead', x, y, n: ahead.count, onPaint: false, word: true, text: 'days ahead', pct: 100 - livedPct })
   }
   return out
 }

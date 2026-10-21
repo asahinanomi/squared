@@ -2535,14 +2535,16 @@ button.settings-row:active {
 .settings-switch {
   flex-shrink: 0;
   display: grid;
-  width: 26px;
-  height: 26px;
-  color: var(--ink);
+  width: 20px;
+  height: 20px;
+  color: var(--faint);
 }
+/* The speaker: the size and quiet ink of the other rows' chevrons, ink only while sound is on. */
 .settings-row .settings-switch svg {
-  width: 26px;
-  height: 26px;
-  color: var(--ink);
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  color: var(--ink-soft);
 }
 .settings-row[aria-checked='false'] .settings-switch svg {
   color: var(--muted);
@@ -3544,6 +3546,11 @@ button.settings-row:active {
   .painting-art {
     animation: none;
   }
+}
+.painting-later {
+  margin: 22px 0 0;
+  font-size: 15px;
+  color: var(--ink-soft);
 }
 .painting-keep {
   margin: 20px auto 0;

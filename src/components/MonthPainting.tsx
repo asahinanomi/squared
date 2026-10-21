@@ -49,22 +49,26 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep }: P
         )}
         <p className="painting-title">{title}</p>
         <canvas ref={art} className="painting-art" role="img" aria-label={title} />
-        <button className="pill painting-keep" onClick={keep} disabled={busy}>
-          keep this painting
-          <svg
-            viewBox="0 0 24 24"
-            width="20"
-            height="20"
-            aria-hidden="true"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 4 V15 M7 10.5 L12 15.5 L17 10.5 M5 19.5 H19" />
-          </svg>
-        </button>
+        {inProgress(month) ? (
+          <p className="painting-later">Yours to keep once {month.length === 4 ? 'the year' : 'the month'} ends.</p>
+        ) : (
+          <button className="pill painting-keep" onClick={keep} disabled={busy}>
+            keep this painting
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 4 V15 M7 10.5 L12 15.5 L17 10.5 M5 19.5 H19" />
+            </svg>
+          </button>
+        )}
         <button className="painting-close" onClick={onClose}>
           close
         </button>
