@@ -614,6 +614,12 @@
   text-align: left; /* reads like a note to yourself, top to bottom */
   animation: fade-in 0.3s ease-out;
 }
+.torn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* one even rhythm between the three lines */
+  line-height: 1.4;
+}
 .torn p {
   margin: 0;
 }
@@ -623,16 +629,13 @@
 }
 /* In the app's own voice (Inter), so it sits with the palette instead of over it. */
 .torn-question {
-  margin-top: 2px !important;
   font-size: 16px;
   font-weight: 500;
   color: var(--ink);
 }
-/* The bridge to your list: a small label between two dotted hairlines. */
+/* One of your mattered entries, and the way to all of them. */
 .torn-mine {
-  margin-top: 6px !important;
   font-size: 16px;
-  line-height: 1.45;
   color: var(--ink-soft);
 }
 .torn-mine:has(.torn-pick) {
