@@ -41,7 +41,9 @@ export function MonthPainting({ month, days, name, onClose, arrived }: Props) {
   return (
     <Sheet open onClose={onClose}>
       <div className="painting">
-        {arrived && <p className="painting-kicker">a new month. here's the last one —</p>}
+        {arrived && (
+          <p className="painting-kicker">a new {month.length === 4 ? 'year' : 'month'}. here's the last one —</p>
+        )}
         <p className="painting-title">{title}</p>
         <canvas ref={art} className="painting-art" role="img" aria-label={title} />
         <button className="pill painting-keep" onClick={keep} disabled={busy}>

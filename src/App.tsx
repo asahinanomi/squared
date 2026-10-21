@@ -92,7 +92,9 @@ const legalAtStart = (
 ) as 'privacy' | 'terms' | 'questions' | null
 // squared.today/?month shows last month's painting, to try it (it changes nothing).
 const tryMonth = new URLSearchParams(location.search).has('month')
-const PAINTED_KEY = 'squared.paintedMonth' // the month whose arrival last showed a painting
+// squared.today/?year shows last year's painting, the January 1st moment, to try it.
+const tryYear = new URLSearchParams(location.search).has('year')
+const PAINTED_KEY = 'squared.paintedMonth' // the month whose arrival last showed a painting (January: the year's)
 const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
 
 export default function App() {
@@ -244,14 +246,18 @@ export default function App() {
   useEffect(() => {
     if ((userId && checking) || !Object.keys(days).length) return
     const now = todayIso().slice(0, 7)
-    const last = (monthsAgo(`${now}-01`, 1) ?? '').slice(0, 7)
+    // A new month shows the last one; a new year (January) shows the whole last year instead: day, month, year.
+    const last =
+      now.endsWith('-01') || tryYear
+        ? String(Number(now.slice(0, 4)) - 1)
+        : (monthsAgo(`${now}-01`, 1) ?? '').slice(0, 7)
     let seen: string | null = null
     try {
       seen = localStorage.getItem(PAINTED_KEY)
     } catch {
       /* storage unavailable: it may show again, which is harmless */
     }
-    if (!tryMonth && seen === now) return
+    if (!tryMonth && !tryYear && seen === now) return
     if (!Object.keys(days).some((iso) => iso.startsWith(last))) return
     setPaintedMonth(last)
     setPaintedArrived(true)
