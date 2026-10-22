@@ -144,18 +144,23 @@ function DayCard({
         {special && <span className="day-card-special">{special}</span>}
         {/* Only what's worth saying in a list: a late square, or one changed later (on time is the norm). */}
         {stamp && stamp !== 'painted on time' && <span className="day-card-painted">{stamp}</span>}
-        {!open && latest?.pinned && (
-          <span className={'day-card-pin' + (day?.framed ? '' : ' is-plain')}>
-            {day?.framed ? 'to remember' : 'pinned'}
-          </span>
-        )}
-        {!open && latest && <p className="day-card-note">{latest.body}</p>}
-        {more && !open && (
-          <button className="day-card-more" aria-expanded={false} onClick={() => setOpen(true)}>
-            {notes.length > 1 ? `more · ${notes.length} notes ⌄` : 'more ⌄'}
-          </button>
-        )}
       </div>
+      {/* The latest note under the square and date, the card's full width (more of it fits), two lines. */}
+      {!open && latest && (
+        <div className="day-card-preview">
+          {latest.pinned && (
+            <span className={'day-card-pin' + (day?.framed ? '' : ' is-plain')}>
+              {day?.framed ? 'to remember' : 'pinned'}
+            </span>
+          )}
+          <p className="day-card-note">{latest.body}</p>
+          {more && (
+            <button className="day-card-more" aria-expanded={false} onClick={() => setOpen(true)}>
+              {notes.length > 1 ? `more · ${notes.length} notes ⌄` : 'more ⌄'}
+            </button>
+          )}
+        </div>
+      )}
       {/* Open, the notes take the card's full width, each its own block: its time, then its words. */}
       {open && (
         <div className="day-card-notes">
