@@ -1061,6 +1061,7 @@ export default function App() {
               name={painter}
               onClose={() => setPaintedMonth(null)}
               onKeep={(p) => keepPainting(p, session?.user.user_metadata?.kept_paintings).then(setKept)}
+              kept={!!paintedMonth && kept.includes(paintedMonth)}
             />
           )}
           {!demo && <SyncStatus />}

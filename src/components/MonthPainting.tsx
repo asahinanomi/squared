@@ -15,11 +15,13 @@ type Props = {
   onClose: () => void
   /** Kept: it hangs in my paintings. */
   onKeep?: (month: string) => void
+  /** Already kept: the button only downloads it again. */
+  kept?: boolean
 }
 
 // A new month: the last one, shown once as a finished painting (see lib/painting), framed and signed. Any finished
 // month opens it again from its picture icon; kept ones hang in my paintings (settings); this month shows "so far", unsigned. No counts: it's a painting, not a score. "keep this painting" saves it as a picture (on a phone, the share sheet: Save to Photos, or send it).
-export function MonthPainting({ month, days, name, onClose, arrived, onKeep }: Props) {
+export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kept }: Props) {
   const [busy, setBusy] = useState(false)
   const art = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
@@ -31,7 +33,7 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep }: P
   const title = `${monthName(month)}, ${inProgress(month) ? 'so far' : 'painted'}`
   const keep = async () => {
     setBusy(true)
-    onKeep?.(month)
+    if (!kept) onKeep?.(month)
     try {
       const blob = await paintingImage(month, days, name)
       const file = new File([blob], `squared-${month}.png`, { type: 'image/png' })
@@ -56,7 +58,7 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep }: P
           <p className="painting-later">Yours to keep once {month.length === 4 ? 'the year' : 'the month'} ends.</p>
         ) : (
           <button className="pill painting-keep" onClick={keep} disabled={busy}>
-            keep this painting
+            {kept ? 'download' : 'keep this painting'}
             <svg
               viewBox="0 0 24 24"
               width="20"
