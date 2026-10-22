@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 22, 2026, 18:05 UTC_
+_last updated Oct 22, 2026, 18:25 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -177,6 +177,7 @@ Design: board "16 · Pie — line art (final)". Built step by step; I check each
 ## Home
 
 - **Where you land** (`src/screens/Home.tsx`): squared opens on today, unless your squares are set and today is already painted, or nothing is painted yet (back after onboarding without a first square): then it opens on home. Someone new goes home after the welcome (first steps). The logo leads home from every screen. The menu's "today" leads to today. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (B, C and D).
+- **Before the first square** (lab K): squares set, nothing painted (wiping your only square brings it back). Home is just: the greeting; your days ahead as the hero ("10,962 / days ahead of you / Make each one meaningful, starting with today.", 48px, the same as onboarding's count); the question in its card with one black pill, "paint your first square", and a quiet "or paint yesterday" (from the day after your birthday on); and "getting started · 2 of 4": learned what squared is · named what matters · set how many squares · paint your first square. Done steps get a filled ink tick in calm grey (no strikethrough); open ones are ink with an empty circle and a chevron, and each opens its place. Explore squared, the life card and the rest wait until the first square.
 - **Top to bottom**: a greeting ("Good evening, nomi.", or "Welcome." for someone new), centred. If today is painted (B): the life card first ("a life ›", "10,962 days ahead", a lived/ahead bar with "65% lived · 35% ahead", then how the painted days split, "603 painted: 310 mattered"; tap for a life in days), then today's square, signed, with its stamp ("painted on time") and "open today". If it isn't (C): one card, "today is still blank", the question, and "paint today" (the one black pill); the life card comes lower. Then **explore squared** (say why, write what matters, frame a day, keep a painting, see a life; one tap each, and a done or tried one leaves the list, remembered in `squared.tried`; only for the first week after onboarding). Then **a month and a year ago today** (each its square, word and note, up to two lines; a tap opens that day), and **this month and this year so far** as paintings, side by side, each titled above ("October, so far", "2026, so far") with its count under; a tap opens it. No streaks, no scores. The pie stays where it is for now; it moves to a life dashboard later (see `docs/future-ideas.md`).
 
 ## Saving: this phone first, then the account

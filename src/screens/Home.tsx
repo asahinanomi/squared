@@ -1,5 +1,5 @@
 import { PaintingThumb } from '../components/PaintingThumb'
-import { shortDateParts, todayIso } from '../lib/dates'
+import { addDays, shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
 import type { Notes } from '../lib/notes'
@@ -15,7 +15,7 @@ type Props = {
   days: Days
   notes: Notes
   profile: Profile | null
-  /** The few things squared needs (how many squares, a first square): shown while you're new (squares not set). */
+  /** Getting started (onboarding's steps and the first square): shown until the first square is painted. */
   steps: Step[]
   /** What else squared can do, one tap each to try; a tried one leaves the list. */
   discover: { label: string; sub: string; swatch: React.CSSProperties; go: () => void }[]
@@ -41,11 +41,11 @@ const DateLine = ({ iso }: { iso: string }) => {
   )
 }
 
-// Home: where you land once today is painted (and on your first visits); the logo leads here any time. Before
-// you paint, today leads: the question and "paint today". Then a month and a year ago today, your life in one
-// line, and this month and year so far, as paintings. For someone new (how many squares not set yet): first steps
-// and what to explore. Every
-// card is a door. No streaks, no scores.
+// Home: where you land once today is painted (and when nothing is painted yet); the logo leads here any time.
+// Before you paint, today leads: the question and "paint today". Then a month and a year ago today, your life in
+// one line, and this month and year so far, as paintings. Every card is a door. No streaks, no scores.
+// Before the first square (squares set, nothing painted): only your days ahead, the question with "paint your
+// first square", and getting started, so there's one thing to do. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (K)
 export function Home({ name, days, notes, profile, steps, discover, onToday, onLife, onDay, onPainting }: Props) {
   const today = todayIso()
   const painted = days[today]
@@ -54,8 +54,8 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
   const hasMonth = Object.keys(days).some((d) => d.startsWith(month))
   const hasYear = Object.keys(days).some((d) => d.startsWith(year))
   const count = (p: string) => Object.keys(days).filter((d) => d.startsWith(p) && d <= today).length
-  // New: how many squares isn't set yet. First steps show until then.
-  const stepsLeft = !profile
+  // Before the first square: squares set, nothing painted (wiping the only square brings it back).
+  const first = !!profile && Object.keys(days).length === 0
 
   const life =
     profile &&
@@ -128,11 +128,56 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
     </div>
   )
 
+  if (first) {
+    const yesterday = addDays(today, -1)
+    const done = steps.filter((st) => st.done).length
+    return (
+      <main className="home">
+        <p className="home-greet">{greeting(name)}</p>
+        <div className="home-hero">
+          <p className="home-hero-n">{fmt(lifeCounts(profile.born, profile.lifespan, today).left)}</p>
+          <p className="home-hero-c">days ahead of you</p>
+          <p className="home-hero-m">Make each one meaningful, starting with today.</p>
+        </div>
+        <div className="home-card home-ask">
+          <p className="home-q">
+            did I spend <u>Today</u> meaningfully?
+          </p>
+          <button className="pill" onClick={onToday}>
+            paint your first square
+          </button>
+          {yesterday >= profile.born && (
+            <button className="home-yesterday" onClick={() => onDay(yesterday)}>
+              or paint yesterday
+            </button>
+          )}
+        </div>
+        <section className="home-card">
+          <h2 className="home-head">
+            getting started
+            <small className="home-of">
+              {done} of {steps.length}
+            </small>
+          </h2>
+          <ul className="home-steps">
+            {steps.map((st) => (
+              <li key={st.label}>
+                <button onClick={st.go} disabled={st.done} className={st.done ? 'is-done' : undefined}>
+                  <span className="home-box" aria-hidden="true" />
+                  {st.label}
+                  {!st.done && <Chevron dir="right" />}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
+    )
+  }
+
   return (
     <main className="home">
-      <p className="home-greet">
-        {stepsLeft && !Object.keys(days).length ? `Welcome${name ? `, ${name}` : ''}.` : greeting(name)}
-      </p>
+      <p className="home-greet">{greeting(name)}</p>
 
       {painted ? (
         <>
@@ -141,22 +186,6 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
         </>
       ) : (
         todayCard
-      )}
-
-      {stepsLeft && (
-        <section className="home-card">
-          <h2 className="home-head">first steps</h2>
-          <ul className="home-steps">
-            {steps.map((s) => (
-              <li key={s.label}>
-                <button onClick={s.go} disabled={s.done} className={s.done ? 'is-done' : undefined}>
-                  <span className="home-box" aria-hidden="true" />
-                  {s.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
       )}
 
       {discover.length > 0 && (

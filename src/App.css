@@ -3995,7 +3995,57 @@ button.home-card:active {
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
-/* first steps: only what squared needs */
+/* Before the first square: your days ahead as the hero, then the question, then getting started (done steps
+   ticked in calm grey, the open one in ink). */
+.home-hero {
+  margin: 14px 0 6px;
+  text-align: center;
+}
+.home-hero p {
+  margin: 0;
+}
+.home-hero-n {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.home-hero-c {
+  margin-top: 8px !important;
+  font-size: 17px;
+  color: var(--ink-soft);
+}
+.home-hero-m {
+  margin: 14px auto 0 !important;
+  max-width: 280px;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  text-wrap: balance;
+}
+/* "paint your first square" is longer than the usual pill: it keeps one line, a little wider. */
+.home-ask .pill {
+  width: auto;
+  min-width: min(100%, 250px);
+  padding: 0 28px;
+  white-space: nowrap;
+}
+.home-yesterday {
+  margin-top: 12px;
+  padding: 4px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
+}
+.home-of {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+/* getting started */
 .home-steps,
 .home-discover {
   list-style: none;
@@ -4016,15 +4066,24 @@ button.home-card:active {
   flex: none;
   width: 20px;
   height: 20px;
-  border-radius: 6px;
-  box-shadow: inset 0 0 0 1.5px var(--faint);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--ink);
   display: grid;
   place-items: center;
 }
 .home-steps .is-done {
   color: var(--muted);
-  text-decoration: line-through;
-  text-decoration-color: var(--faint);
+  opacity: 1; /* done, not unavailable: no faded look */
+  cursor: default;
+}
+.home-steps button:not(.is-done) {
+  font-weight: 600;
+}
+.home-steps button svg {
+  margin-left: auto;
+  width: 18px;
+  height: 18px;
+  color: var(--faint);
 }
 .home-steps .is-done .home-box {
   background: var(--ink);

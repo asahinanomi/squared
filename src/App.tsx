@@ -847,6 +847,15 @@ export default function App() {
                 notes={notes}
                 profile={profile}
                 steps={[
+                  { label: 'learned what squared is', done: true, go: goToday },
+                  {
+                    label: 'named what matters',
+                    done: mattersWritten,
+                    go: () => {
+                      setMattersFrom('home')
+                      setScreenValue('matters')
+                    },
+                  },
                   {
                     label: 'set how many squares',
                     done: !!profile,
