@@ -117,12 +117,13 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
   const week = Array.from({ length: 7 }, (_, i) => addDays(today, i - 6)).filter((d) => !profile || d >= profile.born)
   const inColour = week.filter((d) => days[d]).length
   const full = inColour === week.length
-  // A full week's rainbow, in the colours you painted it: the most painted outermost; a colour short, the first
-  // one's lighter shades fill in.
+  // A full week's rainbow, in the colours you painted it.
   const mine = PAINTS.map((p) => ({ p, n: week.filter((d) => days[d]?.color === p.id).length }))
     .filter((x) => x.n)
     .sort((a, b) => b.n - a.n)
-  const arcs = [0, 1, 2].map((i) => mine[i]?.p.hex ?? (i === 1 ? mine[0]?.p.soft : `${mine[0]?.p.soft}99`))
+  // Outer: the most painted, middle: the next, inner: the least. Two colours: the bigger takes two arcs; one: all three.
+  const order = mine.length === 3 ? [0, 1, 2] : mine.length === 2 ? [0, 0, 1] : [0, 0, 0]
+  const arcs = order.map((i) => mine[i]?.p.hex)
   const weekCard = (
     <section className={'home-card home-week' + (full ? ' is-full' : '')}>
       <h2 className="home-head">
