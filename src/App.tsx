@@ -162,6 +162,7 @@ export default function App() {
   useEffect(() => setKept(keptPaintings(session?.user.user_metadata?.kept_paintings)), [session])
   const [paintedArrived, setPaintedArrived] = useState(false) // shown by the new month, not opened from the month view
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [profileReady, setProfileReady] = useState(false)
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
   const [checking, setChecking] = useState(() => !legalAtStart && !tryWelcome && !trySquaresAtStart && !welcomed())
@@ -191,7 +192,10 @@ export default function App() {
 
   // The demo keeps its profile on this device.
   useEffect(() => {
-    if (demo) fetchProfile().then(setProfile)
+    if (demo)
+      fetchProfile()
+        .then(setProfile)
+        .finally(() => setProfileReady(true))
   }, [])
 
   // The outbox sends only the signed-in person's changes.
@@ -207,7 +211,10 @@ export default function App() {
       return
     }
     fetchQuestion().then((q) => q && setQuestion(q))
-    fetchProfile().then(setProfile)
+    fetchProfile()
+      .then(setProfile)
+      .catch(() => undefined)
+      .finally(() => setProfileReady(true))
     notesLoaded.current = new Set([todayIso().slice(0, 7)])
     Promise.all([fetchAllDays(), fetchMonthNotes(todayIso())])
       .then(([d, n]) => {
@@ -416,6 +423,15 @@ export default function App() {
   useEffect(() => {
     if (screen === 'life') markTried('life')
   }, [screen]) // eslint-disable-line react-hooks/exhaustive-deps
+  // Where you land: today, unless today is already painted and you've been here before (your squares are set):
+  // then home. Decided once, when the days and the profile are in.
+  const landed = useRef(false)
+  useEffect(() => {
+    if (landed.current || !signedIn || (userId && checking) || !profileReady) return
+    landed.current = true
+    if (screen === 'today' && date === todayIso() && days[todayIso()] && profile) setScreenValue('home')
+  }, [signedIn, userId, checking, profileReady]) // eslint-disable-line react-hooks/exhaustive-deps
+
   if (session === undefined || (userId && checking)) return null
   if (!signedIn)
     return ideaOut ? (
