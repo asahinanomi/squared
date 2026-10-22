@@ -3610,3 +3610,64 @@ button.settings-row:active {
   line-height: 1.5;
   color: var(--ink-soft);
 }
+
+/* Finger-sized targets: small icon buttons keep their look, but an invisible margin around each reaches 44px
+   (the switch's segments only grow up and down, so neighbours never overlap). */
+.logo-btn,
+.zoombar-buttons button,
+.today-zoom button:not(.zoombar-today),
+.zoombar-switch button,
+.zoombar-recenter,
+.lifeglass {
+  position: relative;
+}
+.logo-btn::after,
+.zoombar-buttons button::after,
+.today-zoom button:not(.zoombar-today)::after,
+.zoombar-recenter::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+}
+.zoombar-switch button::after {
+  content: '';
+  position: absolute;
+  inset: -7px 0;
+}
+.lifeglass::after {
+  content: '';
+  position: absolute;
+  inset: 0 -11px;
+}
+.life-title-row .lifeglass::after {
+  inset: -6px -13px;
+}
+.life-title-row .lifeglass::before {
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+}
+/* The life glass, pressed: the controls' soft capsule behind it, as on the painting icon. */
+.lifeglass::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 50%;
+  background: #e9e9e3;
+  opacity: 0;
+  transform: scale(0.9);
+  transition:
+    opacity 0.15s,
+    transform 0.15s;
+}
+.lifeglass:active::before {
+  opacity: 1;
+  transform: none;
+}
+.lifeglass svg {
+  position: relative; /* above its capsule */
+}

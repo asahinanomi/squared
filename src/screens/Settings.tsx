@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { fromIso, todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
 import type { Profile } from '../lib/profile'
-import { setSoundOn, soundOn } from '../lib/sound'
+import { setSoundOn, soundOn, soundOnChime } from '../lib/sound'
 import { Chevron, SpeakerIcon } from './Today'
 
 type Props = {
@@ -44,6 +44,7 @@ export function Settings({
   const toggleSound = () => {
     setSoundOn(!sound)
     setSound(!sound)
+    if (!sound) soundOnChime() // back on: you hear it
   }
   return (
     <main className="settings">

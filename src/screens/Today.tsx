@@ -11,7 +11,7 @@ import { addDays, longDate, ordinal, shortDateParts, todayIso } from '../lib/dat
 import { stampLine, type Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, squareFill, WORD, type Paint } from '../lib/paints'
-import { setSoundOn, soundOn } from '../lib/sound'
+import { setSoundOn, soundOn, soundOnChime } from '../lib/sound'
 import { loadMatters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 
@@ -436,6 +436,7 @@ export function Today(props: Props) {
             onClick={() => {
               setSoundOn(!sound)
               setSound(!sound)
+              if (!sound) soundOnChime() // back on: you hear it
             }}
           >
             <SpeakerIcon on={sound} />

@@ -233,6 +233,18 @@ function sand(a: AudioContext, out: AudioNode, at: number) {
 }
 
 /** A day framed: a little magic — three kalimba notes rising, then a soft shimmer of high bells. */
+/** Sound turned on: two soft rising plucks, so you hear that it's back. */
+export function soundOnChime() {
+  const a = audio()
+  if (!a || !master) return
+  const out = a.createGain()
+  out.gain.value = SETTLE
+  out.connect(master)
+  const t = a.currentTime + 0.03
+  kalimba(a, out, t, 1046.5, 0.3)
+  kalimba(a, out, t + 0.1, 1568, 0.26)
+}
+
 export function frameSound() {
   const a = audio()
   if (!a || !master) return
