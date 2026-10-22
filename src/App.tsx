@@ -10,8 +10,7 @@ import { WhatMatters } from './screens/WhatMatters'
 import { QUESTION } from './lib/config'
 import { monthsAgo, paintedFresh, todayIso } from './lib/dates'
 import { fetchAllDays, type Days } from './lib/days'
-import { enqueue, overlayDays, overlayNotes, setOutboxUser } from './lib/outbox'
-import { claimDevice } from './lib/owner'
+import { commit, overlayDays, overlayNotes, save as enqueue, takeOldOutbox, type Op } from './lib/save'
 import { reportError } from './lib/report'
 import { mockDays } from './lib/mock'
 import { draftNote, fetchAllNotes, fetchMonthNotes, legacyNotes, type Note, type Notes, type Why } from './lib/notes'
@@ -37,12 +36,12 @@ import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
 import { Welcome } from './screens/Welcome'
-import { loadMatters, setMattersOwner, syncMatters } from './lib/matters'
+import { adoptDeviceCopy, fetchMatters, noMatters, saveMatters, written, type Matters } from './lib/matters'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import { Paintings } from './screens/Paintings'
 import { Home } from './screens/Home'
-import { keepPainting, keptPaintings, unkeepPainting } from './lib/kept'
+import { adoptKept, keptPaintings, saveKept } from './lib/kept'
 import { OpenPainting } from './components/PaintingButton'
 import { SyncStatus } from './components/SyncStatus'
 import { Waiting } from './components/Waiting'
@@ -94,6 +93,8 @@ const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
 
 export default function App() {
   const ownerRef = useRef<string | null>(null)
+  const oldOps = useRef<Op[]>([])
+  const [loadFailed, setLoadFailed] = useState(false)
   // undefined = still checking; null = signed out.
   const [session, setSession] = useState<Session | null | undefined>(demo ? null : undefined)
   const [demoIn, setDemoIn] = useState(false)
@@ -160,6 +161,12 @@ export default function App() {
   // The paintings you kept, for my paintings (with your account, and on this device).
   const [kept, setKept] = useState<string[]>([])
   useEffect(() => setKept(keptPaintings(session?.user.user_metadata?.kept_paintings)), [session])
+  // Kept or taken down: on the wall at once, and saved to the account like every other change.
+  const putKept = (next: string[]) => {
+    setKept(next)
+    if (demo) void saveKept(next)
+    else commit('kept', () => saveKept(next))
+  }
   const [paintedArrived, setPaintedArrived] = useState(false) // shown by the new month, not opened from the month view
   const [profile, setProfile] = useState<Profile | null>(null)
   const [profileReady, setProfileReady] = useState(false)
@@ -206,15 +213,29 @@ export default function App() {
         .finally(() => setProfileReady(true))
   }, [])
 
-  // The outbox sends only the signed-in person's changes.
-  useEffect(() => setOutboxUser(userId ?? null), [userId])
-  // Whose device copies these are: another account's are set aside, never sent up (a shared device, or trying a
-  // new account). Runs before anything below reads them.
+  // Changes left waiting on this device by the old outbox (before saving went online-first): taken out once per
+  // account, sent, and laid over what the account loads.
   if (userId && ownerRef.current !== userId) {
     ownerRef.current = userId
-    setMattersOwner(userId)
-    claimDevice(userId)
+    oldOps.current = takeOldOutbox(userId)
+    for (const op of oldOps.current) enqueue(op)
   }
+  // What matters, from the account (any lines a device kept from before are added to it once).
+  const [matters, setMatters] = useState<Matters>(noMatters)
+  const refreshMatters = useCallback(() => {
+    if (!userId && !demo) return
+    fetchMatters()
+      .then((m) => (userId ? adoptDeviceCopy(userId, m) : m))
+      .then(setMatters)
+      .catch((e) => console.error('Could not load what matters', e))
+  }, [userId])
+  useEffect(() => {
+    refreshMatters()
+    if (userId)
+      adoptKept(session?.user.user_metadata?.kept_paintings)
+        .then((k) => k && setKept(k))
+        .catch(() => undefined)
+  }, [userId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load the question, every painted day, this month's notes and the profile for whoever is signed in.
   useEffect(() => {
@@ -233,13 +254,14 @@ export default function App() {
     notesLoaded.current = new Set([todayIso().slice(0, 7)])
     Promise.all([fetchAllDays(), fetchMonthNotes(todayIso())])
       .then(([d, n]) => {
-        // This device's unsent changes lie over what the account has, so nothing seems to vanish.
-        setDays(overlayDays(d))
-        setNotes(overlayNotes(n ?? legacyNotes(d)))
+        setDays(overlayDays(d, oldOps.current))
+        setNotes(overlayNotes(n ?? legacyNotes(d), oldOps.current))
+        setLoadFailed(false)
       })
       .catch((e) => {
         console.error('Could not load days', e)
         reportError('load days', e)
+        setLoadFailed(true) // never show an empty life in place of one that didn't load
       })
       .finally(() => {
         setChecking(false)
@@ -255,7 +277,7 @@ export default function App() {
       if (!userId || notesLoaded.current.has(m)) return
       notesLoaded.current.add(m)
       fetchMonthNotes(iso)
-        .then((n) => n && setNotes((all) => ({ ...all, ...overlayNotes(n, (d) => d.startsWith(m)) })))
+        .then((n) => n && setNotes((all) => ({ ...all, ...overlayNotes(n, oldOps.current) })))
         .catch((e) => {
           notesLoaded.current.delete(m)
           console.error('Could not load notes', e)
@@ -395,18 +417,16 @@ export default function App() {
     }
   }, [screen, loadNotes])
 
-  // Home's lists. What matters is written (on this device, or synced from the account).
-  // Checked against the account too (this phone's copy can be empty), and again whenever home opens.
-  const written = (m: { meaningful: unknown[]; wasted: unknown[] }) => m.meaningful.length > 0 || m.wasted.length > 0
-  const [mattersWritten, setMattersWritten] = useState(() => written(loadMatters()))
+  // Home's and today's lists come from the account: fresh whenever home or what matters opens, or the app returns.
+  const mattersWritten = written(matters)
   useEffect(() => {
-    if (!userId && !demo) return
-    if (screen !== 'home') return
-    setMattersWritten(written(loadMatters()))
-    syncMatters(loadMatters())
-      .then((m) => setMattersWritten(written(m)))
-      .catch(() => undefined)
-  }, [userId, screen])
+    if (screen === 'home') refreshMatters()
+  }, [screen]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const back = () => document.visibilityState === 'visible' && refreshMatters()
+    document.addEventListener('visibilitychange', back)
+    return () => document.removeEventListener('visibilitychange', back)
+  }, [refreshMatters])
   // Where you land: today, unless your squares are set and today is already painted, or nothing is painted yet
   // (back before a first square): then home. Decided once, when the days and the profile are in.
   // Nothing shows until then (no flash of today before home); if loading drags past 4s, today it is.
@@ -462,6 +482,16 @@ export default function App() {
     return () => window.removeEventListener('popstate', back)
   }, [])
 
+  // Your squares couldn't load: say so, rather than showing an empty life in its place.
+  if (loadFailed && userId)
+    return (
+      <main className="load-failed">
+        <p>Couldn't load your squares. Check your connection.</p>
+        <button className="pill" onClick={() => location.reload()}>
+          try again
+        </button>
+      </main>
+    )
   if (session === undefined || (userId && checking) || (signedIn && !landed && screen === 'today'))
     return session === undefined && backFromGoogle ? (
       <Waiting line="signing you in with Google…" later="still signing you in, a slow connection can take a moment" />
@@ -802,6 +832,7 @@ export default function App() {
               />
             ) : screen === 'today' ? (
               <Today
+                matters={matters}
                 question={question}
                 born={profile?.born}
                 date={date}
@@ -837,7 +868,7 @@ export default function App() {
                 days={days}
                 name={painter}
                 onBack={() => setScreenValue('settings')}
-                onRemove={(p) => unkeepPainting(p, session?.user.user_metadata?.kept_paintings).then(setKept)}
+                onRemove={(p) => putKept(kept.filter((x) => x !== p))}
                 onOpen={(m) => {
                   setPaintedArrived(false)
                   setPaintedMonth(m)
@@ -884,6 +915,10 @@ export default function App() {
                   await saveProfile(p)
                   setProfile(p)
                 }}
+                onMatters={(m) => {
+                  saveMatters(matters, m)
+                  setMatters(m)
+                }}
                 onDone={() => {
                   if (tryWelcome) history.replaceState(null, '', location.pathname)
                   goToday() // the first square, with the ghost brush showing how
@@ -913,7 +948,7 @@ export default function App() {
                   days,
                   // Every note (the day screen loads them a month at a time); the demo has only what's on screen.
                   notes: (await fetchAllNotes()) ?? (demo ? notes : legacyNotes(days)),
-                  matters: await syncMatters(loadMatters()).catch(() => loadMatters()),
+                  matters: await fetchMatters().catch(() => matters),
                   profile,
                 })}
               />
@@ -929,6 +964,8 @@ export default function App() {
                 backLabel={mattersFrom === 'idea' ? 'the idea' : mattersFrom}
                 onPaint={goToday}
                 paintedToday={!!days[todayIso()]}
+                initial={matters}
+                onSaved={setMatters}
               />
             ) : screen === 'list' ? (
               listRes === 'days' ? (
@@ -1069,7 +1106,7 @@ export default function App() {
               days={days}
               name={painter}
               onClose={() => setPaintedMonth(null)}
-              onKeep={(p) => keepPainting(p, session?.user.user_metadata?.kept_paintings).then(setKept)}
+              onKeep={(p) => putKept([...kept.filter((x) => x !== p), p].sort().reverse())}
               kept={!!paintedMonth && kept.includes(paintedMonth)}
             />
           )}

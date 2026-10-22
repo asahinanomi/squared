@@ -12,7 +12,7 @@ import { stampLine, type Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, WORD, type Paint } from '../lib/paints'
 import { setSoundOn, soundOn, soundOnChime } from '../lib/sound'
-import { loadMatters } from '../lib/matters'
+import type { Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 
 type Props = {
@@ -21,6 +21,8 @@ type Props = {
   born?: string
   date: string
   days: Days
+  /** What matters, from the account: the compass when torn. */
+  matters: Matters
   notes: Note[]
   loaded: Paint | null
   /** The open "why?" bubble: a new note, or an existing note being edited. */
@@ -93,11 +95,7 @@ export function Today(props: Props) {
     if (d.length >= 3 && d.includes('green') && d.includes('red')) setTorn(true)
   }
   // Your own "mattered" entries; one is shown (the same all day, so it doesn't flicker), all in a sheet.
-  const compass = torn
-    ? loadMatters()
-        .meaningful.map((e) => e.text.trim())
-        .filter(Boolean)
-    : []
+  const compass = torn ? props.matters.meaningful.map((e) => e.text.trim()).filter(Boolean) : []
   const pick = [...date].reduce((h, ch) => h + ch.charCodeAt(0), 0)
   const [compassOpen, setCompassOpen] = useState(false)
   useEffect(() => setCompassOpen(false), [date])

@@ -1,18 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { SwipeRow } from '../components/SwipeRow'
-import {
-  loadMatters,
-  MAX_CHARS,
-  newEntry,
-  pushMatters,
-  saveMatters,
-  syncMatters,
-  type Entry,
-  type Kind,
-  type Matters,
-  type Saved,
-} from '../lib/matters'
+import { fetchMatters, MAX_CHARS, newEntry, saveMatters, type Entry, type Kind, type Matters } from '../lib/matters'
 import { paintHex } from '../lib/paints'
 import { Chevron } from './Today'
 
@@ -24,6 +13,10 @@ type Props = {
   onPaint: () => void
   /** Today already has its colour (the link then just leads back). */
   paintedToday: boolean
+  /** The lists as the account had them a moment ago (shown at once; fetched fresh on opening). */
+  initial: Matters
+  /** Each saved change, so the rest of the app has the same lists. */
+  onSaved: (m: Matters) => void
 }
 
 const LISTS: { kind: Kind; label: string; dot: string; hint: string }[] = [
@@ -64,8 +57,8 @@ function EntryInput({ entry, onChange, onDone }: { entry: Entry; onChange: (t: s
 // What matters: two short lists — what a meaningful day and a wasted day look like to you.
 // Your compass when you paint; it never judges or colours a day for you. Every change saves itself,
 // to this device and the account; opening it picks up changes made on another device.
-export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedToday }: Props) {
-  const [lists, setLists] = useState<Matters>(loadMatters)
+export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedToday, initial, onSaved }: Props) {
+  const [lists, setLists] = useState<Matters>(initial)
   const [editing, setEditing] = useState<string | null>(null)
   const [swiped, setSwiped] = useState<string | null>(null)
   // Which lists show: both, or just one (a long list is easier to read alone). Opens on all.
@@ -75,27 +68,39 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
   // Only real edits are saved (not the lists arriving from the account).
   const edited = useRef(false)
 
-  // This device's copy shows at once; the account's replaces it if it's newer (unless you've already started editing).
+  // What the account has: shown at once, then fetched fresh (unless you've already started editing). Each change
+  // is saved against it, line by line, so only what you changed is sent.
+  const base = useRef<Matters>(initial)
   useEffect(() => {
-    syncMatters(loadMatters())
-      .then((m) => !edited.current && setLists(m))
+    fetchMatters()
+      .then((m) => {
+        // Already editing: keep saving against what was shown (so lines added elsewhere are never taken as deleted).
+        if (edited.current) return
+        base.current = m
+        setLists(m)
+      })
       .catch((e) => console.error('Could not load what matters', e))
   }, [])
 
-  // Each change is kept on this device at once and sent to the account once typing pauses (or on leaving).
-  const pending = useRef<Saved | null>(null)
-  const push = () => {
-    if (!pending.current) return
-    pushMatters(pending.current).catch((e) => console.error('Could not save what matters', e))
-    pending.current = null
+  // Each change goes to the account once typing pauses (or on leaving).
+  const latest = useRef(lists)
+  latest.current = lists
+  const flush = () => {
+    if (!edited.current) return
+    const next = {
+      meaningful: latest.current.meaningful.filter((e) => e.text.trim()),
+      wasted: latest.current.wasted.filter((e) => e.text.trim()),
+    }
+    saveMatters(base.current, next)
+    base.current = next
+    onSaved(next)
   }
   useEffect(() => {
     if (!edited.current) return
-    pending.current = saveMatters(lists)
-    const t = setTimeout(push, 800)
+    const t = setTimeout(flush, 800)
     return () => clearTimeout(t)
-  }, [lists])
-  useEffect(() => push, [])
+  }, [lists]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => flush, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const update = (kind: Kind, fn: (l: Entry[]) => Entry[]) => {
     edited.current = true

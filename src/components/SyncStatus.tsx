@@ -1,32 +1,34 @@
 import { useEffect, useState } from 'react'
-import { flush, onSync, syncState, type SyncState } from '../lib/outbox'
+import { discardSaves, onSave, retrySaves, saveState, type SaveState } from '../lib/save'
 
-const QUIET_AFTER = 4000 // a normal save is gone well before this: the line shows only when one is slow
+const QUIET_AFTER = 3000 // a normal save is done well before this: the line shows only when one is slow
 
-// Where your changes are. Usually nowhere to be seen: they reach the account in a moment. If one is slow, a quiet
-// line under the top bar says it's "saved on this phone". If sending keeps failing, an ink speech bubble says so
-// plainly (never red: red is a paint), with a way to try now.
+// Where your changes are. Usually nowhere to be seen: they're in the account in a moment. If one is slow, a quiet
+// "saving…" under the top bar. If it can't get through, an ink speech bubble says so plainly (never red: red is a
+// paint): the change is on screen but not saved, until "try again" sends it or "discard" goes back to the account.
 export function SyncStatus() {
-  const [s, setS] = useState<SyncState>(syncState)
+  const [s, setS] = useState<SaveState>(saveState)
   const [now, setNow] = useState(Date.now)
-  useEffect(() => onSync(setS), [])
+  useEffect(() => onSave(setS), [])
   useEffect(() => {
-    if (!s.pending) return
-    const t = setInterval(() => setNow(Date.now()), 1000)
+    if (!s.saving) return
+    const t = setInterval(() => setNow(Date.now()), 500)
     return () => clearInterval(t)
-  }, [s.pending])
-  if (!s.pending || s.since === null) return null
-  if (s.stuck)
+  }, [s.saving])
+  if (s.failed)
     return (
-      <div className="sync-bubble" role="status">
-        <p>Not synced yet. Your changes are safe on this phone, and I'll keep trying.</p>
-        <button onClick={() => void flush()}>try now</button>
+      <div className="sync-bubble" role="alert">
+        <p>Not saved. squared couldn't reach your account. Check your connection.</p>
+        <span className="sync-actions">
+          <button onClick={retrySaves}>try again</button>
+          <button onClick={discardSaves}>discard</button>
+        </span>
       </div>
     )
-  if (now - s.since < QUIET_AFTER) return null
+  if (!s.saving || s.since === null || now - s.since < QUIET_AFTER) return null
   return (
     <p className="sync-quiet" role="status">
-      saved on this phone
+      saving…
     </p>
   )
 }

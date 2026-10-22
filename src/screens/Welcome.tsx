@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { fromIso, todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
-import { MAX_CHARS, newEntry, pushMatters, saveMatters, type Kind } from '../lib/matters'
+import { MAX_CHARS, newEntry, type Kind, type Matters } from '../lib/matters'
 import { PAINTS, paintHex } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 import { reportError } from '../lib/report'
@@ -14,6 +14,8 @@ type Props = {
   onSquares: (p: Profile) => Promise<void>
   /** Off to today's square: onboarding is over. */
   onDone: () => void
+  /** The lines written here, for what matters (saved to the account). */
+  onMatters: (m: Matters) => void
 }
 
 const FIELDS: Record<Kind, { dot: string; holders: string[] }> = {
@@ -80,7 +82,7 @@ function Lines({
 // what makes one empty (both skippable; the lines go straight into settings → what matters), then how many
 // squares you have (never filled in for you, never skipped, 18 and over), and "start painting" opens today's
 // first square. Lab: https://claude.ai/artifact/TdNFeCnenYybjepoDhUt9C
-export function Welcome({ tryOut, onSquares, onDone }: Props) {
+export function Welcome({ tryOut, onSquares, onDone, onMatters }: Props) {
   const [step, setStep] = useState(0)
   const [meaningful, setMeaningful] = useState(['', '', ''])
   const [wasted, setWasted] = useState(['', '', ''])
@@ -90,11 +92,10 @@ export function Welcome({ tryOut, onSquares, onDone }: Props) {
   // On to the last step, keeping what was written (the same lists as settings → what matters).
   const toSquares = (mine: string[], empty: string[]) => {
     if ((mine.length || empty.length) && !tryOut) {
-      const saved = saveMatters({
+      onMatters({
         meaningful: mine.map((text) => ({ ...newEntry(), text })),
         wasted: empty.map((text) => ({ ...newEntry(), text })),
       })
-      pushMatters(saved).catch((err) => console.error('Could not save what matters', err))
     }
     setStep(3)
   }

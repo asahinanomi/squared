@@ -3823,6 +3823,10 @@ button.settings-row:active {
   background: var(--ink);
   transform: rotate(45deg);
 }
+.sync-actions {
+  display: flex;
+  gap: 18px;
+}
 .sync-bubble p {
   margin: 0;
   font-size: 15px;
@@ -4381,4 +4385,22 @@ button.home-card:active {
 .welcome-squares .setup-years input:placeholder-shown {
   width: 3.8em;
   text-align: center;
+}
+
+/* Your squares couldn't load: one plain line and one pill, centred, never an empty life in their place. */
+.load-failed {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 0 32px;
+  text-align: center;
+}
+.load-failed p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink-soft);
 }
