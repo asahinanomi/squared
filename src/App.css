@@ -4052,6 +4052,13 @@ button.home-card:active {
   background: #f6f4ee;
   box-shadow: inset 0 0 0 1.5px #dcdad2;
 }
+.home-week-days i.is-ahead {
+  box-shadow: inset 0 0 0 1px #ecebe5; /* still to come: a faint outline, like the month's days ahead */
+}
+.home-week-days button:disabled {
+  opacity: 1;
+  cursor: default;
+}
 .home-week-days i.is-today {
   outline: 2px solid var(--ink);
   outline-offset: 2px;

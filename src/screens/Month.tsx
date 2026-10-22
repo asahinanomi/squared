@@ -28,7 +28,7 @@ type Props = {
   onPainting?: (month: string) => void
 }
 
-const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] // Sunday first, as North American calendars
 
 /** First of the month `n` months away from the month containing `iso`. */
 export const shiftMonth = (iso: string, n: number) => {

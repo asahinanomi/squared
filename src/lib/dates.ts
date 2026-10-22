@@ -61,12 +61,12 @@ export function shortDateParts(iso: string) {
 /** "October 2026" */
 export const monthTitle = (iso: string) => fromIso(iso).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
-/** Monday-first month layout: leading nulls, then every date in the month. */
+/** Sunday-first month layout (the North American calendar): leading nulls, then every date in the month. */
 export function monthCells(iso: string): (string | null)[] {
   const d = fromIso(iso)
   const first = new Date(d.getFullYear(), d.getMonth(), 1)
   const days = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate()
-  const lead = (first.getDay() + 6) % 7
+  const lead = first.getDay()
   const cells: (string | null)[] = Array(lead).fill(null)
   for (let i = 1; i <= days; i++) cells.push(isoDate(new Date(d.getFullYear(), d.getMonth(), i)))
   return cells

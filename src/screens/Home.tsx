@@ -112,11 +112,14 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
     </div>
   )
 
-  // The last seven days, today last: paper until painted, so home gains colour as you paint. Each square opens its
-  // day. A full week blooms once, a soft wave, like the paint settling. Counted as days in colour, never missed.
-  const week = Array.from({ length: 7 }, (_, i) => addDays(today, i - 6)).filter((d) => !profile || d >= profile.born)
-  const inColour = week.filter((d) => days[d]).length
-  const full = inColour === week.length
+  // The week: paper until painted, so home gains colour as you paint. Each square opens its day. A full week blooms once, a soft wave, like the paint settling. Counted as days in colour, never missed.
+  // This week as a calendar has it: Sunday to Saturday. Days still to come are faint outlines; a full week is all
+  // seven painted (so its moment comes on Saturday, or when the last blank one is filled in).
+  const sunday = addDays(today, -fromIso(today).getDay())
+  const week = Array.from({ length: 7 }, (_, i) => addDays(sunday, i))
+  const open = (d: string) => d <= today && (!profile || d >= profile.born)
+  const inColour = week.filter((d) => open(d) && days[d]).length
+  const full = week.every((d) => days[d])
   // A full week's rainbow, in the colours you painted it.
   const mine = PAINTS.map((p) => ({ p, n: week.filter((d) => days[d]?.color === p.id).length }))
     .filter((x) => x.n)
@@ -129,7 +132,7 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
       <h2 className="home-head">
         this week
         <small className="home-of">
-          {shortDateParts(week[0]).monthDay} – {shortDateParts(today).monthDay}
+          {shortDateParts(week[0]).monthDay} – {shortDateParts(week[6]).monthDay}
         </small>
       </h2>
       <ul className="home-week-days">
@@ -137,10 +140,11 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
           <li key={d}>
             <button
               onClick={() => onDay(d)}
-              aria-label={`${fromIso(d).toLocaleDateString('en-US', { weekday: 'long' })}: ${days[d] ? WORD[days[d].color] : 'not painted yet'}`}
+              disabled={!open(d)}
+              aria-label={`${fromIso(d).toLocaleDateString('en-US', { weekday: 'long' })}: ${days[d] ? WORD[days[d].color] : open(d) ? 'not painted yet' : 'still to come'}`}
             >
               <i
-                className={(days[d] ? '' : 'is-paper') + (d === today ? ' is-today' : '')}
+                className={(days[d] ? '' : open(d) ? 'is-paper' : 'is-ahead') + (d === today ? ' is-today' : '')}
                 style={{ ...(days[d] ? { background: paintHex(days[d].color) } : {}), '--i': i } as React.CSSProperties}
               />
               {d === today ? <b>today</b> : fromIso(d).toLocaleDateString('en-US', { weekday: 'narrow' })}
