@@ -4011,18 +4011,19 @@ button.home-card:active {
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
-.home-hero-c {
-  margin-top: 8px !important;
-  font-size: 17px;
-  color: var(--ink-soft);
-}
+/* The caption and the line under it read as one group: one size, one ink, one line height. */
+.home-hero-c,
 .home-hero-m {
-  margin: 14px auto 0 !important;
   max-width: 280px;
+  margin-left: auto !important;
+  margin-right: auto !important;
   font-size: 16px;
   line-height: 1.45;
   color: var(--ink-soft);
   text-wrap: balance;
+}
+.home-hero-c {
+  margin-top: 8px !important;
 }
 /* "paint your first square" is longer than the usual pill: it keeps one line, a little wider. */
 .home-ask .pill {
