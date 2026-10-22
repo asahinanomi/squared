@@ -1,6 +1,6 @@
 # squared — working notes for Claude
 
-Read `README.md` first: it is the product spec and the record of every phase built so far. The visual identity (logo, colour, type, components) is `docs/design-system.md`. Parked ideas live in `docs/future-ideas.md`: add new ones there. Test links (hidden ?welcome-style links) live in `docs/test-links.md`: add any new one there.
+Read `README.md` first: it is the product spec and the record of every phase built so far. The visual identity (logo, colour, type, components) is `docs/design-system.md`. Parked ideas live in `docs/future-ideas.md`: add new ones there. Test links (hidden ?welcome-style links) live in `docs/test-links.md`: add any new one there. What's needed before and after beta lives in `docs/beta-readiness.md`: tick items there as they're done.
 
 ## Who & how
 
