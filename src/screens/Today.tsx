@@ -370,14 +370,20 @@ export function Today(props: Props) {
         {props.glimpse && (
           <button className="glimpse" onClick={() => onDate(props.glimpse!.iso)}>
             <span className="glimpse-ago">{props.glimpse.ago}</span>
+            {/* As a card in the list of days: its square, then the date and word, then its note (two lines). */}
             <span className="glimpse-row">
               <span
                 className={'glimpse-square' + (props.glimpse.day.framed ? ' is-framed' : '')}
                 style={{ background: squareFill(props.glimpse.day.color, props.glimpse.day.framed) }}
                 aria-hidden="true"
               />
-              <span className="glimpse-word">{WORD[props.glimpse.day.color]}</span>
-              {props.glimpse.note && <span className="glimpse-note">“{props.glimpse.note.body}”</span>}
+              <span className="glimpse-text">
+                <span className="glimpse-word">
+                  <GlimpseDate iso={props.glimpse.iso} />
+                  <span className="glimpse-color"> · {WORD[props.glimpse.day.color]}</span>
+                </span>
+                {props.glimpse.note && <span className="glimpse-note">{props.glimpse.note.body}</span>}
+              </span>
             </span>
           </button>
         )}
@@ -516,6 +522,17 @@ export function ChevronDown({ className = 'day-pick-chevron' }: { className?: st
         strokeLinejoin="round"
       />
     </svg>
+  )
+}
+
+/** "Tue, Sep 22nd", as a list card names its day. */
+function GlimpseDate({ iso }: { iso: string }) {
+  const p = shortDateParts(iso)
+  return (
+    <>
+      {p.weekday}, {p.monthDay}
+      <sup>{p.suffix}</sup>
+    </>
   )
 }
 

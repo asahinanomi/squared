@@ -870,39 +870,50 @@
 }
 .glimpse-row {
   display: flex;
-  align-items: flex-start; /* the square and word sit on the note's first line */
-  gap: 10px;
-  line-height: 1.4;
-  text-align: left;
+  align-items: flex-start;
+  gap: 14px;
   min-width: 0;
-  font-size: 15px;
-  color: var(--ink-soft);
+  text-align: left;
 }
+/* The list card's square: 26px, rounded. */
 .glimpse-square {
   flex: none;
-  width: 20px;
-  height: 20px;
-  margin-top: 1px;
-  border-radius: 5px;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
 }
 .glimpse-square.is-framed {
   box-shadow:
     inset 0 0 0 2px #53735c,
     inset 0 0 0 3.5px #ebe6da;
 }
+.glimpse-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding-top: 3px;
+}
 .glimpse-word {
-  flex: none;
+  font-size: 16px;
   font-weight: 600;
   color: var(--ink);
 }
-/* The note, up to two lines, then an ellipsis. */
+.glimpse-color {
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+/* The note, up to two lines, then an ellipsis: as in the list. */
 .glimpse-note {
-  min-width: 0;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink-soft);
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   overflow: hidden;
+  overflow-wrap: anywhere;
 }
 
 /* ---------- note under the square ---------- */
