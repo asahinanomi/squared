@@ -92,7 +92,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'How do I keep it on my home screen?',
-      'On iPhone, in Safari: Share → Add to Home Screen. On Android, in Chrome: ⋮ → Add to home screen. Then squared is one tap away, every day.',
+      'On iPhone, in Safari or Chrome: Share → Add to Home Screen. On Android, in Chrome: ⋮ → Add to home screen. Then squared is one tap away, every day.',
     ],
     [
       'Where do I ask questions?',
