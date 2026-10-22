@@ -454,6 +454,12 @@ export default function App() {
     } else if (screen === 'today' && date === todayIso() && days[todayIso()] && profile) setScreenValue('home')
     setLanded(true)
   }, [signedIn, daysReady, profileReady, landed]) // eslint-disable-line react-hooks/exhaustive-deps
+  // Until the squares are set, onboarding is the only way in: any other screen (today from the terms page, say)
+  // goes back to it. The small print stays open to read.
+  useEffect(() => {
+    if (!signedIn || !profileReady || profile || tryWelcome || trySquaresAtStart) return
+    if (!['welcome', 'privacy', 'terms', 'questions'].includes(screen)) setScreenValue('welcome')
+  }, [signedIn, profileReady, profile, screen]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // The browser's back button: each move to another screen is a step in the browser's history, so back returns to
   // where you were (paging day to day on today's screen only updates the step, never piles them up).
@@ -721,9 +727,12 @@ export default function App() {
     legalOpened.current = true
     goToday()
   }
-  // Back from the small print: "settings" when opened there, "back" from the menu, "today" from its web address.
+  // Back from the small print: "settings" when opened there, "back" from the menu, "today" from its web address
+  // ("back" before the squares are set: it leads to onboarding).
   const legalBack = !legalOpened.current
-    ? 'today'
+    ? profile
+      ? 'today'
+      : 'back'
     : legalFrom === 'settings'
       ? 'settings'
       : legalFrom === 'idea'
