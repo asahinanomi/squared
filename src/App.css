@@ -3365,7 +3365,7 @@ button.settings-row:active {
 }
 .welcome-eyebrow {
   margin: 0 0 14px;
-  color: #5c5c57; /* every line around a question: 16px, regular, dark grey, so the question leads */
+  color: var(--ink-soft); /* every line around a question: 16px, regular, ink-soft (sentences you read) */
   font-size: 16px;
   line-height: 1.4;
 }
@@ -3374,7 +3374,7 @@ button.settings-row:active {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  color: #5c5c57;
+  color: var(--ink-soft);
   font-size: 16px;
   line-height: 1.4;
 }
@@ -3397,7 +3397,7 @@ button.settings-row:active {
 }
 .welcome-then {
   margin: 44px 0 0;
-  color: #5c5c57;
+  color: var(--ink-soft);
   font-size: 16px;
   line-height: 1.4;
 }
