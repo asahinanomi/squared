@@ -185,10 +185,12 @@
 }
 /* The hero: how many days a life holds. */
 /* A small grey lead-in, like "that's" on how many squares: the number stays the hero. */
+/* "there are" and "days in an 80-year life" read as one sentence around the number: same size, same ink. */
 .signin-there {
-  margin: 0 0 6px;
-  font-size: 14px;
-  color: var(--muted);
+  margin: 0 0 10px;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--ink-soft);
 }
 .signin-number {
   margin: 0;
