@@ -1,398 +1,55 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { usePinch, type Focal } from './lib/usePinch'
-import type { Session } from '@supabase/supabase-js'
+import { useEffect, useState } from 'react'
 import { MeaningSheet } from './components/MeaningSheet'
 import { MonthPainting } from './components/MonthPainting'
-import { Topbar } from './components/Topbar'
-import { ViewSwitch } from './components/ZoomBar'
-import { Settings } from './screens/Settings'
-import { WhatMatters } from './screens/WhatMatters'
-import { QUESTION } from './lib/config'
-import { monthsAgo, paintedFresh, todayIso } from './lib/dates'
-import { fetchAllDays, type Days } from './lib/days'
-import { commit, save } from './lib/save'
-import { reportError } from './lib/report'
-import { mockDays } from './lib/mock'
-import { draftNote, fetchAllNotes, fetchMonthNotes, legacyNotes, type Note, type Notes, type Why } from './lib/notes'
-import type { Paint } from './lib/paints'
-import { fetchProfile, saveProfile, type Profile } from './lib/profile'
-import { frameSound } from './lib/sound'
-import { backFromGoogle, fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/supabase'
-import { Idea } from './screens/Idea'
-import { Month } from './screens/Month'
-import { Year } from './screens/Year'
-import { Life } from './screens/Life'
-import { Pie } from './screens/Pie'
-import { SCOPE_ORDER, type Scope } from './lib/pie'
-import { LifeMonths } from './screens/LifeMonths'
-import { DaysList } from './screens/DaysList'
-import { PeriodList } from './screens/PeriodList'
-import { Privacy } from './screens/Privacy'
-import { About } from './screens/About'
-import { Terms } from './screens/Terms'
-import { Questions } from './screens/Questions'
-import { Export } from './screens/Export'
-import { LifeDays } from './screens/LifeDays'
-import { LifeHead, type Resolution } from './components/LifeHead'
-import { Setup } from './screens/Setup'
-import { Welcome } from './screens/Welcome'
-import { fetchMatters, noMatters, saveMatters, written, type Matters } from './lib/matters'
-import { SignIn } from './screens/SignIn'
-import { Today } from './screens/Today'
-import { Paintings } from './screens/Paintings'
-import { Home } from './screens/Home'
-import { keptPaintings, saveKept } from './lib/kept'
 import { OpenPainting } from './components/PaintingButton'
 import { SyncStatus } from './components/SyncStatus'
+import { Topbar } from './components/Topbar'
 import { Waiting } from './components/Waiting'
+import { ViewSwitch } from './components/ZoomBar'
+import { monthsAgo, todayIso } from './lib/dates'
+import type { Why } from './lib/notes'
+import type { Paint } from './lib/paints'
+import { backFromGoogle, supabase } from './lib/supabase'
+import { Screens } from './Screens'
+import { SignedOut } from './screens/SignedOut'
+import { demo, NO_TOPBAR, type Screen } from './state/app'
+import { useAccount } from './state/useAccount'
+import { useAuth } from './state/useAuth'
+import { useBrowserHistory } from './state/useBrowserHistory'
+import { useDayActions } from './state/useDayActions'
+import { useKept } from './state/useKept'
+import { useLanding } from './state/useLanding'
+import { useMatters } from './state/useMatters'
+import { useNavigation } from './state/useNavigation'
+import { usePaintingArrival } from './state/usePaintingArrival'
 import './App.css'
 
-type Screen =
-  | 'home'
-  | 'today'
-  | 'month'
-  | 'year'
-  | 'life'
-  | 'pie'
-  | 'list'
-  | 'idea'
-  | 'setup'
-  | 'settings'
-  | 'matters'
-  | 'privacy'
-  | 'terms'
-  | 'questions'
-  | 'export'
-  | 'paintings'
-  | 'welcome'
-/** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
-const LADDER: Screen[] = ['today', 'month', 'year', 'life']
-
-const byTime = (a: Note, b: Note) => a.writtenAt.localeCompare(b.writtenAt)
-
-// Without Supabase env vars the app runs as a local demo: no sign-in, fake days, nothing saved.
-const demo = !supabase
-// squared.today/?welcome opens onboarding on any account, to try it: nothing is saved.
-const tryWelcome = new URLSearchParams(location.search).has('welcome')
-// squared.today/?squares opens "how many squares?" as the first time shows it, to try it: nothing is saved.
-const trySquaresAtStart = new URLSearchParams(location.search).has('squares')
-// squared.today/privacy and /terms open those pages directly (signed in or not): links for Google's sign-in screen.
-const legalAtStart = (
-  ['/privacy', '/terms', '/questions'].includes(location.pathname)
-    ? location.pathname.slice(1)
-    : location.pathname === '/faq'
-      ? 'questions'
-      : null
-) as 'privacy' | 'terms' | 'questions' | null
-// squared.today/?month shows last month's painting, to try it (it changes nothing).
-const tryMonth = new URLSearchParams(location.search).has('month')
-// squared.today/?year shows last year's painting, the January 1st moment, to try it.
-const tryYear = new URLSearchParams(location.search).has('year')
-const PAINTED_KEY = 'squared.paintedMonth' // the month whose arrival last showed a painting (January: the year's)
-const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
-
+// The app, put together: who's signed in, what the account holds, where you are, and what's on screen. Each piece
+// lives in its own file under src/state (and the screens in Screens.tsx); this file only wires them up.
 export default function App() {
-  const [loadFailed, setLoadFailed] = useState(false)
-  // undefined = still checking; null = signed out.
-  const [session, setSession] = useState<Session | null | undefined>(demo ? null : undefined)
-  const [demoIn, setDemoIn] = useState(false)
-  // "the idea", opened from the sign-in screen.
-  const [ideaOut, setIdeaOut] = useState(false)
-  const [privacyOut, setPrivacyOut] = useState(legalAtStart === 'privacy')
-  const [termsOut, setTermsOut] = useState(legalAtStart === 'terms')
-  const [questionsOut, setQuestionsOut] = useState(legalAtStart === 'questions')
-  // Where privacy and terms were opened from (settings or the menu): back returns there.
-  const [legalFrom, setLegalFrom] = useState<Screen>('settings')
-  const legalOpened = useRef(false) // opened from inside the app (not straight from its web address)
-  const [authError, setAuthError] = useState<string | null>(null)
-  const [question, setQuestion] = useState(QUESTION)
-  const [screen, setScreenValue] = useState<Screen>(
-    legalAtStart ?? (tryWelcome ? 'welcome' : trySquaresAtStart ? 'setup' : 'today'),
-  )
-  // Which way the last move went, so the new level can zoom in or out into place.
-  const [motion, setMotion] = useState<'in' | 'out' | null>(null)
-  // The month to open on when zooming in from a year (zooming out always lands on today's).
-  const [monthFocus, setMonthFocus] = useState<string | undefined>()
-  const [yearFocus, setYearFocus] = useState<number | undefined>()
-  // Which view of a life: one square per year (where a life always lands), month or day.
-  const [lifeRes, setLifeResValue] = useState<Resolution>('years')
-  // Pinched in within a level (bigger squares, with labels): a notch, 0 = the level's own size.
-  // Never remembered: every move to another level starts back at 0.
-  const [mag, setMag] = useState(0)
-  const [focal, setFocal] = useState<Focal | undefined>()
-  const [monthAnchor, setMonthAnchor] = useState<{ iso?: string; y: number } | undefined>()
-  // Where "how many squares?" returns to: a life, when it was asked for on the way there.
-  const [afterSetup, setAfterSetup] = useState<Screen>(trySquaresAtStart ? 'life' : 'today')
-  const [trySquares, setTrySquares] = useState(trySquaresAtStart)
-  // The zoom level the pie was opened from: the switch returns there.
-  const [pieFrom, setPieFrom] = useState<Screen>('life')
-  // The list of days sits beside the ladder too: where it was opened from, and the day it opens on.
-  const [listFrom, setListFrom] = useState<Screen>('month')
-  const [listFocus, setListFocus] = useState(todayIso)
-  // The list zooms too, within itself: years → months → days (→ the day). And the level it was opened at.
-  const [listRes, setListRes] = useState<Resolution>('days')
-  const [listZoomed, setListZoomed] = useState(false) // zoomed within the list since it opened
-  // Only one slice's days (from the pie's "see them →"), until cleared or the list zooms out.
-  const [listOnly, setListOnly] = useState<Paint | 'unpainted' | 'framed' | null>(null)
-  // The list keeps this pointed at the day in the middle of the screen, for a pinch to open on.
-  const listMid = useRef(() => todayIso())
-  const daysNow = useRef<Days>({}) // the days as they are now, for callbacks that mustn't change with them
-  // A day opened from the list goes back to the list when you zoom out of it.
-  const [dayFromList, setDayFromList] = useState(false)
-  // Which days the pie is out of; it always opens on the whole life.
-  const [pieScope, setPieScope] = useState<Scope>('life')
-  // Where settings was opened from: its back arrow returns there.
-  const [settingsFrom, setSettingsFrom] = useState<Screen>('today')
-  // What matters opens from settings, the idea or the day's compass; back returns there.
-  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea' | 'today' | 'home'>('settings')
-  const [date, setDate] = useState(todayIso)
-  const [days, setDays] = useState<Days>(() => (demo ? mockDays() : {}))
-  daysNow.current = days
-  const [loaded, setLoaded] = useState<Paint | null>(null)
-  const [defining, setDefining] = useState(false)
-  const [notes, setNotes] = useState<Notes>({})
-  // The open "why?" bubble: a new note ({}), or an existing note being edited.
+  const { session, userId, signedIn, painter, authError, setDemoIn } = useAuth()
+  const acc = useAccount(userId)
+
+  // What's open on the day: the "why?" bubble (a new note, or one being edited), the brush's paint, the nudge.
   const [why, setWhy] = useState<Why | null>(null)
+  const [loaded, setLoaded] = useState<Paint | null>(null)
   const [nudge, setNudge] = useState(false)
-  // A new month: the last one, shown once as a painting (on the first visit of the month, if it holds any squares).
-  const [paintedMonth, setPaintedMonth] = useState<string | null>(null)
-  // The paintings you kept, for my paintings (with your account, and on this device).
-  const [kept, setKept] = useState<string[]>([])
-  useEffect(() => setKept(keptPaintings(session?.user.user_metadata?.kept_paintings)), [session])
-  // Kept or taken down: on the wall at once, and saved to the account like every other change.
-  const putKept = (next: string[]) => {
-    setKept(next)
-    if (demo) void saveKept(next)
-    else commit('kept', () => saveKept(next))
-  }
-  const [paintedArrived, setPaintedArrived] = useState(false) // shown by the new month, not opened from the month view
-  const [profile, setProfile] = useState<Profile | null>(null)
-  const [profileReady, setProfileReady] = useState(false)
-  const [daysReady, setDaysReady] = useState(demo) // the demo's days are there from the start
-  // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
-  // anything, so today never flashes up before the welcome.
-  const [checking, setChecking] = useState(() => !legalAtStart && !tryWelcome && !trySquaresAtStart)
-
-  useEffect(() => {
-    if (!supabase) return
-    const sb = supabase
-    // Back from Google, the sign-in finishes first: until then, "nobody yet" is not an answer (it would flash the
-    // sign-in screen for a moment).
-    let finishing = true
-    finishSignIn().then(async (err) => {
-      setAuthError(err)
-      const { data } = await sb.auth.getSession()
-      finishing = false
-      setSession(data.session)
-    })
-    const { data } = sb.auth.onAuthStateChange((_e, s) => {
-      if (finishing && !s) return
-      setSession(s)
-    })
-    return () => data.subscription.unsubscribe()
-  }, [])
-
-  const userId = session?.user.id
-
-  // The current level's stage is what scales under your fingers while you pinch.
-  const stage = useCallback(() => document.querySelector<HTMLElement>('.stage'), [])
-  const pinchRef = useRef<{ onIn?: (at: Focal) => boolean | void; onOut?: (at: Focal) => boolean | void }>({})
-  usePinch(stage, {
-    onIn: (at) => (pinchRef.current.onIn ? pinchRef.current.onIn(at) : false),
-    onOut: (at) => (pinchRef.current.onOut ? pinchRef.current.onOut(at) : false),
-  })
-  const signedIn = demo ? demoIn : !!userId
-
-  // The demo keeps its profile on this device.
-  useEffect(() => {
-    if (demo)
-      fetchProfile()
-        .then(setProfile)
-        .finally(() => setProfileReady(true))
-  }, [])
-
-  // What matters, from the account.
-  const [matters, setMatters] = useState<Matters>(noMatters)
-  const refreshMatters = useCallback(() => {
-    if (!userId && !demo) return
-    fetchMatters()
-      .then(setMatters)
-      .catch((e) => console.error('Could not load what matters', e))
-  }, [userId])
-  useEffect(refreshMatters, [refreshMatters])
-
-  // Load the question, every painted day, this month's notes and the profile for whoever is signed in.
-  useEffect(() => {
-    if (!userId) {
-      if (!demo) {
-        setDays({})
-        setNotes({})
-      }
-      return
-    }
-    fetchQuestion().then((q) => q && setQuestion(q))
-    fetchProfile()
-      .then(setProfile)
-      .catch(() => undefined)
-      .finally(() => setProfileReady(true))
-    notesLoaded.current = new Set([todayIso().slice(0, 7)])
-    Promise.all([fetchAllDays(), fetchMonthNotes(todayIso())])
-      .then(([d, n]) => {
-        setDays(d)
-        setNotes(n ?? legacyNotes(d))
-        setLoadFailed(false)
-      })
-      .catch((e) => {
-        console.error('Could not load days', e)
-        reportError('load days', e)
-        setLoadFailed(true) // never show an empty life in place of one that didn't load
-      })
-      .finally(() => {
-        setChecking(false)
-        setDaysReady(true)
-      })
-  }, [userId])
-
-  // Notes load a month at a time, as you visit days in it (or read past them on the month).
-  const notesLoaded = useRef(new Set<string>())
-  const loadNotes = useCallback(
-    (iso: string) => {
-      const m = iso.slice(0, 7)
-      if (!userId || notesLoaded.current.has(m)) return
-      notesLoaded.current.add(m)
-      fetchMonthNotes(iso)
-        .then((n) => n && setNotes((all) => ({ ...all, ...n })))
-        .catch((e) => {
-          notesLoaded.current.delete(m)
-          console.error('Could not load notes', e)
-        })
-    },
-    [userId],
-  )
-  useEffect(() => {
-    loadNotes(date)
-  }, [loadNotes, date])
-
-  useEffect(() => {
-    if ((userId && checking) || !Object.keys(days).length) return
-    const now = todayIso().slice(0, 7)
-    // A new month shows the last one; a new year (January) shows the whole last year instead: day, month, year.
-    const last =
-      now.endsWith('-01') || tryYear
-        ? String(Number(now.slice(0, 4)) - 1)
-        : (monthsAgo(`${now}-01`, 1) ?? '').slice(0, 7)
-    let seen: string | null = null
-    try {
-      seen = localStorage.getItem(PAINTED_KEY)
-    } catch {
-      /* storage unavailable: it may show again, which is harmless */
-    }
-    if (!tryMonth && !tryYear && seen === now) return
-    if (!Object.keys(days).some((iso) => iso.startsWith(last))) return
-    setPaintedMonth(last)
-    setPaintedArrived(true)
-    try {
-      localStorage.setItem(PAINTED_KEY, now)
-    } catch {
-      /* fine */
-    }
-  }, [checking, days, userId])
-
-  useEffect(() => {
-    document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'
-  }, [signedIn, screen])
-
-  // Shown at once and saved straight to the account.
-  const onFilled = useCallback(
-    (color: Paint) => {
-      setWhy({ settled: color, fresh: !daysNow.current[date] })
-      setDays((d) => {
-        // A first paint is on time on the day or the next day (the database decides for good);
-        // repaints keep the first paint's shade and date.
-        return {
-          ...d,
-          [date]: d[date]
-            ? {
-                ...d[date],
-                color,
-                changedOn: d[date].color !== color ? todayIso() : d[date].changedOn,
-                // A frame is for a day that mattered most: painting it another colour takes it off.
-                framed: color === 'green' ? d[date].framed : undefined,
-              }
-            : { backfilled: !paintedFresh(date), paintedOn: todayIso(), color },
-        }
-      })
-      if (color !== 'green' && daysNow.current[date]?.framed) save({ k: 'framed', date, framed: false })
-      save({ k: 'color', date, color })
-    },
-    [date],
-  )
-
-  // Wipe: the square goes blank at once and leaves every count.
-  // Frame (or unframe) a day that mattered most: shown at once, saved straight to the account.
-  const onFrame = () => {
-    const day = date
-    const was = !!days[day]?.framed
-    const put = (framed: boolean) => setDays((d) => (d[day] ? { ...d, [day]: { ...d[day], framed } } : d))
-    put(!was)
-    // A little magic, and a pinned note: what do you want to remember? (skippable). Unframing keeps notes pinned.
-    if (!was) {
-      frameSound()
-      if (!(notes[day] ?? []).some((n) => n.pinned)) setWhy({ pinned: true })
-    }
-    save({ k: 'framed', date: day, framed: !was })
-  }
-
-  const onWipe = () => {
-    const day = date
-    const before = days[day]
-    if (!before) return
-    setWhy(null)
-    setDays((d) => {
-      const next = { ...d }
-      delete next[day]
-      return next
-    })
-    save({ k: 'wipe', date: day })
-  }
-
-  // Notes save instantly: the change shows at once and goes straight to the account.
-  const putNotes = (day: string, fn: (list: Note[]) => Note[]) =>
-    setNotes((all) => ({ ...all, [day]: fn(all[day] ?? []).sort(byTime) }))
-  const swap = (day: string, id: string, to: Note) => putNotes(day, (l) => l.map((n) => (n.id === id ? to : n)))
-
-  const onSaveNote = async (note: Note | undefined, text: string) => {
-    setWhy(null)
-    if (note) {
-      swap(note.date, note.id, { ...note, body: text, writtenAt: new Date().toISOString() })
-      save({ k: 'note-body', note, body: text })
-    } else {
-      const draft = draftNote(date, text, why?.pinned)
-      putNotes(draft.date, (l) => [...l, draft])
-      save({ k: 'note-add', note: draft })
-    }
-  }
-
-  // Pin a note to the top of its day (or unpin it).
-  const onPinNote = (note: Note) => {
-    setWhy(null)
-    const pinned = !note.pinned
-    swap(note.date, note.id, { ...note, pinned: pinned || undefined })
-    save({ k: 'note-pin', note, pinned })
-  }
-
-  const onDeleteNote = async (note: Note) => {
-    setWhy(null)
-    putNotes(note.date, (l) => l.filter((n) => n.id !== note.id))
-    save({ k: 'note-del', note })
-  }
-
+  const [defining, setDefining] = useState(false)
   const onDryBrush = () => {
     setNudge(true)
     setTimeout(() => setNudge(false), 750)
   }
 
-  // Home shows a month and a year ago today, with their notes: load those months.
+  const nav = useNavigation(acc.profile, setWhy, signedIn)
+  const { screen, date } = nav
+  const act = useDayActions(date, acc, why, setWhy)
+  const lists = useMatters(userId, screen)
+  const wall = useKept(session)
+  const painting = usePaintingArrival(acc.days, !!userId && acc.checking)
+
+  // Notes load a month at a time: the day you're on, and on home a month and a year ago today.
+  const { loadNotes } = acc
+  useEffect(() => loadNotes(date), [loadNotes, date])
   useEffect(() => {
     if (screen !== 'home') return
     for (const n of [1, 12]) {
@@ -401,73 +58,15 @@ export default function App() {
     }
   }, [screen, loadNotes])
 
-  // Home's and today's lists come from the account: fresh whenever home or what matters opens, or the app returns.
-  const mattersWritten = written(matters)
   useEffect(() => {
-    if (screen === 'home') refreshMatters()
-  }, [screen]) // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    const back = () => document.visibilityState === 'visible' && refreshMatters()
-    document.addEventListener('visibilitychange', back)
-    return () => document.removeEventListener('visibilitychange', back)
-  }, [refreshMatters])
-  // Where you land: today, unless your squares are set and today is already painted, or nothing is painted yet
-  // (back before a first square): then home. Decided once, when the days and the profile are in.
-  // Nothing shows until then (no flash of today before home); if loading drags past 4s, today it is.
-  const [landed, setLanded] = useState(false)
-  useEffect(() => {
-    if (landed || !signedIn) return
-    if (!daysReady || !profileReady) {
-      const t = setTimeout(() => setLanded(true), 4000)
-      return () => clearTimeout(t)
-    }
-    // Onboarding, one rule: squares not set yet means the journey (what squared is, what matters, how many squares).
-    if (!profile && screen === 'today' && !legalAtStart && !tryWelcome && !trySquaresAtStart) {
-      setScreenValue('welcome')
-    } else if (screen === 'today' && date === todayIso() && profile && (days[todayIso()] || !Object.keys(days).length))
-      setScreenValue('home')
-    setLanded(true)
-  }, [signedIn, daysReady, profileReady, landed]) // eslint-disable-line react-hooks/exhaustive-deps
-  // Until the squares are set, onboarding is the only way in: any other screen (today from the terms page, say)
-  // goes back to it. The small print stays open to read.
-  useEffect(() => {
-    if (!signedIn || !profileReady || profile || tryWelcome || trySquaresAtStart) return
-    if (!['welcome', 'privacy', 'terms', 'questions'].includes(screen)) setScreenValue('welcome')
-  }, [signedIn, profileReady, profile, screen]) // eslint-disable-line react-hooks/exhaustive-deps
+    document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'
+  }, [signedIn, screen])
 
-  // The browser's back button: each move to another screen is a step in the browser's history, so back returns to
-  // where you were (paging day to day on today's screen only updates the step, never piles them up).
-  const fromHistory = useRef(false)
-  const where = useRef({ screen, date })
-  where.current = { screen, date }
-  useEffect(() => {
-    if (!signedIn) return
-    if (fromHistory.current) {
-      fromHistory.current = false
-      return
-    }
-    const st = { screen, date }
-    const cur = history.state as { screen?: Screen; date?: string } | null
-    if (!cur?.screen || cur.screen === screen) history.replaceState(st, '')
-    else history.pushState(st, '')
-  }, [signedIn, screen, date])
-  useEffect(() => {
-    const back = (e: PopStateEvent) => {
-      const st = e.state as { screen?: Screen; date?: string } | null
-      if (!st?.screen) return
-      const now = where.current
-      if (st.screen === now.screen && st.date === now.date) return
-      fromHistory.current = true
-      setWhy(null)
-      setScreenValue(st.screen)
-      if (st.date) setDate(st.date)
-    }
-    window.addEventListener('popstate', back)
-    return () => window.removeEventListener('popstate', back)
-  }, [])
+  const landed = useLanding(signedIn, acc, nav)
+  useBrowserHistory(signedIn, nav, () => setWhy(null))
 
   // Your squares couldn't load: say so, rather than showing an empty life in its place.
-  if (loadFailed && userId)
+  if (acc.loadFailed && userId)
     return (
       <main className="load-failed">
         <p>Couldn't load your squares. Check your connection.</p>
@@ -476,622 +75,74 @@ export default function App() {
         </button>
       </main>
     )
-  if (session === undefined || (userId && checking) || (signedIn && !landed && screen === 'today'))
+  if (session === undefined || (userId && acc.checking) || (signedIn && !landed && screen === 'today'))
     return session === undefined && backFromGoogle ? (
       <Waiting line="signing you in with Google…" later="still signing you in, a slow connection can take a moment" />
     ) : (
       <Waiting />
     )
-  if (!signedIn)
-    return ideaOut ? (
-      <div className="app">
-        <Idea onBack={() => setIdeaOut(false)} />
-      </div>
-    ) : privacyOut ? (
-      <div className="app">
-        <Privacy
-          onBack={() => {
-            leaveLegalUrl()
-            setPrivacyOut(false)
-          }}
-          backLabel="sign in"
-        />
-      </div>
-    ) : questionsOut ? (
-      <div className="app">
-        <Questions
-          onBack={() => {
-            leaveLegalUrl()
-            setQuestionsOut(false)
-          }}
-          backLabel="sign in"
-        />
-      </div>
-    ) : termsOut ? (
-      <div className="app">
-        <Terms
-          onBack={() => {
-            leaveLegalUrl()
-            setTermsOut(false)
-          }}
-          backLabel="sign in"
-        />
-      </div>
-    ) : (
-      <SignIn
-        error={authError}
-        onSignIn={demo ? () => setDemoIn(true) : signInWithGoogle}
-        onIdea={() => setIdeaOut(true)}
-        onPrivacy={() => setPrivacyOut(true)}
-        onTerms={() => setTermsOut(true)}
-      />
-    )
-
-  // The painter's signature on a month's painting: the first name.
-  const painter = (session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? '').split(' ')[0]
-  const setScreen = (next: Screen) => {
-    const a = LADDER.indexOf(screen)
-    const b = LADDER.indexOf(next)
-    setMotion(a < 0 || b < 0 || a === b ? null : b > a ? 'out' : 'in')
-    setMag(0)
-    if (next !== 'today') setDayFromList(false)
-    setScreenValue(next)
-  }
-
-  // The three views of a life sit on the ladder too: years → months → days is zooming out.
-  const RES: Resolution[] = ['years', 'months', 'days']
-  const setLifeRes = (r: Resolution) => {
-    setMotion(RES.indexOf(r) > RES.indexOf(lifeRes) ? 'out' : RES.indexOf(r) < RES.indexOf(lifeRes) ? 'in' : null)
-    setMag(0)
-    setLifeResValue(r)
-  }
-
-  const goToday = () => {
-    setDayFromList(false)
-    setDate(todayIso())
-    setScreen('today')
-  }
-  const goHome = () => {
-    setWhy(null)
-    setDayFromList(false)
-    setDate(todayIso())
-    setScreen('home')
-  }
-  // Zoom out of a day: to its month — or back to the list, if it was opened from there.
-  const outOfDay = () => {
-    if (!dayFromList) return goMonth()
-    setWhy(null)
-    setDayFromList(false)
-    setScreen('list')
-  }
-
-  // Zoom out from the square: the month, always the current one.
-  const goMonth = (focus?: string) => {
-    setWhy(null)
-    setMonthFocus(focus)
-    setScreen('month')
-  }
-  const goYear = (focus?: number) => {
-    setYearFocus(focus)
-    setScreen('year')
-  }
-  // A life, in days (from home's life card).
-  const goLifeDays = () => {
-    if (profile) return setScreen('life')
-    setAfterSetup('life')
-    setScreenValue('setup')
-  }
-  // A life needs a birth date and a lifespan: the first time, ask (gently) on the way.
-  const goLife = () => {
-    setLifeResValue('years')
-    if (profile) return setScreen('life')
-    setAfterSetup('life')
-    setScreenValue('setup')
-  }
-  // The pie sits beside the ladder: the switch in the bar opens it, and takes you back to the level you left.
-  const togglePie = () => {
-    if (screen === 'pie') return setScreen(pieFrom)
-    setPieFrom(screen === 'list' ? listFrom : screen)
-    setPieScope('life')
-    if (profile) return setScreen('pie')
-    setAfterSetup('pie')
-    setScreenValue('setup')
-  }
-  // The list of days, the same way: open it on the day you were looking at, and its switch takes you back.
-  // It opens at the level that matches the squares (a life → years, a year → months, a month → days); its
-  // switch goes back where you came from, or — if you zoomed within the list — to the squares at that level.
-  const toggleList = (at?: string) => {
-    const day = at ?? todayIso()
-    if (screen === 'list') {
-      if (!listZoomed) return setScreen(listFrom)
-      if (listRes === 'days') return goMonth(day)
-      if (listRes === 'months') return goYear(Number(day.slice(0, 4)))
-      return goLife()
-    }
-    const from = screen === 'pie' ? pieFrom : screen
-    const res: Resolution = from === 'life' ? lifeRes : from === 'year' ? 'months' : 'days'
-    setListFrom(from)
-    setListOnly(null)
-    setListRes(res)
-    setListZoomed(false)
-    setListFocus(day)
-    setScreen('list')
-  }
-  const listIn = (at: string) => {
-    // From the days: today's square, and zooming out of it comes back here.
-    if (listRes === 'days') {
-      setDate(todayIso())
-      setScreen('today')
-      return setDayFromList(true)
-    }
-    setListZoomed(true)
-    setListFocus(at)
-    setListRes(listRes === 'years' ? 'months' : 'days')
-  }
-  // The capsule under the life's title jumps straight to a level of the list, where you are.
-  const listTo = (r: Resolution) => {
-    setListOnly(null)
-    setListZoomed(true)
-    setListFocus(listMid.current())
-    setListRes(r)
-  }
-  const listHead = profile && <LifeHead profile={profile} current={listRes} onPick={listTo} />
-  const listOut = (at: string) => {
-    if (listRes === 'years') return false
-    setListOnly(null)
-    setListZoomed(true)
-    setListFocus(at)
-    setListRes(listRes === 'days' ? 'months' : 'years')
-  }
-  const openSettings = () => {
-    if (!['settings', 'setup', 'matters', 'privacy', 'terms', 'questions', 'export', 'paintings'].includes(screen))
-      setSettingsFrom(screen)
-    setScreenValue('settings')
-  }
-  const endTrySquares = () => {
-    setTrySquares(false)
-    history.replaceState(null, '', location.pathname)
-    goToday()
-  }
-  // Back from privacy or terms: where it was opened from, or today when it came straight from its web address.
-  const closeLegal = () => {
-    if (legalOpened.current) return setScreenValue(legalFrom)
-    leaveLegalUrl()
-    legalOpened.current = true
-    goToday()
-  }
-  // Back from the small print: "settings" when opened there, "back" from the menu, "today" from its web address
-  // ("back" before the squares are set: it leads to onboarding).
-  const legalBack = !legalOpened.current
-    ? profile
-      ? 'today'
-      : 'back'
-    : legalFrom === 'settings'
-      ? 'settings'
-      : legalFrom === 'idea'
-        ? 'the idea'
-        : 'back'
-  const openLegal = (page: 'privacy' | 'terms' | 'questions', from: Screen) => {
-    legalOpened.current = true
-    setLegalFrom(from)
-    setScreenValue(page)
-  }
-  const openSquareSettings = () => {
-    setAfterSetup('settings')
-    setScreenValue('setup')
-  }
+  if (!signedIn) return <SignedOut error={authError} onDemoSignIn={() => setDemoIn(true)} />
 
   const signOut = () => {
-    goToday()
+    nav.goToday()
     setWhy(null)
     setLoaded(null)
     if (supabase) supabase.auth.signOut()
     else setDemoIn(false)
   }
-
-  // Pinch: out walks the ladder outward (today → month → year → a life in years → months → days);
-  // in enlarges the squares where there's more to read (month, a life in months or days), else steps in.
-  const MONTH_NOTCHES = 2
-  const LIFE_NOTCHES = 4
-  const pinchIn = (at: Focal) => {
-    if (screen === 'list') return listIn(listMid.current())
-    else if (screen === 'month') {
-      if (mag >= MONTH_NOTCHES - 1) return false
-      const hit = document.elementsFromPoint(at.x, at.y).find((el) => (el as HTMLElement).dataset?.iso) as HTMLElement
-      setMonthAnchor({ iso: hit?.dataset.iso, y: at.y })
-      setMag(mag + 1)
-    } else if (screen === 'year') goMonth()
-    else if (screen === 'pie') {
-      // On the pie, closer means fewer days counted: whole life → days I lived → painted only.
-      const i = SCOPE_ORDER.indexOf(pieScope)
-      if (i >= SCOPE_ORDER.length - 1) return false
-      setPieScope(SCOPE_ORDER[i + 1])
-    } else if (screen === 'life' && lifeRes === 'years') goYear()
-    else if (screen === 'life') {
-      if (mag >= LIFE_NOTCHES - 1) return false
-      setFocal(at)
-      setMag(mag + 1)
-    } else return false
-  }
-  const pinchOut = (at: Focal) => {
-    if (screen === 'today') outOfDay()
-    else if (screen === 'list') return listOut(listMid.current())
-    else if (screen === 'month') {
-      if (mag === 0) return goYear()
-      const hit = document.elementsFromPoint(at.x, at.y).find((el) => (el as HTMLElement).dataset?.iso) as HTMLElement
-      setMonthAnchor({ iso: hit?.dataset.iso, y: at.y })
-      setMag(mag - 1)
-    } else if (screen === 'year') goLife()
-    else if (screen === 'pie') {
-      const i = SCOPE_ORDER.indexOf(pieScope)
-      if (i <= 0) return false
-      setPieScope(SCOPE_ORDER[i - 1])
-    } else if (screen === 'life') {
-      if (mag > 0) {
-        setFocal(at)
-        setMag(mag - 1)
-      } else if (lifeRes === 'years') setLifeRes('months')
-      else if (lifeRes === 'months') setLifeRes('days')
-      else return false
-    } else return false
-  }
-
-  pinchRef.current = { onIn: pinchIn, onOut: pinchOut }
+  const oneScreen = ['month', 'year', 'life', 'pie', 'list'].includes(screen)
+  const withPainting: Screen[] = ['home', 'today', 'month', 'year', 'life', 'list', 'paintings']
 
   return (
-    // Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint).
     <ViewSwitch.Provider
-      value={{ pie: screen === 'pie', toggle: togglePie, list: screen === 'list', toggleList, goToday }}
+      value={{
+        pie: screen === 'pie',
+        toggle: nav.togglePie,
+        list: screen === 'list',
+        toggleList: nav.toggleList,
+        goToday: nav.goToday,
+      }}
     >
-      <OpenPainting.Provider value={paintedMonth}>
-        <div
-          className={
-            'app' +
-            (screen === 'month' || screen === 'year' || screen === 'life' || screen === 'pie' || screen === 'list'
-              ? ' is-one-screen'
-              : '')
-          }
-        >
-          {screen !== 'setup' &&
-            screen !== 'welcome' &&
-            screen !== 'settings' &&
-            screen !== 'matters' &&
-            screen !== 'privacy' &&
-            screen !== 'terms' &&
-            screen !== 'questions' &&
-            screen !== 'export' &&
-            screen !== 'paintings' && (
-              <Topbar
-                onHome={goHome}
-                onToday={goToday}
-                onCalendar={() => goMonth()}
-                onIdea={() => setScreen('idea')}
-                onSettings={openSettings}
-                onSignOut={signOut}
-              />
-            )}
+      <OpenPainting.Provider value={painting.paintedMonth}>
+        {/* Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint). */}
+        <div className={'app' + (oneScreen ? ' is-one-screen' : '')}>
+          {!NO_TOPBAR.includes(screen) && (
+            <Topbar
+              onHome={nav.goHome}
+              onToday={nav.goToday}
+              onCalendar={() => nav.goMonth()}
+              onIdea={() => nav.setScreen('idea')}
+              onSettings={nav.openSettings}
+              onSignOut={signOut}
+            />
+          )}
           <div
-            className={'stage' + (motion ? ` is-zoom-${motion}` : '')}
-            key={screen === 'life' ? `life-${lifeRes}` : screen}
+            className={'stage' + (nav.motion ? ` is-zoom-${nav.motion}` : '')}
+            key={screen === 'life' ? `life-${nav.lifeRes}` : screen}
           >
-            {screen === 'home' ? (
-              <Home
-                name={painter}
-                days={days}
-                notes={notes}
-                profile={profile}
-                steps={[
-                  { label: 'learned what squared is', done: true, go: goToday },
-                  {
-                    label: 'named what matters',
-                    done: mattersWritten,
-                    go: () => {
-                      setMattersFrom('home')
-                      setScreenValue('matters')
-                    },
-                  },
-                  {
-                    label: 'set how many squares',
-                    done: !!profile,
-                    go: () => {
-                      setAfterSetup('home')
-                      setScreenValue('setup')
-                    },
-                  },
-                  { label: 'paint your first square', done: Object.keys(days).length > 0, go: goToday },
-                ]}
-                onToday={goToday}
-                onLife={() => {
-                  setLifeResValue('days')
-                  goLifeDays()
-                }}
-                onDay={(iso) => {
-                  setDate(iso)
-                  setScreen('today')
-                }}
-                onPainting={(p) => {
-                  setPaintedArrived(false)
-                  setPaintedMonth(p)
-                }}
-              />
-            ) : screen === 'today' ? (
-              <Today
-                matters={matters}
-                question={question}
-                born={profile?.born}
-                date={date}
-                days={days}
-                notes={notes[date] ?? []}
-                loaded={loaded}
-                why={why}
-                nudge={nudge}
-                onDate={(iso) => {
-                  setWhy(null)
-                  setDate(iso)
-                }}
-                onLoad={setLoaded}
-                onDefine={() => setDefining(true)}
-                onSaveNote={onSaveNote}
-                onDeleteNote={onDeleteNote}
-                onCloseWhy={() => setWhy(null)}
-                onOpenWhy={(note) => setWhy({ note })}
-                onDryBrush={onDryBrush}
-                onFilled={onFilled}
-                onWipe={onWipe}
-                onFrame={onFrame}
-                onPinNote={onPinNote}
-                onZoomOut={outOfDay}
-                onMatters={() => {
-                  setMattersFrom('today')
-                  setScreenValue('matters')
-                }}
-              />
-            ) : screen === 'paintings' ? (
-              <Paintings
-                kept={kept}
-                days={days}
-                name={painter}
-                onBack={() => setScreenValue('settings')}
-                onRemove={(p) => putKept(kept.filter((x) => x !== p))}
-                onOpen={(m) => {
-                  setPaintedArrived(false)
-                  setPaintedMonth(m)
-                }}
-              />
-            ) : screen === 'idea' ? (
-              <About
-                onMatters={() => {
-                  setMattersFrom('idea')
-                  setScreenValue('matters')
-                }}
-                onLegal={(page) => openLegal(page, 'idea')}
-              />
-            ) : screen === 'setup' && trySquares ? (
-              <Setup profile={null} onBack={endTrySquares} onSave={async () => endTrySquares()} />
-            ) : screen === 'setup' ? (
-              <Setup
-                profile={profile}
-                onBack={() =>
-                  afterSetup === 'home'
-                    ? goHome()
-                    : afterSetup === 'life'
-                      ? setScreen('year')
-                      : afterSetup === 'pie'
-                        ? setScreen(pieFrom)
-                        : afterSetup === 'settings'
-                          ? setScreenValue('settings')
-                          : goToday()
-                }
-                mode={afterSetup === 'settings' ? 'settings' : 'onboarding'}
-                onSave={async (p) => {
-                  await saveProfile(p)
-                  setProfile(p)
-                  // First run ends on "start painting": straight to today's square.
-                  if (afterSetup === 'pie') setScreen('pie')
-                  else if (afterSetup === 'home') goHome()
-                  else if (afterSetup !== 'settings') goToday()
-                }}
-              />
-            ) : screen === 'welcome' ? (
-              <Welcome
-                tryOut={tryWelcome}
-                onSquares={async (p) => {
-                  await saveProfile(p)
-                  setProfile(p)
-                }}
-                onMatters={(m) => {
-                  saveMatters(matters, m)
-                  setMatters(m)
-                }}
-                onDone={() => {
-                  if (tryWelcome) history.replaceState(null, '', location.pathname)
-                  goToday() // the first square, with the ghost brush showing how
-                }}
-              />
-            ) : screen === 'settings' ? (
-              <Settings
-                profile={profile}
-                onBack={() => setScreenValue(settingsFrom)}
-                onSquares={openSquareSettings}
-                onMatters={() => {
-                  setMattersFrom('settings')
-                  setScreenValue('matters')
-                }}
-                email={session?.user.email}
-                onSignOut={signOut}
-                onDeleted={signOut}
-                onPrivacy={() => openLegal('privacy', 'settings')}
-                onTerms={() => openLegal('terms', 'settings')}
-                onExport={() => setScreenValue('export')}
-                onPaintings={() => setScreenValue('paintings')}
-              />
-            ) : screen === 'export' ? (
-              <Export
-                onBack={() => setScreenValue('settings')}
-                gather={async () => ({
-                  days,
-                  // Every note (the day screen loads them a month at a time); the demo has only what's on screen.
-                  notes: (await fetchAllNotes()) ?? (demo ? notes : legacyNotes(days)),
-                  matters: await fetchMatters().catch(() => matters),
-                  profile,
-                })}
-              />
-            ) : screen === 'privacy' ? (
-              <Privacy onBack={closeLegal} backLabel={legalBack} />
-            ) : screen === 'terms' ? (
-              <Terms onBack={closeLegal} backLabel={legalBack} />
-            ) : screen === 'questions' ? (
-              <Questions onBack={closeLegal} backLabel={legalBack} />
-            ) : screen === 'matters' ? (
-              <WhatMatters
-                onBack={() => setScreenValue(mattersFrom)}
-                backLabel={mattersFrom === 'idea' ? 'the idea' : mattersFrom}
-                onPaint={goToday}
-                paintedToday={!!days[todayIso()]}
-                initial={matters}
-                onSaved={setMatters}
-              />
-            ) : screen === 'list' ? (
-              listRes === 'days' ? (
-                <DaysList
-                  key={`days-${listOnly}`}
-                  only={listOnly ?? undefined}
-                  onOnly={setListOnly}
-                  mid={listMid}
-                  head={listHead}
-                  days={days}
-                  notes={notes}
-                  born={profile?.born}
-                  focus={listFocus}
-                  onPick={(iso) => {
-                    setDate(iso)
-                    setDayFromList(true)
-                    setScreen('today')
-                  }}
-                  onMonthShown={loadNotes}
-                  onPainting={(m) => {
-                    setPaintedArrived(false)
-                    setPaintedMonth(m)
-                  }}
-                  onIn={() => listIn(listMid.current())}
-                  onOut={() => listOut(listMid.current())}
-                />
-              ) : (
-                <PeriodList
-                  key={listRes}
-                  res={listRes}
-                  mid={listMid}
-                  head={listHead}
-                  days={days}
-                  born={profile?.born}
-                  focus={listFocus}
-                  onOpen={(first) => listIn(first)}
-                  onIn={() => listIn(listMid.current())}
-                  onOut={listRes === 'months' ? () => listOut(listMid.current()) : undefined}
-                  onPainting={(p) => {
-                    setPaintedArrived(false)
-                    setPaintedMonth(p)
-                  }}
-                />
-              )
-            ) : screen === 'pie' && profile ? (
-              <Pie
-                days={days}
-                profile={profile}
-                scope={pieScope}
-                onScope={setPieScope}
-                onSee={(id) => {
-                  // The slice's days, in the list; its squares icon goes back to where the pie was opened from.
-                  setListFrom(pieFrom)
-                  setListRes('days')
-                  setListZoomed(false)
-                  setListFocus(todayIso())
-                  setListOnly(id === 'lived' ? null : id)
-                  setScreen('list')
-                }}
-              />
-            ) : screen === 'year' ? (
-              <Year
-                days={days}
-                born={profile?.born}
-                focus={yearFocus}
-                onPick={(m) => goMonth(m)}
-                onIn={() => goMonth()}
-                onOut={goLife}
-                onPainting={(p) => {
-                  setPaintedArrived(false)
-                  setPaintedMonth(p)
-                }}
-              />
-            ) : screen === 'life' && profile ? (
-              lifeRes === 'days' ? (
-                <LifeDays
-                  days={days}
-                  profile={profile}
-                  onPick={(iso) => {
-                    setDate(iso)
-                    setScreen('today')
-                  }}
-                  onIn={() => setLifeRes('months')}
-                  onResolution={setLifeRes}
-                  cols={[28, 14, 7, 3][mag]}
-                  focal={focal}
-                  onPainting={(p) => {
-                    setPaintedArrived(false)
-                    setPaintedMonth(p)
-                  }}
-                />
-              ) : lifeRes === 'months' ? (
-                <LifeMonths
-                  days={days}
-                  profile={profile}
-                  onPick={(m) => goMonth(m)}
-                  onIn={() => setLifeRes('years')}
-                  onOut={() => setLifeRes('days')}
-                  onResolution={setLifeRes}
-                  cols={[12, 6, 4, 3][mag]}
-                  focal={focal}
-                />
-              ) : (
-                <Life
-                  days={days}
-                  profile={profile}
-                  onPick={(y) => goYear(y)}
-                  onIn={() => goYear()}
-                  onOut={() => setLifeRes('months')}
-                  onResolution={setLifeRes}
-                />
-              )
-            ) : (
-              <Month
-                days={days}
-                born={profile?.born}
-                focus={monthFocus}
-                onPick={(iso) => {
-                  setDate(iso)
-                  setScreen('today')
-                }}
-                onIn={goToday}
-                onOut={() => goYear()}
-                zoomed={mag > 0}
-                anchor={monthAnchor}
-                onPainting={(m) => {
-                  setPaintedArrived(false)
-                  setPaintedMonth(m)
-                }}
-              />
-            )}
+            <Screens
+              nav={nav}
+              acc={acc}
+              act={act}
+              lists={lists}
+              wall={wall}
+              openPainting={painting.openPainting}
+              painter={painter}
+              email={session?.user.email}
+              signOut={signOut}
+              ui={{ why, setWhy, loaded, setLoaded, nudge, onDryBrush, onDefine: () => setDefining(true) }}
+            />
           </div>
           <MeaningSheet open={defining} onClose={() => setDefining(false)} />
-          {(['home', 'today', 'month', 'year', 'life', 'list', 'paintings'] as Screen[]).includes(screen) && (
+          {withPainting.includes(screen) && (
             <MonthPainting
-              month={paintedMonth}
-              arrived={paintedArrived}
-              days={days}
+              month={painting.paintedMonth}
+              arrived={painting.paintedArrived}
+              days={acc.days}
               name={painter}
-              onClose={() => setPaintedMonth(null)}
-              onKeep={(p) => putKept([...kept.filter((x) => x !== p), p].sort().reverse())}
-              kept={!!paintedMonth && kept.includes(paintedMonth)}
+              onClose={painting.closePainting}
+              onKeep={wall.keep}
+              kept={!!painting.paintedMonth && wall.kept.includes(painting.paintedMonth)}
             />
           )}
           {!demo && <SyncStatus />}

@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 22, 2026, 22:59 UTC_
+_last updated Oct 22, 2026, 23:12 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -203,6 +203,21 @@ Decided Oct 22, 2026, after a device copy of what matters replaced the account's
 ## Testing as someone new (hidden links)
 
 All test links live in `docs/test-links.md`.
+
+## Code structure
+
+Split Oct 22, 2026, so each piece lives in one place (no change in behaviour): `src/App.tsx` (about 150 lines) only wires the pieces together.
+
+- `src/state/app.ts`: the screens, and what the web address asked for (the demo, `?welcome`, `/terms`…).
+- `src/state/useAuth.ts`: who's signed in (and finishing Google's sign-in).
+- `src/state/useAccount.ts`: what the account holds: the question, the profile, every painted day, notes a month at a time; "couldn't load your squares" if it fails.
+- `src/state/useDayActions.ts`: paint, start over, frame, and notes (each saved straight to the account).
+- `src/state/useMatters.ts`, `useKept.ts`: what matters, my paintings.
+- `src/state/usePaintingArrival.ts`: the painting that's open, and the new month's (or year's) arrival.
+- `src/state/useNavigation.ts`: where you are and how you move: the zoom ladder, the list and pie, the small print, settings, pinching.
+- `src/state/useLanding.ts`: where you land, and onboarding as the only way in until your squares are set.
+- `src/state/useBrowserHistory.ts`: the browser's back button.
+- `src/Screens.tsx`: which screen shows, and what each one gets. `src/screens/SignedOut.tsx`: sign-in and its pages.
 
 ## Setup (for future sessions)
 

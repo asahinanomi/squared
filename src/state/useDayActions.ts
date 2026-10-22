@@ -1,0 +1,105 @@
+import { useCallback, useRef } from 'react'
+import { paintedFresh, todayIso } from '../lib/dates'
+import type { Days } from '../lib/days'
+import { draftNote, type Note, type Why } from '../lib/notes'
+import type { Paint } from '../lib/paints'
+import { save } from '../lib/save'
+import { frameSound } from '../lib/sound'
+import type { Account } from './useAccount'
+
+const byTime = (a: Note, b: Note) => a.writtenAt.localeCompare(b.writtenAt)
+
+/** What you do to a day: paint it, start it over, frame it, and its notes. Each shows at once and is saved straight
+ *  to the account. */
+export function useDayActions(
+  date: string,
+  { days, setDays, notes, setNotes }: Account,
+  why: Why | null,
+  setWhy: (w: Why | null) => void,
+) {
+  const daysNow = useRef<Days>({}) // the days as they are now, for callbacks that mustn't change with them
+  daysNow.current = days
+
+  const onFilled = useCallback(
+    (color: Paint) => {
+      setWhy({ settled: color, fresh: !daysNow.current[date] })
+      setDays((d) => {
+        // A first paint is on time on the day or the next day (the database decides for good);
+        // repaints keep the first paint's shade and date.
+        return {
+          ...d,
+          [date]: d[date]
+            ? {
+                ...d[date],
+                color,
+                changedOn: d[date].color !== color ? todayIso() : d[date].changedOn,
+                // A frame is for a day that mattered most: painting it another colour takes it off.
+                framed: color === 'green' ? d[date].framed : undefined,
+              }
+            : { backfilled: !paintedFresh(date), paintedOn: todayIso(), color },
+        }
+      })
+      if (color !== 'green' && daysNow.current[date]?.framed) save({ k: 'framed', date, framed: false })
+      save({ k: 'color', date, color })
+    },
+    [date], // eslint-disable-line react-hooks/exhaustive-deps
+  )
+
+  // Frame (or unframe) a day that mattered most.
+  const onFrame = () => {
+    const day = date
+    const was = !!days[day]?.framed
+    setDays((d) => (d[day] ? { ...d, [day]: { ...d[day], framed: !was } } : d))
+    // A little magic, and a pinned note: what do you want to remember? (skippable). Unframing keeps notes pinned.
+    if (!was) {
+      frameSound()
+      if (!(notes[day] ?? []).some((n) => n.pinned)) setWhy({ pinned: true })
+    }
+    save({ k: 'framed', date: day, framed: !was })
+  }
+
+  // Start over: the square goes blank at once and leaves every count.
+  const onWipe = () => {
+    const day = date
+    if (!days[day]) return
+    setWhy(null)
+    setDays((d) => {
+      const next = { ...d }
+      delete next[day]
+      return next
+    })
+    save({ k: 'wipe', date: day })
+  }
+
+  const putNotes = (day: string, fn: (list: Note[]) => Note[]) =>
+    setNotes((all) => ({ ...all, [day]: fn(all[day] ?? []).sort(byTime) }))
+  const swap = (day: string, id: string, to: Note) => putNotes(day, (l) => l.map((n) => (n.id === id ? to : n)))
+
+  const onSaveNote = async (note: Note | undefined, text: string) => {
+    setWhy(null)
+    if (note) {
+      swap(note.date, note.id, { ...note, body: text, writtenAt: new Date().toISOString() })
+      save({ k: 'note-body', note, body: text })
+    } else {
+      const draft = draftNote(date, text, why?.pinned)
+      putNotes(draft.date, (l) => [...l, draft])
+      save({ k: 'note-add', note: draft })
+    }
+  }
+
+  // Pin a note to the top of its day (or unpin it).
+  const onPinNote = (note: Note) => {
+    setWhy(null)
+    const pinned = !note.pinned
+    swap(note.date, note.id, { ...note, pinned: pinned || undefined })
+    save({ k: 'note-pin', note, pinned })
+  }
+
+  const onDeleteNote = async (note: Note) => {
+    setWhy(null)
+    putNotes(note.date, (l) => l.filter((n) => n.id !== note.id))
+    save({ k: 'note-del', note })
+  }
+
+  return { onFilled, onFrame, onWipe, onSaveNote, onPinNote, onDeleteNote }
+}
