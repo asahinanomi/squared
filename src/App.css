@@ -4217,12 +4217,12 @@ button.home-card:active {
   gap: 2px;
   min-width: 0;
 }
-/* the note: one line, then an ellipsis */
+/* the note: one line, then an ellipsis; a note is something you read, so ink-soft, as on today's card */
 .home-ago-note {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: var(--muted);
+  color: var(--ink-soft);
 }
 .home-dot {
   flex: none;
