@@ -11,6 +11,31 @@ export type Kind = keyof Matters
 export type Saved = Matters & { at?: string }
 
 const KEY = 'squared.matters'
+const PREV = 'squared.matters.prev' // the copy a sync last replaced, just in case
+
+// Whose lists this device holds. A device can be shared (or used to try a new account): one account's copy must
+// never be sent up into another's. Copies saved before this carry no owner.
+let owner: string | null = null
+type Stored = Saved & { owner?: string; empty?: Entry[] }
+const readStored = (): Stored | null => {
+  try {
+    return JSON.parse(localStorage.getItem(KEY) ?? 'null')
+  } catch {
+    return null
+  }
+}
+/** Signed in (or out): from now on this device's copy belongs to `id`; another account's copy is set aside. */
+export function setMattersOwner(id: string | null) {
+  owner = id
+  const m = readStored()
+  if (id && m?.owner && m.owner !== id) {
+    try {
+      localStorage.removeItem(KEY)
+    } catch {
+      /* fine */
+    }
+  }
+}
 export const MAX_CHARS = 120 // a line or two
 
 // Never keep blank entries.
@@ -23,7 +48,8 @@ const clean = (m: Matters): Matters => {
 export function loadMatters(): Saved {
   try {
     // Copies saved before the rename keep the second list as "empty".
-    const m = JSON.parse(localStorage.getItem(KEY) ?? 'null') as (Saved & { empty?: Entry[] }) | null
+    const m = readStored()
+    if (m?.owner && owner && m.owner !== owner) return { meaningful: [], wasted: [] }
     const wasted = m?.wasted ?? m?.empty
     if (m && Array.isArray(m.meaningful) && Array.isArray(wasted)) return { meaningful: m.meaningful, wasted, at: m.at }
   } catch {
@@ -34,7 +60,7 @@ export function loadMatters(): Saved {
 
 function keepLocal(m: Saved) {
   try {
-    localStorage.setItem(KEY, JSON.stringify(m))
+    localStorage.setItem(KEY, JSON.stringify({ ...m, owner: owner ?? undefined }))
   } catch {
     /* storage unavailable (private mode): the lists last until the app closes */
   }
@@ -63,6 +89,9 @@ export function saveMatters(m: Matters): Saved {
 /** Send this device's copy to the account. */
 export async function pushMatters(m: Saved): Promise<void> {
   if (!supabase) return
+  // Never send another account's copy (a device used by two accounts).
+  const stored = readStored()
+  if (stored?.owner && owner && stored.owner !== owner) return
   const send = (second: 'wasted' | 'empty') =>
     supabase!
       .from('matters')
@@ -72,17 +101,64 @@ export async function pushMatters(m: Saved): Promise<void> {
   if (error && error.code !== 'PGRST205' && error.code !== '42P01') throw error
 }
 
-/** Opening the lists: whichever copy changed last wins, and the other side catches up. */
+const count = (m: Matters) => m.meaningful.length + m.wasted.length
+const same = (a: Matters, b: Matters) =>
+  JSON.stringify([a.meaningful.map((e) => e.text), a.wasted.map((e) => e.text)]) ===
+  JSON.stringify([b.meaningful.map((e) => e.text), b.wasted.map((e) => e.text)])
+// Both lists, every entry once (by id, then by its words): nothing on either side is dropped.
+const union = (a: Matters, b: Matters): Matters => {
+  const join = (x: Entry[], y: Entry[]) => {
+    const seen = new Set(x.map((e) => e.id))
+    const words = new Set(x.map((e) => e.text.trim().toLowerCase()))
+    return [...x, ...y.filter((e) => !seen.has(e.id) && !words.has(e.text.trim().toLowerCase()))]
+  }
+  return { meaningful: join(a.meaningful, b.meaningful), wasted: join(a.wasted, b.wasted) }
+}
+const stash = (m: Saved) => {
+  try {
+    localStorage.setItem(PREV, JSON.stringify({ ...m, owner: owner ?? undefined }))
+  } catch {
+    /* fine */
+  }
+}
+
+/** Opening the lists: whichever copy changed last wins, and the other side catches up, with three guards so a
+ *  list is never lost: an empty copy never replaces a written one; a copy from before owners existed is merged
+ *  in, not dropped; and whatever a sync replaces is kept aside on the device (and in the account's history). */
 export async function syncMatters(local: Saved): Promise<Saved> {
   const remote = await fetchMatters()
-  const hasLocal = local.meaningful.length + local.wasted.length > 0
-  // The account writes its times its own way ("…+00:00"), so compare them as times, not text.
-  if (remote && (!local.at || Date.parse(remote.at!) >= Date.parse(local.at))) {
+  const stored = readStored()
+  const legacy = !!stored && !stored.owner && count(local) > 0
+  // Nothing in the account yet: this device's copy goes up (only if it's this account's).
+  if (!remote || count(remote) === 0) {
+    if (count(local) > 0) {
+      const up = { ...local, at: local.at ?? new Date().toISOString() }
+      await pushMatters(up)
+      keepLocal(up)
+    }
+    return local
+  }
+  if (count(local) === 0 || same(local, remote)) {
     keepLocal(remote)
     return remote
   }
-  // This device is newer (or the account has nothing yet): send it up.
-  if (remote || hasLocal) await pushMatters({ ...local, at: local.at ?? new Date().toISOString() })
+  // An older device copy (from before owners): merge it in, so nothing written on it is lost.
+  if (legacy) {
+    const merged = { ...union(remote, local), at: new Date().toISOString() }
+    stash(local)
+    await pushMatters(merged)
+    keepLocal(merged)
+    return merged
+  }
+  // The account's copy is newer: it wins; this device's is kept aside.
+  if (!local.at || Date.parse(remote.at!) >= Date.parse(local.at)) {
+    stash(local)
+    keepLocal(remote)
+    return remote
+  }
+  // This device is newer: send it up.
+  await pushMatters({ ...local, at: local.at })
+  keepLocal(local)
   return local
 }
 

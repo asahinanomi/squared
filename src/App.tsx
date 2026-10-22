@@ -11,6 +11,7 @@ import { QUESTION } from './lib/config'
 import { monthsAgo, paintedFresh, todayIso } from './lib/dates'
 import { fetchAllDays, type Days } from './lib/days'
 import { enqueue, overlayDays, overlayNotes, setOutboxUser } from './lib/outbox'
+import { claimDevice } from './lib/owner'
 import { reportError } from './lib/report'
 import { mockDays } from './lib/mock'
 import { draftNote, fetchAllNotes, fetchMonthNotes, legacyNotes, type Note, type Notes, type Why } from './lib/notes'
@@ -36,7 +37,7 @@ import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
 import { Welcome } from './screens/Welcome'
-import { loadMatters, syncMatters } from './lib/matters'
+import { loadMatters, setMattersOwner, syncMatters } from './lib/matters'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import { Paintings } from './screens/Paintings'
@@ -92,6 +93,7 @@ const PAINTED_KEY = 'squared.paintedMonth' // the month whose arrival last showe
 const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
 
 export default function App() {
+  const ownerRef = useRef<string | null>(null)
   // undefined = still checking; null = signed out.
   const [session, setSession] = useState<Session | null | undefined>(demo ? null : undefined)
   const [demoIn, setDemoIn] = useState(false)
@@ -206,6 +208,13 @@ export default function App() {
 
   // The outbox sends only the signed-in person's changes.
   useEffect(() => setOutboxUser(userId ?? null), [userId])
+  // Whose device copies these are: another account's are set aside, never sent up (a shared device, or trying a
+  // new account). Runs before anything below reads them.
+  if (userId && ownerRef.current !== userId) {
+    ownerRef.current = userId
+    setMattersOwner(userId)
+    claimDevice(userId)
+  }
 
   // Load the question, every painted day, this month's notes and the profile for whoever is signed in.
   useEffect(() => {
