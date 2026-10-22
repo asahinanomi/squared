@@ -810,16 +810,16 @@
   stroke-linejoin: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  animation: ghost-trail 2.2s 0.4s ease-in-out forwards;
+  animation: ghost-trail 1.45s 0.3s ease-in-out forwards;
 }
 .ghost-brush {
   stroke: #141413;
   stroke-width: 1.2;
   stroke-linejoin: round;
   opacity: 0;
-  animation: ghost-brush 2.2s 0.4s ease-in-out forwards;
+  animation: ghost-brush 1.45s 0.3s ease-in-out forwards;
 }
-/* Once: the 1.4s sweep is the first 62%, then brush and trail fade. */
+/* Once: the 0.9s sweep is the first 62%, then brush and trail fade. */
 @keyframes ghost-brush {
   0%,
   62% {
