@@ -45,6 +45,7 @@ import { Home } from './screens/Home'
 import { keepPainting, keptPaintings, unkeepPainting } from './lib/kept'
 import { OpenPainting } from './components/PaintingButton'
 import { SyncStatus } from './components/SyncStatus'
+import { Waiting } from './components/Waiting'
 import './App.css'
 
 type Screen =
@@ -473,7 +474,7 @@ export default function App() {
     return () => window.removeEventListener('popstate', back)
   }, [])
 
-  if (session === undefined || (userId && checking) || (signedIn && !landed && screen === 'today')) return null
+  if (session === undefined || (userId && checking) || (signedIn && !landed && screen === 'today')) return <Waiting />
   if (!signedIn)
     return ideaOut ? (
       <div className="app">
