@@ -1768,19 +1768,21 @@
   margin: -6px -12px -6px 0; /* the icon's edge on the last column's edge */
   display: grid;
   place-items: center;
-  border-radius: 50%;
   color: var(--ink);
-  transition:
-    background-color 0.15s,
-    transform 0.15s;
 }
-/* Pressed, and while its painting is open: the controls' soft capsule behind it. */
-.month-paint:active,
-.month-paint.is-on {
-  background: #e9e9e3;
+/* Pressed, the icon presses in; while its painting is open it's filled (ink frame, paper hills), as the view
+   switch fills the one you're on. Nothing grows past the icon. */
+.month-paint svg {
+  transition: transform 0.12s;
 }
-.month-paint:active {
-  transform: scale(0.92);
+.month-paint:active svg {
+  transform: scale(0.84);
+}
+.month-paint.is-on svg rect {
+  fill: currentColor;
+}
+.month-paint.is-on svg path {
+  stroke: var(--paper);
 }
 .month-paint svg {
   width: 20px;
@@ -3642,32 +3644,10 @@ button.settings-row:active {
 .life-title-row .lifeglass::after {
   inset: -6px -13px;
 }
-.life-title-row .lifeglass::before {
-  width: 32px;
-  height: 32px;
-  margin: -16px 0 0 -16px;
-}
-/* The life glass, pressed: the controls' soft capsule behind it, as on the painting icon. */
-.lifeglass::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
-  border-radius: 50%;
-  background: #e9e9e3;
-  opacity: 0;
-  transform: scale(0.9);
-  transition:
-    opacity 0.15s,
-    transform 0.15s;
-}
-.lifeglass:active::before {
-  opacity: 1;
-  transform: none;
-}
+/* The life glass, pressed: it presses in, as the painting icon does. */
 .lifeglass svg {
-  position: relative; /* above its capsule */
+  transition: transform 0.12s;
+}
+.lifeglass:active svg {
+  transform: scale(0.84);
 }
