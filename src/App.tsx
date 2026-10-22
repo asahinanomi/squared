@@ -162,7 +162,6 @@ export default function App() {
   useEffect(() => setKept(keptPaintings(session?.user.user_metadata?.kept_paintings)), [session])
   const [paintedArrived, setPaintedArrived] = useState(false) // shown by the new month, not opened from the month view
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [profileReady, setProfileReady] = useState(false)
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
   const [checking, setChecking] = useState(() => !legalAtStart && !tryWelcome && !trySquaresAtStart && !welcomed())
@@ -192,10 +191,7 @@ export default function App() {
 
   // The demo keeps its profile on this device.
   useEffect(() => {
-    if (demo)
-      fetchProfile()
-        .then(setProfile)
-        .finally(() => setProfileReady(true))
+    if (demo) fetchProfile().then(setProfile)
   }, [])
 
   // The outbox sends only the signed-in person's changes.
@@ -211,10 +207,7 @@ export default function App() {
       return
     }
     fetchQuestion().then((q) => q && setQuestion(q))
-    fetchProfile()
-      .then(setProfile)
-      .catch(() => undefined)
-      .finally(() => setProfileReady(true))
+    fetchProfile().then(setProfile)
     notesLoaded.current = new Set([todayIso().slice(0, 7)])
     Promise.all([fetchAllDays(), fetchMonthNotes(todayIso())])
       .then(([d, n]) => {
@@ -380,17 +373,6 @@ export default function App() {
     setTimeout(() => setNudge(false), 750)
   }
 
-  // Where you land: home once today is painted, or while you're new (first steps to do); before you paint,
-  // today's question. Decided once, when the days and the profile are in.
-  const landed = useRef(false)
-  useEffect(() => {
-    if (landed.current || !signedIn || (userId && checking) || !profileReady) return
-    landed.current = true
-    if (screen !== 'today' || date !== todayIso()) return
-    const isNew = !profile || !Object.keys(days).length || !mattersWritten
-    if (days[todayIso()] || isNew) setScreenValue('home')
-  }, [signedIn, userId, checking, profileReady]) // eslint-disable-line react-hooks/exhaustive-deps
-
   // Home shows a month and a year ago today, with their notes: load those months.
   useEffect(() => {
     if (screen !== 'home') return
@@ -401,10 +383,17 @@ export default function App() {
   }, [screen, loadNotes])
 
   // Home's lists. What matters is written (on this device, or synced from the account).
-  const mattersWritten = (() => {
-    const m = loadMatters()
-    return m.meaningful.length > 0 || m.wasted.length > 0
-  })()
+  // Checked against the account too (this phone's copy can be empty), and again whenever home opens.
+  const written = (m: { meaningful: unknown[]; wasted: unknown[] }) => m.meaningful.length > 0 || m.wasted.length > 0
+  const [mattersWritten, setMattersWritten] = useState(() => written(loadMatters()))
+  useEffect(() => {
+    if (!userId && !demo) return
+    if (screen !== 'home') return
+    setMattersWritten(written(loadMatters()))
+    syncMatters(loadMatters())
+      .then((m) => setMattersWritten(written(m)))
+      .catch(() => undefined)
+  }, [userId, screen])
   // Discover squared: what else it can do, one tap each; a tried one leaves the list (remembered on the device).
   const [tried, setTried] = useState<string[]>(() => {
     try {
@@ -511,8 +500,8 @@ export default function App() {
       go: () => goLife(),
     },
   ]
-    // Only while you're new (fewer than 30 painted days): after that, you know your way around.
-    .filter((d) => Object.keys(days).length < 30 && !d.done && !tried.includes(d.id))
+    // Only while you're new (first steps still open): after that, you know your way around.
+    .filter((d) => (!profile || !Object.keys(days).length || !mattersWritten) && !d.done && !tried.includes(d.id))
 
   // The painter's signature on a month's painting: the first name.
   const painter = (session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? '').split(' ')[0]
