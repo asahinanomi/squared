@@ -171,12 +171,19 @@ export default function App() {
   useEffect(() => {
     if (!supabase) return
     const sb = supabase
+    // Back from Google, the sign-in finishes first: until then, "nobody yet" is not an answer (it would flash the
+    // sign-in screen for a moment).
+    let finishing = true
     finishSignIn().then(async (err) => {
       setAuthError(err)
       const { data } = await sb.auth.getSession()
+      finishing = false
       setSession(data.session)
     })
-    const { data } = sb.auth.onAuthStateChange((_e, s) => setSession(s))
+    const { data } = sb.auth.onAuthStateChange((_e, s) => {
+      if (finishing && !s) return
+      setSession(s)
+    })
     return () => data.subscription.unsubscribe()
   }, [])
 
