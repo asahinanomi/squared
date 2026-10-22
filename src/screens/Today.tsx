@@ -21,8 +21,6 @@ type Props = {
   born?: string
   date: string
   days: Days
-  /** Today, once painted, links home to see the week. */
-  onHome?: () => void
   notes: Note[]
   loaded: Paint | null
   /** The open "why?" bubble: a new note, or an existing note being edited. */
@@ -301,12 +299,6 @@ export function Today(props: Props) {
               <button className="day-wipe" onClick={() => setWiping(true)}>
                 start over
               </button>
-              {/* Just painted today: a quiet way to see the week it joins. */}
-              {date === today && props.onHome && (
-                <button className="day-wipe" onClick={props.onHome}>
-                  see your week →
-                </button>
-              )}
               {/* A day that mattered most: framed in a darker green. Green days only. */}
               {day.color === 'green' && (
                 <button className="day-wipe" onClick={props.onFrame} aria-pressed={!!day.framed}>

@@ -739,7 +739,6 @@ export default function App() {
             screen !== 'export' &&
             screen !== 'paintings' && (
               <Topbar
-                onHome={goHome}
                 onCalendar={() => goMonth()}
                 onIdea={() => setScreen('idea')}
                 onSettings={openSettings}
