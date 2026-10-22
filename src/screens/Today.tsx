@@ -10,7 +10,7 @@ import { ZoomInIcon, ZoomOutIcon } from '../components/ZoomBar'
 import { addDays, longDate, ordinal, shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
-import { PAINTS, paintHex, squareFill, WORD, type Paint } from '../lib/paints'
+import { PAINTS, paintHex, WORD, type Paint } from '../lib/paints'
 import { setSoundOn, soundOn, soundOnChime } from '../lib/sound'
 import { loadMatters } from '../lib/matters'
 import { specialDay } from '../lib/special'
@@ -37,7 +37,8 @@ type Props = {
   /** Pin a note to the top of its day, or unpin it. */
   onPinNote: (note: Note) => void
   /** On this day: a year (or a month) ago, painted — shown on today's screen; a tap opens it. */
-  glimpse?: { iso: string; day: Days[string]; note?: Note; ago: string }
+  /** On this day (a month and a year ago today), under today's square. */
+  onThisDay?: React.ReactNode
   /** Framing didn't save: what to say, quietly, under the square. */
   onLoad: (p: Paint) => void
   onDefine: () => void
@@ -367,27 +368,7 @@ export function Today(props: Props) {
 
       {/* Notes stay just as they were, below; kept mounted (hidden) while writing so opened notes stay open. */}
       <div className="tray-rest" hidden={!!why}>
-        {props.glimpse && (
-          <button className="glimpse" onClick={() => onDate(props.glimpse!.iso)}>
-            <span className="glimpse-ago">{props.glimpse.ago}</span>
-            {/* As a card in the list of days: its square, then the date and word. */}
-            <span className="glimpse-row">
-              <span
-                className={'glimpse-square' + (props.glimpse.day.framed ? ' is-framed' : '')}
-                style={{ background: squareFill(props.glimpse.day.color, props.glimpse.day.framed) }}
-                aria-hidden="true"
-              />
-              <span className="glimpse-text">
-                <span className="glimpse-word">
-                  <GlimpseDate iso={props.glimpse.iso} />
-                  <span className="glimpse-color"> · {WORD[props.glimpse.day.color]}</span>
-                </span>
-              </span>
-            </span>
-            {/* The note under both, the card's full width (more of it fits), up to two lines. */}
-            {props.glimpse.note && <span className="glimpse-note">{props.glimpse.note.body}</span>}
-          </button>
-        )}
+        {props.onThisDay}
         {(day || notes.length > 0) && (
           <NotesList
             key={date}
@@ -523,17 +504,6 @@ export function ChevronDown({ className = 'day-pick-chevron' }: { className?: st
         strokeLinejoin="round"
       />
     </svg>
-  )
-}
-
-/** "Tue, Sep 22nd", as a list card names its day. */
-function GlimpseDate({ iso }: { iso: string }) {
-  const p = shortDateParts(iso)
-  return (
-    <>
-      {p.weekday}, {p.monthDay}
-      <sup>{p.suffix}</sup>
-    </>
   )
 }
 

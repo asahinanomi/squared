@@ -45,6 +45,7 @@ import { Home } from './screens/Home'
 import { keepPainting, keptPaintings, unkeepPainting } from './lib/kept'
 import { OpenPainting } from './components/PaintingButton'
 import { SyncStatus } from './components/SyncStatus'
+import { OnThisDay } from './components/OnThisDay'
 import './App.css'
 
 type Screen =
@@ -284,12 +285,6 @@ export default function App() {
     }
   }, [checking, days, userId])
 
-  // On this day: today's screen offers a glimpse of a year ago (or, if that's blank, a month ago).
-  const glimpseIso = [12, 1].map((n) => monthsAgo(todayIso(), n)).find((iso) => iso && days[iso]) ?? null
-  useEffect(() => {
-    if (glimpseIso) loadNotes(glimpseIso)
-  }, [loadNotes, glimpseIso])
-
   useEffect(() => {
     document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'
   }, [signedIn, screen])
@@ -384,9 +379,9 @@ export default function App() {
     setTimeout(() => setNudge(false), 750)
   }
 
-  // Home shows a month and a year ago today, with their notes: load those months.
+  // Home and today show a month and a year ago today, with their notes: load those months.
   useEffect(() => {
-    if (screen !== 'home') return
+    if (screen !== 'home' && screen !== 'today') return
     for (const n of [1, 12]) {
       const iso = monthsAgo(todayIso(), n)
       if (iso) loadNotes(iso)
@@ -843,15 +838,8 @@ export default function App() {
                 onFilled={onFilled}
                 onWipe={onWipe}
                 onFrame={onFrame}
-                glimpse={
-                  date === todayIso() && glimpseIso
-                    ? {
-                        iso: glimpseIso,
-                        day: days[glimpseIso],
-                        note: (notes[glimpseIso] ?? []).find((n) => n.pinned) ?? notes[glimpseIso]?.at(-1),
-                        ago: glimpseIso === monthsAgo(todayIso(), 12) ? 'a year ago today' : 'a month ago today',
-                      }
-                    : undefined
+                onThisDay={
+                  date === todayIso() && <OnThisDay days={days} notes={notes} onDay={setDate} className="is-today" />
                 }
                 onPinNote={onPinNote}
                 onZoomOut={outOfDay}

@@ -1,10 +1,11 @@
 import { PaintingThumb } from '../components/PaintingThumb'
-import { monthsAgo, shortDateParts, todayIso } from '../lib/dates'
+import { shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
-import type { Note, Notes } from '../lib/notes'
-import { PAINTS, paintDeep, paintHex, squareFill, WORD } from '../lib/paints'
+import type { Notes } from '../lib/notes'
+import { PAINTS, paintDeep, paintHex, WORD } from '../lib/paints'
 import type { Profile } from '../lib/profile'
+import { OnThisDay } from '../components/OnThisDay'
 import { Chevron } from './Today'
 
 type Step = { label: string; done: boolean; go: () => void }
@@ -48,15 +49,6 @@ const DateLine = ({ iso }: { iso: string }) => {
 export function Home({ name, days, notes, profile, steps, discover, onToday, onLife, onDay, onPainting }: Props) {
   const today = todayIso()
   const painted = days[today]
-  const firstNote = (iso: string): Note | undefined => (notes[iso] ?? []).find((n) => n.pinned) ?? notes[iso]?.at(-1)
-  const ago = (
-    [
-      [1, 'a month ago today'],
-      [12, 'a year ago today'],
-    ] as const
-  )
-    .map(([n, label]) => ({ iso: monthsAgo(today, n), label }))
-    .filter((a): a is { iso: string; label: (typeof a)['label'] } => !!a.iso && !!days[a.iso])
   const month = today.slice(0, 7)
   const year = today.slice(0, 4)
   const hasMonth = Object.keys(days).some((d) => d.startsWith(month))
@@ -187,23 +179,7 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
         </section>
       )}
 
-      {ago.length > 0 && (
-        <section className="home-card home-ago">
-          {ago.map((a) => {
-            const d = days[a.iso]
-            const note = firstNote(a.iso)
-            return (
-              <button key={a.iso} onClick={() => onDay(a.iso)}>
-                <span className="home-dot" style={{ background: squareFill(d.color, d.framed) }} aria-hidden="true" />
-                <span>
-                  <b>{a.label}</b>: {WORD[d.color]}
-                  {note && <>. “{note.body}”</>}
-                </span>
-              </button>
-            )
-          })}
-        </section>
-      )}
+      <OnThisDay days={days} notes={notes} onDay={onDay} />
 
       {!painted && life}
 
