@@ -19,6 +19,8 @@ Read `README.md` first: it is the product spec and the record of every phase bui
 - Painting is the point — never let a tap fill a square.
 - Stay focused and minimal: ideally one main action per screen. Home can do a few more things, but never an overwhelming amount of information.
 - Never let squared look "techy": no dashboards of numbers, legends or stats for their own sake.
+- Solid over clever: build only features that stay simple and reliable. Avoid risky features and complex code (sync, merging, device copies). If something needs complex code, say so and offer the simple version first.
+- My account holds real data: treat it as production. Never reset it or run anything that changes it without asking (losing it wouldn't be the end of the world, but keep it).
 - Mobile-first. Desktop layout is deferred to a later phase.
 
 ## Workflow
