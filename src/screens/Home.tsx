@@ -1,9 +1,9 @@
 import { PaintingThumb } from '../components/PaintingThumb'
 import { addDays, fromIso, shortDateParts, todayIso } from '../lib/dates'
-import { stampLine, type Days } from '../lib/days'
-import { daysBetween, lifeCounts } from '../lib/life'
+import type { Days } from '../lib/days'
+import { lifeCounts } from '../lib/life'
 import type { Notes } from '../lib/notes'
-import { PAINTS, paintDeep, paintHex, WORD } from '../lib/paints'
+import { paintDeep, paintHex, WORD } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 import { OnThisDay } from '../components/OnThisDay'
 import { Chevron } from './Today'
@@ -17,8 +17,6 @@ type Props = {
   profile: Profile | null
   /** Getting started (onboarding's steps and the first square): shown until the first square is painted. */
   steps: Step[]
-  /** What else squared can do, one tap each to try; a tried one leaves the list. */
-  discover: { label: string; sub: string; swatch: React.CSSProperties; go: () => void }[]
   onToday: () => void
   onLife: () => void
   onDay: (iso: string) => void
@@ -47,7 +45,7 @@ const DateLine = ({ iso }: { iso: string }) => {
 // streaks, no scores. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (L, M, N)
 // Before the first square (squares set, nothing painted): only your days ahead, the question with "paint your
 // first square", and getting started, so there's one thing to do. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (K)
-export function Home({ name, days, notes, profile, steps, discover, onToday, onLife, onDay, onPainting }: Props) {
+export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay, onPainting }: Props) {
   const today = todayIso()
   const painted = days[today]
   const month = today.slice(0, 7)
@@ -63,16 +61,6 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
     (() => {
       const c = lifeCounts(profile.born, profile.lifespan, today)
       const lived = Math.round((c.sofar / c.total) * 100)
-      // The Oz bar: lived before squared in ink (never painted), the days since your first square in colour, in
-      // true proportion (paper for the ones skipped), and the days ahead in paper.
-      const first = Object.keys(days)
-        .filter((d) => d <= today)
-        .sort()[0]
-      const since = first ? Math.min(daysBetween(first, today) + 1, c.sofar) : 0
-      const counted = Object.entries(days).filter(([d]) => first && d >= first && d <= today)
-      const by = PAINTS.map((p) => ({ p, n: counted.filter(([, d]) => d.color === p.id).length }))
-      const skipped = Math.max(since - by.reduce((n, b) => n + b.n, 0), 0)
-      const w = (n: number) => `${(n / c.total) * 100}%`
       return (
         <button className="home-card home-life" onClick={onLife} aria-label={`a life: ${fmt(c.left)} days ahead`}>
           <span className="home-head">
@@ -85,11 +73,7 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
             <small>days ahead</small>
           </span>
           <span className="home-bar" aria-hidden="true">
-            <i style={{ width: w(c.sofar - since) }} />
-            {by.map(({ p, n }) => (
-              <i key={p.id} style={{ width: w(n), background: p.hex }} />
-            ))}
-            <i className="is-skipped" style={{ width: w(skipped) }} />
+            <i style={{ width: `${(c.sofar / c.total) * 100}%` }} />
           </span>
           <span className="home-legend">
             <span>{lived}% lived</span>
@@ -99,8 +83,11 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
       )
     })()
 
+  // Today, painted: its square and date, and its note (the pinned one, what you want to remember, else the latest).
+  const todayNotes = notes[today] ?? []
+  const todayNote = todayNotes.find((n) => n.pinned) ?? todayNotes[todayNotes.length - 1]
   const todayCard = painted ? (
-    <button className="home-card home-today" onClick={onToday}>
+    <button className="home-card home-today" onClick={onToday} aria-label="Open today">
       <span className="home-sq" style={{ background: paintHex(painted.color) }} aria-hidden="true">
         <span style={{ color: paintDeep(painted.color) }}>{WORD[painted.color]}</span>
       </span>
@@ -108,8 +95,7 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
         <span className="home-t">
           <DateLine iso={today} />
         </span>
-        <span className="home-s">{stampLine(today, painted)}</span>
-        <span className="home-link">open today</span>
+        {todayNote && <span className="home-note">“{todayNote.body}”</span>}
       </span>
     </button>
   ) : (
@@ -240,26 +226,6 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
 
       {todayCard}
       {weekCard}
-
-      {discover.length > 0 && (
-        <section className="home-card">
-          <h2 className="home-head">explore squared</h2>
-          <ul className="home-discover">
-            {discover.map((d) => (
-              <li key={d.label}>
-                <button onClick={d.go}>
-                  <span className="home-swatch" style={d.swatch} aria-hidden="true" />
-                  <span>
-                    <b>{d.label}</b>
-                    <small>{d.sub}</small>
-                  </span>
-                  <Chevron dir="right" />
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
 
       <OnThisDay days={days} notes={notes} onDay={onDay} />
 

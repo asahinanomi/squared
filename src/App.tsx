@@ -88,22 +88,6 @@ const legalAtStart = (
 const tryMonth = new URLSearchParams(location.search).has('month')
 // squared.today/?year shows last year's painting, the January 1st moment, to try it.
 const tryYear = new URLSearchParams(location.search).has('year')
-const ONBOARDED_KEY = 'squared.onboarded' // when onboarding ended on this device: explore squared shows for a week
-const markOnboarded = () => {
-  try {
-    localStorage.setItem(ONBOARDED_KEY, String(Date.now()))
-  } catch {
-    /* fine */
-  }
-}
-const onboardedRecently = () => {
-  try {
-    return Date.now() - Number(localStorage.getItem(ONBOARDED_KEY) ?? 0) < 7 * 86_400_000
-  } catch {
-    return false
-  }
-}
-const TRIED_KEY = 'squared.tried' // discover squared: the things already tried
 const PAINTED_KEY = 'squared.paintedMonth' // the month whose arrival last showed a painting (January: the year's)
 const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
 
@@ -414,28 +398,6 @@ export default function App() {
       .then((m) => setMattersWritten(written(m)))
       .catch(() => undefined)
   }, [userId, screen])
-  // Explore squared: what else it can do, one tap each; a tried one leaves the list (remembered on the device).
-  const [tried, setTried] = useState<string[]>(() => {
-    try {
-      return JSON.parse(localStorage.getItem(TRIED_KEY) ?? '[]')
-    } catch {
-      return []
-    }
-  })
-  const markTried = (id: string) =>
-    setTried((t) => {
-      if (t.includes(id)) return t
-      const next = [...t, id]
-      try {
-        localStorage.setItem(TRIED_KEY, JSON.stringify(next))
-      } catch {
-        /* fine */
-      }
-      return next
-    })
-  useEffect(() => {
-    if (screen === 'life') markTried('life')
-  }, [screen]) // eslint-disable-line react-hooks/exhaustive-deps
   // Where you land: today, unless your squares are set and today is already painted, or nothing is painted yet
   // (back before a first square): then home. Decided once, when the days and the profile are in.
   // Nothing shows until then (no flash of today before home); if loading drags past 4s, today it is.
@@ -541,58 +503,6 @@ export default function App() {
         onTerms={() => setTermsOut(true)}
       />
     )
-
-  const lastMonth = (monthsAgo(`${todayIso().slice(0, 7)}-01`, 1) ?? '').slice(0, 7)
-  const discoverList = [
-    {
-      id: 'note',
-      done: Object.values(notes).some((l) => l.length > 0),
-      label: 'say why',
-      sub: 'a note under any day',
-      swatch: { background: '#a7c4b0' },
-      go: () => goToday(),
-    },
-    {
-      id: 'matters',
-      done: mattersWritten,
-      label: 'write what matters',
-      sub: 'your compass, for torn days',
-      swatch: { background: '#fff', boxShadow: 'inset 0 0 0 1.5px #141413' },
-      go: () => {
-        setMattersFrom('home')
-        setScreenValue('matters')
-      },
-    },
-    {
-      id: 'frame',
-      done: Object.values(days).some((d) => d.framed),
-      label: 'frame a day',
-      sub: 'the ones that mattered most',
-      swatch: { background: '#6e9b7b', boxShadow: 'inset 0 0 0 2px #53735c, inset 0 0 0 3.5px #ebe6da' },
-      go: () => goToday(),
-    },
-    {
-      id: 'keep',
-      done: kept.length > 0,
-      label: 'keep a painting',
-      sub: 'each month, as a picture',
-      swatch: { background: '#9c9a93', boxShadow: 'inset 0 0 0 3px #f6f3ec' },
-      go: () => {
-        setPaintedArrived(false)
-        setPaintedMonth(Object.keys(days).some((d) => d.startsWith(lastMonth)) ? lastMonth : todayIso().slice(0, 7))
-      },
-    },
-    {
-      id: 'life',
-      done: false,
-      label: 'see a life',
-      sub: 'zoom out: months, years, all of it',
-      swatch: { background: '#eeeee8', boxShadow: 'inset 0 0 0 1.5px #141413' },
-      go: () => goLife(),
-    },
-  ]
-    // For the first week after onboarding: after that, you know your way around.
-    .filter((d) => onboardedRecently() && !d.done && !tried.includes(d.id))
 
   // The painter's signature on a month's painting: the first name.
   const painter = (session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? '').split(' ')[0]
@@ -866,7 +776,6 @@ export default function App() {
                   },
                   { label: 'paint your first square', done: Object.keys(days).length > 0, go: goToday },
                 ]}
-                discover={discoverList}
                 onToday={goToday}
                 onLife={() => {
                   setLifeResValue('days')
@@ -968,7 +877,6 @@ export default function App() {
                 }}
                 onDone={() => {
                   if (tryWelcome) history.replaceState(null, '', location.pathname)
-                  else markOnboarded()
                   goToday() // the first square, with the ghost brush showing how
                 }}
               />
