@@ -79,7 +79,8 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
             a life
             <Chevron dir="right" />
           </span>
-          <span className="home-big">
+          {/* Time runs left to right: the past in ink, so the days ahead (the number) sit on the right. */}
+          <span className="home-big is-ahead">
             {fmt(c.left)}
             <small>days ahead</small>
           </span>
@@ -91,22 +92,9 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
             <i className="is-skipped" style={{ width: w(skipped) }} />
           </span>
           <span className="home-legend">
-            <span>
-              {fmt(c.sofar)} lived · {lived}%
-            </span>
+            <span>{lived}% lived</span>
             <span>{100 - lived}% ahead</span>
           </span>
-          {first && (
-            <span className="home-since">
-              <span>since {fromIso(first).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}:</span>
-              {by.map(({ p, n }) => (
-                <span key={p.id}>
-                  <em style={{ background: p.hex }} />
-                  {fmt(n)} {WORD[p.id]}
-                </span>
-              ))}
-            </span>
-          )}
         </button>
       )
     })()
@@ -141,6 +129,7 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
   const week = Array.from({ length: 7 }, (_, i) => addDays(today, i - 6)).filter((d) => !profile || d >= profile.born)
   const inColour = week.filter((d) => days[d]).length
   const full = inColour === week.length
+  const missing = week.find((d) => !days[d] && d !== today)
   const weekCard = (
     <section className={'home-card home-week' + (full ? ' is-full' : '')}>
       <h2 className="home-head">
@@ -179,6 +168,14 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
         </p>
       ) : (
         <p className="home-week-line">This week is still paper.</p>
+      )}
+      {/* A quiet second way in: the oldest day this week still paper (today has its own pill). */}
+      {missing && (
+        <button className="home-yesterday home-week-go" onClick={() => onDay(missing)}>
+          {missing === addDays(today, -1)
+            ? 'paint yesterday'
+            : `paint ${fromIso(missing).toLocaleDateString('en-US', { weekday: 'long' })}`}
+        </button>
       )}
     </section>
   )

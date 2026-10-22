@@ -3983,25 +3983,13 @@ button.home-card:active {
 .home-bar i.is-skipped {
   background: #e9e7df;
 }
-/* Since your first square: each colour's count, with its swatch. */
-.home-since {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  margin-top: 8px;
-  font-size: 13px;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
+/* The days ahead sit over the paper end of the bar. */
+.home-big.is-ahead {
+  align-self: flex-end;
 }
-.home-since > span {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-.home-since em {
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
+.home-week-go {
+  align-self: flex-start;
+  margin: 8px 0 0 -4px;
 }
 /* Today painted: the page's title says so. */
 .home-greet.is-left {
