@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 22, 2026, 15:33 UTC_
+_last updated Oct 22, 2026, 15:34 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -193,17 +193,7 @@ Design: board "16 · Pie — line art (final)". Built step by step; I check each
 
 ## Testing as someone new (hidden links)
 
-Open these on squared.today while signed in. Each one shows a first-time moment on your own account and saves nothing.
-
-| Link | What it shows |
-|---|---|
-| squared.today/?welcome | Onboarding: the four screens before the first square (the lines you type aren't saved). |
-| squared.today/?squares | "how many squares?" as a new person sees it: blank, saving nothing. |
-| squared.today/?brush | The ghost brush on any blank square (go to an unpainted day). |
-| squared.today/?month | Last month's painting (the new-month moment), any day of the month. |
-| squared.today/?year | Last year's painting (the new-year moment), any day of the year. |
-
-Direct pages (anyone, signed in or not): squared.today/faq, squared.today/privacy, squared.today/terms.
+All test links live in `docs/test-links.md`.
 
 ## Setup (for future sessions)
 
