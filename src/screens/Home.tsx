@@ -70,7 +70,7 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
           {/* Time runs left to right: the past in ink, so the days ahead (the number) sit on the right. */}
           <span className="home-big is-ahead">
             {fmt(c.left)}
-            <small>days ahead</small>
+            <small>days</small>
           </span>
           <span className="home-bar" aria-hidden="true">
             <i style={{ width: `${(c.sofar / c.total) * 100}%` }} />
