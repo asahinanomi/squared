@@ -3651,3 +3651,82 @@ button.settings-row:active {
 .lifeglass:active svg {
   transform: scale(0.84);
 }
+
+/* Control sizes: 24px icons in 48px targets (Google's Material standard, and the top of Apple's range), across
+   the app. These come last so they set the size wherever a control was first drawn smaller. */
+.zoombar-switch {
+  gap: 0;
+  padding: 2px;
+}
+.zoombar-switch button {
+  width: 40px; /* any wider and "today", centred, meets the switch on a 375px phone */
+  height: 36px;
+}
+.zoombar-switch button::after {
+  inset: -6px 0; /* 48 tall; neighbours never overlap */
+}
+.zoombar-switch svg,
+.zoombar-buttons svg,
+.zoombar-recenter svg,
+.today-zoom svg,
+.today-zoom .today-sound svg,
+.month-paint svg {
+  width: 24px;
+  height: 24px;
+}
+.zoombar-buttons button,
+.today-zoom button:not(.zoombar-today) {
+  width: 48px;
+  height: 48px;
+}
+.zoombar-buttons button::after,
+.today-zoom button:not(.zoombar-today)::after {
+  inset: 0;
+}
+.zoombar-recenter {
+  width: 44px;
+  height: 44px;
+}
+.zoombar-recenter::after {
+  inset: -2px;
+}
+.month-paint {
+  width: 48px;
+  height: 48px;
+  margin: -8px -12px -8px 0; /* the icon's edge on the last column's edge */
+}
+.period-paint {
+  top: 1px;
+}
+.logo-btn::after {
+  inset: -5px;
+}
+.ladder-head button {
+  width: 48px;
+  height: 48px;
+}
+.setup-back {
+  width: 48px;
+  height: 48px;
+  margin-left: -12px;
+}
+.back-btn {
+  height: 48px;
+}
+.lifeglass {
+  min-height: 48px;
+}
+.lifeglass svg {
+  width: 24px;
+  height: 28px;
+}
+.lifeglass::after {
+  inset: 0 -12px;
+}
+.life-title-row .lifeglass svg {
+  width: 20px;
+  height: 24px;
+}
+.life-title-row .lifeglass::after {
+  inset: -12px -14px;
+}
