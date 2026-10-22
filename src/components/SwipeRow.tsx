@@ -4,6 +4,8 @@ type Props = {
   open: boolean
   onOpenChange: (open: boolean) => void
   onDelete: () => void
+  /** The word behind the row: "delete", or "remove" when nothing is lost. */
+  label?: string
   children: ReactNode
 }
 
@@ -12,7 +14,7 @@ const SLOP = 8 // movement before we decide between a swipe and a scroll
 
 // Swipe left to reveal "delete" (like Mail or Notes). Up/down still scrolls the page;
 // a plain tap still reaches the row's own button.
-export function SwipeRow({ open, onOpenChange, onDelete, children }: Props) {
+export function SwipeRow({ open, onOpenChange, onDelete, label = 'delete', children }: Props) {
   const start = useRef<{ x: number; y: number; base: number } | null>(null)
   const axis = useRef<'x' | 'y' | null>(null)
   const swiped = useRef(false)
@@ -51,7 +53,7 @@ export function SwipeRow({ open, onOpenChange, onDelete, children }: Props) {
   return (
     <div className="swipe">
       <button className="swipe-delete" onClick={onDelete} tabIndex={open ? 0 : -1} aria-hidden={!open}>
-        delete
+        {label}
       </button>
       <div
         className={'swipe-slide' + (drag !== null ? ' is-dragging' : '')}

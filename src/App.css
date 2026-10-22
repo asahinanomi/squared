@@ -3575,29 +3575,17 @@ button.settings-row:active {
   flex-direction: column;
   gap: 28px;
 }
-.gallery-piece {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
+.gallery-wall .swipe {
+  border-radius: 0; /* a painting keeps its square corners */
 }
 .gallery-item {
+  display: block;
   width: 100%;
-}
-/* Take it down: a quiet text link under its bottom-right corner. */
-.gallery-remove {
-  padding: 4px 0;
-  font-size: 14px;
-  color: var(--muted);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
 }
 .gallery-item canvas {
   width: 100%;
   aspect-ratio: 1;
   display: block;
-  filter: drop-shadow(0 8px 14px rgba(20, 20, 19, 0.12));
 }
 .gallery-empty {
   margin: 20px 0 0;
