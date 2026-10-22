@@ -3,18 +3,58 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>squared.today (beta)</title>
-    <meta name="description" content="Paint one square a day. In beta." />
+    <!-- Found by search: what squared is, in the words people search with (mindful app, daily journal, reflection). -->
+    <title>squared.today: a mindful daily journal, one square a day</title>
+    <meta
+      name="description"
+      content="A mindful journal app in one question: did I spend today meaningfully? Paint each day green, red or grey, add a note, and watch your days, months and years take shape. Free, private, no ads."
+    />
+    <meta
+      name="keywords"
+      content="mindful app, mindfulness journal, daily journal, journal app, reflection journal, daily reflection, mood tracker, life in days, life calendar, memento mori, meaningful life, intentional living, gratitude journal, year in pixels, self-reflection"
+    />
+    <meta name="author" content="nomi" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://squared.today/" />
     <meta name="theme-color" content="#fafaf8" />
     <!-- The link preview when squared.today is shared. -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="squared.today" />
     <meta property="og:url" content="https://squared.today/" />
-    <meta property="og:title" content="squared.today (beta)" />
-    <meta property="og:description" content="did I spend Today meaningfully? Paint one square a day." />
+    <meta property="og:title" content="squared.today: a mindful daily journal, one square a day" />
+    <meta
+      property="og:description"
+      content="did I spend Today meaningfully? Paint one square a day, green, red or grey, and see your life take shape."
+    />
     <meta property="og:image" content="https://squared.today/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="squared.today: did I spend Today meaningfully?" />
+    <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="squared.today: a mindful daily journal, one square a day" />
+    <meta
+      name="twitter:description"
+      content="did I spend Today meaningfully? Paint one square a day, green, red or grey, and see your life take shape."
+    />
+    <meta name="twitter:image" content="https://squared.today/og.png" />
+    <!-- What it is, for search engines' rich results. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "squared.today",
+        "alternateName": "squared",
+        "url": "https://squared.today/",
+        "description": "A mindful daily journal: each day, ask did I spend today meaningfully, paint it green, red or grey, add a note, and see your days, months and years take shape.",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Web, iOS, Android",
+        "browserRequirements": "Requires JavaScript",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "nomi" }
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,6 +71,16 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- For anyone (or any crawler) without JavaScript: what squared is. -->
+    <noscript>
+      <h1>squared.today: a mindful daily journal, one square a day</h1>
+      <p>
+        did I spend Today meaningfully? squared is a mindful journal app: each day, paint one square green (it
+        mattered), red (busy, but empty) or grey (it slipped by), and add a note about why. Your squares become your
+        months, your years and your life, so you can see where your days go. Free, private, no ads. squared needs
+        JavaScript to run.
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

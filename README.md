@@ -173,6 +173,12 @@ Design: board "16 · Pie — line art (final)". Built step by step; I check each
 - **What you see**: usually nothing, since a save takes a moment. If one is slow (over 4s), a quiet "saved on this phone" sits under the top bar. If sending keeps failing (two failed tries), an ink speech bubble says "Not synced yet. Your changes are safe on this phone, and I'll keep trying." with "try now". Never red (red is a paint); a bubble, not a pill (pills are buttons).
 - **Why a save failed is written down** (`src/lib/report.ts`, migration 0015): each failure becomes one line (what, error code and message, status, how long it took, online or not, how long since the app came back to the screen, the browser), kept on the phone first and sent to `client_errors` when it can be. Read them in Supabase: `select * from public.client_errors order by happened_at desc;`. The aim: find why saves fail on the phone and fix it at the root.
 
+## Found by search (SEO)
+
+- `index.html` carries what search engines read: the title "squared.today: a mindful daily journal, one square a day", a description in search words (mindful journal app, did I spend today meaningfully, free, private, no ads), keywords (mindful app, mindfulness journal, daily journal, journal app, reflection, mood tracker, life calendar, memento mori, intentional living, gratitude journal, year in pixels…), a canonical link, the share preview (Open Graph and Twitter, with the og.png image), a schema.org `WebApplication` description (free, lifestyle), and a `<noscript>` paragraph saying what squared is for crawlers without JavaScript.
+- `public/robots.txt` allows everything and points to `public/sitemap.xml` (home, faq, privacy, terms).
+- Next steps that help most: add squared.today to Google Search Console (and Bing Webmaster Tools) and submit the sitemap; links from elsewhere (a Product Hunt page, a blog post) count more than any tag.
+
 ## Testing as someone new (hidden links)
 
 Open these on squared.today while signed in. Each one shows a first-time moment on your own account and saves nothing.
