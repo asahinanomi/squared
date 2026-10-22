@@ -339,6 +339,18 @@ function Squares({
         <button className="pill" disabled={!valid || busy} onClick={start}>
           {busy ? 'saving…' : 'start painting →'}
         </button>
+        {/* Starting is agreeing: no checkbox. The links open in a new tab so nothing here is lost. */}
+        <p className="welcome-agree">
+          by starting, you confirm you’re 18 or over and agree to the{' '}
+          <a href="/terms" target="_blank" rel="noopener">
+            terms
+          </a>{' '}
+          and{' '}
+          <a href="/privacy" target="_blank" rel="noopener">
+            privacy
+          </a>
+          .
+        </p>
       </div>
     </section>
   )

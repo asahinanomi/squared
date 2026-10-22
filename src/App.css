@@ -3561,6 +3561,18 @@ button.settings-row:active {
 .welcome-foot .pill:disabled {
   opacity: 0.35;
 }
+.welcome-agree {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: center;
+}
+.welcome-agree a {
+  color: inherit;
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 3px;
+}
 .welcome-link {
   padding: 6px;
   color: var(--muted);
