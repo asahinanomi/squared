@@ -142,7 +142,13 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
       {full ? (
         <p className="home-week-line">
           <b>Every day this week, in colour.</b>
-          <small>{week.length} days you noticed</small>
+          {/* Somewhere over the rainbow: a small ink rainbow draws itself once, for a full week. */}
+          <svg className="home-rainbow" viewBox="0 0 24 14" aria-hidden="true">
+            <path pathLength="1" d="M2 13a10 10 0 0 1 20 0" />
+            <path pathLength="1" d="M5.5 13a6.5 6.5 0 0 1 13 0" />
+            <path pathLength="1" d="M9 13a3 3 0 0 1 6 0" />
+          </svg>
+          <small>You showed up for every single one.</small>
         </p>
       ) : inColour ? (
         <p className="home-week-line">

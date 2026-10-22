@@ -4067,6 +4067,44 @@ button.home-card:active {
   font-size: 14px;
   color: var(--muted);
 }
+/* A full week's rainbow: ink arcs, drawn once, outer to inner, after the squares bloom. */
+.home-rainbow {
+  display: inline-block;
+  width: 22px;
+  height: 13px;
+  margin-left: 6px;
+  vertical-align: -1px;
+  overflow: visible;
+}
+.home-rainbow path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: rainbow-draw 0.6s ease-out forwards;
+}
+.home-rainbow path:nth-child(1) {
+  animation-delay: 1s;
+}
+.home-rainbow path:nth-child(2) {
+  animation-delay: 1.15s;
+}
+.home-rainbow path:nth-child(3) {
+  animation-delay: 1.3s;
+}
+@keyframes rainbow-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-rainbow path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
 /* A full week blooms once, left to right. */
 .home-week.is-full i {
   animation: week-bloom 0.9s ease-in-out both;
