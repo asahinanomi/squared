@@ -1,3 +1,4 @@
+import { reportError } from './report'
 import { createClient } from '@supabase/supabase-js'
 
 const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
@@ -43,6 +44,27 @@ if (supabase) {
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined
 const NONCE_KEY = 'squared.signin'
 
+// The one-time secrets of sign-ins on their way through Google, matched by their state when Google sends you back.
+// Kept in localStorage (not one tab's sessionStorage, which a reload, a discarded tab or a second tap could lose),
+// the last few, for 20 minutes.
+type Pending = { state: string; nonce: string; at: number }
+const PENDING_MS = 20 * 60_000
+const readPending = (): Pending[] => {
+  try {
+    const v = JSON.parse(localStorage.getItem(NONCE_KEY) ?? '[]')
+    return (Array.isArray(v) ? v : []).filter((p: Pending) => Date.now() - p.at < PENDING_MS)
+  } catch {
+    return []
+  }
+}
+const writePending = (list: Pending[]) => {
+  try {
+    localStorage.setItem(NONCE_KEY, JSON.stringify(list.slice(-5)))
+  } catch {
+    /* private mode: this sign-in may need a second try */
+  }
+}
+
 const sha256 = async (text: string) =>
   [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)))]
     .map((b) => b.toString(16).padStart(2, '0'))
@@ -57,7 +79,7 @@ export async function signInWithGoogle() {
   // A one-time secret: Google signs its hash into the token, Supabase checks it against the original.
   const nonce = crypto.randomUUID()
   const state = crypto.randomUUID()
-  sessionStorage.setItem(NONCE_KEY, JSON.stringify({ nonce, state }))
+  writePending([...readPending(), { nonce, state, at: Date.now() }])
   const q = new URLSearchParams({
     client_id: googleClientId,
     redirect_uri: `${location.origin}/`,
@@ -83,10 +105,19 @@ export function finishSignIn(): Promise<string | null> {
     const hash = new URLSearchParams(location.hash.slice(1))
     if (hash.has('id_token') || hash.has('error')) {
       history.replaceState(null, '', location.pathname)
-      const saved = JSON.parse(sessionStorage.getItem(NONCE_KEY) ?? 'null') as { nonce: string; state: string } | null
-      sessionStorage.removeItem(NONCE_KEY)
+      const pending = readPending()
+      const saved = pending.find((p) => p.state === hash.get('state'))
+      writePending(pending.filter((p) => p !== saved))
       if (hash.has('error')) return hash.get('error') === 'access_denied' ? null : 'Google sign-in didn’t finish.'
-      if (!saved || saved.state !== hash.get('state')) return 'Sign-in expired, please try again.'
+      if (!saved) {
+        // Already signed in (a stale return from Google): nothing to say.
+        if ((await supabase.auth.getSession()).data.session) return null
+        reportError('sign in', {
+          code: 'no-pending',
+          message: `no matching sign-in on this device (${pending.length} pending; standalone: ${matchMedia('(display-mode: standalone)').matches})`,
+        })
+        return 'Sign-in expired, please try again.'
+      }
       const { error } = await supabase.auth.signInWithIdToken({
         provider: 'google',
         token: hash.get('id_token')!,

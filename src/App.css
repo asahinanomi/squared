@@ -4056,7 +4056,8 @@ button.home-card:active {
   font-size: 13px;
 }
 
-/* A wait: the hourglass alone, centred on the paper, its grains falling for as long as it lasts. */
+/* A wait: the hourglass alone, centred on the paper. Its grains fall, then it's turned over (half a turn, a
+   little ease), and again, as long as the wait lasts. Its sand is half and half, so every turn looks the same. */
 .waiting {
   position: fixed;
   inset: 0;
@@ -4064,23 +4065,34 @@ button.home-card:active {
   place-items: center;
   --zoom-ink: #55554f;
   color: var(--zoom-ink);
-  animation: fade-in 0.4s ease-out;
+  animation: fade-in 0.25s ease-out;
 }
 .waiting svg {
   width: 30px;
   height: 35px;
   overflow: visible;
+  animation: glass-turn 1.6s cubic-bezier(0.6, 0, 0.3, 1) infinite;
+}
+@keyframes glass-turn {
+  0%,
+  65% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
 }
 .waiting .lifeglass-grain {
-  animation: grain 0.6s ease-in infinite;
+  animation: grain 0.5s ease-in infinite;
 }
 .waiting .lifeglass-grain:nth-of-type(2) {
-  animation-delay: 0.2s;
+  animation-delay: 0.17s;
 }
 .waiting .lifeglass-grain:nth-of-type(3) {
-  animation-delay: 0.4s;
+  animation-delay: 0.34s;
 }
 @media (prefers-reduced-motion: reduce) {
+  .waiting svg,
   .waiting .lifeglass-grain {
     animation: none;
   }
