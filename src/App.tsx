@@ -41,12 +41,14 @@ import { loadMatters, syncMatters } from './lib/matters'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import { Paintings } from './screens/Paintings'
+import { Home } from './screens/Home'
 import { keepPainting, keptPaintings, unkeepPainting } from './lib/kept'
 import { OpenPainting } from './components/PaintingButton'
 import { SyncStatus } from './components/SyncStatus'
 import './App.css'
 
 type Screen =
+  | 'home'
   | 'today'
   | 'month'
   | 'year'
@@ -87,6 +89,7 @@ const legalAtStart = (
 const tryMonth = new URLSearchParams(location.search).has('month')
 // squared.today/?year shows last year's painting, the January 1st moment, to try it.
 const tryYear = new URLSearchParams(location.search).has('year')
+const TRIED_KEY = 'squared.tried' // discover squared: the things already tried
 const PAINTED_KEY = 'squared.paintedMonth' // the month whose arrival last showed a painting (January: the year's)
 const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
 
@@ -142,7 +145,7 @@ export default function App() {
   // Where settings was opened from: its back arrow returns there.
   const [settingsFrom, setSettingsFrom] = useState<Screen>('today')
   // What matters opens from settings, the idea or the day's compass; back returns there.
-  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea' | 'today'>('settings')
+  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea' | 'today' | 'home'>('settings')
   const [date, setDate] = useState(todayIso)
   const [days, setDays] = useState<Days>(() => (demo ? mockDays() : {}))
   daysNow.current = days
@@ -159,6 +162,7 @@ export default function App() {
   useEffect(() => setKept(keptPaintings(session?.user.user_metadata?.kept_paintings)), [session])
   const [paintedArrived, setPaintedArrived] = useState(false) // shown by the new month, not opened from the month view
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [profileReady, setProfileReady] = useState(false)
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
   const [checking, setChecking] = useState(() => !legalAtStart && !tryWelcome && !trySquaresAtStart && !welcomed())
@@ -188,7 +192,10 @@ export default function App() {
 
   // The demo keeps its profile on this device.
   useEffect(() => {
-    if (demo) fetchProfile().then(setProfile)
+    if (demo)
+      fetchProfile()
+        .then(setProfile)
+        .finally(() => setProfileReady(true))
   }, [])
 
   // The outbox sends only the signed-in person's changes.
@@ -204,7 +211,10 @@ export default function App() {
       return
     }
     fetchQuestion().then((q) => q && setQuestion(q))
-    fetchProfile().then(setProfile)
+    fetchProfile()
+      .then(setProfile)
+      .catch(() => undefined)
+      .finally(() => setProfileReady(true))
     notesLoaded.current = new Set([todayIso().slice(0, 7)])
     Promise.all([fetchAllDays(), fetchMonthNotes(todayIso())])
       .then(([d, n]) => {
@@ -370,6 +380,53 @@ export default function App() {
     setTimeout(() => setNudge(false), 750)
   }
 
+  // Where you land: home once today is painted, or while you're new (first steps to do); before you paint,
+  // today's question. Decided once, when the days and the profile are in.
+  const landed = useRef(false)
+  useEffect(() => {
+    if (landed.current || !signedIn || (userId && checking) || !profileReady) return
+    landed.current = true
+    if (screen !== 'today' || date !== todayIso()) return
+    const isNew = !profile || !Object.keys(days).length || !mattersWritten
+    if (days[todayIso()] || isNew) setScreenValue('home')
+  }, [signedIn, userId, checking, profileReady]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Home shows a month and a year ago today, with their notes: load those months.
+  useEffect(() => {
+    if (screen !== 'home') return
+    for (const n of [1, 12]) {
+      const iso = monthsAgo(todayIso(), n)
+      if (iso) loadNotes(iso)
+    }
+  }, [screen, loadNotes])
+
+  // Home's lists. What matters is written (on this device, or synced from the account).
+  const mattersWritten = (() => {
+    const m = loadMatters()
+    return m.meaningful.length > 0 || m.wasted.length > 0
+  })()
+  // Discover squared: what else it can do, one tap each; a tried one leaves the list (remembered on the device).
+  const [tried, setTried] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem(TRIED_KEY) ?? '[]')
+    } catch {
+      return []
+    }
+  })
+  const markTried = (id: string) =>
+    setTried((t) => {
+      if (t.includes(id)) return t
+      const next = [...t, id]
+      try {
+        localStorage.setItem(TRIED_KEY, JSON.stringify(next))
+      } catch {
+        /* fine */
+      }
+      return next
+    })
+  useEffect(() => {
+    if (screen === 'life') markTried('life')
+  }, [screen]) // eslint-disable-line react-hooks/exhaustive-deps
   if (session === undefined || (userId && checking)) return null
   if (!signedIn)
     return ideaOut ? (
@@ -416,6 +473,47 @@ export default function App() {
       />
     )
 
+  const lastMonth = (monthsAgo(`${todayIso().slice(0, 7)}-01`, 1) ?? '').slice(0, 7)
+  const discoverList = [
+    {
+      id: 'note',
+      done: Object.values(notes).some((l) => l.length > 0),
+      label: 'say why',
+      sub: 'a note under any day',
+      swatch: { background: '#a7c4b0' },
+      go: () => goToday(),
+    },
+    {
+      id: 'frame',
+      done: Object.values(days).some((d) => d.framed),
+      label: 'frame a day',
+      sub: 'the ones that mattered most',
+      swatch: { background: '#6e9b7b', boxShadow: 'inset 0 0 0 2px #53735c, inset 0 0 0 3.5px #ebe6da' },
+      go: () => goToday(),
+    },
+    {
+      id: 'keep',
+      done: kept.length > 0,
+      label: 'keep a painting',
+      sub: 'each month, as a picture',
+      swatch: { background: '#9c9a93', boxShadow: 'inset 0 0 0 3px #f6f3ec' },
+      go: () => {
+        setPaintedArrived(false)
+        setPaintedMonth(Object.keys(days).some((d) => d.startsWith(lastMonth)) ? lastMonth : todayIso().slice(0, 7))
+      },
+    },
+    {
+      id: 'life',
+      done: false,
+      label: 'see a life',
+      sub: 'zoom out: months, years, all of it',
+      swatch: { background: '#eeeee8', boxShadow: 'inset 0 0 0 1.5px #141413' },
+      go: () => goLife(),
+    },
+  ]
+    // Only while you're new (fewer than 30 painted days): after that, you know your way around.
+    .filter((d) => Object.keys(days).length < 30 && !d.done && !tried.includes(d.id))
+
   // The painter's signature on a month's painting: the first name.
   const painter = (session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? '').split(' ')[0]
   const setScreen = (next: Screen) => {
@@ -440,6 +538,12 @@ export default function App() {
     setDate(todayIso())
     setScreen('today')
   }
+  const goHome = () => {
+    setWhy(null)
+    setDayFromList(false)
+    setDate(todayIso())
+    setScreen('home')
+  }
   // Zoom out of a day: to its month — or back to the list, if it was opened from there.
   const outOfDay = () => {
     if (!dayFromList) return goMonth()
@@ -457,6 +561,12 @@ export default function App() {
   const goYear = (focus?: number) => {
     setYearFocus(focus)
     setScreen('year')
+  }
+  // A life, in days (from home's life card).
+  const goLifeDays = () => {
+    if (profile) return setScreen('life')
+    setAfterSetup('life')
+    setScreenValue('setup')
   }
   // A life needs a birth date and a lifespan: the first time, ask (gently) on the way.
   const goLife = () => {
@@ -641,7 +751,7 @@ export default function App() {
             screen !== 'export' &&
             screen !== 'paintings' && (
               <Topbar
-                onHome={goToday}
+                onHome={goHome}
                 onCalendar={() => goMonth()}
                 onIdea={() => setScreen('idea')}
                 onSettings={openSettings}
@@ -652,7 +762,47 @@ export default function App() {
             className={'stage' + (motion ? ` is-zoom-${motion}` : '')}
             key={screen === 'life' ? `life-${lifeRes}` : screen}
           >
-            {screen === 'today' ? (
+            {screen === 'home' ? (
+              <Home
+                name={painter}
+                days={days}
+                notes={notes}
+                profile={profile}
+                steps={[
+                  {
+                    label: 'set how many squares',
+                    done: !!profile,
+                    go: () => {
+                      setAfterSetup('home')
+                      setScreenValue('setup')
+                    },
+                  },
+                  { label: 'paint your first square', done: Object.keys(days).length > 0, go: goToday },
+                  {
+                    label: 'write what matters to you',
+                    done: mattersWritten,
+                    go: () => {
+                      setMattersFrom('home')
+                      setScreenValue('matters')
+                    },
+                  },
+                ]}
+                discover={discoverList}
+                onToday={goToday}
+                onLife={() => {
+                  setLifeResValue('days')
+                  goLifeDays()
+                }}
+                onDay={(iso) => {
+                  setDate(iso)
+                  setScreen('today')
+                }}
+                onPainting={(p) => {
+                  setPaintedArrived(false)
+                  setPaintedMonth(p)
+                }}
+              />
+            ) : screen === 'today' ? (
               <Today
                 question={question}
                 born={profile?.born}
@@ -719,13 +869,15 @@ export default function App() {
               <Setup
                 profile={profile}
                 onBack={() =>
-                  afterSetup === 'life'
-                    ? setScreen('year')
-                    : afterSetup === 'pie'
-                      ? setScreen(pieFrom)
-                      : afterSetup === 'settings'
-                        ? setScreenValue('settings')
-                        : goToday()
+                  afterSetup === 'home'
+                    ? goHome()
+                    : afterSetup === 'life'
+                      ? setScreen('year')
+                      : afterSetup === 'pie'
+                        ? setScreen(pieFrom)
+                        : afterSetup === 'settings'
+                          ? setScreenValue('settings')
+                          : goToday()
                 }
                 mode={afterSetup === 'settings' ? 'settings' : 'onboarding'}
                 onSave={async (p) => {
@@ -733,6 +885,7 @@ export default function App() {
                   setProfile(p)
                   // First run ends on "start painting": straight to today's square.
                   if (afterSetup === 'pie') setScreen('pie')
+                  else if (afterSetup === 'home') goHome()
                   else if (afterSetup !== 'settings') goToday()
                 }}
               />
@@ -741,7 +894,7 @@ export default function App() {
                 tryOut={tryWelcome}
                 onDone={() => {
                   if (tryWelcome) history.replaceState(null, '', location.pathname)
-                  goToday()
+                  goHome() // someone new lands on home: first steps, and what to discover
                 }}
               />
             ) : screen === 'settings' ? (
@@ -922,7 +1075,7 @@ export default function App() {
             )}
           </div>
           <MeaningSheet open={defining} onClose={() => setDefining(false)} />
-          {(['today', 'month', 'year', 'life', 'list', 'paintings'] as Screen[]).includes(screen) && (
+          {(['home', 'today', 'month', 'year', 'life', 'list', 'paintings'] as Screen[]).includes(screen) && (
             <MonthPainting
               month={paintedMonth}
               arrived={paintedArrived}
