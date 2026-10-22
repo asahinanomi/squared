@@ -394,7 +394,7 @@ export default function App() {
       .then((m) => setMattersWritten(written(m)))
       .catch(() => undefined)
   }, [userId, screen])
-  // Discover squared: what else it can do, one tap each; a tried one leaves the list (remembered on the device).
+  // Explore squared: what else it can do, one tap each; a tried one leaves the list (remembered on the device).
   const [tried, setTried] = useState<string[]>(() => {
     try {
       return JSON.parse(localStorage.getItem(TRIED_KEY) ?? '[]')
@@ -473,6 +473,17 @@ export default function App() {
       go: () => goToday(),
     },
     {
+      id: 'matters',
+      done: mattersWritten,
+      label: 'write what matters',
+      sub: 'your compass, for torn days',
+      swatch: { background: '#fff', boxShadow: 'inset 0 0 0 1.5px #141413' },
+      go: () => {
+        setMattersFrom('home')
+        setScreenValue('matters')
+      },
+    },
+    {
       id: 'frame',
       done: Object.values(days).some((d) => d.framed),
       label: 'frame a day',
@@ -500,8 +511,8 @@ export default function App() {
       go: () => goLife(),
     },
   ]
-    // Only while you're new (first steps still open): after that, you know your way around.
-    .filter((d) => (!profile || !Object.keys(days).length || !mattersWritten) && !d.done && !tried.includes(d.id))
+    // Only while you're new (how many squares not set yet): after that, you know your way around.
+    .filter((d) => !profile && !d.done && !tried.includes(d.id))
 
   // The painter's signature on a month's painting: the first name.
   const painter = (session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? '').split(' ')[0]
@@ -767,14 +778,6 @@ export default function App() {
                     },
                   },
                   { label: 'paint your first square', done: Object.keys(days).length > 0, go: goToday },
-                  {
-                    label: 'write what matters to you',
-                    done: mattersWritten,
-                    go: () => {
-                      setMattersFrom('home')
-                      setScreenValue('matters')
-                    },
-                  },
                 ]}
                 discover={discoverList}
                 onToday={goToday}

@@ -14,7 +14,7 @@ type Props = {
   days: Days
   notes: Notes
   profile: Profile | null
-  /** The few things squared needs (how many squares, a first square, what matters): shown until all are done. */
+  /** The few things squared needs (how many squares, a first square): shown while you're new (squares not set). */
   steps: Step[]
   /** What else squared can do, one tap each to try; a tried one leaves the list. */
   discover: { label: string; sub: string; swatch: React.CSSProperties; go: () => void }[]
@@ -42,7 +42,8 @@ const DateLine = ({ iso }: { iso: string }) => {
 
 // Home: where you land once today is painted (and on your first visits); the logo leads here any time. Before
 // you paint, today leads: the question and "paint today". Then a month and a year ago today, your life in one
-// line, and this month and year so far, as paintings. For someone new: first steps and what to discover. Every
+// line, and this month and year so far, as paintings. For someone new (how many squares not set yet): first steps
+// and what to explore. Every
 // card is a door. No streaks, no scores.
 export function Home({ name, days, notes, profile, steps, discover, onToday, onLife, onDay, onPainting }: Props) {
   const today = todayIso()
@@ -61,7 +62,8 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
   const hasMonth = Object.keys(days).some((d) => d.startsWith(month))
   const hasYear = Object.keys(days).some((d) => d.startsWith(year))
   const count = (p: string) => Object.keys(days).filter((d) => d.startsWith(p) && d <= today).length
-  const stepsLeft = steps.some((s) => !s.done)
+  // New: how many squares isn't set yet. First steps show until then.
+  const stepsLeft = !profile
 
   const life =
     profile &&
@@ -167,7 +169,7 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
 
       {discover.length > 0 && (
         <section className="home-card">
-          <h2 className="home-head">discover squared</h2>
+          <h2 className="home-head">explore squared</h2>
           <ul className="home-discover">
             {discover.map((d) => (
               <li key={d.label}>
