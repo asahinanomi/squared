@@ -3980,13 +3980,40 @@ button.home-card:active {
 .home-bar i {
   background: var(--ink);
 }
-.home-shares {
+.home-bar i.is-skipped {
+  background: #e9e7df;
+}
+/* Since your first square: each colour's count, with its swatch. */
+.home-since {
   display: flex;
-  margin-top: 12px;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.home-since > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.home-since em {
+  width: 8px;
   height: 8px;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #eeeee8;
+  border-radius: 2px;
+}
+/* Today painted: the page's title says so. */
+.home-greet.is-left {
+  text-align: left;
+  margin-bottom: -6px;
+}
+.home-title {
+  margin: 0 0 2px;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 .home-legend {
   display: flex;

@@ -1,7 +1,7 @@
 import { PaintingThumb } from '../components/PaintingThumb'
 import { addDays, fromIso, shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Days } from '../lib/days'
-import { lifeCounts } from '../lib/life'
+import { daysBetween, lifeCounts } from '../lib/life'
 import type { Notes } from '../lib/notes'
 import { PAINTS, paintDeep, paintHex, WORD } from '../lib/paints'
 import type { Profile } from '../lib/profile'
@@ -63,9 +63,16 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
     (() => {
       const c = lifeCounts(profile.born, profile.lifespan, today)
       const lived = Math.round((c.sofar / c.total) * 100)
-      const all = Object.values(days)
-      const by = PAINTS.map((p) => ({ p, n: all.filter((d) => d.color === p.id).length }))
-      const paintedN = by.reduce((n, b) => n + b.n, 0)
+      // The Oz bar: lived before squared in ink (never painted), the days since your first square in colour, in
+      // true proportion (paper for the ones skipped), and the days ahead in paper.
+      const first = Object.keys(days)
+        .filter((d) => d <= today)
+        .sort()[0]
+      const since = first ? Math.min(daysBetween(first, today) + 1, c.sofar) : 0
+      const counted = Object.entries(days).filter(([d]) => first && d >= first && d <= today)
+      const by = PAINTS.map((p) => ({ p, n: counted.filter(([, d]) => d.color === p.id).length }))
+      const skipped = Math.max(since - by.reduce((n, b) => n + b.n, 0), 0)
+      const w = (n: number) => `${(n / c.total) * 100}%`
       return (
         <button className="home-card home-life" onClick={onLife} aria-label={`a life: ${fmt(c.left)} days ahead`}>
           <span className="home-head">
@@ -77,7 +84,11 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
             <small>days ahead</small>
           </span>
           <span className="home-bar" aria-hidden="true">
-            <i style={{ width: `${(c.sofar / c.total) * 100}%` }} />
+            <i style={{ width: w(c.sofar - since) }} />
+            {by.map(({ p, n }) => (
+              <i key={p.id} style={{ width: w(n), background: p.hex }} />
+            ))}
+            <i className="is-skipped" style={{ width: w(skipped) }} />
           </span>
           <span className="home-legend">
             <span>
@@ -85,20 +96,16 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
             </span>
             <span>{100 - lived}% ahead</span>
           </span>
-          {/* How the painted days split, among the days lived: each colour, then the unpainted rest. */}
-          {paintedN > 0 && (
-            <>
-              <span className="home-shares" aria-hidden="true">
-                {by.map(({ p, n }) => (
-                  <i key={p.id} style={{ width: `${(n / Math.max(c.sofar, 1)) * 100}%`, background: p.soft }} />
-                ))}
-              </span>
-              <span className="home-legend">
-                <span>
-                  {fmt(paintedN)} painted: {fmt(by[0].n)} mattered
+          {first && (
+            <span className="home-since">
+              <span>since {fromIso(first).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}:</span>
+              {by.map(({ p, n }) => (
+                <span key={p.id}>
+                  <em style={{ background: p.hex }} />
+                  {fmt(n)} {WORD[p.id]}
                 </span>
-              </span>
-            </>
+              ))}
+            </span>
           )}
         </button>
       )
@@ -110,10 +117,10 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
         <span style={{ color: paintDeep(painted.color) }}>{WORD[painted.color]}</span>
       </span>
       <span>
-        <span className="home-t">Today is in colour.</span>
-        <span className="home-s">
-          {stampLine(today, painted)} · <DateLine iso={today} />
+        <span className="home-t">
+          <DateLine iso={today} />
         </span>
+        <span className="home-s">{stampLine(today, painted)}</span>
         <span className="home-link">open today</span>
       </span>
     </button>
@@ -225,7 +232,14 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
 
   return (
     <main className="home">
-      <p className="home-greet">{greeting(name)}</p>
+      {painted ? (
+        <>
+          <p className="home-greet is-left">{greeting(name)}</p>
+          <h1 className="home-title">Today is in colour.</h1>
+        </>
+      ) : (
+        <p className="home-greet">{greeting(name)}</p>
+      )}
 
       {todayCard}
       {weekCard}
