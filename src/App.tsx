@@ -163,6 +163,7 @@ export default function App() {
   const [paintedArrived, setPaintedArrived] = useState(false) // shown by the new month, not opened from the month view
   const [profile, setProfile] = useState<Profile | null>(null)
   const [profileReady, setProfileReady] = useState(false)
+  const [daysReady, setDaysReady] = useState(demo) // the demo's days are there from the start
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
   const [checking, setChecking] = useState(() => !legalAtStart && !tryWelcome && !trySquaresAtStart && !welcomed())
@@ -232,7 +233,10 @@ export default function App() {
         console.error('Could not load days', e)
         reportError('load days', e)
       })
-      .finally(() => setChecking(false))
+      .finally(() => {
+        setChecking(false)
+        setDaysReady(true)
+      })
   }, [userId])
 
   // Notes load a month at a time, as you visit days in it (or read past them on the month).
@@ -425,14 +429,19 @@ export default function App() {
   }, [screen]) // eslint-disable-line react-hooks/exhaustive-deps
   // Where you land: today, unless today is already painted and you've been here before (your squares are set):
   // then home. Decided once, when the days and the profile are in.
-  const landed = useRef(false)
+  // Nothing shows until then (no flash of today before home); if loading drags past 4s, today it is.
+  const [landed, setLanded] = useState(false)
   useEffect(() => {
-    if (landed.current || !signedIn || (userId && checking) || !profileReady) return
-    landed.current = true
+    if (landed || !signedIn) return
+    if (!daysReady || !profileReady) {
+      const t = setTimeout(() => setLanded(true), 4000)
+      return () => clearTimeout(t)
+    }
     if (screen === 'today' && date === todayIso() && days[todayIso()] && profile) setScreenValue('home')
-  }, [signedIn, userId, checking, profileReady]) // eslint-disable-line react-hooks/exhaustive-deps
+    setLanded(true)
+  }, [signedIn, daysReady, profileReady, landed]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (session === undefined || (userId && checking)) return null
+  if (session === undefined || (userId && checking) || (signedIn && !landed && screen === 'today')) return null
   if (!signedIn)
     return ideaOut ? (
       <div className="app">
