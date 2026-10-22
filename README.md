@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 22, 2026, 23:12 UTC_
+_last updated Oct 22, 2026, 23:41 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -203,6 +203,16 @@ Decided Oct 22, 2026, after a device copy of what matters replaced the account's
 ## Testing as someone new (hidden links)
 
 All test links live in `docs/test-links.md`.
+
+## Safety and stability (before beta, Oct 22, 2026)
+
+- **Every deploy is checked first**: Vercel runs `npm run lint && npm test && npm run build` (`vercel.json` → buildCommand), so a failing test or lint error stops the deploy and the live site stays as it was. Tests (`npm test`, Vitest) live next to the code: `src/lib/saving.test.ts` checks what matters (add, reorder, edit, delete, two devices) and the save queue (a blip retried quietly; offline says "not saved"; "try again" saves).
+- **A crash never shows a blank page** (`src/components/CrashScreen.tsx`): "Something went wrong. Your squares are safe in your account." with "reload"; what broke is written to `client_errors`, and so are errors outside a screen (scripts, promises nobody caught).
+- **Security headers** (`vercel.json`): a content policy (scripts only from squared itself; fonts from Google Fonts; no framing by other sites), plus `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` and HSTS.
+- **Every table is locked to its owner** (row-level security: each person reads and writes only their own rows). No secret keys in the app or the repo; the admin key lives only in the feedback email function.
+- **Feedback is limited** to 5 messages per person per day (migration 0019, a check in the database): the sixth says "that's today's limit of five messages. thank you, send more tomorrow". No captcha (it would need a third-party script, and "get in touch" already needs a Google account).
+- **Packages**: `npm audit` is clean; run it again about monthly.
+- **Backups**: on Supabase Pro, daily backups are kept for 7 days (Dashboard → Database → Backups). Once a month, download one (or Dashboard → Database → Backups → download) and keep it somewhere private: a copy outside Supabase.
 
 ## Code structure
 

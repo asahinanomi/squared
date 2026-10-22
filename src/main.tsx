@@ -2,10 +2,14 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App'
+import { CrashScreen } from './components/CrashScreen'
+import { reportError } from './lib/report'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <CrashScreen>
+      <App />
+    </CrashScreen>
   </StrictMode>,
 )
 
@@ -33,3 +37,7 @@ if (import.meta.env.PROD) {
     }
   })
 }
+
+// Errors outside a screen (a script, a promise nobody caught) are written down too.
+window.addEventListener('error', (e) => reportError('script', e.error ?? e.message))
+window.addEventListener('unhandledrejection', (e) => reportError('promise', e.reason))

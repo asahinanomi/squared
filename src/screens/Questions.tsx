@@ -74,7 +74,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'Can I delete my account?',
-      'Yes: settings → account → delete my account. Everything goes, right away and for good. I’d be sad to see you go, but it’s always your choice.',
+      'Yes: settings → delete my account. Everything goes, right away and for good. I’d be sad to see you go, but it’s always your choice.',
     ],
     [
       'Does squared cost anything?',

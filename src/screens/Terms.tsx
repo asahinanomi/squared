@@ -38,7 +38,7 @@ export function Terms({ onBack, backLabel }: Props) {
       <h2 className="privacy-head">changes</h2>
       <p>
         squared may change, or one day end. I’ll try to give notice first. You can delete your account any time:
-        settings → account.
+        settings → delete my account.
       </p>
 
       <h2 className="privacy-head">questions</h2>

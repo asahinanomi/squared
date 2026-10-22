@@ -11,14 +11,14 @@ type Props = {
 // hello). Thanks once sent.
 export function Feedback({ onDone }: Props) {
   const [text, setText] = useState('')
-  const [state, setState] = useState<'writing' | 'sending' | 'sent' | 'failed'>('writing')
+  const [state, setState] = useState<'writing' | 'sending' | 'sent' | 'failed' | 'limit'>('writing')
   const send = () => {
     setState('sending')
     sendFeedback(text.trim())
       .then(() => setState('sent'))
       .catch((e) => {
         console.error('Could not send feedback', e)
-        setState('failed')
+        setState(String((e as { message?: string })?.message).includes('feedback limit') ? 'limit' : 'failed')
       })
   }
   return (
@@ -47,10 +47,13 @@ export function Feedback({ onDone }: Props) {
             aria-label="Your feedback"
             onChange={(e) => {
               setText(e.target.value)
-              if (state === 'failed') setState('writing')
+              if (state === 'failed' || state === 'limit') setState('writing')
             }}
           />
           {state === 'failed' && <p className="feedback-error">couldn't send — check your connection and try again</p>}
+          {state === 'limit' && (
+            <p className="feedback-error">that's today's limit of five messages. thank you, send more tomorrow</p>
+          )}
           <button className="pill feedback-send" disabled={!text.trim() || state === 'sending'} onClick={send}>
             {state === 'sending' ? 'sending…' : 'send'}
           </button>
