@@ -9,7 +9,7 @@ Ideas parked for later. Not promises, not in order. When one ships, move it into
 
 ## A life
 
-- **A life dashboard**: one page for your whole life, beyond the home card's "days ahead" (which links to a life in days for now): lived and ahead, how your painted days split, your years side by side, and more.
+- **A life dashboard**: one page for your whole life, beyond the home card's "days ahead" (which links to a life in days for now): lived and ahead, the pie (the most striking picture of a life; it leaves the bar and home, and lives here), how your painted days split, your years side by side, and more.
 
 ## Days
 
