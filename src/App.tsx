@@ -740,6 +740,7 @@ export default function App() {
             screen !== 'paintings' && (
               <Topbar
                 onHome={goHome}
+                onToday={goToday}
                 onCalendar={() => goMonth()}
                 onIdea={() => setScreen('idea')}
                 onSettings={openSettings}

@@ -3,13 +3,15 @@ import { Logo } from './Logo'
 
 type Props = {
   onHome: () => void
+  /** The menu's "today": always the day, painted or not. */
+  onToday: () => void
   onCalendar: () => void
   onIdea: () => void
   onSettings: () => void
   onSignOut: () => void
 }
 
-export function Topbar({ onHome, onCalendar, onIdea, onSettings, onSignOut }: Props) {
+export function Topbar({ onHome, onToday, onCalendar, onIdea, onSettings, onSignOut }: Props) {
   const [open, setOpen] = useState(false)
   const go = (fn: () => void) => () => {
     setOpen(false)
@@ -17,8 +19,8 @@ export function Topbar({ onHome, onCalendar, onIdea, onSettings, onSignOut }: Pr
   }
   return (
     <header className="topbar">
-      {/* Every screen's top left: the logo, home to today. (Zooming out is the bar's job.) */}
-      <button className="logo-btn" onClick={onHome} aria-label="Today">
+      {/* Every screen's top left: the logo, home. (Zooming out is the bar's job.) */}
+      <button className="logo-btn" onClick={onHome} aria-label="Home">
         <Logo />
       </button>
       <button
@@ -33,7 +35,7 @@ export function Topbar({ onHome, onCalendar, onIdea, onSettings, onSignOut }: Pr
       {open && (
         <div className="menu-layer" onClick={() => setOpen(false)}>
           <nav className="menu" onClick={(e) => e.stopPropagation()}>
-            <button onClick={go(onHome)}>today</button>
+            <button onClick={go(onToday)}>today</button>
             <button onClick={go(onCalendar)}>my squares</button>
             <button onClick={go(onSettings)}>settings</button>
             <button onClick={go(onSignOut)}>sign out</button>
