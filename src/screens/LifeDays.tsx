@@ -272,7 +272,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
             <span
               key={y}
               className="life-paint"
-              style={{ top: TOP + (Number(y) - firstYear) * block - 9 }} // centred on the label's line
+              style={{ top: TOP + (Number(y) - firstYear) * block - 15 }} // centred on the label's line
               onClick={(e) => e.stopPropagation()}
             >
               <PaintingButton period={y} label={y} onOpen={onPainting} />

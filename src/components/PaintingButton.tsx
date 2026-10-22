@@ -1,12 +1,17 @@
+import { createContext, useContext } from 'react'
 import { inProgress } from '../lib/painting'
+
+/** The painting open right now, so its button stays lit while the sheet is up. */
+export const OpenPainting = createContext<string | null>(null)
 
 type Props = { period: string; label: string; onOpen: (period: string) => void }
 
 /** A small picture icon in ink that opens a month's or a year's painting ("so far" while it's still going). */
 export function PaintingButton({ period, label, onOpen }: Props) {
+  const open = useContext(OpenPainting)
   return (
     <button
-      className="month-paint"
+      className={'month-paint' + (open === period ? ' is-on' : '')}
       onClick={() => onOpen(period)}
       aria-label={`${label}, ${inProgress(period) ? 'so far' : 'painted'}`}
     >

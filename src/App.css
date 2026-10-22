@@ -1762,19 +1762,32 @@
   color: var(--ink);
 }
 .month-paint {
-  width: 32px;
-  height: 32px;
-  margin-right: -7px; /* the icon's edge on the last column's edge */
+  /* A finger-sized target (44px) around a 20px icon, taking no more room than the label's line. */
+  width: 44px;
+  height: 44px;
+  margin: -6px -12px -6px 0; /* the icon's edge on the last column's edge */
   display: grid;
   place-items: center;
-  color: var(--ink-soft);
+  border-radius: 50%;
+  color: var(--ink);
+  transition:
+    background-color 0.15s,
+    transform 0.15s;
+}
+/* Pressed, and while its painting is open: the controls' soft capsule behind it. */
+.month-paint:active,
+.month-paint.is-on {
+  background: #e9e9e3;
+}
+.month-paint:active {
+  transform: scale(0.92);
 }
 .month-paint svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.8;
+  stroke-width: 2.2; /* as solid as the speaker */
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -2962,9 +2975,12 @@ button.settings-row:active {
 /* A card's painting: the ink picture icon at its top right, above the card's own tap. */
 .period-paint {
   position: absolute;
-  top: 8px;
-  right: 14px;
+  top: 3px;
+  right: 4px; /* the icon's edge on the band's end */
   z-index: 1;
+}
+.period-paint .month-paint {
+  margin: 0;
 }
 .period-band {
   display: flex;

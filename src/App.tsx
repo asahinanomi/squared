@@ -52,6 +52,7 @@ import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import { Paintings } from './screens/Paintings'
 import { keepPainting, keptPaintings, unkeepPainting } from './lib/kept'
+import { OpenPainting } from './components/PaintingButton'
 import './App.css'
 
 type Screen =
@@ -681,325 +682,327 @@ export default function App() {
     <ViewSwitch.Provider
       value={{ pie: screen === 'pie', toggle: togglePie, list: screen === 'list', toggleList, goToday }}
     >
-      <div
-        className={
-          'app' +
-          (screen === 'month' || screen === 'year' || screen === 'life' || screen === 'pie' || screen === 'list'
-            ? ' is-one-screen'
-            : '')
-        }
-      >
-        {screen !== 'setup' &&
-          screen !== 'welcome' &&
-          screen !== 'settings' &&
-          screen !== 'matters' &&
-          screen !== 'account' &&
-          screen !== 'privacy' &&
-          screen !== 'terms' &&
-          screen !== 'questions' &&
-          screen !== 'export' &&
-          screen !== 'paintings' && (
-            <Topbar
-              onHome={goToday}
-              onCalendar={() => goMonth()}
-              back={
-                screen === 'month'
-                  ? { label: todayIso().slice(0, 4), onBack: () => goYear() }
-                  : screen === 'year'
-                    ? { label: 'a life', onBack: goLife }
-                    : undefined
-              }
-              onIdea={() => setScreen('idea')}
-              onSettings={openSettings}
-              onSignOut={signOut}
-            />
-          )}
+      <OpenPainting.Provider value={paintedMonth}>
         <div
-          className={'stage' + (motion ? ` is-zoom-${motion}` : '')}
-          key={screen === 'life' ? `life-${lifeRes}` : screen}
+          className={
+            'app' +
+            (screen === 'month' || screen === 'year' || screen === 'life' || screen === 'pie' || screen === 'list'
+              ? ' is-one-screen'
+              : '')
+          }
         >
-          {screen === 'today' ? (
-            <Today
-              question={question}
-              born={profile?.born}
-              date={date}
-              days={days}
-              notes={notes[date] ?? []}
-              loaded={loaded}
-              why={why}
-              nudge={nudge}
-              onDate={(iso) => {
-                setWhy(null)
-                setDate(iso)
-              }}
-              onLoad={setLoaded}
-              onDefine={() => setDefining(true)}
-              onSaveNote={onSaveNote}
-              onDeleteNote={onDeleteNote}
-              onCloseWhy={() => setWhy(null)}
-              onOpenWhy={(note) => setWhy({ note })}
-              onDryBrush={onDryBrush}
-              onFilled={onFilled}
-              onWipe={onWipe}
-              onFrame={onFrame}
-              glimpse={
-                date === todayIso() && glimpseIso
-                  ? {
-                      iso: glimpseIso,
-                      day: days[glimpseIso],
-                      note: (notes[glimpseIso] ?? []).find((n) => n.pinned) ?? notes[glimpseIso]?.at(-1),
-                      ago: glimpseIso === monthsAgo(todayIso(), 12) ? 'a year ago today' : 'a month ago today',
-                    }
-                  : undefined
-              }
-              onPinNote={onPinNote}
-              frameError={frameError}
-              onZoomOut={outOfDay}
-              onMatters={() => {
-                setMattersFrom('today')
-                setScreenValue('matters')
-              }}
-            />
-          ) : screen === 'paintings' ? (
-            <Paintings
-              kept={kept}
-              days={days}
-              name={painter}
-              onBack={() => setScreenValue('settings')}
-              onRemove={(p) => unkeepPainting(p, session?.user.user_metadata?.kept_paintings).then(setKept)}
-              onOpen={(m) => {
-                setPaintedArrived(false)
-                setPaintedMonth(m)
-              }}
-            />
-          ) : screen === 'idea' ? (
-            <About
-              onMatters={() => {
-                setMattersFrom('idea')
-                setScreenValue('matters')
-              }}
-              onLegal={(page) => openLegal(page, 'idea')}
-            />
-          ) : screen === 'setup' && trySquares ? (
-            <Setup profile={null} onBack={endTrySquares} onSave={async () => endTrySquares()} />
-          ) : screen === 'setup' ? (
-            <Setup
-              profile={profile}
-              onBack={() =>
-                afterSetup === 'life'
-                  ? setScreen('year')
-                  : afterSetup === 'pie'
-                    ? setScreen(pieFrom)
-                    : afterSetup === 'settings'
-                      ? setScreenValue('settings')
-                      : goToday()
-              }
-              mode={afterSetup === 'settings' ? 'settings' : 'onboarding'}
-              onSave={async (p) => {
-                await saveProfile(p)
-                setProfile(p)
-                // First run ends on "start painting": straight to today's square.
-                if (afterSetup === 'pie') setScreen('pie')
-                else if (afterSetup !== 'settings') goToday()
-              }}
-            />
-          ) : screen === 'welcome' ? (
-            <Welcome
-              tryOut={tryWelcome}
-              onDone={() => {
-                if (tryWelcome) history.replaceState(null, '', location.pathname)
-                goToday()
-              }}
-            />
-          ) : screen === 'settings' ? (
-            <Settings
-              profile={profile}
-              onBack={() => setScreenValue(settingsFrom)}
-              onSquares={openSquareSettings}
-              onMatters={() => {
-                setMattersFrom('settings')
-                setScreenValue('matters')
-              }}
-              onAccount={() => setScreenValue('account')}
-              onPrivacy={() => openLegal('privacy', 'settings')}
-              onTerms={() => openLegal('terms', 'settings')}
-              onExport={() => setScreenValue('export')}
-              onPaintings={() => setScreenValue('paintings')}
-            />
-          ) : screen === 'export' ? (
-            <Export
-              onBack={() => setScreenValue('settings')}
-              gather={async () => ({
-                days,
-                // Every note (the day screen loads them a month at a time); the demo has only what's on screen.
-                notes: (await fetchAllNotes()) ?? (demo ? notes : legacyNotes(days)),
-                matters: await syncMatters(loadMatters()).catch(() => loadMatters()),
-                profile,
-              })}
-            />
-          ) : screen === 'account' ? (
-            <Account
-              email={session?.user.email}
-              onBack={() => setScreenValue('settings')}
-              onSignOut={signOut}
-              onDeleted={signOut}
-            />
-          ) : screen === 'privacy' ? (
-            <Privacy onBack={closeLegal} backLabel={legalBack} />
-          ) : screen === 'terms' ? (
-            <Terms onBack={closeLegal} backLabel={legalBack} />
-          ) : screen === 'questions' ? (
-            <Questions onBack={closeLegal} backLabel={legalBack} />
-          ) : screen === 'matters' ? (
-            <WhatMatters
-              onBack={() => setScreenValue(mattersFrom)}
-              backLabel={mattersFrom === 'idea' ? 'the idea' : mattersFrom}
-              onPaint={goToday}
-              paintedToday={!!days[todayIso()]}
-            />
-          ) : screen === 'list' ? (
-            listRes === 'days' ? (
-              <DaysList
-                key={`days-${listOnly}`}
-                only={listOnly ?? undefined}
-                onOnly={setListOnly}
-                mid={listMid}
-                head={listHead}
-                days={days}
-                notes={notes}
+          {screen !== 'setup' &&
+            screen !== 'welcome' &&
+            screen !== 'settings' &&
+            screen !== 'matters' &&
+            screen !== 'account' &&
+            screen !== 'privacy' &&
+            screen !== 'terms' &&
+            screen !== 'questions' &&
+            screen !== 'export' &&
+            screen !== 'paintings' && (
+              <Topbar
+                onHome={goToday}
+                onCalendar={() => goMonth()}
+                back={
+                  screen === 'month'
+                    ? { label: todayIso().slice(0, 4), onBack: () => goYear() }
+                    : screen === 'year'
+                      ? { label: 'a life', onBack: goLife }
+                      : undefined
+                }
+                onIdea={() => setScreen('idea')}
+                onSettings={openSettings}
+                onSignOut={signOut}
+              />
+            )}
+          <div
+            className={'stage' + (motion ? ` is-zoom-${motion}` : '')}
+            key={screen === 'life' ? `life-${lifeRes}` : screen}
+          >
+            {screen === 'today' ? (
+              <Today
+                question={question}
                 born={profile?.born}
-                focus={listFocus}
+                date={date}
+                days={days}
+                notes={notes[date] ?? []}
+                loaded={loaded}
+                why={why}
+                nudge={nudge}
+                onDate={(iso) => {
+                  setWhy(null)
+                  setDate(iso)
+                }}
+                onLoad={setLoaded}
+                onDefine={() => setDefining(true)}
+                onSaveNote={onSaveNote}
+                onDeleteNote={onDeleteNote}
+                onCloseWhy={() => setWhy(null)}
+                onOpenWhy={(note) => setWhy({ note })}
+                onDryBrush={onDryBrush}
+                onFilled={onFilled}
+                onWipe={onWipe}
+                onFrame={onFrame}
+                glimpse={
+                  date === todayIso() && glimpseIso
+                    ? {
+                        iso: glimpseIso,
+                        day: days[glimpseIso],
+                        note: (notes[glimpseIso] ?? []).find((n) => n.pinned) ?? notes[glimpseIso]?.at(-1),
+                        ago: glimpseIso === monthsAgo(todayIso(), 12) ? 'a year ago today' : 'a month ago today',
+                      }
+                    : undefined
+                }
+                onPinNote={onPinNote}
+                frameError={frameError}
+                onZoomOut={outOfDay}
+                onMatters={() => {
+                  setMattersFrom('today')
+                  setScreenValue('matters')
+                }}
+              />
+            ) : screen === 'paintings' ? (
+              <Paintings
+                kept={kept}
+                days={days}
+                name={painter}
+                onBack={() => setScreenValue('settings')}
+                onRemove={(p) => unkeepPainting(p, session?.user.user_metadata?.kept_paintings).then(setKept)}
+                onOpen={(m) => {
+                  setPaintedArrived(false)
+                  setPaintedMonth(m)
+                }}
+              />
+            ) : screen === 'idea' ? (
+              <About
+                onMatters={() => {
+                  setMattersFrom('idea')
+                  setScreenValue('matters')
+                }}
+                onLegal={(page) => openLegal(page, 'idea')}
+              />
+            ) : screen === 'setup' && trySquares ? (
+              <Setup profile={null} onBack={endTrySquares} onSave={async () => endTrySquares()} />
+            ) : screen === 'setup' ? (
+              <Setup
+                profile={profile}
+                onBack={() =>
+                  afterSetup === 'life'
+                    ? setScreen('year')
+                    : afterSetup === 'pie'
+                      ? setScreen(pieFrom)
+                      : afterSetup === 'settings'
+                        ? setScreenValue('settings')
+                        : goToday()
+                }
+                mode={afterSetup === 'settings' ? 'settings' : 'onboarding'}
+                onSave={async (p) => {
+                  await saveProfile(p)
+                  setProfile(p)
+                  // First run ends on "start painting": straight to today's square.
+                  if (afterSetup === 'pie') setScreen('pie')
+                  else if (afterSetup !== 'settings') goToday()
+                }}
+              />
+            ) : screen === 'welcome' ? (
+              <Welcome
+                tryOut={tryWelcome}
+                onDone={() => {
+                  if (tryWelcome) history.replaceState(null, '', location.pathname)
+                  goToday()
+                }}
+              />
+            ) : screen === 'settings' ? (
+              <Settings
+                profile={profile}
+                onBack={() => setScreenValue(settingsFrom)}
+                onSquares={openSquareSettings}
+                onMatters={() => {
+                  setMattersFrom('settings')
+                  setScreenValue('matters')
+                }}
+                onAccount={() => setScreenValue('account')}
+                onPrivacy={() => openLegal('privacy', 'settings')}
+                onTerms={() => openLegal('terms', 'settings')}
+                onExport={() => setScreenValue('export')}
+                onPaintings={() => setScreenValue('paintings')}
+              />
+            ) : screen === 'export' ? (
+              <Export
+                onBack={() => setScreenValue('settings')}
+                gather={async () => ({
+                  days,
+                  // Every note (the day screen loads them a month at a time); the demo has only what's on screen.
+                  notes: (await fetchAllNotes()) ?? (demo ? notes : legacyNotes(days)),
+                  matters: await syncMatters(loadMatters()).catch(() => loadMatters()),
+                  profile,
+                })}
+              />
+            ) : screen === 'account' ? (
+              <Account
+                email={session?.user.email}
+                onBack={() => setScreenValue('settings')}
+                onSignOut={signOut}
+                onDeleted={signOut}
+              />
+            ) : screen === 'privacy' ? (
+              <Privacy onBack={closeLegal} backLabel={legalBack} />
+            ) : screen === 'terms' ? (
+              <Terms onBack={closeLegal} backLabel={legalBack} />
+            ) : screen === 'questions' ? (
+              <Questions onBack={closeLegal} backLabel={legalBack} />
+            ) : screen === 'matters' ? (
+              <WhatMatters
+                onBack={() => setScreenValue(mattersFrom)}
+                backLabel={mattersFrom === 'idea' ? 'the idea' : mattersFrom}
+                onPaint={goToday}
+                paintedToday={!!days[todayIso()]}
+              />
+            ) : screen === 'list' ? (
+              listRes === 'days' ? (
+                <DaysList
+                  key={`days-${listOnly}`}
+                  only={listOnly ?? undefined}
+                  onOnly={setListOnly}
+                  mid={listMid}
+                  head={listHead}
+                  days={days}
+                  notes={notes}
+                  born={profile?.born}
+                  focus={listFocus}
+                  onPick={(iso) => {
+                    setDate(iso)
+                    setDayFromList(true)
+                    setScreen('today')
+                  }}
+                  onMonthShown={loadNotes}
+                  onPainting={(m) => {
+                    setPaintedArrived(false)
+                    setPaintedMonth(m)
+                  }}
+                  onIn={() => listIn(listMid.current())}
+                  onOut={() => listOut(listMid.current())}
+                />
+              ) : (
+                <PeriodList
+                  key={listRes}
+                  res={listRes}
+                  mid={listMid}
+                  head={listHead}
+                  days={days}
+                  born={profile?.born}
+                  focus={listFocus}
+                  onOpen={(first) => listIn(first)}
+                  onIn={() => listIn(listMid.current())}
+                  onOut={listRes === 'months' ? () => listOut(listMid.current()) : undefined}
+                  onPainting={(p) => {
+                    setPaintedArrived(false)
+                    setPaintedMonth(p)
+                  }}
+                />
+              )
+            ) : screen === 'pie' && profile ? (
+              <Pie
+                days={days}
+                profile={profile}
+                scope={pieScope}
+                onScope={setPieScope}
+                onSee={(id) => {
+                  // The slice's days, in the list; its squares icon goes back to where the pie was opened from.
+                  setListFrom(pieFrom)
+                  setListRes('days')
+                  setListZoomed(false)
+                  setListFocus(todayIso())
+                  setListOnly(id === 'lived' ? null : id)
+                  setScreen('list')
+                }}
+              />
+            ) : screen === 'year' ? (
+              <Year
+                days={days}
+                born={profile?.born}
+                focus={yearFocus}
+                onPick={(m) => goMonth(m)}
+                onIn={() => goMonth()}
+                onOut={goLife}
+                onPainting={(p) => {
+                  setPaintedArrived(false)
+                  setPaintedMonth(p)
+                }}
+              />
+            ) : screen === 'life' && profile ? (
+              lifeRes === 'days' ? (
+                <LifeDays
+                  days={days}
+                  profile={profile}
+                  onPick={(iso) => {
+                    setDate(iso)
+                    setScreen('today')
+                  }}
+                  onIn={() => setLifeRes('months')}
+                  onResolution={setLifeRes}
+                  cols={[28, 14, 7, 3][mag]}
+                  focal={focal}
+                  onPainting={(p) => {
+                    setPaintedArrived(false)
+                    setPaintedMonth(p)
+                  }}
+                />
+              ) : lifeRes === 'months' ? (
+                <LifeMonths
+                  days={days}
+                  profile={profile}
+                  onPick={(m) => goMonth(m)}
+                  onIn={() => setLifeRes('years')}
+                  onOut={() => setLifeRes('days')}
+                  onResolution={setLifeRes}
+                  cols={[12, 6, 4, 3][mag]}
+                  focal={focal}
+                />
+              ) : (
+                <Life
+                  days={days}
+                  profile={profile}
+                  onPick={(y) => goYear(y)}
+                  onIn={() => goYear()}
+                  onOut={() => setLifeRes('months')}
+                  onResolution={setLifeRes}
+                />
+              )
+            ) : (
+              <Month
+                days={days}
+                born={profile?.born}
+                focus={monthFocus}
                 onPick={(iso) => {
                   setDate(iso)
-                  setDayFromList(true)
                   setScreen('today')
                 }}
-                onMonthShown={loadNotes}
+                onIn={goToday}
+                onOut={() => goYear()}
+                zoomed={mag > 0}
+                anchor={monthAnchor}
                 onPainting={(m) => {
                   setPaintedArrived(false)
                   setPaintedMonth(m)
                 }}
-                onIn={() => listIn(listMid.current())}
-                onOut={() => listOut(listMid.current())}
               />
-            ) : (
-              <PeriodList
-                key={listRes}
-                res={listRes}
-                mid={listMid}
-                head={listHead}
-                days={days}
-                born={profile?.born}
-                focus={listFocus}
-                onOpen={(first) => listIn(first)}
-                onIn={() => listIn(listMid.current())}
-                onOut={listRes === 'months' ? () => listOut(listMid.current()) : undefined}
-                onPainting={(p) => {
-                  setPaintedArrived(false)
-                  setPaintedMonth(p)
-                }}
-              />
-            )
-          ) : screen === 'pie' && profile ? (
-            <Pie
+            )}
+          </div>
+          <MeaningSheet open={defining} onClose={() => setDefining(false)} />
+          {(['today', 'month', 'year', 'life', 'list', 'paintings'] as Screen[]).includes(screen) && (
+            <MonthPainting
+              month={paintedMonth}
+              arrived={paintedArrived}
               days={days}
-              profile={profile}
-              scope={pieScope}
-              onScope={setPieScope}
-              onSee={(id) => {
-                // The slice's days, in the list; its squares icon goes back to where the pie was opened from.
-                setListFrom(pieFrom)
-                setListRes('days')
-                setListZoomed(false)
-                setListFocus(todayIso())
-                setListOnly(id === 'lived' ? null : id)
-                setScreen('list')
-              }}
-            />
-          ) : screen === 'year' ? (
-            <Year
-              days={days}
-              born={profile?.born}
-              focus={yearFocus}
-              onPick={(m) => goMonth(m)}
-              onIn={() => goMonth()}
-              onOut={goLife}
-              onPainting={(p) => {
-                setPaintedArrived(false)
-                setPaintedMonth(p)
-              }}
-            />
-          ) : screen === 'life' && profile ? (
-            lifeRes === 'days' ? (
-              <LifeDays
-                days={days}
-                profile={profile}
-                onPick={(iso) => {
-                  setDate(iso)
-                  setScreen('today')
-                }}
-                onIn={() => setLifeRes('months')}
-                onResolution={setLifeRes}
-                cols={[28, 14, 7, 3][mag]}
-                focal={focal}
-                onPainting={(p) => {
-                  setPaintedArrived(false)
-                  setPaintedMonth(p)
-                }}
-              />
-            ) : lifeRes === 'months' ? (
-              <LifeMonths
-                days={days}
-                profile={profile}
-                onPick={(m) => goMonth(m)}
-                onIn={() => setLifeRes('years')}
-                onOut={() => setLifeRes('days')}
-                onResolution={setLifeRes}
-                cols={[12, 6, 4, 3][mag]}
-                focal={focal}
-              />
-            ) : (
-              <Life
-                days={days}
-                profile={profile}
-                onPick={(y) => goYear(y)}
-                onIn={() => goYear()}
-                onOut={() => setLifeRes('months')}
-                onResolution={setLifeRes}
-              />
-            )
-          ) : (
-            <Month
-              days={days}
-              born={profile?.born}
-              focus={monthFocus}
-              onPick={(iso) => {
-                setDate(iso)
-                setScreen('today')
-              }}
-              onIn={goToday}
-              onOut={() => goYear()}
-              zoomed={mag > 0}
-              anchor={monthAnchor}
-              onPainting={(m) => {
-                setPaintedArrived(false)
-                setPaintedMonth(m)
-              }}
+              name={painter}
+              onClose={() => setPaintedMonth(null)}
+              onKeep={(p) => keepPainting(p, session?.user.user_metadata?.kept_paintings).then(setKept)}
             />
           )}
         </div>
-        <MeaningSheet open={defining} onClose={() => setDefining(false)} />
-        {(['today', 'month', 'year', 'life', 'list', 'paintings'] as Screen[]).includes(screen) && (
-          <MonthPainting
-            month={paintedMonth}
-            arrived={paintedArrived}
-            days={days}
-            name={painter}
-            onClose={() => setPaintedMonth(null)}
-            onKeep={(p) => keepPainting(p, session?.user.user_metadata?.kept_paintings).then(setKept)}
-          />
-        )}
-      </div>
+      </OpenPainting.Provider>
     </ViewSwitch.Provider>
   )
 }
