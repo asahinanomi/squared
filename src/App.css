@@ -903,8 +903,10 @@
   font-weight: 400;
   color: var(--ink-soft);
 }
-/* The note, up to two lines, then an ellipsis: as in the list. */
+/* The note, the card's full width under the square and date, up to two lines, then an ellipsis. */
 .glimpse-note {
+  margin-top: 2px;
+  text-align: left;
   font-size: 16px;
   line-height: 1.45;
   color: var(--ink-soft);

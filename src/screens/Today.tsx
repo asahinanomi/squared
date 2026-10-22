@@ -370,7 +370,7 @@ export function Today(props: Props) {
         {props.glimpse && (
           <button className="glimpse" onClick={() => onDate(props.glimpse!.iso)}>
             <span className="glimpse-ago">{props.glimpse.ago}</span>
-            {/* As a card in the list of days: its square, then the date and word, then its note (two lines). */}
+            {/* As a card in the list of days: its square, then the date and word. */}
             <span className="glimpse-row">
               <span
                 className={'glimpse-square' + (props.glimpse.day.framed ? ' is-framed' : '')}
@@ -382,9 +382,10 @@ export function Today(props: Props) {
                   <GlimpseDate iso={props.glimpse.iso} />
                   <span className="glimpse-color"> · {WORD[props.glimpse.day.color]}</span>
                 </span>
-                {props.glimpse.note && <span className="glimpse-note">{props.glimpse.note.body}</span>}
               </span>
             </span>
+            {/* The note under both, the card's full width (more of it fits), up to two lines. */}
+            {props.glimpse.note && <span className="glimpse-note">{props.glimpse.note.body}</span>}
           </button>
         )}
         {(day || notes.length > 0) && (
