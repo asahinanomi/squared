@@ -47,7 +47,7 @@ export function Privacy({ onBack, backLabel }: Props) {
       </ul>
 
       <h2 className="privacy-head">what squared never does</h2>
-      <p>No ads, no tracking, no analytics that follow you. Your data is never sold or shared.</p>
+      <p>No ads inside squared. Your squares, notes and lists are never sold or shared.</p>
 
       <h2 className="privacy-head">deleting it all</h2>
       <p>

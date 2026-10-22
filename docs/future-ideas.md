@@ -21,3 +21,9 @@ Ideas parked for later. Not promises, not in order. When one ships, move it into
 ## Later, with an iPhone app
 
 - **An evening nudge**: a quiet reminder to paint the day.
+
+## Before adding Google Analytics or Google Ads (noted Oct 22, 2026)
+
+- The content policy in `vercel.json` only allows squared's own scripts: GA (`googletagmanager.com`, `google-analytics.com`) and Ads tags must be added to `script-src`, `connect-src` and `img-src`, or they're blocked.
+- The privacy page must say it plainly: what's collected (pages visited, the browser, not your squares or notes), by whom (Google), and how to opt out. For testers in the EU and the UK, a cookie consent banner before anything loads.
+- Keep it off the signed-in screens if possible (landing and sign-in only), so nothing about your days is ever near it.
