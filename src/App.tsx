@@ -25,7 +25,6 @@ import { Life } from './screens/Life'
 import { Pie } from './screens/Pie'
 import { SCOPE_ORDER, type Scope } from './lib/pie'
 import { LifeMonths } from './screens/LifeMonths'
-import { Account } from './screens/Account'
 import { DaysList } from './screens/DaysList'
 import { PeriodList } from './screens/PeriodList'
 import { Privacy } from './screens/Privacy'
@@ -60,7 +59,6 @@ type Screen =
   | 'setup'
   | 'settings'
   | 'matters'
-  | 'account'
   | 'privacy'
   | 'terms'
   | 'questions'
@@ -713,11 +711,7 @@ export default function App() {
     setListRes(listRes === 'days' ? 'months' : 'years')
   }
   const openSettings = () => {
-    if (
-      !['settings', 'setup', 'matters', 'account', 'privacy', 'terms', 'questions', 'export', 'paintings'].includes(
-        screen,
-      )
-    )
+    if (!['settings', 'setup', 'matters', 'privacy', 'terms', 'questions', 'export', 'paintings'].includes(screen))
       setSettingsFrom(screen)
     setScreenValue('settings')
   }
@@ -829,7 +823,6 @@ export default function App() {
             screen !== 'welcome' &&
             screen !== 'settings' &&
             screen !== 'matters' &&
-            screen !== 'account' &&
             screen !== 'privacy' &&
             screen !== 'terms' &&
             screen !== 'questions' &&
@@ -978,7 +971,9 @@ export default function App() {
                   setMattersFrom('settings')
                   setScreenValue('matters')
                 }}
-                onAccount={() => setScreenValue('account')}
+                email={session?.user.email}
+                onSignOut={signOut}
+                onDeleted={signOut}
                 onPrivacy={() => openLegal('privacy', 'settings')}
                 onTerms={() => openLegal('terms', 'settings')}
                 onExport={() => setScreenValue('export')}
@@ -994,13 +989,6 @@ export default function App() {
                   matters: await syncMatters(loadMatters()).catch(() => loadMatters()),
                   profile,
                 })}
-              />
-            ) : screen === 'account' ? (
-              <Account
-                email={session?.user.email}
-                onBack={() => setScreenValue('settings')}
-                onSignOut={signOut}
-                onDeleted={signOut}
               />
             ) : screen === 'privacy' ? (
               <Privacy onBack={closeLegal} backLabel={legalBack} />
