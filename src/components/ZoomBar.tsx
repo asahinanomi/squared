@@ -100,7 +100,7 @@ export const ViewSwitch = createContext<{
 
 // Bottom of every zoom level, controls only: on the left one switch for the three views — squares · list · pie,
 // the one showing raised — then "today" (go paint it)
-// pinned to the centre, and the zoom pair on the right. ◎ (back to today's square, once it's out of view) floats
+// halfway to the zoom pair on the right. ◎ (back to today's square, once it's out of view) floats
 // just above the bar's right end.
 export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
   const view = useContext(ViewSwitch)

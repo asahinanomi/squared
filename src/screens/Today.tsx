@@ -453,13 +453,15 @@ export function Today(props: Props) {
               today
             </button>
           )}
-          <button aria-label="Zoom out" onClick={onZoomOut}>
-            <ZoomOutIcon />
-          </button>
-          {/* Already as close as it gets: shown, greyed, like the far end of the ladder. */}
-          <button aria-label="Zoom in" disabled>
-            <ZoomInIcon />
-          </button>
+          <div className="today-zoom-pair">
+            <button aria-label="Zoom out" onClick={onZoomOut}>
+              <ZoomOutIcon />
+            </button>
+            {/* Already as close as it gets: shown, greyed, like the far end of the ladder. */}
+            <button aria-label="Zoom in" disabled>
+              <ZoomInIcon />
+            </button>
+          </div>
         </div>
       )}
     </main>

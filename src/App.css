@@ -1611,13 +1611,10 @@
   width: 20px;
   height: 20px;
 }
-/* "today" — go paint it — pinned to the bar's centre, whatever shows either side. */
+/* "today" — go paint it — halfway between the view switch and the zoom pair (the bar spaces the three evenly). */
 .zoombar-today {
-  position: absolute;
-  left: 50%;
-  top: 6px;
-  height: 40px;
-  transform: translateX(-50%);
+  position: relative;
+  height: 48px; /* the other controls' height, so all sit on one line */
   padding: 0 12px;
   color: var(--zoom-ink);
   font-size: 14px;
@@ -1629,7 +1626,7 @@
 .zoombar-today::before {
   content: '';
   position: absolute;
-  inset: 2px 0;
+  inset: 6px 0;
   z-index: -1;
   border-radius: 999px;
   background: #e9e9e3;
@@ -1675,6 +1672,17 @@
 .today-zoom .today-sound {
   margin-right: auto; /* on the left, apart from the zoom pair */
 }
+/* On a past day, "today" joins them: the bar spaces the three evenly, as on every other level. */
+.today-zoom:has(.zoombar-today) {
+  justify-content: space-between;
+}
+.today-zoom:has(.zoombar-today) .today-sound {
+  margin-right: 0;
+}
+.today-zoom-pair {
+  display: flex;
+  gap: 6px;
+}
 .today-zoom .today-sound svg {
   width: 23px;
   height: 23px;
@@ -1684,7 +1692,6 @@
 }
 .today-zoom .zoombar-today {
   width: auto;
-  top: 6px;
 }
 .today-zoom button:disabled {
   opacity: 0.25;
