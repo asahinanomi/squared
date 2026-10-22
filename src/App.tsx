@@ -883,6 +883,7 @@ export default function App() {
               />
             ) : screen === 'today' ? (
               <Today
+                onHome={goHome}
                 question={question}
                 born={profile?.born}
                 date={date}

@@ -667,7 +667,8 @@
   z-index: 3; /* above the brush's reach around the square (a drag never clicks it) */
   display: block;
   margin: 6px 0 -8px;
-  padding: 6px 12px;
+  padding: 6px 8px;
+  white-space: nowrap;
   font-size: 14px;
   color: var(--muted);
   text-decoration: underline dotted #c9c9c2;
@@ -3994,6 +3995,76 @@ button.home-card:active {
   font-size: 13px;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
+}
+/* The week in colour: seven squares, paper until painted, today ringed in ink. */
+.home-week-days {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+.home-week-days button {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.home-week-days i {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 6px;
+}
+.home-week-days i.is-paper {
+  background: #f6f4ee;
+  box-shadow: inset 0 0 0 1.5px #dcdad2;
+}
+.home-week-days i.is-today {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.home-week-days b {
+  font-weight: 600;
+  color: var(--ink);
+}
+.home-week-days button:active i {
+  transform: scale(0.94);
+}
+.home-week-line {
+  margin: 12px 0 0;
+  font-size: 15px;
+  color: var(--ink);
+}
+.home-week-line b {
+  font-weight: 600;
+}
+.home-week-line small {
+  display: block;
+  margin-top: 3px;
+  font-size: 14px;
+  color: var(--muted);
+}
+/* A full week blooms once, left to right. */
+.home-week.is-full i {
+  animation: week-bloom 0.9s ease-in-out both;
+  animation-delay: calc(0.3s + var(--i) * 0.08s);
+}
+@keyframes week-bloom {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-week.is-full i {
+    animation: none;
+  }
 }
 /* Before the first square: your days ahead as the hero, then the question, then getting started (done steps
    ticked in calm grey, the open one in ink). */

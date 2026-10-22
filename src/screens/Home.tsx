@@ -1,5 +1,5 @@
 import { PaintingThumb } from '../components/PaintingThumb'
-import { addDays, shortDateParts, todayIso } from '../lib/dates'
+import { addDays, fromIso, shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
 import type { Notes } from '../lib/notes'
@@ -42,8 +42,9 @@ const DateLine = ({ iso }: { iso: string }) => {
 }
 
 // Home: where you land once today is painted (and when nothing is painted yet); the logo leads here any time.
-// Before you paint, today leads: the question and "paint today". Then a month and a year ago today, your life in
-// one line, and this month and year so far, as paintings. Every card is a door. No streaks, no scores.
+// Today first ("Today is in colour.", or the question and "paint today"), then the week in colour, a month and a
+// year ago today, your life in one line, and this month and year so far, as paintings. Every card is a door. No
+// streaks, no scores. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (L, M, N)
 // Before the first square (squares set, nothing painted): only your days ahead, the question with "paint your
 // first square", and getting started, so there's one thing to do. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (K)
 export function Home({ name, days, notes, profile, steps, discover, onToday, onLife, onDay, onPainting }: Props) {
@@ -109,16 +110,16 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
         <span style={{ color: paintDeep(painted.color) }}>{WORD[painted.color]}</span>
       </span>
       <span>
-        <span className="home-t">
-          <DateLine iso={today} />
+        <span className="home-t">Today is in colour.</span>
+        <span className="home-s">
+          {stampLine(today, painted)} · <DateLine iso={today} />
         </span>
-        <span className="home-s">{stampLine(today, painted)}</span>
         <span className="home-link">open today</span>
       </span>
     </button>
   ) : (
     <div className="home-card home-ask">
-      <p className="home-blank">today is still blank</p>
+      <p className="home-blank">today is still paper</p>
       <p className="home-q">
         did I spend <u>Today</u> meaningfully?
       </p>
@@ -126,6 +127,53 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
         paint today
       </button>
     </div>
+  )
+
+  // The last seven days, today last: paper until painted, so home gains colour as you paint. Each square opens its
+  // day. A full week blooms once, a soft wave, like the paint settling. Counted as days in colour, never missed.
+  const week = Array.from({ length: 7 }, (_, i) => addDays(today, i - 6)).filter((d) => !profile || d >= profile.born)
+  const inColour = week.filter((d) => days[d]).length
+  const full = inColour === week.length
+  const weekCard = (
+    <section className={'home-card home-week' + (full ? ' is-full' : '')}>
+      <h2 className="home-head">
+        this week
+        <small className="home-of">
+          {shortDateParts(week[0]).monthDay} – {shortDateParts(today).monthDay}
+        </small>
+      </h2>
+      <ul className="home-week-days">
+        {week.map((d, i) => (
+          <li key={d}>
+            <button
+              onClick={() => onDay(d)}
+              aria-label={`${fromIso(d).toLocaleDateString('en-US', { weekday: 'long' })}: ${days[d] ? WORD[days[d].color] : 'not painted yet'}`}
+            >
+              <i
+                className={(days[d] ? '' : 'is-paper') + (d === today ? ' is-today' : '')}
+                style={{ ...(days[d] ? { background: paintHex(days[d].color) } : {}), '--i': i } as React.CSSProperties}
+              />
+              {d === today ? <b>today</b> : fromIso(d).toLocaleDateString('en-US', { weekday: 'narrow' })}
+            </button>
+          </li>
+        ))}
+      </ul>
+      {full ? (
+        <p className="home-week-line">
+          <b>Every day this week, in colour.</b>
+          <small>{week.length} days you noticed</small>
+        </p>
+      ) : inColour ? (
+        <p className="home-week-line">
+          <b>
+            {inColour} {inColour === 1 ? 'day' : 'days'} in colour
+          </b>{' '}
+          this week.
+        </p>
+      ) : (
+        <p className="home-week-line">This week is still paper.</p>
+      )}
+    </section>
   )
 
   if (first) {
@@ -179,14 +227,8 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
     <main className="home">
       <p className="home-greet">{greeting(name)}</p>
 
-      {painted ? (
-        <>
-          {life}
-          {todayCard}
-        </>
-      ) : (
-        todayCard
-      )}
+      {todayCard}
+      {weekCard}
 
       {discover.length > 0 && (
         <section className="home-card">
@@ -210,7 +252,7 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
 
       <OnThisDay days={days} notes={notes} onDay={onDay} />
 
-      {!painted && life}
+      {life}
 
       {(hasMonth || hasYear) && (
         <section className="home-card home-paintings">
@@ -218,14 +260,14 @@ export function Home({ name, days, notes, profile, steps, discover, onToday, onL
             <button onClick={() => onPainting(month)}>
               <span className="home-t">{new Date().toLocaleDateString('en-US', { month: 'long' })}, so far</span>
               <PaintingThumb month={month} days={days} />
-              <span className="home-s">{count(month)} days painted</span>
+              <span className="home-s">{count(month)} days in colour</span>
             </button>
           )}
           {hasYear && (
             <button onClick={() => onPainting(year)}>
               <span className="home-t">{year}, so far</span>
               <PaintingThumb month={year} days={days} />
-              <span className="home-s">{count(year)} days painted</span>
+              <span className="home-s">{count(year)} days in colour</span>
             </button>
           )}
         </section>
