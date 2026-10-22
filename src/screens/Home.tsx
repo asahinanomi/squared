@@ -230,9 +230,13 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
       )}
 
       {todayCard}
-      {weekCard}
+      {/* Today painted: the same date looked back on comes next, then the wider week. Not yet: the week stays
+          under the question, part of the invitation to paint. */}
+      {!painted && weekCard}
 
       <OnThisDay days={days} notes={notes} onDay={onDay} />
+
+      {painted && weekCard}
 
       {life}
 
