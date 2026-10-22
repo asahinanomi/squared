@@ -2,6 +2,7 @@ import { monthsAgo, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
 import { squareFill, WORD } from '../lib/paints'
+import { Chevron } from '../screens/Today'
 
 type Props = { days: Days; notes: Notes; onDay: (iso: string) => void; className?: string }
 
@@ -33,6 +34,8 @@ export function OnThisDay({ days, notes, onDay, className = '' }: Props) {
               </span>
               {note && <span className="home-ago-note">{note.body}</span>}
             </span>
+            {/* The same quiet cue as the life card's: this opens. */}
+            <Chevron dir="right" />
           </button>
         )
       })}
