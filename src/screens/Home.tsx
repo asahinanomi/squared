@@ -3,7 +3,7 @@ import { addDays, fromIso, shortDateParts, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
 import type { Notes } from '../lib/notes'
-import { paintDeep, paintHex, WORD } from '../lib/paints'
+import { PAINTS, paintDeep, paintHex, WORD } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 import { OnThisDay } from '../components/OnThisDay'
 import { Chevron } from './Today'
@@ -115,6 +115,12 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
   const week = Array.from({ length: 7 }, (_, i) => addDays(today, i - 6)).filter((d) => !profile || d >= profile.born)
   const inColour = week.filter((d) => days[d]).length
   const full = inColour === week.length
+  // A full week's rainbow, in the colours you painted it: the most painted outermost; a colour short, the first
+  // one's lighter shades fill in.
+  const mine = PAINTS.map((p) => ({ p, n: week.filter((d) => days[d]?.color === p.id).length }))
+    .filter((x) => x.n)
+    .sort((a, b) => b.n - a.n)
+  const arcs = [0, 1, 2].map((i) => mine[i]?.p.hex ?? (i === 1 ? mine[0]?.p.soft : `${mine[0]?.p.soft}99`))
   const weekCard = (
     <section className={'home-card home-week' + (full ? ' is-full' : '')}>
       <h2 className="home-head">
@@ -142,11 +148,11 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
       {full ? (
         <p className="home-week-line">
           <b>Every day this week, in colour.</b>
-          {/* Somewhere over the rainbow: a small ink rainbow draws itself once, for a full week. */}
+          {/* Somewhere over the rainbow: a small rainbow in your week's colours draws itself once, for a full week. */}
           <svg className="home-rainbow" viewBox="0 0 24 14" aria-hidden="true">
-            <path pathLength="1" d="M2 13a10 10 0 0 1 20 0" />
-            <path pathLength="1" d="M5.5 13a6.5 6.5 0 0 1 13 0" />
-            <path pathLength="1" d="M9 13a3 3 0 0 1 6 0" />
+            <path pathLength="1" d="M2 13a10 10 0 0 1 20 0" style={{ stroke: arcs[0] }} />
+            <path pathLength="1" d="M5.5 13a6.5 6.5 0 0 1 13 0" style={{ stroke: arcs[1] }} />
+            <path pathLength="1" d="M9 13a3 3 0 0 1 6 0" style={{ stroke: arcs[2] }} />
           </svg>
           <small>You showed up for every single one.</small>
         </p>

@@ -4067,7 +4067,7 @@ button.home-card:active {
   font-size: 14px;
   color: var(--muted);
 }
-/* A full week's rainbow: ink arcs, drawn once, outer to inner, after the squares bloom. */
+/* A full week's rainbow: arcs in your week's paint, drawn once, outer to inner, after the squares bloom. */
 .home-rainbow {
   display: inline-block;
   width: 22px;
@@ -4078,8 +4078,7 @@ button.home-card:active {
 }
 .home-rainbow path {
   fill: none;
-  stroke: var(--ink);
-  stroke-width: 1.6;
+  stroke-width: 2.2;
   stroke-linecap: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
