@@ -174,7 +174,7 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
         <p className="home-greet">{greeting(name)}</p>
         <div className="home-hero">
           <p className="home-hero-n">{fmt(lifeCounts(profile.born, profile.lifespan, today).left)}</p>
-          <p className="home-hero-c">days ahead of you</p>
+          <p className="home-hero-c">days ahead of you.</p>
           <p className="home-hero-m">Make each one meaningful, starting with today.</p>
         </div>
         <div className="home-card home-ask">
