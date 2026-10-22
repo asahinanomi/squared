@@ -31,6 +31,41 @@ const FILLED = 0.88
 // The ghost brush's stroke: three sweeps across the square, each rising from left to right, like painting it.
 const GHOST = 'M18 40 L82 22 L18 62 L82 44 L18 84 L82 66'
 
+// The ghost brush, moved along the stroke by script (not SVG's own animation, whose clock some browsers start at
+// page load: after a long onboarding the brush had already finished and never came back). In step with the CSS:
+// 0.8s in, a 2.6s sweep, then a rest, every 6.6s.
+function GhostBrush() {
+  const trail = useRef<SVGPathElement>(null)
+  const brush = useRef<SVGGElement>(null)
+  useEffect(() => {
+    const path = trail.current
+    const g = brush.current
+    if (!path || !g) return
+    const total = path.getTotalLength()
+    const start = performance.now()
+    let raf = 0
+    const tick = (now: number) => {
+      const t = now - start - 800
+      const k = t < 0 ? 0 : Math.min(1, (t % 6600) / 2600)
+      const pt = path.getPointAtLength(k * total)
+      g.setAttribute('transform', `translate(${pt.x} ${pt.y})`)
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [])
+  return (
+    <svg className="ghost" viewBox="0 0 100 100" aria-hidden="true">
+      <path ref={trail} className="ghost-trail" pathLength="1" d={GHOST} />
+      <g ref={brush} className="ghost-brush" transform="translate(18 40)">
+        <path d="M30 -27c2-1.5 4 .5 2.5 2.5L18 -9l-3-3z" fill="#8c8c87" />
+        <path d="M15 -12l3 3-3.5 4L11 -8.5z" fill="#d9d9d4" />
+        <path d="M11 -8.5l3.5 3.5C13 1 8 5.5 1 7c-1.5.3-2.3-.7-1.8-2C1.5-1.5 5-6.5 11-8.5z" fill="#6e9b7b" />
+      </g>
+    </svg>
+  )
+}
+
 // Desktop cursor: a little brush whose tip carries the loaded paint; hotspot at the tip.
 function brushCursor(tip: string) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><g stroke="#141413" stroke-width="1.6" stroke-linejoin="round"><path d="M34 3c2-1.5 4 .5 2.5 2.5L22 21l-3-3z" fill="#8c8c87"/><path d="M19 18l3 3-3.5 4L15 21.5z" fill="#d9d9d4"/><path d="M15 21.5l3.5 3.5C17 31 12 35.5 5 37c-1.5.3-2.3-.7-1.8-2C5.5 28.5 9 23.5 15 21.5z" fill="${tip}"/></g></svg>`
@@ -265,17 +300,7 @@ export function PaintCanvas({
 
         {settling && <div className="settle" style={{ background: paintHex(settling) }} />}
         {/* For someone new: a ghost brush sweeps across, leaving a faint trail, so the square reads as "paint me". */}
-        {hint && !saved && !touched && (
-          <svg className="ghost" viewBox="0 0 100 100" aria-hidden="true">
-            <path className="ghost-trail" pathLength="1" d={GHOST} />
-            <g className="ghost-brush">
-              <path d="M30 -27c2-1.5 4 .5 2.5 2.5L18 -9l-3-3z" fill="#8c8c87" />
-              <path d="M15 -12l3 3-3.5 4L11 -8.5z" fill="#d9d9d4" />
-              <path d="M11 -8.5l3.5 3.5C13 1 8 5.5 1 7c-1.5.3-2.3-.7-1.8-2C1.5-1.5 5-6.5 11-8.5z" fill="#6e9b7b" />
-              <animateMotion dur="2.6s" begin="0.8s;ghost.end+4s" id="ghost" fill="freeze" path={GHOST} />
-            </g>
-          </svg>
-        )}
+        {hint && !saved && !touched && <GhostBrush />}
         {!touched && !settling && (
           <span
             className={'canvas-word' + (saved ? ' is-painted' : '')}
