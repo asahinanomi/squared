@@ -10,13 +10,10 @@ Ideas parked for later. Not promises, not in order. When one ships, move it into
 ## Days
 
 - **My framed days**: a page for the days you framed, maybe in settings beside my paintings.
+- **A photo on a framed day**: let you add an image to a day you framed, to keep with it.
 - **Your own special days** (special days, step 2): add your own in settings (a `special_days` table).
 - **Hashtags in notes**: nomi is trying them by hand first.
 
 ## Later, with an iPhone app
 
 - **An evening nudge**: a quiet reminder to paint the day.
-
-## Sound
-
-- **The grey sound**: pick an option in the sound lab (https://claude.ai/artifact/VPXRP6yFE1yaUaqizNnTuV).
