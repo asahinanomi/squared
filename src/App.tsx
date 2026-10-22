@@ -704,13 +704,6 @@ export default function App() {
               <Topbar
                 onHome={goToday}
                 onCalendar={() => goMonth()}
-                back={
-                  screen === 'month'
-                    ? { label: todayIso().slice(0, 4), onBack: () => goYear() }
-                    : screen === 'year'
-                      ? { label: 'a life', onBack: goLife }
-                      : undefined
-                }
                 onIdea={() => setScreen('idea')}
                 onSettings={openSettings}
                 onSignOut={signOut}

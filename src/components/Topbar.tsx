@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Logo } from './Logo'
-import { Chevron } from '../screens/Today'
 
 type Props = {
   onHome: () => void
@@ -8,11 +7,9 @@ type Props = {
   onIdea: () => void
   onSettings: () => void
   onSignOut: () => void
-  /** On a zoom level: one level out, labelled with where it lands ("2026", "a life"). Replaces the logo. */
-  back?: { label: string; onBack: () => void }
 }
 
-export function Topbar({ onHome, onCalendar, onIdea, onSettings, onSignOut, back }: Props) {
+export function Topbar({ onHome, onCalendar, onIdea, onSettings, onSignOut }: Props) {
   const [open, setOpen] = useState(false)
   const go = (fn: () => void) => () => {
     setOpen(false)
@@ -20,16 +17,10 @@ export function Topbar({ onHome, onCalendar, onIdea, onSettings, onSignOut, back
   }
   return (
     <header className="topbar">
-      {back ? (
-        <button className="back-btn" onClick={back.onBack} aria-label={`Back to ${back.label}`}>
-          <Chevron dir="left" />
-          {back.label}
-        </button>
-      ) : (
-        <button className="logo-btn" onClick={onHome} aria-label="Today">
-          <Logo />
-        </button>
-      )}
+      {/* Every screen's top left: the logo, home to today. (Zooming out is the bar's job.) */}
+      <button className="logo-btn" onClick={onHome} aria-label="Today">
+        <Logo />
+      </button>
       <button
         className={'menu-btn' + (open ? ' is-open' : '')}
         aria-label="Menu"
