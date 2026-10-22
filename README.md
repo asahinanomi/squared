@@ -167,6 +167,12 @@ Design: board "16 · Pie — line art (final)". Built step by step; I check each
 - Step 3 (done): **ship** — regression pass at 390×844 and 375×667 (the switch on month, year and a life in years, months and days, back to the same level each time; zoom buttons greyed on the pie; every scope adds up — whole life to the life's total; filter resets to whole life; menu from the pie; no birth date → "how many squares?" and back; the glass count leaves the switch in place), README wrapped up, PR ready to merge into `main`.
 - Later (own phase): share my pie, download my pie.
 
+## Saving: this phone first, then the account
+
+- **Every change lands on the phone first** (`src/lib/outbox.ts`): painting, wiping, framing and notes go into an outbox kept in localStorage (`squared.outbox`) and are sent to Supabase in order. Nothing is rolled back on a failed save any more. A failed send tries again on its own: when the connection comes back, when the app comes back to the screen, and after 4s, 8s, 16s… up to a minute. Two changes to the same thing before it's sent become one (the latest); a note added and deleted before it's sent never goes. Until it's sent, a change is laid over whatever the account loads, so it never seems to vanish. Only the signed-in person's changes are sent. A refusal that retrying can't fix (a database rule, a missing column) is written down and let go.
+- **What you see**: usually nothing, since a save takes a moment. If one is slow (over 4s), a quiet "saved on this phone" sits under the top bar. If sending keeps failing (two failed tries), an ink speech bubble says "Not synced yet. Your changes are safe on this phone, and I'll keep trying." with "try now". Never red (red is a paint); a bubble, not a pill (pills are buttons).
+- **Why a save failed is written down** (`src/lib/report.ts`, migration 0015): each failure becomes one line (what, error code and message, status, how long it took, online or not, how long since the app came back to the screen, the browser), kept on the phone first and sent to `client_errors` when it can be. Read them in Supabase: `select * from public.client_errors order by happened_at desc;`. The aim: find why saves fail on the phone and fix it at the root.
+
 ## Testing as someone new (hidden links)
 
 Open these on squared.today while signed in. Each one shows a first-time moment on your own account and saves nothing.

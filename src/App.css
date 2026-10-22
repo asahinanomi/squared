@@ -575,12 +575,6 @@
   gap: 6px;
 }
 /* Framing didn't save: said quietly under the square. */
-.day-frame-error {
-  margin: 10px 0 -4px;
-  text-align: center;
-  font-size: 14px;
-  color: var(--muted);
-}
 /* A framed day: the canvas edge in a darker green (its paint, a third toward ink), thicker. */
 .canvas.is-framed {
   border: 5px solid #53735c;
@@ -3736,4 +3730,61 @@ button.settings-row:active {
 }
 .life-title-row .lifeglass::after {
   inset: -12px -14px;
+}
+
+/* Where your changes are (see SyncStatus): a quiet line under the top bar while a save is slow, and an ink speech
+   bubble if sending keeps failing. Ink on paper, never red (red is a paint); a bubble, not a pill (pills are
+   buttons). */
+.sync-quiet {
+  position: fixed;
+  z-index: 30;
+  left: 50%;
+  top: calc(env(safe-area-inset-top) + 30px);
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+  pointer-events: none;
+  animation: fade-in 0.3s ease-out;
+}
+.sync-bubble {
+  position: fixed;
+  z-index: 30;
+  left: 50%;
+  top: calc(env(safe-area-inset-top) + 76px);
+  transform: translateX(-50%);
+  width: min(300px, calc(100vw - 48px));
+  box-sizing: border-box;
+  padding: 14px 16px 12px;
+  border-radius: 16px;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(20, 20, 19, 0.18);
+  animation: fade-in 0.3s ease-out;
+}
+/* Its tail, pointing up to the top bar it speaks from. */
+.sync-bubble::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -7px;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 2px;
+  background: var(--ink);
+  transform: rotate(45deg);
+}
+.sync-bubble p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.sync-bubble button {
+  margin-top: 6px;
+  padding: 4px 0;
+  font-size: 14px;
+  color: #fff;
+  text-decoration: underline dotted rgba(255, 255, 255, 0.6);
+  text-underline-offset: 4px;
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Chevron } from './Today'
 import { fromIso, todayIso } from '../lib/dates'
 import { DEFAULT_LIFESPAN, lifeCounts } from '../lib/life'
+import { reportError } from '../lib/report'
 import type { Profile } from '../lib/profile'
 
 type Props = {
@@ -46,6 +47,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
       await onSave({ born, lifespan })
     } catch (e) {
       console.error('Could not save profile', e)
+      reportError('save profile', e)
       const code = (e as { code?: string })?.code
       setError(
         code === 'PGRST205' || code === '42P01'
@@ -73,6 +75,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
       setOffline(false)
     } catch (e) {
       console.error('Could not save profile', e)
+      reportError('save profile', e)
       setOffline(true)
     }
   }

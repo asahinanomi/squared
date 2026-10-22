@@ -39,7 +39,6 @@ type Props = {
   /** On this day: a year (or a month) ago, painted — shown on today's screen; a tap opens it. */
   glimpse?: { iso: string; day: Days[string]; note?: Note; ago: string }
   /** Framing didn't save: what to say, quietly, under the square. */
-  frameError?: string | null
   onLoad: (p: Paint) => void
   onDefine: () => void
   /** Saves a new note, or updates `note` (instantly; a failure reopens the box). */
@@ -313,7 +312,6 @@ export function Today(props: Props) {
               )}
             </div>
           )}
-          {props.frameError && <p className="day-frame-error">{props.frameError}</p>}
 
           <div className="tray">
             {why ? (

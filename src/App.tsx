@@ -9,21 +9,11 @@ import { Settings } from './screens/Settings'
 import { WhatMatters } from './screens/WhatMatters'
 import { QUESTION } from './lib/config'
 import { monthsAgo, paintedFresh, todayIso } from './lib/dates'
-import { fetchAllDays, saveColor, saveFramed, wipeDay, type Days } from './lib/days'
+import { fetchAllDays, type Days } from './lib/days'
+import { enqueue, overlayDays, overlayNotes, setOutboxUser } from './lib/outbox'
+import { reportError } from './lib/report'
 import { mockDays } from './lib/mock'
-import {
-  addNote,
-  deleteNote,
-  draftNote,
-  fetchAllNotes,
-  setPinned,
-  fetchMonthNotes,
-  legacyNotes,
-  replaceNote,
-  type Note,
-  type Notes,
-  type Why,
-} from './lib/notes'
+import { draftNote, fetchAllNotes, fetchMonthNotes, legacyNotes, type Note, type Notes, type Why } from './lib/notes'
 import type { Paint } from './lib/paints'
 import { fetchProfile, saveProfile, type Profile } from './lib/profile'
 import { frameSound } from './lib/sound'
@@ -53,6 +43,7 @@ import { Today } from './screens/Today'
 import { Paintings } from './screens/Paintings'
 import { keepPainting, keptPaintings, unkeepPainting } from './lib/kept'
 import { OpenPainting } from './components/PaintingButton'
+import { SyncStatus } from './components/SyncStatus'
 import './App.css'
 
 type Screen =
@@ -161,7 +152,6 @@ export default function App() {
   // The open "why?" bubble: a new note ({}), or an existing note being edited.
   const [why, setWhy] = useState<Why | null>(null)
   const [nudge, setNudge] = useState(false)
-  const [frameError, setFrameError] = useState<string | null>(null)
   // A new month: the last one, shown once as a painting (on the first visit of the month, if it holds any squares).
   const [paintedMonth, setPaintedMonth] = useState<string | null>(null)
   // The paintings you kept, for my paintings (with your account, and on this device).
@@ -201,6 +191,9 @@ export default function App() {
     if (demo) fetchProfile().then(setProfile)
   }, [])
 
+  // The outbox sends only the signed-in person's changes.
+  useEffect(() => setOutboxUser(userId ?? null), [userId])
+
   // Load the question, every painted day, this month's notes and the profile for whoever is signed in.
   useEffect(() => {
     if (!userId) {
@@ -215,8 +208,9 @@ export default function App() {
     notesLoaded.current = new Set([todayIso().slice(0, 7)])
     Promise.all([fetchAllDays(), fetchMonthNotes(todayIso())])
       .then(([d, n]) => {
-        setDays(d)
-        setNotes(n ?? legacyNotes(d))
+        // This device's unsent changes lie over what the account has, so nothing seems to vanish.
+        setDays(overlayDays(d))
+        setNotes(overlayNotes(n ?? legacyNotes(d)))
         // Someone new (nothing painted, no compass yet, here or in the account): a pause before the first square.
         if (legalAtStart || tryWelcome || trySquaresAtStart || welcomed()) return
         if (Object.keys(d).length) return markWelcomed()
@@ -224,7 +218,10 @@ export default function App() {
           m.meaningful.length || m.wasted.length ? markWelcomed() : setScreenValue('welcome'),
         )
       })
-      .catch((e) => console.error('Could not load days', e))
+      .catch((e) => {
+        console.error('Could not load days', e)
+        reportError('load days', e)
+      })
       .finally(() => setChecking(false))
   }, [userId])
 
@@ -236,7 +233,7 @@ export default function App() {
       if (!userId || notesLoaded.current.has(m)) return
       notesLoaded.current.add(m)
       fetchMonthNotes(iso)
-        .then((n) => n && setNotes((all) => ({ ...all, ...n })))
+        .then((n) => n && setNotes((all) => ({ ...all, ...overlayNotes(n, (d) => d.startsWith(m)) })))
         .catch((e) => {
           notesLoaded.current.delete(m)
           console.error('Could not load notes', e)
@@ -283,13 +280,11 @@ export default function App() {
     document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'
   }, [signedIn, screen])
 
-  // Optimistic: show the paint at once, save in the background, roll back if it fails.
+  // Shown at once and kept on this device; the outbox sends it to the account (and keeps trying until it does).
   const onFilled = useCallback(
     (color: Paint) => {
       setWhy({ settled: color, fresh: !daysNow.current[date] })
-      let before: Days[string]
       setDays((d) => {
-        before = d[date]
         // A first paint is on time on the day or the next day (the database decides for good);
         // repaints keep the first paint's shade and date.
         return {
@@ -305,24 +300,14 @@ export default function App() {
             : { backfilled: !paintedFresh(date), paintedOn: todayIso(), color },
         }
       })
-      if (color !== 'green' && daysNow.current[date]?.framed)
-        saveFramed(date, false).catch((e) => console.error('Could not unframe day', e))
-      saveColor(date, color).catch((e) => {
-        console.error('Could not save color', e)
-        setWhy(null)
-        setDays((d) => {
-          const next = { ...d }
-          if (before) next[date] = before
-          else delete next[date]
-          return next
-        })
-      })
+      if (color !== 'green' && daysNow.current[date]?.framed) enqueue({ k: 'framed', date, framed: false })
+      enqueue({ k: 'color', date, color })
     },
     [date],
   )
 
-  // Wipe: the square goes blank at once and leaves every count; put back if the save fails.
-  // Frame (or unframe) a day that mattered most: shown at once, saved in the background, put back if it fails.
+  // Wipe: the square goes blank at once and leaves every count.
+  // Frame (or unframe) a day that mattered most: shown at once, kept here, sent by the outbox.
   const onFrame = () => {
     const day = date
     const was = !!days[day]?.framed
@@ -333,13 +318,7 @@ export default function App() {
       frameSound()
       if (!(notes[day] ?? []).some((n) => n.pinned)) setWhy({ pinned: true })
     }
-    saveFramed(day, !was).catch((e) => {
-      console.error('Could not frame day', e)
-      put(was)
-      // Said, not silent: a quiet line under the square for a few seconds.
-      setFrameError(was ? "couldn't unframe, check your connection" : "couldn't frame, check your connection")
-      setTimeout(() => setFrameError(null), 4000)
-    })
+    enqueue({ k: 'framed', date: day, framed: !was })
   }
 
   const onWipe = () => {
@@ -352,78 +331,38 @@ export default function App() {
       delete next[day]
       return next
     })
-    wipeDay(day).catch((e) => {
-      console.error('Could not wipe day', e)
-      setDays((d) => ({ ...d, [day]: before }))
-    })
+    enqueue({ k: 'wipe', date: day })
   }
 
-  // Notes save instantly: the change shows at once and saves in the background. If saving fails,
-  // it's undone and the box reopens on that day with the text and a quiet message.
+  // Notes save instantly: the change shows at once, stays on this device, and the outbox sends it to the account.
   const putNotes = (day: string, fn: (list: Note[]) => Note[]) =>
     setNotes((all) => ({ ...all, [day]: fn(all[day] ?? []).sort(byTime) }))
   const swap = (day: string, id: string, to: Note) => putNotes(day, (l) => l.map((n) => (n.id === id ? to : n)))
 
-  const failure = (e: unknown, verb: string) => {
-    console.error(`Could not ${verb} note`, e)
-    const code = (e as { code?: string })?.code
-    return code === 'PGRST205' || code === '42P01'
-      ? `couldn't ${verb}: the notes update (0004) hasn't been run in Supabase yet`
-      : `couldn't ${verb}, check your connection and try again`
-  }
-
-  const reopen = (day: string, w: Why) => {
-    setDate(day)
-    setScreen('today')
-    setWhy({ ...w, n: Date.now() })
-  }
-
   const onSaveNote = async (note: Note | undefined, text: string) => {
     setWhy(null)
     if (note) {
-      swap(note.date, note.id, {
-        ...note,
-        body: text,
-        writtenAt: new Date().toISOString(),
-      })
-      try {
-        swap(note.date, note.id, await replaceNote(note, text))
-      } catch (e) {
-        swap(note.date, note.id, note)
-        reopen(note.date, { note, draft: text, error: failure(e, 'save') })
-      }
+      swap(note.date, note.id, { ...note, body: text, writtenAt: new Date().toISOString() })
+      enqueue({ k: 'note-body', note, body: text })
     } else {
       const draft = draftNote(date, text, why?.pinned)
       putNotes(draft.date, (l) => [...l, draft])
-      try {
-        swap(draft.date, draft.id, await addNote(draft))
-      } catch (e) {
-        putNotes(draft.date, (l) => l.filter((n) => n.id !== draft.id))
-        reopen(draft.date, { draft: text, error: failure(e, 'save') })
-      }
+      enqueue({ k: 'note-add', note: draft })
     }
   }
 
-  // Pin a note to the top of its day (or unpin it): shown at once, saved in the background, put back if it fails.
+  // Pin a note to the top of its day (or unpin it).
   const onPinNote = (note: Note) => {
     setWhy(null)
     const pinned = !note.pinned
     swap(note.date, note.id, { ...note, pinned: pinned || undefined })
-    setPinned(note, pinned).catch((e) => {
-      console.error('Could not pin note', e)
-      swap(note.date, note.id, note)
-    })
+    enqueue({ k: 'note-pin', note, pinned })
   }
 
   const onDeleteNote = async (note: Note) => {
     setWhy(null)
     putNotes(note.date, (l) => l.filter((n) => n.id !== note.id))
-    try {
-      await deleteNote(note)
-    } catch (e) {
-      putNotes(note.date, (l) => [...l, note])
-      reopen(note.date, { note, error: failure(e, 'delete') })
-    }
+    enqueue({ k: 'note-del', note })
   }
 
   const onDryBrush = () => {
@@ -748,7 +687,6 @@ export default function App() {
                     : undefined
                 }
                 onPinNote={onPinNote}
-                frameError={frameError}
                 onZoomOut={outOfDay}
                 onMatters={() => {
                   setMattersFrom('today')
@@ -994,6 +932,7 @@ export default function App() {
               onKeep={(p) => keepPainting(p, session?.user.user_metadata?.kept_paintings).then(setKept)}
             />
           )}
+          {!demo && <SyncStatus />}
         </div>
       </OpenPainting.Provider>
     </ViewSwitch.Provider>
