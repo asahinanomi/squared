@@ -26,12 +26,12 @@ const BRUSH = 0.58
 const GRID = 24
 const FILLED = 0.88
 
-// The ghost brush's stroke: three sweeps across the square, each rising from left to right, like painting it.
-const GHOST = 'M18 40 L82 22 L18 62 L82 44 L18 84 L82 66'
+// The ghost brush's stroke: two sweeps across the square, each rising from left to right, like painting it.
+const GHOST = 'M18 46 L82 28 L18 68 L82 50'
 
 // Every blank square, once, as it appears: a ghost brush sweeps the stroke, leaving a faint trail that fades, so the
 // square reads as "paint me". Moved by script (SVG's own animation clock can start at page load); in step with the
-// CSS: 0.3s in, a 0.9s sweep.
+// CSS: 0.4s in, a 0.85s sweep (the calm pace, over a shorter stroke).
 function GhostBrush() {
   const trail = useRef<SVGPathElement>(null)
   const brush = useRef<SVGGElement>(null)
@@ -43,7 +43,7 @@ function GhostBrush() {
     const start = performance.now()
     let raf = 0
     const tick = (now: number) => {
-      const k = Math.min(1, Math.max(0, (now - start - 300) / 900))
+      const k = Math.min(1, Math.max(0, (now - start - 400) / 850))
       const pt = path.getPointAtLength(k * total)
       g.setAttribute('transform', `translate(${pt.x} ${pt.y})`)
       if (k < 1) raf = requestAnimationFrame(tick)
