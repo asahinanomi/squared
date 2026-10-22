@@ -9,7 +9,10 @@ type Props = {
   profile: Profile | null
   /** First run asks "how many squares?" and ends on "start painting"; from settings every change saves itself. */
   mode?: 'onboarding' | 'settings'
-  onBack: () => void
+  /** Absent at the start of onboarding: there's nowhere to go back to. */
+  onBack?: () => void
+  /** The main button's words (onboarding goes on to what matters with "next"). */
+  cta?: string
   /** Rejects if it couldn't be saved. */
   onSave: (p: Profile) => Promise<void>
 }
@@ -20,7 +23,7 @@ const fmt = (n: number) => n.toLocaleString('en-US')
 
 // "How many squares?": birth date and hoped-for lifespan, and what they add up to.
 // The one screen where a number belongs: it's there to feel how finite the squares are.
-export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
+export function Setup({ profile, mode = 'onboarding', onBack, cta = 'start painting', onSave }: Props) {
   const today = todayIso()
   const [born, setBorn] = useState(profile?.born ?? '')
   const [lifespan, setLifespanValue] = useState(profile?.lifespan ?? DEFAULT_LIFESPAN)
@@ -92,14 +95,16 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
   }, [editing]) // eslint-disable-line react-hooks/exhaustive-deps
   const back = () => {
     if (editing) void flush() // don't lose a change made just before leaving
-    onBack()
+    onBack?.()
   }
 
   return (
     <main className="setup">
-      <button className="setup-back" aria-label="Back" onClick={back}>
-        <Chevron dir="left" />
-      </button>
+      {onBack && (
+        <button className="setup-back" aria-label="Back" onClick={back}>
+          <Chevron dir="left" />
+        </button>
+      )}
 
       <div className="setup-body">
         <h1 className="setup-title">{editing ? 'square settings' : 'how many squares?'}</h1>
@@ -227,7 +232,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
         <>
           {error && <p className="setup-error">{error}</p>}
           <button className="pill setup-go" disabled={!valid || busy} onClick={save}>
-            {busy ? 'saving…' : 'start painting'}
+            {busy ? 'saving…' : cta}
           </button>
         </>
       )}

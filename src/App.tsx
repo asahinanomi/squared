@@ -36,7 +36,7 @@ import { Export } from './screens/Export'
 import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
-import { markWelcomed, Welcome, welcomed } from './screens/Welcome'
+import { Welcome } from './screens/Welcome'
 import { loadMatters, syncMatters } from './lib/matters'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
@@ -90,6 +90,21 @@ const legalAtStart = (
 const tryMonth = new URLSearchParams(location.search).has('month')
 // squared.today/?year shows last year's painting, the January 1st moment, to try it.
 const tryYear = new URLSearchParams(location.search).has('year')
+const ONBOARDED_KEY = 'squared.onboarded' // when onboarding ended on this device: explore squared shows for a week
+const markOnboarded = () => {
+  try {
+    localStorage.setItem(ONBOARDED_KEY, String(Date.now()))
+  } catch {
+    /* fine */
+  }
+}
+const onboardedRecently = () => {
+  try {
+    return Date.now() - Number(localStorage.getItem(ONBOARDED_KEY) ?? 0) < 7 * 86_400_000
+  } catch {
+    return false
+  }
+}
 const TRIED_KEY = 'squared.tried' // discover squared: the things already tried
 const PAINTED_KEY = 'squared.paintedMonth' // the month whose arrival last showed a painting (January: the year's)
 const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
@@ -167,7 +182,7 @@ export default function App() {
   const [daysReady, setDaysReady] = useState(demo) // the demo's days are there from the start
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
-  const [checking, setChecking] = useState(() => !legalAtStart && !tryWelcome && !trySquaresAtStart && !welcomed())
+  const [checking, setChecking] = useState(() => !legalAtStart && !tryWelcome && !trySquaresAtStart)
 
   useEffect(() => {
     if (!supabase) return
@@ -230,12 +245,6 @@ export default function App() {
         // This device's unsent changes lie over what the account has, so nothing seems to vanish.
         setDays(overlayDays(d))
         setNotes(overlayNotes(n ?? legacyNotes(d)))
-        // Someone new (nothing painted, no compass yet, here or in the account): a pause before the first square.
-        if (legalAtStart || tryWelcome || trySquaresAtStart || welcomed()) return
-        if (Object.keys(d).length) return markWelcomed()
-        return syncMatters(loadMatters()).then((m) =>
-          m.meaningful.length || m.wasted.length ? markWelcomed() : setScreenValue('welcome'),
-        )
       })
       .catch((e) => {
         console.error('Could not load days', e)
@@ -439,7 +448,11 @@ export default function App() {
       const t = setTimeout(() => setLanded(true), 4000)
       return () => clearTimeout(t)
     }
-    if (screen === 'today' && date === todayIso() && days[todayIso()] && profile) setScreenValue('home')
+    // Onboarding, one rule: squares not set yet means the journey (how many squares, then what matters), always.
+    if (!profile && screen === 'today' && !legalAtStart && !tryWelcome && !trySquaresAtStart) {
+      setAfterSetup('welcome')
+      setScreenValue('setup')
+    } else if (screen === 'today' && date === todayIso() && days[todayIso()] && profile) setScreenValue('home')
     setLanded(true)
   }, [signedIn, daysReady, profileReady, landed]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -569,8 +582,8 @@ export default function App() {
       go: () => goLife(),
     },
   ]
-    // Only while you're new (how many squares not set yet): after that, you know your way around.
-    .filter((d) => !profile && !d.done && !tried.includes(d.id))
+    // For the first week after onboarding: after that, you know your way around.
+    .filter((d) => onboardedRecently() && !d.done && !tried.includes(d.id))
 
   // The painter's signature on a month's painting: the first name.
   const painter = (session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? '').split(' ')[0]
@@ -908,23 +921,29 @@ export default function App() {
             ) : screen === 'setup' ? (
               <Setup
                 profile={profile}
-                onBack={() =>
-                  afterSetup === 'home'
-                    ? goHome()
-                    : afterSetup === 'life'
-                      ? setScreen('year')
-                      : afterSetup === 'pie'
-                        ? setScreen(pieFrom)
-                        : afterSetup === 'settings'
-                          ? setScreenValue('settings')
-                          : goToday()
+                onBack={
+                  afterSetup === 'welcome'
+                    ? undefined // the journey's first screen: nowhere to go back to
+                    : () =>
+                        afterSetup === 'home'
+                          ? goHome()
+                          : afterSetup === 'life'
+                            ? setScreen('year')
+                            : afterSetup === 'pie'
+                              ? setScreen(pieFrom)
+                              : afterSetup === 'settings'
+                                ? setScreenValue('settings')
+                                : goToday()
                 }
                 mode={afterSetup === 'settings' ? 'settings' : 'onboarding'}
+                cta={afterSetup === 'welcome' ? 'next' : undefined}
                 onSave={async (p) => {
                   await saveProfile(p)
                   setProfile(p)
                   // First run ends on "start painting": straight to today's square.
                   if (afterSetup === 'pie') setScreen('pie')
+                  else if (afterSetup === 'welcome')
+                    setScreenValue('welcome') // on to what matters
                   else if (afterSetup === 'home') goHome()
                   else if (afterSetup !== 'settings') goToday()
                 }}
@@ -934,7 +953,8 @@ export default function App() {
                 tryOut={tryWelcome}
                 onDone={() => {
                   if (tryWelcome) history.replaceState(null, '', location.pathname)
-                  goHome() // someone new lands on home: first steps, and what to discover
+                  else markOnboarded()
+                  goToday() // the first square, with the ghost brush showing how
                 }}
               />
             ) : screen === 'settings' ? (
