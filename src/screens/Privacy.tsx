@@ -34,7 +34,7 @@ export function Privacy({ onBack, backLabel }: Props) {
 
       <h2 className="privacy-head">who can see it</h2>
       <ul className="privacy-list">
-        <li>Only you. Everything is locked to your account.</li>
+        <li>No one else using squared: everything is locked to your account.</li>
         <li>
           It’s stored with Supabase (the database), encrypted on their disks, and the site is served by Vercel. It isn’t
           end-to-end encrypted: as the maker, I can reach the database to keep it running and safe, but I don’t read

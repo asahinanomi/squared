@@ -66,7 +66,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'Is my data private?',
-      'Yes. Your days are yours. Only you can see your squares and notes. No ads, no tracking, never sold. The privacy page has the details.',
+      'Your squares and notes are locked to your account: no one else using squared can see them. They’re stored with Supabase and encrypted on its disks, but not end-to-end, so as the maker I can reach the database to keep it running. I don’t read your squares or notes. No ads, no tracking, never sold. The privacy page has the details.',
     ],
     [
       'Can I get a copy of my data?',
