@@ -849,13 +849,6 @@
   }
 }
 
-/* On this day under today's square: home's card (OnThisDay), at the notes' width. */
-.home-ago.is-today {
-  width: min(100%, 360px);
-  margin: 4px 0 28px;
-  padding: 6px 16px;
-}
-
 /* ---------- note under the square ---------- */
 .notes {
   width: min(100%, 360px);
@@ -4015,12 +4008,18 @@ button.home-card:active {
 .home-ago b {
   color: var(--ink);
 }
-.home-ago button > span:last-child {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+.home-ago-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+/* the note: one line, then an ellipsis */
+.home-ago-note {
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--muted);
 }
 .home-dot {
   flex: none;

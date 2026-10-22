@@ -45,7 +45,6 @@ import { Home } from './screens/Home'
 import { keepPainting, keptPaintings, unkeepPainting } from './lib/kept'
 import { OpenPainting } from './components/PaintingButton'
 import { SyncStatus } from './components/SyncStatus'
-import { OnThisDay } from './components/OnThisDay'
 import './App.css'
 
 type Screen =
@@ -379,9 +378,9 @@ export default function App() {
     setTimeout(() => setNudge(false), 750)
   }
 
-  // Home and today show a month and a year ago today, with their notes: load those months.
+  // Home shows a month and a year ago today, with their notes: load those months.
   useEffect(() => {
-    if (screen !== 'home' && screen !== 'today') return
+    if (screen !== 'home') return
     for (const n of [1, 12]) {
       const iso = monthsAgo(todayIso(), n)
       if (iso) loadNotes(iso)
@@ -435,6 +434,37 @@ export default function App() {
     if (screen === 'today' && date === todayIso() && days[todayIso()] && profile) setScreenValue('home')
     setLanded(true)
   }, [signedIn, daysReady, profileReady, landed]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // The browser's back button: each move to another screen is a step in the browser's history, so back returns to
+  // where you were (paging day to day on today's screen only updates the step, never piles them up).
+  const fromHistory = useRef(false)
+  const where = useRef({ screen, date })
+  where.current = { screen, date }
+  useEffect(() => {
+    if (!signedIn) return
+    if (fromHistory.current) {
+      fromHistory.current = false
+      return
+    }
+    const st = { screen, date }
+    const cur = history.state as { screen?: Screen; date?: string } | null
+    if (!cur?.screen || cur.screen === screen) history.replaceState(st, '')
+    else history.pushState(st, '')
+  }, [signedIn, screen, date])
+  useEffect(() => {
+    const back = (e: PopStateEvent) => {
+      const st = e.state as { screen?: Screen; date?: string } | null
+      if (!st?.screen) return
+      const now = where.current
+      if (st.screen === now.screen && st.date === now.date) return
+      fromHistory.current = true
+      setWhy(null)
+      setScreenValue(st.screen)
+      if (st.date) setDate(st.date)
+    }
+    window.addEventListener('popstate', back)
+    return () => window.removeEventListener('popstate', back)
+  }, [])
 
   if (session === undefined || (userId && checking) || (signedIn && !landed && screen === 'today')) return null
   if (!signedIn)
@@ -838,9 +868,6 @@ export default function App() {
                 onFilled={onFilled}
                 onWipe={onWipe}
                 onFrame={onFrame}
-                onThisDay={
-                  date === todayIso() && <OnThisDay days={days} notes={notes} onDay={setDate} className="is-today" />
-                }
                 onPinNote={onPinNote}
                 onZoomOut={outOfDay}
                 onMatters={() => {

@@ -37,8 +37,6 @@ type Props = {
   /** Pin a note to the top of its day, or unpin it. */
   onPinNote: (note: Note) => void
   /** On this day: a year (or a month) ago, painted — shown on today's screen; a tap opens it. */
-  /** On this day (a month and a year ago today), under today's square. */
-  onThisDay?: React.ReactNode
   /** Framing didn't save: what to say, quietly, under the square. */
   onLoad: (p: Paint) => void
   onDefine: () => void
@@ -368,7 +366,6 @@ export function Today(props: Props) {
 
       {/* Notes stay just as they were, below; kept mounted (hidden) while writing so opened notes stay open. */}
       <div className="tray-rest" hidden={!!why}>
-        {props.onThisDay}
         {(day || notes.length > 0) && (
           <NotesList
             key={date}
