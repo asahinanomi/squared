@@ -1639,6 +1639,7 @@
 }
 .today-zoom .zoombar-today {
   width: auto;
+  height: 48px; /* the zoom bar's: the same capsule on every level (the day's 40px buttons made it shorter) */
 }
 .today-zoom button:disabled {
   opacity: 0.25;
