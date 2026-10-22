@@ -3985,10 +3985,6 @@ button.home-card:active {
 .home-big.is-ahead {
   align-self: flex-end;
 }
-.home-week-go {
-  align-self: flex-start;
-  margin: 8px 0 0 -4px;
-}
 /* Today's note on home: up to two lines. */
 .home-note {
   display: -webkit-box;

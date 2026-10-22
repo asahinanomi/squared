@@ -115,7 +115,6 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
   const week = Array.from({ length: 7 }, (_, i) => addDays(today, i - 6)).filter((d) => !profile || d >= profile.born)
   const inColour = week.filter((d) => days[d]).length
   const full = inColour === week.length
-  const missing = week.find((d) => !days[d] && d !== today)
   const weekCard = (
     <section className={'home-card home-week' + (full ? ' is-full' : '')}>
       <h2 className="home-head">
@@ -154,14 +153,6 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
         </p>
       ) : (
         <p className="home-week-line">This week is still paper.</p>
-      )}
-      {/* A quiet second way in: the oldest day this week still paper (today has its own pill). */}
-      {missing && (
-        <button className="home-yesterday home-week-go" onClick={() => onDay(missing)}>
-          {missing === addDays(today, -1)
-            ? 'paint yesterday'
-            : `paint ${fromIso(missing).toLocaleDateString('en-US', { weekday: 'long' })}`}
-        </button>
       )}
     </section>
   )
