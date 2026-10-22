@@ -3466,17 +3466,6 @@ button.settings-row:active {
   text-decoration-thickness: 2.5px;
   text-underline-offset: 6px;
 }
-.welcome-sub {
-  margin: 14px 0 0;
-  color: var(--ink-soft);
-  font-size: 15px;
-  line-height: 1.5;
-}
-.welcome-where {
-  margin: 10px 0 0;
-  color: var(--muted);
-  font-size: 13px;
-}
 .welcome-lines {
   list-style: none;
   margin: 28px 0 0;
@@ -3515,32 +3504,6 @@ button.settings-row:active {
 .welcome-lines input:focus {
   outline: none;
   box-shadow: inset 0 0 0 1.5px var(--ink);
-}
-.welcome-compass {
-  margin: 26px 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  text-align: left;
-}
-.welcome-compass h2 {
-  margin: 0 0 6px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 15px;
-  font-weight: 600;
-}
-.welcome-compass .welcome-dot {
-  width: 10px;
-  height: 10px;
-}
-.welcome-compass ul {
-  margin: 0;
-  padding-left: 22px;
-  font-size: 16px;
-  color: var(--ink-soft);
-  line-height: 1.6;
 }
 /* Every step's button: the same 250px pill, centred, the same 36px under what's above it. */
 .welcome-foot {
@@ -3958,14 +3921,6 @@ button.home-card:active {
   margin-top: 2px;
   font-size: 14px;
   color: var(--muted);
-}
-.home-link {
-  display: inline-block;
-  margin-top: 6px;
-  font-size: 14px;
-  color: var(--ink-soft);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
 }
 /* a life, in one line */
 .home-big {

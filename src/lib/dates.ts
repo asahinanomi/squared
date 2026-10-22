@@ -73,7 +73,7 @@ export function monthCells(iso: string): (string | null)[] {
 }
 
 /** "Wed" for an ISO date. */
-export const shortWeekday = (iso: string) =>
+const shortWeekday = (iso: string) =>
   ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][new Date(iso + 'T12:00').getDay()]
 
 /** Under a big day number: "Sat, Oct 2026" (the date written normally, around the number). */

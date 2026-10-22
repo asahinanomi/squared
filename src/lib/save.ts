@@ -1,6 +1,5 @@
-import { paintedFresh, todayIso } from './dates'
-import { saveColor, saveFramed, wipeDay, type Days } from './days'
-import { addNote, deleteNote, replaceNote, setPinned, type Note, type Notes } from './notes'
+import { saveColor, saveFramed, wipeDay } from './days'
+import { addNote, deleteNote, replaceNote, setPinned, type Note } from './notes'
 import type { Paint } from './paints'
 import { reportError, sendErrors } from './report'
 import { supabase } from './supabase'
@@ -135,7 +134,7 @@ export function discardSaves() {
 }
 
 /** Still saving or stuck: leaving now would lose it, so the browser asks first. */
-export const unsaved = () => queue.length > 0
+const unsaved = () => queue.length > 0
 
 // The connection is back, or the app is: a stuck save tries again by itself (the message stays until it's in).
 if (typeof window !== 'undefined') {
@@ -144,50 +143,4 @@ if (typeof window !== 'undefined') {
   window.addEventListener('beforeunload', (e) => {
     if (unsaved()) e.preventDefault()
   })
-}
-
-// Before saving went online-first, changes could wait on a device in an outbox. Whatever is still there for this
-// account is taken out once (the outbox is gone after), sent, and laid over what the account loads meanwhile.
-const OLD_OUTBOX = 'squared.outbox'
-export function takeOldOutbox(user: string): Op[] {
-  try {
-    const items = JSON.parse(localStorage.getItem(OLD_OUTBOX) ?? '[]') as { op: Op; user: string }[]
-    localStorage.removeItem(OLD_OUTBOX)
-    return Array.isArray(items) ? items.filter((i) => i?.user === user && i.op).map((i) => i.op) : []
-  } catch {
-    return []
-  }
-}
-
-/** The account's days with these (old outbox) changes laid over them. */
-export function overlayDays(days: Days, ops: Op[]): Days {
-  const out = { ...days }
-  for (const op of ops) {
-    if (op.k === 'color') {
-      const d = out[op.date]
-      out[op.date] = d
-        ? { ...d, color: op.color, framed: op.color === 'green' ? d.framed : undefined }
-        : { backfilled: !paintedFresh(op.date), paintedOn: todayIso(), color: op.color }
-    } else if (op.k === 'wipe') delete out[op.date]
-    else if (op.k === 'framed' && out[op.date]) out[op.date] = { ...out[op.date], framed: op.framed }
-  }
-  return out
-}
-
-/** The account's notes with these (old outbox) changes laid over them. */
-export function overlayNotes(notes: Notes, ops: Op[]): Notes {
-  const out: Notes = { ...notes }
-  const put = (date: string, fn: (l: Note[]) => Note[]) => {
-    out[date] = fn(out[date] ?? []).sort((a, b) => a.writtenAt.localeCompare(b.writtenAt))
-  }
-  for (const op of ops) {
-    if (!('note' in op)) continue
-    const id = op.note.id
-    if (op.k === 'note-add') put(op.note.date, (l) => [...l.filter((n) => n.id !== id), op.note])
-    else if (op.k === 'note-body') put(op.note.date, (l) => l.map((n) => (n.id === id ? { ...n, body: op.body } : n)))
-    else if (op.k === 'note-pin')
-      put(op.note.date, (l) => l.map((n) => (n.id === id ? { ...n, pinned: op.pinned || undefined } : n)))
-    else put(op.note.date, (l) => l.filter((n) => n.id !== id))
-  }
-  return out
 }

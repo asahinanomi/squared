@@ -13,7 +13,7 @@ export const monthName = (p: string) =>
   isYear(p) ? p : fromIso(`${p}-01`).toLocaleDateString('en-US', { month: 'long' })
 /** A month (or year) still being painted: shown "so far", and not signed until it ends. */
 export const inProgress = (p: string) => p >= todayIso().slice(0, p.length)
-export const shortMonth = (p: string) =>
+const shortMonth = (p: string) =>
   isYear(p) ? p : fromIso(`${p}-01`).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 
 type Rgb = [number, number, number]

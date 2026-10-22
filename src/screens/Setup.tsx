@@ -11,8 +11,6 @@ type Props = {
   mode?: 'onboarding' | 'settings'
   /** Absent at the start of onboarding: there's nowhere to go back to. */
   onBack?: () => void
-  /** The main button's words (onboarding goes on to what matters with "next"). */
-  cta?: string
   /** Rejects if it couldn't be saved. */
   onSave: (p: Profile) => Promise<void>
 }
@@ -23,7 +21,7 @@ const fmt = (n: number) => n.toLocaleString('en-US')
 
 // "How many squares?": birth date and hoped-for lifespan, and what they add up to.
 // The one screen where a number belongs: it's there to feel how finite the squares are.
-export function Setup({ profile, mode = 'onboarding', onBack, cta = 'start painting', onSave }: Props) {
+export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
   const today = todayIso()
   const [born, setBorn] = useState(profile?.born ?? '')
   const [lifespan, setLifespanValue] = useState(profile?.lifespan ?? DEFAULT_LIFESPAN)
@@ -232,7 +230,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, cta = 'start paint
         <>
           {error && <p className="setup-error">{error}</p>}
           <button className="pill setup-go" disabled={!valid || busy} onClick={save}>
-            {busy ? 'saving…' : cta}
+            {busy ? 'saving…' : 'start painting'}
           </button>
         </>
       )}

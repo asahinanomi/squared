@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 22, 2026, 22:49 UTC_
+_last updated Oct 22, 2026, 22:58 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -191,7 +191,7 @@ Decided Oct 22, 2026, after a device copy of what matters replaced the account's
 - **What you see**: usually nothing. If a save is slow (over 3s), a quiet "saving…" sits under the top bar. If it can't get through, an ink speech bubble (never red: red is a paint) says "Not saved. squared couldn't reach your account. Check your connection." with **try again** and **discard** (discard reloads what the account has). The change stays on screen meanwhile, and the bubble stays until it's in; when the connection or the app comes back, it tries again by itself. Leaving the page while a save is waiting asks first.
 - **Opening reads from the account**: days, notes, what matters (fresh on opening home or what matters, and when the app comes back). If your squares can't load, squared says "Couldn't load your squares. Check your connection." with "try again", never an empty life in their place.
 - **What matters is one row per line** (`matters_entries`, migration 0017; it copies your lists in, and the old `matters` table stays untouched): each line added, edited, deleted or moved saves on its own (what changed against what the account had), so edits from two devices add up instead of one list overwriting the other. The order is saved too. Every earlier version of a line is kept in `matters_entries_history` (and the old table's in `matters_history`, 0016).
-- **Moving over**: the first time this version opens on a device, anything the old versions left there for this account is handed over once and then removed from the device: unsent changes in the old outbox (`squared.outbox`, laid over what loads meanwhile), lines in the old device copy of what matters (`squared.matters`, missing lines are added), and paintings kept only on the device (`squared.keptPaintings`). The demo (no account) keeps everything on the device.
+- **The demo** (no account) keeps everything on the device.
 - **Why a save failed is written down** (`src/lib/report.ts`, migration 0015): each failure becomes one line (what, error code and message, status, how long it took, online or not, how long since the app came back to the screen, the browser), kept on the phone first and sent to `client_errors` when it can be. Read them in Supabase: `select * from public.client_errors order by happened_at desc;`. The aim: find why saves fail on the phone and fix it at the root.
 
 ## Found by search (SEO)

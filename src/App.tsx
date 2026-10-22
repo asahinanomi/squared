@@ -10,7 +10,7 @@ import { WhatMatters } from './screens/WhatMatters'
 import { QUESTION } from './lib/config'
 import { monthsAgo, paintedFresh, todayIso } from './lib/dates'
 import { fetchAllDays, type Days } from './lib/days'
-import { commit, overlayDays, overlayNotes, save as enqueue, takeOldOutbox, type Op } from './lib/save'
+import { commit, save } from './lib/save'
 import { reportError } from './lib/report'
 import { mockDays } from './lib/mock'
 import { draftNote, fetchAllNotes, fetchMonthNotes, legacyNotes, type Note, type Notes, type Why } from './lib/notes'
@@ -36,12 +36,12 @@ import { LifeDays } from './screens/LifeDays'
 import { LifeHead, type Resolution } from './components/LifeHead'
 import { Setup } from './screens/Setup'
 import { Welcome } from './screens/Welcome'
-import { adoptDeviceCopy, fetchMatters, noMatters, saveMatters, written, type Matters } from './lib/matters'
+import { fetchMatters, noMatters, saveMatters, written, type Matters } from './lib/matters'
 import { SignIn } from './screens/SignIn'
 import { Today } from './screens/Today'
 import { Paintings } from './screens/Paintings'
 import { Home } from './screens/Home'
-import { adoptKept, keptPaintings, saveKept } from './lib/kept'
+import { keptPaintings, saveKept } from './lib/kept'
 import { OpenPainting } from './components/PaintingButton'
 import { SyncStatus } from './components/SyncStatus'
 import { Waiting } from './components/Waiting'
@@ -92,8 +92,6 @@ const PAINTED_KEY = 'squared.paintedMonth' // the month whose arrival last showe
 const leaveLegalUrl = () => legalAtStart && history.replaceState(null, '', '/')
 
 export default function App() {
-  const ownerRef = useRef<string | null>(null)
-  const oldOps = useRef<Op[]>([])
   const [loadFailed, setLoadFailed] = useState(false)
   // undefined = still checking; null = signed out.
   const [session, setSession] = useState<Session | null | undefined>(demo ? null : undefined)
@@ -213,29 +211,15 @@ export default function App() {
         .finally(() => setProfileReady(true))
   }, [])
 
-  // Changes left waiting on this device by the old outbox (before saving went online-first): taken out once per
-  // account, sent, and laid over what the account loads.
-  if (userId && ownerRef.current !== userId) {
-    ownerRef.current = userId
-    oldOps.current = takeOldOutbox(userId)
-    for (const op of oldOps.current) enqueue(op)
-  }
-  // What matters, from the account (any lines a device kept from before are added to it once).
+  // What matters, from the account.
   const [matters, setMatters] = useState<Matters>(noMatters)
   const refreshMatters = useCallback(() => {
     if (!userId && !demo) return
     fetchMatters()
-      .then((m) => (userId ? adoptDeviceCopy(userId, m) : m))
       .then(setMatters)
       .catch((e) => console.error('Could not load what matters', e))
   }, [userId])
-  useEffect(() => {
-    refreshMatters()
-    if (userId)
-      adoptKept(session?.user.user_metadata?.kept_paintings)
-        .then((k) => k && setKept(k))
-        .catch(() => undefined)
-  }, [userId]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(refreshMatters, [refreshMatters])
 
   // Load the question, every painted day, this month's notes and the profile for whoever is signed in.
   useEffect(() => {
@@ -254,8 +238,8 @@ export default function App() {
     notesLoaded.current = new Set([todayIso().slice(0, 7)])
     Promise.all([fetchAllDays(), fetchMonthNotes(todayIso())])
       .then(([d, n]) => {
-        setDays(overlayDays(d, oldOps.current))
-        setNotes(overlayNotes(n ?? legacyNotes(d), oldOps.current))
+        setDays(d)
+        setNotes(n ?? legacyNotes(d))
         setLoadFailed(false)
       })
       .catch((e) => {
@@ -277,7 +261,7 @@ export default function App() {
       if (!userId || notesLoaded.current.has(m)) return
       notesLoaded.current.add(m)
       fetchMonthNotes(iso)
-        .then((n) => n && setNotes((all) => ({ ...all, ...overlayNotes(n, oldOps.current) })))
+        .then((n) => n && setNotes((all) => ({ ...all, ...n })))
         .catch((e) => {
           notesLoaded.current.delete(m)
           console.error('Could not load notes', e)
@@ -318,7 +302,7 @@ export default function App() {
     document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'
   }, [signedIn, screen])
 
-  // Shown at once and kept on this device; the outbox sends it to the account (and keeps trying until it does).
+  // Shown at once and saved straight to the account.
   const onFilled = useCallback(
     (color: Paint) => {
       setWhy({ settled: color, fresh: !daysNow.current[date] })
@@ -338,14 +322,14 @@ export default function App() {
             : { backfilled: !paintedFresh(date), paintedOn: todayIso(), color },
         }
       })
-      if (color !== 'green' && daysNow.current[date]?.framed) enqueue({ k: 'framed', date, framed: false })
-      enqueue({ k: 'color', date, color })
+      if (color !== 'green' && daysNow.current[date]?.framed) save({ k: 'framed', date, framed: false })
+      save({ k: 'color', date, color })
     },
     [date],
   )
 
   // Wipe: the square goes blank at once and leaves every count.
-  // Frame (or unframe) a day that mattered most: shown at once, kept here, sent by the outbox.
+  // Frame (or unframe) a day that mattered most: shown at once, saved straight to the account.
   const onFrame = () => {
     const day = date
     const was = !!days[day]?.framed
@@ -356,7 +340,7 @@ export default function App() {
       frameSound()
       if (!(notes[day] ?? []).some((n) => n.pinned)) setWhy({ pinned: true })
     }
-    enqueue({ k: 'framed', date: day, framed: !was })
+    save({ k: 'framed', date: day, framed: !was })
   }
 
   const onWipe = () => {
@@ -369,10 +353,10 @@ export default function App() {
       delete next[day]
       return next
     })
-    enqueue({ k: 'wipe', date: day })
+    save({ k: 'wipe', date: day })
   }
 
-  // Notes save instantly: the change shows at once, stays on this device, and the outbox sends it to the account.
+  // Notes save instantly: the change shows at once and goes straight to the account.
   const putNotes = (day: string, fn: (list: Note[]) => Note[]) =>
     setNotes((all) => ({ ...all, [day]: fn(all[day] ?? []).sort(byTime) }))
   const swap = (day: string, id: string, to: Note) => putNotes(day, (l) => l.map((n) => (n.id === id ? to : n)))
@@ -381,11 +365,11 @@ export default function App() {
     setWhy(null)
     if (note) {
       swap(note.date, note.id, { ...note, body: text, writtenAt: new Date().toISOString() })
-      enqueue({ k: 'note-body', note, body: text })
+      save({ k: 'note-body', note, body: text })
     } else {
       const draft = draftNote(date, text, why?.pinned)
       putNotes(draft.date, (l) => [...l, draft])
-      enqueue({ k: 'note-add', note: draft })
+      save({ k: 'note-add', note: draft })
     }
   }
 
@@ -394,13 +378,13 @@ export default function App() {
     setWhy(null)
     const pinned = !note.pinned
     swap(note.date, note.id, { ...note, pinned: pinned || undefined })
-    enqueue({ k: 'note-pin', note, pinned })
+    save({ k: 'note-pin', note, pinned })
   }
 
   const onDeleteNote = async (note: Note) => {
     setWhy(null)
     putNotes(note.date, (l) => l.filter((n) => n.id !== note.id))
-    enqueue({ k: 'note-del', note })
+    save({ k: 'note-del', note })
   }
 
   const onDryBrush = () => {
