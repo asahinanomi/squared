@@ -3371,9 +3371,91 @@ button.settings-row:active {
 }
 .welcome-eyebrow {
   margin: 0 0 14px;
+  color: #5c5c57; /* every line around a question: 16px, regular, dark grey, so the question leads */
+  font-size: 16px;
+  line-height: 1.4;
+}
+/* The first step: what squared is (one short paragraph), the question on its own, then the paint. */
+.welcome-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #5c5c57;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.welcome-intro p {
+  margin: 0;
+}
+.welcome-big {
+  margin: 44px 0 0;
+  font-family: var(--font-reflect);
+  font-optical-sizing: auto;
+  font-size: clamp(30px, 9vw, 36px); /* the day screen's question, exactly */
+  font-weight: 450;
+  line-height: 1.22;
+  letter-spacing: -0.005em;
+}
+.welcome-big u {
+  text-decoration: underline dotted var(--ink);
+  text-decoration-thickness: 2.5px;
+  text-underline-offset: 6px;
+}
+.welcome-then {
+  margin: 44px 0 0;
+  color: #5c5c57;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.welcome-trio {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+.welcome-trio span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.welcome-trio i {
+  display: block;
+  width: 46px;
+  height: 46px;
+  border-radius: 9px;
+}
+/* The last step: how many squares. The fields read left, as in square settings. */
+.welcome-fields {
+  margin-top: 22px;
+  text-align: left;
+}
+.welcome-young {
+  color: var(--ink);
+}
+.welcome-count {
+  margin: 26px 0 0;
+  display: flex;
+  flex-direction: column;
+}
+.welcome-count-n {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.welcome-count-w {
+  margin-top: 8px;
+  font-size: 16px;
+  color: var(--ink-soft);
+}
+.welcome-count-a {
+  margin-top: 4px;
+  font-size: 14px;
   color: var(--muted);
-  font-size: 15px;
-  line-height: 1.5;
 }
 .welcome-q {
   margin: 0;
@@ -4096,4 +4178,9 @@ button.home-card:active {
   .waiting .lifeglass-grain {
     animation: none;
   }
+}
+/* "choose", before a lifespan is picked: wide enough to read. */
+.welcome-squares .setup-years input:placeholder-shown {
+  width: 3.8em;
+  text-align: center;
 }

@@ -448,10 +448,9 @@ export default function App() {
       const t = setTimeout(() => setLanded(true), 4000)
       return () => clearTimeout(t)
     }
-    // Onboarding, one rule: squares not set yet means the journey (how many squares, then what matters), always.
+    // Onboarding, one rule: squares not set yet means the journey (what squared is, what matters, how many squares).
     if (!profile && screen === 'today' && !legalAtStart && !tryWelcome && !trySquaresAtStart) {
-      setAfterSetup('welcome')
-      setScreenValue('setup')
+      setScreenValue('welcome')
     } else if (screen === 'today' && date === todayIso() && days[todayIso()] && profile) setScreenValue('home')
     setLanded(true)
   }, [signedIn, daysReady, profileReady, landed]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -921,29 +920,23 @@ export default function App() {
             ) : screen === 'setup' ? (
               <Setup
                 profile={profile}
-                onBack={
-                  afterSetup === 'welcome'
-                    ? undefined // the journey's first screen: nowhere to go back to
-                    : () =>
-                        afterSetup === 'home'
-                          ? goHome()
-                          : afterSetup === 'life'
-                            ? setScreen('year')
-                            : afterSetup === 'pie'
-                              ? setScreen(pieFrom)
-                              : afterSetup === 'settings'
-                                ? setScreenValue('settings')
-                                : goToday()
+                onBack={() =>
+                  afterSetup === 'home'
+                    ? goHome()
+                    : afterSetup === 'life'
+                      ? setScreen('year')
+                      : afterSetup === 'pie'
+                        ? setScreen(pieFrom)
+                        : afterSetup === 'settings'
+                          ? setScreenValue('settings')
+                          : goToday()
                 }
                 mode={afterSetup === 'settings' ? 'settings' : 'onboarding'}
-                cta={afterSetup === 'welcome' ? 'next' : undefined}
                 onSave={async (p) => {
                   await saveProfile(p)
                   setProfile(p)
                   // First run ends on "start painting": straight to today's square.
                   if (afterSetup === 'pie') setScreen('pie')
-                  else if (afterSetup === 'welcome')
-                    setScreenValue('welcome') // on to what matters
                   else if (afterSetup === 'home') goHome()
                   else if (afterSetup !== 'settings') goToday()
                 }}
@@ -951,6 +944,10 @@ export default function App() {
             ) : screen === 'welcome' ? (
               <Welcome
                 tryOut={tryWelcome}
+                onSquares={async (p) => {
+                  await saveProfile(p)
+                  setProfile(p)
+                }}
                 onDone={() => {
                   if (tryWelcome) history.replaceState(null, '', location.pathname)
                   else markOnboarded()

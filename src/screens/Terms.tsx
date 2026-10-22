@@ -11,7 +11,7 @@ export function Terms({ onBack, backLabel }: Props) {
         {backLabel}
       </button>
       <h1 className="idea-title">terms</h1>
-      <p className="privacy-date">last updated Oct 20, 2026</p>
+      <p className="privacy-date">last updated Oct 22, 2026</p>
       <p>squared is a small app made by one person. By using it, you agree to these few things.</p>
 
       <h2 className="privacy-head">it’s a beta, as is</h2>
@@ -33,7 +33,7 @@ export function Terms({ onBack, backLabel }: Props) {
       <p>Support through Ko-fi is a gift to help build squared. It isn’t a purchase and doesn’t buy features.</p>
 
       <h2 className="privacy-head">using it fairly</h2>
-      <p>You must be 13 or older. Don’t misuse squared, try to break it, or reach into anyone else’s account.</p>
+      <p>You must be 18 or older. Don’t misuse squared, try to break it, or reach into anyone else’s account.</p>
 
       <h2 className="privacy-head">changes</h2>
       <p>
