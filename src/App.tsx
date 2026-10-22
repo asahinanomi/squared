@@ -438,8 +438,8 @@ export default function App() {
   useEffect(() => {
     if (screen === 'life') markTried('life')
   }, [screen]) // eslint-disable-line react-hooks/exhaustive-deps
-  // Where you land: today, unless today is already painted and you've been here before (your squares are set):
-  // then home. Decided once, when the days and the profile are in.
+  // Where you land: today, unless your squares are set and today is already painted, or nothing is painted yet
+  // (back before a first square): then home. Decided once, when the days and the profile are in.
   // Nothing shows until then (no flash of today before home); if loading drags past 4s, today it is.
   const [landed, setLanded] = useState(false)
   useEffect(() => {
@@ -451,7 +451,8 @@ export default function App() {
     // Onboarding, one rule: squares not set yet means the journey (what squared is, what matters, how many squares).
     if (!profile && screen === 'today' && !legalAtStart && !tryWelcome && !trySquaresAtStart) {
       setScreenValue('welcome')
-    } else if (screen === 'today' && date === todayIso() && days[todayIso()] && profile) setScreenValue('home')
+    } else if (screen === 'today' && date === todayIso() && profile && (days[todayIso()] || !Object.keys(days).length))
+      setScreenValue('home')
     setLanded(true)
   }, [signedIn, daysReady, profileReady, landed]) // eslint-disable-line react-hooks/exhaustive-deps
   // Until the squares are set, onboarding is the only way in: any other screen (today from the terms page, say)
