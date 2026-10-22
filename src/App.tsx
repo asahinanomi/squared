@@ -17,7 +17,7 @@ import { draftNote, fetchAllNotes, fetchMonthNotes, legacyNotes, type Note, type
 import type { Paint } from './lib/paints'
 import { fetchProfile, saveProfile, type Profile } from './lib/profile'
 import { frameSound } from './lib/sound'
-import { fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/supabase'
+import { backFromGoogle, fetchQuestion, finishSignIn, signInWithGoogle, supabase } from './lib/supabase'
 import { Idea } from './screens/Idea'
 import { Month } from './screens/Month'
 import { Year } from './screens/Year'
@@ -492,7 +492,12 @@ export default function App() {
     return () => window.removeEventListener('popstate', back)
   }, [])
 
-  if (session === undefined || (userId && checking) || (signedIn && !landed && screen === 'today')) return <Waiting />
+  if (session === undefined || (userId && checking) || (signedIn && !landed && screen === 'today'))
+    return session === undefined && backFromGoogle ? (
+      <Waiting line="signing you in with Google…" later="still signing you in, a slow connection can take a moment" />
+    ) : (
+      <Waiting />
+    )
   if (!signedIn)
     return ideaOut ? (
       <div className="app">

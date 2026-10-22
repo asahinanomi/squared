@@ -4161,6 +4161,22 @@ button.home-card:active {
   color: var(--zoom-ink);
   animation: fade-in 0.25s ease-out;
 }
+.waiting-in {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 0 32px;
+}
+.waiting-line {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: center;
+  text-wrap: balance;
+  animation: fade-in 0.4s ease-out;
+}
 .waiting svg {
   width: 30px;
   height: 35px;

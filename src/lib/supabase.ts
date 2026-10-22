@@ -8,14 +8,21 @@ const key = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
 // Give each request 10s, then try once more on a fresh one.
 const TIMEOUT_MS = 10_000
 
+// A plain timer and controller (not AbortSignal.timeout/any, which some Safari versions handle unreliably).
 async function patientFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
   for (let attempt = 0; ; attempt++) {
-    const timeout = AbortSignal.timeout(TIMEOUT_MS)
-    const signal = init?.signal && 'any' in AbortSignal ? AbortSignal.any([init.signal, timeout]) : timeout
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS)
+    const outer = init?.signal
+    const follow = () => ctrl.abort()
+    outer?.addEventListener('abort', follow)
     try {
-      return await fetch(input, { ...init, signal })
+      return await fetch(input, { ...init, signal: ctrl.signal })
     } catch (e) {
-      if (attempt > 0 || init?.signal?.aborted) throw e
+      if (attempt > 0 || outer?.aborted) throw e
+    } finally {
+      clearTimeout(timer)
+      outer?.removeEventListener('abort', follow)
     }
   }
 }
@@ -92,6 +99,11 @@ export async function signInWithGoogle() {
   location.assign(`https://accounts.google.com/o/oauth2/v2/auth?${q}`)
 }
 
+const NETWORK = 'check your connection and try again'
+
+/** Back from Google with an answer to finish (the hourglass says so meanwhile). */
+export const backFromGoogle = /[#&]id_token=|[?&]code=/.test(location.hash + location.search)
+
 let finishing: Promise<string | null> | null = null
 
 /**
@@ -118,12 +130,20 @@ export function finishSignIn(): Promise<string | null> {
         })
         return 'Sign-in expired, please try again.'
       }
-      const { error } = await supabase.auth.signInWithIdToken({
-        provider: 'google',
-        token: hash.get('id_token')!,
-        nonce: saved.nonce,
-      })
-      return error ? error.message : null
+      // Google's answer is good for an hour: if the network drops it on the way to Supabase, try again (3 times).
+      for (let attempt = 1; ; attempt++) {
+        const started = Date.now()
+        const { error } = await supabase.auth.signInWithIdToken({
+          provider: 'google',
+          token: hash.get('id_token')!,
+          nonce: saved.nonce,
+        })
+        if (!error) return null
+        reportError(`sign in (try ${attempt})`, error, Date.now() - started)
+        const network = error.name === 'AuthRetryableFetchError' || !error.status
+        if (!network || attempt >= 3) return network ? NETWORK : error.message
+        await new Promise((r) => setTimeout(r, 1000 * attempt))
+      }
     }
     const params = new URLSearchParams(location.search)
     const code = params.get('code')
@@ -132,6 +152,7 @@ export function finishSignIn(): Promise<string | null> {
     if (failed) return failed
     if (!code) return null
     const { error } = await supabase.auth.exchangeCodeForSession(code)
+    if (error) reportError('sign in (code)', error)
     return error ? error.message : null
   })()
   return finishing
