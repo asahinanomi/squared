@@ -3955,9 +3955,9 @@ button.home-card:active {
 /* a life, in one line */
 .home-big {
   margin-top: 6px;
-  font-size: 40px;
-  font-weight: 700;
-  letter-spacing: -0.035em;
+  font-size: 28px; /* the same as the page title: one headline size on home */
+  font-weight: 600;
+  letter-spacing: -0.03em;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -3968,17 +3968,17 @@ button.home-card:active {
   letter-spacing: 0;
   color: var(--ink-soft);
 }
+/* A calm bar, a fact to glance at: lived in a quiet dark grey, ahead in pale paper. */
 .home-bar {
   display: flex;
-  margin-top: 12px;
-  height: 10px;
-  border-radius: 5px;
+  margin-top: 10px;
+  height: 6px;
+  border-radius: 3px;
   overflow: hidden;
-  background: #fff;
-  box-shadow: inset 0 0 0 1.5px var(--ink);
+  background: #ecebe5;
 }
 .home-bar i {
-  background: var(--ink);
+  background: #55554f; /* dark grey ink, clearly not the slipped paint */
 }
 /* The days ahead sit over the paper end of the bar. */
 .home-big.is-ahead {
