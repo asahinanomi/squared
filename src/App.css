@@ -870,8 +870,10 @@
 }
 .glimpse-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* the square and word sit on the note's first line */
   gap: 10px;
+  line-height: 1.4;
+  text-align: left;
   min-width: 0;
   font-size: 15px;
   color: var(--ink-soft);
@@ -880,6 +882,7 @@
   flex: none;
   width: 20px;
   height: 20px;
+  margin-top: 1px;
   border-radius: 5px;
 }
 .glimpse-square.is-framed {
@@ -892,11 +895,14 @@
   font-weight: 600;
   color: var(--ink);
 }
+/* The note, up to two lines, then an ellipsis. */
 .glimpse-note {
   min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /* ---------- note under the square ---------- */
