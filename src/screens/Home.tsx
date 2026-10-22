@@ -97,6 +97,8 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
         </span>
         {todayNote && <span className="home-note">“{todayNote.body}”</span>}
       </span>
+      {/* The same quiet cue as the other cards: this opens. */}
+      <Chevron dir="right" />
     </button>
   ) : (
     <div className="home-card home-ask">

@@ -3915,6 +3915,16 @@ button.home-card:active {
   align-items: center;
   gap: 16px;
 }
+.home-today > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.home-today > svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--faint);
+}
 .home-sq {
   flex: none;
   position: relative;
