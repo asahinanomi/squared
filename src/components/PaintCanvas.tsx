@@ -16,8 +16,6 @@ type Props = {
   onFilled: (p: Paint) => void
   /** The quiet word on a blank square: "paint your day" (today) or "paint this day". */
   blank?: string
-  /** Someone new (nothing painted yet): a ghost brush shows the stroke, until they touch the square. */
-  hint?: boolean
 }
 
 // A quiet word in the middle of the square: what it holds, or that it's waiting.
@@ -31,9 +29,9 @@ const FILLED = 0.88
 // The ghost brush's stroke: three sweeps across the square, each rising from left to right, like painting it.
 const GHOST = 'M18 40 L82 22 L18 62 L82 44 L18 84 L82 66'
 
-// The ghost brush, moved along the stroke by script (not SVG's own animation, whose clock some browsers start at
-// page load: after a long onboarding the brush had already finished and never came back). In step with the CSS:
-// 0.8s in, a 2.6s sweep, then a rest, every 6.6s.
+// Every blank square, once, as it appears: a ghost brush sweeps the stroke, leaving a faint trail that fades, so the
+// square reads as "paint me". Moved by script (SVG's own animation clock can start at page load); in step with the
+// CSS: 0.8s in, a 2.6s sweep.
 function GhostBrush() {
   const trail = useRef<SVGPathElement>(null)
   const brush = useRef<SVGGElement>(null)
@@ -45,11 +43,10 @@ function GhostBrush() {
     const start = performance.now()
     let raf = 0
     const tick = (now: number) => {
-      const t = now - start - 800
-      const k = t < 0 ? 0 : Math.min(1, (t % 6600) / 2600)
+      const k = Math.min(1, Math.max(0, (now - start - 800) / 2600))
       const pt = path.getPointAtLength(k * total)
       g.setAttribute('transform', `translate(${pt.x} ${pt.y})`)
-      raf = requestAnimationFrame(tick)
+      if (k < 1) raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
@@ -72,16 +69,7 @@ function brushCursor(tip: string) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 4 36, crosshair`
 }
 
-export function PaintCanvas({
-  saved,
-  framed,
-  loaded,
-  stamp,
-  onDryBrush,
-  onFilled,
-  blank = 'paint your day',
-  hint,
-}: Props) {
+export function PaintCanvas({ saved, framed, loaded, stamp, onDryBrush, onFilled, blank = 'paint your day' }: Props) {
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const covered = useRef(new Uint8Array(GRID * GRID))
@@ -300,7 +288,7 @@ export function PaintCanvas({
 
         {settling && <div className="settle" style={{ background: paintHex(settling) }} />}
         {/* For someone new: a ghost brush sweeps across, leaving a faint trail, so the square reads as "paint me". */}
-        {hint && !saved && !touched && <GhostBrush />}
+        {!saved && !touched && <GhostBrush />}
         {!touched && !settling && (
           <span
             className={'canvas-word' + (saved ? ' is-painted' : '')}

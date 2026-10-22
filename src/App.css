@@ -803,27 +803,28 @@
 }
 .ghost-trail {
   fill: none;
-  stroke: rgba(110, 155, 123, 0.28);
+  stroke: rgba(110, 155, 123, 0.2);
   stroke-width: 9;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  animation: ghost-trail 6.6s 0.8s ease-in-out infinite;
+  animation: ghost-trail 4.2s 0.8s ease-in-out forwards;
 }
 .ghost-brush {
   stroke: #141413;
   stroke-width: 1.2;
   stroke-linejoin: round;
   opacity: 0;
-  animation: ghost-brush 6.6s 0.8s ease-in-out infinite;
+  animation: ghost-brush 4.2s 0.8s ease-in-out forwards;
 }
+/* Once: the 2.6s sweep is the first 62%, then brush and trail fade. */
 @keyframes ghost-brush {
   0%,
-  39% {
+  62% {
     opacity: 0.85;
   }
-  50%,
+  78%,
   100% {
     opacity: 0;
   }
@@ -833,11 +834,10 @@
     stroke-dashoffset: 1;
     opacity: 1;
   }
-  39% {
+  62% {
     stroke-dashoffset: 0;
     opacity: 1;
   }
-  55%,
   100% {
     stroke-dashoffset: 0;
     opacity: 0;

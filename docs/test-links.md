@@ -8,7 +8,6 @@ Hidden links for trying squared's first-time moments on your own account. Open t
 |---|---|
 | [squared.today/?welcome](https://squared.today/?welcome) | Onboarding: all four steps, through to "start painting →". Nothing you type is saved. |
 | [squared.today/?squares](https://squared.today/?squares) | "how many squares?" as a new person sees it, blank. |
-| [squared.today/?brush](https://squared.today/?brush) | The ghost brush. Go to an unpainted day to see it. |
 | [squared.today/?month](https://squared.today/?month) | Last month's painting (the new-month moment). Works any day. |
 | [squared.today/?year](https://squared.today/?year) | Last year's painting (the new-year moment). Works any day. |
 
