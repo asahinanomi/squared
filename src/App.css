@@ -965,7 +965,21 @@
 }
 .swipe .note-card {
   border-radius: 0;
+  box-shadow: none;
+  border: 0;
 } /* the row clips the corners */
+/* The note's keyline, drawn on the row, so it follows the rounded corners the row clips. */
+.swipe:has(.note-card)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px #ecece5;
+  pointer-events: none;
+}
+.swipe:has(.is-remember)::after {
+  box-shadow: inset 0 0 0 1px #53735c;
+}
 .note-card {
   display: block;
   text-align: left;
