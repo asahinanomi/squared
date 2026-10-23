@@ -101,7 +101,10 @@ export function Home({ name, days, notes, profile, steps, onToday, onDay, onFind
       <h2 className="home-head">
         this week
         <small className="home-of">
-          {shortDateParts(week[0]).monthDay} – {shortDateParts(week[6]).monthDay}
+          {/* With its year ("Oct 18 – Oct 24, 2026"); a week across New Year names both ("Dec 28, 2025 – Jan 3, 2026"). */}
+          {shortDateParts(week[0]).monthDay}
+          {week[0].slice(0, 4) !== week[6].slice(0, 4) && `, ${week[0].slice(0, 4)}`} –{' '}
+          {shortDateParts(week[6]).monthDay}, {week[6].slice(0, 4)}
         </small>
       </h2>
       <ul className="home-week-days">
