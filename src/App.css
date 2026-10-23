@@ -777,7 +777,7 @@
 }
 .day-next button {
   padding: 6px 4px;
-  color: var(--ink-soft);
+  color: var(--muted); /* the same quiet links as start over · frame it: one colour, one size */
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
 }
