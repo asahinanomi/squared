@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { DayFinder } from './components/DayFinder'
 import { MeaningSheet } from './components/MeaningSheet'
 import { MonthPainting } from './components/MonthPainting'
 import { OpenPainting } from './components/PaintingButton'
@@ -8,6 +9,7 @@ import { Waiting } from './components/Waiting'
 import { ViewSwitch } from './components/ZoomBar'
 import type { Why } from './lib/notes'
 import type { Paint } from './lib/paints'
+import { todayIso } from './lib/dates'
 import { backFromGoogle, supabase } from './lib/supabase'
 import { Screens } from './Screens'
 import { SignedOut } from './screens/SignedOut'
@@ -34,6 +36,8 @@ export default function App() {
   const [loaded, setLoaded] = useState<Paint | null>(null)
   const [nudge, setNudge] = useState(false)
   const [defining, setDefining] = useState(false)
+  // The day finder from home ("paint another day") or the menu ("find a day"): pick a day, land on it to paint.
+  const [finding, setFinding] = useState(false)
   const onDryBrush = () => {
     setNudge(true)
     setTimeout(() => setNudge(false), 750)
@@ -102,6 +106,7 @@ export default function App() {
             <Topbar
               onHome={nav.goHome}
               onToday={nav.goToday}
+              onFind={() => setFinding(true)}
               onCalendar={() => nav.goMonth()}
               onIdea={() => nav.setScreen('idea')}
               onSettings={nav.openSettings}
@@ -122,10 +127,32 @@ export default function App() {
               painter={painter}
               email={session?.user.email}
               signOut={signOut}
-              ui={{ why, setWhy, loaded, setLoaded, nudge, onDryBrush, onDefine: () => setDefining(true) }}
+              ui={{
+                why,
+                setWhy,
+                loaded,
+                setLoaded,
+                nudge,
+                onDryBrush,
+                onDefine: () => setDefining(true),
+                onFind: () => setFinding(true),
+              }}
             />
           </div>
           <MeaningSheet open={defining} onClose={() => setDefining(false)} />
+          <DayFinder
+            open={finding}
+            onClose={() => setFinding(false)}
+            date={todayIso()}
+            today={todayIso()}
+            born={acc.profile?.born}
+            days={acc.days}
+            onPick={(iso) => {
+              setFinding(false)
+              setWhy(null)
+              nav.openDay(iso)
+            }}
+          />
           {withPainting.includes(screen) && (
             <MonthPainting
               month={painting.paintedMonth}

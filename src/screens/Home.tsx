@@ -22,6 +22,8 @@ type Props = {
   onPainting: (period: string) => void
   /** my framed days: the link shows once a day is framed. */
   onFramed: () => void
+  /** paint another day: the day finder, straight away. */
+  onFind: () => void
 }
 
 const greeting = (name: string) => {
@@ -46,7 +48,19 @@ const DateLine = ({ iso }: { iso: string }) => {
 // streaks, no scores. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (L, M, N)
 // Before the first square (squares set, nothing painted): only your days ahead, the question with "paint your
 // first square", and getting started, so there's one thing to do. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (K)
-export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay, onPainting, onFramed }: Props) {
+export function Home({
+  name,
+  days,
+  notes,
+  profile,
+  steps,
+  onToday,
+  onLife,
+  onDay,
+  onPainting,
+  onFramed,
+  onFind,
+}: Props) {
   const today = todayIso()
   const painted = days[today]
   const month = today.slice(0, 7)
@@ -120,6 +134,10 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
       </p>
       <button className="pill" onClick={onToday}>
         paint today
+      </button>
+      {/* A day in the past: straight to the day finder (year, month, day), not through today. */}
+      <button className="home-yesterday" onClick={onFind}>
+        paint another day
       </button>
     </div>
   )
@@ -249,6 +267,11 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
       {todayCard}
       {/* Home asks you to paint: today, then the week, where a day still paper opens with a tap. */}
       {weekCard}
+      {painted && (
+        <button className="home-yesterday home-another" onClick={onFind}>
+          paint another day
+        </button>
+      )}
 
       {life}
 

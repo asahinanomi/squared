@@ -50,6 +50,7 @@ export type ScreensProps = {
     nudge: boolean
     onDryBrush: () => void
     onDefine: () => void
+    onFind: () => void
   }
 }
 
@@ -77,6 +78,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
         onDay={(iso) => nav.openDay(iso)}
         onPainting={openPainting}
         onFramed={() => nav.openFramed('home')}
+        onFind={ui.onFind}
       />
     )
   if (screen === 'today')

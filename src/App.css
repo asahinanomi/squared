@@ -4293,6 +4293,11 @@ button.home-card:active {
   border-bottom: 2px solid #fff;
   transform: rotate(-45deg) translate(1px, -1px);
 }
+/* paint another day, under the week once today is painted (under the pill before) */
+.home-another {
+  align-self: center;
+  margin-top: -6px;
+}
 /* a life: the card opens a life; "see my framed days" is its own quiet line at the foot, under a hairline. */
 .home-life-open {
   display: flex;
