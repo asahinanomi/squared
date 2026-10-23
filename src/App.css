@@ -399,13 +399,33 @@
 .easel-square.is-pulled {
   transition: none;
 }
-.easel-square.is-from-left,
-.day-label.is-from-left {
+.easel-square.is-from-left {
   animation: day-from-left 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.easel-square.is-from-right,
-.day-label.is-from-right {
+.easel-square.is-from-right {
   animation: day-from-right 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* The date turns like a calendar page, hinged on its binding: back a day, the page swings down from the top;
+   on a day, it swings up from the bottom (the square still slides, with the swipe). */
+.day-label.is-from-left {
+  transform-origin: 50% 0;
+  animation: page-down 0.36s cubic-bezier(0.35, 0.15, 0.25, 1);
+}
+.day-label.is-from-right {
+  transform-origin: 50% 100%;
+  animation: page-up 0.36s cubic-bezier(0.35, 0.15, 0.25, 1);
+}
+@keyframes page-down {
+  from {
+    opacity: 0;
+    transform: perspective(320px) rotateX(80deg);
+  }
+}
+@keyframes page-up {
+  from {
+    opacity: 0;
+    transform: perspective(320px) rotateX(-80deg);
+  }
 }
 @keyframes day-from-left {
   from {
