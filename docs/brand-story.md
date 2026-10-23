@@ -18,6 +18,8 @@ squared is a daily conscience tracker. Each day you paint one square, one honest
 
 **Meaningful, not good.** Life is meaningful in some very bad days, and it's not just about having good days. (nomi, Oct 23, 2026: the day her dad died, she was there and said she forgave him. Green.) That's part of why squared exists, and why it never becomes a good-day / bad-day mood tracker.
 
+**It makes you think deeply.** Painting one square asks for a moment of honest reflection: what did this day hold, and was I there for it? That pause, thinking deeply about your own days, is itself meaningful. It's what squared does for people. (nomi, Oct 23, 2026, painting her own past days: "this practice makes me think deeply, and that is meaningful.")
+
 Rooted in Covey's urgent-vs-important: a day can be busy and still not matter. squared asks you to notice the difference, one day at a time.
 
 **The metaphor: black and white, then colour** (the Wizard of Oz, when Dorothy steps out into colour). squared is ink on paper; the only colour anywhere is what you paint. Days stay paper until you paint them, so your life literally turns colourful as you go. Celebrate days "in colour", never days "missed".
