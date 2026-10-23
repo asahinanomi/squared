@@ -2,6 +2,15 @@
 
 Ideas parked for later. Not promises, not in order. When one ships, move it into the README.
 
+## ⭐ Top priority: private notes (end-to-end encryption)
+
+Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encrypted on Supabase's disks, not end-to-end; the privacy page says so plainly). Do this first after beta, or sooner if testers ask.
+
+- **What**: notes (the sensitive part of a journal) encrypted on your device before they're saved, so no one but you can read them, not even the maker. Squares (just colours) and what matters may stay as they are, or follow later.
+- **Why**: the journal leaders do it. Day One encrypts end to end by default, with the key made on the device; Penzu's paid tier uses a key partly made from your password, so the company can't unlock entries.
+- **The trade-offs to design carefully** (solid over clever): a passphrase you enter once per device, a recovery option (or a plain warning that a lost passphrase means lost notes), and export and search working on the device. Existing notes would be encrypted once, on your device.
+- **Before building**: a lab for the passphrase moments (set it, enter it on a new device, forgot it), and a short plan of the simplest safe design.
+
 ## Paintings
 
 - **Painting styles when keeping one.** On "keep this painting", offer a few templates to choose from: oil, watercolour, brush and so on. The same month, painted in another manner. (The lab already tried brushstrokes and watercolour beside the current soft style: https://claude.ai/artifact/V8up29C1WmH7MXz8BBMdLE)
