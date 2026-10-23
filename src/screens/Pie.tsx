@@ -315,34 +315,3 @@ function halfLabels(drawn: Drawn[], lived: number, livedEnd: number): Label[] {
 
 const pieLabel = (slices: Slice[]) =>
   'A pie of a life: ' + slices.map((s) => `${LABEL[s.id]} ${fmt(s.count)}`).join(', ')
-
-/** A life pie, small and still (my days): the whole life's slices in their paint, the rims, no numbers. */
-export function PieThumb({ days, profile }: { days: Days; profile: Profile }) {
-  const slices = lifeSlices(days, profile.born, profile.lifespan, todayIso(), 'life')
-  const total = slices.reduce((s, x) => s + x.count, 0)
-  let turn = 0
-  const drawn = slices
-    .filter((s) => s.count > 0)
-    .map((s) => {
-      const a = turn
-      turn += s.count / total
-      return { ...s, a, b: turn }
-    })
-  return (
-    <svg className="pie-chart is-thumb" viewBox="-4 -4 258 258" aria-hidden="true">
-      {drawn.map((s) => (
-        <path key={s.id} d={wedge(s.a, s.b)} fill={FILL[s.id]} className="pie-wedge" />
-      ))}
-      {drawn.length > 1 &&
-        drawn.map((s) => <path key={`e-${s.id}`} d={`M${C} ${C} L${at(s.a)}`} className="pie-edge" />)}
-      {drawn.map((s) => (
-        <path
-          key={`r-${s.id}`}
-          d={rim(s.a, s.b)}
-          fill="none"
-          className={s.id === 'ahead' ? 'pie-rim is-ahead' : 'pie-rim'}
-        />
-      ))}
-    </svg>
-  )
-}

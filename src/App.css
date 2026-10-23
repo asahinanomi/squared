@@ -4626,38 +4626,6 @@ button.home-card:active {
   overflow: hidden;
 }
 
-/* my days: a life as a pie, its one picture, small and still; a tap opens the full pie. Then the rows. */
-.my-days-pie {
-  align-self: center;
-  display: grid;
-  justify-items: center;
-  gap: 10px;
-  margin-top: 22px;
-  padding: 6px;
-}
-.my-days-pie:active {
-  transform: scale(0.98);
-}
-.my-days-pie .pie-chart.is-thumb {
-  width: min(56vw, 200px);
-  height: auto;
-}
-.my-days-pie-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ink);
-}
-.my-days-pie-label svg {
-  width: 18px;
-  height: 18px;
-  color: var(--faint);
-}
-.my-days .settings-rows {
-  margin-top: 22px;
-}
 /* The pie, opened from my days: its way back, at the top left. */
 .pie-back {
   align-self: flex-start;

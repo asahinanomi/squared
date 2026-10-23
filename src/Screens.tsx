@@ -127,7 +127,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
   if (screen === 'mydays')
     return (
       <MyDays
-        days={days}
         profile={profile}
         onPie={nav.openPie}
         onSquares={nav.goLifeDays}
