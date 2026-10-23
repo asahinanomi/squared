@@ -90,7 +90,7 @@ export function Settings({
         {row('square settings', summary, onSquares)}
         {row('what matters', 'worth it & regret, your compass', onMatters)}
         {row('my paintings', 'the paintings you kept', onPaintings)}
-        {row('my framed days', 'the days you framed, in the list', onFramed)}
+        {row('my framed days', 'the days you framed, oldest first', onFramed)}
       </div>
 
       <h2 className="settings-group">app</h2>

@@ -187,18 +187,19 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setScreen('list')
   }
   const openSettings = () => {
-    if (!['settings', 'setup', 'matters', 'privacy', 'terms', 'questions', 'export', 'paintings'].includes(screen))
+    if (
+      !['settings', 'setup', 'matters', 'privacy', 'terms', 'questions', 'export', 'paintings', 'framed'].includes(
+        screen,
+      )
+    )
       setSettingsFrom(screen)
     setScreenValue('settings')
   }
-  // my framed days (home, settings): the list of days, showing only the framed ones.
-  const openFramed = () => {
-    setListFrom('month')
-    setListRes('days')
-    setListZoomed(false)
-    setListFocus(todayIso())
-    setListOnly('framed')
-    setScreen('list')
+  // my framed days opens from home or settings; back returns there.
+  const [framedFrom, setFramedFrom] = useState<'home' | 'settings'>('settings')
+  const openFramed = (from: 'home' | 'settings') => {
+    setFramedFrom(from)
+    setScreenValue('framed')
   }
   const openMatters = (from: 'settings' | 'idea' | 'today' | 'home') => {
     setMattersFrom(from)
@@ -348,6 +349,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     seeSlice,
     openSettings,
     openMatters,
+    framedFrom,
     openFramed,
     endTrySquares,
     leaveSetup,

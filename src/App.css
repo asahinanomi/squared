@@ -4548,3 +4548,63 @@ button.home-card:active {
   white-space: nowrap;
   animation: fade-in 0.25s ease-out;
 }
+
+/* my framed days: oldest first, a card per day (the list's card), only what matters: the framed square (the list's
+   own, 26px), the date and weekday, and up to three lines of what you wanted to remember. */
+.framed-list {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.framed-day {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  column-gap: 14px;
+  align-items: start;
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px #ecece5;
+}
+.framed-day:active {
+  transform: scale(0.99);
+}
+.framed-square {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  box-shadow:
+    inset 0 0 0 2px var(--frame),
+    inset 0 0 0 4px #ebe6da;
+}
+.framed-text {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding-top: 2px;
+}
+.framed-date {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.framed-date small {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.framed-note {
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  white-space: pre-line;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
