@@ -509,6 +509,17 @@
   transform: rotate(-4deg);
   transform-origin: right bottom;
 }
+/* Blank: not a signature but the square's invitation, so it sits in the middle, level, a shade stronger. */
+.canvas-word:not(.is-painted) .canvas-sign {
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.canvas-word:not(.is-painted) .canvas-hand {
+  transform: none;
+  color: #8f8f89;
+}
 .canvas-word.is-painted .canvas-hand {
   font-size: 30px;
 }
