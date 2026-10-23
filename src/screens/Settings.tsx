@@ -28,7 +28,7 @@ type Props = {
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 // Settings: one page in three short groups (your squares, app, account); rows open their own screen, sound and
-// sign out act right here, and deleting the account is asked once more before it goes.
+// sign out act right here, and deleting the account asks once more, with "delete" typed, before it goes.
 export function Settings({
   profile,
   onBack,
@@ -104,7 +104,7 @@ export function Settings({
       </div>
 
       <h2 className="settings-group">account</h2>
-      <div className="settings-rows">
+      <div className="settings-rows is-last">
         {row('export my data', 'a Word copy of your squares and notes', onExport)}
         <button className="settings-row" onClick={onSignOut}>
           <span>
@@ -112,11 +112,14 @@ export function Settings({
             <span className="settings-sub">{email ? `signed in as ${email}` : 'signed in'}</span>
           </span>
         </button>
+        <button className="settings-row" disabled={deleting === 'deleting'} onClick={() => setAsking(true)}>
+          <span>
+            <span className="settings-label">{deleting === 'deleting' ? 'deleting…' : 'delete my account'}</span>
+            <span className="settings-sub">your squares, notes and lists, for good</span>
+          </span>
+        </button>
       </div>
       {deleting === 'failed' && <p className="settings-note">couldn't delete, check your connection and try again</p>}
-      <button className="settings-delete" disabled={deleting === 'deleting'} onClick={() => setAsking(true)}>
-        {deleting === 'deleting' ? 'deleting…' : 'delete my account'}
-      </button>
 
       <Footer
         links={[
@@ -129,6 +132,7 @@ export function Settings({
           title="Delete your account?"
           body="Your squares, notes, lists and settings go for good. It can't be undone."
           confirm="delete"
+          typeToConfirm="delete"
           onConfirm={remove}
           onCancel={() => setAsking(false)}
         />

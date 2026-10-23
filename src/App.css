@@ -2149,6 +2149,32 @@
   background: var(--grey-4);
   color: #fff;
 }
+.confirm-ok:disabled {
+  opacity: 0.35;
+}
+/* Type the word to confirm: what can't be undone takes one more deliberate step. */
+.confirm-type {
+  display: grid;
+  gap: 6px;
+  margin-top: 16px;
+  text-align: left;
+  font-size: 14px;
+  color: var(--muted);
+}
+.confirm-type input {
+  padding: 11px 14px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--grey-1);
+  box-shadow: inset 0 0 0 1px #e2e2db;
+  font: inherit;
+  font-size: 16px; /* no zoom on iPhone */
+  color: var(--ink);
+}
+.confirm-type input:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1.5px var(--grey-3);
+}
 
 /* ---------- bottom sheet ---------- */
 .sheet-backdrop {
@@ -2605,23 +2631,13 @@ button.settings-row:active {
 .settings-title + .settings-group {
   margin-top: 24px;
 }
+.settings-rows.is-last {
+  margin-bottom: 28px; /* room before the footer's hairline */
+}
 .settings-note {
   margin: 12px 0 0;
   font-size: 14px;
   color: var(--ink-soft);
-}
-/* Delete: a quiet text link under the account group; the dialog asks once more. */
-.settings-delete {
-  align-self: flex-start;
-  margin: 14px 0 28px;
-  padding: 6px 4px;
-  font-size: 14px;
-  color: var(--muted);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
-}
-.settings-delete:disabled {
-  opacity: 0.5;
 }
 
 /* ---------- what matters ---------- */

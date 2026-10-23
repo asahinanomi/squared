@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 type Props = {
@@ -7,10 +7,14 @@ type Props = {
   confirm: string
   onConfirm: () => void
   onCancel: () => void
+  /** For what can't be undone: the word to type before the button works (e.g. "delete"). */
+  typeToConfirm?: string
 }
 
 // A small "are you sure?" alert in the app's own style (not the browser's).
-export function ConfirmDialog({ title, body, confirm, onConfirm, onCancel }: Props) {
+export function ConfirmDialog({ title, body, confirm, onConfirm, onCancel, typeToConfirm }: Props) {
+  const [typed, setTyped] = useState('')
+  const ready = !typeToConfirm || typed.trim().toLowerCase() === typeToConfirm
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onCancel()
     window.addEventListener('keydown', onKey)
@@ -30,11 +34,25 @@ export function ConfirmDialog({ title, body, confirm, onConfirm, onCancel }: Pro
           {title}
         </h2>
         {body && <p className="confirm-body">{body}</p>}
+        {typeToConfirm && (
+          <label className="confirm-type">
+            <span>type “{typeToConfirm}” to confirm</span>
+            <input
+              value={typed}
+              onChange={(e) => setTyped(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && ready && onConfirm()}
+              autoComplete="off"
+              autoCapitalize="none"
+              spellCheck={false}
+              autoFocus
+            />
+          </label>
+        )}
         <div className="confirm-actions">
-          <button className="confirm-cancel" onClick={onCancel} autoFocus>
+          <button className="confirm-cancel" onClick={onCancel} autoFocus={!typeToConfirm}>
             cancel
           </button>
-          <button className="confirm-ok" onClick={onConfirm}>
+          <button className="confirm-ok" onClick={onConfirm} disabled={!ready}>
             {confirm}
           </button>
         </div>
