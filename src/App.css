@@ -2729,7 +2729,7 @@ button.settings-row:active {
 }
 .foot-mark {
   margin-top: 2px !important;
-  color: var(--faint);
+  color: var(--muted); /* text you read: the one small-text grey, as the small print above it */
 }
 .foot-mark .beta {
   margin-left: 4px;

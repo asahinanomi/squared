@@ -29,7 +29,7 @@ _Pairs with `brand-story.md` (voice & copy). This doc = look: logo, color, type,
 | ink (text, mark) | #141413 |
 | ink-soft | #3D3D3A |
 | muted (secondary text, links) | #6F6F6A — the one grey for small text you read (4.8:1 on paper) |
-| faint (decoration only — never text you need to read) | #8A8A82 and lighter |
+| faint (decoration only — never text you need to read: chevrons, separators, placeholders, future squares) | #C4C4BF |
 | hairline / border | #E2E2DB |
 | dot grid | #DDDCD6 |
 | .today grey | #A3A39E |
@@ -68,7 +68,7 @@ squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, 
 - **Pie labels:** every label (number, word under it) sits on the line from the centre to the rim through the middle of its wedge, halfway out.
 - **Beta mark:** a small soft capsule, lowercase "beta", 12px/500 ink on #E9E9E3, radius 999. Beside the wordmark on sign-in and at the settings foot; never in the menu or on the day screen.
 - **Capsules (segmented control):** left-aligned on text pages (what matters, the idea's tabs, how many squares); centred only on the centred views (a life, the pie).
-- **Footer:** one component everywhere: dotted hairline, small print (12px, muted, dot-separated), then "© year squared.today" with the beta capsule. Left-aligned with the page; centred (no hairline) only on sign-in.
+- **Footer:** one component everywhere: dotted hairline, small print (12px, muted, dot-separated), then "© year squared.today" with the beta capsule, all in muted: it's text you read, never faint. Left-aligned with the page; centred (no hairline) only on sign-in.
 - **Links / dividers:** 1px dotted hairlines.
 
 ## Layout — sign-in / home
