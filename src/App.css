@@ -346,11 +346,66 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   cursor: pointer;
 }
-.day-pick .day-label {
+/* The date sits in a quiet capsule (the same soft grey as the bar's "today"), narrower than the square, so it
+   labels the square without competing with it. */
+.day-nav .day-pick {
+  height: 36px;
+  padding: 0 12px 0 14px;
+  border-radius: 999px;
+  background: #efeee8;
+}
+.day-nav .day-pick .day-label {
   min-width: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+/* The window the date rolls through. */
+.day-roll {
+  position: relative;
+  display: inline-grid;
+  height: 36px;
+  align-items: center;
+  overflow: hidden;
+}
+.day-roll .day-label {
+  grid-area: 1 / 1;
+}
+.day-label.is-in-up {
+  animation: roll-in-up 0.32s cubic-bezier(0.3, 0.7, 0.3, 1);
+}
+.day-label.is-in-down {
+  animation: roll-in-down 0.32s cubic-bezier(0.3, 0.7, 0.3, 1);
+}
+.day-label.is-out-up {
+  animation: roll-out-up 0.32s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+}
+.day-label.is-out-down {
+  animation: roll-out-down 0.32s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+}
+@keyframes roll-in-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes roll-in-down {
+  from {
+    transform: translateY(-100%);
+  }
+}
+@keyframes roll-out-up {
+  to {
+    transform: translateY(-100%);
+  }
+}
+@keyframes roll-out-down {
+  to {
+    transform: translateY(100%);
+  }
 }
 .day-pick-chevron {
   width: 14px;
@@ -399,48 +454,7 @@
 .easel-square.is-pulled {
   transition: none;
 }
-.easel-square.is-from-left {
-  animation: day-from-left 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.easel-square.is-from-right {
-  animation: day-from-right 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-/* The date turns like a calendar page, hinged on its binding: back a day, the page swings down from the top;
-   on a day, it swings up from the bottom (the square still slides, with the swipe). */
-.day-label.is-from-left {
-  transform-origin: 50% 0;
-  animation: page-down 0.36s cubic-bezier(0.35, 0.15, 0.25, 1);
-}
-.day-label.is-from-right {
-  transform-origin: 50% 100%;
-  animation: page-up 0.36s cubic-bezier(0.35, 0.15, 0.25, 1);
-}
-@keyframes page-down {
-  from {
-    opacity: 0;
-    transform: perspective(320px) rotateX(80deg);
-  }
-}
-@keyframes page-up {
-  from {
-    opacity: 0;
-    transform: perspective(320px) rotateX(-80deg);
-  }
-}
-@keyframes day-from-left {
-  from {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-}
-@keyframes day-from-right {
-  from {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .easel-square,
   .day-label {
     animation: none !important;
   }

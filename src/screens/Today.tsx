@@ -251,7 +251,7 @@ export function Today(props: Props) {
           <div className="day-nav">
             {/* Tap the date to jump to any day you've lived: the phone's own date picker, birth to today. */}
             <label className="day-pick">
-              <DayLabel key={date} iso={date} slide={slide} />
+              <DayLabel iso={date} slide={slide} />
               <ChevronDown />
               <input
                 type="date"
@@ -516,13 +516,36 @@ export function ChevronDown({ className = 'day-pick-chevron' }: { className?: st
 }
 
 /** "Sat, Oct 17th, 2026" with the "th" raised; read aloud in full. It slides in with its day. */
+// The date, in a quiet capsule, rolls like a counter when you step a day: back a day, the new date comes down from
+// above and the old one leaves below; forward, the other way. The one motion on the day (the square stays still).
 function DayLabel({ iso, slide }: { iso: string; slide: 'from-left' | 'from-right' | null }) {
-  const p = shortDateParts(iso)
+  const [shown, setShown] = useState(iso)
+  const [leaving, setLeaving] = useState<string | null>(null)
+  useEffect(() => {
+    if (iso === shown) return
+    setLeaving(slide ? shown : null)
+    setShown(iso)
+    const t = setTimeout(() => setLeaving(null), 340)
+    return () => clearTimeout(t)
+  }, [iso]) // eslint-disable-line react-hooks/exhaustive-deps
+  const text = (d: string) => {
+    const p = shortDateParts(d)
+    return `${p.weekday}, ${p.monthDay}, ${p.year}`
+  }
+  const back = slide === 'from-left'
   return (
-    <span className={'day-label' + (slide ? ` is-${slide}` : '')} aria-label={longDate(iso)} aria-live="polite">
-      <span aria-hidden="true">
-        {p.weekday}, {p.monthDay}
-        <sup>{p.suffix}</sup>, {p.year}
+    <span className="day-roll" aria-label={longDate(iso)} aria-live="polite">
+      {leaving && (
+        <span className={'day-label ' + (back ? 'is-out-down' : 'is-out-up')} aria-hidden="true">
+          {text(leaving)}
+        </span>
+      )}
+      <span
+        key={shown}
+        className={'day-label' + (leaving ? (back ? ' is-in-down' : ' is-in-up') : '')}
+        aria-hidden="true"
+      >
+        {text(shown)}
       </span>
     </span>
   )
