@@ -210,7 +210,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, sig
     return (
       <WhatMatters
         onBack={() => setScreenValue(nav.mattersFrom)}
-        backLabel={nav.mattersFrom === 'idea' ? 'the idea' : nav.mattersFrom === 'mydays' ? 'my days' : nav.mattersFrom}
+        backLabel={nav.mattersFrom === 'idea' ? 'about' : nav.mattersFrom === 'mydays' ? 'my days' : nav.mattersFrom}
         onPaint={nav.goToday}
         paintedToday={!!days[todayIso()]}
         initial={lists.matters}

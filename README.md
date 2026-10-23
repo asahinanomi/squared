@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 23, 2026, 23:42 UTC_
+_last updated Oct 23, 2026, 23:45 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -146,11 +146,13 @@ Build step by step; the owner reviews and gives feedback after each step before 
 
 **my days (Oct 23, 2026)** (`src/screens/MyDays.tsx`): the menu's "my squares" (which only opened a zoom level the zoom buttons already reach) became **my days**, the life dashboard, as doors, never a page of numbers: the rows **a life pie** (the full pie; its "‹ my days" leads back. A picture of the pie here read techy and alone, so it's a row until there's a better idea), **all my squares** (a life, day by day), **what matters**, **my framed days**, **my paintings**, each back to my days. The pie left the bar's view switch (now squares · list), and the pie page has no bottom bar: it's a page like my days' others ("‹ my days", the title, whole life · days I lived · painted only, the pie); pinch still steps those three. Settings lost those rows and its groups: one short list (square settings, sound, lock when I leave, export my data, delete my account).
 
+**"about" (Oct 23, 2026)**: the menu's "the idea" is now **about** (the page holds more than the letter: faq, get in touch, support, the small print); the letter keeps its title "the idea", the page's first tab, and sign-in's link still says "the idea" (it opens the letter alone). Back links from there say "‹ about".
+
 **"how many squares" (Oct 23, 2026)**: settings' first row, and its page, are called **how many squares** ("square settings" said "settings" twice; onboarding asks the same question), with "Oct 26, 1971 · 85 years · 31,047 squares" under it.
 
 **The top bar on settings (Oct 23, 2026)**: settings and every page it opens (square settings, what matters, my paintings, my framed days, export, privacy, terms, questions) keep the logo and the menu, like every other screen. Settings itself has no back arrow (it's a place, reached from the menu); its pages keep their back arrow under the bar. Each opens at its top. Only onboarding (the welcome, and "how many squares?" while it's part of it) has no top bar: one way forward.
 
-Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: today · my days · settings · the idea · sign out — the things about you — and, set apart at its foot under a hairline in quieter grey, "the idea" (about the app). Under it, as quiet, **send feedback** — a screen in squared: "what confused you, or felt off? what did your squares show you? anything helps.", one box, and a black "send" pill; then "Thank you. I read every one. — nomi" and "done". Notes save to the `feedback` table (migration 0010); each person can only add their own, and nomi reads them in Supabase (Table Editor → feedback). In the local demo nothing is saved. To read them all with who sent them: SQL Editor → `select * from feedback_inbox;` (a view, also in 0010).
+Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: today · my days · settings · about · sign out — the things about you — and, set apart at its foot under a hairline in quieter grey, "the idea" (about the app). Under it, as quiet, **send feedback** — a screen in squared: "what confused you, or felt off? what did your squares show you? anything helps.", one box, and a black "send" pill; then "Thank you. I read every one. — nomi" and "done". Notes save to the `feedback` table (migration 0010); each person can only add their own, and nomi reads them in Supabase (Table Editor → feedback). In the local demo nothing is saved. To read them all with who sent them: SQL Editor → `select * from feedback_inbox;` (a view, also in 0010).
 
 ### Feedback by email (one-time setup)
 

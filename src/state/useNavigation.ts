@@ -261,7 +261,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     : legalFrom === 'settings'
       ? 'settings'
       : legalFrom === 'idea'
-        ? 'the idea'
+        ? 'about'
         : 'back'
 
   // Pinch: out walks the ladder outward (today → month → year → a life in years → months → days);

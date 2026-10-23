@@ -38,9 +38,9 @@ export function Topbar({ onHome, onToday, onCalendar, onIdea, onSettings, onSign
             <button onClick={go(onToday)}>today</button>
             <button onClick={go(onCalendar)}>my days</button>
             <button onClick={go(onSettings)}>settings</button>
-            {/* About the app, not about you: set apart at the foot, quieter. Its page holds the rest (get in touch, support, the small print). */}
+            {/* About the app, not about you: set apart at the foot, quieter. Its page opens on the idea (the letter), then the rest (faq, get in touch, support, the small print). */}
             <button className="menu-idea" onClick={go(onIdea)}>
-              the idea
+              about
             </button>
             {/* A private journal: signing out is always two taps away, the menu's last line. */}
             <button className="menu-signout" onClick={go(onSignOut)}>
