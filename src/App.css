@@ -469,6 +469,10 @@
 .peek:active {
   color: var(--grey-3);
 }
+/* The focus ring only for the keyboard, not after a tap. */
+.peek:focus:not(:focus-visible) {
+  outline: none;
+}
 /* The day's square is a canvas: a clean ink edge with nearly square corners, a thin raw-canvas margin inside
    it where the priming stops, and the primed face — a fine linen weave while blank, smooth paint once painted. */
 .canvas {
@@ -477,7 +481,7 @@
   z-index: 1;
   width: min(46vw, 176px); /* the palette below is drawn to the same width */
   aspect-ratio: 1;
-  background: #ebe6da; /* the raw canvas */
+  background: #e2dccc; /* the raw canvas, a shade deeper than the face so the canvas reads */
   border: 2.5px solid var(--ink);
   border-radius: 3px;
   overflow: hidden;
