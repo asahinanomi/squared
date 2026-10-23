@@ -20,6 +20,8 @@ squared is a daily conscience tracker. Each day you paint one square, one honest
 
 **It makes you think deeply.** Painting one square asks for a moment of honest reflection: what did this day hold, and was I there for it? That pause, thinking deeply about your own days, is itself meaningful. It's what squared does for people. (nomi, Oct 23, 2026, painting her own past days: "this practice makes me think deeply, and that is meaningful.")
 
+**Less regret.** I want to live meaningfully because I can't bear the thought of the regret days. On my death bed, I want to say I have no regrets, or fewer. squared helps me see them while there's still time to choose differently. (nomi, Oct 23, 2026)
+
 Rooted in Covey's urgent-vs-important: a day can be busy and still not matter. squared asks you to notice the difference, one day at a time.
 
 **The metaphor: black and white, then colour** (the Wizard of Oz, when Dorothy steps out into colour). squared is ink on paper; the only colour anywhere is what you paint. Days stay paper until you paint them, so your life literally turns colourful as you go. Celebrate days "in colour", never days "missed".
