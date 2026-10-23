@@ -19,19 +19,38 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 const pad = (n: number) => String(n).padStart(2, '0')
 
+/** How old you were on a day: whole years and months since your birth date. */
+function ageOn(born: string, iso: string) {
+  const [by, bm, bd] = born.split('-').map(Number)
+  const [y, m, d] = iso.split('-').map(Number)
+  let months = (y - by) * 12 + (m - bm) - (d < bd ? 1 : 0)
+  if (months < 0) months = 0
+  return { years: Math.floor(months / 12), months: months % 12 }
+}
+const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`
+
 // Find a day from your past the way memory does: which year (with how old you were), which month, then the day.
 // Opened from the date on the day screen; painted days show their colour, so you can see what's there already.
 export function DayFinder({ open, onClose, date, today, born, days, onPick }: Props) {
   const [step, setStep] = useState<'year' | 'month' | 'day'>('year')
   const [year, setYear] = useState(Number(date.slice(0, 4)))
   const [month, setMonth] = useState(Number(date.slice(5, 7)))
+  // The day just picked: held for a moment, with how old you were, before it opens.
+  const [picked, setPicked] = useState<string | null>(null)
   // Each time it opens: on the year you're looking at, starting from the years.
   useEffect(() => {
     if (!open) return
     setStep('year')
+    setPicked(null)
     setYear(Number(date.slice(0, 4)))
     setMonth(Number(date.slice(5, 7)))
   }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
+  // A moment to read your age, then the day opens (a tap opens it at once).
+  useEffect(() => {
+    if (!picked) return
+    const t = setTimeout(() => onPick(picked), 2000)
+    return () => clearTimeout(t)
+  }, [picked]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const first = born ?? `${Number(today.slice(0, 4)) - 100}-01-01`
   const bornYear = born ? Number(born.slice(0, 4)) : null
@@ -40,24 +59,46 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
   const painted = Object.keys(days)
   const has = (prefix: string) => painted.some((d) => d.startsWith(prefix))
   const ym = `${year}-${pad(month)}`
+  const ageLine = () => {
+    if (!born) return ''
+    if (picked) {
+      if (picked === born) return 'The day you were born.'
+      const a = ageOn(born, picked)
+      if (!a.years) return `You were ${plural(a.months, 'month')} old.`
+      return a.months
+        ? `You were ${plural(a.years, 'year')} and ${plural(a.months, 'month')} old.`
+        : `You were exactly ${plural(a.years, 'year')} old.`
+    }
+    const mid = step === 'day' ? `${ym}-15` : `${year}-07-01`
+    const a = ageOn(born, mid < born ? born : mid)
+    return year === Number(born.slice(0, 4)) && step === 'month'
+      ? 'The year you were born.'
+      : `You were about ${a.years}.`
+  }
 
   return (
     <Sheet open={open} onClose={onClose}>
       <div className="finder">
         <div className="finder-head">
-          {step !== 'year' && (
-            <button className="finder-back" onClick={() => setStep(step === 'day' ? 'month' : 'year')}>
-              ‹ {step === 'day' ? year : 'years'}
-            </button>
-          )}
           <h2 className="sheet-title">
-            {step === 'year'
-              ? 'which year?'
-              : step === 'month'
-                ? `which month? · ${year}`
-                : `which day? · ${MONTHS[month - 1]} ${year}`}
+            {step === 'year' ? 'which year?' : step === 'month' ? 'which month?' : 'which day?'}
           </h2>
+          {/* What's chosen so far, on the right, apart from the question: tap one to choose it again. */}
+          {step !== 'year' && (
+            <span className="finder-crumbs">
+              <button onClick={() => (setPicked(null), setStep('year'))}>{year}</button>
+              {step === 'day' && (
+                <button onClick={() => (setPicked(null), setStep('month'))}>{MONTHS[month - 1]}</button>
+              )}
+            </span>
+          )}
         </div>
+        {/* How old you were, as soon as the year is chosen (roughly), then exactly, once it's the day. */}
+        {born && step !== 'year' && (
+          <p className="finder-age" aria-live="polite">
+            {ageLine()}
+          </p>
+        )}
 
         {step === 'year' && (
           <ul className="finder-grid is-years">
@@ -71,8 +112,10 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
                   }}
                 >
                   <b>{y}</b>
-                  {/* How old you were (by the end of that year): memory often keeps the age, not the year. */}
-                  {bornYear !== null && <small>{y === bornYear ? 'born' : `age ${y - bornYear}`}</small>}
+                  {/* How old you were that year (mid-year, as the line above says "about"): memory often keeps the age. */}
+                  {bornYear !== null && (
+                    <small>{y === bornYear ? 'born' : `age ${ageOn(born!, `${y}-07-01`).years}`}</small>
+                  )}
                   {has(String(y)) && <i className="finder-dot" aria-label="has painted days" />}
                 </button>
               </li>
@@ -120,10 +163,10 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
                   <li key={iso}>
                     <button
                       disabled={off}
-                      className={(iso === date ? 'is-here' : '') + (d ? ' is-painted' : '')}
+                      className={(iso === (picked ?? date) ? 'is-here' : '') + (d ? ' is-painted' : '')}
                       style={d ? { background: squareFill(d.color, d.framed), boxShadow: 'none' } : undefined}
                       aria-label={fromIso(iso).toLocaleDateString('en-US', { dateStyle: 'full' })}
-                      onClick={() => onPick(iso)}
+                      onClick={() => (picked === iso ? onPick(iso) : setPicked(iso))}
                     >
                       {Number(iso.slice(8))}
                     </button>

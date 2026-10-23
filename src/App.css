@@ -4442,14 +4442,33 @@ button.home-card:active {
   position: sticky;
   top: 0;
   z-index: 1;
-  padding: 2px 0 12px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 0 6px;
   background: #fff;
 }
 .finder-head .sheet-title {
   margin: 0;
 }
-.finder-back {
-  padding: 4px 0 8px;
+/* What's chosen so far: small, quiet capsules on the right, apart from the question. Tap one to choose again. */
+.finder-crumbs {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.finder-crumbs button {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #efefed;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.finder-age {
+  margin: 0 0 14px;
   font-size: 15px;
   color: var(--ink-soft);
 }
@@ -4487,8 +4506,8 @@ button.home-card:active {
   align-content: center;
   gap: 1px;
   border-radius: 12px;
-  background: #f6f5f0;
-  box-shadow: inset 0 0 0 1px #e6e5de;
+  background: #f4f4f3; /* grey, never the canvas's warm tone: that's for the canvas and the palette only */
+  box-shadow: inset 0 0 0 1px #e4e4e2;
   color: var(--ink);
   font-size: 16px;
 }
