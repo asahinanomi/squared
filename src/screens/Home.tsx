@@ -136,7 +136,7 @@ export function Home({
         paint today
       </button>
       {/* A day in the past: straight to the day finder (year, month, day), not through today. */}
-      <button className="home-yesterday" onClick={onFind}>
+      <button className="pill is-keyline" onClick={onFind}>
         paint another day
       </button>
     </div>
@@ -268,7 +268,7 @@ export function Home({
       {/* Home asks you to paint: today, then the week, where a day still paper opens with a tap. */}
       {weekCard}
       {painted && (
-        <button className="home-yesterday home-another" onClick={onFind}>
+        <button className="pill home-another" onClick={onFind}>
           paint another day
         </button>
       )}
