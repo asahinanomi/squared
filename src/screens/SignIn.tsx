@@ -19,7 +19,7 @@ export function SignIn({
     <main className="signin">
       {/* Three groups in one centred column: the brand, the message, sign-in. */}
       <header className="signin-brand">
-        <Logo size={40} />
+        <Logo size={40} painting />
         <h1 className="wordmark">
           squared<span>.today</span>
           <b className="beta">beta</b>
