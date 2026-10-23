@@ -4678,6 +4678,11 @@ button.home-card:active {
 .my-days-paintings {
   margin-top: 12px;
 }
+/* One space between every card on my days: the bar, the paintings, each row. */
+.my-days .settings-rows {
+  margin-top: 12px;
+  gap: 12px;
+}
 /* The pie, opened from my days: its way back, at the top left. */
 .pie-back {
   align-self: flex-start;
