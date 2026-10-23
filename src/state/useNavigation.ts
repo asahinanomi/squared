@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from 'react'
 import type { Resolution } from '../components/LifeHead'
+import type { Only } from '../screens/DaysList'
 import { todayIso } from '../lib/dates'
 import type { Why } from '../lib/notes'
-import type { Paint } from '../lib/paints'
 import { SCOPE_ORDER, type Scope, type SliceId } from '../lib/pie'
 import type { Profile } from '../lib/profile'
 import { usePinch, type Focal } from '../lib/usePinch'
@@ -45,7 +45,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const [listRes, setListRes] = useState<Resolution>('days')
   const [listZoomed, setListZoomed] = useState(false) // zoomed within the list since it opened
   // Only one slice's days (from the pie's "see them →"), until cleared or the list zooms out.
-  const [listOnly, setListOnly] = useState<Paint | 'unpainted' | 'framed' | null>(null)
+  const [listOnly, setListOnly] = useState<Only | null>(null)
   // The list keeps this pointed at the day in the middle of the screen, for a pinch to open on.
   const listMid = useRef(() => todayIso())
   // A day opened from the list goes back to the list when you zoom out of it.
@@ -56,16 +56,20 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const [legalFrom, setLegalFrom] = useState<Screen>('settings')
   const legalOpened = useRef(false) // opened from inside the app (not straight from its web address)
 
+  // A life opened from my days shows "‹ my days" until you move on (another view, or zooming within a life).
+  const [lifeBack, setLifeBack] = useState(false)
   const setScreen = (next: Screen) => {
     const a = LADDER.indexOf(screen)
     const b = LADDER.indexOf(next)
     setMotion(a < 0 || b < 0 || a === b ? null : b > a ? 'out' : 'in')
     setMag(0)
     if (next !== 'today') setDayFromList(false)
+    if (next !== 'life') setLifeBack(false)
     setScreenValue(next)
   }
   // The three views of a life sit on the ladder too: years → months → days is zooming out.
   const setLifeRes = (r: Resolution) => {
+    setLifeBack(false)
     setMotion(RES.indexOf(r) > RES.indexOf(lifeRes) ? 'out' : RES.indexOf(r) < RES.indexOf(lifeRes) ? 'in' : null)
     setMag(0)
     setLifeResValue(r)
@@ -179,6 +183,10 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const openSettings = () => setScreenValue('settings')
   // my days (the menu): a life as a pie, all your squares, what matters, your framed days and paintings.
   const openMyDays = () => setScreenValue('mydays')
+  const openLifeFromMyDays = () => {
+    goLifeDays()
+    if (profile) setLifeBack(true)
+  }
   // The pie lives in my days now: its back arrow returns there; its squares and list switch go to a life.
   const openPie = () => {
     setPieFrom('life')
@@ -187,8 +195,8 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     askSquares('pie')
   }
   // my framed days opens from home or my days; back returns there.
-  const [framedFrom, setFramedFrom] = useState<'home' | 'mydays'>('mydays')
-  const openFramed = (from: 'home' | 'mydays') => {
+  const [framedFrom, setFramedFrom] = useState<'home' | 'mydays' | 'list'>('mydays')
+  const openFramed = (from: 'home' | 'mydays' | 'list') => {
     setFramedFrom(from)
     setScreenValue('framed')
   }
@@ -341,6 +349,8 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     framedFrom,
     openFramed,
     openMyDays,
+    openLifeFromMyDays,
+    lifeBack,
     openPie,
     endTrySquares,
     leaveSetup,

@@ -1,4 +1,3 @@
-import { PaintingThumb } from '../components/PaintingThumb'
 import { addDays, fromIso, shortDateParts, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
@@ -17,11 +16,7 @@ type Props = {
   /** Getting started (onboarding's steps and the first square): shown until the first square is painted. */
   steps: Step[]
   onToday: () => void
-  onLife: () => void
   onDay: (iso: string) => void
-  onPainting: (period: string) => void
-  /** my framed days: the link shows once a day is framed. */
-  onFramed: () => void
   /** paint another day: the day finder, straight away. */
   onFind: () => void
 }
@@ -43,71 +38,16 @@ const DateLine = ({ iso }: { iso: string }) => {
 }
 
 // Home: where you land once today is painted (and when nothing is painted yet); the logo leads here any time.
-// Today first ("Today is in colour.", or the question and "paint today"), then the week in colour, your life in one
-// line (with "see my framed days" in it), and this month and year so far, as paintings. Every card is a door. No
-// streaks, no scores. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (L, M, N)
+// Home is today, now: today first ("Today is in colour.", or the question and "paint today"), the week in colour,
+// and "paint another day". Looking back (a life, the paintings so far, framed days) lives in my days. No streaks,
+// no scores. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (L, M, N)
 // Before the first square (squares set, nothing painted): only your days ahead, the question with "paint your
 // first square", and getting started, so there's one thing to do. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (K)
-export function Home({
-  name,
-  days,
-  notes,
-  profile,
-  steps,
-  onToday,
-  onLife,
-  onDay,
-  onPainting,
-  onFramed,
-  onFind,
-}: Props) {
+export function Home({ name, days, notes, profile, steps, onToday, onDay, onFind }: Props) {
   const today = todayIso()
   const painted = days[today]
-  const month = today.slice(0, 7)
-  const year = today.slice(0, 4)
-  const hasMonth = Object.keys(days).some((d) => d.startsWith(month))
-  const hasYear = Object.keys(days).some((d) => d.startsWith(year))
-  const count = (p: string) => Object.keys(days).filter((d) => d.startsWith(p) && d <= today).length
   // Before the first square: squares set, nothing painted (wiping the only square brings it back).
   const first = !!profile && Object.keys(days).length === 0
-  const framed = Object.keys(days)
-    .filter((d) => days[d].framed)
-    .sort()
-
-  const life =
-    profile &&
-    (() => {
-      const c = lifeCounts(profile.born, profile.lifespan, today)
-      const lived = Math.round((c.sofar / c.total) * 100)
-      return (
-        <section className="home-card home-life">
-          <button className="home-life-open" onClick={onLife} aria-label={`a life: ${fmt(c.left)} days ahead`}>
-            <span className="home-head">
-              a life
-              <Chevron dir="right" />
-            </span>
-            {/* Time runs left to right: the past in ink, so the days ahead (the number) sit on the right. */}
-            <span className="home-big is-ahead">
-              {fmt(c.left)}
-              <small>days</small>
-            </span>
-            <span className="home-bar" aria-hidden="true">
-              <i style={{ width: `${(c.sofar / c.total) * 100}%` }} />
-            </span>
-            <span className="home-legend">
-              <span>{lived}% lived</span>
-              <span>{100 - lived}% ahead</span>
-            </span>
-          </button>
-          {/* The days you framed belong to a life: seen together, as its chapters (once there's one). */}
-          {framed.length > 0 && (
-            <button className="home-life-framed" onClick={onFramed}>
-              see my framed days →
-            </button>
-          )}
-        </section>
-      )
-    })()
 
   // Today, painted: its square and date, and its note (the pinned one, what you want to remember, else the latest).
   const todayNotes = notes[today] ?? []
@@ -271,27 +211,6 @@ export function Home({
         <button className="pill home-another" onClick={onFind}>
           paint another day
         </button>
-      )}
-
-      {life}
-
-      {(hasMonth || hasYear) && (
-        <section className="home-card home-paintings">
-          {hasMonth && (
-            <button onClick={() => onPainting(month)}>
-              <span className="home-t">{new Date().toLocaleDateString('en-US', { month: 'long' })}, so far</span>
-              <PaintingThumb month={month} days={days} />
-              <span className="home-s">{count(month)} days in colour</span>
-            </button>
-          )}
-          {hasYear && (
-            <button onClick={() => onPainting(year)}>
-              <span className="home-t">{year}, so far</span>
-              <PaintingThumb month={year} days={days} />
-              <span className="home-s">{count(year)} days in colour</span>
-            </button>
-          )}
-        </section>
       )}
     </main>
   )

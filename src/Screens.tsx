@@ -75,10 +75,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
           { label: 'paint your first square', done: Object.keys(days).length > 0, go: nav.goToday },
         ]}
         onToday={nav.goToday}
-        onLife={nav.goLifeDays}
         onDay={(iso) => nav.openDay(iso)}
-        onPainting={openPainting}
-        onFramed={() => nav.openFramed('home')}
         onFind={ui.onFind}
       />
     )
@@ -111,6 +108,8 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
         onPinNote={act.onPinNote}
         onZoomOut={nav.outOfDay}
         onMatters={() => nav.openMatters('today')}
+        onFind={ui.onFind}
+        onHome={nav.goHome}
       />
     )
   if (screen === 'paintings')
@@ -127,9 +126,11 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
   if (screen === 'mydays')
     return (
       <MyDays
+        days={days}
         profile={profile}
+        onPainting={openPainting}
         onPie={nav.openPie}
-        onSquares={nav.goLifeDays}
+        onSquares={nav.openLifeFromMyDays}
         onMatters={() => nav.openMatters('mydays')}
         onFramed={() => nav.openFramed('mydays')}
         onPaintings={() => setScreenValue('paintings')}
@@ -143,6 +144,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
         loadNotes={acc.loadNotes}
         onDay={(iso) => nav.openDay(iso)}
         onBack={() => setScreenValue(nav.framedFrom)}
+        backLabel={nav.framedFrom === 'mydays' ? 'my days' : nav.framedFrom}
       />
     )
   if (screen === 'idea')
@@ -224,6 +226,8 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
         key={`days-${nav.listOnly}`}
         only={nav.listOnly ?? undefined}
         onOnly={nav.setListOnly}
+        onFramedDays={() => nav.openFramed('list')}
+        onAllNotes={acc.loadAllNotes}
         mid={listMid}
         head={head}
         days={days}
@@ -286,6 +290,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
         cols={[28, 14, 7, 3][mag]}
         focal={focal}
         onPainting={openPainting}
+        onBack={nav.lifeBack ? nav.openMyDays : undefined}
       />
     ) : lifeRes === 'months' ? (
       <LifeMonths

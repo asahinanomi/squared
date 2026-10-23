@@ -85,6 +85,8 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 ## 8. Voice principles
 
+- **Squares and days.** A **square** is the thing you paint: "paint its square", "start over under the square", "how many squares do you have?", "your squares and notes". A **day** is time you live: "days in colour", "10,961 days ahead", "my days", "my framed days". A place named for looking back says days; a thing you touch with the brush says square.
+
 - First person, plain-spoken. Honest, never preachy.
 - No streaks. No scores. No judgment from the app, only your own. Counts are days in colour, never days missed.
 - Warm, quiet, a little tender. It's a conscience, not a coach.
@@ -113,12 +115,13 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - tap a colour to load the brush; its one-liner shows under the palette
 - once painted: "your 3rd day worth it this month" · "because…" (you finish the sentence, never "why?"; "a line, or a page, or skip"); a framed day asks "what do you want to remember?"
 - torn between green and red: "torn? ask yourself:" / "did what mattered outweigh the rest?" / "you said: '…'"
-- under the square: start over · frame this day
+- under the square: start over · **frame this day** (a small keyline pill)
+- at the very foot of a painted day: paint another day · go home
 
 **Home**
 - Before the first square: greeting · **10,962** / "days ahead of you." / "Make each one meaningful, starting with today." · the question · **paint your first square** · or paint yesterday · "getting started" (learned what squared is · named what matters · set how many squares · paint your first square)
-- Today not painted yet: greeting · "today is still paper" · the question · **paint today** · paint another day · this week · a life ("see my framed days →") · this month and year so far
-- Today painted: greeting · **Today is in colour.** · today's square and note · this week · paint another day · a life ("10,962 days", "65% lived", "35% ahead") · "October, so far" / "2026, so far" ("18 days in colour")
+- Today not painted yet: greeting · "today is still paper" · the question · **paint today** · paint another day · this week
+- Today painted: greeting · **Today is in colour.** · today's square and note · this week · **paint another day**
 - This week: "5 days in colour this week." · a full week: **"Every day this week, in colour."** 🌈 (a small rainbow in your week's colours) · "You showed up for every single one."
 
 **The idea page — LOCKED COPY** (— nomi; lowercase; keep verbatim):
@@ -147,7 +150,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **What matters (compass)** — "what does a meaningful day look like to you? and what feels empty?" · filter: all · worth it · regret · **now, paint today →** (or back to today →) · "a guide, not a rule. you still choose the day's colour"
 
-**my days** (the menu) — a life pie · all my squares · what matters · my framed days · my paintings
+**my days** (the menu) — October, so far · 2026, so far · a life pie · a life · what matters · my framed days · my paintings
 
 **Settings** — square settings · sound · export my data · sign out · delete my account
 

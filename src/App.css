@@ -273,6 +273,11 @@
   align-self: flex-start;
   margin: 0 0 18px -6px;
 }
+/* Settings' and my days' pages: back, with where it goes ("‹ settings", "‹ my days"), at the top left. */
+.page-back {
+  align-self: flex-start;
+  margin-left: -6px;
+}
 .signin-error {
   color: var(--muted);
   font-size: 14px;
@@ -736,6 +741,37 @@
   white-space: nowrap;
   font-size: 14px;
   color: var(--muted);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
+}
+.day-frame {
+  position: relative;
+  z-index: 3; /* above the brush's reach, as start over */
+  margin: 4px 0 -8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+.day-frame:active {
+  transform: scale(0.97);
+}
+/* The foot of a painted day: paint another day · go home, two quiet links. */
+.day-next {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 26px 0 8px;
+  font-size: 14px;
+  color: var(--faint);
+}
+.day-next button {
+  padding: 6px 4px;
+  color: var(--ink-soft);
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
 }
@@ -1846,6 +1882,10 @@ body[data-screen='questions'] .idea {
 .life-head {
   text-align: center;
   margin-top: 6px;
+}
+/* A life opened from my days: the way back, at the top left, over the title. */
+.life-back {
+  margin-bottom: 4px;
 }
 .life-title-row {
   display: flex;
@@ -2988,11 +3028,27 @@ button.settings-row:active {
   box-shadow: inset 0 0 0 1.5px #c4c4bf;
   border: 1px dashed transparent;
 }
+.filter-mark.is-notes {
+  /* a little page with two lines of writing */
+  border-radius: 3px;
+  background:
+    linear-gradient(var(--ink-soft), var(--ink-soft)) 3px 5px / 8px 1.5px no-repeat,
+    linear-gradient(var(--ink-soft), var(--ink-soft)) 3px 9px / 6px 1.5px no-repeat,
+    #fff;
+  box-shadow: inset 0 0 0 1.5px var(--ink-soft);
+}
 .filter-mark.is-framed {
   background: #6e9b7b;
   box-shadow:
     inset 0 0 0 2px #53735c,
     inset 0 0 0 4px #ebe6da;
+}
+/* A filter with nothing in it. */
+.days-empty {
+  margin: 32px 0 0;
+  text-align: center;
+  font-size: 15px;
+  color: var(--ink-soft);
 }
 /* A month or a year in the list: its name, its colours as a band on its side (the same shares as its square), and
    how many days of each. A tap anywhere zooms in on it (the name button is stretched over the card). */
@@ -4313,26 +4369,6 @@ button.home-card:active {
 .home-another {
   align-self: center;
 }
-/* a life: the card opens a life; "see my framed days" is its own quiet line at the foot, under a hairline. */
-.home-life-open {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  width: 100%;
-  text-align: left;
-  color: var(--ink);
-}
-.home-life-open:active {
-  transform: scale(0.99);
-}
-.home-life-framed {
-  margin: 14px 0 -4px;
-  padding: 12px 0 2px;
-  border-top: 1px solid #ecece5;
-  text-align: left;
-  font-size: 14px;
-  color: var(--ink-soft);
-}
 /* this month and this year so far, side by side, each titled above (still unsigned) */
 .home-paintings {
   display: grid;
@@ -4626,6 +4662,10 @@ button.home-card:active {
   overflow: hidden;
 }
 
+/* my days: this month and year so far, as paintings, over the rows. */
+.my-days-paintings {
+  margin-top: 22px;
+}
 /* The pie, opened from my days: its way back, at the top left. */
 .pie-back {
   align-self: flex-start;

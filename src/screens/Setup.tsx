@@ -99,8 +99,9 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
   return (
     <main className="setup">
       {onBack && (
-        <button className="setup-back" aria-label="Back" onClick={back}>
+        <button className="back-btn page-back" onClick={back} aria-label={editing ? 'Back to settings' : 'Back'}>
           <Chevron dir="left" />
+          {editing ? 'settings' : 'back'}
         </button>
       )}
 

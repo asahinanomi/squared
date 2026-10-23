@@ -25,8 +25,9 @@ export function Export({ onBack, gather }: Props) {
   }
   return (
     <main className="settings export">
-      <button className="setup-back" aria-label="Back" onClick={onBack}>
+      <button className="back-btn page-back" onClick={onBack} aria-label={`Back to ${'settings'}`}>
         <Chevron dir="left" />
+        {'settings'}
       </button>
       <h1 className="settings-title">export my data</h1>
       <p className="feedback-lede">

@@ -91,7 +91,7 @@ export default function App() {
     else setDemoIn(false)
   }
   const oneScreen = ['month', 'year', 'life', 'pie', 'list'].includes(screen)
-  const withPainting: Screen[] = ['home', 'today', 'month', 'year', 'life', 'list', 'paintings']
+  const withPainting: Screen[] = ['home', 'today', 'month', 'year', 'life', 'list', 'paintings', 'mydays']
 
   return (
     <ViewSwitch.Provider
@@ -109,11 +109,9 @@ export default function App() {
               <Topbar
                 onHome={nav.goHome}
                 onToday={nav.goToday}
-                onFind={() => setFinding(true)}
                 onCalendar={nav.openMyDays}
                 onIdea={() => nav.setScreen('idea')}
                 onSettings={nav.openSettings}
-                onSignOut={signOut}
               />
             )}
           <div

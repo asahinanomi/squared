@@ -12,20 +12,23 @@ type Props = {
   loadNotes: (iso: string) => void
   onDay: (iso: string) => void
   onBack: () => void
+  /** Where back goes: home, my days or the list. */
+  backLabel: string
 }
 
 // my framed days: the days you framed, any colour, oldest first, like the chapters of a life. Only what matters on
 // each card: its framed square, the date and weekday, and up to three lines of what you wanted to remember.
 // Tap one to open the day. Lab: https://claude.ai/artifact/Ttid43gnYW9XzNRibK5QVc (G, without the age)
-export function Framed({ days, notes, loadNotes, onDay, onBack }: Props) {
+export function Framed({ days, notes, loadNotes, onDay, onBack, backLabel }: Props) {
   const framed = Object.keys(days)
     .filter((iso) => days[iso].framed)
     .sort()
   useEffect(() => framed.forEach(loadNotes), [framed.join()]) // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <main className="settings framed">
-      <button className="setup-back" aria-label="Back" onClick={onBack}>
+      <button className="back-btn page-back" onClick={onBack} aria-label={`Back to ${backLabel}`}>
         <Chevron dir="left" />
+        {backLabel}
       </button>
       <h1 className="settings-title">my framed days</h1>
       {framed.length ? (

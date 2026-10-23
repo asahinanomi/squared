@@ -32,15 +32,20 @@ type Props = {
   /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */
   head?: ReactNode
   /** Only the days of one colour (or the unpainted ones) — from a slice of the pie — and the way back to all. */
-  only?: Paint | 'unpainted' | 'framed'
+  only?: Only
   /** Choose what the list shows: one kind of day, or all (null). */
   onOnly?: (only: Only | null) => void
+  /** A framed card's "framed" tag: my framed days. */
+  onFramedDays?: () => void
+  /** "only with notes" needs every note, not just the months seen so far. */
+  onAllNotes?: () => void
 }
 
-type Only = Paint | 'unpainted' | 'framed'
+export type Only = Paint | 'unpainted' | 'framed' | 'notes'
 /** The filter's choices, in the order the app always lists colours. */
 const FILTERS: [Only | null, string][] = [
   [null, 'all days'],
+  ['notes', 'with notes'],
   ['framed', 'framed'],
   ['green', 'worth it'],
   ['red', 'regret'],
@@ -53,10 +58,11 @@ function FilterMark({ id }: { id: Only | null }) {
   if (!id) return <span className="filter-mark is-all" aria-hidden="true" />
   if (id === 'unpainted') return <span className="filter-mark is-unpainted" aria-hidden="true" />
   if (id === 'framed') return <span className="filter-mark is-framed" aria-hidden="true" />
+  if (id === 'notes') return <span className="filter-mark is-notes" aria-hidden="true" />
   return <span className="filter-mark" style={{ background: paintHex(id) }} aria-hidden="true" />
 }
 
-const WORD_OF: Record<Paint | 'unpainted' | 'framed', string> = { ...WORD, unpainted: 'unpainted', framed: 'framed' }
+const WORD_OF: Record<Only, string> = { ...WORD, unpainted: 'unpainted', framed: 'framed', notes: 'with notes' }
 /** About what two lines of a card's note hold on a phone. */
 const PREVIEW_CHARS = 80
 /** Months added at a time as you scroll toward either end. */
@@ -138,7 +144,7 @@ function DayCard({
         </button>
         {/* A framed day: a small tag that shows only the framed ones. */}
         {day?.framed && onFramed && (
-          <button className="day-card-framed" onClick={onFramed} aria-label="Show only framed days">
+          <button className="day-card-framed" onClick={onFramed} aria-label="Open my framed days">
             framed
           </button>
         )}
@@ -202,7 +208,12 @@ export function DaysList({
   head,
   only,
   onOnly,
+  onFramedDays,
+  onAllNotes,
 }: Props) {
+  useEffect(() => {
+    if (only === 'notes') onAllNotes?.()
+  }, [only]) // eslint-disable-line react-hooks/exhaustive-deps
   const [picking, setPicking] = useState(false)
   const today = todayIso()
   const current = shiftMonth(today, 0)
@@ -214,9 +225,19 @@ export function DaysList({
     from: monthsBetween(first, start) > 1 ? shiftMonth(start, -1) : first,
     to: start < current ? shiftMonth(start, 1) : current,
   }))
-  const months = Array.from({ length: monthsBetween(range.from, range.to) + 1 }, (_, i) => shiftMonth(range.from, i))
+  // Filtered, every month of the life is in (the empty ones stay hidden), so a framed day or a note from years back
+  // shows without scrolling to it first; unfiltered, a window of months that grows as you scroll.
+  const span = only ? { from: first, to: current } : range
+  const months = Array.from({ length: monthsBetween(span.from, span.to) + 1 }, (_, i) => shiftMonth(span.from, i))
   const shown = (iso: string) =>
-    !only || (only === 'unpainted' ? !days[iso] : only === 'framed' ? !!days[iso]?.framed : days[iso]?.color === only)
+    !only ||
+    (only === 'unpainted'
+      ? !days[iso]
+      : only === 'framed'
+        ? !!days[iso]?.framed
+        : only === 'notes'
+          ? !!notes[iso]?.length
+          : days[iso]?.color === only)
   const scroller = useRef<HTMLDivElement>(null)
   const heightBefore = useRef<number | null>(null) // set when months are added above, to keep your place
   const pending = useRef<string | null>(null) // a day to bring to the middle once it's drawn
@@ -360,6 +381,10 @@ export function DaysList({
         </Sheet>
       )}
       <div className="days-scroll" ref={scroller} onScroll={onScroll}>
+        {/* A filter with nothing in it says so, rather than an empty page. */}
+        {only && !months.some((m) => monthCells(m).some((iso) => !!iso && iso <= today && shown(iso))) && (
+          <p className="days-empty">No days here yet.</p>
+        )}
         {months.map((m) => {
           const list = monthCells(m).filter(
             (iso): iso is string => !!iso && iso <= today && (!born || iso >= born) && shown(iso),
@@ -395,7 +420,7 @@ export function DaysList({
                             today={today}
                             born={born}
                             onPick={onPick}
-                            onFramed={only === 'framed' || !onOnly ? undefined : () => onOnly('framed')}
+                            onFramed={onFramedDays}
                           />
                         </li>
                       ))}

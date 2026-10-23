@@ -19,6 +19,8 @@ type Props = {
   /** Zoom in: this year. */
   onIn: () => void
   onResolution: (r: Resolution) => void
+  /** Opened from my days: "‹ my days". */
+  onBack?: () => void
   /** Squares per row: 28, or fewer and bigger when pinched in (14, 7, 3). */
   cols?: number
   /** Where the fingers were when the size changed: the day under them stays put. */
@@ -47,7 +49,7 @@ const daysInYear = (y: number) => (new Date(y, 1, 29).getDate() === 29 ? 366 : 3
 // A life, in days — one solid square per real day, grouped into a block per year (each labelled,
 // with a gap between years). Long by design: you scroll your whole life, year by year.
 // Drawn on a canvas, only the rows on screen. Opens on today, where lived days meet the empty ones.
-export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28, focal, onPainting }: Props) {
+export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28, focal, onPainting, onBack }: Props) {
   const today = todayIso()
   const { born, lifespan } = profile
   const end = addYears(born, lifespan) // the first day after the hoped-for last one
@@ -252,7 +254,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
   const totalH = TOP + years * block - BLOCK_GAP
   return (
     <main className="life">
-      <LifeHead profile={profile} current="days" onPick={onResolution} />
+      <LifeHead profile={profile} current="days" onPick={onResolution} onBack={onBack} />
       <div
         className="life-canvas"
         ref={scroller}

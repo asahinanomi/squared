@@ -49,7 +49,10 @@ type Props = {
   onFilled: (p: Paint) => void
   /** Zoom out to the month. */
   onZoomOut: () => void
-  /** Off to settings → what matters, to edit the compass. */
+  /** At the foot of a painted day: on to another day (the day finder), or home. */
+  onFind: () => void
+  onHome: () => void
+  /** Off to my days → what matters, to edit the compass. */
   onMatters: () => void
 }
 
@@ -310,7 +313,12 @@ export function Today(props: Props) {
                 start over
               </button>
               {/* A day you want to keep, any colour: framed in its paint's deeper shade. */}
-              <button className="day-wipe" onClick={props.onFrame} aria-pressed={!!day.framed}>
+              {/* Framing a day you want to keep: a small keyline pill, so it's found; unframing stays a quiet link. */}
+              <button
+                className={day.framed ? 'day-wipe' : 'day-frame'}
+                onClick={props.onFrame}
+                aria-pressed={!!day.framed}
+              >
                 {day.framed ? 'unframe' : 'frame this day'}
               </button>
             </div>
@@ -358,7 +366,7 @@ export function Today(props: Props) {
                         </p>
                       </>
                     ) : (
-                      <p className="torn-mine">name what matters to you in settings → what matters</p>
+                      <p className="torn-mine">name what matters to you in my days → what matters</p>
                     )}
                   </div>
                 )}
@@ -380,11 +388,19 @@ export function Today(props: Props) {
             onDelete={onDeleteNote}
           />
         )}
+        {/* The day is done: where next, quietly, at the very end. */}
+        {day && (
+          <p className="day-next">
+            <button onClick={props.onFind}>paint another day</button>
+            <span aria-hidden="true">·</span>
+            <button onClick={props.onHome}>go home</button>
+          </p>
+        )}
         <Sheet open={compassOpen} onClose={() => setCompassOpen(false)}>
           <h2 className="sheet-title">what matters to you</h2>
           <p className="compass-sub">you said these matter to you</p>
           <button className="compass-edit" onClick={props.onMatters}>
-            edit in settings → what matters
+            edit in my days → what matters
           </button>
           <hr className="compass-rule" />
           <ul className="compass-list">

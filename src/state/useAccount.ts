@@ -3,7 +3,7 @@ import { QUESTION } from '../lib/config'
 import { todayIso } from '../lib/dates'
 import { fetchAllDays, type Days } from '../lib/days'
 import { mockDays } from '../lib/mock'
-import { fetchMonthNotes, legacyNotes, type Notes } from '../lib/notes'
+import { fetchAllNotes, fetchMonthNotes, legacyNotes, type Notes } from '../lib/notes'
 import { fetchProfile, type Profile } from '../lib/profile'
 import { reportError } from '../lib/report'
 import { fetchQuestion } from '../lib/supabase'
@@ -78,6 +78,24 @@ export function useAccount(userId: string | undefined) {
     },
     [userId],
   )
+  // Every note at once (the list's "only with notes"): fills in the months not loaded yet; loaded months keep what's
+  // on screen.
+  const allNotes = useRef(false)
+  const loadAllNotes = useCallback(() => {
+    if (!userId || allNotes.current) return
+    allNotes.current = true
+    fetchAllNotes()
+      .then((n) => {
+        if (!n) return
+        const fresh = Object.fromEntries(Object.entries(n).filter(([iso]) => !notesLoaded.current.has(iso.slice(0, 7))))
+        for (const iso of Object.keys(n)) notesLoaded.current.add(iso.slice(0, 7))
+        setNotes((all) => ({ ...fresh, ...all }))
+      })
+      .catch((e) => {
+        allNotes.current = false
+        console.error('Could not load notes', e)
+      })
+  }, [userId])
 
   return {
     question,
@@ -90,6 +108,7 @@ export function useAccount(userId: string | undefined) {
     notes,
     setNotes,
     loadNotes,
+    loadAllNotes,
     loadFailed,
     checking,
   }

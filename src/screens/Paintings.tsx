@@ -15,7 +15,7 @@ type Props = {
   onBack: () => void
 }
 
-// my paintings (in settings): the paintings you kept, one to a row, big, newest first. No labels: each is signed.
+// my paintings (in my days): the paintings you kept, one to a row, big, newest first. No labels: each is signed.
 // Tap one to look at it again; swipe it left to take it down (it can always be kept again).
 export function Paintings({ kept, days, name, onOpen, onRemove, onBack }: Props) {
   // Swipe a painting left to take it down, as on what matters; it asks first.
@@ -23,8 +23,9 @@ export function Paintings({ kept, days, name, onOpen, onRemove, onBack }: Props)
   const [asking, setAsking] = useState<string | null>(null)
   return (
     <main className="settings gallery">
-      <button className="setup-back" aria-label="Back" onClick={onBack}>
+      <button className="back-btn page-back" onClick={onBack} aria-label={`Back to ${'my days'}`}>
         <Chevron dir="left" />
+        {'my days'}
       </button>
       <h1 className="settings-title">my paintings</h1>
       {kept.length ? (
