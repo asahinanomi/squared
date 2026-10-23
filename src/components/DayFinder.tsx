@@ -48,7 +48,7 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
   // A moment to read your age, then the day opens (a tap opens it at once).
   useEffect(() => {
     if (!picked) return
-    const t = setTimeout(() => onPick(picked), 3200)
+    const t = setTimeout(() => onPick(picked), 4500) // long enough to read the age line
     return () => clearTimeout(t)
   }, [picked]) // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -4468,10 +4468,12 @@ button.home-card:active {
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
 }
+/* Your age that year (then that day): its own line, clear of the title, in ink, so it's read, not missed. */
 .finder-age {
-  margin: 0 0 14px;
-  font-size: 15px;
-  color: var(--ink-soft);
+  margin: 10px 0 18px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
 }
 .finder-grid {
   list-style: none;
