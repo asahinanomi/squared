@@ -8,9 +8,10 @@ type Props = {
   onCalendar: () => void
   onIdea: () => void
   onSettings: () => void
+  onSignOut: () => void
 }
 
-export function Topbar({ onHome, onToday, onCalendar, onIdea, onSettings }: Props) {
+export function Topbar({ onHome, onToday, onCalendar, onIdea, onSettings, onSignOut }: Props) {
   const [open, setOpen] = useState(false)
   const go = (fn: () => void) => () => {
     setOpen(false)
@@ -40,6 +41,10 @@ export function Topbar({ onHome, onToday, onCalendar, onIdea, onSettings }: Prop
             {/* About the app, not about you: set apart at the foot, quieter. Its page holds the rest (get in touch, support, the small print). */}
             <button className="menu-idea" onClick={go(onIdea)}>
               the idea
+            </button>
+            {/* A private journal: signing out is always two taps away, the menu's last line. */}
+            <button className="menu-signout" onClick={go(onSignOut)}>
+              sign out
             </button>
           </nav>
         </div>

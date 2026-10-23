@@ -94,6 +94,27 @@
   font-size: 16px;
   color: var(--muted);
 }
+/* settings → lock when I leave: its choice under the words, the same quiet capsule as years · months · days. */
+.settings-row.is-lock {
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+.settings-row > .settings-seg {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+}
+/* The very last line, under the idea, as quiet: sign out. */
+.menu .menu-signout {
+  padding: 8px 18px 12px;
+  border-radius: 0 0 12px 12px;
+  font-size: 16px;
+  color: var(--muted);
+}
+.menu .menu-idea:has(+ .menu-signout) {
+  border-radius: 0;
+  padding-bottom: 8px;
+}
 /* Under "the idea", as quiet: a form to tell the maker what confused you (shown once its link is set). */
 @keyframes pop {
   from {

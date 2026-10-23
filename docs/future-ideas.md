@@ -11,6 +11,10 @@ Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encry
 - **The trade-offs to design carefully** (solid over clever): a passphrase you enter once per device, a recovery option (or a plain warning that a lost passphrase means lost notes), and export and search working on the device. Existing notes would be encrypted once, on your device.
 - **Before building**: a lab for the passphrase moments (set it, enter it on a new device, forgot it), and a short plan of the simplest safe design.
 
+## A real lock: Face ID or a passcode (noted Oct 23, 2026)
+
+Today "lock when I leave" signs out, and Google sign-in is the unlock (two taps). Day One instead stays signed in and locks the app with a passcode or Face ID, with a "require after" timer. On the web, the polished version is a passkey (Face ID / Touch ID through the browser): unlock without signing out. More code than the sign-out lock; do it alongside private notes encryption.
+
 ## The colours, for the hardest days (thinking it through, Oct 23, 2026)
 
 Real human moments many people will have: a day that mattered more than any other, but went badly. (nomi's: telling her daughter about the divorce, bluntly; "I broke her heart.") None of the three colours holds it: the model's empty cell is "went to what matters, but I wasn't there for it".

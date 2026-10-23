@@ -5,6 +5,7 @@ import { deleteMyAccount } from '../lib/account'
 import { fromIso, todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
 import type { Profile } from '../lib/profile'
+import { LOCK_CHOICES, lockAfter, setLockAfter } from '../lib/lock'
 import { setSoundOn, soundOn, soundOnChime } from '../lib/sound'
 import { Chevron, SpeakerIcon } from './Today'
 
@@ -34,6 +35,7 @@ export function Settings({ profile, onSquares, email, onSignOut, onDeleted, onPr
       ].join(' · ')
     : 'birth date & lifespan'
   const [sound, setSound] = useState(soundOn)
+  const [lock, setLock] = useState(lockAfter)
   const toggleSound = () => {
     setSoundOn(!sound)
     setSound(!sound)
@@ -75,6 +77,28 @@ export function Settings({ profile, onSquares, email, onSignOut, onDeleted, onPr
             <SpeakerIcon on={sound} />
           </span>
         </button>
+        {/* Lock when I leave: a private journal locks itself; only how soon is yours to choose (never isn't). */}
+        <div className="settings-row is-lock">
+          <span>
+            <span className="settings-label">lock when I leave</span>
+            <span className="settings-sub">signs out when you're away this long</span>
+          </span>
+          <span className="seg settings-seg" role="group" aria-label="Lock when I leave">
+            {LOCK_CHOICES.map(([id, label]) => (
+              <button
+                key={id}
+                className={id === lock ? 'is-on' : undefined}
+                aria-pressed={id === lock}
+                onClick={() => {
+                  setLockAfter(id)
+                  setLock(id)
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </span>
+        </div>
         {row('export my data', 'a Word copy of your squares and notes', onExport)}
         <button className="settings-row" onClick={onSignOut}>
           <span>

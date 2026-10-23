@@ -20,6 +20,7 @@ import { useBrowserHistory } from './state/useBrowserHistory'
 import { useDayActions } from './state/useDayActions'
 import { useKept } from './state/useKept'
 import { useLanding } from './state/useLanding'
+import { useLock } from './state/useLock'
 import { useMatters } from './state/useMatters'
 import { useNavigation } from './state/useNavigation'
 import { usePaintingArrival } from './state/usePaintingArrival'
@@ -62,6 +63,16 @@ export default function App() {
     document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'
   }, [signedIn, screen])
 
+  const signOut = () => {
+    nav.goToday()
+    setWhy(null)
+    setLoaded(null)
+    if (supabase) supabase.auth.signOut()
+    else setDemoIn(false)
+  }
+  // Lock when I leave: away longer than you chose, squared signs out (settings → lock when I leave).
+  useLock(signedIn, signOut)
+
   const landed = useLanding(signedIn, acc, nav)
   useBrowserHistory(signedIn, nav, () => setWhy(null))
 
@@ -83,13 +94,6 @@ export default function App() {
     )
   if (!signedIn) return <SignedOut error={authError} onDemoSignIn={() => setDemoIn(true)} />
 
-  const signOut = () => {
-    nav.goToday()
-    setWhy(null)
-    setLoaded(null)
-    if (supabase) supabase.auth.signOut()
-    else setDemoIn(false)
-  }
   const oneScreen = ['month', 'year', 'life', 'pie', 'list'].includes(screen)
   const withPainting: Screen[] = ['home', 'today', 'month', 'year', 'life', 'list', 'paintings', 'mydays']
 
@@ -112,6 +116,7 @@ export default function App() {
                 onCalendar={nav.openMyDays}
                 onIdea={() => nav.setScreen('idea')}
                 onSettings={nav.openSettings}
+                onSignOut={signOut}
               />
             )}
           <div
