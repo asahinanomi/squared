@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { ZoomBar } from '../components/ZoomBar'
 import { Chevron } from './Today'
 import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
@@ -79,7 +78,6 @@ export function Pie({ days, profile, scope, onScope, onSee, onBack }: Props) {
     setPicked(null)
     setLivedPicked(!livedPicked)
   }
-  const step = SCOPE_ORDER.indexOf(scope)
   const slices = lifeSlices(days, profile.born, profile.lifespan, todayIso(), scope)
   const total = slices.reduce((s, x) => s + x.count, 0)
   let turn = 0
@@ -242,11 +240,6 @@ export function Pie({ days, profile, scope, onScope, onSee, onBack }: Props) {
             ))}
         </ul>
       </div>
-
-      <ZoomBar
-        onIn={step < SCOPE_ORDER.length - 1 ? () => onScope(SCOPE_ORDER[step + 1]) : undefined}
-        onOut={step > 0 ? () => onScope(SCOPE_ORDER[step - 1]) : undefined}
-      />
     </main>
   )
 }

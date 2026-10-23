@@ -78,18 +78,16 @@ const RecenterIcon = () => (
 )
 
 /**
- * What every bar needs from the app: the two other views beside the squares — the pie (`pie` = it's showing) and
- * the list of days (`list` = it's showing; `toggleList` takes the day to open on) — and the way to today.
+ * What every bar needs from the app: the other view beside the squares, the list of days (`list` = it's showing;
+ * `toggleList` takes the day to open on), and the way to today.
  */
 export const ViewSwitch = createContext<{
-  pie: boolean
-  toggle: () => void
   list: boolean
   toggleList: (at?: string) => void
   goToday: () => void
 } | null>(null)
 
-// Bottom of every zoom level, controls only: on the left one switch for the two views — squares · list (the pie lives in my days),
+// Bottom of every zoom level, controls only: on the left one switch for the two views — squares · list (the pie is in my days),
 // the one showing raised — then "today" (go paint it)
 // halfway to the zoom pair on the right. ◎ (back to today's square, once it's out of view) floats
 // just above the bar's right end.
@@ -98,7 +96,7 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
   return (
     <div className="zoombar">
       {view ? (
-        // One switch for the two ways to look: squares · list. The one showing is raised (on the pie, neither).
+        // One switch for the two ways to look: squares · list. The one showing is raised.
         <div className="zoombar-switch" role="group" aria-label="View">
           {(
             [
@@ -106,11 +104,9 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
               ['list', 'List view', <ListIcon key="l" />],
             ] as const
           ).map(([id, label, icon]) => {
-            const now: string = view.pie ? 'pie' : view.list ? 'list' : 'squares'
+            const now = view.list ? 'list' : 'squares'
             const go = () => {
-              if (id === now) return
-              if (id === 'squares' && now === 'pie') view.toggle()
-              else view.toggleList(listAt?.())
+              if (id !== now) view.toggleList(listAt?.())
             }
             return (
               <button

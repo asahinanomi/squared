@@ -96,8 +96,6 @@ export default function App() {
   return (
     <ViewSwitch.Provider
       value={{
-        pie: screen === 'pie',
-        toggle: nav.togglePie,
         list: screen === 'list',
         toggleList: nav.toggleList,
         goToday: nav.goToday,

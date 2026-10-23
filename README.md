@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 23, 2026, 20:33 UTC_
+_last updated Oct 23, 2026, 20:35 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -140,7 +140,7 @@ Build step by step; the owner reviews and gives feedback after each step before 
 
 ## Phase 3 — settings (in progress)
 
-**my days (Oct 23, 2026)** (`src/screens/MyDays.tsx`): the menu's "my squares" (which only opened a zoom level the zoom buttons already reach) became **my days**, the life dashboard, as doors, never a page of numbers: the rows **a life pie** (the full pie; its "‹ my days" leads back. A picture of the pie here read techy and alone, so it's a row until there's a better idea), **all my squares** (a life, day by day), **what matters**, **my framed days**, **my paintings**, each back to my days. The pie left the bar's view switch (now squares · list). Settings lost those rows and its groups: one short list (square settings, sound, export my data, sign out, delete my account).
+**my days (Oct 23, 2026)** (`src/screens/MyDays.tsx`): the menu's "my squares" (which only opened a zoom level the zoom buttons already reach) became **my days**, the life dashboard, as doors, never a page of numbers: the rows **a life pie** (the full pie; its "‹ my days" leads back. A picture of the pie here read techy and alone, so it's a row until there's a better idea), **all my squares** (a life, day by day), **what matters**, **my framed days**, **my paintings**, each back to my days. The pie left the bar's view switch (now squares · list), and the pie page has no bottom bar: it's a page like my days' others ("‹ my days", the title, whole life · days I lived · painted only, the pie); pinch still steps those three. Settings lost those rows and its groups: one short list (square settings, sound, export my data, sign out, delete my account).
 
 **The top bar on settings (Oct 23, 2026)**: settings and every page it opens (square settings, what matters, my paintings, my framed days, export, privacy, terms, questions) keep the logo and the menu, like every other screen. Settings itself has no back arrow (it's a place, reached from the menu); its pages keep their back arrow under the bar. Each opens at its top. Only onboarding (the welcome, and "how many squares?" while it's part of it) has no top bar: one way forward.
 

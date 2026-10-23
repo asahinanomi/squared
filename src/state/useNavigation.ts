@@ -122,14 +122,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     if (profile) return setScreen('life')
     askSquares('life')
   }
-  // The pie sits beside the ladder: the switch in the bar opens it, and takes you back to the level you left.
-  const togglePie = () => {
-    if (screen === 'pie') return setScreen(pieFrom)
-    setPieFrom(screen === 'list' ? listFrom : screen)
-    setPieScope('life')
-    if (profile) return setScreen('pie')
-    askSquares('pie')
-  }
   // The list of days, the same way: open it on the day you were looking at, and its switch takes you back.
   // It opens at the level that matches the squares (a life → years, a year → months, a month → days); its
   // switch goes back where you came from, or — if you zoomed within the list — to the squares at that level.
@@ -339,7 +331,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     openDay,
     outOfDay,
     askSquares,
-    togglePie,
     toggleList,
     listIn,
     listTo,
