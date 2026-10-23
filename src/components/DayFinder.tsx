@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { fromIso, monthCells } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { squareFill } from '../lib/paints'
@@ -37,7 +37,6 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
   const [month, setMonth] = useState(Number(date.slice(5, 7)))
   // The day just picked: held for a moment, with how old you were, before it opens.
   const [picked, setPicked] = useState<string | null>(null)
-  const go = useRef<HTMLParagraphElement>(null)
   // Each time it opens: on the year you're looking at, starting from the years.
   useEffect(() => {
     if (!open) return
@@ -49,7 +48,6 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
   // A moment to read your age, then the day opens (a tap opens it at once).
   useEffect(() => {
     if (!picked) return
-    go.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }) // a tall month: bring the pill into view
     const t = setTimeout(() => onPick(picked), 4500) // long enough to read the age line
     return () => clearTimeout(t)
   }, [picked]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -103,6 +101,15 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
         {born && step !== 'year' && (
           <p className="finder-age" aria-live="polite">
             {ageLine()}
+            {/* While it pauses on the picked day: the way to go now, right where the eyes are. */}
+            {picked && (
+              <>
+                {' '}
+                <button className="finder-go" onClick={() => onPick(picked)}>
+                  paint this day →
+                </button>
+              </>
+            )}
           </p>
         )}
 
@@ -180,14 +187,6 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
                 )
               })}
             </ul>
-            {/* While it pauses on the picked day: the way to go now (it also opens by itself in a moment). */}
-            {picked && (
-              <p className="finder-go" ref={go}>
-                <button className="pill" onClick={() => onPick(picked)}>
-                  paint this day →
-                </button>
-              </p>
-            )}
           </>
         )}
       </div>

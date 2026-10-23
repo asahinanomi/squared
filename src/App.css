@@ -4545,8 +4545,12 @@ button.home-card:active {
 }
 
 .finder-go {
-  display: flex;
-  justify-content: center;
-  margin: 18px 0 4px;
+  padding: 2px 0;
+  font: inherit;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: underline dotted #b9b9b2;
+  text-underline-offset: 4px;
+  white-space: nowrap;
   animation: fade-in 0.25s ease-out;
 }
