@@ -11,7 +11,14 @@ Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encry
 - **The trade-offs to design carefully** (solid over clever): a passphrase you enter once per device, a recovery option (or a plain warning that a lost passphrase means lost notes), and export and search working on the device. Existing notes would be encrypted once, on your device.
 - **Before building**: a lab for the passphrase moments (set it, enter it on a new device, forgot it), and a short plan of the simplest safe design.
 
-## Paintings
+## The colours, for the hardest days (thinking it through, Oct 23, 2026)
+
+Real human moments many people will have: a day that mattered more than any other, but went badly. (nomi's: telling her daughter about the divorce, bluntly; "I broke her heart.") None of the three colours holds it: the model's empty cell is "went to what matters, but I wasn't there for it".
+
+- **Red becomes regret** (leaning yes): red means "the day went *against* what matters", whether it was wasted or did harm. The label **regret** (instead of empty, which fits a wasted day but not a day of harm), with the one-liner "no, it went against what matters to me." Green: spent on what matters; red: went against it; grey: wasn't there for it. It touches the locked brand (labels, the idea letter, the pie, onboarding, the brand story), so decide carefully; a lab first, empty vs regret side by side.
+- **A "marked" day**: a ring or outline on any colour, like framing but for days that changed you, good or bad. The colour stays an honest answer; the mark says "this one is to remember".
+- A day like the day nomi's dad died ("I was there, I said I forgive him") shows green already works for painful days: meaningful is "not a good day or a bad one", and framing it, with "what do you want to remember?", holds it.
+
 
 - **Painting styles when keeping one.** On "keep this painting", offer a few templates to choose from: oil, watercolour, brush and so on. The same month, painted in another manner. (The lab already tried brushstrokes and watercolour beside the current soft style: https://claude.ai/artifact/V8up29C1WmH7MXz8BBMdLE)
 - **Order a print or a magnet** of a month or year. The paintings are square for this.
