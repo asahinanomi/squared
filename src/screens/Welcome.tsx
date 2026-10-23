@@ -321,7 +321,7 @@ function Squares({
             </button>
           </div>
           <p className="setup-hint">
-            the average in America is about 79 years
+            the average lifespan in America is about 79 years
             <br />
             76 for men, 81 for women
           </p>

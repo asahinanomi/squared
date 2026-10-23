@@ -185,7 +185,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
             </div>
             {/* A point of reference, not a target: most people pick near it, some hope for more. */}
             <p className="setup-hint">
-              the average in America is about 79 years
+              the average lifespan in America is about 79 years
               <br />
               76 for men, 81 for women
             </p>

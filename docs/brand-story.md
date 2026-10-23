@@ -108,7 +108,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 1. "Welcome to squared." / "One square for every day of your life." / "Each day, ask yourself:" · *did I spend Today meaningfully?* · "Then paint its square." · worth it · regret · a blur · **let's begin**
 2. "what makes a day feel *meaningful*?" · next · skip this step
 3. "and what makes a day feel *empty*?" · next · skip this step
-4. "Last thing." / "how many squares do you have?" · "when were you born?" · "how long do you hope to live?" ("the average in America is about 79 years / 76 for men, 81 for women") · **28,855** / "squares in your life" / "and 13,709 still ahead to paint" · **start painting →** · "by starting, you confirm you're 18 or over and agree to the terms and privacy."
+4. "Last thing." / "how many squares do you have?" · "when were you born?" · "how long do you hope to live?" ("the average lifespan in America is about 79 years / 76 for men, 81 for women") · **28,855** / "squares in your life" / "and 13,709 still ahead to paint" · **start painting →** · "by starting, you confirm you're 18 or over and agree to the terms and privacy."
 
 **Today (paint)**
 - *did I spend Today meaningfully?* · the date · the square: "paint your day" (today) or "paint this day"
