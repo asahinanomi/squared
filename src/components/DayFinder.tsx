@@ -48,7 +48,7 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
   // A moment to read your age, then the day opens (a tap opens it at once).
   useEffect(() => {
     if (!picked) return
-    const t = setTimeout(() => onPick(picked), 2000)
+    const t = setTimeout(() => onPick(picked), 3200)
     return () => clearTimeout(t)
   }, [picked]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -83,13 +83,17 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
           <h2 className="sheet-title">
             {step === 'year' ? 'which year?' : step === 'month' ? 'which month?' : 'which day?'}
           </h2>
-          {/* What's chosen so far, on the right, apart from the question: tap one to choose it again. */}
+          {/* What's chosen so far, on the right, apart from the question, growing as you go: "2010", "Feb 2010",
+              "Feb 23, 2010" (the app's way of writing dates). Tap the month or the year to choose it again. */}
           {step !== 'year' && (
-            <span className="finder-crumbs">
-              <button onClick={() => (setPicked(null), setStep('year'))}>{year}</button>
+            <span className="finder-chosen">
               {step === 'day' && (
-                <button onClick={() => (setPicked(null), setStep('month'))}>{MONTHS[month - 1]}</button>
-              )}
+                <button onClick={() => (setPicked(null), setStep('month'))}>
+                  {MONTHS[month - 1]}
+                  {picked ? ` ${Number(picked.slice(8))},` : ''}
+                </button>
+              )}{' '}
+              <button onClick={() => (setPicked(null), setStep('year'))}>{year}</button>
             </span>
           )}
         </div>
