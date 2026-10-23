@@ -54,7 +54,7 @@ export function Framed({ days, notes, loadNotes, onDay, onBack, backLabel }: Pro
         </ol>
       ) : (
         <p className="gallery-empty">
-          The days you frame hang here, the ones you want to keep. Under a painted day, tap "frame this day".
+          The days you frame hang here, the ones you want to keep. Under a painted day, tap "frame it".
         </p>
       )}
     </main>

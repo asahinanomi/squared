@@ -81,7 +81,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 | lived but not painted | **unpainted**; on home, **paper** ("today is still paper", "This week is still paper.") | the pie, home |
 | not yet lived | **ahead** ("10,962 days", "35% ahead", "and 13,709 still ahead to paint") | home, onboarding, the pie |
 | painted | **in colour** ("Today is in colour.", "5 days in colour this week.", "18 days in colour") | home, the paintings |
-| a day you want to keep, any colour | **framed** ("frame this day", "my framed days") | the day, the list, framed days (my days) |
+| a day you want to keep, any colour | **framed** ("frame it", "framed days") | the day, the list, framed days (my days) |
 
 ## 8. Voice principles
 
@@ -115,7 +115,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - tap a colour to load the brush; its one-liner shows under the palette
 - once painted: "your 3rd day worth it this month" · "because…" (you finish the sentence, never "why?"; "a line, or a page, or skip"); a framed day asks "what do you want to remember?"
 - torn between green and red: "torn? ask yourself:" / "did what mattered outweigh the rest?" / "you said: '…'"
-- under the square: start over · frame this day (a shade stronger than start over)
+- under the square: start over · frame it
 - at the very foot of a painted day: paint another day · go home
 
 **Home**

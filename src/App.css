@@ -658,7 +658,7 @@
 .tray-rest[hidden] {
   display: none;
 }
-/* Under a painted square: "start over", and on a green day "frame this day", side by side. */
+/* Under a painted square: "start over" and "frame it", side by side. */
 .day-links {
   display: flex;
   justify-content: center;
@@ -764,10 +764,6 @@
   color: var(--muted);
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
-}
-.day-wipe.is-frame {
-  color: var(--ink-soft); /* a shade stronger than start over: the one to find */
-  text-decoration-color: #b0b0a8;
 }
 /* The foot of a painted day: paint another day · go home, two quiet links. */
 .day-next {

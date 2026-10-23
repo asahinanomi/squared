@@ -313,13 +313,9 @@ export function Today(props: Props) {
                 start over
               </button>
               {/* A day you want to keep, any colour: framed in its paint's deeper shade. */}
-              {/* Framing a day you want to keep: a quiet link like start over, a shade stronger, so it's found. */}
-              <button
-                className={day.framed ? 'day-wipe' : 'day-wipe is-frame'}
-                onClick={props.onFrame}
-                aria-pressed={!!day.framed}
-              >
-                {day.framed ? 'unframe' : 'frame this day'}
+              {/* Framing a day you want to keep: a quiet link, the same as start over. */}
+              <button className="day-wipe" onClick={props.onFrame} aria-pressed={!!day.framed}>
+                {day.framed ? 'unframe' : 'frame it'}
               </button>
             </div>
           )}
