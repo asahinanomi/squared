@@ -49,7 +49,7 @@ Use the **one-liner** wherever there's room. Use the **short label** in tight UI
 | 🟥 red | **regret** | no, I wish I'd spent it differently. |
 | ⬜ grey | **a blur** | I don't know… I wasn't paying attention. |
 
-The same three lines everywhere: the palette, the meaningful sheet and the idea letter.
+The same three lines everywhere: the palette, the meaningful sheet and the letter (why squared).
 
 **Why these words (Oct 23, 2026).** Ask a friend "how was your day?" and they'd answer "worth it", "a regret" or "a blur": the labels sound like that honest answer. Red is the day you were there for and wish you'd chosen differently; grey is the day you weren't there for. Psychology behind it: regret is a useful feeling when it points at the act ("I wish I'd…"), never at the person, and paired with kindness it moves people to choose better. In counts: "3 worth it", "2 regrets", "1 blur"; just painted: "your 3rd day worth it this month", "your 2nd regret", "your 1st blur".
 
@@ -124,13 +124,15 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - Today painted: greeting · **Today is in colour.** · today's square and note · this week · **paint another day**
 - This week: "5 days in colour this week." · a full week: **"Every day this week, in colour."** 🌈 (a small rainbow in your week's colours) · "You showed up for every single one."
 
-**The idea page — LOCKED COPY** (— nomi; lowercase; keep verbatim):
+**The letter, "why squared" — LOCKED COPY** (— nomi; lowercase; keep verbatim; rewritten by nomi Oct 23, 2026, on this brand story: meaningful, not good; less regret; noticing without blame. Its tab on the about page and the sign-in link say "why squared"):
 
-> **the idea**
+> **why squared**
 >
-> I live a very busy life. one day, I looked up and saw so many days had gone that I couldn't say where or how. scary.
+> I had my head down in a busy life. one day, I looked up and saw so many days had gone. scarily fast, faster than I thought I had.
 >
-> the hard part wasn't the bad days. it was the busy, even productive days I spent on things that didn't matter. or even worse, days slipped by that I didn't even notice.
+> the hard part wasn't the bad days. some of my hardest days were the ones truly worth it, the days I really grew. the worst were the days I wish I had lived differently: the days I could have spent on what truly matters, and the days that slipped by without me noticing.
+>
+> I don't want to reach the end and find a life full of regret and blur.
 >
 > squared asks one thing each day:
 >
@@ -140,9 +142,9 @@ These describe squares, not feelings. Keep them out of the three-colour language
 > 🟥 no, I wish I'd spent it differently.
 > ⬜ I don't know… I wasn't paying attention.
 >
-> paint one square a day. no streaks, no scores. just an honest log, one day at a time. the days that build a life, the days we have fewer than we think.
+> paint one square a day. no streaks, no scores. just a moment to reflect, one day at a time. a day of regret isn't there to blame you. noticing it is how the next one goes differently.
 >
-> I'll try to make mine as green as I can. I hope squared helps you too.
+> I'll try to make mine meaningful, with as little regret as I can. I hope squared helps you do the same.
 >
 > — nomi
 >
@@ -160,4 +162,4 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 ## 10. Kill list (never use again)
 
-The old colour labels, retired Oct 23, 2026: "mattered", "empty", "slipped" (as labels; "mattered" stays in prose like "what mattered"), and red's old line "no, I was busy, but none of it mattered." Also: "here, and it mattered" (as a label), "here, but wasted", "but wasted", "gone before I noticed", "lived, it mattered", "slipped by / slipped past" as a colour label (the idea letter's "days slipped by" stays: it's prose), "busy" as a label, "lived, not painted", "wasted" on screen (the data keeps the name `wasted`; the screen says regret), "you missed", streaks, scores.
+The old colour labels, retired Oct 23, 2026: "mattered", "empty", "slipped" (as labels; "mattered" stays in prose like "what mattered"), and red's old line "no, I was busy, but none of it mattered." Also: "here, and it mattered" (as a label), "here, but wasted", "but wasted", "gone before I noticed", "lived, it mattered", "slipped by / slipped past" as a colour label (the letter's "slipped by" stays: it's prose), "busy" as a label, "lived, not painted", "wasted" on screen (the data keeps the name `wasted`; the screen says regret), "you missed", streaks, scores.

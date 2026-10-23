@@ -42,7 +42,7 @@ export function Terms({ onBack, backLabel }: Props) {
       </p>
 
       <h2 className="privacy-head">questions</h2>
-      <p>Use “get in touch” (on the idea page), or reply to any email from me.</p>
+      <p>Use “get in touch” (on the about page), or reply to any email from me.</p>
       <p className="idea-sign">— nomi</p>
     </main>
   )

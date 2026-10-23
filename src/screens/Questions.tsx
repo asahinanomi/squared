@@ -87,7 +87,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
       'How can I support squared?',
       <>
         Thank you for asking. I’m building it myself, one square a day, and every bit of support keeps it going:{' '}
-        {go(onSupport, 'help build squared', 'the idea → support')}. Telling a friend helps too.
+        {go(onSupport, 'help build squared', 'about → support')}. Telling a friend helps too.
       </>,
     ],
     [
@@ -96,7 +96,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'Where do I ask questions?',
-      <>Ask me any time: {go(onTouch, 'get in touch', 'the idea → get in touch')}. I read every one.</>,
+      <>Ask me any time: {go(onTouch, 'get in touch', 'about → get in touch')}. I read every one.</>,
     ],
   ]
 }

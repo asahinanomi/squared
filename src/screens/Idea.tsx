@@ -14,7 +14,8 @@ type Props = {
   onBack?: () => void
 }
 
-// "the idea": why squared exists, in the maker's own words.
+// "why squared" (the letter): why squared exists, in the maker's own words. Rewritten by nomi, Oct 23, 2026, on
+// the brand story: meaningful, not good; less regret; noticing without blame.
 export function Idea({ onMatters, onBack }: Props) {
   return (
     <main className="idea">
@@ -24,15 +25,17 @@ export function Idea({ onMatters, onBack }: Props) {
           sign in
         </button>
       )}
-      <h1 className="idea-title">the idea</h1>
+      <h1 className="idea-title">why squared</h1>
       <p>
-        I live a very busy life. one day, I looked up and saw so many days had gone that I couldn’t say where or how.
-        scary.
+        I had my head down in a busy life. one day, I looked up and saw so many days had gone. scarily fast, faster than
+        I thought I had.
       </p>
       <p>
-        the hard part wasn’t the bad days. it was the busy, even productive days I spent on things that didn’t matter.
-        or even worse, days slipped by that I didn’t even notice.
+        the hard part wasn’t the bad days. some of my hardest days were the ones truly worth it, the days I really grew.
+        the worst were the days I wish I had lived differently: the days I could have spent on what truly matters, and
+        the days that slipped by without me noticing.
       </p>
+      <p>I don’t want to reach the end and find a life full of regret and blur.</p>
       <p>squared asks one thing each day:</p>
       <p>did I spend Today meaningfully?</p>
       <ul className="idea-colours">
@@ -45,10 +48,10 @@ export function Idea({ onMatters, onBack }: Props) {
         ))}
       </ul>
       <p>
-        paint one square a day. no streaks, no scores. just an honest log, one day at a time. the days that build a
-        life, the days we have fewer than we think.
+        paint one square a day. no streaks, no scores. just a moment to reflect, one day at a time. a day of regret
+        isn’t there to blame you. noticing it is how the next one goes differently.
       </p>
-      <p>I’ll try to make mine as green as I can. I hope squared helps you too.</p>
+      <p>I’ll try to make mine meaningful, with as little regret as I can. I hope squared helps you do the same.</p>
       <p className="idea-sign">— nomi</p>
       {/* The way on, as a letter would end: a quiet p.s. under the signature. */}
       {onMatters && (
