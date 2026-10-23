@@ -5,6 +5,7 @@ Read `README.md` first: it is the product spec and the record of every phase bui
 ## Who & how
 
 - I'm nomi, the maker and only user. Talk to me short, warm, to the point — no fluff.
+- I want to keep squared to about 3 hours a day (I enjoy it, and it's easy to overdo). When a day's work passes 3 hours (judge by the time of the first commit or message that day, e.g. `git log --since=midnight --reverse --format=%cd | head -1`), remind me once, warmly and in one line, to wrap up. Remind again only if I keep going another hour. Never stop helping because of it: it's my call.
 - When I ask "what do you think / if you agree do it, if not say no": give a short opinion; build only on "go" (or if I said to just do it).
 - Ask before changing my design. Design boards: https://claude.ai/artifact/PFuFHaZmJXTG82GkJsT1NH
 - Labs (artifact mocks): never replace what's already in a lab; add new options below, so I can look back.
