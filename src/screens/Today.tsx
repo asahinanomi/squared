@@ -10,7 +10,7 @@ import { ZoomInIcon, ZoomOutIcon } from '../components/ZoomBar'
 import { addDays, fromIso, longDate, ordinal, shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
-import { PAINTS, paintHex, WORD, type Paint } from '../lib/paints'
+import { PAINTS, paintHex, type Paint } from '../lib/paints'
 import { setSoundOn, soundOn, soundOnChime } from '../lib/sound'
 import type { Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
@@ -56,6 +56,9 @@ type Props = {
 // The blank square says how far back its day is (the date above says which day), so a slip to another day shows
 // before the first stroke, on two lines ("paint" above): "paint your day", "paint yesterday", "paint 3 days ago", "paint last week",
 // "paint 2 months ago", "paint 17 years ago".
+// How the just-painted line counts a colour: "your 3rd day worth it", "your 2nd regret", "your 1st blur".
+const NTH: Record<Paint, string> = { green: 'day worth it', red: 'regret', grey: 'blur' }
+
 function blankWord(date: string, today: string) {
   const days = Math.round((fromIso(today).getTime() - fromIso(date).getTime()) / 86_400_000)
   const ago = (n: number, unit: string) => `paint\n${n} ${unit}${n === 1 ? '' : 's'} ago`
@@ -79,11 +82,11 @@ export function Today(props: Props) {
   const next = addDays(date, 1)
   const day = days[date]
   const special = specialDay(date, born)
-  // Just painted: which of this month's days of that colour it is — "your 3rd mattered day this month".
+  // Just painted: which of this month's days of that colour it is: "your 3rd day worth it this month".
   const reveal = (paint: Paint, fresh: boolean) => {
     const month = date.slice(0, 7)
     const n = Object.entries(days).filter(([iso, d]) => iso.startsWith(month) && d.color === paint).length
-    return n ? { text: `your ${ordinal(n)} ${WORD[paint]} day this month`, fresh } : undefined
+    return n ? { text: `your ${ordinal(n)} ${NTH[paint]} this month`, fresh } : undefined
   }
 
   // On each dip, the color's meaning whispers under the palette, then fades (sooner if painting starts).

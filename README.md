@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 23, 2026, 14:10 UTC_
+_last updated Oct 23, 2026, 16:09 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -60,11 +60,11 @@ The UI in these screens should be kept; better treatments are welcome.
 
 - **Green** — I lived consciously. Good or bad, I spent the day meaningfully.
 - **Grey** — I wasn't conscious. The day just slipped by.
-- **Red** — I was conscious, but I didn't spend the day meaningfully.
+- **Red** — I was conscious, but I didn't spend the day meaningfully, and I wish I'd chosen differently.
 
 Shades (from the phase 2 design): green `#6E9B7B`, grey `#8E8E87`, red `#C06A62` — the paint itself, on the day's canvas. Every square in the overviews (month, list, year and life bands, a life in days) uses one softer shade instead (`#A7C4B0`, `#AEAEA6`, `#D9A8A3`), however late it was painted (its line says when), so a full month reads calm. A framed day keeps the full paint there, framed in `#53735C` (or filled with it where squares are too small for a frame, and as its own strip at the bottom of green in the bands), so it pops among the soft ones.
 
-In the app the meanings read, in the brand story's words: **green** "yes, I spent it on what matters." · **red** "no, I was busy, but none of it mattered." · **grey** "I don't know… I wasn't paying attention." Short labels, everywhere space is tight (the word in the square, legends, filters): **mattered** · **empty** · **slipped**. Always listed green, red, grey. They show in the "meaningful" sheet, and as a quiet grey line (led by a small dot of that paint) under the palette each time a color is dipped (it fades after a few seconds, or as soon as painting starts).
+In the app the meanings read, in the brand story's words: **green** "yes, I spent it on what matters." · **red** "no, I wish I'd spent it differently." · **grey** "I don't know… I wasn't paying attention." Short labels, everywhere space is tight (the word in the square, legends, filters): **worth it** · **regret** · **a blur** (renamed Oct 23, 2026 from mattered · empty · slipped: they sound like the honest answer to "how was your day?"; see the brand story v3). In counts: "3 worth it", "2 regrets", "1 blur"; just painted: "your 3rd day worth it this month". The question stays "did I spend Today meaningfully?". The data keeps its names (`green`, `red`, `grey`; the compass's `meaningful` and `wasted`). Always listed green, red, grey. They show in the "meaningful" sheet, and as a quiet grey line (led by a small dot of that paint) under the palette each time a color is dipped (it fades after a few seconds, or as soon as painting starts).
 
 ## The why note
 

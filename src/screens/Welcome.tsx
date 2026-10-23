@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { fromIso, todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
 import { MAX_CHARS, newEntry, type Kind, type Matters } from '../lib/matters'
-import { PAINTS, paintHex } from '../lib/paints'
+import { PAINTS, paintHex, WORD } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 import { reportError } from '../lib/report'
 import { Chevron } from './Today'
@@ -22,7 +22,6 @@ const FIELDS: Record<Kind, { dot: string; holders: string[] }> = {
   meaningful: { dot: paintHex('green'), holders: ['time with family', 'a long walk', 'making something'] },
   wasted: { dot: paintHex('red'), holders: ['scrolling', 'busywork', 'just waiting'] },
 }
-const WORDS = { green: 'mattered', red: 'empty', grey: 'slipped' } as const
 const AVERAGE = 79 // the stepper's first tap lands here
 const MIN_YEARS = 1
 const MAX_YEARS = 130
@@ -130,7 +129,7 @@ export function Welcome({ tryOut, onSquares, onDone, onMatters }: Props) {
             {PAINTS.map((p) => (
               <span key={p.id}>
                 <i style={{ background: p.hex }} />
-                {WORDS[p.id]}
+                {WORD[p.id]}
               </span>
             ))}
           </div>

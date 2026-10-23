@@ -3,7 +3,7 @@ import { ZoomBar } from '../components/ZoomBar'
 import { glide, pulse } from '../lib/backToToday'
 import { fromIso, isoDate, monthTitle, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
-import { PAINTS, WORD } from '../lib/paints'
+import { counted, PAINTS } from '../lib/paints'
 import { bands, monthEnd } from '../lib/tally'
 import { monthsBetween, shiftMonth } from './Month'
 import { PaintingButton } from '../components/PaintingButton'
@@ -71,7 +71,7 @@ function PeriodCard({
   const period = id.length === 4 ? id : id.slice(0, 7)
   const bs = bands(days, from, to, today, born)
   const c = counts(days, from, to, today, born)
-  const parts = PAINTS.filter((p) => c[p.id]).map((p) => `${c[p.id]} ${WORD[p.id]}`)
+  const parts = PAINTS.filter((p) => c[p.id]).map((p) => counted(p.id, c[p.id]))
   if (c.unpainted) parts.push(`${c.unpainted} unpainted`)
   const now = from <= today && today <= to
   return (

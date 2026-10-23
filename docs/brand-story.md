@@ -1,6 +1,6 @@
 # squared.today — Brand Story & Key Messaging
 
-_The single source of truth for what squared says and why. Every screen pulls from here. v2 · Oct 23, 2026 · matches the app as it is today (v1 was Oct 18) · — nomi_
+_The single source of truth for what squared says and why. Every screen pulls from here. v3 · Oct 23, 2026 · the colours renamed: worth it, regret, a blur (v2 earlier the same day, v1 Oct 18) · — nomi_
 
 When the app's words change, change them here too. If this doc and the app ever disagree, the app is the truth and this doc gets updated.
 
@@ -32,10 +32,10 @@ Every day answers two hidden questions:
 
 | | went to what matters | didn't |
 |---|---|---|
-| **you were there** | 🟩 mattered | 🟥 empty |
-| **on autopilot** | — | ⬜ slipped |
+| **you were there** | 🟩 worth it | 🟥 regret |
+| **on autopilot** | — | ⬜ a blur |
 
-🟩 and 🟥 are siblings: both days you *lived*. ⬜ is the outlier: the day you weren't there for. Grey still counts as "in colour": a slipped day was still noticed, afterwards.
+🟩 and 🟥 are siblings: both days you *lived*. ⬜ is the outlier: the day you weren't there for. Grey still counts as "in colour": a blurry day was still noticed, afterwards.
 
 ## 4. The three colours — LOCKED
 
@@ -43,13 +43,15 @@ Use the **one-liner** wherever there's room. Use the **short label** in tight UI
 
 | colour | short label | one-liner (palette, the meaningful sheet) |
 |---|---|---|
-| 🟩 green | **mattered** | yes, I spent it on what matters. |
-| 🟥 red | **empty** | no, I was busy, but none of it mattered. |
-| ⬜ grey | **slipped** | I don't know… I wasn't paying attention. |
+| 🟩 green | **worth it** | yes, I spent it on what matters. |
+| 🟥 red | **regret** | no, I wish I'd spent it differently. |
+| ⬜ grey | **a blur** | I don't know… I wasn't paying attention. |
 
 The same three lines everywhere: the palette, the meaningful sheet and the idea letter.
 
-Voice rule: all three are **first person** (it's your own conscience, not the app grading you) and follow the skeleton **[yes, / no, / I don't know…] [honest clause].**
+**Why these words (Oct 23, 2026).** Ask a friend "how was your day?" and they'd answer "worth it", "a regret" or "a blur": the labels sound like that honest answer. Red is the day you were there for and wish you'd chosen differently; grey is the day you weren't there for. Psychology behind it: regret is a useful feeling when it points at the act ("I wish I'd…"), never at the person, and paired with kindness it moves people to choose better. In counts: "3 worth it", "2 regrets", "1 blur"; just painted: "your 3rd day worth it this month", "your 2nd regret", "your 1st blur".
+
+Voice rule: all three one-liners are **first person** (it's your own conscience, not the app grading you) and follow the skeleton **[yes, / no, / I don't know…] [honest clause].**
 
 ## 5. The daily question — LOCKED
 
@@ -99,7 +101,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - "continue with Google" · links: the idea · privacy · terms
 
 **Onboarding** (four steps)
-1. "Welcome to squared." / "One square for every day of your life." / "Each day, ask yourself:" · *did I spend Today meaningfully?* · "Then paint its square." · mattered · empty · slipped · **let's begin**
+1. "Welcome to squared." / "One square for every day of your life." / "Each day, ask yourself:" · *did I spend Today meaningfully?* · "Then paint its square." · worth it · regret · a blur · **let's begin**
 2. "what makes a day feel *meaningful*?" · next · skip this step
 3. "and what makes a day feel *empty*?" · next · skip this step
 4. "Last thing." / "how many squares do you have?" · "when were you born?" · "how long do you hope to live?" ("the average in America is about 79 years / 76 for men, 81 for women") · **28,855** / "squares in your life" / "and 13,709 still ahead to paint" · **start painting →** · "by starting, you confirm you're 18 or over and agree to the terms and privacy."
@@ -107,7 +109,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 **Today (paint)**
 - *did I spend Today meaningfully?* · the date · the square: "paint your day" (today) or "paint this day"
 - tap a colour to load the brush; its one-liner shows under the palette
-- once painted: "your 3rd mattered day this month" · "why?" ("a line, or a page, or skip"); a framed day asks "what do you want to remember?"
+- once painted: "your 3rd day worth it this month" · "why?" ("a line, or a page, or skip"); a framed day asks "what do you want to remember?"
 - torn between green and red: "torn? ask yourself:" / "did what mattered outweigh the rest?" / "you said: '…'"
 - under the square: start over · frame this day
 
@@ -130,7 +132,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 > did I spend Today meaningfully?
 >
 > 🟩 yes, I spent it on what matters.
-> 🟥 no, I was busy, but none of it mattered.
+> 🟥 no, I wish I'd spent it differently.
 > ⬜ I don't know… I wasn't paying attention.
 >
 > paint one square a day. no streaks, no scores. just an honest log, one day at a time. the days that build a life, the days we have fewer than we think.
@@ -141,14 +143,14 @@ These describe squares, not feelings. Keep them out of the three-colour language
 >
 > p.s. start by naming what matters to you →
 
-**What matters (compass)** — "what does a meaningful day look like to you? and what feels empty?" · filter: all · mattered · empty · **now, paint today →** (or back to today →) · "a guide, not a rule. you still choose the day's colour"
+**What matters (compass)** — "what does a meaningful day look like to you? and what feels empty?" · filter: all · worth it · regret · **now, paint today →** (or back to today →) · "a guide, not a rule. you still choose the day's colour"
 
 **Settings** — your squares (square settings · what matters · my paintings) · app (sound) · account (export my data · sign out · delete my account)
 
 **A painting** — "October, painted" / "October, so far" · a new month: "a new month. here's the last one." · **keep this painting ↓** (once kept: download ↓) · "Yours to keep once the month ends."
 
-**Pie / summary** — short labels + counts: 🟩 mattered · 🟥 empty · ⬜ slipped · **unpainted** · **ahead**
+**Pie / summary** — short labels + counts: 🟩 worth it · 🟥 regret · ⬜ a blur · **unpainted** · **ahead**
 
 ## 10. Kill list (never use again)
 
-"here, and it mattered" (as a label), "here, but wasted", "but wasted", "gone before I noticed", "lived, it mattered", "slipped by / slipped past" as a colour label (the idea letter's "days slipped by" stays: it's prose), "busy" as a label, "lived, not painted", "wasted" on screen (the data keeps the name `wasted`; the screen says empty), "you missed", streaks, scores.
+The old colour labels, retired Oct 23, 2026: "mattered", "empty", "slipped" (as labels; "mattered" stays in prose like "what mattered"), and red's old line "no, I was busy, but none of it mattered." Also: "here, and it mattered" (as a label), "here, but wasted", "but wasted", "gone before I noticed", "lived, it mattered", "slipped by / slipped past" as a colour label (the idea letter's "days slipped by" stays: it's prose), "busy" as a label, "lived, not painted", "wasted" on screen (the data keeps the name `wasted`; the screen says regret), "you missed", streaks, scores.

@@ -2,7 +2,7 @@ import type { Days } from './days'
 import { fromIso, todayIso } from './dates'
 import type { Matters } from './matters'
 import type { Notes } from './notes'
-import { PAINTS, paintHex, WORD } from './paints'
+import { counted, PAINTS, paintHex, WORD } from './paints'
 import type { Profile } from './profile'
 
 // "export my data": your squares and notes as a Word document you can read anywhere (Word, Google Docs, Pages),
@@ -64,9 +64,9 @@ export async function exportWord(all: Everything) {
 
   for (const m of months) {
     const inMonth = dates.filter((d) => d.startsWith(m))
-    const counts = PAINTS.map((p) => [WORD[p.id], inMonth.filter((d) => all.days[d]?.color === p.id).length] as const)
+    const counts = PAINTS.map((p) => [p.id, inMonth.filter((d) => all.days[d]?.color === p.id).length] as const)
       .filter(([, n]) => n)
-      .map(([w, n]) => `${n} ${w}`)
+      .map(([p, n]) => counted(p, n))
       .join(' · ')
     body.push(
       new Paragraph({

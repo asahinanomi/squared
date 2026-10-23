@@ -20,8 +20,8 @@ type Props = {
 }
 
 const LISTS: { kind: Kind; label: string; dot: string; hint: string }[] = [
-  { kind: 'meaningful', label: 'mattered', dot: paintHex('green'), hint: 'what does a meaningful day look like?' },
-  { kind: 'wasted', label: 'empty', dot: paintHex('red'), hint: 'what makes a day feel empty?' },
+  { kind: 'meaningful', label: 'worth it', dot: paintHex('green'), hint: 'what does a meaningful day look like?' },
+  { kind: 'wasted', label: 'regret', dot: paintHex('red'), hint: 'what makes a day feel empty?' },
 ]
 
 /** A text box that grows with what's typed (one or two lines). */

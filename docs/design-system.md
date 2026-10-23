@@ -37,9 +37,9 @@ _Pairs with `brand-story.md` (voice & copy). This doc = look: logo, color, type,
 **Paint colors (semantic — the three answers)**
 | answer | hex |
 |---|---|
-| 🟩 mattered (green) | #6E9B7B |
-| 🟥 empty (red) | #C06A62 |
-| ⬜ slipped (grey) | #8E8E87 |
+| 🟩 worth it (green) | #6E9B7B |
+| 🟥 regret (red) | #C06A62 |
+| ⬜ a blur (grey) | #8E8E87 |
 
 _(The review-mock backdrop #EFEEE9 is not an app color.)_
 

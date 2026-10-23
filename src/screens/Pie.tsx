@@ -187,7 +187,7 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
           </p>
         ) : chosen && chosen.id !== 'ahead' ? (
           <p className="pie-pick">
-            {fmt(chosen.count)} {LABEL[chosen.id]} {chosen.count === 1 ? 'day' : 'days'} ·{' '}
+            {LABEL[chosen.id]}: {fmt(chosen.count)} {chosen.count === 1 ? 'day' : 'days'} ·{' '}
             <button onClick={() => onSee(chosen.id as Exclude<SliceId, 'ahead'>)}>see them →</button>
           </p>
         ) : (

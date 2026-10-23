@@ -32,7 +32,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
               {p.id === 'green'
                 ? 'Green: yes, I spent it on what matters.'
                 : p.id === 'red'
-                  ? 'Red: no, I was busy, but none of it mattered.'
+                  ? 'Red: no, I wish I’d spent it differently.'
                   : 'Grey: I don’t know, I wasn’t paying attention.'}
             </span>
           ))}

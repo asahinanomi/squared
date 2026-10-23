@@ -42,9 +42,9 @@ type Only = Paint | 'unpainted' | 'framed'
 const FILTERS: [Only | null, string][] = [
   [null, 'all days'],
   ['framed', 'framed'],
-  ['green', 'mattered'],
-  ['red', 'empty'],
-  ['grey', 'slipped'],
+  ['green', 'worth it'],
+  ['red', 'regret'],
+  ['grey', 'a blur'],
   ['unpainted', 'unpainted'],
 ]
 

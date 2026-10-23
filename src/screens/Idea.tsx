@@ -3,7 +3,7 @@ import { Chevron } from './Today'
 
 const COLOURS: [Paint, string][] = [
   ['green', 'yes, I spent it on what matters.'],
-  ['red', 'no, I was busy, but none of it mattered.'],
+  ['red', 'no, I wish I’d spent it differently.'],
   ['grey', 'I don’t know… I wasn’t paying attention.'],
 ]
 
