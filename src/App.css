@@ -4293,15 +4293,28 @@ button.home-card:active {
   border-bottom: 2px solid #fff;
   transform: rotate(-45deg) translate(1px, -1px);
 }
-/* my framed days: a quiet text link under a life (navigation, so a link, not a card). */
-.home-framed {
-  align-self: center;
-  margin-top: -6px;
-  padding: 6px;
-  font-size: 15px;
-  color: var(--ink-soft);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
+/* framed days: the latest seven framed squares, oldest to newest, as the week's squares, each in its own frame. */
+.home-framed-days {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+.home-framed-days > span {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.home-framed-days i {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 2px var(--frame),
+    inset 0 0 0 3.5px #ebe6da;
 }
 /* this month and this year so far, side by side, each titled above (still unsigned) */
 .home-paintings {

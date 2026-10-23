@@ -3,7 +3,7 @@ import { addDays, fromIso, shortDateParts, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
 import type { Notes } from '../lib/notes'
-import { PAINTS, paintDeep, paintHex, WORD } from '../lib/paints'
+import { frameVars, PAINTS, paintDeep, paintHex, WORD } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 import { Chevron } from './Today'
 
@@ -42,7 +42,7 @@ const DateLine = ({ iso }: { iso: string }) => {
 
 // Home: where you land once today is painted (and when nothing is painted yet); the logo leads here any time.
 // Today first ("Today is in colour.", or the question and "paint today"), then the week in colour, your life in one
-// line (and my framed days under it), and this month and year so far, as paintings. Every card is a door. No
+// line, the days you framed (the latest seven), and this month and year so far, as paintings. Every card is a door. No
 // streaks, no scores. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (L, M, N)
 // Before the first square (squares set, nothing painted): only your days ahead, the question with "paint your
 // first square", and getting started, so there's one thing to do. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (K)
@@ -56,6 +56,9 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
   const count = (p: string) => Object.keys(days).filter((d) => d.startsWith(p) && d <= today).length
   // Before the first square: squares set, nothing painted (wiping the only square brings it back).
   const first = !!profile && Object.keys(days).length === 0
+  const framed = Object.keys(days)
+    .filter((d) => days[d].framed)
+    .sort()
 
   const life =
     profile &&
@@ -240,10 +243,21 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
       {weekCard}
 
       {life}
-      {/* The days you framed, a life's chapters: a quiet link under a life, once there's one. */}
-      {Object.values(days).some((d) => d.framed) && (
-        <button className="home-framed" onClick={onFramed}>
-          my framed days →
+      {/* The days you framed, a life's chapters: the latest seven, each in its frame, once there's one. */}
+      {framed.length > 0 && (
+        <button className="home-card home-framed" onClick={onFramed} aria-label="my framed days">
+          <span className="home-head">
+            framed days
+            <Chevron dir="right" />
+          </span>
+          <span className="home-framed-days">
+            {framed.slice(-7).map((d) => (
+              <span key={d}>
+                <i style={{ background: paintHex(days[d].color), ...frameVars(days[d].color) }} />
+                {d.slice(0, 4)}
+              </span>
+            ))}
+          </span>
         </button>
       )}
 

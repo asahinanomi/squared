@@ -117,7 +117,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **Home**
 - Before the first square: greeting · **10,962** / "days ahead of you." / "Make each one meaningful, starting with today." · the question · **paint your first square** · or paint yesterday · "getting started" (learned what squared is · named what matters · set how many squares · paint your first square)
-- Today not painted yet: greeting · "today is still paper" · the question · **paint today** · this week · a life · "my framed days →" · this month and year so far
+- Today not painted yet: greeting · "today is still paper" · the question · **paint today** · this week · a life · framed days (the latest seven, in their frames) · this month and year so far
 - Today painted: greeting · **Today is in colour.** · today's square and note · this week · a life ("10,962 days", "65% lived", "35% ahead") · "October, so far" / "2026, so far" ("18 days in colour")
 - This week: "5 days in colour this week." · a full week: **"Every day this week, in colour."** 🌈 (a small rainbow in your week's colours) · "You showed up for every single one."
 
