@@ -14,6 +14,7 @@ import { PAINTS, paintHex, WORD, type Paint } from '../lib/paints'
 import { setSoundOn, soundOn, soundOnChime } from '../lib/sound'
 import type { Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
+import { DayFinder } from '../components/DayFinder'
 
 type Props = {
   question: string
@@ -121,6 +122,8 @@ export function Today(props: Props) {
   const hasPrev = !born || prev >= born
   const hasNext = next <= today
   const [slide, setSlide] = useState<'from-left' | 'from-right' | null>(null)
+  // Find a day from your past: which year, which month, which day (the date's capsule opens it).
+  const [finding, setFinding] = useState(false)
   const step = (dir: -1 | 1) => {
     if (dir < 0 ? !hasPrev : !hasNext) return false
     setSlide(dir < 0 ? 'from-left' : 'from-right')
@@ -249,35 +252,24 @@ export function Today(props: Props) {
           />
 
           <div className="day-nav">
-            {/* Tap the date to jump to any day you've lived: the phone's own date picker, birth to today. */}
-            <label className="day-pick">
+            {/* Tap the date to find any day you've lived: which year (with your age), which month, which day. */}
+            <button className="day-pick" aria-label="Go to a day" onClick={() => setFinding(true)}>
               <DayLabel iso={date} slide={slide} />
               <ChevronDown />
-              <input
-                type="date"
-                aria-label="Go to a day"
-                min={born}
-                max={today}
-                value={date}
-                onChange={(e) => {
-                  // Clamp, never refuse: iPhone's wheels change the year first, keeping today's month and day,
-                  // so 1971 can first arrive as a day before you were born — it lands on your birthday instead.
-                  let iso = e.target.value
-                  if (!iso) return
-                  if (born && iso < born) iso = born
-                  if (iso > today) iso = today
-                  setSlide(null)
-                  onDate(iso)
-                }}
-                onClick={(e) => {
-                  try {
-                    e.currentTarget.showPicker()
-                  } catch {
-                    /* older browsers open it themselves */
-                  }
-                }}
-              />
-            </label>
+            </button>
+            <DayFinder
+              open={finding}
+              onClose={() => setFinding(false)}
+              date={date}
+              today={today}
+              born={born}
+              days={days}
+              onPick={(iso) => {
+                setFinding(false)
+                setSlide(null)
+                onDate(iso)
+              }}
+            />
           </div>
           {special && <p className="day-special">{special}</p>}
 
