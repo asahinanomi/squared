@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 23, 2026, 17:04 UTC_
+_last updated Oct 23, 2026, 17:07 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -35,7 +35,7 @@ Everything squared relies on outside its own code, what it's for, and where its 
 1. **Sign in** — dotted-grid background (light dots, `--dot: #dddcd6` — a texture you barely notice, lightened after phase 4 so it never competes with text), logo mark (rounded square with a paint wave), wordmark `squared` + grey `.today`, a black pill button "continue with Google" (Google's official G mark goes in the circle).
 2. **Today / paint** — logo top-left, hamburger top-right. Question "did I spend Today meaningfully?" with a dotted underline on "meaningfully", then the date, "Mon, Oct 12th, 2026" (short weekday, the "th" raised; screen readers hear the full "Monday, Oct 12th, 2026"). One large square to paint in the center, with a quiet word in its middle — "to paint" while blank, then "meaningful" · "wasted" · "slipped by" once painted (small, lowercase, soft ink; it steps aside the moment the brush touches the square). A paint palette (three wells + brush) sits under the square. **Day screen, after phase 4** (built after review): no grey veil and no month behind the square — the question, date, square and palette sit together, tighter, in the middle of the first screen, on the plain dotted paper; notes follow right after the palette (just past the colour's meaning line), unchanged otherwise (full length, page scroll), each with the same light keyline as the entries in what matters. The "show older / hide older" toggle sits 24px clear of the first note, so a tap on it never lands on a note. One rhythm down the screen: 40px of ink under the question (the same as from the palette to the notes, so the question stands alone as the title), then 16px between date and square, square and brush tip, and the colour's meaning line and the notes. The trio is placed in the middle by measuring the screen, so the square stays in the same spot on every day however long its notes are. The square is a little bigger now (up to 176px) and the palette is drawn to the same width, so the palette is never wider than the square; a little more room sits between the top bar and the question. **Day by day, sideways**: a large, light grey arrow on the left of the square steps to yesterday; one on the right steps toward today (not shown on today). (A first try showed the neighbouring days as small faint squares in their paint; it read as noise.) Swipe right to pull yesterday in, left to go back toward today, one day per swipe with a soft stop at today (and at the birth date); the date and square slide in with the day. A swipe never starts on the square (that's a brush stroke), on a note (notes keep swipe-to-delete), or at the screen's very edge (Safari's back gesture). Also: tap an arrow; ← / → arrow keys; a sideways two-finger trackpad swipe (one day per flick). Android gives a tiny haptic tick per step; iPhone web has none. The arrows are also the screen reader's "previous / next day" buttons.
 3. **Month calendar** — `‹ October 2026 ›`, M–S weekday header, painted days filled with their color, today outlined in black, past unpainted days dashed, future days light grey. Each day shows its number with a tiny weekday ("Wed") under it. Hint: "tap a day to paint it".
-4. **Why bubble** — after the square is filled, a white speech bubble pointing at the square: "why?" with a text box that grows as you write (paragraphs allowed) and a "done" button. Below it: "tap anywhere to skip".
+4. **Why bubble** — after the square is filled, a white speech bubble pointing at the square: "because…" with a text box that grows as you write (paragraphs allowed) and a "done" button. Below it: "tap anywhere to skip".
 5. **Meaning sheet** — tapping the underlined "meaningful" opens a bottom sheet titled "meaningful" (lowercase, like every screen title): *Not a good day or a bad one. Not what you got done. A day is meaningful when you spent it on what matters to you.* Followed by the three color definitions (each led by a small round paint dot with a keyline) and a black "close" button.
 
 6. **The idea** — from the menu ("the idea"): a quiet page in the maker's words about why squared exists.
@@ -68,9 +68,9 @@ In the app the meanings read, in the brand story's words: **green** "yes, I spen
 
 ## The why note
 
-- Once a square is filled, a small gentle bubble appears asking "why?". The note can be as long as needed, with paragraph breaks (up to 10,000 characters). (Was a single-line input; changed during v1 review.)
+- Once a square is filled, a small gentle bubble appears with "because…" (asked "why?" until Oct 23, 2026: an open sentence you finish, gentler than a question). The note can be as long as needed, with paragraph breaks (up to 10,000 characters). (Was a single-line input; changed during v1 review.)
 - Notes keep a history: a day can hold several notes, each stamped with when it was written (stored in a `notes` table, migration 0004). They show under the palette, all open and in full, oldest → newest, each stamped like "Wed, Oct 14, 2026 · 4:52 pm". The latest note always shows; a "3 notes · hide older / show 2 older" row tucks the older ones away (remembered on that device).
-- Tap a note to open it: **update** (saves the change; its time becomes now) or **delete** (a grey button; an in-app "Delete this note? It can't be undone." alert confirms). Swiping a note left also reveals a grey **delete**, with the same alert. Tapping outside leaves it as it was. Below the last note, an **add new note** button always opens an empty box. Painting a day asks "why?" as a new note.
+- Tap a note to open it: **update** (saves the change; its time becomes now) or **delete** (a grey button; an in-app "Delete this note? It can't be undone." alert confirms). Swiping a note left also reveals a grey **delete**, with the same alert. Tapping outside leaves it as it was. Below the last note, an **add new note** button always opens an empty box. Painting a day opens "because…" as a new note.
 - Notes save instantly: the box closes (button: **done**) and the note shows at once while it saves in the background. If saving fails, the change is undone and the box reopens with the text and a quiet message. Each request gives up after 10s and retries once on a fresh connection (phones can wake the app on a dead one); the sign-in is renewed as soon as the app comes back on screen.
 - Easy to dismiss — tapping outside closes it; skipping is fine. Never required, never nagging.
 - Text only. No voice recording.
@@ -110,7 +110,7 @@ Width and size:
 | Screen and sheet titles | all lowercase | a life, settings, a life pie, in slices, meaningful |
 | Dates | Normal date capitals | "Wednesday, Oct 14th, 2026", "Wed, Oct 14, 2026 · 4:52 pm" |
 | Buttons and controls | all lowercase | continue with Google, add new note, hide older, update, delete, cancel |
-| Quiet helper and error text | all lowercase | why?, tap anywhere to skip, 3 notes, couldn't save, sign-in didn't finish |
+| Quiet helper and error text | all lowercase | because…, tap anywhere to skip, 3 notes, couldn't save, sign-in didn't finish |
 | The user's own notes | as typed | — |
 
 Proper names keep their capitals everywhere (Google, I).

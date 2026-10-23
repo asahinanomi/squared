@@ -17,14 +17,14 @@ type Props = {
   onCancel: () => void
   /** Just painted: "your 3rd mattered day this month", with a tiny hourglass whose grains fall for a new square. */
   reveal?: { text: string; fresh: boolean }
-  /** A framed day's note: it asks "what do you want to remember?" instead of "why?". */
+  /** A framed day's note: it asks "what do you want to remember?" instead of "because…". */
   pinned?: boolean
   /** Editing a note: pin it to the top of its day, or unpin it. */
   onPin?: () => void
   isPinned?: boolean
 }
 
-// Gentle "why?" bubble under the square. Write as much as you like; Enter makes a new line.
+// Gentle "because…" bubble (you finish the sentence: "worth it, because…") under the square. Write as much as you like; Enter makes a new line.
 // It closes at once; if saving fails, the app reopens it with the text and a quiet message.
 export function WhyBubble({
   initial = '',
@@ -95,7 +95,7 @@ export function WhyBubble({
           </p>
         )}
         <label className="why-label" htmlFor="why">
-          {pinned ? 'what do you want to remember?' : 'why?'}
+          {pinned ? 'what do you want to remember?' : 'because…'}
         </label>
         <textarea
           id="why"
