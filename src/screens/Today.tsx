@@ -53,19 +53,19 @@ type Props = {
 }
 
 // The blank square says how far back its day is (the date above says which day), so a slip to another day shows
-// before the first stroke: "paint your day", "paint yesterday", "paint 3 days ago", "paint last week",
+// before the first stroke, on two lines ("paint" above): "paint your day", "paint yesterday", "paint 3 days ago", "paint last week",
 // "paint 2 months ago", "paint 17 years ago".
 function blankWord(date: string, today: string) {
   const days = Math.round((fromIso(today).getTime() - fromIso(date).getTime()) / 86_400_000)
-  const ago = (n: number, unit: string) => `paint ${n} ${unit}${n === 1 ? '' : 's'} ago`
-  if (days <= 0) return 'paint your day'
-  if (days === 1) return 'paint yesterday'
+  const ago = (n: number, unit: string) => `paint\n${n} ${unit}${n === 1 ? '' : 's'} ago`
+  if (days <= 0) return 'paint\nyour day'
+  if (days === 1) return 'paint\nyesterday'
   if (days < 7) return ago(days, 'day')
-  if (days < 14) return 'paint last week'
+  if (days < 14) return 'paint\nlast week'
   if (days < 30) return ago(Math.floor(days / 7), 'week')
-  if (days < 60) return 'paint last month'
+  if (days < 60) return 'paint\nlast month'
   if (days < 365) return ago(Math.floor(days / 30.44), 'month')
-  if (days < 730) return 'paint a year ago'
+  if (days < 730) return 'paint\na year ago'
   return ago(Math.floor(days / 365.25), 'year')
 }
 

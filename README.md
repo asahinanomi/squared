@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 23, 2026, 02:38 UTC_
+_last updated Oct 23, 2026, 02:48 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -185,7 +185,7 @@ Design: board "16 · Pie — line art (final)". Built step by step; I check each
 
 - **The logo paints itself on sign-in**: the small square starts empty and fills once, left to right like a brush stroke (1.1s, after 0.35s), then stays still; off with reduced motion. Only on sign-in.
 
-- **The blank square says how far back its day is** (the date above says which day), so a slip to another day shows before the first stroke: "paint your day", "paint yesterday", "paint 3 days ago", "paint last week", "paint 2 weeks ago", "paint last month", "paint 7 months ago", "paint a year ago", "paint 17 years ago". It sits in the middle of the square, level, a shade stronger (#8f8f89): an invitation, not a signature (the corner signature is for the colour word, once painted). The arrows sit a little further from the square (`clamp(26px, 9vw, 44px)`), so a stroke starting just outside the square, or a resting thumb, never steps to another day.
+- **The blank square says how far back its day is** (the date above says which day), so a slip to another day shows before the first stroke: "paint your day", "paint yesterday", "paint 3 days ago", "paint last week", "paint 2 weeks ago", "paint last month", "paint 7 months ago", "paint a year ago", "paint 17 years ago". On two lines, "paint" above how long ago, in the middle of the square, level (#9a9a94): an invitation, not a signature (the corner signature is for the colour word, once painted). The arrows sit a little further from the square (`clamp(26px, 9vw, 44px)`), so a stroke starting just outside the square, or a resting thumb, never steps to another day.
 
 ## Saving: online first, the account is the one truth
 

@@ -518,7 +518,9 @@
 }
 .canvas-word:not(.is-painted) .canvas-hand {
   transform: none;
-  color: #8f8f89;
+  white-space: pre-line; /* two lines: "paint", then how long ago */
+  line-height: 1.1;
+  color: #9a9a94;
 }
 .canvas-word.is-painted .canvas-hand {
   font-size: 30px;
