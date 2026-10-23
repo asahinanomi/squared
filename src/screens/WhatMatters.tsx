@@ -226,7 +226,7 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
                   {lists[kind].length > 1 && (
                     <button
                       className="matters-grip"
-                      aria-label={`move "${e.text}" — arrow keys up or down`}
+                      aria-label={`move "${e.text}": arrow keys up or down`}
                       onPointerDown={gripDown(kind, e.id)}
                       onPointerMove={gripMove}
                       onPointerUp={gripUp}
@@ -248,7 +248,7 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
               </div>
             ),
           )}
-          <button className="matters-add" onClick={() => add(kind)} aria-label={`add — ${hint}`}>
+          <button className="matters-add" onClick={() => add(kind)} aria-label={`add: ${hint}`}>
             <span aria-hidden="true">+</span> add
           </button>
         </section>
@@ -277,7 +277,7 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
           {paintedToday ? 'back to today →' : 'now, paint today →'}
         </button>
       </p>
-      <p className="matters-foot">a guide, not a rule — you still choose the day's colour</p>
+      <p className="matters-foot">a guide, not a rule. you still choose the day's colour</p>
     </main>
   )
 }

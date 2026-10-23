@@ -86,7 +86,7 @@ export function Settings({
       <h2 className="settings-group">your squares</h2>
       <div className="settings-rows">
         {row('square settings', summary, onSquares)}
-        {row('what matters', 'mattered & empty — your compass', onMatters)}
+        {row('what matters', 'mattered & empty, your compass', onMatters)}
         {row('my paintings', 'the paintings you kept', onPaintings)}
       </div>
 

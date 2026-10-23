@@ -39,13 +39,13 @@ Use the **one-liner** wherever there's room. Use the **short label** in tight UI
 
 | colour | short label | one-liner (palette, the meaningful sheet) |
 |---|---|---|
-| 🟩 green | **mattered** | yes — I spent it on what matters. |
-| 🟥 red | **empty** | no — I was busy, but none of it mattered. |
-| ⬜ grey | **slipped** | I don't know — I wasn't paying attention. |
+| 🟩 green | **mattered** | yes, I spent it on what matters. |
+| 🟥 red | **empty** | no, I was busy, but none of it mattered. |
+| ⬜ grey | **slipped** | I don't know… I wasn't paying attention. |
 
-The idea letter writes the same three lines in its own, softer punctuation (see section 9): "yes, I spent it on what matters." · "no, I was busy, but none of it mattered." · "I don't know… I wasn't paying attention."
+The same three lines everywhere: the palette, the meaningful sheet and the idea letter.
 
-Voice rule: all three are **first person** (it's your own conscience, not the app grading you) and follow the skeleton **[yes / no / I don't know] — [honest clause].**
+Voice rule: all three are **first person** (it's your own conscience, not the app grading you) and follow the skeleton **[yes, / no, / I don't know…] [honest clause].**
 
 ## 5. The daily question — LOCKED
 
@@ -81,6 +81,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - No streaks. No scores. No judgment from the app, only your own. Counts are days in colour, never days missed.
 - Warm, quiet, a little tender. It's a conscience, not a coach.
 - Say the honest thing simply ("I wasn't paying attention") rather than dressing it up.
+- **No long dashes (—) in copy**: they read as written by AI. Use a full stop, a comma, a colon or "…". The one exception is the signature, "— nomi".
 - Copy rules: statements in sentence case; buttons, controls and helper text lowercase; "I" always capitalised; "squared" always lowercase.
 - Signed **— nomi** where a human voice appears (the idea page, thanks for feedback).
 - Never techy: no dashboards of numbers, legends or stats for their own sake.
@@ -118,7 +119,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 >
 > I live a very busy life. one day, I looked up and saw so many days had gone that I couldn't say where or how. scary.
 >
-> the hard part wasn't the bad days. it was the busy, even productive days I spent on things that didn't matter; or even worse — days slipped by that I didn't even notice.
+> the hard part wasn't the bad days. it was the busy, even productive days I spent on things that didn't matter. or even worse, days slipped by that I didn't even notice.
 >
 > squared asks one thing each day:
 >
@@ -128,7 +129,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 > 🟥 no, I was busy, but none of it mattered.
 > ⬜ I don't know… I wasn't paying attention.
 >
-> paint one square a day. no streaks, no scores — just an honest log, one day at a time. the days that build a life, the days we have fewer than we think.
+> paint one square a day. no streaks, no scores. just an honest log, one day at a time. the days that build a life, the days we have fewer than we think.
 >
 > I'll try to make mine as green as I can. I hope squared helps you too.
 >
@@ -136,11 +137,11 @@ These describe squares, not feelings. Keep them out of the three-colour language
 >
 > p.s. start by naming what matters to you →
 
-**What matters (compass)** — "what does a meaningful day look like to you? and what feels empty?" · filter: all · mattered · empty · **now, paint today →** (or back to today →) · "a guide, not a rule — you still choose the day's colour"
+**What matters (compass)** — "what does a meaningful day look like to you? and what feels empty?" · filter: all · mattered · empty · **now, paint today →** (or back to today →) · "a guide, not a rule. you still choose the day's colour"
 
 **Settings** — your squares (square settings · what matters · my paintings) · app (sound) · account (export my data · sign out · delete my account)
 
-**A painting** — "October, painted" / "October, so far" · a new month: "a new month. here's the last one —" · **keep this painting ↓** (once kept: download ↓) · "Yours to keep once the month ends."
+**A painting** — "October, painted" / "October, so far" · a new month: "a new month. here's the last one." · **keep this painting ↓** (once kept: download ↓) · "Yours to keep once the month ends."
 
 **Pie / summary** — short labels + counts: 🟩 mattered · 🟥 empty · ⬜ slipped · **unpainted** · **ahead**
 

@@ -50,7 +50,7 @@ export function Feedback({ onDone }: Props) {
               if (state === 'failed' || state === 'limit') setState('writing')
             }}
           />
-          {state === 'failed' && <p className="feedback-error">couldn't send — check your connection and try again</p>}
+          {state === 'failed' && <p className="feedback-error">couldn't send, check your connection and try again</p>}
           {state === 'limit' && (
             <p className="feedback-error">that's today's limit of five messages. thank you, send more tomorrow</p>
           )}

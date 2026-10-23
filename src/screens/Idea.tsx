@@ -30,8 +30,8 @@ export function Idea({ onMatters, onBack }: Props) {
         scary.
       </p>
       <p>
-        the hard part wasn’t the bad days. it was the busy, even productive days I spent on things that didn’t matter;
-        or even worse — days slipped by that I didn’t even notice.
+        the hard part wasn’t the bad days. it was the busy, even productive days I spent on things that didn’t matter.
+        or even worse, days slipped by that I didn’t even notice.
       </p>
       <p>squared asks one thing each day:</p>
       <p>did I spend Today meaningfully?</p>
@@ -45,7 +45,7 @@ export function Idea({ onMatters, onBack }: Props) {
         ))}
       </ul>
       <p>
-        paint one square a day. no streaks, no scores — just an honest log, one day at a time. the days that build a
+        paint one square a day. no streaks, no scores. just an honest log, one day at a time. the days that build a
         life, the days we have fewer than we think.
       </p>
       <p>I’ll try to make mine as green as I can. I hope squared helps you too.</p>
