@@ -77,6 +77,17 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
           {older.length > 0 && (
             <button className="notes-toggle" onClick={toggle} aria-expanded={!hidden}>
               {hidden ? 'show older' : 'hide older'}
+              {/* Down while there's more to open, up to tuck it away. */}
+              <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d={hidden ? 'M6 9l6 6 6-6' : 'M6 15l6-6 6 6'}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </button>
           )}
         </div>

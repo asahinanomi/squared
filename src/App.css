@@ -976,8 +976,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px 8px;
-  margin-bottom: 14px; /* clear of the first note, so a tap on the toggle never lands on it */
+  padding: 0 4px 6px; /* the line sits close under its words: it's the group's header */
+  margin-bottom: 16px; /* clear of the first note, so a tap on the toggle never lands on it */
   border-bottom: 1px solid #e4e3dc; /* a thin line: the notes start here */
 }
 .notes-count {
@@ -986,9 +986,19 @@
 }
 /* show older · hide older: just words, as quiet as the count (it was a keyline pill; it competed with the notes) */
 .notes-toggle {
-  padding: 8px 0 8px 12px; /* a finger-sized target, the words where they are */
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  padding: 0;
   font-size: 15px;
   color: var(--ink-soft);
+}
+/* A finger-sized target, without pushing the line away from the words. */
+.notes-toggle::before {
+  content: '';
+  position: absolute;
+  inset: -12px -8px -10px -12px;
 }
 .notes-toggle:active {
   transform: scale(0.97);

@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 23, 2026, 23:32 UTC_
+_last updated Oct 23, 2026, 23:35 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -69,7 +69,7 @@ In the app the meanings read, in the brand story's words: **green** "yes, I spen
 ## The why note
 
 - Once a square is filled, a small gentle bubble appears with "because…" (asked "why?" until Oct 23, 2026: an open sentence you finish, gentler than a question). The note can be as long as needed, with paragraph breaks (up to 10,000 characters). (Was a single-line input; changed during v1 review.)
-- Notes keep a history: a day can hold several notes, each stamped with when it was written (stored in a `notes` table, migration 0004). They show under the palette, all open and in full, oldest → newest, each stamped like "Wed, Oct 14, 2026 · 4:52 pm". The latest note always shows; a "3 notes … show older / hide older" row tucks the older ones away (remembered on that device): plain words, ink-soft, with a thin line under the row so the notes clearly start there (it was a keyline pill; it competed).
+- Notes keep a history: a day can hold several notes, each stamped with when it was written (stored in a `notes` table, migration 0004). They show under the palette, all open and in full, oldest → newest, each stamped like "Wed, Oct 14, 2026 · 4:52 pm". The latest note always shows; a "3 notes … show older / hide older" row tucks the older ones away (remembered on that device): plain words, ink-soft, with a small chevron (down while there's more to open, up to tuck it away), and a thin line close under the row, its header's rule, so the notes clearly start there (it was a keyline pill; it competed).
 - Tap a note to open it: **update** (saves the change; its time becomes now) or **delete** (a grey button; an in-app "Delete this note? It can't be undone." alert confirms). Swiping a note left also reveals a grey **delete**, with the same alert. Tapping outside leaves it as it was. Below the last note, an **add new note** button always opens an empty box. Painting a day opens "because…" as a new note.
 - Notes save instantly: the box closes (button: **done**) and the note shows at once while it saves in the background. If saving fails, the change is undone and the box reopens with the text and a quiet message. Each request gives up after 10s and retries once on a fresh connection (phones can wake the app on a dead one); the sign-in is renewed as soon as the app comes back on screen.
 - Easy to dismiss — tapping outside closes it; skipping is fine. Never required, never nagging.
