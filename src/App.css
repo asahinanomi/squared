@@ -374,6 +374,10 @@
 }
 .day-roll .day-label {
   grid-area: 1 / 1;
+  /* As tall as the window, so a roll carries a date fully out of view (no half-way stop, no sudden vanish). */
+  height: 36px;
+  display: grid;
+  place-items: center;
 }
 .day-label.is-in-up {
   animation: roll-in-up 0.32s cubic-bezier(0.3, 0.7, 0.3, 1);
@@ -390,21 +394,25 @@
 @keyframes roll-in-up {
   from {
     transform: translateY(100%);
+    opacity: 0;
   }
 }
 @keyframes roll-in-down {
   from {
     transform: translateY(-100%);
+    opacity: 0;
   }
 }
 @keyframes roll-out-up {
   to {
     transform: translateY(-100%);
+    opacity: 0;
   }
 }
 @keyframes roll-out-down {
   to {
     transform: translateY(100%);
+    opacity: 0;
   }
 }
 .day-pick-chevron {
