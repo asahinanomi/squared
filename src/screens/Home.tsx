@@ -3,7 +3,7 @@ import { addDays, fromIso, shortDateParts, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
 import type { Notes } from '../lib/notes'
-import { frameVars, PAINTS, paintDeep, paintHex, WORD } from '../lib/paints'
+import { PAINTS, paintDeep, paintHex, WORD } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 import { Chevron } from './Today'
 
@@ -42,7 +42,7 @@ const DateLine = ({ iso }: { iso: string }) => {
 
 // Home: where you land once today is painted (and when nothing is painted yet); the logo leads here any time.
 // Today first ("Today is in colour.", or the question and "paint today"), then the week in colour, your life in one
-// line, the days you framed (the latest seven), and this month and year so far, as paintings. Every card is a door. No
+// line (with "see my framed days" in it), and this month and year so far, as paintings. Every card is a door. No
 // streaks, no scores. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (L, M, N)
 // Before the first square (squares set, nothing painted): only your days ahead, the question with "paint your
 // first square", and getting started, so there's one thing to do. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (K)
@@ -66,24 +66,32 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
       const c = lifeCounts(profile.born, profile.lifespan, today)
       const lived = Math.round((c.sofar / c.total) * 100)
       return (
-        <button className="home-card home-life" onClick={onLife} aria-label={`a life: ${fmt(c.left)} days ahead`}>
-          <span className="home-head">
-            a life
-            <Chevron dir="right" />
-          </span>
-          {/* Time runs left to right: the past in ink, so the days ahead (the number) sit on the right. */}
-          <span className="home-big is-ahead">
-            {fmt(c.left)}
-            <small>days</small>
-          </span>
-          <span className="home-bar" aria-hidden="true">
-            <i style={{ width: `${(c.sofar / c.total) * 100}%` }} />
-          </span>
-          <span className="home-legend">
-            <span>{lived}% lived</span>
-            <span>{100 - lived}% ahead</span>
-          </span>
-        </button>
+        <section className="home-card home-life">
+          <button className="home-life-open" onClick={onLife} aria-label={`a life: ${fmt(c.left)} days ahead`}>
+            <span className="home-head">
+              a life
+              <Chevron dir="right" />
+            </span>
+            {/* Time runs left to right: the past in ink, so the days ahead (the number) sit on the right. */}
+            <span className="home-big is-ahead">
+              {fmt(c.left)}
+              <small>days</small>
+            </span>
+            <span className="home-bar" aria-hidden="true">
+              <i style={{ width: `${(c.sofar / c.total) * 100}%` }} />
+            </span>
+            <span className="home-legend">
+              <span>{lived}% lived</span>
+              <span>{100 - lived}% ahead</span>
+            </span>
+          </button>
+          {/* The days you framed belong to a life: seen together, as its chapters (once there's one). */}
+          {framed.length > 0 && (
+            <button className="home-life-framed" onClick={onFramed}>
+              see my framed days →
+            </button>
+          )}
+        </section>
       )
     })()
 
@@ -243,23 +251,6 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
       {weekCard}
 
       {life}
-      {/* The days you framed, a life's chapters: the latest seven, each in its frame, once there's one. */}
-      {framed.length > 0 && (
-        <button className="home-card home-framed" onClick={onFramed} aria-label="my framed days">
-          <span className="home-head">
-            framed days
-            <Chevron dir="right" />
-          </span>
-          <span className="home-framed-days">
-            {framed.slice(-7).map((d) => (
-              <span key={d}>
-                <i style={{ background: paintHex(days[d].color), ...frameVars(days[d].color) }} />
-                {d.slice(0, 4)}
-              </span>
-            ))}
-          </span>
-        </button>
-      )}
 
       {(hasMonth || hasYear) && (
         <section className="home-card home-paintings">
