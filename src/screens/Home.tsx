@@ -68,7 +68,6 @@ export function Home({ name, days, notes, profile, steps, onToday, onDay, onFind
     </button>
   ) : (
     <div className="home-card home-ask">
-      <p className="home-blank">today is still paper</p>
       <p className="home-q">
         did I spend <u>Today</u> meaningfully?
       </p>
@@ -141,7 +140,7 @@ export function Home({ name, days, notes, profile, steps, onToday, onDay, onFind
           this week.
         </p>
       ) : (
-        <p className="home-week-line">This week is still paper.</p>
+        <p className="home-week-line">Nothing painted this week yet.</p>
       )}
     </section>
   )
@@ -205,7 +204,7 @@ export function Home({ name, days, notes, profile, steps, onToday, onDay, onFind
       )}
 
       {todayCard}
-      {/* Home asks you to paint: today, then the week, where a day still paper opens with a tap. */}
+      {/* Home asks you to paint: today, then the week, where a day not painted yet opens with a tap. */}
       {weekCard}
       {painted && (
         <button className="pill home-another" onClick={onFind}>

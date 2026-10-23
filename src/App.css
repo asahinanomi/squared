@@ -4033,11 +4033,6 @@ button.home-card:active {
   text-align: center;
   padding: 22px 18px;
 }
-.home-blank {
-  margin: 0;
-  font-size: 13px;
-  color: var(--muted);
-}
 .home-q {
   margin: 6px 0 16px;
   font-family: var(--font-reflect);

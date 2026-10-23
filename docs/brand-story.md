@@ -78,7 +78,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 | state | term | where |
 |---|---|---|
-| lived but not painted | **unpainted**; on home, **paper** ("today is still paper", "This week is still paper.") | the pie, home |
+| lived but not painted | **unpainted** ("Nothing painted this week yet." on home; "paper" read odd on screen, Oct 23, 2026: the idea of paper stays in the design, not the words) | the pie, home |
 | not yet lived | **ahead** ("10,962 days", "35% ahead", "and 13,709 still ahead to paint") | home, onboarding, the pie |
 | painted | **in colour** ("Today is in colour.", "5 days in colour this week.", "18 days in colour") | home, the paintings |
 | a day you want to keep, any colour | **framed** ("frame it", "framed days") | the day, the list, framed days (my days) |
@@ -120,7 +120,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **Home**
 - Before the first square: greeting · **10,962** / "days ahead of you." / "Make each one meaningful, starting with today." · the question · **paint your first square** · or paint yesterday · "getting started" (learned what squared is · named what matters · set how many squares · paint your first square)
-- Today not painted yet: greeting · "today is still paper" · the question · **paint today** · paint another day · this week
+- Today not painted yet: greeting · the question · **paint today** · paint another day · this week
 - Today painted: greeting · **Today is in colour.** · today's square and note · this week · **paint another day**
 - This week: "5 days in colour this week." · a full week: **"Every day this week, in colour."** 🌈 (a small rainbow in your week's colours) · "You showed up for every single one."
 
