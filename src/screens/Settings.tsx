@@ -81,7 +81,7 @@ export function Settings({ profile, onSquares, email, onSignOut, onDeleted, onPr
         <div className="settings-row is-lock">
           <span>
             <span className="settings-label">lock when I leave</span>
-            <span className="settings-sub">signs out when you're away this long</span>
+            <span className="settings-sub">sign out after I’ve been away</span>
           </span>
           <span className="seg settings-seg" role="group" aria-label="Lock when I leave">
             {LOCK_CHOICES.map(([id, label]) => (

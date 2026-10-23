@@ -1,12 +1,12 @@
 import { onSave, saveState } from './save'
 
 // Lock when I leave: a journal locks itself. When squared has been away (another app, the phone locked, closed) longer
-// than you chose, it signs out; signing in again with Google is the unlock. "immediately" allows 30 seconds, so a
-// quick glance at a message never loses a half-written note. There's no "never". Remembered on the device.
+// than you chose, it signs out; signing in again with Google is the unlock. The shortest is 30 seconds (as an
+// iPhone's shortest Auto-Lock), so a quick glance at a message never loses a half-written note. There's no "never". Remembered on the device.
 
 export type LockAfter = 'now' | '15' | '30'
 export const LOCK_CHOICES: [LockAfter, string][] = [
-  ['now', 'immediately'],
+  ['now', '30 sec'],
   ['15', '15 min'],
   ['30', '30 min'],
 ]

@@ -8,7 +8,7 @@ What has to be true before squared opens to beta testers, and what comes after. 
 
 - [x] **Saving is online first**: every change goes straight to the account; "Not saved" with try again / discard if it can't. No device copies.
 - [x] **What matters, one row per line**, with history (migrations 0017, 0018).
-- [x] **squared locks itself**: lock when I leave (immediately by default, 15 or 30 min), and sign out is the menu's last line.
+- [x] **squared locks itself**: lock when I leave (30 sec by default, 15 or 30 min), and sign out is the menu's last line.
 - [x] **Every table is locked to its owner** (row-level security on all of them). No secret keys in the app or the repo.
 - [x] **Crash screen** instead of a blank page; crashes and failed saves are written to `client_errors`.
 - [x] **Security headers** (content policy, no framing, HTTPS only).
