@@ -56,7 +56,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const [legalFrom, setLegalFrom] = useState<Screen>('settings')
   const legalOpened = useRef(false) // opened from inside the app (not straight from its web address)
 
-  // A life opened from my days shows "‹ my days" until you move on (another view, or zooming within a life).
+  // A life (or the list) opened from my days shows "‹ my days" until you move on (another view, or zooming).
   const [lifeBack, setLifeBack] = useState(false)
   const setScreen = (next: Screen) => {
     const a = LADDER.indexOf(screen)
@@ -64,7 +64,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setMotion(a < 0 || b < 0 || a === b ? null : b > a ? 'out' : 'in')
     setMag(0)
     if (next !== 'today') setDayFromList(false)
-    if (next !== 'life') setLifeBack(false)
+    if (next !== 'life' && next !== 'list') setLifeBack(false)
     setScreenValue(next)
   }
   // The three views of a life sit on the ladder too: years → months → days is zooming out.
@@ -130,6 +130,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   // It opens at the level that matches the squares (a life → years, a year → months, a month → days); its
   // switch goes back where you came from, or — if you zoomed within the list — to the squares at that level.
   const toggleList = (at?: string) => {
+    setLifeBack(false)
     const day = at ?? todayIso()
     if (screen === 'list') {
       if (!listZoomed) return setScreen(listFrom)
@@ -147,6 +148,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setScreen('list')
   }
   const listIn = (at: string) => {
+    setLifeBack(false)
     // From the days: today's square, and zooming out of it comes back here.
     if (listRes === 'days') {
       setDate(todayIso())
@@ -159,6 +161,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   }
   // The capsule under the life's title jumps straight to a level of the list, where you are.
   const listTo = (r: Resolution) => {
+    setLifeBack(false)
     setListOnly(null)
     setListZoomed(true)
     setListFocus(listMid.current())
@@ -166,6 +169,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   }
   const listOut = (at: string) => {
     if (listRes === 'years') return false
+    setLifeBack(false)
     setListOnly(null)
     setListZoomed(true)
     setListFocus(at)
@@ -183,6 +187,16 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const openSettings = () => setScreenValue('settings')
   // my days (the menu): a life as a pie, all your squares, what matters, your framed days and paintings.
   const openMyDays = () => setScreenValue('mydays')
+  // my days' bar: the list of days, on today (its squares switch goes to the month, the same level).
+  const openListFromMyDays = () => {
+    setListFrom('month')
+    setListOnly(null)
+    setListRes('days')
+    setListZoomed(false)
+    setListFocus(todayIso())
+    setScreen('list')
+    setLifeBack(true)
+  }
   const openLifeFromMyDays = () => {
     goLifeDays()
     if (profile) setLifeBack(true)
@@ -350,6 +364,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     openFramed,
     openMyDays,
     openLifeFromMyDays,
+    openListFromMyDays,
     lifeBack,
     openPie,
     endTrySquares,

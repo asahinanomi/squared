@@ -4662,9 +4662,12 @@ button.home-card:active {
   overflow: hidden;
 }
 
-/* my days: this month and year so far, as paintings, over the rows. */
-.my-days-paintings {
+/* my days: a life as one bar first, then this month and year so far, as paintings, over the rows. */
+.my-days-life {
   margin-top: 22px;
+}
+.my-days-paintings {
+  margin-top: 12px;
 }
 /* The pie, opened from my days: its way back, at the top left. */
 .pie-back {

@@ -56,7 +56,7 @@ export type ScreensProps = {
 }
 
 // Which screen shows, and what each one is given. Every screen gets what it needs from the app's pieces (the
-// navigation, the account's data, the day's actions, what matters, my paintings); nothing here keeps state.
+// navigation, the account's data, the day's actions, what matters, paintings); nothing here keeps state.
 export function Screens({ nav, acc, act, lists, wall, openPainting, painter, email, signOut, ui }: ScreensProps) {
   const { screen, setScreenValue, date, mag, focal, lifeRes, setLifeRes, listRes, listMid } = nav
   const { days, notes, profile } = acc
@@ -129,6 +129,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
         days={days}
         profile={profile}
         onPainting={openPainting}
+        onList={nav.openListFromMyDays}
         onPie={nav.openPie}
         onSquares={nav.openLifeFromMyDays}
         onMatters={() => nav.openMatters('mydays')}
@@ -220,7 +221,14 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
       />
     )
   if (screen === 'list') {
-    const head = profile && <LifeHead profile={profile} current={listRes} onPick={nav.listTo} />
+    const head = profile && (
+      <LifeHead
+        profile={profile}
+        current={listRes}
+        onPick={nav.listTo}
+        onBack={nav.lifeBack ? nav.openMyDays : undefined}
+      />
+    )
     return listRes === 'days' ? (
       <DaysList
         key={`days-${nav.listOnly}`}

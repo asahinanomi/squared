@@ -16,7 +16,7 @@ type Props = {
   backLabel: string
 }
 
-// my framed days: the days you framed, any colour, oldest first, like the chapters of a life. Only what matters on
+// framed days (in my days): the days you framed, any colour, oldest first, like the chapters of a life. Only what matters on
 // each card: its framed square, the date and weekday, and up to three lines of what you wanted to remember.
 // Tap one to open the day. Lab: https://claude.ai/artifact/Ttid43gnYW9XzNRibK5QVc (G, without the age)
 export function Framed({ days, notes, loadNotes, onDay, onBack, backLabel }: Props) {
@@ -30,7 +30,7 @@ export function Framed({ days, notes, loadNotes, onDay, onBack, backLabel }: Pro
         <Chevron dir="left" />
         {backLabel}
       </button>
-      <h1 className="settings-title">my framed days</h1>
+      <h1 className="settings-title">framed days</h1>
       {framed.length ? (
         <ol className="framed-list">
           {framed.map((iso) => {

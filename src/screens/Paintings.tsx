@@ -15,7 +15,7 @@ type Props = {
   onBack: () => void
 }
 
-// my paintings (in my days): the paintings you kept, one to a row, big, newest first. No labels: each is signed.
+// paintings (in my days): the paintings you kept, one to a row, big, newest first. No labels: each is signed.
 // Tap one to look at it again; swipe it left to take it down (it can always be kept again).
 export function Paintings({ kept, days, name, onOpen, onRemove, onBack }: Props) {
   // Swipe a painting left to take it down, as on what matters; it asks first.
@@ -27,7 +27,7 @@ export function Paintings({ kept, days, name, onOpen, onRemove, onBack }: Props)
         <Chevron dir="left" />
         {'my days'}
       </button>
-      <h1 className="settings-title">my paintings</h1>
+      <h1 className="settings-title">paintings</h1>
       {kept.length ? (
         <div className="gallery-wall">
           {kept.map((p) => (

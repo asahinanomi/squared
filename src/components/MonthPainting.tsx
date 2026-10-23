@@ -13,14 +13,14 @@ type Props = {
   /** The signature: the painter's first name. */
   name: string
   onClose: () => void
-  /** Kept: it hangs in my paintings. */
+  /** Kept: it hangs in paintings (my days). */
   onKeep?: (month: string) => void
   /** Already kept: the button only downloads it again. */
   kept?: boolean
 }
 
 // A new month: the last one, shown once as a finished painting (see lib/painting), framed and signed. Any finished
-// month opens it again from its picture icon; kept ones hang in my paintings (settings); this month shows "so far", unsigned. No counts: it's a painting, not a score. "keep this painting" saves it as a picture (on a phone, the share sheet: Save to Photos, or send it).
+// month opens it again from its picture icon; kept ones hang in paintings (my days); this month shows "so far", unsigned. No counts: it's a painting, not a score. "keep this painting" saves it as a picture (on a phone, the share sheet: Save to Photos, or send it).
 export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kept }: Props) {
   const [busy, setBusy] = useState(false)
   const art = useRef<HTMLCanvasElement>(null)

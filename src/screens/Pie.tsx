@@ -121,7 +121,7 @@ export function Pie({ days, profile, scope, onScope, onSee, onBack }: Props) {
         my days
       </button>
       <div className="life-head">
-        <h1 className="life-title">a life pie, in slices</h1>
+        <h1 className="life-title">a life, in slices</h1>
       </div>
 
       <div className="seg" role="group" aria-label="Count out of">

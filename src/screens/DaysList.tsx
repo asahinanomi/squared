@@ -35,7 +35,7 @@ type Props = {
   only?: Only
   /** Choose what the list shows: one kind of day, or all (null). */
   onOnly?: (only: Only | null) => void
-  /** A framed card's "framed" tag: my framed days. */
+  /** A framed card's "framed" tag: framed days. */
   onFramedDays?: () => void
   /** "only with notes" needs every note, not just the months seen so far. */
   onAllNotes?: () => void
@@ -144,7 +144,7 @@ function DayCard({
         </button>
         {/* A framed day: a small tag that shows only the framed ones. */}
         {day?.framed && onFramed && (
-          <button className="day-card-framed" onClick={onFramed} aria-label="Open my framed days">
+          <button className="day-card-framed" onClick={onFramed} aria-label="Open framed days">
             framed
           </button>
         )}

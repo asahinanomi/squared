@@ -81,11 +81,11 @@ These describe squares, not feelings. Keep them out of the three-colour language
 | lived but not painted | **unpainted**; on home, **paper** ("today is still paper", "This week is still paper.") | the pie, home |
 | not yet lived | **ahead** ("10,962 days", "35% ahead", "and 13,709 still ahead to paint") | home, onboarding, the pie |
 | painted | **in colour** ("Today is in colour.", "5 days in colour this week.", "18 days in colour") | home, the paintings |
-| a day you want to keep, any colour | **framed** ("frame this day", "my framed days") | the day, the list, my framed days |
+| a day you want to keep, any colour | **framed** ("frame this day", "my framed days") | the day, the list, framed days (my days) |
 
 ## 8. Voice principles
 
-- **Squares and days.** A **square** is the thing you paint: "paint its square", "start over under the square", "how many squares do you have?", "your squares and notes". A **day** is time you live: "days in colour", "10,961 days ahead", "my days", "my framed days". A place named for looking back says days; a thing you touch with the brush says square.
+- **Squares and days.** A **square** is the thing you paint: "paint its square", "start over under the square", "how many squares do you have?", "your squares and notes". A **day** is time you live: "days in colour", "10,961 days ahead", "my days", "framed days". A place named for looking back says days; a thing you touch with the brush says square.
 
 - First person, plain-spoken. Honest, never preachy.
 - No streaks. No scores. No judgment from the app, only your own. Counts are days in colour, never days missed.
@@ -150,7 +150,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **What matters (compass)** — "what does a meaningful day look like to you? and what feels empty?" · filter: all · worth it · regret · **now, paint today →** (or back to today →) · "a guide, not a rule. you still choose the day's colour"
 
-**my days** (the menu) — October, so far · 2026, so far · a life pie · a life · what matters · my framed days · my paintings
+**my days** (the menu) — a life (the bar) · October, so far · 2026, so far · what matters · a life, in squares · a life, in slices · framed days · paintings. Each row is named after the page it opens; none says "my", since the page does.
 
 **Settings** — square settings · sound · export my data · sign out · delete my account
 
