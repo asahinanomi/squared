@@ -1,3 +1,4 @@
+import { frameVars, type Paint } from '../lib/paints'
 import { useState } from 'react'
 import type { Note } from '../lib/notes'
 import { ConfirmDialog } from './ConfirmDialog'
@@ -6,8 +7,8 @@ import { SwipeRow } from './SwipeRow'
 
 type Props = {
   notes: Note[]
-  /** A framed day: its pinned notes are the green "to remember" cards. */
-  framed?: boolean
+  /** A framed day's colour: its pinned notes are "to remember" cards in that paint. */
+  framed?: Paint
   onOpen: (n: Note) => void
   onAdd: () => void
   onDelete: (n: Note) => Promise<void>
@@ -44,7 +45,7 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
       onOpenChange={(o) => setSwiped(o ? n.id : null)}
       onDelete={() => setAsking(n)}
     >
-      <NoteCard note={n} framed={framed} onOpen={() => onOpen(n)} />
+      <NoteCard note={n} framed={!!framed} onOpen={() => onOpen(n)} />
     </SwipeRow>
   )
 
@@ -69,7 +70,7 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
   const older = rest.slice(0, -1)
   const latest = rest.at(-1)
   return (
-    <div className="notes">
+    <div className="notes" style={framed ? frameVars(framed) : undefined}>
       {notes.length > 0 && (
         <div className="notes-head">
           <span className="notes-count">{`${notes.length} ${notes.length === 1 ? 'note' : 'notes'}`}</span>

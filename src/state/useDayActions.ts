@@ -33,19 +33,16 @@ export function useDayActions(
                 ...d[date],
                 color,
                 changedOn: d[date].color !== color ? todayIso() : d[date].changedOn,
-                // A frame is for a day that mattered most: painting it another colour takes it off.
-                framed: color === 'green' ? d[date].framed : undefined,
               }
             : { backfilled: !paintedFresh(date), paintedOn: todayIso(), color },
         }
       })
-      if (color !== 'green' && daysNow.current[date]?.framed) save({ k: 'framed', date, framed: false })
       save({ k: 'color', date, color })
     },
     [date], // eslint-disable-line react-hooks/exhaustive-deps
   )
 
-  // Frame (or unframe) a day that mattered most.
+  // Frame (or unframe) a day you want to keep, any colour.
   const onFrame = () => {
     const day = date
     const was = !!days[day]?.framed

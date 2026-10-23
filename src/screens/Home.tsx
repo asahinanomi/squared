@@ -5,7 +5,6 @@ import { lifeCounts } from '../lib/life'
 import type { Notes } from '../lib/notes'
 import { PAINTS, paintDeep, paintHex, WORD } from '../lib/paints'
 import type { Profile } from '../lib/profile'
-import { OnThisDay } from '../components/OnThisDay'
 import { Chevron } from './Today'
 
 type Step = { label: string; done: boolean; go: () => void }
@@ -21,6 +20,8 @@ type Props = {
   onLife: () => void
   onDay: (iso: string) => void
   onPainting: (period: string) => void
+  /** my framed days: the link shows once a day is framed. */
+  onFramed: () => void
 }
 
 const greeting = (name: string) => {
@@ -40,12 +41,12 @@ const DateLine = ({ iso }: { iso: string }) => {
 }
 
 // Home: where you land once today is painted (and when nothing is painted yet); the logo leads here any time.
-// Today first ("Today is in colour.", or the question and "paint today"), then the week in colour, a month and a
-// year ago today, your life in one line, and this month and year so far, as paintings. Every card is a door. No
+// Today first ("Today is in colour.", or the question and "paint today"), then the week in colour, your life in one
+// line (and my framed days under it), and this month and year so far, as paintings. Every card is a door. No
 // streaks, no scores. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (L, M, N)
 // Before the first square (squares set, nothing painted): only your days ahead, the question with "paint your
 // first square", and getting started, so there's one thing to do. Lab: https://claude.ai/artifact/EJ5eciFVqMwawnNmeDbezr (K)
-export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay, onPainting }: Props) {
+export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay, onPainting, onFramed }: Props) {
   const today = todayIso()
   const painted = days[today]
   const month = today.slice(0, 7)
@@ -235,15 +236,16 @@ export function Home({ name, days, notes, profile, steps, onToday, onLife, onDay
       )}
 
       {todayCard}
-      {/* Today painted: the same date looked back on comes next, then the wider week. Not yet: the week stays
-          under the question, part of the invitation to paint. */}
-      {!painted && weekCard}
-
-      <OnThisDay days={days} notes={notes} onDay={onDay} />
-
-      {painted && weekCard}
+      {/* Home asks you to paint: today, then the week, where a day still paper opens with a tap. */}
+      {weekCard}
 
       {life}
+      {/* The days you framed, a life's chapters: a quiet link under a life, once there's one. */}
+      {Object.values(days).some((d) => d.framed) && (
+        <button className="home-framed" onClick={onFramed}>
+          my framed days →
+        </button>
+      )}
 
       {(hasMonth || hasYear) && (
         <section className="home-card home-paintings">

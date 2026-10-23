@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { brushTip } from '../lib/brush'
-import { paintDeep, paintHex, WORD, type Paint } from '../lib/paints'
+import { frameVars, paintDeep, paintHex, WORD, type Paint } from '../lib/paints'
 import { brushSound, brushStop, settleSound, wakeSound } from '../lib/sound'
 
 type Props = {
@@ -275,10 +275,10 @@ export function PaintCanvas({ saved, framed, loaded, stamp, onDryBrush, onFilled
         className={
           'canvas' +
           (settling ? ' is-settling' : '') +
-          (framed && saved === 'green' ? ' is-framed' : '') +
+          (framed && saved ? ' is-framed' : '') +
           (shining ? ' is-shining' : '')
         }
-        style={saved ? ({ '--paint': paintHex(saved) } as React.CSSProperties) : undefined}
+        style={saved ? frameVars(saved) : undefined}
         aria-label={saved ? `Painted ${saved}` : 'Unpainted square'}
       >
         {/* The primed face, inside a thin raw-canvas margin where the priming stops: weave while blank, the

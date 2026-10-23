@@ -6,7 +6,6 @@ import { SyncStatus } from './components/SyncStatus'
 import { Topbar } from './components/Topbar'
 import { Waiting } from './components/Waiting'
 import { ViewSwitch } from './components/ZoomBar'
-import { monthsAgo, todayIso } from './lib/dates'
 import type { Why } from './lib/notes'
 import type { Paint } from './lib/paints'
 import { backFromGoogle, supabase } from './lib/supabase'
@@ -47,16 +46,9 @@ export default function App() {
   const wall = useKept(session)
   const painting = usePaintingArrival(acc.days, !!userId && acc.checking)
 
-  // Notes load a month at a time: the day you're on, and on home a month and a year ago today.
+  // Notes load a month at a time: the day you're on.
   const { loadNotes } = acc
   useEffect(() => loadNotes(date), [loadNotes, date])
-  useEffect(() => {
-    if (screen !== 'home') return
-    for (const n of [1, 12]) {
-      const iso = monthsAgo(todayIso(), n)
-      if (iso) loadNotes(iso)
-    }
-  }, [screen, loadNotes])
 
   useEffect(() => {
     document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'

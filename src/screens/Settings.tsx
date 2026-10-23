@@ -23,6 +23,7 @@ type Props = {
   onTerms: () => void
   onExport: () => void
   onPaintings: () => void
+  onFramed: () => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
@@ -41,6 +42,7 @@ export function Settings({
   onTerms,
   onExport,
   onPaintings,
+  onFramed,
 }: Props) {
   const summary = profile
     ? [
@@ -88,6 +90,7 @@ export function Settings({
         {row('square settings', summary, onSquares)}
         {row('what matters', 'worth it & regret, your compass', onMatters)}
         {row('my paintings', 'the paintings you kept', onPaintings)}
+        {row('my framed days', 'the days you framed, oldest first', onFramed)}
       </div>
 
       <h2 className="settings-group">app</h2>

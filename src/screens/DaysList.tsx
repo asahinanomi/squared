@@ -5,7 +5,7 @@ import { glide, pulse } from '../lib/backToToday'
 import { addDays, isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Day, type Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
-import { paintHex, squareFill, WORD, type Paint } from '../lib/paints'
+import { frameVars, paintHex, squareFill, WORD, type Paint } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { monthsBetween, shiftMonth } from './Month'
 import { PaintingButton } from '../components/PaintingButton'
@@ -122,6 +122,7 @@ function DayCard({
         'day-card' + (day ? ' is-painted' : '') + (iso === today ? ' is-today' : '') + (day?.framed ? ' is-framed' : '')
       }
       data-iso={iso}
+      style={day?.framed ? frameVars(day.color) : undefined}
     >
       <span
         className={'day-card-swatch' + (day?.framed ? ' is-framed' : '')}

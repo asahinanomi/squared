@@ -32,7 +32,7 @@ type Props = {
   onDate: (iso: string) => void
   /** Wipe the day's square back to blank (after a confirm). */
   onWipe: () => void
-  /** Frame (or unframe) a day that mattered most. */
+  /** Frame (or unframe) a day you want to keep. */
   onFrame: () => void
   /** Pin a note to the top of its day, or unpin it. */
   onPinNote: (note: Note) => void
@@ -309,12 +309,10 @@ export function Today(props: Props) {
               <button className="day-wipe" onClick={() => setWiping(true)}>
                 start over
               </button>
-              {/* A day that mattered most: framed in a darker green. Green days only. */}
-              {day.color === 'green' && (
-                <button className="day-wipe" onClick={props.onFrame} aria-pressed={!!day.framed}>
-                  {day.framed ? 'unframe' : 'frame this day'}
-                </button>
-              )}
+              {/* A day you want to keep, any colour: framed in its paint's deeper shade. */}
+              <button className="day-wipe" onClick={props.onFrame} aria-pressed={!!day.framed}>
+                {day.framed ? 'unframe' : 'frame this day'}
+              </button>
             </div>
           )}
 
@@ -376,7 +374,7 @@ export function Today(props: Props) {
           <NotesList
             key={date}
             notes={notes}
-            framed={!!day?.framed}
+            framed={day?.framed ? day.color : undefined}
             onOpen={(n) => onOpenWhy(n)}
             onAdd={() => onOpenWhy()}
             onDelete={onDeleteNote}

@@ -1,6 +1,6 @@
 import { fromIso, isoDate, monthCells, todayIso } from './dates'
 import type { Days } from './days'
-import { FRAME, PAINTS } from './paints'
+import { frameOf, PAINTS } from './paints'
 
 // A finished month, as a painting: each day a soft pool of its paint where it falls in the month, the brush's
 // bristles as round drops on top, unpainted days in the raw canvas's linen. Framed in flat grey with a thin mat,
@@ -64,7 +64,7 @@ function colours(month: string, days: Days): (Rgb | null)[] {
     if (!iso || iso > todayIso()) return null // before the 1st, or not lived yet (this month, so far)
     const d = days[iso]
     if (!d) return RAW
-    return hexRgb(d.framed && d.color === 'green' ? FRAME : PAINTS.find((p) => p.id === d.color)!.hex)
+    return hexRgb(d.framed ? frameOf(d.color) : PAINTS.find((p) => p.id === d.color)!.hex)
   })
 }
 

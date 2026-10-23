@@ -633,9 +633,9 @@
   gap: 6px;
 }
 /* Framing didn't save: said quietly under the square. */
-/* A framed day: the canvas edge in a darker green (its paint, a third toward ink), thicker. */
+/* A framed day: the canvas edge in its paint's deeper shade (a third toward ink), thicker. Any colour. */
 .canvas.is-framed {
-  border: 5px solid #53735c;
+  border: 5px solid var(--frame, #53735c);
 }
 /* A framed square, small (the list's swatch, the month's day): a dark green frame, a sliver of raw canvas, then
    the paint — a little framed canvas. */
@@ -673,23 +673,26 @@
 }
 .day-card .day-card-swatch.is-framed {
   box-shadow:
-    inset 0 0 0 2px #53735c,
+    inset 0 0 0 2px var(--frame, #53735c),
     inset 0 0 0 4px #ebe6da !important;
 }
 .month-day.is-framed {
-  background: #6e9b7b !important; /* the day's own green paint, framed: a dark green ring, a raw sliver, a light number */
+  background: var(
+    --paint,
+    #6e9b7b
+  ) !important; /* the day's own paint, framed: a deeper ring, a raw sliver, a light number */
   color: #f7f5ef;
   box-shadow:
-    inset 0 0 0 2.5px #53735c,
+    inset 0 0 0 2.5px var(--frame, #53735c),
     inset 0 0 0 4px #ebe6da;
 }
 .month-day.is-framed .month-num,
 .month-day.is-framed .month-wd {
   color: #f7f5ef !important;
 }
-/* A framed day's card in the list: framed like its canvas, in the frame's dark green. */
+/* A framed day's card in the list: framed like its canvas, in its frame's colour. */
 .day-card.is-painted.is-framed {
-  box-shadow: inset 0 0 0 3px #53735c !important;
+  box-shadow: inset 0 0 0 3px var(--frame, #53735c) !important;
 }
 .day-card-pin {
   display: block;
@@ -697,7 +700,7 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: #53735c; /* the frame's green: the note it keeps */
+  color: var(--frame, #53735c); /* the frame's colour: the note it keeps */
 }
 .day-card-pin.is-plain {
   color: var(--muted);
@@ -978,7 +981,7 @@
   pointer-events: none;
 }
 .swipe:has(.is-remember)::after {
-  box-shadow: inset 0 0 0 1px #53735c;
+  box-shadow: inset 0 0 0 1px var(--frame, #53735c);
 }
 .note-card {
   display: block;
@@ -997,12 +1000,12 @@
   font-size: 14px;
   color: var(--ink-soft);
 }
-/* A framed day's pinned note: the frame's dark green, light text, "to remember" on top. */
+/* A framed day's pinned note: the day's own paint, light text, "to remember" on top. */
 .note-card.is-remember {
-  background: #6e9b7b; /* the day's own green, as on its canvas */
+  background: var(--paint, #6e9b7b); /* the day's own paint, as on its canvas */
   box-shadow: none;
-  /* The same thin keyline as every note (1px), in the frame's green; a border, so it follows the corners. */
-  border: 1px solid #53735c;
+  /* The same thin keyline as every note (1px), in the frame's colour; a border, so it follows the corners. */
+  border: 1px solid var(--frame, #53735c);
 }
 .note-pin {
   display: block;
@@ -4290,55 +4293,15 @@ button.home-card:active {
   border-bottom: 2px solid #fff;
   transform: rotate(-45deg) translate(1px, -1px);
 }
-/* a month and a year ago today */
-.home-ago {
-  padding: 6px 18px;
-}
-.home-ago button {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 10px 0;
-  text-align: left;
-  font-size: 15px;
-  line-height: 1.45;
-  color: var(--ink-soft);
-}
-.home-ago button + button {
-  border-top: 1px solid #ecece5;
-}
-.home-ago b {
-  color: var(--ink);
-}
-.home-ago-text {
-  flex: 1;
-}
-.home-ago button > svg {
-  flex: none;
+/* my framed days: a quiet text link under a life (navigation, so a link, not a card). */
+.home-framed {
   align-self: center;
-  width: 18px;
-  height: 18px;
-  color: var(--faint);
-}
-.home-ago-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-/* the note: one line, then an ellipsis; a note is something you read, so ink-soft, as on today's card */
-.home-ago-note {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  margin-top: -6px;
+  padding: 6px;
+  font-size: 15px;
   color: var(--ink-soft);
-}
-.home-dot {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  margin-top: 1px;
-  border-radius: 5px;
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
 }
 /* this month and this year so far, side by side, each titled above (still unsigned) */
 .home-paintings {
@@ -4571,4 +4534,65 @@ button.home-card:active {
   text-underline-offset: 4px;
   white-space: nowrap;
   animation: fade-in 0.25s ease-out;
+}
+
+/* my framed days: oldest first, each a small framed square, its date and age, and what you wanted to remember. */
+.framed-list {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.framed-day {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 1px #ecece5;
+}
+.framed-day:active {
+  transform: scale(0.99);
+}
+/* A little framed canvas: its frame, a sliver of raw canvas, then the paint (as in the list). */
+.framed-square {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 0 2.5px var(--frame),
+    inset 0 0 0 4.5px #ebe6da;
+}
+.framed-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding-top: 1px;
+}
+.framed-date {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.framed-age {
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+/* What you wanted to remember: two lines, then an ellipsis. */
+.framed-note {
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: pre-line;
 }

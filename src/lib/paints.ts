@@ -19,12 +19,16 @@ export const counted = (p: Paint, n: number) =>
 export const paintHex = (p: Paint) => PAINTS.find((x) => x.id === p)!.hex
 
 /** A square in an overview: the soft shade, or the full paint for a framed day (it pops among the soft ones). */
-export const squareFill = (p: Paint, framed?: boolean) =>
-  framed && p === 'green' ? paintHex(p) : PAINTS.find((x) => x.id === p)!.soft
+export const squareFill = (p: Paint, framed?: boolean) => (framed ? paintHex(p) : PAINTS.find((x) => x.id === p)!.soft)
 
 /** A deeper shade of a paint (its hue, mixed toward ink): the word written on its square, tone on tone. */
 /** A framed day's frame: its paint, a third of the way toward ink (#53735C for green). */
 export const FRAME = '#53735C'
+const FRAMES: Record<Paint, string> = { green: FRAME, red: '#874D48', grey: '#656560' }
+/** Any colour can be framed (a day you want to keep): the frame is that paint's own deeper shade. */
+export const frameOf = (p: Paint) => FRAMES[p]
+/** The CSS a framed thing reads its colours from: --paint (the day's paint) and --frame (its frame). */
+export const frameVars = (p: Paint) => ({ '--paint': paintHex(p), '--frame': frameOf(p) }) as React.CSSProperties
 
 export function paintDeep(p: Paint): string {
   const n = parseInt(paintHex(p).slice(1), 16)

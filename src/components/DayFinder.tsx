@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fromIso, monthCells } from '../lib/dates'
+import { ageOn, fromIso, monthCells } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { squareFill } from '../lib/paints'
 import { Sheet } from './Sheet'
@@ -19,14 +19,6 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 const pad = (n: number) => String(n).padStart(2, '0')
 
-/** How old you were on a day: whole years and months since your birth date. */
-function ageOn(born: string, iso: string) {
-  const [by, bm, bd] = born.split('-').map(Number)
-  const [y, m, d] = iso.split('-').map(Number)
-  let months = (y - by) * 12 + (m - bm) - (d < bd ? 1 : 0)
-  if (months < 0) months = 0
-  return { years: Math.floor(months / 12), months: months % 12 }
-}
 const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`
 
 // Find a day from your past the way memory does: which year (with how old you were), which month, then the day.

@@ -81,7 +81,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 | lived but not painted | **unpainted**; on home, **paper** ("today is still paper", "This week is still paper.") | the pie, home |
 | not yet lived | **ahead** ("10,962 days", "35% ahead", "and 13,709 still ahead to paint") | home, onboarding, the pie |
 | painted | **in colour** ("Today is in colour.", "5 days in colour this week.", "18 days in colour") | home, the paintings |
-| a day that mattered most | **framed** ("frame this day") | the day, the list |
+| a day you want to keep, any colour | **framed** ("frame this day", "my framed days") | the day, the list, my framed days |
 
 ## 8. Voice principles
 
@@ -117,8 +117,8 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **Home**
 - Before the first square: greeting · **10,962** / "days ahead of you." / "Make each one meaningful, starting with today." · the question · **paint your first square** · or paint yesterday · "getting started" (learned what squared is · named what matters · set how many squares · paint your first square)
-- Today not painted yet: greeting · "today is still paper" · the question · **paint today** · this week · a month and a year ago today · a life · this month and year so far
-- Today painted: greeting · **Today is in colour.** · today's square and note · a month and a year ago today · this week · a life ("10,962 days", "65% lived", "35% ahead") · "October, so far" / "2026, so far" ("18 days in colour")
+- Today not painted yet: greeting · "today is still paper" · the question · **paint today** · this week · a life · "my framed days →" · this month and year so far
+- Today painted: greeting · **Today is in colour.** · today's square and note · this week · a life ("10,962 days", "65% lived", "35% ahead") · "October, so far" / "2026, so far" ("18 days in colour")
 - This week: "5 days in colour this week." · a full week: **"Every day this week, in colour."** 🌈 (a small rainbow in your week's colours) · "You showed up for every single one."
 
 **The idea page — LOCKED COPY** (— nomi; lowercase; keep verbatim):
@@ -147,7 +147,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **What matters (compass)** — "what does a meaningful day look like to you? and what feels empty?" · filter: all · worth it · regret · **now, paint today →** (or back to today →) · "a guide, not a rule. you still choose the day's colour"
 
-**Settings** — your squares (square settings · what matters · my paintings) · app (sound) · account (export my data · sign out · delete my account)
+**Settings** — your squares (square settings · what matters · my paintings · my framed days) · app (sound) · account (export my data · sign out · delete my account)
 
 **A painting** — "October, painted" / "October, so far" · a new month: "a new month. here's the last one." · **keep this painting ↓** (once kept: download ↓) · "Yours to keep once the month ends."
 

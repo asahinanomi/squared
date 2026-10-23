@@ -3,7 +3,7 @@ import { ZoomBar } from '../components/ZoomBar'
 import { fromIso, isoDate, longDate, monthCells, monthTitle, todayIso, dayCaption } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { useBackToToday } from '../lib/backToToday'
-import { squareFill } from '../lib/paints'
+import { frameVars, squareFill } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { useLadderScroll } from '../lib/useLadderScroll'
 import { PaintingButton } from '../components/PaintingButton'
@@ -132,7 +132,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
                       (before ? ' is-before' : '') +
                       (day?.framed ? ' is-framed' : '')
                     }
-                    style={fill ? { background: fill } : undefined}
+                    style={fill ? { background: fill, ...(day?.framed ? frameVars(day.color) : {}) } : undefined}
                     disabled={iso > today || before}
                     aria-label={longDate(iso) + (specialDay(iso, born) ? `, ${specialDay(iso, born)}` : '')}
                     data-iso={iso}
