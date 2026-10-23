@@ -7,7 +7,6 @@ import { saveProfile } from './lib/profile'
 import { About } from './screens/About'
 import { DaysList } from './screens/DaysList'
 import { Export } from './screens/Export'
-import { Framed } from './screens/Framed'
 import { Home } from './screens/Home'
 import { Life } from './screens/Life'
 import { LifeDays } from './screens/LifeDays'
@@ -76,7 +75,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
         onLife={nav.goLifeDays}
         onDay={(iso) => nav.openDay(iso)}
         onPainting={openPainting}
-        onFramed={() => nav.openFramed('home')}
+        onFramed={() => nav.openFramed()}
       />
     )
   if (screen === 'today')
@@ -119,17 +118,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
         onBack={() => setScreenValue('settings')}
         onRemove={wall.remove}
         onOpen={openPainting}
-      />
-    )
-  if (screen === 'framed')
-    return (
-      <Framed
-        days={days}
-        notes={notes}
-        born={profile?.born}
-        loadNotes={acc.loadNotes}
-        onDay={(iso) => nav.openDay(iso)}
-        onBack={() => setScreenValue(nav.framedFrom)}
       />
     )
   if (screen === 'idea')
@@ -178,7 +166,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
         onTerms={() => nav.openLegal('terms', 'settings')}
         onExport={() => setScreenValue('export')}
         onPaintings={() => setScreenValue('paintings')}
-        onFramed={() => nav.openFramed('settings')}
+        onFramed={() => nav.openFramed()}
       />
     )
   if (screen === 'export')

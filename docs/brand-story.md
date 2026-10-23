@@ -81,7 +81,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 | lived but not painted | **unpainted**; on home, **paper** ("today is still paper", "This week is still paper.") | the pie, home |
 | not yet lived | **ahead** ("10,962 days", "35% ahead", "and 13,709 still ahead to paint") | home, onboarding, the pie |
 | painted | **in colour** ("Today is in colour.", "5 days in colour this week.", "18 days in colour") | home, the paintings |
-| a day you want to keep, any colour | **framed** ("frame this day", "my framed days") | the day, the list, my framed days |
+| a day you want to keep, any colour | **framed** ("frame this day", "my framed days") | the day, the list ("my framed days" opens it on framed only) |
 
 ## 8. Voice principles
 
