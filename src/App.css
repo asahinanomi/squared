@@ -386,7 +386,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(18px, 7vw, 36px);
+  /* Room between the arrows and the square, so a brush stroke (which may start a little outside the square)
+     or a resting thumb never lands on an arrow and steps to another day. */
+  gap: clamp(26px, 9vw, 44px);
   width: 100%;
   margin-top: 14px;
 }

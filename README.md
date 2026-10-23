@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 23, 2026, 00:24 UTC_
+_last updated Oct 23, 2026, 02:32 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -184,6 +184,8 @@ Design: board "16 · Pie — line art (final)". Built step by step; I check each
 - **Top to bottom**: see **Your life, in colour** below (today first, the week, a month and a year ago today, a life, this month and year so far) and **Before the first square**. No streaks, no scores. The pie stays where it is for now; it moves to a life dashboard later (see `docs/future-ideas.md`).
 
 - **The logo paints itself on sign-in**: the small square starts empty and fills once, left to right like a brush stroke (1.1s, after 0.35s), then stays still; off with reduced motion. Only on sign-in.
+
+- **The blank square names its day**, so a slip to another day shows before the first stroke: "paint your day" (today), "paint yesterday", "paint Wed, Oct 21", or for another year "paint Oct 20, 2009". The arrows sit a little further from the square (`clamp(26px, 9vw, 44px)`), so a stroke starting just outside the square, or a resting thumb, never steps to another day.
 
 ## Saving: online first, the account is the one truth
 

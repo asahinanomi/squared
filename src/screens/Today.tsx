@@ -7,7 +7,7 @@ import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { ZoomInIcon, ZoomOutIcon } from '../components/ZoomBar'
-import { addDays, longDate, ordinal, shortDateParts, todayIso } from '../lib/dates'
+import { addDays, fromIso, longDate, ordinal, shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, WORD, type Paint } from '../lib/paints'
@@ -50,6 +50,17 @@ type Props = {
   onZoomOut: () => void
   /** Off to settings → what matters, to edit the compass. */
   onMatters: () => void
+}
+
+// The blank square names its day, so a slip to another day shows before the first stroke: "paint your day"
+// (today), "paint yesterday", "paint Tue, Oct 20", or for another year "paint Oct 20, 2009".
+function blankWord(date: string, today: string) {
+  if (date === today) return 'paint your day'
+  if (date === addDays(today, -1)) return 'paint yesterday'
+  const d = fromIso(date)
+  return date.slice(0, 4) === today.slice(0, 4)
+    ? `paint ${d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`
+    : `paint ${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
 }
 
 export function Today(props: Props) {
@@ -285,7 +296,7 @@ export function Today(props: Props) {
                 loaded={loaded}
                 onDryBrush={onDryBrush}
                 onFilled={onFilled}
-                blank={date === today ? 'paint your day' : 'paint this day'}
+                blank={blankWord(date, today)}
               />
             </div>
             {hasNext ? peek(next, 1) : <span className="peek is-none" />}
