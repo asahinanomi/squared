@@ -972,25 +972,23 @@
 }
 .notes-head {
   width: 100%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px;
-  margin-bottom: 12px; /* 24px clear of the first note, so a tap on the toggle never lands on it */
+  padding: 0 4px 8px;
+  margin-bottom: 14px; /* clear of the first note, so a tap on the toggle never lands on it */
+  border-bottom: 1px solid #e4e3dc; /* a thin line: the notes start here */
 }
 .notes-count {
-  font-size: 16px;
+  font-size: 15px;
   color: var(--ink-soft);
 }
+/* show older · hide older: just words, as quiet as the count (it was a keyline pill; it competed with the notes) */
 .notes-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: 999px;
-  font-size: 16px;
-  color: var(--ink);
-  box-shadow: inset 0 0 0 var(--keyline) var(--ink);
+  padding: 8px 0 8px 12px; /* a finger-sized target, the words where they are */
+  font-size: 15px;
+  color: var(--ink-soft);
 }
 .notes-toggle:active {
   transform: scale(0.97);

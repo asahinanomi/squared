@@ -76,18 +76,7 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
           <span className="notes-count">{`${notes.length} ${notes.length === 1 ? 'note' : 'notes'}`}</span>
           {older.length > 0 && (
             <button className="notes-toggle" onClick={toggle} aria-expanded={!hidden}>
-              {hidden ? `show ${older.length} older` : 'hide older'}
-              <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d={hidden ? 'M6 9l6 6 6-6' : 'M6 15l6-6 6 6'}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  vectorEffect="non-scaling-stroke"
-                />
-              </svg>
+              {hidden ? 'show older' : 'hide older'}
             </button>
           )}
         </div>
