@@ -13,7 +13,7 @@ import { todayIso } from './lib/dates'
 import { backFromGoogle, supabase } from './lib/supabase'
 import { Screens } from './Screens'
 import { SignedOut } from './screens/SignedOut'
-import { demo, NO_TOPBAR, type Screen } from './state/app'
+import { demo, NO_TOPBAR, PAGES, type Screen } from './state/app'
 import { useAccount } from './state/useAccount'
 import { useAuth } from './state/useAuth'
 import { useBrowserHistory } from './state/useBrowserHistory'
@@ -54,6 +54,10 @@ export default function App() {
   const { loadNotes } = acc
   useEffect(() => loadNotes(date), [loadNotes, date])
 
+  // Settings and its pages open at their top (a link at the foot of settings kept its scroll).
+  useEffect(() => {
+    if (PAGES.includes(screen)) window.scrollTo(0, 0)
+  }, [screen])
   useEffect(() => {
     document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'
   }, [signedIn, screen])
@@ -102,17 +106,18 @@ export default function App() {
       <OpenPainting.Provider value={painting.paintedMonth}>
         {/* Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint). */}
         <div className={'app' + (oneScreen ? ' is-one-screen' : '')}>
-          {!NO_TOPBAR.includes(screen) && (
-            <Topbar
-              onHome={nav.goHome}
-              onToday={nav.goToday}
-              onFind={() => setFinding(true)}
-              onCalendar={() => nav.goMonth()}
-              onIdea={() => nav.setScreen('idea')}
-              onSettings={nav.openSettings}
-              onSignOut={signOut}
-            />
-          )}
+          {!NO_TOPBAR.includes(screen) &&
+            !(screen === 'setup' && (nav.trySquares || nav.afterSetup !== 'settings')) && (
+              <Topbar
+                onHome={nav.goHome}
+                onToday={nav.goToday}
+                onFind={() => setFinding(true)}
+                onCalendar={() => nav.goMonth()}
+                onIdea={() => nav.setScreen('idea')}
+                onSettings={nav.openSettings}
+                onSignOut={signOut}
+              />
+            )}
           <div
             className={'stage' + (nav.motion ? ` is-zoom-${nav.motion}` : '')}
             key={screen === 'life' ? `life-${nav.lifeRes}` : screen}

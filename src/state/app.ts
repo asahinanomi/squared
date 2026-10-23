@@ -23,11 +23,13 @@ export type Screen =
   | 'welcome'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
 export const LADDER: Screen[] = ['today', 'month', 'year', 'life']
-/** Screens with their own back arrow, no top bar. */
-export const NO_TOPBAR: Screen[] = [
-  'setup',
-  'welcome',
+/** Screens without the top bar: onboarding's guided path, one way forward (and "how many squares?" when it's part of
+ *  it, see App). Settings and its pages keep the logo and menu, with a back arrow under them. */
+export const NO_TOPBAR: Screen[] = ['welcome']
+/** Settings and the pages it opens. */
+export const PAGES: Screen[] = [
   'settings',
+  'setup',
   'matters',
   'privacy',
   'terms',

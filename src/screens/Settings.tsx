@@ -10,8 +10,6 @@ import { Chevron, SpeakerIcon } from './Today'
 
 type Props = {
   profile: Profile | null
-  /** Back to wherever settings was opened from. */
-  onBack: () => void
   onSquares: () => void
   onMatters: () => void
   /** The signed-in email, if known. */
@@ -32,7 +30,6 @@ const fmt = (n: number) => n.toLocaleString('en-US')
 // sign out act right here, and deleting the account asks once more, with "delete" typed, before it goes.
 export function Settings({
   profile,
-  onBack,
   onSquares,
   onMatters,
   email,
@@ -80,9 +77,6 @@ export function Settings({
   )
   return (
     <main className="settings">
-      <button className="setup-back" aria-label="Back" onClick={onBack}>
-        <Chevron dir="left" />
-      </button>
       <h1 className="settings-title">settings</h1>
 
       <h2 className="settings-group">your squares</h2>

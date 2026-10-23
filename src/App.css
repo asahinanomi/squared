@@ -1199,6 +1199,12 @@
   margin: 0 auto;
   padding: clamp(24px, 8vh, 72px) 4px 48px;
 }
+/* Signed in, the small print sits under the top bar, like settings' other pages: its back link starts close under it. */
+body[data-screen='privacy'] .idea,
+body[data-screen='terms'] .idea,
+body[data-screen='questions'] .idea {
+  padding-top: 8px;
+}
 .idea-title {
   margin: 0 0 28px;
   font-size: 36px;

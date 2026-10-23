@@ -169,7 +169,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
     return (
       <Settings
         profile={profile}
-        onBack={() => setScreenValue(nav.settingsFrom)}
         onSquares={() => nav.askSquares('settings')}
         onMatters={() => nav.openMatters('settings')}
         email={email}

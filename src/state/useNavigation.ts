@@ -50,8 +50,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const listMid = useRef(() => todayIso())
   // A day opened from the list goes back to the list when you zoom out of it.
   const [dayFromList, setDayFromList] = useState(false)
-  // Where settings was opened from: its back arrow returns there.
-  const [settingsFrom, setSettingsFrom] = useState<Screen>('today')
   // What matters opens from settings, the idea, the day's compass or home; back returns there.
   const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea' | 'today' | 'home'>('settings')
   // Where privacy and terms were opened from (settings or the idea): back returns there.
@@ -186,15 +184,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setListOnly(id === 'lived' ? null : id)
     setScreen('list')
   }
-  const openSettings = () => {
-    if (
-      !['settings', 'setup', 'matters', 'privacy', 'terms', 'questions', 'export', 'paintings', 'framed'].includes(
-        screen,
-      )
-    )
-      setSettingsFrom(screen)
-    setScreenValue('settings')
-  }
+  const openSettings = () => setScreenValue('settings')
   // my framed days opens from home or settings; back returns there.
   const [framedFrom, setFramedFrom] = useState<'home' | 'settings'>('settings')
   const openFramed = (from: 'home' | 'settings') => {
@@ -329,7 +319,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     listMid,
     trySquares,
     afterSetup,
-    settingsFrom,
     mattersFrom,
     legalBack,
     goToday,
