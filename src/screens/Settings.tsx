@@ -64,7 +64,7 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
       <h1 className="settings-title">settings</h1>
 
       <div className="settings-rows is-last">
-        {row('square settings', summary, onSquares)}
+        {row('how many squares', summary, onSquares)}
         <button className="settings-row" role="switch" aria-checked={sound} onClick={() => toggleSound()}>
           <span>
             <span className="settings-label">sound</span>
