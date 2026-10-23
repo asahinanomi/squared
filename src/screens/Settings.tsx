@@ -12,9 +12,6 @@ import { Chevron, SpeakerIcon } from './Today'
 type Props = {
   profile: Profile | null
   onSquares: () => void
-  /** The signed-in email, if known. */
-  email?: string
-  onSignOut: () => void
   /** After the account is gone: back to the sign-in screen. */
   onDeleted: () => void
   onPrivacy: () => void
@@ -25,8 +22,8 @@ type Props = {
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 // Settings: one short list (what's about you and your days lives in my days); rows open their own screen, sound and
-// sign out act right here, and deleting the account asks once more, with "delete" typed, before it goes.
-export function Settings({ profile, onSquares, email, onSignOut, onDeleted, onPrivacy, onTerms, onExport }: Props) {
+// the lock act right here (sign out is the menu's last line), and deleting the account asks once more, with "delete" typed, before it goes.
+export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, onExport }: Props) {
   const summary = profile
     ? [
         fromIso(profile.born).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -100,12 +97,6 @@ export function Settings({ profile, onSquares, email, onSignOut, onDeleted, onPr
           </span>
         </div>
         {row('export my data', 'a Word copy of your squares and notes', onExport)}
-        <button className="settings-row" onClick={onSignOut}>
-          <span>
-            <span className="settings-label">sign out</span>
-            <span className="settings-sub">{email ? `signed in as ${email}` : 'signed in'}</span>
-          </span>
-        </button>
         <button className="settings-row" disabled={deleting === 'deleting'} onClick={() => setAsking(true)}>
           <span>
             <span className="settings-label">{deleting === 'deleting' ? 'deleting…' : 'delete my account'}</span>

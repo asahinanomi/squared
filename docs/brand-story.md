@@ -152,7 +152,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **my days** (the menu) — a life (the bar) · October, so far · 2026, so far · what matters · a life, in squares · a life, in slices · framed days · paintings. Each row is named after the page it opens; none says "my", since the page does.
 
-**Settings** — square settings · sound · export my data · sign out · delete my account
+**Settings** — square settings · sound · lock when I leave · export my data · delete my account (sign out is the menu's last line)
 
 **A painting** — "October, painted" / "October, so far" · a new month: "a new month. here's the last one." · **keep this painting ↓** (once kept: download ↓) · "Yours to keep once the month ends."
 

@@ -131,7 +131,6 @@ export default function App() {
               wall={wall}
               openPainting={painting.openPainting}
               painter={painter}
-              email={session?.user.email}
               signOut={signOut}
               ui={{
                 why,
