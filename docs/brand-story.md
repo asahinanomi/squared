@@ -115,7 +115,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - tap a colour to load the brush; its one-liner shows under the palette
 - once painted: "your 3rd day worth it this month" · "because…" (you finish the sentence, never "why?"; "a line, or a page, or skip"); a framed day asks "what do you want to remember?"
 - torn between green and red: "torn? ask yourself:" / "did what mattered outweigh the rest?" / "you said: '…'"
-- under the square: start over · **frame this day** (a small keyline pill)
+- under the square: start over · frame this day (a shade stronger than start over)
 - at the very foot of a painted day: paint another day · go home
 
 **Home**
