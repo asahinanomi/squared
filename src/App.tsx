@@ -112,7 +112,7 @@ export default function App() {
                 onHome={nav.goHome}
                 onToday={nav.goToday}
                 onFind={() => setFinding(true)}
-                onCalendar={() => nav.goMonth()}
+                onCalendar={nav.openMyDays}
                 onIdea={() => nav.setScreen('idea')}
                 onSettings={nav.openSettings}
                 onSignOut={signOut}

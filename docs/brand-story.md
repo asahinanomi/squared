@@ -147,7 +147,9 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **What matters (compass)** — "what does a meaningful day look like to you? and what feels empty?" · filter: all · worth it · regret · **now, paint today →** (or back to today →) · "a guide, not a rule. you still choose the day's colour"
 
-**Settings** — your squares (square settings · what matters · my paintings · my framed days) · app (sound) · account (export my data · sign out · delete my account)
+**my days** (the menu) — a life pie · all my squares · what matters · my framed days · my paintings
+
+**Settings** — square settings · sound · export my data · sign out · delete my account
 
 **A painting** — "October, painted" / "October, so far" · a new month: "a new month. here's the last one." · **keep this painting ↓** (once kept: download ↓) · "Yours to keep once the month ends."
 

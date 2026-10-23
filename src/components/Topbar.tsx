@@ -39,7 +39,7 @@ export function Topbar({ onHome, onToday, onFind, onCalendar, onIdea, onSettings
           <nav className="menu" onClick={(e) => e.stopPropagation()}>
             <button onClick={go(onToday)}>today</button>
             <button onClick={go(onFind)}>find a day</button>
-            <button onClick={go(onCalendar)}>my squares</button>
+            <button onClick={go(onCalendar)}>my days</button>
             <button onClick={go(onSettings)}>settings</button>
             <button onClick={go(onSignOut)}>sign out</button>
             {/* About the app, not about you: set apart at the foot, quieter. Its page holds the rest (get in touch, support, the small print). */}

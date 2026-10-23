@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
+import { Chevron } from './Today'
 import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { paintHex, WORD } from '../lib/paints'
@@ -14,6 +15,8 @@ type Props = {
   onScope: (s: Scope) => void
   /** "see them →": the days of a slice, in the list. */
   onSee: (id: Exclude<SliceId, 'ahead'> | 'lived') => void
+  /** Back to my days, where the pie lives. */
+  onBack: () => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
@@ -62,7 +65,7 @@ function rim(a: number, b: number) {
 // a dashed keyline round the days still to come. Numbers sit inside the wedges that have room for them.
 // Three denominators for the same chart; it always opens on the whole life. Zooming in (pinch or
 // the zoom buttons) steps closer: whole life → days I lived → painted only.
-export function Pie({ days, profile, scope, onScope, onSee }: Props) {
+export function Pie({ days, profile, scope, onScope, onSee, onBack }: Props) {
   // A tapped slice (or legend row) lifts and the rest fade; a line under the pie leads to those days.
   const [picked, setPicked] = useState<SliceId | null>(null)
   const pick = (id: SliceId) => {
@@ -115,6 +118,10 @@ export function Pie({ days, profile, scope, onScope, onSee }: Props) {
 
   return (
     <main className="pie">
+      <button className="back-btn pie-back" onClick={onBack} aria-label="Back to my days">
+        <Chevron dir="left" />
+        my days
+      </button>
       <div className="life-head">
         <h1 className="life-title">a life pie, in slices</h1>
       </div>
@@ -308,3 +315,34 @@ function halfLabels(drawn: Drawn[], lived: number, livedEnd: number): Label[] {
 
 const pieLabel = (slices: Slice[]) =>
   'A pie of a life: ' + slices.map((s) => `${LABEL[s.id]} ${fmt(s.count)}`).join(', ')
+
+/** A life pie, small and still (my days): the whole life's slices in their paint, the rims, no numbers. */
+export function PieThumb({ days, profile }: { days: Days; profile: Profile }) {
+  const slices = lifeSlices(days, profile.born, profile.lifespan, todayIso(), 'life')
+  const total = slices.reduce((s, x) => s + x.count, 0)
+  let turn = 0
+  const drawn = slices
+    .filter((s) => s.count > 0)
+    .map((s) => {
+      const a = turn
+      turn += s.count / total
+      return { ...s, a, b: turn }
+    })
+  return (
+    <svg className="pie-chart is-thumb" viewBox="-4 -4 258 258" aria-hidden="true">
+      {drawn.map((s) => (
+        <path key={s.id} d={wedge(s.a, s.b)} fill={FILL[s.id]} className="pie-wedge" />
+      ))}
+      {drawn.length > 1 &&
+        drawn.map((s) => <path key={`e-${s.id}`} d={`M${C} ${C} L${at(s.a)}`} className="pie-edge" />)}
+      {drawn.map((s) => (
+        <path
+          key={`r-${s.id}`}
+          d={rim(s.a, s.b)}
+          fill="none"
+          className={s.id === 'ahead' ? 'pie-rim is-ahead' : 'pie-rim'}
+        />
+      ))}
+    </svg>
+  )
+}

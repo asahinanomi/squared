@@ -47,15 +47,6 @@ export const ZoomInIcon = () => (
   </svg>
 )
 
-/** A pie: the whole life in slices. Drawn to the zoom icons' height. */
-const PieIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
-    <circle cx="12" cy="12" r="8.5" />
-    <line x1="12" y1="12" x2="12" y2="3.5" />
-    <line x1="12" y1="12" x2="19.4" y2="16.25" />
-  </svg>
-)
-
 /** Squares, one painted: back to the zoom levels. Drawn to the zoom icons' height. */
 const SquaresIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
@@ -98,7 +89,7 @@ export const ViewSwitch = createContext<{
   goToday: () => void
 } | null>(null)
 
-// Bottom of every zoom level, controls only: on the left one switch for the three views — squares · list · pie,
+// Bottom of every zoom level, controls only: on the left one switch for the two views — squares · list (the pie lives in my days),
 // the one showing raised — then "today" (go paint it)
 // halfway to the zoom pair on the right. ◎ (back to today's square, once it's out of view) floats
 // just above the bar's right end.
@@ -107,19 +98,18 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
   return (
     <div className="zoombar">
       {view ? (
-        // One switch for the three ways to look: squares · list · pie (the days, then the summary). The one showing is raised.
+        // One switch for the two ways to look: squares · list. The one showing is raised (on the pie, neither).
         <div className="zoombar-switch" role="group" aria-label="View">
           {(
             [
               ['squares', 'Squares', <SquaresIcon key="s" />],
               ['list', 'List view', <ListIcon key="l" />],
-              ['pie', 'Pie view', <PieIcon key="p" />],
             ] as const
           ).map(([id, label, icon]) => {
-            const now = view.pie ? 'pie' : view.list ? 'list' : 'squares'
+            const now: string = view.pie ? 'pie' : view.list ? 'list' : 'squares'
             const go = () => {
               if (id === now) return
-              if (id === 'pie' || (id === 'squares' && now === 'pie')) view.toggle()
+              if (id === 'squares' && now === 'pie') view.toggle()
               else view.toggleList(listAt?.())
             }
             return (

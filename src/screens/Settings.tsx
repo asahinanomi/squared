@@ -11,7 +11,6 @@ import { Chevron, SpeakerIcon } from './Today'
 type Props = {
   profile: Profile | null
   onSquares: () => void
-  onMatters: () => void
   /** The signed-in email, if known. */
   email?: string
   onSignOut: () => void
@@ -20,27 +19,13 @@ type Props = {
   onPrivacy: () => void
   onTerms: () => void
   onExport: () => void
-  onPaintings: () => void
-  onFramed: () => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
-// Settings: one page in three short groups (your squares, app, account); rows open their own screen, sound and
+// Settings: one short list (what's about you and your days lives in my days); rows open their own screen, sound and
 // sign out act right here, and deleting the account asks once more, with "delete" typed, before it goes.
-export function Settings({
-  profile,
-  onSquares,
-  onMatters,
-  email,
-  onSignOut,
-  onDeleted,
-  onPrivacy,
-  onTerms,
-  onExport,
-  onPaintings,
-  onFramed,
-}: Props) {
+export function Settings({ profile, onSquares, email, onSignOut, onDeleted, onPrivacy, onTerms, onExport }: Props) {
   const summary = profile
     ? [
         fromIso(profile.born).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -79,16 +64,8 @@ export function Settings({
     <main className="settings">
       <h1 className="settings-title">settings</h1>
 
-      <h2 className="settings-group">your squares</h2>
-      <div className="settings-rows">
+      <div className="settings-rows is-last">
         {row('square settings', summary, onSquares)}
-        {row('what matters', 'worth it & regret, your compass', onMatters)}
-        {row('my paintings', 'the paintings you kept', onPaintings)}
-        {row('my framed days', 'the days you framed, oldest first', onFramed)}
-      </div>
-
-      <h2 className="settings-group">app</h2>
-      <div className="settings-rows">
         <button className="settings-row" role="switch" aria-checked={sound} onClick={() => toggleSound()}>
           <span>
             <span className="settings-label">sound</span>
@@ -98,10 +75,6 @@ export function Settings({
             <SpeakerIcon on={sound} />
           </span>
         </button>
-      </div>
-
-      <h2 className="settings-group">account</h2>
-      <div className="settings-rows is-last">
         {row('export my data', 'a Word copy of your squares and notes', onExport)}
         <button className="settings-row" onClick={onSignOut}>
           <span>

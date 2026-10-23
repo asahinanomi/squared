@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 23, 2026, 20:02 UTC_
+_last updated Oct 23, 2026, 20:16 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -140,9 +140,11 @@ Build step by step; the owner reviews and gives feedback after each step before 
 
 ## Phase 3 — settings (in progress)
 
+**my days (Oct 23, 2026)** (`src/screens/MyDays.tsx`): the menu's "my squares" (which only opened a zoom level the zoom buttons already reach) became **my days**, the life dashboard, as doors, never a page of numbers: a life as a pie, small and still, its one picture (tap it for the full pie, whose "‹ my days" leads back), then the rows **all my squares** (a life, day by day), **what matters**, **my framed days**, **my paintings**, each back to my days. The pie left the bar's view switch (now squares · list). Settings lost those rows and its groups: one short list (square settings, sound, export my data, sign out, delete my account).
+
 **The top bar on settings (Oct 23, 2026)**: settings and every page it opens (square settings, what matters, my paintings, my framed days, export, privacy, terms, questions) keep the logo and the menu, like every other screen. Settings itself has no back arrow (it's a place, reached from the menu); its pages keep their back arrow under the bar. Each opens at its top. Only onboarding (the welcome, and "how many squares?" while it's part of it) has no top bar: one way forward.
 
-Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: today · find a day · my squares · settings · sign out — the things about you — and, set apart at its foot under a hairline in quieter grey, "the idea" (about the app). Under it, as quiet, **send feedback** — a screen in squared: "what confused you, or felt off? what did your squares show you? anything helps.", one box, and a black "send" pill; then "Thank you. I read every one. — nomi" and "done". Notes save to the `feedback` table (migration 0010); each person can only add their own, and nomi reads them in Supabase (Table Editor → feedback). In the local demo nothing is saved. To read them all with who sent them: SQL Editor → `select * from feedback_inbox;` (a view, also in 0010).
+Design: the "Settings (hub)" and "Onboarding (how many squares?)" boards. Menu: today · find a day · my days · settings · sign out — the things about you — and, set apart at its foot under a hairline in quieter grey, "the idea" (about the app). Under it, as quiet, **send feedback** — a screen in squared: "what confused you, or felt off? what did your squares show you? anything helps.", one box, and a black "send" pill; then "Thank you. I read every one. — nomi" and "done". Notes save to the `feedback` table (migration 0010); each person can only add their own, and nomi reads them in Supabase (Table Editor → feedback). In the local demo nothing is saved. To read them all with who sent them: SQL Editor → `select * from feedback_inbox;` (a view, also in 0010).
 
 ### Feedback by email (one-time setup)
 

@@ -20,6 +20,7 @@ export type Screen =
   | 'export'
   | 'paintings'
   | 'framed'
+  | 'mydays'
   | 'welcome'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
 export const LADDER: Screen[] = ['today', 'month', 'year', 'life']
@@ -37,6 +38,7 @@ export const PAGES: Screen[] = [
   'export',
   'paintings',
   'framed',
+  'mydays',
 ]
 
 // Without Supabase env vars the app runs as a local demo: no sign-in, fake days, nothing saved.

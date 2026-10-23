@@ -13,6 +13,7 @@ import { Life } from './screens/Life'
 import { LifeDays } from './screens/LifeDays'
 import { LifeMonths } from './screens/LifeMonths'
 import { Month } from './screens/Month'
+import { MyDays } from './screens/MyDays'
 import { Paintings } from './screens/Paintings'
 import { PeriodList } from './screens/PeriodList'
 import { Pie } from './screens/Pie'
@@ -118,9 +119,21 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
         kept={wall.kept}
         days={days}
         name={painter}
-        onBack={() => setScreenValue('settings')}
+        onBack={nav.openMyDays}
         onRemove={wall.remove}
         onOpen={openPainting}
+      />
+    )
+  if (screen === 'mydays')
+    return (
+      <MyDays
+        days={days}
+        profile={profile}
+        onPie={nav.openPie}
+        onSquares={nav.goLifeDays}
+        onMatters={() => nav.openMatters('mydays')}
+        onFramed={() => nav.openFramed('mydays')}
+        onPaintings={() => setScreenValue('paintings')}
       />
     )
   if (screen === 'framed')
@@ -170,15 +183,12 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
       <Settings
         profile={profile}
         onSquares={() => nav.askSquares('settings')}
-        onMatters={() => nav.openMatters('settings')}
         email={email}
         onSignOut={signOut}
         onDeleted={signOut}
         onPrivacy={() => nav.openLegal('privacy', 'settings')}
         onTerms={() => nav.openLegal('terms', 'settings')}
         onExport={() => setScreenValue('export')}
-        onPaintings={() => setScreenValue('paintings')}
-        onFramed={() => nav.openFramed('settings')}
       />
     )
   if (screen === 'export')
@@ -201,7 +211,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
     return (
       <WhatMatters
         onBack={() => setScreenValue(nav.mattersFrom)}
-        backLabel={nav.mattersFrom === 'idea' ? 'the idea' : nav.mattersFrom}
+        backLabel={nav.mattersFrom === 'idea' ? 'the idea' : nav.mattersFrom === 'mydays' ? 'my days' : nav.mattersFrom}
         onPaint={nav.goToday}
         paintedToday={!!days[todayIso()]}
         initial={lists.matters}
@@ -244,7 +254,16 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, ema
     )
   }
   if (screen === 'pie' && profile)
-    return <Pie days={days} profile={profile} scope={nav.pieScope} onScope={nav.setPieScope} onSee={nav.seeSlice} />
+    return (
+      <Pie
+        days={days}
+        profile={profile}
+        scope={nav.pieScope}
+        onScope={nav.setPieScope}
+        onSee={nav.seeSlice}
+        onBack={nav.openMyDays}
+      />
+    )
   if (screen === 'year')
     return (
       <Year

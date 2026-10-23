@@ -51,7 +51,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   // A day opened from the list goes back to the list when you zoom out of it.
   const [dayFromList, setDayFromList] = useState(false)
   // What matters opens from settings, the idea, the day's compass or home; back returns there.
-  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea' | 'today' | 'home'>('settings')
+  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea' | 'today' | 'home' | 'mydays'>('settings')
   // Where privacy and terms were opened from (settings or the idea): back returns there.
   const [legalFrom, setLegalFrom] = useState<Screen>('settings')
   const legalOpened = useRef(false) // opened from inside the app (not straight from its web address)
@@ -185,13 +185,22 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setScreen('list')
   }
   const openSettings = () => setScreenValue('settings')
-  // my framed days opens from home or settings; back returns there.
-  const [framedFrom, setFramedFrom] = useState<'home' | 'settings'>('settings')
-  const openFramed = (from: 'home' | 'settings') => {
+  // my days (the menu): a life as a pie, all your squares, what matters, your framed days and paintings.
+  const openMyDays = () => setScreenValue('mydays')
+  // The pie lives in my days now: its back arrow returns there; its squares and list switch go to a life.
+  const openPie = () => {
+    setPieFrom('life')
+    setPieScope('life')
+    if (profile) return setScreen('pie')
+    askSquares('pie')
+  }
+  // my framed days opens from home or my days; back returns there.
+  const [framedFrom, setFramedFrom] = useState<'home' | 'mydays'>('mydays')
+  const openFramed = (from: 'home' | 'mydays') => {
     setFramedFrom(from)
     setScreenValue('framed')
   }
-  const openMatters = (from: 'settings' | 'idea' | 'today' | 'home') => {
+  const openMatters = (from: 'settings' | 'idea' | 'today' | 'home' | 'mydays') => {
     setMattersFrom(from)
     setScreenValue('matters')
   }
@@ -340,6 +349,8 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     openMatters,
     framedFrom,
     openFramed,
+    openMyDays,
+    openPie,
     endTrySquares,
     leaveSetup,
     afterSquares,
