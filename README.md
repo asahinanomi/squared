@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 24, 2026, 15:22 UTC_
+_last updated Oct 24, 2026, 15:24 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -153,7 +153,7 @@ Build step by step; the owner reviews and gives feedback after each step before 
 **Be here, now** (Oct 24, 2026; squared's essence: we can't change the past, now is what we have):
 - **One breath before you paint**: the day's first dip of the brush, on today while it's blank, the canvas fills with light and rises toward you, swelling (6%) and lifting off the paper with a deeper shadow, then settles back, once (4 seconds, like a breath), and its hand says "be here" at 30px, the painted word's size. Each time you come to today while it's blank, its first dip breathes (more dips in that visit choose quietly; starting any day over breathes again on its next dip), it never holds the brush, and without motion it's just the words.
 - **Every note is a moment** (Oct 24, 2026, nomi: simpler, and squared is about now): what you write about a day is a **moment**, everywhere ("3 moments", "add a moment", "Delete this moment?", the list's "with moments", the FAQ "What are moments for?", privacy and export). Two prompts, two questions: today before it's painted, "right now…" (catch it as it happens); after painting, or on any other day, "because…" (looking back). Each keeps its time. (A "moment"-vs-"note" split with labels was tried for an hour and dropped: more code, no more meaning.) The data keeps its name, `notes`.
-- **The question's tense follows the day** (`src/lib/question.ts`, tested): on today and home, until today is painted, "am I spending Today meaningfully?"; once it's painted, "did I spend Today meaningfully?" (no clock: only the paint turns it); other days "did I spend this day meaningfully?". Sign-in, onboarding and the letter keep the classic.
+- **The question's tense follows the day** (`src/lib/question.ts`, tested): on today and home, until today is painted, "am I spending Today meaningfully?"; once it's painted, "did I spend Today meaningfully?" (no clock: only the paint turns it); other days "did I spend this day meaningfully?". Sign-in asks in the present too ("am I spending Today meaningfully?", a hook under the 29,200 days); onboarding's first step and the letter keep "did I spend…", the ritual, whose answers speak in the past.
 - A morning intention ("what would make today worth it?") was labbed and parked: it made today more complex (see `docs/future-ideas.md`).
 
 **Swipe the week** (Oct 24, 2026): on home, swipe the week card right for the week before (or tap the quiet ‹ beside its dates; › comes back), to catch up on missed days from home. Its title follows ("this week", "last week", "3 weeks ago"), and so does its line ("5 days in colour that week.", "Every day that week, in colour." with its rainbow, "Nothing painted that week."). It stops at this week and at the week you were born, and home always opens on this week.

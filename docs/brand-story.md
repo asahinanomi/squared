@@ -67,7 +67,7 @@ Voice rule: all three one-liners are **first person** (it's your own conscience,
 
 > **did I spend Today meaningfully?**
 
-- **Its tense follows the day** (Oct 24, 2026). Today, until it's painted: *am I spending Today meaningfully?*, a nudge to be present while it's lived. Once today is painted: *did I spend Today meaningfully?*, the honest look back. Any other day: *did I spend this day meaningfully?* Sign-in, onboarding and the letter keep the classic *did I spend Today meaningfully?*
+- **Its tense follows the day** (Oct 24, 2026). Today, until it's painted: *am I spending Today meaningfully?*, a nudge to be present while it's lived. Once today is painted: *did I spend Today meaningfully?*, the honest look back. Any other day: *did I spend this day meaningfully?* Sign-in asks in the present too (*am I spending Today meaningfully?*, under the 29,200 days: a hook, it asks the reader right now, Oct 24, 2026). Onboarding's first step and the letter keep *did I spend Today meaningfully?*: they teach the ritual, and its three answers speak in the past ("yes, I spent it on what matters").
 - First person. Always.
 - **Today** is capitalised, with a dotted underline: it's the day itself, any day you're looking at.
 - Set in the reflective voice (Fraunces). It's the hero of the day screen, sign-in and onboarding.
@@ -111,7 +111,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 **Sign in**
 - squared.today · beta
 - "there are" / **29,200** / "days in an 80-year life"
-- *did I spend Today meaningfully?*
+- *am I spending Today meaningfully?*
 - "continue with Google" · links: the idea · privacy · terms
 
 **Onboarding** (four steps)

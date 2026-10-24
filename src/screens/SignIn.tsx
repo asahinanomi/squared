@@ -33,7 +33,7 @@ export function SignIn({
           <p className="signin-number">29,200</p>
           <p className="signin-line">days in an 80-year life</p>
           <p className="signin-question">
-            did I spend <u>Today</u> meaningfully?
+            am I spending <u>Today</u> meaningfully?
           </p>
         </div>
         <div className="signin-go">
