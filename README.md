@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 24, 2026, 14:18 UTC_
+_last updated Oct 24, 2026, 14:27 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -148,9 +148,11 @@ Build step by step; the owner reviews and gives feedback after each step before 
 
 **Privacy and terms: "last updated" at the foot** (Oct 24, 2026), under the signature, quiet (12px, muted); kept, since a privacy policy has to show when it last changed (CCPA). Now Oct 24, 2026 (both pages say "the about page").
 
+**Sign-in's small print sits at the screen's foot** (Oct 24, 2026): the message and "continue with Google" centred in the space above, "why squared · privacy · terms" and the © line at the bottom with the page's own 24px padding (and the phone's safe area); on a short phone it simply follows, 32px under the button.
+
 **Be here, now** (Oct 24, 2026; squared's essence: we can't change the past, now is what we have):
-- **One breath before you paint**: the day's first dip of the brush, on today while it's blank, the canvas fills with light and rises toward you, swelling (6%) and lifting off the paper with a deeper shadow, then settles back, once (4 seconds, like a breath), and its hand says "be here" at 30px, the painted word's size. Once a day (remembered on the device; starting any day over breathes again on its next dip, even if today's breath has been), it never holds the brush, and without motion it's just the words.
-- **"right now…" moments**: today, before it's painted, the notes show with "add a moment", and the note opens with "right now…" instead of "because…". Jot a moment as it happens; it keeps its time, and waits for tonight's paint. Once the day is painted, notes are "because…" again.
+- **One breath before you paint**: the day's first dip of the brush, on today while it's blank, the canvas fills with light and rises toward you, swelling (6%) and lifting off the paper with a deeper shadow, then settles back, once (4 seconds, like a breath), and its hand says "be here" at 30px, the painted word's size. Each time you come to today while it's blank, its first dip breathes (more dips in that visit choose quietly; starting any day over breathes again on its next dip), it never holds the brush, and without motion it's just the words.
+- **"right now…" moments**: today, before it's painted, the notes show with "add a moment" and are counted as moments ("2 moments"), and the note opens with "right now…" instead of "because…". Jot a moment as it happens; it keeps its time, and waits for tonight's paint. Once the day is painted, notes are "because…" again.
 - **The question's tense follows the day** (`src/lib/question.ts`, tested): on today and home, until today is painted, "am I spending Today meaningfully?"; once it's painted, "did I spend Today meaningfully?" (no clock: only the paint turns it); other days "did I spend this day meaningfully?". Sign-in, onboarding and the letter keep the classic.
 - Next: a morning intention ("what would make today worth it?"), with a lab first (it adds a line to the canvas and one new table column).
 

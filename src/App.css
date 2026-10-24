@@ -159,11 +159,21 @@
 /* ---------- sign in ---------- */
 .signin {
   flex: 1;
+  box-sizing: border-box;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--gutter) var(--gutter) max(var(--gutter), env(safe-area-inset-bottom));
+}
+/* The message and sign-in, centred in the space above the small print. */
+.signin-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--gutter);
+  width: 100%;
 }
 /* Sign-in: the logo's square paints itself once, as you'd paint a day (left to right, like a brush). */
 .logo-paint {
@@ -2774,7 +2784,7 @@ button.settings-row:active {
 }
 /* Sign-in is centred: its footer too, without the hairline. */
 .foot.is-centred {
-  margin: 22px auto 0;
+  margin: 32px auto 0; /* sign-in: at the screen's foot, clear of "continue with Google" */
   padding-top: 0;
   border-top: 0;
   text-align: center;

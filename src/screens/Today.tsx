@@ -112,26 +112,20 @@ export function Today(props: Props) {
     dips.current = []
     setTorn(false)
   }, [date])
-  // One breath before you paint: the first dip of the day, on today, the canvas glows in and out once (4s) and says
-  // "be here". Remembered on the device, so it's once a day; it never holds the brush.
+  // One breath before you paint: each time you come to today while it's blank, its first dip makes the canvas breathe
+  // once (4s, "be here"); more dips in the same visit choose quietly. Starting any day over is a fresh start too.
+  // It never holds the brush.
   const [breathing, setBreathing] = useState(false)
-  // Starting any day over is a fresh start: its next dip breathes too, even if today's breath has been.
+  const breathed = useRef(false)
   const fresh = useRef<string | null>(null)
+  useEffect(() => {
+    breathed.current = false
+  }, [date])
   const breathe = () => {
     if (days[date]) return
-    if (fresh.current === date) {
-      fresh.current = null
-      setBreathing(true)
-      setTimeout(() => setBreathing(false), 4000)
-      return
-    }
-    if (date !== today) return
-    try {
-      if (localStorage.getItem('squared.breathed') === today) return
-      localStorage.setItem('squared.breathed', today)
-    } catch {
-      return
-    }
+    if (fresh.current !== date && (date !== today || breathed.current)) return
+    fresh.current = null
+    breathed.current = true
     setBreathing(true)
     setTimeout(() => setBreathing(false), 4000)
   }
@@ -409,6 +403,7 @@ export function Today(props: Props) {
             onAdd={() => onOpenWhy()}
             onDelete={onDeleteNote}
             addLabel={!day && date === today ? 'add a moment' : undefined}
+            noun={!day && date === today ? 'moment' : 'note'}
           />
         )}
         {/* The day is done: where next, quietly, at the very end. */}
