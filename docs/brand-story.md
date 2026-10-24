@@ -67,7 +67,7 @@ Voice rule: all three one-liners are **first person** (it's your own conscience,
 
 > **did I spend Today meaningfully?**
 
-- **Its tense follows the day** (Oct 24, 2026). Today, until it's painted: *am I spending Today meaningfully?*, a nudge to be present while it's lived. Once today is painted: *did I spend Today meaningfully?*, the honest look back. Any other day: *did I spend this day meaningfully?* Sign-in asks in the present too (*am I spending Today meaningfully?*, under the 29,200 days: a hook, it asks the reader right now, Oct 24, 2026). Onboarding's first step and the letter keep *did I spend Today meaningfully?*: they teach the ritual, and its three answers speak in the past ("yes, I spent it on what matters").
+- **Its tense follows the day** (Oct 24, 2026). Today, until it's painted: *am I spending Today meaningfully?*, a nudge to be present while it's lived. Once today is painted: *did I spend Today meaningfully?*, the honest look back. Any other day: *did I spend this day meaningfully?* Sign-in asks in the present too (*am I spending Today meaningfully?*, under the 29,200 days: a hook, it asks the reader right now, Oct 24, 2026). The letter keeps *did I spend Today meaningfully?*: its three answers speak in the past ("yes, I spent it on what matters"). Onboarding's first step asks forward instead: *how would you like to spend today?*
 - First person. Always.
 - **Today** is capitalised, with a dotted underline: it's the day itself, any day you're looking at.
 - Set in the reflective voice (Fraunces). It's the hero of the day screen, sign-in and onboarding.
@@ -115,7 +115,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - "continue with Google" · links: the idea · privacy · terms
 
 **Onboarding** (four steps)
-1. "Welcome to squared." / "One square for every day of your life." / "Each day, ask yourself:" · *did I spend Today meaningfully?* · "Then paint its square." · worth it · regret · a blur · **let's begin**
+1. "Welcome to squared." / "Each square is one day of your life. Its colour is how you spent it:" · the three colours, each its square, word and line (🟩 worth it · yes, I spent it on what matters. 🟥 regret · no, I wish I'd spent it differently. ⬜ a blur · I don't know… I wasn't paying attention.) · *how would you like to spend today?* · **start now** (Oct 24, 2026, nomi's structure: what a square is, what its colour means, then a question about now)
 2. "what makes a day feel *meaningful*?" · next · skip this step
 3. "and what makes a day feel *empty*?" · next · skip this step
 4. "Last thing." / "how many squares do you have?" · "when were you born?" · "how long do you hope to live?" ("the average lifespan in America is about 79 years / 76 for men, 81 for women") · **28,855** / "squares in your life" / "and 13,709 still ahead to paint" · **start painting →** · "by starting, you confirm you're 18 or over and agree to the terms and privacy."

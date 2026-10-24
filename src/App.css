@@ -3600,31 +3600,34 @@ button.settings-row:active {
   text-decoration-thickness: 2.5px;
   text-underline-offset: 6px;
 }
-.welcome-then {
-  margin: 44px 0 0;
-  color: var(--ink-soft);
-  font-size: 16px;
-  line-height: 1.4;
-}
-.welcome-trio {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 16px;
-}
-.welcome-trio span {
+/* Step 1's three colours: each its square, its word and its line (the palette's, word for word), read left. */
+.welcome-colours {
+  list-style: none;
+  margin: 22px auto 0;
+  padding: 0;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
+  gap: 12px;
+  text-align: left;
+}
+.welcome-colours li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.4;
   color: var(--ink-soft);
 }
-.welcome-trio i {
-  display: block;
-  width: 46px;
-  height: 46px;
-  border-radius: 9px;
+.welcome-colours i {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+}
+.welcome-colours b {
+  font-weight: 600;
+  color: var(--ink);
 }
 /* The last step: how many squares. The fields read left, as in square settings. */
 .welcome-fields {

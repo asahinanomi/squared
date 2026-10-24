@@ -115,27 +115,26 @@ export function Welcome({ tryOut, onSquares, onDone, onMatters }: Props) {
 
       {step === 0 ? (
         <section className="welcome-step is-pause" key="intro" aria-label="Step 1 of 4">
-          {/* What squared is, as one short paragraph; then the question on its own; then the paint. */}
+          {/* What a square is and what its colour means (the three lines, as under the palette); then a question
+              that looks forward, about now. */}
           <div className="welcome-intro">
             <p>Welcome to squared.</p>
-            <p>One square for every day of your life.</p>
-            <p>Each day, ask yourself:</p>
+            <p>Each square is one day of your life. Its colour is how you spent it:</p>
           </div>
-          <h1 className="welcome-big">
-            did I spend <u>Today</u> meaningfully?
-          </h1>
-          <p className="welcome-then">Then paint its square.</p>
-          <div className="welcome-trio" aria-hidden="true">
+          <ul className="welcome-colours">
             {PAINTS.map((p) => (
-              <span key={p.id}>
-                <i style={{ background: p.hex }} />
-                {WORD[p.id]}
-              </span>
+              <li key={p.id}>
+                <i style={{ background: p.hex }} aria-hidden="true" />
+                <span>
+                  <b>{WORD[p.id]}</b> · {p.meaning}
+                </span>
+              </li>
             ))}
-          </div>
+          </ul>
+          <h1 className="welcome-big">how would you like to spend today?</h1>
           <div className="welcome-foot">
             <button className="pill" onClick={() => setStep(1)}>
-              let's begin
+              start now
             </button>
           </div>
         </section>
