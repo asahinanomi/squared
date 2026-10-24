@@ -111,7 +111,22 @@ export function Today(props: Props) {
     dips.current = []
     setTorn(false)
   }, [date])
+  // One breath before you paint: the first dip of the day, on today, the canvas glows in and out once (4s) and says
+  // "be here". Remembered on the device, so it's once a day; it never holds the brush.
+  const [breathing, setBreathing] = useState(false)
+  const breathe = () => {
+    if (date !== today || days[date]) return
+    try {
+      if (localStorage.getItem('squared.breathed') === today) return
+      localStorage.setItem('squared.breathed', today)
+    } catch {
+      return
+    }
+    setBreathing(true)
+    setTimeout(() => setBreathing(false), 4000)
+  }
   const dip = (p: Paint) => {
+    breathe()
     onLoad(p)
     setWhisper({ paint: p, at: Date.now() })
     if (p === 'grey') return
@@ -301,6 +316,7 @@ export function Today(props: Props) {
                 onDryBrush={onDryBrush}
                 onFilled={onFilled}
                 blank={blankWord(date, today)}
+                breathing={breathing}
               />
             </div>
             {hasNext ? peek(next, 1) : <span className="peek is-none" />}
@@ -335,6 +351,7 @@ export function Today(props: Props) {
                 pinned={(why.pinned || why.note?.pinned) && !!day?.framed}
                 isPinned={why.note?.pinned}
                 onPin={why.note ? () => props.onPinNote(why.note!) : undefined}
+                now={!day && date === today && !why.note}
               />
             ) : (
               <>
@@ -374,7 +391,8 @@ export function Today(props: Props) {
 
       {/* Notes stay just as they were, below; kept mounted (hidden) while writing so opened notes stay open. */}
       <div className="tray-rest" hidden={!!why}>
-        {(day || notes.length > 0) && (
+        {/* Today, before it's painted: moments as they happen ("right now…"), waiting for tonight's paint. */}
+        {(day || notes.length > 0 || date === today) && (
           <NotesList
             key={date}
             notes={notes}
@@ -382,6 +400,7 @@ export function Today(props: Props) {
             onOpen={(n) => onOpenWhy(n)}
             onAdd={() => onOpenWhy()}
             onDelete={onDeleteNote}
+            addLabel={!day && date === today ? 'add a moment' : undefined}
           />
         )}
         {/* The day is done: where next, quietly, at the very end. */}

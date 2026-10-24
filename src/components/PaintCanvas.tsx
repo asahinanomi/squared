@@ -16,6 +16,8 @@ type Props = {
   onFilled: (p: Paint) => void
   /** The quiet word on a blank square: "paint your day" (today) or "paint this day". */
   blank?: string
+  /** The day's first dip: the canvas breathes once ("be here"). */
+  breathing?: boolean
 }
 
 // A quiet word in the middle of the square: what it holds, or that it's waiting.
@@ -69,7 +71,16 @@ function brushCursor(tip: string) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 4 36, crosshair`
 }
 
-export function PaintCanvas({ saved, framed, loaded, stamp, onDryBrush, onFilled, blank = 'paint your day' }: Props) {
+export function PaintCanvas({
+  saved,
+  framed,
+  loaded,
+  stamp,
+  onDryBrush,
+  onFilled,
+  blank = 'paint your day',
+  breathing,
+}: Props) {
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const covered = useRef(new Uint8Array(GRID * GRID))
@@ -276,7 +287,8 @@ export function PaintCanvas({ saved, framed, loaded, stamp, onDryBrush, onFilled
           'canvas' +
           (settling ? ' is-settling' : '') +
           (framed && saved ? ' is-framed' : '') +
-          (shining ? ' is-shining' : '')
+          (shining ? ' is-shining' : '') +
+          (breathing && !saved ? ' is-breathing' : '')
         }
         style={saved ? frameVars(saved) : undefined}
         aria-label={saved ? `Painted ${saved}` : 'Unpainted square'}
@@ -296,7 +308,7 @@ export function PaintCanvas({ saved, framed, loaded, stamp, onDryBrush, onFilled
             aria-hidden="true"
           >
             <span className="canvas-sign">
-              <span className="canvas-hand">{saved ? WORD[saved] : blank}</span>
+              <span className="canvas-hand">{saved ? WORD[saved] : breathing ? 'be here' : blank}</span>
               {saved && stamp && <small className="canvas-painted">{stamp}</small>}
             </span>
           </span>

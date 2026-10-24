@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 24, 2026, 13:18 UTC_
+_last updated Oct 24, 2026, 13:45 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -147,6 +147,11 @@ Build step by step; the owner reviews and gives feedback after each step before 
 **my days (Oct 23, 2026)** (`src/screens/MyDays.tsx`): the menu's "my squares" (which only opened a zoom level the zoom buttons already reach) became **my days**, the life dashboard, as doors, never a page of numbers: the rows **a life pie** (the full pie; its "‹ my days" leads back. A picture of the pie here read techy and alone, so it's a row until there's a better idea), **all my squares** (a life, day by day), **what matters**, **my framed days**, **my paintings**, each back to my days. The pie left the bar's view switch (now squares · list), and the pie page has no bottom bar: it's a page like my days' others ("‹ my days", the title, whole life · days I lived · painted only, the pie); pinch still steps those three. Settings lost those rows and its groups: one short list (square settings, sound, lock when I leave, export my data, delete my account).
 
 **Privacy and terms: "last updated" at the foot** (Oct 24, 2026), under the signature, quiet (12px, muted); kept, since a privacy policy has to show when it last changed (CCPA). Now Oct 24, 2026 (both pages say "the about page").
+
+**Be here, now** (Oct 24, 2026; squared's essence: we can't change the past, now is what we have):
+- **One breath before you paint**: the day's first dip of the brush, on today while it's blank, the canvas glows softly in and out once (4 seconds, like a breath) and its hand says "be here". Once a day (remembered on the device), it never holds the brush, and without motion it's just the words.
+- **"right now…" moments**: today, before it's painted, the notes show with "add a moment", and the note opens with "right now…" instead of "because…". Jot a moment as it happens; it keeps its time, and waits for tonight's paint. Once the day is painted, notes are "because…" again.
+- Next: a morning intention ("what would make today worth it?"), with a lab first (it adds a line to the canvas and one new table column).
 
 **Swipe the week** (Oct 24, 2026): on home, swipe the week card right for the week before (or tap the quiet ‹ beside its dates; › comes back), to catch up on missed days from home. Its title follows ("this week", "last week", "3 weeks ago"), and so does its line ("5 days in colour that week.", "Every day that week, in colour." with its rainbow, "Nothing painted that week."). It stops at this week and at the week you were born, and home always opens on this week.
 

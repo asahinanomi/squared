@@ -11,6 +11,8 @@ type Props = {
   framed?: Paint
   onOpen: (n: Note) => void
   onAdd: () => void
+  /** The add button's words: "add new note", or on today before it's painted, "add a moment". */
+  addLabel?: string
   onDelete: (n: Note) => Promise<void>
 }
 
@@ -32,7 +34,7 @@ const writeHidden = (hidden: boolean) => {
 }
 
 // A day's notes, oldest to newest. The latest always shows; older ones can be tucked away.
-export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
+export function NotesList({ notes, framed, onOpen, onAdd, onDelete, addLabel = 'add new note' }: Props) {
   const [hidden, setHidden] = useState(readHidden)
   // Only one row is swiped open at a time; deleting always asks first.
   const [swiped, setSwiped] = useState<string | null>(null)
@@ -96,7 +98,7 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
       {!hidden && older.map(row)}
       {latest && row(latest)}
       <button className="note-add" onClick={onAdd}>
-        add new note
+        {addLabel}
       </button>
       {asking && (
         <ConfirmDialog
