@@ -4244,12 +4244,12 @@ button.home-card:active {
   color: var(--ink-soft);
 }
 /* Today painted: the page's title says so. */
-.home-greet.is-left {
-  text-align: left;
-  margin-bottom: -6px;
+.home-greet.is-over {
+  margin-bottom: -14px; /* sits with the title under it, as one line of greeting */
 }
 .home-title {
   margin: 0 0 2px;
+  text-align: center; /* home is centred: the greeting, the title, the line at the foot */
   font-size: 28px;
   font-weight: 600;
   letter-spacing: -0.03em;

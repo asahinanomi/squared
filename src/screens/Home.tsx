@@ -237,7 +237,7 @@ export function Home({ name, days, notes, profile, steps, onToday, onDay, onFind
       <div className="home-now">
         {painted ? (
           <>
-            <p className="home-greet is-left">{greeting(name)}</p>
+            <p className="home-greet is-over">{greeting(name)}</p>
             <h1 className="home-title">Today is in colour.</h1>
           </>
         ) : (
