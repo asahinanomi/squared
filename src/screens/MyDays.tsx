@@ -82,8 +82,15 @@ export function MyDays({
                 {fmt(c.left)}
                 <small>days</small>
               </span>
-              <span className="home-bar" aria-hidden="true">
-                <i style={{ width: `${(c.sofar / c.total) * 100}%` }} />
+              {/* Now, on the line: a dot where the days lived meet the days ahead, "today" under it. */}
+              <span className="life-track" aria-hidden="true">
+                <span className="home-bar">
+                  <i style={{ width: `${(c.sofar / c.total) * 100}%` }} />
+                </span>
+                <i className="life-now" style={{ left: `${(c.sofar / c.total) * 100}%` }} />
+              </span>
+              <span className="life-now-label" aria-hidden="true">
+                <span style={{ left: `clamp(18px, ${(c.sofar / c.total) * 100}%, calc(100% - 18px))` }}>today</span>
               </span>
               <span className="home-legend">
                 <span>{lived}% lived</span>
@@ -117,6 +124,8 @@ export function MyDays({
         {row('framed days', 'the days you framed', onFramed)}
         {row('paintings', 'the paintings you kept', onPaintings)}
       </div>
+      {/* Looked back; the page ends on now. */}
+      <p className="my-days-close">The past is painted. Today is still yours.</p>
     </main>
   )
 }

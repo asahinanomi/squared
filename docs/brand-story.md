@@ -156,7 +156,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **What matters (compass)** — "what does a meaningful day look like to you? and what feels empty?" · filter: all · worth it · regret · **now, paint today →** (or back to today →) · "a guide, not a rule. you still choose the day's colour"
 
-**my days** (the menu) — a life (the bar) · October, so far · 2026, so far · what matters · a life, in squares · a life, in slices · framed days · paintings. Each row is named after the page it opens; none says "my", since the page does.
+**my days** (the menu) — a life (the bar, with an ink dot and "today" where lived meets ahead) · October, so far · 2026, so far · what matters · a life, in squares · a life, in slices · framed days · paintings. Each row is named after the page it opens; none says "my", since the page does. It ends: *The past is painted. Today is still yours.*
 
 **Settings** — how many squares · sound · lock when I leave · export my data · delete my account (sign out is the menu's last line, under "about")
 
