@@ -45,21 +45,29 @@ export const PAGES: Screen[] = [
 export const demo = !supabase
 const params = new URLSearchParams(location.search)
 // A test link (?welcome, ?squares, ?month, ?year) opened while signed out survives the trip through Google sign-in,
-// which returns to the bare address: kept for this tab only, used once when it comes back.
+// which returns to the bare address: kept on the device for 10 minutes, used once when it comes back.
 const TEST_KEY = 'squared.testLink'
 const TESTS = ['welcome', 'squares', 'month', 'year']
 // Back from Google: a ?code, or an #id_token (direct sign-in).
 const returning = location.search.includes('code=') || /id_token|access_token/.test(location.hash)
 try {
   const asked = TESTS.find((t) => params.has(t))
-  if (asked) sessionStorage.setItem(TEST_KEY, asked)
+  if (asked) localStorage.setItem(TEST_KEY, JSON.stringify({ t: asked, at: Date.now() }))
   else if (returning) {
-    const kept = sessionStorage.getItem(TEST_KEY)
-    if (kept) params.set(kept, '')
+    const kept = JSON.parse(localStorage.getItem(TEST_KEY) ?? 'null') as { t: string; at: number } | null
+    if (kept && Date.now() - kept.at < 10 * 60_000) params.set(kept.t, '')
+    localStorage.removeItem(TEST_KEY)
   }
-  if (!asked) sessionStorage.removeItem(TEST_KEY) // used once (or never asked)
 } catch {
   /* without storage, a test link works only while signed in */
+}
+/** A test walked through: nothing left to carry through a sign-in. */
+export const forgetTestLink = () => {
+  try {
+    localStorage.removeItem(TEST_KEY)
+  } catch {
+    /* nothing kept */
+  }
 }
 // squared.today/?welcome opens onboarding on any account, to try it: nothing is saved.
 export const tryWelcome = params.has('welcome')

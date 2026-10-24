@@ -26,7 +26,7 @@ import { Today } from './screens/Today'
 import { Welcome } from './screens/Welcome'
 import { WhatMatters } from './screens/WhatMatters'
 import { Year } from './screens/Year'
-import { demo, tryWelcome } from './state/app'
+import { demo, forgetTestLink, tryWelcome } from './state/app'
 import type { Account } from './state/useAccount'
 import type { useDayActions } from './state/useDayActions'
 import type { useKept } from './state/useKept'
@@ -175,7 +175,10 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, sig
         }}
         onMatters={lists.addLines}
         onDone={() => {
-          if (tryWelcome) history.replaceState(null, '', location.pathname)
+          if (tryWelcome) {
+            history.replaceState(null, '', location.pathname)
+            forgetTestLink()
+          }
           nav.goToday() // the first square, with the ghost brush showing how
         }}
       />

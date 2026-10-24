@@ -3575,7 +3575,17 @@ button.settings-row:active {
   line-height: 1.4;
 }
 /* The first step: what squared is (one short paragraph), the question on its own, then the paint. */
+/* Step 1 opens with a heading, in the app's heading type (as page titles). */
+.welcome-hello {
+  margin: 0 0 14px;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--ink);
+}
 .welcome-intro {
+  text-wrap: balance; /* no word left alone on a line */
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -3583,7 +3593,8 @@ button.settings-row:active {
   font-size: 16px;
   line-height: 1.4;
 }
-.welcome-intro p {
+.welcome-intro p,
+p.welcome-intro {
   margin: 0;
 }
 .welcome-big {

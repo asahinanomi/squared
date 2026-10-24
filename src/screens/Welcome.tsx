@@ -117,10 +117,12 @@ export function Welcome({ tryOut, onSquares, onDone, onMatters }: Props) {
         <section className="welcome-step is-pause" key="intro" aria-label="Step 1 of 4">
           {/* What a square is and what its colour means (the three lines, as under the palette); then a question
               that looks forward, about now. */}
-          <div className="welcome-intro">
-            <p>Welcome to squared.</p>
-            <p>Each square is one day of your life. Its colour is how you spent it:</p>
-          </div>
+          <h2 className="welcome-hello">Welcome to squared.</h2>
+          <p className="welcome-intro">
+            Each square represents one day of your life.
+            <br />
+            Its colour is how you spent it:
+          </p>
           <ul className="welcome-colours">
             {PAINTS.map((p) => (
               <li key={p.id}>
@@ -131,7 +133,7 @@ export function Welcome({ tryOut, onSquares, onDone, onMatters }: Props) {
               </li>
             ))}
           </ul>
-          <h1 className="welcome-big">how would you like to spend today?</h1>
+          <h1 className="welcome-big">how would you like to spend your days?</h1>
           <div className="welcome-foot">
             <button className="pill" onClick={() => setStep(1)}>
               start now
