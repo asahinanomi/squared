@@ -156,7 +156,9 @@ These describe squares, not feelings. Keep them out of the three-colour language
 >
 > paint one square a day. no streaks, no scores. just a moment to be here and now. keep in mind: noticing a regret day is how the next one could go differently ;)
 >
-> I'll try to paint as many green squares as I can, and I hope squared helps you do the same. the past is painted. today is still yours.
+> I'll try to paint as many green squares as I can.
+>
+> the past is painted. today is still yours.
 >
 > — nomi
 >
