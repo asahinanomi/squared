@@ -14,7 +14,7 @@ squared is a daily conscience tracker. Each day you paint one square, one honest
 
 > **The past is painted. Today is still yours.**
 
-squared in eight words: the days behind are done (lived, painted); now is what you have; spend it on what matters, with less regret. Warm, not preachy: it hands today back to you. It sits on home, at the foot (home is today, now), and on my days, right under the life bar, where its dot says "today": the question's serif, 22px, ink, centred, no box. It may become squared's tagline (on sign-in under the wordmark, or the share card) once it has earned its place; sign-in's hero stays the number and the question for now.
+squared in eight words: the days behind are done (lived, painted); now is what you have; spend it on what matters, with less regret. Warm, not preachy: it hands today back to you. It sits on home, at the foot (home is today, now), and on my days, inside the life card as the bar's caption, where its dot says "today": under a thin hairline, the serif, 18px, ink-soft, centred. It may become squared's tagline (on sign-in under the wordmark, or the share card) once it has earned its place; sign-in's hero stays the number and the question for now.
 
 ## 2. The idea (the why)
 
@@ -166,7 +166,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **What matters (compass)** — "what does a meaningful day look like to you? and what feels empty?" · filter: all · worth it · regret · **now, paint today →** (or back to today →) · "a guide, not a rule. you still choose the day's colour"
 
-**my days** (the menu) — a life (the bar, with an ink dot and "today" where lived meets ahead) · October, so far · 2026, so far · what matters · a life, in squares · a life, in slices · framed days · paintings. Each row is named after the page it opens; none says "my", since the page does. Under the bar: *The past is painted. Today is still yours.* (the line, 1b)
+**my days** (the menu) — a life (the bar, with an ink dot and "today" where lived meets ahead) · October, so far · 2026, so far · what matters · a life, in squares · a life, in slices · framed days · paintings. Each row is named after the page it opens; none says "my", since the page does. The life card's caption: *The past is painted. Today is still yours.* (the line, 1b)
 
 **Settings** — how many squares · sound · lock when I leave · export my data · delete my account (sign out is the menu's last line, under "about")
 

@@ -96,11 +96,11 @@ export function MyDays({
                 <span>{lived}% lived</span>
                 <span>{100 - lived}% ahead</span>
               </span>
+              {/* squared's line, the bar's caption: what its "today" means. The tagline candidate (brand story). */}
+              <span className="my-days-line">The past is painted. Today is still yours.</span>
             </button>
           )
         })()}
-      {/* squared's line, under the bar's "today": what that dot means. The tagline candidate (brand story). */}
-      <p className="my-days-line">The past is painted. Today is still yours.</p>
       {(hasMonth || hasYear) && (
         <section className="home-card home-paintings my-days-paintings">
           {hasMonth && (

@@ -4854,18 +4854,19 @@ button.home-card:active {
 .my-days-life .home-legend {
   margin-top: 2px;
 }
-/* squared's line, under the life bar: the question's serif, a touch larger, in ink, with room around it; no box, no
-   colour, like the line under a painting's title. */
+/* squared's line, inside the life card as the bar's caption: under a hairline, the serif, quiet. */
 .my-days-line {
-  margin: 26px 0 14px;
+  display: block;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #ecece5;
   text-align: center;
   font-family: var(--font-reflect);
   font-optical-sizing: auto;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 450;
   line-height: 1.3;
-  letter-spacing: -0.005em;
-  color: var(--ink);
+  color: var(--ink-soft);
   text-wrap: balance;
 }
 /* my days: a life as one bar first, then this month and year so far, as paintings, over the rows. */
@@ -4874,9 +4875,6 @@ button.home-card:active {
 }
 .my-days-paintings {
   margin-top: 12px;
-}
-.my-days-line + .my-days-paintings {
-  margin-top: 0; /* the line keeps its own room */
 }
 /* One space between every card on my days: the bar, the paintings, each row. */
 .my-days .settings-rows {
