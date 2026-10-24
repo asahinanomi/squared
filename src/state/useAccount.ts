@@ -7,7 +7,7 @@ import { fetchAllNotes, fetchMonthNotes, legacyNotes, type Notes } from '../lib/
 import { fetchProfile, type Profile } from '../lib/profile'
 import { reportError } from '../lib/report'
 import { fetchQuestion } from '../lib/supabase'
-import { demo, legalAtStart, trySquaresAtStart, tryWelcome } from './app'
+import { demo, legalAtStart, tryWelcome } from './app'
 
 /** What the account holds for whoever is signed in: the question, the profile, every painted day, and the notes
  *  (a month at a time). Loaded from the account on sign-in; never an empty life in place of one that didn't load. */
@@ -21,7 +21,7 @@ export function useAccount(userId: string | undefined) {
   const [loadFailed, setLoadFailed] = useState(false)
   // Signed in on a device that hasn't settled whether this is someone new: wait for the days before showing
   // anything, so today never flashes up before the welcome.
-  const [checking, setChecking] = useState(() => !legalAtStart && !tryWelcome && !trySquaresAtStart)
+  const [checking, setChecking] = useState(() => !legalAtStart && !tryWelcome)
   const notesLoaded = useRef(new Set<string>())
 
   // The demo keeps its profile on this device.

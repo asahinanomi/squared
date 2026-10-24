@@ -109,17 +109,16 @@ export default function App() {
       <OpenPainting.Provider value={painting.paintedMonth}>
         {/* Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint). */}
         <div className={'app' + (oneScreen ? ' is-one-screen' : '')}>
-          {!NO_TOPBAR.includes(screen) &&
-            !(screen === 'setup' && (nav.trySquares || nav.afterSetup !== 'settings')) && (
-              <Topbar
-                onHome={nav.goHome}
-                onToday={nav.goToday}
-                onCalendar={nav.openMyDays}
-                onIdea={() => nav.setScreen('idea')}
-                onSettings={nav.openSettings}
-                onSignOut={signOut}
-              />
-            )}
+          {!NO_TOPBAR.includes(screen) && !(screen === 'setup' && nav.afterSetup !== 'settings') && (
+            <Topbar
+              onHome={nav.goHome}
+              onToday={nav.goToday}
+              onCalendar={nav.openMyDays}
+              onIdea={() => nav.setScreen('idea')}
+              onSettings={nav.openSettings}
+              onSignOut={signOut}
+            />
+          )}
           <div
             className={'stage' + (nav.motion ? ` is-zoom-${nav.motion}` : '')}
             key={screen === 'life' ? `life-${nav.lifeRes}` : screen}

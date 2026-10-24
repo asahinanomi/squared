@@ -6,7 +6,7 @@ import type { Why } from '../lib/notes'
 import { SCOPE_ORDER, type Scope, type SliceId } from '../lib/pie'
 import type { Profile } from '../lib/profile'
 import { usePinch, type Focal } from '../lib/usePinch'
-import { LADDER, leaveLegalUrl, legalAtStart, trySquaresAtStart, tryWelcome, type Legal, type Screen } from './app'
+import { LADDER, leaveLegalUrl, legalAtStart, tryWelcome, type Legal, type Screen } from './app'
 
 const RES: Resolution[] = ['years', 'months', 'days'] // the three views of a life, outward
 const MONTH_NOTCHES = 2
@@ -15,9 +15,7 @@ const LIFE_NOTCHES = 4
 /** Where you are and how you move: the screen and day, the zoom ladder (a day → its month → its year → a life), the
  *  list and the pie beside it, the small print, settings, and pinching. */
 export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) => void, signedIn: boolean) {
-  const [screen, setScreenValue] = useState<Screen>(
-    legalAtStart ?? (tryWelcome ? 'welcome' : trySquaresAtStart ? 'setup' : 'today'),
-  )
+  const [screen, setScreenValue] = useState<Screen>(legalAtStart ?? (tryWelcome ? 'welcome' : 'today'))
   const [date, setDate] = useState(todayIso)
   // Which way the last move went, so the new level can zoom in or out into place.
   const [motion, setMotion] = useState<'in' | 'out' | null>(null)
@@ -32,8 +30,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const [focal, setFocal] = useState<Focal | undefined>()
   const [monthAnchor, setMonthAnchor] = useState<{ iso?: string; y: number } | undefined>()
   // Where "how many squares?" returns to: a life, when it was asked for on the way there.
-  const [afterSetup, setAfterSetup] = useState<Screen>(trySquaresAtStart ? 'life' : 'today')
-  const [trySquares, setTrySquares] = useState(trySquaresAtStart)
+  const [afterSetup, setAfterSetup] = useState<Screen>('today')
   // The zoom level the pie was opened from: the switch returns there.
   const [pieFrom, setPieFrom] = useState<Screen>('life')
   // Which days the pie is out of; it always opens on the whole life.
@@ -218,11 +215,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setMattersFrom(from)
     setScreenValue('matters')
   }
-  const endTrySquares = () => {
-    setTrySquares(false)
-    history.replaceState(null, '', location.pathname)
-    goToday()
-  }
   // Back from how many squares: wherever it was asked from.
   const leaveSetup = () =>
     afterSetup === 'home'
@@ -340,7 +332,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     listOnly,
     setListOnly,
     listMid,
-    trySquares,
     afterSetup,
     mattersFrom,
     legalBack,
@@ -366,7 +357,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     openListFromMyDays,
     lifeBack,
     openPie,
-    endTrySquares,
     leaveSetup,
     afterSquares,
     openLegal,

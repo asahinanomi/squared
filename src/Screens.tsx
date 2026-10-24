@@ -150,8 +150,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, sig
     )
   if (screen === 'idea')
     return <About onMatters={() => nav.openMatters('idea')} onLegal={(page) => nav.openLegal(page, 'idea')} />
-  if (screen === 'setup' && nav.trySquares)
-    return <Setup profile={null} onBack={nav.endTrySquares} onSave={async () => nav.endTrySquares()} />
   if (screen === 'setup')
     return (
       <Setup
