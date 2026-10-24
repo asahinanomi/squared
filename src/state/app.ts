@@ -44,6 +44,23 @@ export const PAGES: Screen[] = [
 // Without Supabase env vars the app runs as a local demo: no sign-in, fake days, nothing saved.
 export const demo = !supabase
 const params = new URLSearchParams(location.search)
+// A test link (?welcome, ?squares, ?month, ?year) opened while signed out survives the trip through Google sign-in,
+// which returns to the bare address: kept for this tab only, used once when it comes back.
+const TEST_KEY = 'squared.testLink'
+const TESTS = ['welcome', 'squares', 'month', 'year']
+// Back from Google: a ?code, or an #id_token (direct sign-in).
+const returning = location.search.includes('code=') || /id_token|access_token/.test(location.hash)
+try {
+  const asked = TESTS.find((t) => params.has(t))
+  if (asked) sessionStorage.setItem(TEST_KEY, asked)
+  else if (returning) {
+    const kept = sessionStorage.getItem(TEST_KEY)
+    if (kept) params.set(kept, '')
+  }
+  if (!asked) sessionStorage.removeItem(TEST_KEY) // used once (or never asked)
+} catch {
+  /* without storage, a test link works only while signed in */
+}
 // squared.today/?welcome opens onboarding on any account, to try it: nothing is saved.
 export const tryWelcome = params.has('welcome')
 // squared.today/?squares opens "how many squares?" as the first time shows it, to try it: nothing is saved.

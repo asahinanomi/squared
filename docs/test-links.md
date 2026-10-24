@@ -16,3 +16,5 @@ Hidden links for trying squared's first-time moments on your own account. Open t
 - [squared.today/faq](https://squared.today/faq)
 - [squared.today/privacy](https://squared.today/privacy)
 - [squared.today/terms](https://squared.today/terms)
+
+Signed out? Open the link anyway: it survives the trip through Google sign-in (kept for that tab only, used once), so you land on the test after signing in. (Fixed Oct 24, 2026: with "lock when I leave", you're often signed out, and Google returns to the bare address.)
