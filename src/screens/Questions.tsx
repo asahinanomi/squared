@@ -54,15 +54,15 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'Can I paint days I missed?',
-      'Of course. Life gets busy, that’s why squared exists. Tap the date or swipe back to any day since your birthday.',
+      'Of course. Life gets busy, that’s why squared exists. Tap “paint another day” on home, or the date on any day, and pick the day.',
     ],
     [
       'What are notes for?',
-      'For the why. What made the day feel that way, a moment you want to keep, or what you see now that you didn’t then. A day can hold as many as it needs.',
+      'To finish the sentence. After you paint, squared opens “because…”: why the day was worth it, a regret, or a blur. A moment you want to keep, or what you see now that you didn’t then. A day can hold as many notes as it needs.',
     ],
     [
       'What is “what matters”?',
-      'Your own compass: what makes a day meaningful to you, and what makes one feel empty. When you’re torn between colours, squared gently reminds you what you said.',
+      'Your own compass: what makes a day worth it to you, and what you’d regret. When you’re torn between colours, squared gently reminds you what you said.',
     ],
     [
       'Is my data private?',
