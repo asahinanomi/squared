@@ -20,6 +20,8 @@ squared is a daily conscience tracker. Each day you paint one square, one honest
 
 **It makes you think deeply.** Painting one square asks for a moment of honest reflection: what did this day hold, and was I there for it? That pause, thinking deeply about your own days, is itself meaningful. It's what squared does for people. (nomi, Oct 23, 2026, painting her own past days: "this practice makes me think deeply, and that is meaningful.")
 
+**Now, then a day, then a life.** We can't change the past; this moment is what we have. squared works from the small to the large: notice the **moment** you're in (be here), so the **day** is spent on what matters, so the **life** those days build is meaningful, with less regret. That's why what you write is a *moment*, why the day's first dip breathes "be here", and why the question asks "am I spending Today…" while the day is still being lived. (nomi, Oct 24, 2026)
+
 **Less regret.** I want to live meaningfully because I can't bear the thought of the regret days. On my death bed, I want to say I have no regrets, or fewer. squared helps me see them while there's still time to choose differently. (nomi, Oct 23, 2026)
 
 Rooted in Covey's urgent-vs-important: a day can be busy and still not matter. squared asks you to notice the difference, one day at a time.
