@@ -14,7 +14,7 @@ squared is a daily conscience tracker. Each day you paint one square, one honest
 
 > **The past is painted. Today is still yours.**
 
-squared in eight words: the days behind are done (lived, painted); now is what you have; spend it on what matters, with less regret. Warm, not preachy: it hands today back to you. It sits on home, at the foot (home is today, now), and on my days, inside the life card as the bar's caption, where its dot says "today": under a thin hairline, the serif, 18px, ink-soft, centred. It may become squared's tagline (on sign-in under the wordmark, or the share card) once it has earned its place; sign-in's hero stays the number and the question for now.
+squared in eight words: the days behind are done (lived, painted); now is what you have; spend it on what matters, with less regret. Warm, not preachy: it hands today back to you. It sits on home, at the foot (home is today, now), and on my days, inside the life card as the bar's caption, where its dot says "today": under a thin hairline, the serif, 22px, ink-soft, centred. It may become squared's tagline (on sign-in under the wordmark, or the share card) once it has earned its place; sign-in's hero stays the number and the question for now.
 
 ## 2. The idea (the why)
 
