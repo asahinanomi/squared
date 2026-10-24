@@ -1,3 +1,4 @@
+import { isoDate } from '../lib/dates'
 import { frameVars, type Paint } from '../lib/paints'
 import { useState } from 'react'
 import type { Note } from '../lib/notes'
@@ -15,6 +16,8 @@ type Props = {
   addLabel?: string
   /** What they're called in the count: notes, or on today before it's painted, moments. */
   noun?: 'note' | 'moment'
+  /** When the day was first painted (ISO): notes written on the day before it are labelled "a moment". */
+  paintedAt?: string
   onDelete: (n: Note) => Promise<void>
 }
 
@@ -36,7 +39,18 @@ const writeHidden = (hidden: boolean) => {
 }
 
 // A day's notes, oldest to newest. The latest always shows; older ones can be tucked away.
-export function NotesList({ notes, framed, onOpen, onAdd, onDelete, addLabel = 'add new note', noun = 'note' }: Props) {
+export function NotesList({
+  notes,
+  framed,
+  onOpen,
+  onAdd,
+  onDelete,
+  addLabel = 'add new note',
+  noun = 'note',
+  paintedAt,
+}: Props) {
+  // A moment: written on its own day, before the day was painted. Only labelled once there's a paint to be before.
+  const isMoment = (n: Note) => !!paintedAt && n.writtenAt < paintedAt && isoDate(new Date(n.writtenAt)) === n.date
   const [hidden, setHidden] = useState(readHidden)
   // Only one row is swiped open at a time; deleting always asks first.
   const [swiped, setSwiped] = useState<string | null>(null)
@@ -49,7 +63,7 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete, addLabel = '
       onOpenChange={(o) => setSwiped(o ? n.id : null)}
       onDelete={() => setAsking(n)}
     >
-      <NoteCard note={n} framed={!!framed} onOpen={() => onOpen(n)} />
+      <NoteCard note={n} framed={!!framed} moment={isMoment(n)} onOpen={() => onOpen(n)} />
     </SwipeRow>
   )
 

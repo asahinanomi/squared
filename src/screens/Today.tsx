@@ -404,6 +404,7 @@ export function Today(props: Props) {
             onDelete={onDeleteNote}
             addLabel={!day && date === today ? 'add a moment' : undefined}
             noun={!day && date === today ? 'moment' : 'note'}
+            paintedAt={day?.paintedAt}
           />
         )}
         {/* The day is done: where next, quietly, at the very end. */}

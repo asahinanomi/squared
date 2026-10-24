@@ -34,7 +34,7 @@ export function useDayActions(
                 color,
                 changedOn: d[date].color !== color ? todayIso() : d[date].changedOn,
               }
-            : { backfilled: !paintedFresh(date), paintedOn: todayIso(), color },
+            : { backfilled: !paintedFresh(date), paintedOn: todayIso(), paintedAt: new Date().toISOString(), color },
         }
       })
       save({ k: 'color', date, color })

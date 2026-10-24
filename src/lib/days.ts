@@ -8,12 +8,14 @@ export type Day = {
   backfilled?: boolean
   /** the date it was first painted on (repaints keep it): a journal's entry date */
   paintedOn?: string
+  /** when it was first painted, exactly (ISO): notes written before it, on the day, were moments */
+  paintedAt?: string
   note?: string
   /** when the note was last written (ISO) */
   noteAt?: string
   /** the date its colour last changed (a repaint in a new colour), if ever */
   changedOn?: string
-  /** a day that mattered most, framed (green days only) */
+  /** a day you want to keep, framed (any colour) */
   framed?: boolean
 }
 
@@ -80,6 +82,7 @@ export async function fetchAllDays(): Promise<Days> {
         color: r.color,
         backfilled: r.painted_on_day === false,
         paintedOn: r.created_at ? isoDate(new Date(r.created_at)) : undefined,
+        paintedAt: r.created_at ?? undefined,
         note: r.note ?? undefined,
         noteAt: r.note_at ?? undefined,
         changedOn: r.changed_at ? isoDate(new Date(r.changed_at)) : undefined,
