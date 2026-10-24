@@ -18,6 +18,8 @@ type Props = {
   onMatters: () => void
   onFramed: () => void
   onPaintings: () => void
+  /** Beside the title: back to today, now. */
+  onToday: () => void
 }
 
 // my days (the menu): looking back, every door into your past in one place, never a dashboard of numbers. A life as one
@@ -34,6 +36,7 @@ export function MyDays({
   onMatters,
   onFramed,
   onPaintings,
+  onToday,
 }: Props) {
   const today = todayIso()
   const month = today.slice(0, 7)
@@ -52,7 +55,14 @@ export function MyDays({
   )
   return (
     <main className="settings my-days">
-      <h1 className="settings-title">my days</h1>
+      {/* Looking back, with the way to now always at hand, on the title's far right. */}
+      <div className="my-days-head">
+        <h1 className="settings-title">my days</h1>
+        <button className="my-days-today" onClick={onToday}>
+          to today
+          <Chevron dir="right" />
+        </button>
+      </div>
       {profile &&
         (() => {
           const c = lifeCounts(profile.born, profile.lifespan, today)

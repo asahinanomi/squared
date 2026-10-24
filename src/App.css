@@ -4717,6 +4717,25 @@ button.home-card:active {
   overflow: hidden;
 }
 
+/* my days' title row: the title, and "to today ›" on its far right, a quiet text link. */
+.my-days-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.my-days-today {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 0 8px 8px;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+.my-days-today svg {
+  width: 18px;
+  height: 18px;
+}
 /* my days: a life as one bar first, then this month and year so far, as paintings, over the rows. */
 .my-days-life {
   margin-top: 22px;
