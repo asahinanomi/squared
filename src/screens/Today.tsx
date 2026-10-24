@@ -15,6 +15,7 @@ import { setSoundOn, soundOn, soundOnChime } from '../lib/sound'
 import type { Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
+import { questionFor } from '../lib/question'
 
 type Props = {
   question: string
@@ -266,11 +267,9 @@ export function Today(props: Props) {
         }}
       >
         <div className="today-trio" ref={trio}>
-          {/* "Today" belongs to now: on any other day, the question asks about "this day" — the date under it. */}
-          <Question
-            text={date === today ? question : question.replace(/\bToday\b/, 'this\u00a0day')}
-            onDefine={onDefine}
-          />
+          {/* "Today" belongs to now: its tense follows the day ("am I spending…" while it's lived, "did I spend…" once
+              it's evening or painted); on any other day, the question asks about "this day", the date under it. */}
+          <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
 
           <div className="day-nav">
             {/* Tap the date to find any day you've lived: which year (with your age), which month, which day. */}

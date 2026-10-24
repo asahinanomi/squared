@@ -59,6 +59,7 @@ Voice rule: all three one-liners are **first person** (it's your own conscience,
 
 > **did I spend Today meaningfully?**
 
+- **Its tense follows the day** (Oct 24, 2026). Today, while it's blank and before 6pm: *am I spending Today meaningfully?*, a nudge to be present while it's lived. In the evening, or once today is painted: *did I spend Today meaningfully?*, the honest look back. Any other day: *did I spend this day meaningfully?* Sign-in, onboarding and the letter keep the classic *did I spend Today meaningfully?*
 - First person. Always.
 - **Today** is capitalised, with a dotted underline: it's the day itself, any day you're looking at.
 - Set in the reflective voice (Fraunces). It's the hero of the day screen, sign-in and onboarding.

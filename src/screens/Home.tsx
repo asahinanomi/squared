@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { addDays, fromIso, shortDateParts, todayIso } from '../lib/dates'
+import { stillToday } from '../lib/question'
 import type { Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
 import type { Notes } from '../lib/notes'
@@ -72,7 +73,7 @@ export function Home({ name, days, notes, profile, steps, onToday, onDay, onFind
   ) : (
     <div className="home-card home-ask">
       <p className="home-q">
-        did I spend <u>Today</u> meaningfully?
+        {stillToday(false) ? 'am I spending' : 'did I spend'} <u>Today</u> meaningfully?
       </p>
       <button className="pill" onClick={onToday}>
         paint today
@@ -196,7 +197,7 @@ export function Home({ name, days, notes, profile, steps, onToday, onDay, onFind
         </div>
         <div className="home-card home-ask">
           <p className="home-q">
-            did I spend <u>Today</u> meaningfully?
+            {stillToday(false) ? 'am I spending' : 'did I spend'} <u>Today</u> meaningfully?
           </p>
           <button className="pill" onClick={onToday}>
             paint your first square
