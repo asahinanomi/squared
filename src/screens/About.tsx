@@ -7,7 +7,7 @@ import { Support } from './Support'
 
 type Tab = 'idea' | 'questions' | 'touch' | 'support'
 const TABS: [Tab, string][] = [
-  ['idea', 'why squared'],
+  ['idea', 'about'],
   ['questions', 'faq'],
   ['touch', 'get in touch'],
   ['support', 'support'],

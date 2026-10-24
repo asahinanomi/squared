@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 24, 2026, 00:20 UTC_
+_last updated Oct 24, 2026, 00:21 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -150,7 +150,7 @@ Build step by step; the owner reviews and gives feedback after each step before 
 
 **This week carries its year** (Oct 23, 2026): "Oct 18 – Oct 24, 2026" on home's week (a week across New Year names both years).
 
-**"about" and "why squared" (Oct 23, 2026)**: the menu's "the idea" is now **about** (the page holds more than the letter: faq, get in touch, support, the small print). The letter is now **why squared** (its title, the about page's first tab, and sign-in's link), rewritten by nomi on the brand story: meaningful, not good; less regret; noticing without blame (the words are in `docs/brand-story.md`, locked). Back links from there say "‹ about".
+**"about" and "why squared" (Oct 23, 2026)**: the menu's "the idea" is now **about** (the page holds more than the letter: faq, get in touch, support, the small print). The letter is now **why squared** (its title and sign-in's link; the about page's first tab stays **about**, so the four pills fit one line: about · faq · get in touch · support), rewritten by nomi on the brand story: meaningful, not good; less regret; noticing without blame (the words are in `docs/brand-story.md`, locked). Back links from there say "‹ about".
 
 **"how many squares" (Oct 23, 2026)**: settings' first row, and its page, are called **how many squares** ("square settings" said "settings" twice; onboarding asks the same question), with "Oct 26, 1971 · 85 years · 31,047 squares" under it.
 
