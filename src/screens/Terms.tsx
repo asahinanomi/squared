@@ -11,7 +11,6 @@ export function Terms({ onBack, backLabel }: Props) {
         {backLabel}
       </button>
       <h1 className="idea-title">terms</h1>
-      <p className="privacy-date">last updated Oct 22, 2026</p>
       <p>squared is a small app made by one person. By using it, you agree to these few things.</p>
 
       <h2 className="privacy-head">it’s a beta, as is</h2>
@@ -44,6 +43,8 @@ export function Terms({ onBack, backLabel }: Props) {
       <h2 className="privacy-head">questions</h2>
       <p>Use “get in touch” (on the about page), or reply to any email from me.</p>
       <p className="idea-sign">— nomi</p>
+      {/* The date it last changed, required for a privacy policy: quiet, at the foot. */}
+      <p className="privacy-date">last updated Oct 24, 2026</p>
     </main>
   )
 }

@@ -11,7 +11,6 @@ export function Privacy({ onBack, backLabel }: Props) {
         {backLabel}
       </button>
       <h1 className="idea-title">privacy</h1>
-      <p className="privacy-date">last updated Oct 22, 2026</p>
       <p>squared is a private journal. Here’s exactly what it keeps, and what it doesn’t.</p>
       <p>squared is in beta. I’ll do my best to carry your squares and notes over when it leaves beta (see terms).</p>
 
@@ -58,6 +57,8 @@ export function Privacy({ onBack, backLabel }: Props) {
       <h2 className="privacy-head">questions</h2>
       <p>Use “get in touch” (on the about page), or reply to any email from me.</p>
       <p className="idea-sign">— nomi</p>
+      {/* The date it last changed, required for a privacy policy: quiet, at the foot. */}
+      <p className="privacy-date">last updated Oct 24, 2026</p>
     </main>
   )
 }
