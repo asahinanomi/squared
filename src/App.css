@@ -3622,7 +3622,7 @@ p.welcome-intro {
   text-decoration-thickness: 2.5px;
   text-underline-offset: 6px;
 }
-/* Step 1's three colours: each its square, its word and its line (the palette's, word for word), read left. */
+/* Step 1's three colours: each its dot, its word and its line (the palette's, word for word), read left. */
 .welcome-colours {
   list-style: none;
   margin: 14px auto 0; /* the same group as the line above it */
@@ -3642,10 +3642,13 @@ p.welcome-intro {
   color: var(--ink-soft);
 }
 .welcome-colours i {
+  /* a round dot of the paint, as under the palette and in the letter: explaining, never a square to paint */
   flex: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
+  width: 9px;
+  height: 9px;
+  margin: 6.5px 0 0 1.5px; /* centred on the first line (15px × 1.4), clear of its ring */
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--ink); /* the palette's dot, exactly (.whisper-dot) */
 }
 .welcome-colours b {
   font-weight: 600;
@@ -3756,6 +3759,15 @@ p.welcome-intro {
 }
 .welcome-read .idea {
   padding-top: 24px;
+}
+/* Its one way out: "close ✕", at the top right, as a sheet closes. */
+.read-close {
+  float: right;
+  min-height: 44px;
+  padding: 0 4px 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
 }
 .welcome-foot {
   margin-top: 36px;

@@ -1,15 +1,26 @@
 import { Chevron } from './Today'
 
-type Props = { onBack: () => void; backLabel: string }
+type Props = {
+  onBack: () => void
+  backLabel: string
+  /** Read over onboarding: only a close, nowhere else to go. */
+  asSheet?: boolean
+}
 
 // Terms: the few rules of using squared, in plain words, in privacy's paper.
-export function Terms({ onBack, backLabel }: Props) {
+export function Terms({ onBack, backLabel, asSheet }: Props) {
   return (
     <main className="idea privacy">
-      <button className="back-btn idea-back" onClick={onBack} aria-label={`Back to ${backLabel}`}>
-        <Chevron dir="left" />
-        {backLabel}
-      </button>
+      {asSheet ? (
+        <button className="read-close" onClick={onBack} aria-label="Close">
+          close ✕
+        </button>
+      ) : (
+        <button className="back-btn idea-back" onClick={onBack} aria-label={`Back to ${backLabel}`}>
+          <Chevron dir="left" />
+          {backLabel}
+        </button>
+      )}
       <h1 className="idea-title">terms</h1>
       <p>squared is a small app made by one person. By using it, you agree to these few things.</p>
 

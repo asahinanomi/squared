@@ -118,7 +118,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 1. **Welcome to squared.** (a heading) / "Each square represents one day of your life." / "Its colour is how you spent it:" · the three colours, each its square, word and line (🟩 worth it · yes, I spent it on what matters. 🟥 regret · no, I wish I'd spent it differently. ⬜ a blur · I don't know… I wasn't paying attention.) · *how would you like to spend your days?* · **start now** (Oct 24, 2026, nomi's structure and words)
 2. "what makes a day feel *meaningful*?" · next · skip this step
 3. "and what makes a day feel *empty*?" · next · skip this step
-4. "Almost there." / "how many squares do you have?" · "when were you born?" · "how long do you hope to live?" ("the average lifespan in America is about 79 years / 76 for men, 81 for women") · **28,855** / "squares in your life" / "and 13,709 still ahead to paint" · **start painting →** · "by starting, you confirm you're 18 or over and agree to the terms and privacy."
+4. "how many squares do you have?" · "when were you born?" · "how long do you hope to live?" ("the average lifespan in America is about 79 years / 76 for men, 81 for women") · **28,855** / "squares in your life" / "and 13,709 still ahead to paint" · **start painting →** · "by starting, you confirm you're 18 or over and agree to the terms and privacy."
 
 **Today (paint)**
 - *did I spend Today meaningfully?* · the date · the square: "paint your day" (today) or "paint this day"

@@ -247,7 +247,6 @@ function Squares({
   return (
     <section className="welcome-step welcome-squares" key="squares" aria-label="Step 4 of 4">
       {back}
-      <p className="welcome-eyebrow">Almost there.</p>
       <h1 className="welcome-q">how many squares do you have?</h1>
 
       <div className="setup-fields welcome-fields">
@@ -360,9 +359,9 @@ function Squares({
       {reading && (
         <div className="welcome-read">
           {reading === 'terms' ? (
-            <Terms onBack={() => setReading(null)} backLabel="back" />
+            <Terms onBack={() => setReading(null)} backLabel="back" asSheet />
           ) : (
-            <Privacy onBack={() => setReading(null)} backLabel="back" />
+            <Privacy onBack={() => setReading(null)} backLabel="back" asSheet />
           )}
         </div>
       )}
