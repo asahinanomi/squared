@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 24, 2026, 13:56 UTC_
+_last updated Oct 24, 2026, 13:59 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -151,7 +151,7 @@ Build step by step; the owner reviews and gives feedback after each step before 
 **Be here, now** (Oct 24, 2026; squared's essence: we can't change the past, now is what we have):
 - **One breath before you paint**: the day's first dip of the brush, on today while it's blank, the canvas fills with light and lets it go, swelling a little (4%) in and out, once (4 seconds, like a breath), and its hand says "be here" at 30px, the painted word's size. Once a day (remembered on the device; starting today over breathes again), it never holds the brush, and without motion it's just the words.
 - **"right now…" moments**: today, before it's painted, the notes show with "add a moment", and the note opens with "right now…" instead of "because…". Jot a moment as it happens; it keeps its time, and waits for tonight's paint. Once the day is painted, notes are "because…" again.
-- **The question's tense follows the day** (`src/lib/question.ts`, tested): on today and home, while today is blank and before 6pm, "am I spending Today meaningfully?"; in the evening or once painted, "did I spend Today meaningfully?"; other days "did I spend this day meaningfully?". Sign-in, onboarding and the letter keep the classic.
+- **The question's tense follows the day** (`src/lib/question.ts`, tested): on today and home, until today is painted, "am I spending Today meaningfully?"; once it's painted, "did I spend Today meaningfully?" (no clock: only the paint turns it); other days "did I spend this day meaningfully?". Sign-in, onboarding and the letter keep the classic.
 - Next: a morning intention ("what would make today worth it?"), with a lab first (it adds a line to the canvas and one new table column).
 
 **Swipe the week** (Oct 24, 2026): on home, swipe the week card right for the week before (or tap the quiet ‹ beside its dates; › comes back), to catch up on missed days from home. Its title follows ("this week", "last week", "3 weeks ago"), and so does its line ("5 days in colour that week.", "Every day that week, in colour." with its rainbow, "Nothing painted that week."). It stops at this week and at the week you were born, and home always opens on this week.

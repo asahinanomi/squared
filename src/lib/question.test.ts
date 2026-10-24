@@ -1,23 +1,13 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { questionFor } from './question'
 
 const Q = 'did I spend Today meaningfully?'
-const at = (h: number) => vi.setSystemTime(new Date(2026, 9, 24, h, 0))
 
 describe('the question follows the day', () => {
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-  it('asks about now while today is blank, before 6pm', () => {
-    vi.useFakeTimers()
-    at(9)
+  it('asks about now until today is painted, at any hour', () => {
     expect(questionFor(Q, true, false)).toBe('am I spending Today meaningfully?')
   })
-  it('looks back in the evening, or once today is painted', () => {
-    vi.useFakeTimers()
-    at(19)
-    expect(questionFor(Q, true, false)).toBe(Q)
-    at(9)
+  it('looks back once today is painted', () => {
     expect(questionFor(Q, true, true)).toBe(Q)
   })
   it('asks about "this day" on any other day', () => {

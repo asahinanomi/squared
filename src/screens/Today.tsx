@@ -267,8 +267,8 @@ export function Today(props: Props) {
         }}
       >
         <div className="today-trio" ref={trio}>
-          {/* "Today" belongs to now: its tense follows the day ("am I spending…" while it's lived, "did I spend…" once
-              it's evening or painted); on any other day, the question asks about "this day", the date under it. */}
+          {/* "Today" belongs to now: its tense follows the day ("am I spending…" until it's painted, "did I spend…" once
+              it is); on any other day, the question asks about "this day", the date under it. */}
           <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
 
           <div className="day-nav">
