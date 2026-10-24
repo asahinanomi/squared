@@ -128,11 +128,11 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 > **why squared**
 >
-> I had my head down in a busy life. one day, I looked up and saw so many days had gone. scarily fast, faster than I thought I had.
+> I had my head down in a busy life. one day, I looked up and saw so many days had gone. scarily fast, faster than I ever thought.
 >
-> the hard part wasn't the bad days. some of my hardest days were the ones truly worth it, the days I really grew. the worst were the days I wish I had lived differently: the days I could have spent on what truly matters, and the days that slipped by without me noticing.
+> the hard part wasn't the bad days. some of my hardest days were the ones truly worth it, the days I really grew. the worst were the days I wish I'd lived differently. and the days that slipped by without me noticing at all.
 >
-> I don't want to reach the end and find a life full of regret and blur.
+> when I reach the end, I don't want to find a life I'd live differently, or barely remember.
 >
 > squared asks one thing each day:
 >
@@ -142,9 +142,9 @@ These describe squares, not feelings. Keep them out of the three-colour language
 > 🟥 no, I wish I'd spent it differently.
 > ⬜ I don't know… I wasn't paying attention.
 >
-> paint one square a day. no streaks, no scores. just a moment to reflect, one day at a time. a day of regret isn't there to blame you. noticing it is how the next one goes differently.
+> paint one square a day. no streaks, no scores. just a moment to reflect, one day at a time. keep in mind: noticing a regret day is how the next one could go differently ;)
 >
-> I'll try to make mine meaningful, with as little regret as I can. I hope squared helps you do the same.
+> I'll try to paint as many green squares as I can. I hope squared helps you do the same.
 >
 > — nomi
 >
