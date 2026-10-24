@@ -3678,6 +3678,13 @@ p.welcome-intro {
   font-size: 14px;
   color: var(--muted);
 }
+/* A quiet line before a step's question (step 2: "before your first square, take a minute."). */
+.welcome-eyebrow {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
 .welcome-q {
   margin: 0;
   font-family: var(--font-reflect);
