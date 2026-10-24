@@ -247,7 +247,7 @@ function Squares({
   return (
     <section className="welcome-step welcome-squares" key="squares" aria-label="Step 4 of 4">
       {back}
-      <h1 className="welcome-q">how many squares do you have?</h1>
+      <h1 className="welcome-q">how many squares will you paint?</h1>
 
       <div className="setup-fields welcome-fields">
         <div>

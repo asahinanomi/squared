@@ -3579,12 +3579,6 @@ button.settings-row:active {
   align-self: flex-start;
   margin: -24px 0 12px -8px;
 }
-.welcome-eyebrow {
-  margin: 0 0 14px;
-  color: var(--ink-soft); /* every line around a question: 16px, regular, ink-soft (sentences you read) */
-  font-size: 16px;
-  line-height: 1.4;
-}
 /* The first step: what squared is (one short paragraph), the question on its own, then the paint. */
 /* Step 1 opens with a heading, in the app's heading type (as page titles). */
 .welcome-hello {
