@@ -27,7 +27,7 @@ export function Feedback({ onDone }: Props) {
       {state === 'sent' ? (
         <>
           <p className="feedback-lede">
-            {supabase ? 'Thank you. I read every one. — nomi' : 'This is a demo, so nothing was sent.'}
+            {supabase ? 'Thank you. I read every message. — nomi' : 'This is a demo, so nothing was sent.'}
           </p>
           <button className="pill feedback-send" onClick={onDone}>
             done

@@ -96,7 +96,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'Where do I ask questions?',
-      <>Ask me any time: {go(onTouch, 'get in touch', 'about → get in touch')}. I read every one.</>,
+      <>Ask me any time: {go(onTouch, 'get in touch', 'about → get in touch')}. I read every message.</>,
     ],
   ]
 }
