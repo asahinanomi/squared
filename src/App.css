@@ -3619,19 +3619,19 @@ p.welcome-intro {
 /* Step 1's three colours: each its dot, its word and its line (the palette's, word for word), read left. */
 .welcome-colours {
   list-style: none;
-  margin: 14px auto 0; /* the same group as the line above it */
+  margin: 0 auto; /* the same group as the lines above it, at their rhythm: no extra space between lines */
   padding: 0;
-  max-width: 320px;
+  max-width: 330px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
   text-align: left;
 }
 .welcome-colours li {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  font-size: 15px;
+  font-size: 16px; /* the same as the lines above: one group, one size, one rhythm */
   line-height: 1.4;
   color: var(--ink-soft);
 }
@@ -3640,7 +3640,7 @@ p.welcome-intro {
   flex: none;
   width: 9px;
   height: 9px;
-  margin: 6.5px 0 0 1.5px; /* centred on the first line (15px × 1.4), clear of its ring */
+  margin: 6.7px 0 0 1.5px; /* centred on the first line (16px × 1.4), clear of its ring */
   border-radius: 50%;
   box-shadow: 0 0 0 1.5px var(--ink); /* the palette's dot, exactly (.whisper-dot) */
 }
@@ -3681,9 +3681,10 @@ p.welcome-intro {
 /* A quiet line before a step's question (step 2: "before your first square, take a minute."). */
 .welcome-eyebrow {
   margin: 0 0 14px;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.5;
+  color: var(--ink-soft); /* lead-in text: the same as step 1's lines (16px, ink-soft, 1.4) */
+  text-wrap: balance;
+  font-size: 16px;
+  line-height: 1.4;
 }
 .welcome-q {
   margin: 0;

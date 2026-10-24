@@ -150,7 +150,7 @@ export function Welcome({ tryOut, onSquares, onDone, onMatters }: Props) {
         <section className="welcome-step" key="meaningful" aria-label="Step 2 of 4">
           {back(0)}
           {/* The bridge from "how would you like to spend your days?": a pause, then the question. */}
-          <p className="welcome-eyebrow">before your first square, take a minute.</p>
+          <p className="welcome-eyebrow">before your first square, take a minute to think:</p>
           <h1 className="welcome-q">
             what makes a day feel <u>meaningful</u>?
           </h1>

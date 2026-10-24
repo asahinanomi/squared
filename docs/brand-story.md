@@ -116,7 +116,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **Onboarding** (four steps)
 1. **Welcome to squared.** (a heading) / "Each square is one day of your life." / "Its colour is how you spent it:" · ● green means I spent it on what matters. ● red means I wish I'd spent it differently. ● grey means I wasn't paying attention. (one plain sentence each, one punctuation; the labels come with the first paint, and the palette's "yes, I… / no, I…" lines answer the question there) · *how would you like to spend your days?* · **start now** (Oct 24, 2026, nomi's structure and words)
-2. "before your first square, take a minute." / "what makes a day feel *meaningful*?" · next · skip this step
+2. "before your first square, take a minute to think:" / "what makes a day feel *meaningful*?" · next · skip this step
 3. "and what makes a day feel *empty*?" · next · skip this step
 4. "how many squares will you paint?" · "when were you born?" · "how long do you hope to live?" ("the average lifespan in America is about 79 years / 76 for men, 81 for women") · **28,855** / "squares in your life" / "and 13,709 still ahead to paint" · **start painting →** · "by starting, you confirm you're 18 or over and agree to the terms and privacy."
 
