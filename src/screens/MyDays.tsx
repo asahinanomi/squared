@@ -99,6 +99,8 @@ export function MyDays({
             </button>
           )
         })()}
+      {/* squared's line, under the bar's "today": what that dot means. The tagline candidate (brand story). */}
+      <p className="my-days-line">The past is painted. Today is still yours.</p>
       {(hasMonth || hasYear) && (
         <section className="home-card home-paintings my-days-paintings">
           {hasMonth && (
@@ -124,8 +126,6 @@ export function MyDays({
         {row('framed days', 'the days you framed', onFramed)}
         {row('paintings', 'the paintings you kept', onPaintings)}
       </div>
-      {/* Looked back; the page ends on now. */}
-      <p className="my-days-close">The past is painted. Today is still yours.</p>
     </main>
   )
 }
