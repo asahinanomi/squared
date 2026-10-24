@@ -70,8 +70,9 @@ export default function App() {
     if (supabase) supabase.auth.signOut()
     else setDemoIn(false)
   }
-  // Lock when I leave: away longer than you chose, squared signs out (settings → lock when I leave).
-  useLock(signedIn, signOut)
+  // Lock when I leave: away longer than you chose, squared signs out (settings → lock when I leave). Never during
+  // onboarding: nothing private is there yet, and signing out would lose what was typed.
+  useLock(signedIn && screen !== 'welcome', signOut)
 
   const landed = useLanding(signedIn, acc, nav)
   useBrowserHistory(signedIn, nav, () => setWhy(null))

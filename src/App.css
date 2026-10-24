@@ -3564,6 +3564,17 @@ button.settings-row:active {
   align-items: center;
   padding-bottom: 12vh;
 }
+/* Step 1 reads as four groups, one space apart: the welcome, what a square is (with its colours), the question, the
+   pill. Inside a group, things sit close. */
+.welcome-step.is-pause > .welcome-intro {
+  margin-top: 28px;
+}
+.welcome-step.is-pause > .welcome-big {
+  margin-top: 40px;
+}
+.welcome-step.is-pause > .welcome-foot {
+  margin-top: 40px;
+}
 .welcome-back {
   align-self: flex-start;
   margin: -24px 0 12px -8px;
@@ -3577,7 +3588,7 @@ button.settings-row:active {
 /* The first step: what squared is (one short paragraph), the question on its own, then the paint. */
 /* Step 1 opens with a heading, in the app's heading type (as page titles). */
 .welcome-hello {
-  margin: 0 0 14px;
+  margin: 0;
   font-size: 28px;
   font-weight: 600;
   letter-spacing: -0.03em;
@@ -3614,7 +3625,7 @@ p.welcome-intro {
 /* Step 1's three colours: each its square, its word and its line (the palette's, word for word), read left. */
 .welcome-colours {
   list-style: none;
-  margin: 22px auto 0;
+  margin: 14px auto 0; /* the same group as the line above it */
   padding: 0;
   max-width: 320px;
   display: flex;
@@ -3725,6 +3736,27 @@ p.welcome-intro {
   box-shadow: inset 0 0 0 1.5px var(--ink);
 }
 /* Every step's button: the same 250px pill, centred, the same 36px under what's above it. */
+.welcome-agree-link {
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+/* The small print, read over the last step: the whole screen, on paper, scrolling; its back returns to the step. */
+.welcome-read {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow-y: auto;
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px);
+  background-size: 22px 22px;
+  padding: env(safe-area-inset-top, 0px) var(--gutter) env(safe-area-inset-bottom, 0px);
+  text-align: left;
+}
+.welcome-read .idea {
+  padding-top: 24px;
+}
 .welcome-foot {
   margin-top: 36px;
   align-self: center;

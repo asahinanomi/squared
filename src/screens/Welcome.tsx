@@ -5,6 +5,8 @@ import { MAX_CHARS, newEntry, type Kind, type Matters } from '../lib/matters'
 import { PAINTS, paintHex, WORD } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 import { reportError } from '../lib/report'
+import { Privacy } from './Privacy'
+import { Terms } from './Terms'
 import { Chevron } from './Today'
 
 type Props = {
@@ -218,6 +220,8 @@ function Squares({
     setYearsText(String(n))
   }
   const [busy, setBusy] = useState(false)
+  // The small print, read right here over the step (its back returns to it), so nothing typed is lost.
+  const [reading, setReading] = useState<'terms' | 'privacy' | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const young = !!born && born > adult
@@ -243,7 +247,7 @@ function Squares({
   return (
     <section className="welcome-step welcome-squares" key="squares" aria-label="Step 4 of 4">
       {back}
-      <p className="welcome-eyebrow">Last thing.</p>
+      <p className="welcome-eyebrow">Almost there.</p>
       <h1 className="welcome-q">how many squares do you have?</h1>
 
       <div className="setup-fields welcome-fields">
@@ -340,19 +344,28 @@ function Squares({
         <button className="pill" disabled={!valid || busy} onClick={start}>
           {busy ? 'saving…' : 'start painting →'}
         </button>
-        {/* Starting is agreeing: no checkbox. The links open in a new tab so nothing here is lost. */}
+        {/* Starting is agreeing: no checkbox. The links open the small print over this step, back returns here. */}
         <p className="welcome-agree">
           by starting, you confirm you’re 18 or over and agree to the{' '}
-          <a href="/terms" target="_blank" rel="noopener">
+          <button className="welcome-agree-link" onClick={() => setReading('terms')}>
             terms
-          </a>{' '}
+          </button>{' '}
           and{' '}
-          <a href="/privacy" target="_blank" rel="noopener">
+          <button className="welcome-agree-link" onClick={() => setReading('privacy')}>
             privacy
-          </a>
+          </button>
           .
         </p>
       </div>
+      {reading && (
+        <div className="welcome-read">
+          {reading === 'terms' ? (
+            <Terms onBack={() => setReading(null)} backLabel="back" />
+          ) : (
+            <Privacy onBack={() => setReading(null)} backLabel="back" />
+          )}
+        </div>
+      )}
     </section>
   )
 }
