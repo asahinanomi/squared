@@ -78,7 +78,7 @@ function Lines({
 }
 
 // Onboarding: one journey for anyone whose squares aren't set. What squared is, what makes a day meaningful,
-// what makes one empty (both skippable; the lines go straight into settings → what matters), then how many
+// what makes one empty (both skippable; the lines go straight into my days → what matters), then how many
 // squares you have (never filled in for you, never skipped, 18 and over), and "start painting" opens today's
 // first square. Lab: https://claude.ai/artifact/TdNFeCnenYybjepoDhUt9C
 export function Welcome({ tryOut, onSquares, onDone, onMatters }: Props) {
@@ -88,7 +88,7 @@ export function Welcome({ tryOut, onSquares, onDone, onMatters }: Props) {
   const m = lines(meaningful)
   const e = lines(wasted)
 
-  // On to the last step, keeping what was written (the same lists as settings → what matters).
+  // On to the last step, keeping what was written (the same lists as my days → what matters).
   const toSquares = (mine: string[], empty: string[]) => {
     if ((mine.length || empty.length) && !tryOut) {
       onMatters({

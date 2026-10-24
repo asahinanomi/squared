@@ -6,7 +6,7 @@ type Props = {
 }
 
 // The one footer: the small print (faq · privacy · terms…) and the mark, "© 2026 squared.today beta".
-// The same everywhere it appears: sign-in, settings, the idea.
+// The same everywhere it appears: sign-in, settings, about.
 export function Footer({ links, centred }: Props) {
   return (
     <footer className={'foot' + (centred ? ' is-centred' : '')}>

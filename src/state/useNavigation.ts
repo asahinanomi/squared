@@ -50,9 +50,9 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const listMid = useRef(() => todayIso())
   // A day opened from the list goes back to the list when you zoom out of it.
   const [dayFromList, setDayFromList] = useState(false)
-  // What matters opens from settings, the idea, the day's compass or home; back returns there.
-  const [mattersFrom, setMattersFrom] = useState<'settings' | 'idea' | 'today' | 'home' | 'mydays'>('settings')
-  // Where privacy and terms were opened from (settings or the idea): back returns there.
+  // What matters opens from my days, about, the day's compass or home's first steps; back returns there.
+  const [mattersFrom, setMattersFrom] = useState<'idea' | 'today' | 'home' | 'mydays'>('mydays')
+  // Where privacy and terms were opened from (settings or about): back returns there.
   const [legalFrom, setLegalFrom] = useState<Screen>('settings')
   const legalOpened = useRef(false) // opened from inside the app (not straight from its web address)
 
@@ -208,13 +208,13 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     if (profile) return setScreen('pie')
     askSquares('pie')
   }
-  // my framed days opens from home or my days; back returns there.
-  const [framedFrom, setFramedFrom] = useState<'home' | 'mydays' | 'list'>('mydays')
-  const openFramed = (from: 'home' | 'mydays' | 'list') => {
+  // framed days opens from my days or a framed card in the list; back returns there.
+  const [framedFrom, setFramedFrom] = useState<'mydays' | 'list'>('mydays')
+  const openFramed = (from: 'mydays' | 'list') => {
     setFramedFrom(from)
     setScreenValue('framed')
   }
-  const openMatters = (from: 'settings' | 'idea' | 'today' | 'home' | 'mydays') => {
+  const openMatters = (from: 'idea' | 'today' | 'home' | 'mydays') => {
     setMattersFrom(from)
     setScreenValue('matters')
   }
@@ -349,7 +349,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     goMonth,
     goYear,
     goLife,
-    goLifeDays,
     openDay,
     outOfDay,
     askSquares,

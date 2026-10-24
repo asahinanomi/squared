@@ -29,7 +29,7 @@ type Props = {
   onPainting?: (year: string) => void
 }
 
-// Space between squares grows with them, so big squares stay apart (7 and 3 a row match my squares).
+// Space between squares grows with them, so big squares stay apart (7 and 3 a row match the month view).
 const gapFor = (n: number) => ({ 28: 2, 14: 4, 7: 9, 3: 10 })[n] ?? 2
 const LABEL_H = 18 // year label above each block
 const BLOCK_GAP = 16 // space between years

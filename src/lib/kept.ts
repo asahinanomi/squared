@@ -1,6 +1,6 @@
 import { supabase } from './supabase'
 
-// The paintings you kept ("keep this painting"): they hang in my paintings. Saved with your account only (so every
+// The paintings you kept ("keep this painting"): they hang in paintings (my days). Saved with your account only (so every
 // device sees the same wall); the demo, with no account, keeps them on the device.
 
 const DEMO = 'squared.keptPaintings.demo'

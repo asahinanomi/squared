@@ -2406,13 +2406,6 @@ body[data-screen='questions'] .idea {
   flex-direction: column;
   padding: 8px 4px 32px;
 }
-.setup-back {
-  width: 44px;
-  height: 44px;
-  margin-left: -10px;
-  display: grid;
-  place-items: center;
-}
 .setup-body {
   flex: 1;
   display: flex;
@@ -2756,20 +2749,6 @@ button.settings-row:active {
   padding-right: 4px;
 }
 
-/* Settings' groups: a small muted heading over each short list. */
-.settings-group {
-  margin: 30px 0 0;
-  padding-left: 4px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--muted);
-}
-.settings-group + .settings-rows {
-  margin-top: 10px;
-}
-.settings-title + .settings-group {
-  margin-top: 24px;
-}
 .settings-rows.is-last {
   margin-bottom: 28px; /* room before the footer's hairline */
 }
@@ -3890,11 +3869,6 @@ button.settings-row:active {
 .ladder-head button {
   width: 48px;
   height: 48px;
-}
-.setup-back {
-  width: 48px;
-  height: 48px;
-  margin-left: -12px;
 }
 .back-btn {
   height: 48px;

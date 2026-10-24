@@ -4,7 +4,7 @@ import { keptPaintings, saveKept } from '../lib/kept'
 import { commit } from '../lib/save'
 import { demo } from './app'
 
-/** The paintings you kept, for my paintings: on the wall at once, and saved to the account like every change. */
+/** The paintings you kept, for paintings (my days): on the wall at once, and saved to the account like every change. */
 export function useKept(session: Session | null | undefined) {
   const [kept, setKept] = useState<string[]>([])
   useEffect(() => setKept(keptPaintings(session?.user.user_metadata?.kept_paintings)), [session])

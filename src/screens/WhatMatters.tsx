@@ -7,7 +7,7 @@ import { Chevron } from './Today'
 
 type Props = {
   onBack: () => void
-  /** Where back leads: "settings" or "the idea". */
+  /** Where back leads: "my days", "about", "today" or "home". */
   backLabel?: string
   /** Off to today's square, compass in mind. */
   onPaint: () => void

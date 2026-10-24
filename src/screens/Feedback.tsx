@@ -3,11 +3,11 @@ import { sendFeedback } from '../lib/feedback'
 import { supabase } from '../lib/supabase'
 
 type Props = {
-  /** After it's sent, "done" leads on (back to the idea). */
+  /** After it's sent, "done" leads on (back to why squared). */
   onDone: () => void
 }
 
-// Get in touch (a tab of the idea): one box, straight to the maker, for anything (feedback, questions, bugs,
+// Get in touch (a tab of about): one box, straight to the maker, for anything (feedback, questions, bugs,
 // hello). Thanks once sent.
 export function Feedback({ onDone }: Props) {
   const [text, setText] = useState('')

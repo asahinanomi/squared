@@ -5,12 +5,12 @@ import { Chevron, ChevronDown } from './Today'
 type Props = {
   onBack?: () => void
   backLabel?: string
-  /** Inside the idea page: "get in touch" and "support" switch to their tabs. */
+  /** Inside the about page: "get in touch" and "support" switch to their tabs. */
   onTouch?: () => void
   onSupport?: () => void
 }
 
-/** A link to another tab inside the idea page, or the plain way there when this page stands alone. */
+/** A link to another tab inside the about page, or the plain way there when this page stands alone. */
 const go = (to: (() => void) | undefined, label: string, path: string) =>
   to ? (
     <button className="idea-inline" onClick={to}>

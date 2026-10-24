@@ -1,7 +1,7 @@
 import { KOFI_URL } from '../lib/config'
 
 // "help build squared": a short letter from the maker, and the way to support it (on Ko-fi, in a new tab).
-// Found, never pushed: a tab of the idea page.
+// Found, never pushed: a tab of the about page.
 export function Support() {
   return (
     <main className="idea support">
