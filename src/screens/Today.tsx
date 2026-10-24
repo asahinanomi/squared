@@ -438,6 +438,13 @@ export function Today(props: Props) {
             onConfirm={() => {
               setWiping(false)
               props.onWipe()
+              // Starting today over is a fresh start: the next dip breathes again.
+              if (date === today)
+                try {
+                  localStorage.removeItem('squared.breathed')
+                } catch {
+                  /* then it breathed once today, that's enough */
+                }
             }}
             onCancel={() => setWiping(false)}
           />
