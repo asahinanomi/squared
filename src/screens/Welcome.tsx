@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { fromIso, todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
 import { MAX_CHARS, newEntry, type Kind, type Matters } from '../lib/matters'
-import { PAINTS, paintHex, WORD } from '../lib/paints'
+import { PAINTS, paintHex } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 import { reportError } from '../lib/report'
 import { Privacy } from './Privacy'
@@ -23,6 +23,25 @@ type Props = {
 const FIELDS: Record<Kind, { dot: string; holders: string[] }> = {
   meaningful: { dot: paintHex('green'), holders: ['time with family', 'a long walk', 'making something'] },
   wasted: { dot: paintHex('red'), holders: ['scrolling', 'busywork', 'just waiting'] },
+}
+// Step 1 explains the colours as kinds of day, named (the dot alone doesn't say which colour the sentence means);
+// the palette's lines answer the question, so they wait for the day screen.
+const KIND: Record<'green' | 'red' | 'grey', ReactNode> = {
+  green: (
+    <>
+      a day <b>worth it</b>: I spent it on what matters.
+    </>
+  ),
+  red: (
+    <>
+      a day of <b>regret</b>: I wish I’d spent it differently.
+    </>
+  ),
+  grey: (
+    <>
+      <b>a blur</b>: I wasn’t paying attention.
+    </>
+  ),
 }
 const AVERAGE = 79 // the stepper's first tap lands here
 const MIN_YEARS = 1
@@ -130,7 +149,7 @@ export function Welcome({ tryOut, onSquares, onDone, onMatters }: Props) {
               <li key={p.id}>
                 <i style={{ background: p.hex }} aria-hidden="true" />
                 <span>
-                  <b>{WORD[p.id]}</b> · {p.meaning}
+                  {p.id} · {KIND[p.id]}
                 </span>
               </li>
             ))}
