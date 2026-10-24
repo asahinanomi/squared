@@ -112,7 +112,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - squared.today · beta
 - "there are" / **29,200** / "days in an 80-year life"
 - *am I spending Today meaningfully?*
-- "continue with Google" · links: the idea · privacy · terms
+- "continue with Google" · links: the idea · faq · privacy · terms
 
 **Onboarding** (four steps)
 1. **Welcome to squared.** (a heading) / "Each square is one day of your life." / "Its colour is how you spent it:" · ● green means I spent it on what matters. ● red means I wish I'd spent it differently. ● grey means I wasn't paying attention. (one plain sentence each, one punctuation; the labels come with the first paint, and the palette's "yes, I… / no, I…" lines answer the question there) · *how would you like to spend your days?* · **start now** (Oct 24, 2026, nomi's structure and words)

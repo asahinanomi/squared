@@ -55,6 +55,10 @@ export default function App() {
   const { loadNotes } = acc
   useEffect(() => loadNotes(date), [loadNotes, date])
 
+  // Opened at squared.today/idea: once you move on, the address is plain again (a reload won't reopen it).
+  useEffect(() => {
+    if (location.pathname === '/idea' && screen !== 'idea') history.replaceState(null, '', '/')
+  }, [screen])
   // Settings and its pages open at their top (a link at the foot of settings kept its scroll).
   useEffect(() => {
     if (PAGES.includes(screen)) window.scrollTo(0, 0)

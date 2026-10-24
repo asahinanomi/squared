@@ -12,6 +12,7 @@ Hidden links for trying squared's first-time moments on your own account. Open t
 
 ## Pages anyone can open (signed in or not)
 
+- [squared.today/idea](https://squared.today/idea) (the letter; signed in, the about page)
 - [squared.today/faq](https://squared.today/faq)
 - [squared.today/privacy](https://squared.today/privacy)
 - [squared.today/terms](https://squared.today/terms)

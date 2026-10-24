@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 24, 2026, 23:20 UTC_
+_last updated Oct 24, 2026, 23:23 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -147,6 +147,8 @@ Build step by step; the owner reviews and gives feedback after each step before 
 **my days (Oct 23, 2026)** (`src/screens/MyDays.tsx`): the menu's "my squares" (which only opened a zoom level the zoom buttons already reach) became **my days**, the life dashboard, as doors, never a page of numbers: the rows **a life pie** (the full pie; its "‹ my days" leads back. A picture of the pie here read techy and alone, so it's a row until there's a better idea), **all my squares** (a life, day by day), **what matters**, **my framed days**, **my paintings**, each back to my days. The pie left the bar's view switch (now squares · list), and the pie page has no bottom bar: it's a page like my days' others ("‹ my days", the title, whole life · days I lived · painted only, the pie); pinch still steps those three. Settings lost those rows and its groups: one short list (square settings, sound, lock when I leave, export my data, delete my account).
 
 **Privacy and terms: "last updated" at the foot** (Oct 24, 2026), under the signature, quiet (12px, muted); kept, since a privacy policy has to show when it last changed (CCPA). Now Oct 24, 2026 (both pages say "the about page").
+
+**squared.today/idea, and faq on sign-in** (Oct 24, 2026): the idea has its own address, like faq, privacy and terms (signed out it opens the letter, back leads to sign-in; signed in, the about page), and sign-in's footer reads "the idea · faq · privacy · terms", so the questions can be read before signing in.
 
 **Sign-in's small print sits at the screen's foot** (Oct 24, 2026): the message and "continue with Google" centred in the space above, "why squared · privacy · terms" and the © line at the bottom with the page's own 24px padding (and the phone's safe area); on a short phone it simply follows, 32px under the button.
 

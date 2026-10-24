@@ -86,3 +86,5 @@ export const legalAt = (): Legal | null =>
       : null
 export const legalAtStart = legalAt()
 export const leaveLegalUrl = () => legalAt() && history.replaceState(null, '', '/')
+/** squared.today/idea opens the letter (signed out) or the about page (signed in). */
+export const ideaAtStart = location.pathname === '/idea'
