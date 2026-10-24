@@ -115,8 +115,17 @@ export function Today(props: Props) {
   // One breath before you paint: the first dip of the day, on today, the canvas glows in and out once (4s) and says
   // "be here". Remembered on the device, so it's once a day; it never holds the brush.
   const [breathing, setBreathing] = useState(false)
+  // Starting any day over is a fresh start: its next dip breathes too, even if today's breath has been.
+  const fresh = useRef<string | null>(null)
   const breathe = () => {
-    if (date !== today || days[date]) return
+    if (days[date]) return
+    if (fresh.current === date) {
+      fresh.current = null
+      setBreathing(true)
+      setTimeout(() => setBreathing(false), 4000)
+      return
+    }
+    if (date !== today) return
     try {
       if (localStorage.getItem('squared.breathed') === today) return
       localStorage.setItem('squared.breathed', today)
@@ -437,13 +446,7 @@ export function Today(props: Props) {
             onConfirm={() => {
               setWiping(false)
               props.onWipe()
-              // Starting today over is a fresh start: the next dip breathes again.
-              if (date === today)
-                try {
-                  localStorage.removeItem('squared.breathed')
-                } catch {
-                  /* then it breathed once today, that's enough */
-                }
+              fresh.current = date // a fresh start: the next dip breathes again
             }}
             onCancel={() => setWiping(false)}
           />

@@ -686,7 +686,8 @@
     box-shadow: inset 0 0 70px 40px #fff; /* the face fills with light, then lets it go */
   }
 }
-/* The whole canvas swells a little with the breath, in and out. */
+/* The whole canvas rises toward you with the breath and settles back: it swells (6%) and lifts off the paper (a deeper
+   shadow), so the breath is seen, not just sensed. Ink and paper only. */
 .canvas.is-breathing {
   animation: breathe-in 4s ease-in-out;
 }
@@ -697,7 +698,8 @@
   }
   45%,
   55% {
-    transform: scale(1.04);
+    transform: scale(1.06);
+    box-shadow: 0 22px 44px rgba(20, 20, 19, 0.28);
   }
 }
 /* "be here", bigger than "paint your day": the word painted days get (30px). */
