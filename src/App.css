@@ -4717,7 +4717,7 @@ button.home-card:active {
   overflow: hidden;
 }
 
-/* my days' title row: the title, and "to today ›" on its far right, a quiet text link. */
+/* my days' title row: the title, and "today ›" on its far right, a quiet text link. */
 .my-days-head {
   display: flex;
   align-items: baseline;

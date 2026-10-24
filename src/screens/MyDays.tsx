@@ -59,7 +59,7 @@ export function MyDays({
       <div className="my-days-head">
         <h1 className="settings-title">my days</h1>
         <button className="my-days-today" onClick={onToday}>
-          to today
+          today
           <Chevron dir="right" />
         </button>
       </div>
