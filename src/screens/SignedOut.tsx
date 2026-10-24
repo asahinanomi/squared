@@ -9,7 +9,7 @@ import { Terms } from './Terms'
 
 type Props = { error: string | null; onDemoSignIn: () => void }
 
-// Signed out: the sign-in screen, and what it links to (why squared, privacy, terms, questions). Opened straight from
+// Signed out: the sign-in screen, and what it links to (the idea, privacy, terms, questions). Opened straight from
 // its web address (squared.today/terms), a page shows first; back leads to sign-in.
 export function SignedOut({ error, onDemoSignIn }: Props) {
   const [page, setPage] = useState<'idea' | 'privacy' | 'terms' | 'questions' | null>(legalAt)

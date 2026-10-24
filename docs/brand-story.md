@@ -57,7 +57,7 @@ Use the **one-liner** wherever there's room. Use the **short label** in tight UI
 | 🟥 red | **regret** | no, I wish I'd spent it differently. |
 | ⬜ grey | **a blur** | I don't know… I wasn't paying attention. |
 
-The same three lines everywhere: the palette, the meaningful sheet and the letter (why squared).
+The same three lines everywhere: the palette, the meaningful sheet and the letter (the idea).
 
 **Why these words (Oct 23, 2026).** Ask a friend "how was your day?" and they'd answer "worth it", "a regret" or "a blur": the labels sound like that honest answer. Red is the day you were there for and wish you'd chosen differently; grey is the day you weren't there for. Psychology behind it: regret is a useful feeling when it points at the act ("I wish I'd…"), never at the person, and paired with kindness it moves people to choose better. In counts: "3 worth it", "2 regrets", "1 blur"; just painted: "your 3rd day worth it this month", "your 2nd regret", "your 1st blur".
 
@@ -136,13 +136,15 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - Today painted: greeting · **Today is in colour.** · today's square and note · this week · **paint another day**
 - This week: "5 days in colour this week." · a full week: **"Every day this week, in colour."** 🌈 (a small rainbow in your week's colours) · "You showed up for every single one."
 
-**The letter, "why squared" — LOCKED COPY** (— nomi; lowercase; keep verbatim; rewritten by nomi Oct 23, 2026, on this brand story: meaningful, not good; less regret; noticing without blame. Its tab on the about page and the sign-in link say "why squared"):
+**The letter, "the idea" — LOCKED COPY** (— nomi; lowercase; keep verbatim; rewritten by nomi Oct 23–24, 2026, on this brand story: meaningful, not good; less regret; now. Titled "the idea" again, Oct 24: before sign-in it reads as an invitation, where "why squared" read like a pitch. Its tab on the about page says "about"; the sign-in link says "the idea"):
 
-> **why squared**
+> **the idea**
 >
 > I had my head down in a busy life. one day, I looked up and saw so many days had gone. scarily fast, faster than I ever thought.
 >
 > the hard part wasn't the bad days. some of my hardest days were the ones truly worth it, the days I really grew. the worst were the days I wish I'd lived differently, or barely remember.
+>
+> I can't change those days. but this one, right now, I can still live.
 >
 > squared asks one thing each day:
 >
@@ -152,9 +154,9 @@ These describe squares, not feelings. Keep them out of the three-colour language
 > 🟥 no, I wish I'd spent it differently.
 > ⬜ I don't know… I wasn't paying attention.
 >
-> paint one square a day. no streaks, no scores. just a moment to reflect. keep in mind: noticing a regret day is how the next one could go differently ;)
+> paint one square a day. no streaks, no scores. just a moment to be here and now. keep in mind: noticing a regret day is how the next one could go differently ;)
 >
-> I'll try to paint as many green squares as I can. I hope squared helps you do the same.
+> I'll try to paint as many green squares as I can, and I hope squared helps you do the same. the past is painted. today is still yours.
 >
 > — nomi
 >

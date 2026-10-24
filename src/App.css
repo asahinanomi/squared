@@ -1314,7 +1314,7 @@ body[data-screen='questions'] .idea {
   letter-spacing: -0.035em;
 }
 .idea p {
-  margin: 0 0 22px;
+  margin: 0 0 34px; /* more than a line apart (20px × 1.6 = 32px), so each paragraph reads as its own breath */
   font-size: 20px;
   line-height: 1.6;
   color: var(--ink);
@@ -1322,7 +1322,7 @@ body[data-screen='questions'] .idea {
 .idea-colours {
   list-style: none;
   padding: 0;
-  margin: 0 0 22px;
+  margin: 0 0 34px;
   display: flex;
   flex-direction: column;
   gap: 6px;

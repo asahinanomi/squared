@@ -14,7 +14,7 @@ type Props = {
   onBack?: () => void
 }
 
-// "why squared" (the letter): why squared exists, in the maker's own words. Rewritten by nomi, Oct 23, 2026, on
+// "the idea" (the letter): why squared exists, in the maker's own words. Rewritten by nomi, Oct 23, 2026, on
 // the brand story: meaningful, not good; less regret; noticing without blame.
 export function Idea({ onMatters, onBack }: Props) {
   return (
@@ -25,7 +25,7 @@ export function Idea({ onMatters, onBack }: Props) {
           sign in
         </button>
       )}
-      <h1 className="idea-title">why squared</h1>
+      <h1 className="idea-title">the idea</h1>
       <p>
         I had my head down in a busy life. one day, I looked up and saw so many days had gone. scarily fast, faster than
         I ever thought.
@@ -34,6 +34,7 @@ export function Idea({ onMatters, onBack }: Props) {
         the hard part wasn’t the bad days. some of my hardest days were the ones truly worth it, the days I really grew.
         the worst were the days I wish I’d lived differently, or barely remember.
       </p>
+      <p>I can’t change those days. but this one, right now, I can still live.</p>
       <p>squared asks one thing each day:</p>
       <p>did I spend Today meaningfully?</p>
       <ul className="idea-colours">
@@ -46,10 +47,13 @@ export function Idea({ onMatters, onBack }: Props) {
         ))}
       </ul>
       <p>
-        paint one square a day. no streaks, no scores. just a moment to reflect. keep in mind: noticing a regret day is
-        how the next one could go differently ;)
+        paint one square a day. no streaks, no scores. just a moment to be here and now. keep in mind: noticing a regret
+        day is how the next one could go differently ;)
       </p>
-      <p>I’ll try to paint as many green squares as I can. I hope squared helps you do the same.</p>
+      <p>
+        I’ll try to paint as many green squares as I can, and I hope squared helps you do the same. the past is painted.
+        today is still yours.
+      </p>
       <p className="idea-sign">— nomi</p>
       {/* The way on, as a letter would end: a quiet p.s. under the signature. */}
       {onMatters && (

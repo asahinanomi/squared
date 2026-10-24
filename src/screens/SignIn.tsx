@@ -48,7 +48,7 @@ export function SignIn({
       <Footer
         centred
         links={[
-          ['why squared', onIdea],
+          ['the idea', onIdea],
           ['privacy', onPrivacy],
           ['terms', onTerms],
         ]}

@@ -3,7 +3,7 @@ import { sendFeedback } from '../lib/feedback'
 import { supabase } from '../lib/supabase'
 
 type Props = {
-  /** After it's sent, "done" leads on (back to why squared). */
+  /** After it's sent, "done" leads on (back to the idea). */
   onDone: () => void
 }
 
