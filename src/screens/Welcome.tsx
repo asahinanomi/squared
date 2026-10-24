@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { fromIso, todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
 import { MAX_CHARS, newEntry, type Kind, type Matters } from '../lib/matters'
@@ -24,24 +24,11 @@ const FIELDS: Record<Kind, { dot: string; holders: string[] }> = {
   meaningful: { dot: paintHex('green'), holders: ['time with family', 'a long walk', 'making something'] },
   wasted: { dot: paintHex('red'), holders: ['scrolling', 'busywork', 'just waiting'] },
 }
-// Step 1 explains the colours as kinds of day, named (the dot alone doesn't say which colour the sentence means);
-// the palette's lines answer the question, so they wait for the day screen.
-const KIND: Record<'green' | 'red' | 'grey', ReactNode> = {
-  green: (
-    <>
-      a day <b>worth it</b>: I spent it on what matters.
-    </>
-  ),
-  red: (
-    <>
-      a day of <b>regret</b>: I wish I’d spent it differently.
-    </>
-  ),
-  grey: (
-    <>
-      <b>a blur</b>: I wasn’t paying attention.
-    </>
-  ),
+// Step 1 says what each colour means, in one plain sentence each (the palette's labels come with the first paint).
+const MEANS: Record<'green' | 'red' | 'grey', string> = {
+  green: 'green means I spent it on what matters.',
+  red: 'red means I wish I’d spent it differently.',
+  grey: 'grey means I wasn’t paying attention.',
 }
 const AVERAGE = 79 // the stepper's first tap lands here
 const MIN_YEARS = 1
@@ -140,7 +127,7 @@ export function Welcome({ tryOut, onSquares, onDone, onMatters }: Props) {
               that looks forward, about now. */}
           <h2 className="welcome-hello">Welcome to squared.</h2>
           <p className="welcome-intro">
-            Each square represents one day of your life.
+            Each square is one day of your life.
             <br />
             Its colour is how you spent it:
           </p>
@@ -148,9 +135,7 @@ export function Welcome({ tryOut, onSquares, onDone, onMatters }: Props) {
             {PAINTS.map((p) => (
               <li key={p.id}>
                 <i style={{ background: p.hex }} aria-hidden="true" />
-                <span>
-                  {p.id} · {KIND[p.id]}
-                </span>
+                <span>{MEANS[p.id]}</span>
               </li>
             ))}
           </ul>
