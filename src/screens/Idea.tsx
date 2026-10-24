@@ -32,9 +32,8 @@ export function Idea({ onMatters, onBack }: Props) {
       </p>
       <p>
         the hard part wasn’t the bad days. some of my hardest days were the ones truly worth it, the days I really grew.
-        the worst were the days I wish I’d lived differently. and the days that slipped by without me noticing at all.
+        the worst were the days I wish I’d lived differently, or barely remember.
       </p>
-      <p>when I reach the end, I don’t want to find a life I’d live differently, or barely remember.</p>
       <p>squared asks one thing each day:</p>
       <p>did I spend Today meaningfully?</p>
       <ul className="idea-colours">
@@ -47,8 +46,8 @@ export function Idea({ onMatters, onBack }: Props) {
         ))}
       </ul>
       <p>
-        paint one square a day. no streaks, no scores. just a moment to reflect, one day at a time. keep in mind:
-        noticing a regret day is how the next one could go differently ;)
+        paint one square a day. no streaks, no scores. just a moment to reflect. keep in mind: noticing a regret day is
+        how the next one could go differently ;)
       </p>
       <p>I’ll try to paint as many green squares as I can. I hope squared helps you do the same.</p>
       <p className="idea-sign">— nomi</p>
