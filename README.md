@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 24, 2026, 22:18 UTC_
+_last updated Oct 24, 2026, 22:21 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 

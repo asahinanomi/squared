@@ -3564,8 +3564,8 @@ button.settings-row:active {
   align-items: center;
   padding-bottom: 12vh;
 }
-/* Step 1 reads as four groups, one space apart: the welcome, what a square is (with its colours), the question, the
-   pill. Inside a group, things sit close. */
+/* Step 1 reads as groups: the welcome, what a square is, its three colours, the question, the pill. Inside a group,
+   things sit close. */
 .welcome-step.is-pause > .welcome-intro {
   margin-top: 28px;
 }
@@ -3619,12 +3619,12 @@ p.welcome-intro {
 /* Step 1's three colours: each its dot, its word and its line (the palette's, word for word), read left. */
 .welcome-colours {
   list-style: none;
-  margin: 0 auto; /* the same group as the lines above it, at their rhythm: no extra space between lines */
+  margin: 22px auto 0; /* its own group, under the two lines that introduce it */
   padding: 0;
   max-width: 330px;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 6px;
   text-align: left;
 }
 .welcome-colours li {
