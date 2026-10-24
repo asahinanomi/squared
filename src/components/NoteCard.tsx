@@ -8,28 +8,16 @@ function stamp(iso: string) {
   return `${day} · ${time}`
 }
 
-// One note, in full, with when it was written. Tap it to update or delete it.
-export function NoteCard({
-  note,
-  framed,
-  moment,
-  onOpen,
-}: {
-  note: Note
-  framed?: boolean
-  /** Written on the day, before it was painted: "a moment", so it stays one among the day's notes. */
-  moment?: boolean
-  onOpen: () => void
-}) {
+// One moment, in full, with when it was written. Tap it to update or delete it.
+export function NoteCard({ note, framed, onOpen }: { note: Note; framed?: boolean; onOpen: () => void }) {
   return (
     <button
       className={'note-card' + (note.pinned ? (framed ? ' is-pinned is-remember' : ' is-pinned') : '')}
       onClick={onOpen}
-      aria-label="Open note"
+      aria-label="Open moment"
     >
       {/* Pinned: on a framed day it's "to remember", in the day's green; any other day, a quiet "pinned". */}
       {note.pinned && <span className="note-pin">{framed ? 'to remember' : 'pinned'}</span>}
-      {!note.pinned && moment && <span className="note-pin">a moment</span>}
       <span className="note-stamp">{stamp(note.writtenAt)}</span>
       <span className="note-text">{note.body}</span>
     </button>

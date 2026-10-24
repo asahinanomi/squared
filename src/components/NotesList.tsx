@@ -1,4 +1,3 @@
-import { isoDate } from '../lib/dates'
 import { frameVars, type Paint } from '../lib/paints'
 import { useState } from 'react'
 import type { Note } from '../lib/notes'
@@ -12,12 +11,6 @@ type Props = {
   framed?: Paint
   onOpen: (n: Note) => void
   onAdd: () => void
-  /** The add button's words: "add new note", or on today before it's painted, "add a moment". */
-  addLabel?: string
-  /** What they're called in the count: notes, or on today before it's painted, moments. */
-  noun?: 'note' | 'moment'
-  /** When the day was first painted (ISO): notes written on the day before it are labelled "a moment". */
-  paintedAt?: string
   onDelete: (n: Note) => Promise<void>
 }
 
@@ -39,18 +32,8 @@ const writeHidden = (hidden: boolean) => {
 }
 
 // A day's notes, oldest to newest. The latest always shows; older ones can be tucked away.
-export function NotesList({
-  notes,
-  framed,
-  onOpen,
-  onAdd,
-  onDelete,
-  addLabel = 'add new note',
-  noun = 'note',
-  paintedAt,
-}: Props) {
-  // A moment: written on its own day, before the day was painted. Only labelled once there's a paint to be before.
-  const isMoment = (n: Note) => !!paintedAt && n.writtenAt < paintedAt && isoDate(new Date(n.writtenAt)) === n.date
+// Every note is a moment you captured: as it happened ("right now…") or looking back ("because…"), each with its time.
+export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
   const [hidden, setHidden] = useState(readHidden)
   // Only one row is swiped open at a time; deleting always asks first.
   const [swiped, setSwiped] = useState<string | null>(null)
@@ -63,7 +46,7 @@ export function NotesList({
       onOpenChange={(o) => setSwiped(o ? n.id : null)}
       onDelete={() => setAsking(n)}
     >
-      <NoteCard note={n} framed={!!framed} moment={isMoment(n)} onOpen={() => onOpen(n)} />
+      <NoteCard note={n} framed={!!framed} onOpen={() => onOpen(n)} />
     </SwipeRow>
   )
 
@@ -91,7 +74,7 @@ export function NotesList({
     <div className="notes" style={framed ? frameVars(framed) : undefined}>
       {notes.length > 0 && (
         <div className="notes-head">
-          <span className="notes-count">{`${notes.length} ${noun}${notes.length === 1 ? '' : 's'}`}</span>
+          <span className="notes-count">{`${notes.length} ${notes.length === 1 ? 'moment' : 'moments'}`}</span>
           {older.length > 0 && (
             <button className="notes-toggle" onClick={toggle} aria-expanded={!hidden}>
               {hidden ? 'show older' : 'hide older'}
@@ -114,11 +97,11 @@ export function NotesList({
       {!hidden && older.map(row)}
       {latest && row(latest)}
       <button className="note-add" onClick={onAdd}>
-        {addLabel}
+        add a moment
       </button>
       {asking && (
         <ConfirmDialog
-          title="Delete this note?"
+          title="Delete this moment?"
           body="It can't be undone."
           confirm="delete"
           onConfirm={confirmDelete}

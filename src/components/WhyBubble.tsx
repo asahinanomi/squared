@@ -124,7 +124,7 @@ export function WhyBubble({
             <button
               className="why-pin"
               onClick={onPin}
-              aria-label={isPinned ? 'Unpin this note' : 'Pin this note to the top'}
+              aria-label={isPinned ? 'Unpin this moment' : 'Pin this moment to the top'}
             >
               <PinIcon off={isPinned} />
             </button>
@@ -133,7 +133,7 @@ export function WhyBubble({
       </div>
       {confirming && (
         <ConfirmDialog
-          title="Delete this note?"
+          title="Delete this moment?"
           body="It can't be undone."
           confirm="delete"
           onConfirm={del}

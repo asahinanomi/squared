@@ -96,7 +96,7 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
             ))}
           </span>
         </div>
-        {row('export my data', 'a Word copy of your squares and notes', onExport)}
+        {row('export my data', 'a Word copy of your squares and moments', onExport)}
         <button className="settings-row" disabled={deleting === 'deleting'} onClick={() => setAsking(true)}>
           <span>
             <span className="settings-label">{deleting === 'deleting' ? 'deleting…' : 'delete my account'}</span>
@@ -115,7 +115,7 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
       {asking && (
         <ConfirmDialog
           title="Delete your account?"
-          body="Your squares, notes, lists and settings go for good. It can't be undone."
+          body="Your squares, moments, lists and settings go for good. It can't be undone."
           confirm="delete"
           typeToConfirm="delete"
           onConfirm={remove}

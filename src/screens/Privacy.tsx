@@ -12,13 +12,13 @@ export function Privacy({ onBack, backLabel }: Props) {
       </button>
       <h1 className="idea-title">privacy</h1>
       <p>squared is a private journal. Here’s exactly what it keeps, and what it doesn’t.</p>
-      <p>squared is in beta. I’ll do my best to carry your squares and notes over when it leaves beta (see terms).</p>
+      <p>squared is in beta. I’ll do my best to carry your squares and moments over when it leaves beta (see terms).</p>
 
       <h2 className="privacy-head">what squared keeps</h2>
       <ul className="privacy-list">
         <li>Your email and name from Google, so you can sign in.</li>
         <li>Your birth date and how long you hope to live, to count your squares.</li>
-        <li>The squares you paint, when you first painted each, and your notes.</li>
+        <li>The squares you paint, when you first painted each, and your moments (what you write about a day).</li>
         <li>Your “what matters” lists.</li>
         <li>Anything you send through “get in touch”.</li>
         <li>
@@ -37,7 +37,7 @@ export function Privacy({ onBack, backLabel }: Props) {
         <li>
           It’s stored with Supabase (the database), encrypted on their disks, and the site is served by Vercel. It isn’t
           end-to-end encrypted: as the maker, I can reach the database to keep it running and safe, but I don’t read
-          your squares or notes.
+          your squares or moments.
         </li>
         <li>
           Feedback is the exception: it’s for me, so I read it. It’s emailed to me (through Resend) with your email, so
@@ -46,7 +46,7 @@ export function Privacy({ onBack, backLabel }: Props) {
       </ul>
 
       <h2 className="privacy-head">what squared never does</h2>
-      <p>No ads inside squared. Your squares, notes and lists are never sold or shared.</p>
+      <p>No ads inside squared. Your squares, moments and lists are never sold or shared.</p>
 
       <h2 className="privacy-head">deleting it all</h2>
       <p>

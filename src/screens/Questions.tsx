@@ -57,8 +57,8 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
       'Of course. Life gets busy, that’s why squared exists. Tap “paint another day” on home, or the date on any day, and pick the day.',
     ],
     [
-      'What are notes for?',
-      'To finish the sentence. After you paint, squared opens “because…”: why the day was worth it, a regret, or a blur. A moment you want to keep, or what you see now that you didn’t then. A day can hold as many notes as it needs.',
+      'What are moments for?',
+      'To catch the day as you live it, and as you look back on it. Before you paint today, squared asks “right now…”; after you paint, “because…”: why the day was worth it, a regret, or a blur. Each keeps its time. A day can hold as many moments as it needs.',
     ],
     [
       'What is “what matters”?',
@@ -66,7 +66,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'Is my data private?',
-      'Your squares and notes are locked to your account: no one else using squared can see them. They’re stored with Supabase and encrypted on its disks, but not end-to-end, so as the maker I can reach the database to keep it running. I don’t read your squares or notes. No ads inside squared, and your data is never sold. The privacy page has the details.',
+      'Your squares and moments are locked to your account: no one else using squared can see them. They’re stored with Supabase and encrypted on its disks, but not end-to-end, so as the maker I can reach the database to keep it running. I don’t read your squares or moments. No ads inside squared, and your data is never sold. The privacy page has the details.',
     ],
     [
       'Can I get a copy of my data?',

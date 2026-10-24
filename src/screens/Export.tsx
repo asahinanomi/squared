@@ -31,8 +31,8 @@ export function Export({ onBack, gather }: Props) {
       </button>
       <h1 className="settings-title">export my data</h1>
       <p className="feedback-lede">
-        a copy of your squares, your notes and what matters to you, as a Word document. it opens in Word, Google Docs or
-        Pages.
+        a copy of your squares, your moments and what matters to you, as a Word document. it opens in Word, Google Docs
+        or Pages.
       </p>
       {state === 'done' && <p className="export-note">saved to your downloads.</p>}
       {state === 'failed' && <p className="export-note">couldn't export, check your connection and try again</p>}

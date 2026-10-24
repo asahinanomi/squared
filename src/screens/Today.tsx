@@ -402,9 +402,6 @@ export function Today(props: Props) {
             onOpen={(n) => onOpenWhy(n)}
             onAdd={() => onOpenWhy()}
             onDelete={onDeleteNote}
-            addLabel={!day && date === today ? 'add a moment' : undefined}
-            noun={!day && date === today ? 'moment' : 'note'}
-            paintedAt={day?.paintedAt}
           />
         )}
         {/* The day is done: where next, quietly, at the very end. */}
@@ -437,7 +434,7 @@ export function Today(props: Props) {
         {wiping && (
           <ConfirmDialog
             title="Start this day over?"
-            body="Its colour goes. Your notes for the day stay."
+            body="Its colour goes. Your moments for the day stay."
             confirm="start over"
             onConfirm={() => {
               setWiping(false)

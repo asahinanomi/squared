@@ -37,7 +37,7 @@ type Props = {
   onOnly?: (only: Only | null) => void
   /** A framed card's "framed" tag: framed days. */
   onFramedDays?: () => void
-  /** "only with notes" needs every note, not just the months seen so far. */
+  /** "only with moments" needs every one, not just the months seen so far. */
   onAllNotes?: () => void
 }
 
@@ -45,7 +45,7 @@ export type Only = Paint | 'unpainted' | 'framed' | 'notes'
 /** The filter's choices, in the order the app always lists colours. */
 const FILTERS: [Only | null, string][] = [
   [null, 'all days'],
-  ['notes', 'with notes'],
+  ['notes', 'with moments'],
   ['framed', 'framed'],
   ['green', 'worth it'],
   ['red', 'regret'],
@@ -62,7 +62,7 @@ function FilterMark({ id }: { id: Only | null }) {
   return <span className="filter-mark" style={{ background: paintHex(id) }} aria-hidden="true" />
 }
 
-const WORD_OF: Record<Only, string> = { ...WORD, unpainted: 'unpainted', framed: 'framed', notes: 'with notes' }
+const WORD_OF: Record<Only, string> = { ...WORD, unpainted: 'unpainted', framed: 'framed', notes: 'with moments' }
 /** About what two lines of a card's note hold on a phone. */
 const PREVIEW_CHARS = 80
 /** Months added at a time as you scroll toward either end. */
@@ -163,7 +163,7 @@ function DayCard({
           <p className="day-card-note">{latest.body}</p>
           {more && (
             <button className="day-card-more" aria-expanded={false} onClick={() => setOpen(true)}>
-              {notes.length > 1 ? `more · ${notes.length} notes ⌄` : 'more ⌄'}
+              {notes.length > 1 ? `more · ${notes.length} moments ⌄` : 'more ⌄'}
             </button>
           )}
         </div>

@@ -82,6 +82,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 | lived but not painted | **unpainted** ("Nothing painted this week yet." on home; "paper" read odd on screen, Oct 23, 2026: the idea of paper stays in the design, not the words) | the pie, home |
 | not yet lived | **ahead** ("10,962 days", "35% ahead", "and 13,709 still ahead to paint") | home, onboarding, the pie |
 | painted | **in colour** ("Today is in colour.", "5 days in colour this week.", "18 days in colour") | home, the paintings |
+| what you write about a day | **moment** ("3 moments", "add a moment"; "right now…" before you paint today, "because…" after). Never "note" on screen; the data keeps `notes` | the day, the list |
 | a day you want to keep, any colour | **framed** ("frame it", "framed days") | the day, the list, framed days (my days) |
 
 ## 8. Voice principles
@@ -115,7 +116,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - *did I spend Today meaningfully?* · the date · the square: "paint your day" (today) or "paint this day"
 - tap a colour to load the brush; its one-liner shows under the palette
 - the day's first dip, on a blank today: the canvas breathes once and says "be here"
-- today, before it's painted: "add a moment", and the note opens "right now…"
+- moments: "add a moment"; today before it's painted it opens "right now…", after painting (or any other day) "because…"
 - once painted: "your 3rd day worth it this month" · "because…" (you finish the sentence, never "why?"; "a line, or a page, or skip"); a framed day asks "what do you want to remember?"
 - torn between green and red: "torn? ask yourself:" / "did what mattered outweigh the rest?" / "you said: '…'"
 - under the square: start over · frame it

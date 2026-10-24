@@ -16,7 +16,7 @@ export function Terms({ onBack, backLabel }: Props) {
       <h2 className="privacy-head">it’s a beta, as is</h2>
       <p>
         squared is in beta. It’s offered as is, with no promise that it will always work, be available, or keep your
-        squares and notes. I do my best to look after them, but things can break.
+        squares and moments. I do my best to look after them, but things can break.
       </p>
 
       <h2 className="privacy-head">lost data</h2>
