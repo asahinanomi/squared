@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 24, 2026, 00:21 UTC_
+_last updated Oct 24, 2026, 13:18 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -147,6 +147,8 @@ Build step by step; the owner reviews and gives feedback after each step before 
 **my days (Oct 23, 2026)** (`src/screens/MyDays.tsx`): the menu's "my squares" (which only opened a zoom level the zoom buttons already reach) became **my days**, the life dashboard, as doors, never a page of numbers: the rows **a life pie** (the full pie; its "‹ my days" leads back. A picture of the pie here read techy and alone, so it's a row until there's a better idea), **all my squares** (a life, day by day), **what matters**, **my framed days**, **my paintings**, each back to my days. The pie left the bar's view switch (now squares · list), and the pie page has no bottom bar: it's a page like my days' others ("‹ my days", the title, whole life · days I lived · painted only, the pie); pinch still steps those three. Settings lost those rows and its groups: one short list (square settings, sound, lock when I leave, export my data, delete my account).
 
 **Privacy and terms: "last updated" at the foot** (Oct 24, 2026), under the signature, quiet (12px, muted); kept, since a privacy policy has to show when it last changed (CCPA). Now Oct 24, 2026 (both pages say "the about page").
+
+**Swipe the week** (Oct 24, 2026): on home, swipe the week card right for the week before (or tap the quiet ‹ beside its dates; › comes back), to catch up on missed days from home. Its title follows ("this week", "last week", "3 weeks ago"), and so does its line ("5 days in colour that week.", "Every day that week, in colour." with its rainbow, "Nothing painted that week."). It stops at this week and at the week you were born, and home always opens on this week.
 
 **This week carries its year** (Oct 23, 2026): "Oct 18 – Oct 24, 2026" on home's week (a week across New Year names both years).
 
