@@ -4740,6 +4740,10 @@ button.home-card:active {
 .life-track {
   position: relative;
   display: block;
+  margin-top: 10px; /* the bar's own space above moves here, so the dot centres on the bar itself */
+}
+.life-track .home-bar {
+  margin-top: 0;
 }
 .life-now {
   position: absolute;
