@@ -232,24 +232,28 @@ export function Home({ name, days, notes, profile, steps, onToday, onDay, onFind
   }
 
   return (
-    <main className="home">
-      {painted ? (
-        <>
-          <p className="home-greet is-left">{greeting(name)}</p>
-          <h1 className="home-title">Today is in colour.</h1>
-        </>
-      ) : (
-        <p className="home-greet">{greeting(name)}</p>
-      )}
+    <main className="home is-now">
+      {/* Today and the week, centred with room to breathe; squared's line rests at the foot. */}
+      <div className="home-now">
+        {painted ? (
+          <>
+            <p className="home-greet is-left">{greeting(name)}</p>
+            <h1 className="home-title">Today is in colour.</h1>
+          </>
+        ) : (
+          <p className="home-greet">{greeting(name)}</p>
+        )}
 
-      {todayCard}
-      {/* Home asks you to paint: today, then the week, where a day not painted yet opens with a tap. */}
-      {weekCard}
-      {painted && (
-        <button className="pill home-another" onClick={onFind}>
-          paint another day
-        </button>
-      )}
+        {todayCard}
+        {/* Home asks you to paint: today, then the week, where a day not painted yet opens with a tap. */}
+        {weekCard}
+        {painted && (
+          <button className="pill home-another" onClick={onFind}>
+            paint another day
+          </button>
+        )}
+      </div>
+      <p className="home-line">The past is painted. Today is still yours.</p>
     </main>
   )
 }
