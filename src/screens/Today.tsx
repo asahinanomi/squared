@@ -321,12 +321,13 @@ export function Today(props: Props) {
           </div>
           {special && <p className="day-special">{special}</p>}
 
-          {/* A moment, any time: "this moment…" while today is being lived, "because…" once it's painted. Hidden while
-              the bubble is open (writing after painting, or updating a moment). */}
+          {/* A moment, any time: "this moment…" while today is being lived, "add to today…" once it's painted, "add to
+              this day…" on any other day. Hidden while the bubble is open ("because…" right after painting, or updating
+              a moment). */}
           {!why && (
             <MomentBox
               key={date}
-              placeholder={!day && date === today ? 'this moment…' : 'because…'}
+              placeholder={date !== today ? 'add to this day…' : day ? 'add to today…' : 'this moment…'}
               // Once the day is painted the moments sit right under the square: no "last moment added" needed.
               notes={day ? [] : notes}
               onAdd={(text) => void onSaveNote(undefined, text)}
