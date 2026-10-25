@@ -23,9 +23,11 @@ Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encry
 
 **Decided: wait for testers.** nomi's feeling may not be everyone's, and testers won't go as deep in two weeks. So hold it, watch what they do with things as they are (do they paint past days? how far back? do they stop after a hard day?), and ask on day 14 (`docs/4-testflight-todo.md`). Then decide. Risks to solve in a lab: the lived tone must never read as grey paint ("a blur"); squared needs to know the day you started (joined, not first painted). The principle is in the brand story, section 2.
 
-## An email when an account is deleted (noted Oct 25, 2026)
+## An email when an account is deleted (low priority, noted Oct 25, 2026)
 
-nomi asked for an email confirming the account is gone. **Already in place** (from the feedback form): Resend, its key in Supabase's secrets, the `feedback-email` server function, and squared.today verified in Resend (DNS done), so squared can email anyone, not only nomi. **Still to build:** a small `delete-account` server function the app calls instead of today's database delete: it reads the account's email, deletes the account (everything goes with it, migration 0020), then sends "Your squared account has been deleted." nomi deploys it in the Supabase editor, like feedback-email. Moderate work, not complex. Next, once 0020 is run and delete is tested.
+**Low priority:** not required by Apple or privacy law; the goodbye screen already confirms it. Pick it up when squared sends other mail.
+
+nomi asked for an email confirming the account is gone. **Already in place** (from the feedback form): Resend, its key in Supabase's secrets, the `feedback-email` server function, and squared.today verified in Resend (DNS done), so squared can email anyone, not only nomi. **Still to build:** a small `delete-account` server function the app calls instead of today's database delete: it reads the account's email, deletes the account (everything goes with it, migration 0020), then sends "Your squared account has been deleted." nomi deploys it in the Supabase editor, like feedback-email. Moderate work, not complex.
 
 ## A morning intention (parked Oct 24, 2026)
 
