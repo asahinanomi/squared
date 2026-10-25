@@ -248,7 +248,7 @@ export function Home({ name, days, notes, profile, steps, onToday, onDay, onFind
         {/* Home asks you to paint: today, then the week, where a day not painted yet opens with a tap. */}
         {weekCard}
         {painted && (
-          <button className="pill home-another" onClick={onFind}>
+          <button className="pill is-keyline home-another" onClick={onFind}>
             paint another day
           </button>
         )}
