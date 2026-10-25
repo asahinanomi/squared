@@ -2806,7 +2806,7 @@ body[data-screen='questions'] .idea {
 button.settings-row:active {
   background: var(--grey-1);
 }
-.settings-row > span:not(.set-up-now) {
+.settings-row > span {
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -4750,7 +4750,9 @@ button.home-card:active {
   gap: 14px;
 }
 /* "set up now ›": at the far right of a row (or the card's head), where its arrow is, the two one group. */
+.settings-row > span.set-up-now,
 .set-up-now {
+  flex-direction: row;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
