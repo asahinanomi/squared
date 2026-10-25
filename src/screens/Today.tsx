@@ -8,9 +8,9 @@ import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
-import { ZoomInIcon, ZoomOutIcon } from '../components/ZoomBar'
+import { ZoomOutIcon } from '../components/ZoomBar'
 import { addDays, fromIso, longDate, shortDateParts, todayIso } from '../lib/dates'
-import { stampLine, type Days } from '../lib/days'
+import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
 import type { Matters } from '../lib/matters'
@@ -327,7 +327,8 @@ export function Today(props: Props) {
             <MomentBox
               key={date}
               placeholder={!day && date === today ? 'this moment…' : 'because…'}
-              notes={notes}
+              // Once the day is painted the moments sit right under the square: no "last moment added" needed.
+              notes={day ? [] : notes}
               onAdd={(text) => void onSaveNote(undefined, text)}
             />
           )}
@@ -362,7 +363,6 @@ export function Today(props: Props) {
                 key={`${date}:${day?.color ?? ''}`}
                 saved={day?.color}
                 framed={day?.framed}
-                stamp={day && stampLine(date, day)}
                 loaded={loaded}
                 onDryBrush={onDryBrush}
                 onFilled={onFilled}
@@ -404,36 +404,39 @@ export function Today(props: Props) {
                 now={!day && date === today && !why.note}
               />
             ) : (
-              <>
-                <Palette loaded={loaded} nudge={nudge} onLoad={dip} />
-                <p className={'whisper' + (whispering ? ' is-on' : '')} aria-live="polite">
-                  {whisper && (
-                    <>
-                      <span className="whisper-dot" style={{ background: paintHex(whisper.paint) }} />
-                      {PAINTS.find((x) => x.id === whisper.paint)!.meaning}
-                    </>
-                  )}
-                </p>
-                {torn && (
-                  <div className="torn" aria-live="polite">
-                    <p className="torn-ask">torn? ask yourself:</p>
-                    <p className="torn-question">did what mattered outweigh the rest?</p>
-                    {/* Your compass: one line here, all of it in a sheet, so the day never grows. */}
-                    {compass.length ? (
+              // A painted day is closed: the brush is put away ("start over" brings it back).
+              !day && (
+                <>
+                  <Palette loaded={loaded} nudge={nudge} onLoad={dip} />
+                  <p className={'whisper' + (whispering ? ' is-on' : '')} aria-live="polite">
+                    {whisper && (
                       <>
-                        <p className="torn-mine">
-                          <span className="torn-pick">you said: “{compass[pick % compass.length]}”</span>
-                          {compass.length > 1 && (
-                            <button onClick={() => setCompassOpen(true)}>see all {compass.length}</button>
-                          )}
-                        </p>
+                        <span className="whisper-dot" style={{ background: paintHex(whisper.paint) }} />
+                        {PAINTS.find((x) => x.id === whisper.paint)!.meaning}
                       </>
-                    ) : (
-                      <p className="torn-mine">name what matters to you in my days → what matters</p>
                     )}
-                  </div>
-                )}
-              </>
+                  </p>
+                  {torn && (
+                    <div className="torn" aria-live="polite">
+                      <p className="torn-ask">torn? ask yourself:</p>
+                      <p className="torn-question">did what mattered outweigh the rest?</p>
+                      {/* Your compass: one line here, all of it in a sheet, so the day never grows. */}
+                      {compass.length ? (
+                        <>
+                          <p className="torn-mine">
+                            <span className="torn-pick">you said: “{compass[pick % compass.length]}”</span>
+                            {compass.length > 1 && (
+                              <button onClick={() => setCompassOpen(true)}>see all {compass.length}</button>
+                            )}
+                          </p>
+                        </>
+                      ) : (
+                        <p className="torn-mine">name what matters to you in my days → what matters</p>
+                      )}
+                    </div>
+                  )}
+                </>
+              )
             )}
           </div>
         </div>
@@ -523,12 +526,9 @@ export function Today(props: Props) {
             </button>
           )}
           <div className="today-zoom-pair">
+            {/* A day is as close as it gets: only the way out (no greyed-out way in). */}
             <button aria-label="Zoom out" onClick={onZoomOut}>
               <ZoomOutIcon />
-            </button>
-            {/* Already as close as it gets: shown, greyed, like the far end of the ladder. */}
-            <button aria-label="Zoom in" disabled>
-              <ZoomInIcon />
             </button>
           </div>
         </div>

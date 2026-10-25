@@ -694,13 +694,6 @@
 .canvas-word.is-painted .canvas-hand {
   font-size: 30px;
 }
-/* The honest line under the word (painted on time, late, changed): small, in the same tone. */
-.canvas-painted {
-  margin-top: 4px;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0;
-}
 .paint-wrap {
   position: relative;
   z-index: 1;
@@ -1873,7 +1866,7 @@ body[data-screen='questions'] .idea {
   justify-content: space-between;
 }
 .today-zoom-left {
-  width: 86px; /* the zoom pair's width: 40 + 6 + 40 */
+  width: 40px; /* the zoom-out button's width, so "today" sits in the centre */
 }
 .today-zoom-pair {
   display: flex;
@@ -3374,10 +3367,6 @@ button.settings-row:active {
 }
 .day-card:not(.is-painted) .day-card-open {
   font-weight: 400;
-  color: var(--muted);
-}
-.day-card-painted {
-  font-size: 12px;
   color: var(--muted);
 }
 .day-card-note {

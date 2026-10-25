@@ -3,7 +3,7 @@ import { ZoomBar } from '../components/ZoomBar'
 import { Sheet } from '../components/Sheet'
 import { glide, pulse } from '../lib/backToToday'
 import { addDays, isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, todayIso } from '../lib/dates'
-import { stampLine, type Day, type Days } from '../lib/days'
+import type { Day, Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
 import { frameVars, paintHex, squareFill, WORD, type Paint } from '../lib/paints'
 import { specialDay } from '../lib/special'
@@ -115,7 +115,6 @@ function DayCard({
   onFramed?: () => void
 }) {
   const special = specialDay(iso, born)
-  const stamp = day && stampLine(iso, day)
   const [open, setOpen] = useState(false)
   // A framed day's pinned note ("to remember") is the one shown; otherwise the latest.
   const latest = notes.find((n) => n.pinned) ?? notes.at(-1)
@@ -150,7 +149,6 @@ function DayCard({
         )}
         {special && <span className="day-card-special">{special}</span>}
         {/* Only what's worth saying in a list: a late square, or one changed later (on time is the norm). */}
-        {stamp && stamp !== 'painted on time' && <span className="day-card-painted">{stamp}</span>}
       </div>
       {/* The latest note under the square and date, the card's full width (more of it fits), two lines. */}
       {!open && latest && (

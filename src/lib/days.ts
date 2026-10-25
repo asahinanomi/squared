@@ -1,10 +1,10 @@
 import type { Paint } from './paints'
-import { addDays, isoDate, plainDate } from './dates'
+import { isoDate } from './dates'
 import { supabase } from './supabase'
 
 export type Day = {
   color: Paint
-  /** first painted after the next day ended (its line says when) */
+  /** first painted after the next day ended (recorded only; nothing shows it) */
   backfilled?: boolean
   /** the date it was first painted on (repaints keep it): a journal's entry date */
   paintedOn?: string
@@ -17,17 +17,6 @@ export type Day = {
   framed?: boolean
 }
 
-/**
- * The one honest line under a painted square's word: "painted on time", "painted Oct 21" (late), or
- * "repainted Oct 23" once its colour changed after the grace window (the day after it was first painted,
- * or after the day itself, whichever is later).
- */
-export function stampLine(date: string, day: Day): string {
-  const grace = [addDays(date, 1), day.paintedOn ? addDays(day.paintedOn, 1) : ''].sort().pop()!
-  if (day.changedOn && day.changedOn > grace) return `repainted ${plainDate(day.changedOn)}`
-  if (day.backfilled && day.paintedOn) return `painted ${plainDate(day.paintedOn)}`
-  return 'painted on time'
-}
 export type Days = Record<string, Day>
 
 const timeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone

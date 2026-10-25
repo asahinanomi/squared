@@ -10,8 +10,6 @@ type Props = {
   loaded: Paint | null
   /** A day that mattered most: its edge drawn in a darker green, thicker. */
   framed?: boolean
-  /** The honest line under a painted square's word: when it was painted, or last changed. */
-  stamp?: string
   onDryBrush: () => void
   onFilled: (p: Paint) => void
   /** The quiet word on a blank square: "paint your day" (today) or "paint this day". */
@@ -75,7 +73,6 @@ export function PaintCanvas({
   saved,
   framed,
   loaded,
-  stamp,
   onDryBrush,
   onFilled,
   blank = 'paint your day',
@@ -309,7 +306,6 @@ export function PaintCanvas({
           >
             <span className="canvas-sign">
               <span className="canvas-hand">{saved ? WORD[saved] : breathing ? 'be here' : blank}</span>
-              {saved && stamp && <small className="canvas-painted">{stamp}</small>}
             </span>
           </span>
         )}
