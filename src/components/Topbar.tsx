@@ -19,10 +19,12 @@ export function Topbar({ onHome, onToday, onCalendar, onIdea, onSettings, onSign
   }
   return (
     <header className="topbar">
-      {/* Every screen's top left: the logo, home. (Zooming out is the bar's job.) */}
+      {/* Every screen's top left: the logo, home, at the zoom icons' size (24px). (Zooming out is the bar's job.) */}
       <button className="logo-btn" onClick={onHome} aria-label="Home">
-        <Logo />
+        <Logo size={24} />
       </button>
+      {/* The middle of the bar: the day screen puts its date here (see Today), so the day has more room. */}
+      <div className="topbar-center" id="topbar-center" />
       <button
         className={'menu-btn' + (open ? ' is-open' : '')}
         aria-label="Menu"

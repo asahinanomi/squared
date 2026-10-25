@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { MomentBox } from '../components/MomentBox'
 import { NotesList } from '../components/NotesList'
@@ -94,6 +95,9 @@ export function Today(props: Props) {
   const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut } = props
   const today = todayIso()
   const [introOpen, setIntroOpen] = useState(!!props.intro)
+  // The top bar's middle, where the date goes (found once the bar is on the page).
+  const [barCenter, setBarCenter] = useState<HTMLElement | null>(null)
+  useLayoutEffect(() => setBarCenter(document.getElementById('topbar-center')), [])
   const introDone = () => {
     setIntroOpen(false)
     props.onIntroDone?.()
@@ -286,14 +290,21 @@ export function Today(props: Props) {
         }}
       >
         <div className="today-trio" ref={trio}>
-          {/* The day in the order it's lived: which day, a moment as it comes, then the question and the square to
-              close it. */}
+          {/* The day in the order it's lived: which day (its date in the top bar), a moment as it comes, then the
+              question and the square to close it. */}
           <div className="day-nav">
-            {/* Tap the date to find any day you've lived: which year (with your age), which month, which day. */}
-            <button className="day-pick" aria-label="Go to a day" onClick={() => setFinding(true)}>
-              <DayLabel iso={date} slide={slide} />
-              <ChevronDown />
-            </button>
+            {/* Tap the date to find any day you've lived: which year (with your age), which month, which day. It sits in
+                the middle of the top bar, between the logo and the menu. */}
+            {barCenter &&
+              createPortal(
+                <div className="day-nav is-in-bar">
+                  <button className="day-pick" aria-label="Go to a day" onClick={() => setFinding(true)}>
+                    <DayLabel iso={date} slide={slide} />
+                    <ChevronDown />
+                  </button>
+                </div>,
+                barCenter,
+              )}
             <DayFinder
               open={finding}
               onClose={() => setFinding(false)}

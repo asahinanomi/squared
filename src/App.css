@@ -15,7 +15,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
+  height: 48px;
+}
+/* The bar's middle: empty, except on a day, where its date sits (absolutely centred, between logo and menu). */
+.topbar-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max-content;
+  transform: translate(-50%, -50%);
 }
 .logo-btn {
   display: grid;
@@ -66,7 +74,7 @@
 }
 .menu {
   position: absolute;
-  top: calc(env(safe-area-inset-top) + 66px);
+  top: calc(env(safe-area-inset-top) + 58px);
   right: max(var(--gutter), calc(50vw - 280px + var(--gutter)));
   min-width: 190px;
   padding: 8px;
@@ -324,7 +332,7 @@
   letter-spacing: -0.005em;
   line-height: 1.22;
   text-align: center;
-  margin: 44px 0 0; /* the moment box above, the square below: the question opens the day's close */
+  margin: 56px 0 0; /* the moment box above, the square below: the question opens the day's close */
   max-width: 13em;
   text-wrap: balance;
 }
@@ -339,13 +347,17 @@
 .day-nav {
   display: flex;
   justify-content: center;
-  margin-top: 0; /* the day opens with its date */
+  margin-top: 0;
   width: 100%;
+}
+/* In the top bar, the date pill alone (its finder sheet stays with the day). */
+.day-nav.is-in-bar {
+  width: auto;
 }
 /* The day's moment box, right under the date: a white keyline box (rounded, not a pill: pills are buttons), "this
    moment…", and a + to keep it. It grows as you write. */
 .moment-box {
-  margin-top: 18px;
+  margin-top: 8px; /* the first thing on the day, right under the bar (the date sits in the bar) */
   width: min(100%, 342px);
   box-sizing: border-box;
   display: flex;
@@ -393,10 +405,10 @@
 /* A short phone (an iPhone SE): the day's top tightens, so the palette stays above the bar. */
 @media (max-height: 700px) {
   .moment-box {
-    margin-top: 12px;
+    margin-top: 4px;
   }
   .question {
-    margin-top: 16px;
+    margin-top: 28px;
     font-size: 24px;
   }
 }
@@ -3818,7 +3830,7 @@ button.settings-row:active {
   position: fixed;
   z-index: 30;
   left: 50%;
-  top: calc(env(safe-area-inset-top) + 24px);
+  top: calc(env(safe-area-inset-top) + 20px);
   transform: translateX(-50%);
   margin: 0;
   font-size: 13px;
@@ -3830,7 +3842,7 @@ button.settings-row:active {
   position: fixed;
   z-index: 30;
   left: 50%;
-  top: calc(env(safe-area-inset-top) + 70px);
+  top: calc(env(safe-area-inset-top) + 62px);
   transform: translateX(-50%);
   width: min(300px, calc(100vw - 48px));
   box-sizing: border-box;
