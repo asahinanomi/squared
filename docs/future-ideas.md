@@ -25,7 +25,7 @@ Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encry
 
 ## An email when an account is deleted (noted Oct 25, 2026)
 
-nomi asked for an email confirming the account is gone. Parked: squared sends no email of its own today, so it needs an email service (Resend, for example), a key kept on the server, and a small server function that sends it before the account goes (the email address goes with the account). The goodbye screen ("Your account has been deleted.") says it clearly for now. Apple doesn't require the email. Worth doing when squared sends other mail.
+nomi asked for an email confirming the account is gone. **Already in place** (from the feedback form): Resend, its key in Supabase's secrets, the `feedback-email` server function, and squared.today verified in Resend (DNS done), so squared can email anyone, not only nomi. **Still to build:** a small `delete-account` server function the app calls instead of today's database delete: it reads the account's email, deletes the account (everything goes with it, migration 0020), then sends "Your squared account has been deleted." nomi deploys it in the Supabase editor, like feedback-email. Moderate work, not complex. Next, once 0020 is run and delete is tested.
 
 ## A morning intention (parked Oct 24, 2026)
 
