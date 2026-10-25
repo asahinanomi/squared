@@ -34,6 +34,19 @@ Rooted in Covey's urgent-vs-important: a day can be busy and still not matter. s
 
 **The metaphor: black and white, then colour** (the Wizard of Oz, when Dorothy steps out into colour). squared is ink on paper; the only colour anywhere is what you paint. Days stay paper until you paint them, so your life literally turns colourful as you go. Celebrate days "in colour", never days "missed".
 
+**squared starts today. The past is optional, never asked for.** (nomi, Oct 25, 2026) Painting the past has value: painting a heavy day can make you treasure why today matters. But it's heavy, and the mind doesn't want to revisit painful years again and again. Most people carry years like that. So squared never points you back: you can paint a day you want to remember, but nothing asks you to fill in your history. The story moves forward.
+
+**See the whole life, count the days ahead.** The life view starts at birth: seeing all of it is what gives today its weight, and that urgency is essential. But the number squared counts is the days **ahead** (the life card's big number), not the days missed.
+
+**Before squared, days are lived, not blank** (a proposal, Oct 25, 2026, to be mocked in a lab). The days before you started can never all be painted, and blank squares feel like a debt: the zoom quietly calls you to fill them. So those days could show as **lived**, a quiet ink tone like the life bar's past, not raw canvas. Then:
+- **painted** squares are the days you chose to keep (any time),
+- **lived** is the life before squared, done, nothing owed,
+- **blank** canvas is only what's still yours: today and the days ahead.
+
+It matches the line: the past is painted (lived), today is still yours (blank, waiting). Open: the lived tone must never read as grey paint ("a blur"); and how squared knows when you started (the day you joined, not your first painted day).
+
+**Pulling backwards, to check** (an audit, nothing changed yet): "paint another day" on home may invite filling in the past (quieter, or only the last few days?); onboarding never mentions the past (keep it that way); my days stays the place for looking back, only when you choose to go there.
+
 ## 3. The model (why there are exactly three colours)
 
 Every day answers two hidden questions:
