@@ -6,6 +6,7 @@ Where squared is on the road (the big steps) lives in `docs/big-picture.md`: kee
 
 - I'm nomi, the maker and only user. Talk to me short, warm, to the point — no fluff.
 - When I ask "what do you think / if you agree do it, if not say no": give a short opinion; build only on "go" (or if I said to just do it).
+- Push back when you don't agree, always. Say so plainly, with why.
 - Ask before changing my design. Design boards: https://claude.ai/artifact/PFuFHaZmJXTG82GkJsT1NH
 - Labs (artifact mocks): never replace what's already in a lab; add new options below, so I can look back.
 - Keep `README.md` up to date with whatever ships. Refresh the "last updated" date and time (UTC) under its title on every change.

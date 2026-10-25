@@ -8,7 +8,7 @@ Where squared is, in the big steps. Many moving parts, one road. Each step has i
 
 ### 1 · I trust squared ← you are here
 
-Not only the app: the story too. Ready means comfortable, not perfect.
+Not only the app: the story too. Ready means comfortable, not perfect. **A time box: about two weeks** (until early Nov). If it isn't there by then, write down what's missing and decide, rather than keep polishing.
 
 - [ ] **The app:** a quiet week of just painting, no design changes; anything odd goes to Claude. (Used it 5 or 6 days so far, changing it daily.)
 - [ ] **The crash log** is clean (`client_errors`, see beta readiness).
