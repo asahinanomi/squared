@@ -2321,15 +2321,11 @@ body[data-screen='questions'] .idea {
   color: var(--ink-soft);
 }
 .confirm-aside {
-  margin: 12px 0 0;
-  font-size: 14px;
-  color: var(--muted);
+  margin: 16px 0 0;
 }
-.confirm-aside button {
-  font-size: 14px;
-  color: var(--ink-soft);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
+/* Export first, in the delete alert: a full keyline pill, so a copy is one clear tap away before anything goes. */
+.confirm-export {
+  width: 100%;
 }
 .confirm-actions {
   display: flex;

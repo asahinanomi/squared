@@ -36,7 +36,7 @@ export function ConfirmDialog({ title, body, aside, confirm, onConfirm, onCancel
           {title}
         </h2>
         {body && <p className="confirm-body">{body}</p>}
-        {aside && <p className="confirm-aside">{aside}</p>}
+        {aside && <div className="confirm-aside">{aside}</div>}
         {typeToConfirm && (
           <label className="confirm-type">
             <span>type “{typeToConfirm}” to confirm</span>

@@ -143,17 +143,15 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
           confirm="delete"
           typeToConfirm="delete"
           aside={
-            <>
-              Want a copy first?{' '}
-              <button
-                onClick={() => {
-                  setAsking(false)
-                  onExport()
-                }}
-              >
-                export my data
-              </button>
-            </>
+            <button
+              className="pill is-keyline confirm-export"
+              onClick={() => {
+                setAsking(false)
+                onExport()
+              }}
+            >
+              export my data first
+            </button>
           }
           onConfirm={remove}
           onCancel={() => setAsking(false)}
