@@ -23,6 +23,10 @@ Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encry
 
 **Decided: wait for testers.** nomi's feeling may not be everyone's, and testers won't go as deep in two weeks. So hold it, watch what they do with things as they are (do they paint past days? how far back? do they stop after a hard day?), and ask on day 14 (`docs/4-testflight-todo.md`). Then decide. Risks to solve in a lab: the lived tone must never read as grey paint ("a blur"); squared needs to know the day you started (joined, not first painted). The principle is in the brand story, section 2.
 
+## An email when an account is deleted (noted Oct 25, 2026)
+
+nomi asked for an email confirming the account is gone. Parked: squared sends no email of its own today, so it needs an email service (Resend, for example), a key kept on the server, and a small server function that sends it before the account goes (the email address goes with the account). The goodbye screen ("Your account has been deleted.") says it clearly for now. Apple doesn't require the email. Worth doing when squared sends other mail.
+
 ## A morning intention (parked Oct 24, 2026)
 
 "What would make today worth it?": a line set in the morning, seen all day, painted against at night. Lovely, but it makes today more complex (a second thing beside the one question), so it's parked, maybe as its own feature one day. Lab: https://claude.ai/artifact/8FfES4Aj94FZq4QLmJyUww (A on the canvas, B under the question, C as the first card; how you set it; what it becomes at night). A tiny version if it's ever wanted: the morning's empty "add a moment" box hints "what would make today worth it?", saved as an ordinary moment.

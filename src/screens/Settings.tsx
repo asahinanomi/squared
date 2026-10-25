@@ -1,9 +1,11 @@
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { Footer } from '../components/Footer'
+import { Waiting } from '../components/Waiting'
 import { useState } from 'react'
 import { deleteMyAccount } from '../lib/account'
 import { fromIso, todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
+import { reportError } from '../lib/report'
 import type { Profile } from '../lib/profile'
 import { LOCK_CHOICES, lockAfter, setLockAfter } from '../lib/lock'
 import { setSoundOn, soundOn, soundOnChime } from '../lib/sound'
@@ -12,7 +14,7 @@ import { Chevron, SpeakerIcon } from './Today'
 type Props = {
   profile: Profile | null
   onSquares: () => void
-  /** After the account is gone: back to the sign-in screen. */
+  /** After the account is gone: "Your account has been deleted.", then the sign-in screen. */
   onDeleted: () => void
   onPrivacy: () => void
   onTerms: () => void
@@ -43,10 +45,11 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
   const remove = () => {
     setAsking(false)
     setDeleting('deleting')
-    deleteMyAccount()
+    // The hourglass stays at least a moment, so a quick delete still shows it happening.
+    Promise.all([deleteMyAccount(), new Promise((r) => setTimeout(r, 1500))])
       .then(onDeleted)
       .catch((e) => {
-        console.error('Could not delete the account', e)
+        reportError('delete account', e)
         setDeleting('failed')
       })
   }
@@ -99,12 +102,20 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
         {row('export my data', 'a Word copy of your squares and moments', onExport)}
         <button className="settings-row" disabled={deleting === 'deleting'} onClick={() => setAsking(true)}>
           <span>
-            <span className="settings-label">{deleting === 'deleting' ? 'deleting…' : 'delete my account'}</span>
+            <span className="settings-label">delete my account</span>
             <span className="settings-sub">your squares, notes and lists, for good</span>
           </span>
         </button>
       </div>
-      {deleting === 'failed' && <p className="settings-note">couldn't delete, check your connection and try again</p>}
+      {deleting === 'failed' && (
+        <p className="settings-note">couldn't delete your account. try again, and if it still fails, send feedback</p>
+      )}
+      {/* Deleting: the hourglass over the whole screen, until the account is gone. */}
+      {deleting === 'deleting' && (
+        <div className="deleting">
+          <Waiting line="deleting your account…" />
+        </div>
+      )}
 
       <Footer
         links={[

@@ -12,6 +12,7 @@ import type { Paint } from './lib/paints'
 import { todayIso } from './lib/dates'
 import { backFromGoogle, supabase } from './lib/supabase'
 import { Screens } from './Screens'
+import { Deleted } from './screens/Deleted'
 import { SignedOut } from './screens/SignedOut'
 import { demo, NO_TOPBAR, PAGES, type Screen } from './state/app'
 import { useAccount } from './state/useAccount'
@@ -39,6 +40,8 @@ export default function App() {
   const [defining, setDefining] = useState(false)
   // The day finder from home ("paint another day") or the menu ("find a day"): pick a day, land on it to paint.
   const [finding, setFinding] = useState(false)
+  // Just deleted the account: "Your account has been deleted." shows once, before the sign-in screen.
+  const [deleted, setDeleted] = useState(false)
   const onDryBrush = () => {
     setNudge(true)
     setTimeout(() => setNudge(false), 750)
@@ -97,6 +100,7 @@ export default function App() {
     ) : (
       <Waiting />
     )
+  if (!signedIn && deleted) return <Deleted onDone={() => setDeleted(false)} />
   if (!signedIn) return <SignedOut error={authError} onDemoSignIn={() => setDemoIn(true)} />
 
   const oneScreen = ['month', 'year', 'life', 'pie', 'list'].includes(screen)
@@ -135,7 +139,10 @@ export default function App() {
               wall={wall}
               openPainting={painting.openPainting}
               painter={painter}
-              signOut={signOut}
+              onDeleted={() => {
+                setDeleted(true)
+                signOut()
+              }}
               ui={{
                 why,
                 setWhy,
