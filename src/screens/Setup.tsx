@@ -34,7 +34,14 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const valid = born > '1900-01-01' && born <= today
+  // 18 and over: the picker stops at the day 18 years ago (squared is for adults: terms).
+  const adult = (() => {
+    const d = fromIso(today)
+    d.setFullYear(d.getFullYear() - 18)
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  })()
+  const young = !!born && born > adult
+  const valid = born > '1900-01-01' && !young
   const c = valid ? lifeCounts(born, lifespan, today) : null
   const [inYears, setInYears] = useState(false)
   // Years from the squares themselves, so lived + ahead always add up to the lifespan.
@@ -128,7 +135,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
                 id="born"
                 type="date"
                 min="1900-01-02"
-                max={today}
+                max={adult}
                 value={born}
                 onChange={(e) => setBorn(e.target.value)}
                 onClick={(e) => {
@@ -141,6 +148,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
                 }}
               />
             </div>
+            {young && <p className="setup-hint">squared is for people 18 and over.</p>}
           </div>
 
           <div>

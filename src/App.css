@@ -295,6 +295,21 @@
   align-self: flex-start;
   margin-left: -6px;
 }
+.signin-agree {
+  margin: 16px 0 0;
+  max-width: 280px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+  text-align: center;
+  text-wrap: balance;
+}
+.signin-agree button {
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 3px;
+}
 .signin-error {
   color: var(--muted);
   font-size: 14px;
