@@ -4,20 +4,34 @@ import { createClient } from '@supabase/supabase-js'
 const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
 const key = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
 
-// After a phone wakes the app, the first request can ride a dead connection and hang for a minute.
-// Give each request 10s, then try once more on a fresh one.
-const TIMEOUT_MS = 10_000
+// iPhone Safari keeps one connection to the database open and reuses it for every request. On mobile data that
+// connection can die quietly while squared sits open (the network drops it; Safari doesn't notice), and every retry
+// then rides the same dead line and hangs (client_errors, Oct 2026: saves hanging the full 41s, online, minutes
+// after waking). So each request gets 8s, and the next try goes the other way: direct, or through squared.today's
+// own /sb/ (a Vercel rewrite to the same database), which is a different address and so a fresh connection.
+// Whichever way last worked goes first.
+const TIMEOUT_MS = 8_000
+const viaSite = !import.meta.env.DEV && typeof location !== 'undefined' && location.hostname === 'squared.today'
+let preferSite = false
+const throughSite = (input: RequestInfo | URL): string | null => {
+  const href = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
+  return url && viaSite && href.startsWith(url) ? `${location.origin}/sb${href.slice(url.length)}` : null
+}
 
 // A plain timer and controller (not AbortSignal.timeout/any, which some Safari versions handle unreliably).
 async function patientFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  const alt = throughSite(input)
   for (let attempt = 0; ; attempt++) {
+    const site = !!alt && (attempt % 2 === 0) === preferSite
     const ctrl = new AbortController()
     const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS)
     const outer = init?.signal
     const follow = () => ctrl.abort()
     outer?.addEventListener('abort', follow)
     try {
-      return await fetch(input, { ...init, signal: ctrl.signal })
+      const res = await fetch(site ? alt! : input, { ...init, signal: ctrl.signal })
+      if (alt) preferSite = site
+      return res
     } catch (e) {
       if (attempt > 0 || outer?.aborted) throw e
     } finally {

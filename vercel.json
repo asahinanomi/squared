@@ -2,6 +2,10 @@
   "buildCommand": "npm run lint && npm test && npm run build",
   "rewrites": [
     {
+      "source": "/sb/:path*",
+      "destination": "https://xsqpdmtruajdunawpxhk.supabase.co/:path*"
+    },
+    {
       "source": "/((?!assets/|icons/|.*\\..*).*)",
       "destination": "/index.html"
     }
