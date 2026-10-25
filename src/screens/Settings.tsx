@@ -142,6 +142,19 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
           body="Your squares, moments, lists and settings go for good. It can't be undone."
           confirm="delete"
           typeToConfirm="delete"
+          aside={
+            <>
+              Want a copy first?{' '}
+              <button
+                onClick={() => {
+                  setAsking(false)
+                  onExport()
+                }}
+              >
+                export my data
+              </button>
+            </>
+          }
           onConfirm={remove}
           onCancel={() => setAsking(false)}
         />

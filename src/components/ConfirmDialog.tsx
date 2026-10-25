@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 
 type Props = {
   title: string
   body?: string
+  /** A quiet line under the body (e.g. a link to export first). */
+  aside?: ReactNode
   confirm: string
   onConfirm: () => void
   onCancel: () => void
@@ -12,7 +14,7 @@ type Props = {
 }
 
 // A small "are you sure?" alert in the app's own style (not the browser's).
-export function ConfirmDialog({ title, body, confirm, onConfirm, onCancel, typeToConfirm }: Props) {
+export function ConfirmDialog({ title, body, aside, confirm, onConfirm, onCancel, typeToConfirm }: Props) {
   const [typed, setTyped] = useState('')
   const ready = !typeToConfirm || typed.trim().toLowerCase() === typeToConfirm
   useEffect(() => {
@@ -34,6 +36,7 @@ export function ConfirmDialog({ title, body, confirm, onConfirm, onCancel, typeT
           {title}
         </h2>
         {body && <p className="confirm-body">{body}</p>}
+        {aside && <p className="confirm-aside">{aside}</p>}
         {typeToConfirm && (
           <label className="confirm-type">
             <span>type “{typeToConfirm}” to confirm</span>
