@@ -259,7 +259,8 @@ export function Today(props: Props) {
       if (!el) return
       const top = el.parentElement!.getBoundingClientRect().top + window.scrollY
       const band = document.querySelector('.today-zoom')?.getBoundingClientRect().height ?? 0
-      setLift(Math.max(20, (window.innerHeight - top - band - el.offsetHeight) / 2))
+      // Centred, but never more than 24px under the bar: the day sits high, the moments closer.
+      setLift(Math.min(24, Math.max(12, (window.innerHeight - top - band - el.offsetHeight) / 2)))
     }
     fit()
     window.addEventListener('resize', fit)

@@ -5,7 +5,7 @@
   width: 100%;
   max-width: 560px;
   margin: 0 auto;
-  padding: calc(env(safe-area-inset-top) + 10px) var(--gutter) calc(env(safe-area-inset-bottom) + 20px);
+  padding: calc(env(safe-area-inset-top) + 16px) var(--gutter) calc(env(safe-area-inset-bottom) + 20px);
 }
 
 /* ---------- top bar & menu ---------- */
@@ -74,7 +74,7 @@
 }
 .menu {
   position: absolute;
-  top: calc(env(safe-area-inset-top) + 58px);
+  top: calc(env(safe-area-inset-top) + 64px);
   right: max(var(--gutter), calc(50vw - 280px + var(--gutter)));
   min-width: 190px;
   padding: 8px;
@@ -332,7 +332,7 @@
   letter-spacing: -0.005em;
   line-height: 1.22;
   text-align: center;
-  margin: 56px 0 0; /* the moment box above, the square below: the question opens the day's close */
+  margin: 44px 0 0; /* the moment box above, the square below: the question opens the day's close */
   max-width: 13em;
   text-wrap: balance;
 }
@@ -2560,11 +2560,10 @@ body[data-screen='questions'] .idea {
 .setup {
   flex: 1;
   width: 100%;
-  max-width: 400px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  padding: 8px 4px 32px;
+  padding: 8px 0 32px; /* the same width as the top bar, as on today and home */
 }
 .setup-body {
   flex: 1;
@@ -2731,11 +2730,10 @@ body[data-screen='questions'] .idea {
 .settings {
   flex: 1;
   width: 100%;
-  max-width: 400px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  padding: 8px 4px 32px;
+  padding: 8px 0 32px; /* the same width as the top bar, as on today and home */
 }
 .settings-title {
   margin: 10px 0 0;
@@ -2922,7 +2920,6 @@ button.settings-row:active {
 .matters {
   flex: 1;
   width: 100%;
-  max-width: 400px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -3830,7 +3827,7 @@ button.settings-row:active {
   position: fixed;
   z-index: 30;
   left: 50%;
-  top: calc(env(safe-area-inset-top) + 62px);
+  top: calc(env(safe-area-inset-top) + 70px);
   transform: translateX(-50%);
   margin: 0;
   padding: 7px 14px;
@@ -3846,7 +3843,7 @@ button.settings-row:active {
   position: fixed;
   z-index: 30;
   left: 50%;
-  top: calc(env(safe-area-inset-top) + 62px);
+  top: calc(env(safe-area-inset-top) + 70px);
   transform: translateX(-50%);
   width: min(300px, calc(100vw - 48px));
   box-sizing: border-box;
@@ -3893,7 +3890,6 @@ button.settings-row:active {
    left. Colour only in the paint (the squares, the shares, the paintings). */
 .home {
   width: 100%;
-  max-width: 440px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
