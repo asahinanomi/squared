@@ -73,6 +73,15 @@ Claude writes the code in the cloud and pushes it. On the Mac, nomi:
 
 Claude can't run Xcode, so every build passes through these steps. Later, if it gets tedious, a cloud build service can do them on each push.
 
+## Tweaks, once it's in the store
+
+- **The web stays instant:** a push to `main` is live on squared.today in a minute, as now. It's the test bench.
+- **The app carries its own copy:** every change, even a word, is a new build on the Mac and Apple's review (usually about a day).
+- **The rhythm:** tweak freely on the web, then send one app update about once a week, or when something real is ready.
+- **Bugs:** ask Apple for an expedited review.
+- **Later, only if the weekly rhythm hurts:** a live update service (Capgo, for example) sends small changes to the app without review. It's one more paid service and more moving parts, so not for the first version.
+- **Not doing:** an app that just loads squared.today. Tweaks would be instant, but Apple tends to reject it (4.2).
+
 ## 6 · TestFlight, then the store
 
 - [ ] **Internal testing** (nomi only, no review): live with it for a few days.
