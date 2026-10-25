@@ -328,8 +328,6 @@ export function Today(props: Props) {
             <MomentBox
               key={date}
               placeholder={date !== today ? 'add to this day…' : day ? 'add to today…' : 'this moment…'}
-              // Once the day is painted the moments sit right under the square: no "last moment added" needed.
-              notes={day ? [] : notes}
               onAdd={(text) => void onSaveNote(undefined, text)}
             />
           )}

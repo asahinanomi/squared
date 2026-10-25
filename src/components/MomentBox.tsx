@@ -1,28 +1,19 @@
 import { useLayoutEffect, useRef, useState } from 'react'
-import type { Note } from '../lib/notes'
+import { createPortal } from 'react-dom'
 
 type Props = {
-  /** "this moment…" while today is being lived; "because…" once the day is painted. */
+  /** "this moment…" while today is being lived, "add to today…" once painted, "add to this day…" on any other day. */
   placeholder: string
-  /** The day's moments, for the quiet line under the box: when the last one was added. */
-  notes: Note[]
   onAdd: (text: string) => void
 }
 
-const time = (d: Date) => d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()
-
-/** "3:30 pm" if it was written today, else "Oct 26 · 3:30 pm" (a moment can be added to a day later). */
-function when(iso: string) {
-  const d = new Date(iso)
-  if (d.toDateString() === new Date().toDateString()) return time(d)
-  return `${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} · ${time(d)}`
-}
-
-// The day starts with a moment: one box at the top of the day, "this moment…", and a + to keep it. It grows as you
-// write; Enter keeps it too. The moments themselves are listed at the foot of the day, so a quiet line under the box
-// says the last one landed, and when.
-export function MomentBox({ placeholder, notes, onAdd }: Props) {
+// The day starts with a moment: one box at the top of the day and a + to keep it. It grows as you write; Enter keeps
+// it too. The moments are listed at the foot of the day, newest first, so a kept moment lifts out of the box as a
+// paper slip and drifts down toward them (the new one glows once when it arrives there).
+export function MomentBox({ placeholder, onAdd }: Props) {
   const [text, setText] = useState('')
+  const [slip, setSlip] = useState<{ text: string; top: number; left: number; width: number; n: number } | null>(null)
+  const wrap = useRef<HTMLDivElement>(null)
   const box = useRef<HTMLTextAreaElement>(null)
   useLayoutEffect(() => {
     const el = box.current
@@ -33,13 +24,14 @@ export function MomentBox({ placeholder, notes, onAdd }: Props) {
   const add = () => {
     const t = text.trim()
     if (!t) return box.current?.focus()
+    const r = wrap.current?.getBoundingClientRect()
+    if (r) setSlip({ text: t, top: r.top, left: r.left, width: r.width, n: (slip?.n ?? 0) + 1 })
     onAdd(t)
     setText('')
   }
-  const last = notes.reduce<string | null>((at, n) => (!at || n.writtenAt > at ? n.writtenAt : at), null)
   return (
     <>
-      <div className="moment-box">
+      <div className="moment-box" ref={wrap}>
         <textarea
           ref={box}
           rows={1}
@@ -62,11 +54,19 @@ export function MomentBox({ placeholder, notes, onAdd }: Props) {
           </svg>
         </button>
       </div>
-      {last && (
-        <p className="moment-last" role="status">
-          last moment added {when(last)}
-        </p>
-      )}
+      {slip &&
+        createPortal(
+          <div
+            key={slip.n}
+            className="moment-slip"
+            style={{ top: slip.top, left: slip.left, width: slip.width }}
+            onAnimationEnd={() => setSlip(null)}
+            aria-hidden="true"
+          >
+            {slip.text}
+          </div>,
+          document.body,
+        )}
     </>
   )
 }

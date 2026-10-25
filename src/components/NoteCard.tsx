@@ -9,10 +9,25 @@ function stamp(iso: string) {
 }
 
 // One moment, in full, with when it was written. Tap it to update or delete it.
-export function NoteCard({ note, framed, onOpen }: { note: Note; framed?: boolean; onOpen: () => void }) {
+export function NoteCard({
+  note,
+  framed,
+  onOpen,
+  arriving,
+}: {
+  note: Note
+  framed?: boolean
+  onOpen: () => void
+  /** Just written: it glows once as it arrives. */
+  arriving?: boolean
+}) {
   return (
     <button
-      className={'note-card' + (note.pinned ? (framed ? ' is-pinned is-remember' : ' is-pinned') : '')}
+      className={
+        'note-card' +
+        (note.pinned ? (framed ? ' is-pinned is-remember' : ' is-pinned') : '') +
+        (arriving ? ' is-arriving' : '')
+      }
       onClick={onOpen}
       aria-label="Open moment"
     >

@@ -33,7 +33,8 @@ const writeHidden = (hidden: boolean) => {
   }
 }
 
-// A day's notes, oldest to newest. The latest always shows; older ones can be tucked away.
+// A day's notes, newest first: the latest is what counts most (today over the past), and it's always on top, where a
+// moment just added lands (it glows once as it arrives). The earlier ones unfold below it, or stay tucked away.
 // Every note is a moment you captured: as it happened ("this moment…") or looking back ("because…"), each with its time.
 export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
   const [hidden, setHidden] = useState(readHidden)
@@ -48,7 +49,12 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
       onOpenChange={(o) => setSwiped(o ? n.id : null)}
       onDelete={() => setAsking(n)}
     >
-      <NoteCard note={n} framed={!!framed} onOpen={() => onOpen(n)} />
+      <NoteCard
+        note={n}
+        framed={!!framed}
+        onOpen={() => onOpen(n)}
+        arriving={Date.now() - Date.parse(n.writtenAt) < 4000}
+      />
     </SwipeRow>
   )
 
@@ -67,10 +73,10 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
     writeHidden(!hidden)
     setHidden(!hidden)
   }
-  // Pinned notes always come first (oldest first) and always show; the rest keep their order.
+  // Pinned notes always come first and always show; then the rest, newest first.
   const pinned = notes.filter((n) => n.pinned)
   const rest = notes.filter((n) => !n.pinned)
-  const older = rest.slice(0, -1)
+  const older = rest.slice(0, -1).reverse()
   const latest = rest.at(-1)
   return (
     <div className="notes" style={framed ? frameVars(framed) : undefined}>
@@ -95,8 +101,8 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
         </div>
       )}
       {pinned.map(row)}
-      {!hidden && older.map(row)}
       {latest && row(latest)}
+      {!hidden && older.map(row)}
       {onAdd && (
         <button className="note-add" onClick={onAdd}>
           add a moment
