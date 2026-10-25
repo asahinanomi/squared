@@ -1,6 +1,6 @@
 # squared — working notes for Claude
 
-Read `README.md` first: it is the product spec and the record of every phase built so far. The visual identity (logo, colour, type, components) is `docs/design-system.md`. What squared says and why (voice, the three colours, locked copy) is `docs/brand-story.md`. Parked ideas live in `docs/future-ideas.md`: add new ones there. Test links (hidden ?welcome-style links) live in `docs/test-links.md`: add any new one there. What's needed before and after beta lives in `docs/beta-readiness.md`: tick items there as they're done. The App Store plan lives in `docs/ios-todo.md`: tick items there too. The first testers live in `docs/testflight-todo.md`, and how people find squared in `docs/growth.md`.
+Where squared is on the road (the big steps) lives in `docs/big-picture.md`: keep its "you are here" current. Read `README.md` first: it is the product spec and the record of every phase built so far. The visual identity (logo, colour, type, components) is `docs/design-system.md`. What squared says and why (voice, the three colours, locked copy) is `docs/brand-story.md`. Parked ideas live in `docs/future-ideas.md`: add new ones there. Test links (hidden ?welcome-style links) live in `docs/test-links.md`: add any new one there. What's needed before and after beta lives in `docs/beta-readiness.md`: tick items there as they're done. The App Store plan lives in `docs/ios-todo.md`: tick items there too. The first testers live in `docs/testflight-todo.md`, and how people find squared in `docs/growth.md`.
 
 ## Who & how
 

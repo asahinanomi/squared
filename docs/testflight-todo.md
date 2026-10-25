@@ -41,12 +41,15 @@ The first circle: 10 to 20 people painting their days for two weeks, on the iPho
   - Did you keep painting? Why, or why not?
   - What did you feel looking at your week, or your month?
   - What's the one thing you'd change?
+  - Did you paint any days from before you started? Why, or why not?
+  - How did it feel to see the empty years?
 - [ ] Every answer goes to Claude, so it can be sorted into: fix now, try next, parked (future ideas).
 
 ## What to watch (quietly, not as a dashboard)
 
 - Who is still painting after a week, and after two.
 - Where people stop during onboarding.
+- **The past:** does anyone paint days from before they started, and how far back (last week, or years)? Do they open the zoom, and what do they do there? Does anyone stop after painting a hard day? (Decides "lived, not blank": `docs/future-ideas.md`.)
 - What people write in "send feedback" and in TestFlight.
 
 ## After the round
