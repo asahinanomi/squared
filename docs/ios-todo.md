@@ -26,7 +26,8 @@ Wrap the same app in **Capacitor** (the web build bundled inside a native iPhone
 ## 1 · Accounts and setup (nomi)
 
 - [ ] **Apple Developer Program** ($99 a year), as an individual: the store then shows nomi's legal name as the seller.
-- [ ] **A Mac with Xcode**, or a cloud build service (Codemagic, for example) if there isn't one. This decides how builds happen, so it comes first.
+- [x] **A Mac:** nomi's MacBook Pro. Builds happen there, in Xcode.
+- [ ] **Xcode** from the Mac App Store (free, large; then open it once to finish installing).
 - [ ] **App name in App Store Connect:** "squared" will likely be taken. Pick a fallback early, such as "squared: paint your days".
 - [ ] **Bundle id**, for example `today.squared.app`.
 - [ ] **Two-factor login** on the Apple account (as for the others in beta readiness).
@@ -61,6 +62,17 @@ Wrap the same app in **Capacitor** (the web build bundled inside a native iPhone
 - [ ] Privacy labels (see above).
 - [ ] Update privacy, terms and questions to mention the iPhone app and Sign in with Apple.
 
+## How a build gets made
+
+Claude writes the code in the cloud and pushes it. On the Mac, nomi:
+
+1. `git pull`, then `npm install` and `npm run build`
+2. `npx cap sync ios` (copies the build into the iPhone app)
+3. `npx cap open ios`, which opens Xcode
+4. in Xcode: Product → Archive, then Distribute → App Store Connect. The build appears in TestFlight within minutes.
+
+Claude can't run Xcode, so every build passes through these steps. Later, if it gets tedious, a cloud build service can do them on each push.
+
 ## 6 · TestFlight, then the store
 
 - [ ] **Internal testing** (nomi only, no review): live with it for a few days.
@@ -70,6 +82,5 @@ Wrap the same app in **Capacitor** (the web build bundled inside a native iPhone
 
 ## Open questions
 
-- Is there a Mac? (Decides how builds happen.)
 - Android too, later? Capacitor does both from the same code, but one store at a time.
 - Should squared.today get a "get the app" link once it's live, or stay quiet?
