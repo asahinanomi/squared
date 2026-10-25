@@ -62,6 +62,12 @@ type Props = {
 // The blank square says how far back its day is (the date above says which day), so a slip to another day shows
 // before the first stroke, on two lines ("paint" above): "paint your day", "paint yesterday", "paint 3 days ago", "paint last week",
 // "paint 2 months ago", "paint 17 years ago".
+// Today, once painted: a quiet note under "Today is in colour." (the colour itself is never named).
+const CLOSING: Record<Paint, string> = {
+  green: 'Spent on what matters.',
+  red: 'Tomorrow is still yours.',
+  grey: 'Tomorrow, be here.',
+}
 // The first visit's sheet: the three colours, each a plain sentence.
 const INTRO: [Paint, string][] = [
   ['green', 'green means I spent it on what matters.'],
@@ -328,7 +334,16 @@ export function Today(props: Props) {
 
           {/* "Today" belongs to now: its tense follows the day ("am I spending…" until it's painted, "did I spend…" once
               it is); on any other day, the question asks about "this day". */}
-          <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
+          {day && date === today ? (
+            // Today, painted: the question is answered, so the day closes with a statement (the same for every colour,
+            // never a verdict) and a quiet note that points forward. "start over" brings the question back.
+            <div className="day-closed">
+              <h1 className="question">Today is in colour.</h1>
+              <p className="day-closed-note">{CLOSING[day.color]}</p>
+            </div>
+          ) : (
+            <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
+          )}
 
           <div
             className="easel"
