@@ -3830,11 +3830,15 @@ button.settings-row:active {
   position: fixed;
   z-index: 30;
   left: 50%;
-  top: calc(env(safe-area-inset-top) + 20px);
+  top: calc(env(safe-area-inset-top) + 62px);
   transform: translateX(-50%);
   margin: 0;
-  font-size: 13px;
-  color: var(--muted);
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--ink); /* the same ink as the bubble when a save can't get through: clear on any screen */
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 8px 24px rgba(20, 20, 19, 0.18);
   pointer-events: none;
   animation: fade-in 0.3s ease-out;
 }
