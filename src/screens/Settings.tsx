@@ -139,9 +139,10 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
       {asking && (
         <ConfirmDialog
           title="Delete your account?"
-          body="Your squares, moments, lists and settings go for good. It can't be undone."
+          body={"Your squares, moments, lists and settings go for good.\nIt can't be undone."}
           confirm="delete"
           typeToConfirm="delete"
+          typeLabel={'have your copy, or don’t need one?\ntype “delete” to go ahead'}
           aside={
             <button
               className="pill is-keyline confirm-export"
@@ -150,7 +151,7 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
                 onExport()
               }}
             >
-              export my data first
+              export my data
             </button>
           }
           onConfirm={remove}

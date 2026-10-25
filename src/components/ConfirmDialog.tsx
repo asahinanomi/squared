@@ -11,10 +11,12 @@ type Props = {
   onCancel: () => void
   /** For what can't be undone: the word to type before the button works (e.g. "delete"). */
   typeToConfirm?: string
+  /** The words over the box, instead of 'type "delete" to confirm'. */
+  typeLabel?: string
 }
 
 // A small "are you sure?" alert in the app's own style (not the browser's).
-export function ConfirmDialog({ title, body, aside, confirm, onConfirm, onCancel, typeToConfirm }: Props) {
+export function ConfirmDialog({ title, body, aside, confirm, onConfirm, onCancel, typeToConfirm, typeLabel }: Props) {
   const [typed, setTyped] = useState('')
   const ready = !typeToConfirm || typed.trim().toLowerCase() === typeToConfirm
   useEffect(() => {
@@ -39,7 +41,7 @@ export function ConfirmDialog({ title, body, aside, confirm, onConfirm, onCancel
         {aside && <div className="confirm-aside">{aside}</div>}
         {typeToConfirm && (
           <label className="confirm-type">
-            <span>type “{typeToConfirm}” to confirm</span>
+            <span>{typeLabel ?? `type “${typeToConfirm}” to confirm`}</span>
             <input
               value={typed}
               onChange={(e) => setTyped(e.target.value)}

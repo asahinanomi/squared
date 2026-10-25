@@ -2317,6 +2317,7 @@ body[data-screen='questions'] .idea {
 }
 .confirm-body {
   margin: 8px 0 0;
+  white-space: pre-line; /* a "\n" in the body starts a new line */
   font-size: 16px;
   color: var(--ink-soft);
 }
@@ -2324,6 +2325,10 @@ body[data-screen='questions'] .idea {
   margin: 16px 0 0;
 }
 /* Export first, in the delete alert: a full keyline pill, so a copy is one clear tap away before anything goes. */
+/* A typeLabel may break onto two lines ("\n"). */
+.confirm-type > span {
+  white-space: pre-line;
+}
 .confirm-export {
   width: 100%;
 }
