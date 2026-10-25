@@ -15,13 +15,14 @@ type Props = {
   onDelete: (n: Note) => Promise<void>
 }
 
-// Show/hide is remembered on this device (a convenience; fine if storage is unavailable).
+// Show/hide is remembered on this device (a convenience; fine if storage is unavailable). Until you choose, only the
+// latest moment shows.
 const KEY = 'squared.olderHidden'
 const readHidden = () => {
   try {
-    return localStorage.getItem(KEY) === '1'
+    return localStorage.getItem(KEY) !== '0'
   } catch {
-    return false
+    return true
   }
 }
 const writeHidden = (hidden: boolean) => {
@@ -73,25 +74,24 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
   const latest = rest.at(-1)
   return (
     <div className="notes" style={framed ? frameVars(framed) : undefined}>
-      {notes.length > 0 && (
+      {/* One control, the count in it: "show all 6 moments" while only the latest shows, "show latest only" when all
+          do. Nothing to show or hide (one moment): no header. */}
+      {older.length > 0 && (
         <div className="notes-head">
-          <span className="notes-count">{`${notes.length} ${notes.length === 1 ? 'moment' : 'moments'}`}</span>
-          {older.length > 0 && (
-            <button className="notes-toggle" onClick={toggle} aria-expanded={!hidden}>
-              {hidden ? 'show older' : 'hide older'}
-              {/* Down while there's more to open, up to tuck it away. */}
-              <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d={hidden ? 'M6 9l6 6 6-6' : 'M6 15l6-6 6 6'}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          )}
+          <button className="notes-toggle" onClick={toggle} aria-expanded={!hidden}>
+            {hidden ? `show all ${notes.length} moments` : 'show latest only'}
+            {/* Down while there's more to open, up to tuck it away. */}
+            <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d={hidden ? 'M6 9l6 6 6-6' : 'M6 15l6-6 6 6'}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
         </div>
       )}
       {pinned.map(row)}

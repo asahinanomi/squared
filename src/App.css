@@ -1108,10 +1108,6 @@
   margin-bottom: 16px; /* clear of the first note, so a tap on the toggle never lands on it */
   border-bottom: 1px solid #e4e3dc; /* a thin line: the notes start here */
 }
-.notes-count {
-  font-size: 15px;
-  color: var(--ink-soft);
-}
 /* show older · hide older: just words, as quiet as the count (it was a keyline pill; it competed with the notes) */
 .notes-toggle {
   display: inline-flex;
