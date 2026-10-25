@@ -21,7 +21,7 @@ Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encry
 
 **The journal path stays open.** Recommended: no lock, lived days are always paintable (tap one, paint it, it turns to colour). Second option: an "unlock" setting ("my past: lived / to paint") that shows the past as blank canvas, for people who choose to fill it.
 
-**Decided: wait for testers.** nomi's feeling may not be everyone's, and testers won't go as deep in two weeks. So hold it, watch what they do with things as they are (do they paint past days? how far back? do they stop after a hard day?), and ask on day 14 (`docs/testflight-todo.md`). Then decide. Risks to solve in a lab: the lived tone must never read as grey paint ("a blur"); squared needs to know the day you started (joined, not first painted). The principle is in the brand story, section 2.
+**Decided: wait for testers.** nomi's feeling may not be everyone's, and testers won't go as deep in two weeks. So hold it, watch what they do with things as they are (do they paint past days? how far back? do they stop after a hard day?), and ask on day 14 (`docs/4-testflight-todo.md`). Then decide. Risks to solve in a lab: the lived tone must never read as grey paint ("a blur"); squared needs to know the day you started (joined, not first painted). The principle is in the brand story, section 2.
 
 ## A morning intention (parked Oct 24, 2026)
 

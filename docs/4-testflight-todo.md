@@ -2,7 +2,7 @@
 
 _last updated Oct 25, 2026_
 
-The first circle: 10 to 20 people painting their days for two weeks, on the iPhone app, before the store. The build steps live in `docs/ios-todo.md`; this is the people side. Tick items as they're done.
+The first circle: 10 to 20 people painting their days for two weeks, on the iPhone app, before the store. The build steps live in `docs/3-ios-todo.md`; this is the people side. Tick items as they're done.
 
 ## Why this first
 
@@ -56,4 +56,4 @@ The first circle: 10 to 20 people painting their days for two weeks, on the iPho
 
 - [ ] Fix what confused people, in one batch, as one new build.
 - [ ] A second round with the same people plus a few new ones, or straight to the store if it feels ready.
-- [ ] Ask the testers who loved it if they'd say so on launch day (Product Hunt, the App Store, a post). See `docs/growth.md`.
+- [ ] Ask the testers who loved it if they'd say so on launch day (Product Hunt, the App Store, a post). See `docs/6-growth.md`.
