@@ -4854,19 +4854,15 @@ button.home-card:active {
 .my-days-life .home-legend {
   margin-top: 2px;
 }
-/* squared's line, inside the life card as the bar's caption: under a hairline, the serif at 22px. */
+/* squared's line, my days' epigraph: under the title, left like it, the serif, no box. */
 .my-days-line {
-  display: block;
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid #ecece5;
-  text-align: center;
+  margin: 14px 0 0;
   font-family: var(--font-reflect);
   font-optical-sizing: auto;
   font-size: 22px;
   font-weight: 450;
   line-height: 1.25;
-  color: var(--ink-soft);
+  color: var(--ink);
   text-wrap: balance;
 }
 /* my days: a life as one bar first, then this month and year so far, as paintings, over the rows. */

@@ -63,6 +63,8 @@ export function MyDays({
           <Chevron dir="right" />
         </button>
       </div>
+      {/* squared's line, the page's epigraph: what follows is the past; today is beside it. The tagline candidate. */}
+      <p className="my-days-line">The past is painted. Today is still yours.</p>
       {profile &&
         (() => {
           const c = lifeCounts(profile.born, profile.lifespan, today)
@@ -96,8 +98,6 @@ export function MyDays({
                 <span>{lived}% lived</span>
                 <span>{100 - lived}% ahead</span>
               </span>
-              {/* squared's line, the bar's caption: what its "today" means. The tagline candidate (brand story). */}
-              <span className="my-days-line">The past is painted. Today is still yours.</span>
             </button>
           )
         })()}
