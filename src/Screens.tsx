@@ -134,6 +134,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         days={days}
         profile={profile}
         matters={lists.matters.meaningful.map((e) => e.text.trim()).filter(Boolean)}
+        kept={wall.kept}
         onSetUp={() => nav.askSquares('mydays')}
         onPainting={openPainting}
         onList={nav.openListFromMyDays}

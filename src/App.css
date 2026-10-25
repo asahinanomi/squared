@@ -4796,6 +4796,12 @@ button.home-card:active {
   border: 3px solid var(--faint);
   border-radius: 3px;
 }
+/* A kept painting's ghost: a grey frame and a pale mat, as the paintings hang. */
+.framed-ghost.is-painting {
+  padding: 4px;
+  border-width: 4px;
+  border-radius: 2px;
+}
 .framed-ghost i {
   display: block;
   width: 100%;

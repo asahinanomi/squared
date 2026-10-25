@@ -13,6 +13,8 @@ type Props = {
   profile: Profile | null
   /** Your "mattered" lines (empty until written): the row shows the first few. */
   matters: string[]
+  /** The paintings you kept (none yet: the row says how to keep one). */
+  kept: string[]
   /** "set up now" on the life card, before the squares are set: how many squares, then back here. */
   onSetUp: () => void
   onPainting: (period: string) => void
@@ -37,6 +39,7 @@ export function MyDays({
   days,
   profile,
   matters,
+  kept,
   onSetUp,
   onPainting,
   onList,
@@ -176,7 +179,18 @@ export function MyDays({
                 <i />
               </span>,
             )}
-        {row('paintings', 'the paintings you kept', onPaintings)}
+        {kept.length
+          ? row('paintings', 'the paintings you kept', onPaintings)
+          : row(
+              'paintings',
+              'none yet · keep a month’s painting when it ends',
+              onPaintings,
+              'none',
+              // A ghost of a kept painting, in its frame.
+              <span className="framed-ghost is-painting" aria-hidden="true">
+                <i />
+              </span>,
+            )}
       </div>
     </main>
   )
