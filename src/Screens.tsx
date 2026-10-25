@@ -23,10 +23,9 @@ import { Settings } from './screens/Settings'
 import { Setup } from './screens/Setup'
 import { Terms } from './screens/Terms'
 import { Today } from './screens/Today'
-import { Welcome } from './screens/Welcome'
 import { WhatMatters } from './screens/WhatMatters'
 import { Year } from './screens/Year'
-import { demo, forgetTestLink, tryWelcome } from './state/app'
+import { demo, endWelcomeTest, introSeen, markIntroSeen, tryWelcome } from './state/app'
 import type { Account } from './state/useAccount'
 import type { useDayActions } from './state/useDayActions'
 import type { useKept } from './state/useKept'
@@ -110,6 +109,12 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onMatters={() => nav.openMatters('today')}
         onFind={ui.onFind}
         onHome={nav.goHome}
+        // Someone new (nothing painted, squares not set): the colours, once. ?welcome shows it on any account.
+        intro={tryWelcome || (!profile && Object.keys(days).length === 0 && !introSeen())}
+        onIntroDone={() => {
+          markIntroSeen()
+          endWelcomeTest()
+        }}
       />
     )
   if (screen === 'paintings')
@@ -128,6 +133,8 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
       <MyDays
         days={days}
         profile={profile}
+        matters={lists.matters.meaningful.map((e) => e.text.trim()).filter(Boolean)}
+        onSetUp={() => nav.askSquares('mydays')}
         onPainting={openPainting}
         onList={nav.openListFromMyDays}
         onPie={nav.openPie}
@@ -161,24 +168,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
           await saveProfile(p)
           acc.setProfile(p)
           nav.afterSquares()
-        }}
-      />
-    )
-  if (screen === 'welcome')
-    return (
-      <Welcome
-        tryOut={tryWelcome}
-        onSquares={async (p) => {
-          await saveProfile(p)
-          acc.setProfile(p)
-        }}
-        onMatters={lists.addLines}
-        onDone={() => {
-          if (tryWelcome) {
-            history.replaceState(null, '', location.pathname)
-            forgetTestLink()
-          }
-          nav.goToday() // the first square, with the ghost brush showing how
         }}
       />
     )

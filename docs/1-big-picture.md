@@ -15,7 +15,7 @@ Not only the app: the story too. Ready means comfortable, not perfect. **A time 
 - [ ] **The brand story** feels true: "squared starts today", the line, the three colours (`docs/brand-story.md`).
 - [ ] **Open questions** I can live with for now, decided or parked:
   - the past: lived, not blank (parked until testers, `docs/future-ideas.md`)
-  - onboarding step 3's question ("and what makes a day feel empty?")
+  - ~~onboarding step 3's question~~ (onboarding is gone, Oct 25, 2026: moments first, set up later from my days)
 
 ### 2 · squared is safe for other people's days
 

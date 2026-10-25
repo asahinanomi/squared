@@ -14,7 +14,7 @@ squared is a daily conscience tracker. Each day you paint one square, one honest
 
 > **The past is painted. Today is still yours.**
 
-squared in eight words: the days behind are done (lived, painted); now is what you have; spend it on what matters, with less regret. Warm, not preachy: it hands today back to you. It sits on home, at the foot (home is today, now), and on my days as the page's epigraph, right under the title, beside "today ›": the serif, 22px, ink, left like the title, no box. It may become squared's tagline (on sign-in under the wordmark, or the share card) once it has earned its place; sign-in's hero stays the number and the question for now.
+squared in eight words: the days behind are done (lived, painted); now is what you have; spend it on what matters, with less regret. Warm, not preachy: it hands today back to you. It sits on home, at the foot (home is today, now), and on my days as the page's epigraph, right under the title, beside "today ›": the serif, 22px, ink, left like the title, no box. Since Oct 25, 2026 it's on sign-in too, right under "An 80-year life is about 29,200 days.": the number, then the line, one message. It may become squared's tagline (the store page, the share card).
 
 ## 2. The idea (the why)
 
@@ -33,6 +33,8 @@ squared in eight words: the days behind are done (lived, painted); now is what y
 Rooted in Covey's urgent-vs-important: a day can be busy and still not matter. squared asks you to notice the difference, one day at a time.
 
 **The metaphor: black and white, then colour** (the Wizard of Oz, when Dorothy steps out into colour). squared is ink on paper; the only colour anywhere is what you paint. Days stay paper until you paint them, so your life literally turns colourful as you go. Celebrate days "in colour", never days "missed".
+
+**A mindful journal for now, with a journal as its backbone.** (nomi, Oct 25, 2026) The focus is now, today, moving forward; a life is seen whole only so that now and the days ahead get their weight. Squares and colours are the metaphor that makes it fun and engaging. A day is lived in moments, not logged once: so the day screen starts with a moment ("this moment…") and closes with the question and the paint. There's no onboarding: the first visit explains the colours in one sheet, and how many squares and what matters wait in my days ("set up now").
 
 **squared starts today. The past is optional, never asked for.** (nomi, Oct 25, 2026) Painting the past has value: painting a heavy day can make you treasure why today matters. But it's heavy, and the mind doesn't want to revisit painful years again and again. Most people carry years like that. So squared never points you back: you can paint a day you want to remember, but nothing asks you to fill in your history. The story moves forward.
 
@@ -80,7 +82,7 @@ Voice rule: all three one-liners are **first person** (it's your own conscience,
 
 > **did I spend Today meaningfully?**
 
-- **Its tense follows the day** (Oct 24, 2026). Today, until it's painted: *am I spending Today meaningfully?*, a nudge to be present while it's lived. Once today is painted: *did I spend Today meaningfully?*, the honest look back. Any other day: *did I spend this day meaningfully?* Sign-in asks in the present too (*am I spending Today meaningfully?*, under the 29,200 days: a hook, it asks the reader right now, Oct 24, 2026). The letter keeps *did I spend Today meaningfully?*: its three answers speak in the past ("yes, I spent it on what matters"). Onboarding's first step asks forward instead: *how would you like to spend your days?*
+- **Its tense follows the day** (Oct 24, 2026). Today, until it's painted: *am I spending Today meaningfully?*, a nudge to be present while it's lived. Once today is painted: *did I spend Today meaningfully?*, the honest look back. Any other day: *did I spend this day meaningfully?* Sign-in now says the line instead of asking (Oct 25, 2026). The letter keeps *did I spend Today meaningfully?*: its three answers speak in the past ("yes, I spent it on what matters"). 
 - First person. Always.
 - **Today** is capitalised, with a dotted underline: it's the day itself, any day you're looking at.
 - Set in the reflective voice (Fraunces). It's the hero of the day screen, sign-in and onboarding.
@@ -122,22 +124,23 @@ These describe squares, not feelings. Keep them out of the three-colour language
 ## 9. Cascade — what each screen says (as in the app today)
 
 **Sign in**
-- squared.today · beta
-- "there are" / **29,200** / "days in an 80-year life"
-- *am I spending Today meaningfully?*
-- "continue with Google" · links: the idea · faq · privacy · terms
+- the mark, "squared" (one lockup; "beta" in the footer)
+- "An 80-year life is about **29,200** days."
+- *The past is painted. / Today is still yours.* (Oct 25, 2026: the line replaced the question on sign-in)
+- "continue with Google" · links: the idea · faq · privacy · terms · © squared.today beta
 
-**Onboarding** (four steps)
-1. **Welcome to squared.** (a heading) / "Each square is one day of your life." / "Its colour is how you spent it:" · ● green means I spent it on what matters. ● red means I wish I'd spent it differently. ● grey means I wasn't paying attention. (one plain sentence each, one punctuation; the labels come with the first paint, and the palette's "yes, I… / no, I…" lines answer the question there) · *how would you like to spend your days?* · **start now** (Oct 24, 2026, nomi's structure and words)
-2. "before your first square, take a minute to think:" / "what makes a day feel *meaningful*?" · next · skip this step
-3. "and what makes a day feel *empty*?" · next · skip this step
-4. "how many squares will you paint?" · "when were you born?" · "how long do you hope to live?" ("the average lifespan in America is about 79 years / 76 for men, 81 for women") · **28,855** / "squares in your life" / "and 13,709 still ahead to paint" · **start painting →** · "by starting, you confirm you're 18 or over and agree to the terms and privacy."
+**First visit** (Oct 25, 2026: onboarding's four steps are gone; one sheet over today, once)
+- **Each square is one day of your life.**
+- ● green means I spent it on what matters. ● red means I wish I'd spent it differently. ● grey means I wasn't paying attention.
+- Add moments as they come. / Paint the square when the day is done.
+- got it (a keyline: a tip is never the day's main action)
+- How many squares and what matters are set up later, from my days ("set up now").
 
 **Today (paint)**
 - *did I spend Today meaningfully?* · the date · the square: "paint your day" (today) or "paint this day"
 - tap a colour to load the brush; its one-liner shows under the palette
 - the day's first dip, on a blank today: the canvas breathes once and says "be here"
-- moments: "add a moment"; today before it's painted it opens "right now…", after painting (or any other day) "because…"
+- moments first: the box at the top of the day, "this moment…" while today is lived, "because…" once painted; under it "last moment added 3:30 pm"; the moments listed at the foot (Oct 25, 2026)
 - once painted: "your 3rd day worth it this month" · "because…" (you finish the sentence, never "why?"; "a line, or a page, or skip"); a framed day asks "what do you want to remember?"
 - torn between green and red: "torn? ask yourself:" / "did what mattered outweigh the rest?" / "you said: '…'"
 - under the square: start over · frame it

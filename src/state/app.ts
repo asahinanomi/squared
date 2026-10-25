@@ -21,12 +21,8 @@ export type Screen =
   | 'paintings'
   | 'framed'
   | 'mydays'
-  | 'welcome'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
 export const LADDER: Screen[] = ['today', 'month', 'year', 'life']
-/** Screens without the top bar: onboarding's guided path, one way forward (and "how many squares?" when it's part of
- *  it, see App). Settings and its pages keep the logo and menu, with a back arrow under them. */
-export const NO_TOPBAR: Screen[] = ['welcome']
 /** Settings and the pages it opens. */
 export const PAGES: Screen[] = [
   'settings',
@@ -61,6 +57,22 @@ try {
 } catch {
   /* without storage, a test link works only while signed in */
 }
+// The first visit's sheet (each square is a day, the three colours) shows once on this device.
+const INTRO_KEY = 'squared.introSeen'
+export const introSeen = () => {
+  try {
+    return localStorage.getItem(INTRO_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+export const markIntroSeen = () => {
+  try {
+    localStorage.setItem(INTRO_KEY, '1')
+  } catch {
+    /* it may show again: harmless */
+  }
+}
 /** A test walked through: nothing left to carry through a sign-in. */
 export const forgetTestLink = () => {
   try {
@@ -69,8 +81,15 @@ export const forgetTestLink = () => {
     /* nothing kept */
   }
 }
-// squared.today/?welcome opens onboarding on any account, to try it: nothing is saved.
-export const tryWelcome = params.has('welcome')
+// squared.today/?welcome shows the first visit's sheet (each square is a day, the three colours) on any account.
+export let tryWelcome = params.has('welcome')
+/** The ?welcome test seen through: the address is plain again, and the sheet shows only to someone new. */
+export const endWelcomeTest = () => {
+  if (!tryWelcome) return
+  tryWelcome = false
+  history.replaceState(null, '', location.pathname)
+  forgetTestLink()
+}
 // squared.today/?month shows last month's painting, to try it (it changes nothing).
 export const tryMonth = params.has('month')
 // squared.today/?year shows last year's painting, the January 1st moment, to try it.

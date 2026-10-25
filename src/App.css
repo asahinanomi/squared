@@ -198,13 +198,10 @@
   align-items: center;
 }
 .wordmark {
-  font-size: 22px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.02em;
-  margin: 10px 0 0;
-}
-.wordmark span {
-  color: #a3a39e;
+  margin: 6px 0 0;
 }
 /* "beta": a small soft capsule, ink on paper (no colour), wherever it's said. */
 .beta {
@@ -238,45 +235,26 @@
   text-align: center;
 }
 /* The hero: how many days a life holds. */
-/* A small grey lead-in, like "that's" on how many squares: the number stays the hero. */
-/* "there are" and "days in an 80-year life" read as one sentence around the number: same size, same ink. */
-.signin-there {
-  margin: 0 0 10px;
-  font-size: 18px;
-  line-height: 1.4;
+.signin-line {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.45;
   color: var(--ink-soft);
 }
-.signin-number {
-  margin: 0;
-  font-size: 56px;
+.signin-line b {
   font-weight: 600;
-  line-height: 1;
-  letter-spacing: -0.035em;
-  font-variant-numeric: tabular-nums;
   color: var(--ink);
 }
-.signin-line {
-  margin: 10px 0 0;
-  font-size: 18px;
-  line-height: 1.4;
-  color: var(--ink-soft);
-}
-/* Then the question it raises, in the reflective face. "Today" gets a dotted ink underline. */
+/* Then squared's line, in the reflective face, right under it: one message. */
 .signin-question {
-  margin: 44px 0 0;
-  max-width: 300px;
+  margin: 12px 0 0;
   font-family: var(--font-reflect);
   font-optical-sizing: auto;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 450;
   line-height: 1.22;
   letter-spacing: -0.005em;
   color: var(--ink);
-}
-.signin-question u {
-  text-decoration: underline dotted var(--ink);
-  text-decoration-thickness: 2.5px;
-  text-underline-offset: 6px;
 }
 .signin-go {
   margin-top: 56px;
@@ -341,12 +319,12 @@
 .question {
   font-family: var(--font-reflect);
   font-optical-sizing: auto;
-  font-size: clamp(30px, 9vw, 36px);
+  font-size: clamp(26px, 7.4vw, 30px);
   font-weight: 450;
   letter-spacing: -0.005em;
   line-height: 1.22;
   text-align: center;
-  margin: 0;
+  margin: 32px 0 0; /* the moment box above, the square below: the question opens the day's close */
   max-width: 13em;
   text-wrap: balance;
 }
@@ -357,12 +335,76 @@
   text-decoration-thickness: 2.5px;
   text-underline-offset: 8px;
 }
-/* Optically centred between the question's dotted underline and the square. */
+/* The date opens the day, centred at its top. */
 .day-nav {
   display: flex;
   justify-content: center;
-  margin-top: 42px; /* 40px of ink under the question, the same as palette → notes: the question stands alone, date + square + palette are one group */
+  margin-top: 0; /* the day opens with its date */
   width: 100%;
+}
+/* The day's moment box, right under the date: a white keyline box (rounded, not a pill: pills are buttons), "this
+   moment…", and a + to keep it. It grows as you write. */
+.moment-box {
+  margin-top: 18px;
+  width: min(100%, 342px);
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 7px 7px 7px 18px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1.5px #e2e2db;
+}
+.moment-box textarea {
+  flex: 1;
+  min-width: 0;
+  min-height: 36px;
+  max-height: 40vh;
+  padding: 7px 0;
+  border: none;
+  outline: none;
+  resize: none;
+  background: none;
+  font: inherit;
+  font-size: 17px;
+  line-height: 22px;
+  color: var(--ink);
+}
+.moment-box textarea::placeholder {
+  color: var(--muted);
+}
+.moment-box:focus-within {
+  box-shadow: inset 0 0 0 1.5px var(--ink-soft);
+}
+.moment-add {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #efeee8;
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+}
+.moment-add:active {
+  transform: scale(0.94);
+}
+/* A short phone (an iPhone SE): the day's top tightens, so the palette stays above the bar. */
+@media (max-height: 700px) {
+  .moment-box {
+    margin-top: 12px;
+  }
+  .question {
+    margin-top: 16px;
+    font-size: 24px;
+  }
+}
+/* When the day's last moment was added: the list is at the foot, so this says it landed. */
+.moment-last {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--muted);
 }
 /* A special day (your birthday, New Year's Day, Christmas): a quiet line under the date. */
 .day-special {
@@ -2379,6 +2421,47 @@ body[data-screen='questions'] .idea {
   box-shadow: inset 0 0 0 1.5px var(--grey-3);
 }
 
+/* The first visit's sheet: a square is a day, the three colours, how the day goes; then a quiet "got it". */
+.intro-title {
+  margin: 6px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+.intro-colours {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.intro-colours li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.intro-dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
+.intro-how {
+  margin: 18px 0 0;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.intro-done {
+  margin-top: 24px;
+}
+
 /* ---------- bottom sheet ---------- */
 .sheet-backdrop {
   position: fixed;
@@ -3527,294 +3610,6 @@ button.settings-row:active {
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- welcome (onboarding, once, for someone new) ---------- */
-.welcome {
-  flex: 1;
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-}
-.welcome-dots {
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-  min-height: 7px;
-}
-.welcome-dots i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--grey-1);
-}
-.welcome-dots i.is-on {
-  background: var(--ink);
-}
-.welcome-step {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 32px 0 8px;
-  text-align: center;
-  animation: welcome-in 0.35s ease-out;
-}
-@keyframes welcome-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .welcome-step {
-    animation: none;
-  }
-}
-/* The pause: the question and its button sit together, centred. */
-.welcome-step.is-pause {
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 12vh;
-}
-/* Step 1 reads as groups: the welcome, what a square is, its three colours, the question, the pill. Inside a group,
-   things sit close. */
-.welcome-step.is-pause > .welcome-intro {
-  margin-top: 28px;
-}
-.welcome-step.is-pause > .welcome-big {
-  margin-top: 40px;
-}
-.welcome-step.is-pause > .welcome-foot {
-  margin-top: 40px;
-}
-.welcome-back {
-  align-self: flex-start;
-  margin: -24px 0 12px -8px;
-}
-/* The first step: what squared is (one short paragraph), the question on its own, then the paint. */
-/* Step 1 opens with a heading, in the app's heading type (as page titles). */
-.welcome-hello {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-  color: var(--ink);
-}
-.welcome-intro {
-  text-wrap: balance; /* no word left alone on a line */
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  color: var(--ink-soft);
-  font-size: 16px;
-  line-height: 1.4;
-}
-.welcome-intro p,
-p.welcome-intro {
-  margin: 0;
-}
-.welcome-big {
-  margin: 44px 0 0;
-  font-family: var(--font-reflect);
-  font-optical-sizing: auto;
-  font-size: clamp(30px, 9vw, 36px); /* the day screen's question, exactly */
-  font-weight: 450;
-  line-height: 1.22;
-  letter-spacing: -0.005em;
-}
-.welcome-big u {
-  text-decoration: underline dotted var(--ink);
-  text-decoration-thickness: 2.5px;
-  text-underline-offset: 6px;
-}
-/* Step 1's three colours: each its dot, its word and its line (the palette's, word for word), read left. */
-.welcome-colours {
-  list-style: none;
-  margin: 22px auto 0; /* its own group, under the two lines that introduce it */
-  padding: 0;
-  max-width: 330px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  text-align: left;
-}
-.welcome-colours li {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-size: 16px; /* the same as the lines above: one group, one size, one rhythm */
-  line-height: 1.4;
-  color: var(--ink-soft);
-}
-.welcome-colours i {
-  /* a round dot of the paint, as under the palette and in the letter: explaining, never a square to paint */
-  flex: none;
-  width: 9px;
-  height: 9px;
-  margin: 6.7px 0 0 1.5px; /* centred on the first line (16px × 1.4), clear of its ring */
-  border-radius: 50%;
-  box-shadow: 0 0 0 1.5px var(--ink); /* the palette's dot, exactly (.whisper-dot) */
-}
-.welcome-colours b {
-  font-weight: 600;
-  color: var(--ink);
-}
-/* The last step: how many squares. The fields read left, as in square settings. */
-.welcome-fields {
-  margin-top: 22px;
-  text-align: left;
-}
-.welcome-young {
-  color: var(--ink);
-}
-.welcome-count {
-  margin: 26px 0 0;
-  display: flex;
-  flex-direction: column;
-}
-.welcome-count-n {
-  font-size: 48px;
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.welcome-count-w {
-  margin-top: 8px;
-  font-size: 16px;
-  color: var(--ink-soft);
-}
-.welcome-count-a {
-  margin-top: 4px;
-  font-size: 14px;
-  color: var(--muted);
-}
-/* A quiet line before a step's question (step 2: "before your first square, take a minute."). */
-.welcome-eyebrow {
-  margin: 0 0 14px;
-  color: var(--ink-soft); /* lead-in text: the same as step 1's lines (16px, ink-soft, 1.4) */
-  text-wrap: balance;
-  font-size: 16px;
-  line-height: 1.4;
-}
-.welcome-q {
-  margin: 0;
-  font-family: var(--font-reflect);
-  font-optical-sizing: auto;
-  font-size: 30px;
-  font-weight: 450;
-  line-height: 1.22;
-  letter-spacing: -0.005em;
-  text-wrap: balance;
-}
-.welcome-q u {
-  text-decoration: underline dotted var(--ink);
-  text-decoration-thickness: 2.5px;
-  text-underline-offset: 6px;
-}
-.welcome-lines {
-  list-style: none;
-  margin: 28px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.welcome-lines li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.welcome-dot {
-  flex-shrink: 0;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 1.5px var(--ink);
-}
-.welcome-lines input {
-  flex: 1;
-  min-width: 0;
-  font: inherit;
-  font-size: 16px;
-  color: var(--ink);
-  background: #fff;
-  border: 0;
-  border-radius: 12px;
-  box-shadow: inset 0 0 0 1.5px #e2e2db;
-  padding: 14px;
-}
-.welcome-lines input::placeholder {
-  color: #b5b5ae;
-}
-.welcome-lines input:focus {
-  outline: none;
-  box-shadow: inset 0 0 0 1.5px var(--ink);
-}
-/* Every step's button: the same 250px pill, centred, the same 36px under what's above it. */
-.welcome-agree-link {
-  font: inherit;
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-/* The small print, read over the last step: the whole screen, on paper, scrolling; its back returns to the step. */
-.welcome-read {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  overflow-y: auto;
-  background-color: var(--paper);
-  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px);
-  background-size: 22px 22px;
-  padding: env(safe-area-inset-top, 0px) var(--gutter) env(safe-area-inset-bottom, 0px);
-  text-align: left;
-}
-.welcome-read .idea {
-  padding-top: 24px;
-}
-/* Its one way out: "close ✕", at the top right, as a sheet closes. */
-.read-close {
-  float: right;
-  min-height: 44px;
-  padding: 0 4px 0 12px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--ink);
-}
-.welcome-foot {
-  margin-top: 36px;
-  align-self: center;
-  width: min(100%, 250px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-.welcome-foot .pill:disabled {
-  opacity: 0.35;
-}
-.welcome-agree {
-  margin: 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.45;
-  text-align: center;
-}
-.welcome-agree a {
-  color: inherit;
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 3px;
-}
-.welcome-link {
-  padding: 6px;
-  color: var(--muted);
-  font-size: 15px;
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
-}
-
 /* ---------- a painted month ---------- */
 /* A new month: the last one as a finished painting — framed, signed, nothing else. Centred:
    it's a picture to look at. */
@@ -4604,11 +4399,6 @@ button.home-card:active {
     animation: none;
   }
 }
-/* "choose", before a lifespan is picked: wide enough to read. */
-.welcome-squares .setup-years input:placeholder-shown {
-  width: 3.8em;
-  text-align: center;
-}
 
 /* Your squares couldn't load: one plain line and one pill, centred, never an empty life in their place. */
 .load-failed {
@@ -4923,6 +4713,95 @@ button.home-card:active {
 .my-days .settings-rows {
   margin-top: 12px;
   gap: 12px;
+}
+/* Not set up yet: an empty slot, as everywhere in squared: a dashed edge on paper, no white fill. */
+.my-days .settings-row.is-empty,
+.my-days .home-card.is-empty {
+  background: none;
+  box-shadow: none;
+  border: 1.5px dashed var(--faint);
+}
+.settings-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.settings-row > .settings-lead {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+}
+/* "set up now": the sub line as a quiet link. */
+.settings-sub.is-set-up {
+  align-self: flex-start;
+  color: var(--ink-soft);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
+}
+/* The life card before the squares are set: a ghost of the bar in faint grey, lived solid, ahead dotted. */
+.home-big.is-ghost,
+.home-big.is-ghost small {
+  color: var(--faint);
+}
+.life-ghost {
+  position: relative;
+  display: block;
+  height: 4px;
+  margin-top: 14px;
+  border-top: 4px dotted var(--faint);
+  box-sizing: border-box;
+}
+.life-ghost i {
+  position: absolute;
+  left: 0;
+  top: -4px;
+  width: 50%;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--faint);
+}
+.life-ghost::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -7px;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid var(--faint);
+  background: var(--bg);
+}
+.life-ghost-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--faint);
+}
+.life-ghost-ask {
+  margin: 12px 0 4px;
+  font-size: 17px;
+  font-weight: 500;
+}
+/* No framed days yet: a ghost of one, a small square in a faint frame. */
+.framed-ghost {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  box-sizing: border-box;
+  padding: 3px;
+  border: 3px solid var(--faint);
+  border-radius: 3px;
+}
+.framed-ghost i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 1px;
+  background: #e2e2db;
 }
 /* The pie, opened from my days: its way back, at the top left. */
 .pie-back {

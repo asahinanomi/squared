@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ConfirmDialog } from '../components/ConfirmDialog'
+import { MomentBox } from '../components/MomentBox'
 import { NotesList } from '../components/NotesList'
 import { Sheet } from '../components/Sheet'
 import { PaintCanvas } from '../components/PaintCanvas'
@@ -55,6 +56,10 @@ type Props = {
   onHome: () => void
   /** Off to my days → what matters, to edit the compass. */
   onMatters: () => void
+  /** Someone's first visit: the colours, once, in a sheet (each square is a day, what each colour means). Read when
+   *  the day opens; "got it" closes it for good. */
+  intro?: boolean
+  onIntroDone?: () => void
 }
 
 // The blank square says how far back its day is (the date above says which day), so a slip to another day shows
@@ -62,6 +67,12 @@ type Props = {
 // "paint 2 months ago", "paint 17 years ago".
 // How the just-painted line counts a colour: "your 3rd day worth it", "your 2nd regret", "your 1st blur".
 const NTH: Record<Paint, string> = { green: 'day worth it', red: 'regret', grey: 'blur' }
+// The first visit's sheet: the three colours, each a plain sentence.
+const INTRO: [Paint, string][] = [
+  ['green', 'green means I spent it on what matters.'],
+  ['red', 'red means I wish I’d spent it differently.'],
+  ['grey', 'grey means I wasn’t paying attention.'],
+]
 
 function blankWord(date: string, today: string) {
   const days = Math.round((fromIso(today).getTime() - fromIso(date).getTime()) / 86_400_000)
@@ -82,6 +93,11 @@ export function Today(props: Props) {
     props
   const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut } = props
   const today = todayIso()
+  const [introOpen, setIntroOpen] = useState(!!props.intro)
+  const introDone = () => {
+    setIntroOpen(false)
+    props.onIntroDone?.()
+  }
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
   const day = days[date]
@@ -163,7 +179,7 @@ export function Today(props: Props) {
     if (why || e.pointerType === 'mouse') return
     if (swipe.current) return (swipe.current = null) // a second finger: a pinch, not a swipe
     const t = e.target as Element
-    if (t.closest('.paint-reach, .why')) return
+    if (t.closest('.paint-reach, .why, .moment-box')) return
     if (e.clientX < 24 || e.clientX > window.innerWidth - 24) return
     swipe.current = { id: e.pointerId, x: e.clientX, y: e.clientY, on: false }
   }
@@ -270,10 +286,8 @@ export function Today(props: Props) {
         }}
       >
         <div className="today-trio" ref={trio}>
-          {/* "Today" belongs to now: its tense follows the day ("am I spending…" until it's painted, "did I spend…" once
-              it is); on any other day, the question asks about "this day", the date under it. */}
-          <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
-
+          {/* The day in the order it's lived: which day, a moment as it comes, then the question and the square to
+              close it. */}
           <div className="day-nav">
             {/* Tap the date to find any day you've lived: which year (with your age), which month, which day. */}
             <button className="day-pick" aria-label="Go to a day" onClick={() => setFinding(true)}>
@@ -295,6 +309,21 @@ export function Today(props: Props) {
             />
           </div>
           {special && <p className="day-special">{special}</p>}
+
+          {/* A moment, any time: "this moment…" while today is being lived, "because…" once it's painted. Hidden while
+              the bubble is open (writing after painting, or updating a moment). */}
+          {!why && (
+            <MomentBox
+              key={date}
+              placeholder={!day && date === today ? 'this moment…' : 'because…'}
+              notes={notes}
+              onAdd={(text) => void onSaveNote(undefined, text)}
+            />
+          )}
+
+          {/* "Today" belongs to now: its tense follows the day ("am I spending…" until it's painted, "did I spend…" once
+              it is); on any other day, the question asks about "this day". */}
+          <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
 
           <div
             className="easel"
@@ -393,14 +422,13 @@ export function Today(props: Props) {
 
       {/* Notes stay just as they were, below; kept mounted (hidden) while writing so opened notes stay open. */}
       <div className="tray-rest" hidden={!!why}>
-        {/* Today, before it's painted: moments as they happen ("right now…"), waiting for tonight's paint. */}
-        {(day || notes.length > 0 || date === today) && (
+        {/* The day's moments, oldest first, to read back (they're added in the box at the top). */}
+        {notes.length > 0 && (
           <NotesList
             key={date}
             notes={notes}
             framed={day?.framed ? day.color : undefined}
             onOpen={(n) => onOpenWhy(n)}
-            onAdd={() => onOpenWhy()}
             onDelete={onDeleteNote}
           />
         )}
@@ -429,6 +457,27 @@ export function Today(props: Props) {
           </ul>
           <button className="pill" onClick={() => setCompassOpen(false)}>
             close
+          </button>
+        </Sheet>
+        {/* Someone's first visit: what a square is and what its colours mean, once. "got it" is a keyline, not the
+            black main pill: dismissing a tip is never the day's main action (painting is). */}
+        <Sheet open={introOpen} onClose={introDone}>
+          <h2 className="intro-title">Each square is one day of your life.</h2>
+          <ul className="intro-colours">
+            {INTRO.map(([paint, line]) => (
+              <li key={paint}>
+                <span className="intro-dot" style={{ background: paintHex(paint) }} aria-hidden="true" />
+                {line}
+              </li>
+            ))}
+          </ul>
+          <p className="intro-how">
+            Add moments as they come.
+            <br />
+            Paint the square when the day is done.
+          </p>
+          <button className="pill is-keyline intro-done" onClick={introDone}>
+            got it
           </button>
         </Sheet>
         {wiping && (

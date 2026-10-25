@@ -19,7 +19,7 @@ type Props = {
   reveal?: { text: string; fresh: boolean }
   /** A framed day's note: it asks "what do you want to remember?" instead of "because…". */
   pinned?: boolean
-  /** Today, not painted yet: a moment as it happens, "right now…". */
+  /** Today, not painted yet: a moment as it happens, "this moment…". */
   now?: boolean
   /** Editing a note: pin it to the top of its day, or unpin it. */
   onPin?: () => void
@@ -98,7 +98,7 @@ export function WhyBubble({
           </p>
         )}
         <label className="why-label" htmlFor="why">
-          {pinned ? 'what do you want to remember?' : now ? 'right now…' : 'because…'}
+          {pinned ? 'what do you want to remember?' : now ? 'this moment…' : 'because…'}
         </label>
         <textarea
           id="why"

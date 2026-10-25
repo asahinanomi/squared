@@ -14,7 +14,7 @@ _Pairs with `brand-story.md` (voice & copy). This doc = look: logo, color, type,
     <rect x="7" y="7" width="86" height="86" rx="18" fill="none" stroke="#141413" stroke-width="10"/>
   </svg>
   ```
-- **Wordmark:** `squared.today` — Inter 600, letter-spacing −0.02em; render `.today` in grey **#A3A39E**. On the home screen ~22px.
+- **Wordmark:** `squared` — Inter 600, letter-spacing −0.02em (Oct 25, 2026: no ".today" in the logo; the domain lives in the footer, the website and share cards). On sign-in 15px, under a 56px mark, the two the same width: one lockup.
 - **Lockups:**
   - **Stacked** (icon above wordmark, gap ~12px) — sign-in / splash / brand moments. *(The chosen home treatment.)*
   - **Horizontal** (icon left, wordmark right, gap ~10px) — in-app header, compact spaces.
@@ -49,7 +49,7 @@ Two voices (full mapping in `brand-story.md` §9). Both free on Google Fonts.
 - **Reflective voice — Fraunces (serif).** The Google serif closest to Unmet's Denton. `font-optical-sizing: auto`. Use: the daily question, the definition, nomi's prose. Weights 400–500.
   - Question: ~34–35px on the day screen, ~28px on sign-in (under the number) · weight 450 · line-height 1.22 · letter-spacing −0.005em.
 - **System voice — Inter (sans).** Use: wordmark, UI, buttons, labels, data. Weights 400 / 500 / 600.
-  - Wordmark 22/600 on sign-in (−0.02em) · hero number 56/600 (−0.035em) · its caption 18/400 ink-soft · framing & body 16/400 · button 15.5/500 · links 12.5.
+  - Wordmark 15/600 on sign-in (−0.02em) · the number line 16/400 ink-soft (29,200 in 600 ink) · squared's line, the serif 26/450 · framing & body 16/400 · button 15.5/500 · links 12.5.
 - **Scale (Inter):** 12 labels & timestamps · 14 secondary · 16 body & controls · 18–20 reading text (notes, idea, privacy) · 28 screen titles · 36 the idea's title · 56 hero numbers. Weights 400 / 500 / 600 only. The wordmark (22) sits outside the scale, as a logo.
 - **The hand — Caveat (600).** Only the word signed on the day's canvas: lower-right corner (15% in from the bottom and the right), tilted −4°, 22px blank (soft grey), 30px painted, in a deeper shade of its own paint. Nowhere else.
 - **Floor:** nothing you read is under 12px; inputs are at least 16px (iOS zooms smaller ones).

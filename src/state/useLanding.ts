@@ -2,14 +2,11 @@ import { useEffect, useState } from 'react'
 import { todayIso } from '../lib/dates'
 import type { Account } from './useAccount'
 import type { Navigation } from './useNavigation'
-import { legalAtStart, tryWelcome } from './app'
-
-/** Where you land, decided once when the days and the profile are in: onboarding while your squares aren't set;
- *  home when today is painted, or nothing is painted yet; otherwise today. Nothing shows until then (no flash of
- *  today before home); if loading drags past 4s, today it is. And until the squares are set, onboarding is the only
- *  way in: any other screen leads back to it (the small print stays open to read). */
+/** Where you land, decided once when the days are in: home when today is painted, otherwise today, ready for a
+ *  moment (there's no onboarding: how many squares and what matters are set up later, from my days). Nothing shows
+ *  until then (no flash of today before home); if loading drags past 4s, today it is. */
 export function useLanding(signedIn: boolean, acc: Account, nav: Navigation) {
-  const { daysReady, profileReady, profile, days } = acc
+  const { daysReady, profileReady, days } = acc
   const { screen, setScreenValue, date } = nav
   const [landed, setLanded] = useState(false)
   useEffect(() => {
@@ -18,15 +15,8 @@ export function useLanding(signedIn: boolean, acc: Account, nav: Navigation) {
       const t = setTimeout(() => setLanded(true), 4000)
       return () => clearTimeout(t)
     }
-    if (!profile && screen === 'today' && !legalAtStart && !tryWelcome) {
-      setScreenValue('welcome')
-    } else if (screen === 'today' && date === todayIso() && profile && (days[todayIso()] || !Object.keys(days).length))
-      setScreenValue('home')
+    if (screen === 'today' && date === todayIso() && days[todayIso()]) setScreenValue('home')
     setLanded(true)
   }, [signedIn, daysReady, profileReady, landed]) // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (!signedIn || !profileReady || profile || tryWelcome) return
-    if (!['welcome', 'privacy', 'terms', 'questions'].includes(screen)) setScreenValue('welcome')
-  }, [signedIn, profileReady, profile, screen]) // eslint-disable-line react-hooks/exhaustive-deps
   return landed
 }

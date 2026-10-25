@@ -6,7 +6,7 @@ Hidden links for trying squared's first-time moments on your own account. Open t
 
 | Link | What it shows |
 |---|---|
-| [squared.today/?welcome](https://squared.today/?welcome) | Onboarding: all four steps, through to "start painting →". Nothing you type is saved. |
+| [squared.today/?welcome](https://squared.today/?welcome) | The first visit's sheet over today: each square is a day, the three colours, "got it". (Onboarding's four steps are gone since Oct 25, 2026.) |
 | [squared.today/?month](https://squared.today/?month) | Last month's painting (the new-month moment). Works any day. |
 | [squared.today/?year](https://squared.today/?year) | Last year's painting (the new-year moment). Works any day. |
 

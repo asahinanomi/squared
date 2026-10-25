@@ -7,7 +7,7 @@ import type { Profile } from '../lib/profile'
 
 type Props = {
   profile: Profile | null
-  /** First run asks "how many squares?" and ends on "start painting"; from settings every change saves itself. */
+  /** The first time (from my days, a life or the pie) it ends on "done"; from settings every change saves itself. */
   mode?: 'onboarding' | 'settings'
   /** Absent at the start of onboarding: there's nowhere to go back to. */
   onBack?: () => void
@@ -231,7 +231,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
         <>
           {error && <p className="setup-error">{error}</p>}
           <button className="pill setup-go" disabled={!valid || busy} onClick={save}>
-            {busy ? 'saving…' : 'start painting'}
+            {busy ? 'saving…' : 'done'}
           </button>
         </>
       )}

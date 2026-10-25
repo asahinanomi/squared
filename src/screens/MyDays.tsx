@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { PaintingThumb } from '../components/PaintingThumb'
 import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
@@ -10,6 +11,10 @@ const fmt = (n: number) => n.toLocaleString('en-US')
 type Props = {
   days: Days
   profile: Profile | null
+  /** Your "mattered" lines (empty until written): the row shows the first few. */
+  matters: string[]
+  /** "set up now" on the life card, before the squares are set: how many squares, then back here. */
+  onSetUp: () => void
   onPainting: (period: string) => void
   /** The bar: time runs left to right, so it opens the list of days, on today. */
   onList: () => void
@@ -26,9 +31,13 @@ type Props = {
 // bar (days lived, days ahead; it opens the list), this month and year so far as paintings, then what matters, a life
 // in squares, in slices, the days you framed and the paintings you kept. Home stays today, now. Each row is named
 // after the page it opens; the page is "my days", so no row says "my".
+// There's no onboarding: what isn't set up yet waits here, an empty slot (a dashed edge on paper, as for every
+// empty slot) that says "set up now". The life card shows a ghost of its bar, so you can see what's coming.
 export function MyDays({
   days,
   profile,
+  matters,
+  onSetUp,
   onPainting,
   onList,
   onPie,
@@ -44,15 +53,21 @@ export function MyDays({
   const count = (p: string) => Object.keys(days).filter((d) => d.startsWith(p) && d <= today).length
   const hasMonth = count(month) > 0
   const hasYear = count(year) > 0
-  const row = (label: string, sub: string, go: () => void) => (
-    <button className="settings-row" onClick={go}>
-      <span>
-        <span className="settings-label">{label}</span>
-        <span className="settings-sub">{sub}</span>
+  const framed = Object.values(days).some((d) => d.framed)
+  // Each row opens its page; `empty` is an empty slot (dashed), its sub a quiet "set up now" link look.
+  const row = (label: string, sub: string, go: () => void, empty?: 'set up' | 'none', lead?: ReactNode) => (
+    <button className={'settings-row' + (empty ? ' is-empty' : '')} onClick={go}>
+      <span className={lead ? 'settings-lead' : undefined}>
+        {lead}
+        <span className="settings-text">
+          <span className="settings-label">{label}</span>
+          <span className={'settings-sub' + (empty === 'set up' ? ' is-set-up' : '')}>{sub}</span>
+        </span>
       </span>
       <Chevron dir="right" />
     </button>
   )
+  const setUp = 'set up now'
   return (
     <main className="settings my-days">
       {/* Looking back, with the way to now always at hand, on the title's far right. */}
@@ -65,6 +80,26 @@ export function MyDays({
       </div>
       {/* squared's line, the page's epigraph: what follows is the past; today is beside it. The tagline candidate. */}
       <p className="my-days-line">The past is painted. Today is still yours.</p>
+      {/* Before the squares are set: a ghost of the bar (lived solid, ahead dotted, today between), so it's clear
+          what's waiting, then the question and "set up now". */}
+      {!profile && (
+        <button className="home-card my-days-life is-empty" onClick={onSetUp}>
+          <span className="home-head">a life</span>
+          <span className="home-big is-ahead is-ghost">
+            ?<small>days</small>
+          </span>
+          <span className="life-ghost" aria-hidden="true">
+            <i />
+          </span>
+          <span className="life-ghost-legend" aria-hidden="true">
+            <span>lived</span>
+            <span>today</span>
+            <span>ahead</span>
+          </span>
+          <span className="life-ghost-ask">how many squares will you paint?</span>
+          <span className="settings-sub is-set-up">{setUp}</span>
+        </button>
+      )}
       {profile &&
         (() => {
           const c = lifeCounts(profile.born, profile.lifespan, today)
@@ -120,10 +155,27 @@ export function MyDays({
         </section>
       )}
       <div className="settings-rows is-last">
-        {row('what matters', 'your compass', onMatters)}
-        {row('a life, in squares', 'every day, as a square', onSquares)}
-        {profile && row('a life, in slices', 'your days, as a pie', onPie)}
-        {row('framed days', 'the days you framed', onFramed)}
+        {matters.length
+          ? row('what matters', matters.slice(0, 3).join(' · '), onMatters)
+          : row('what matters', setUp, onMatters, 'set up')}
+        {profile
+          ? row('a life, in squares', 'every day, as a square', onSquares)
+          : row('a life, in squares', setUp, onSquares, 'set up')}
+        {profile
+          ? row('a life, in slices', 'your days, as a pie', onPie)
+          : row('a life, in slices', setUp, onPie, 'set up')}
+        {framed
+          ? row('framed days', 'the days you framed', onFramed)
+          : row(
+              'framed days',
+              'none yet · frame a day you want to keep',
+              onFramed,
+              'none',
+              // A ghost of a framed square: what will hang here.
+              <span className="framed-ghost" aria-hidden="true">
+                <i />
+              </span>,
+            )}
         {row('paintings', 'the paintings you kept', onPaintings)}
       </div>
     </main>

@@ -10,7 +10,8 @@ type Props = {
   /** A framed day's colour: its pinned notes are "to remember" cards in that paint. */
   framed?: Paint
   onOpen: (n: Note) => void
-  onAdd: () => void
+  /** A way to add one here (the day screen adds them in its box at the top instead). */
+  onAdd?: () => void
   onDelete: (n: Note) => Promise<void>
 }
 
@@ -32,7 +33,7 @@ const writeHidden = (hidden: boolean) => {
 }
 
 // A day's notes, oldest to newest. The latest always shows; older ones can be tucked away.
-// Every note is a moment you captured: as it happened ("right now…") or looking back ("because…"), each with its time.
+// Every note is a moment you captured: as it happened ("this moment…") or looking back ("because…"), each with its time.
 export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
   const [hidden, setHidden] = useState(readHidden)
   // Only one row is swiped open at a time; deleting always asks first.
@@ -96,9 +97,11 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
       {pinned.map(row)}
       {!hidden && older.map(row)}
       {latest && row(latest)}
-      <button className="note-add" onClick={onAdd}>
-        add a moment
-      </button>
+      {onAdd && (
+        <button className="note-add" onClick={onAdd}>
+          add a moment
+        </button>
+      )}
       {asking && (
         <ConfirmDialog
           title="Delete this moment?"

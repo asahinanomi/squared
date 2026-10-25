@@ -3,24 +3,16 @@ import { Chevron } from './Today'
 type Props = {
   onBack: () => void
   backLabel: string
-  /** Read over onboarding: only a close, nowhere else to go. */
-  asSheet?: boolean
 }
 
 // Privacy: what squared keeps, who can see it, what it never does, and how to delete it all — in plain words.
-export function Privacy({ onBack, backLabel, asSheet }: Props) {
+export function Privacy({ onBack, backLabel }: Props) {
   return (
     <main className="idea privacy">
-      {asSheet ? (
-        <button className="read-close" onClick={onBack} aria-label="Close">
-          close ✕
-        </button>
-      ) : (
-        <button className="back-btn idea-back" onClick={onBack} aria-label={`Back to ${backLabel}`}>
-          <Chevron dir="left" />
-          {backLabel}
-        </button>
-      )}
+      <button className="back-btn idea-back" onClick={onBack} aria-label={`Back to ${backLabel}`}>
+        <Chevron dir="left" />
+        {backLabel}
+      </button>
       <h1 className="idea-title">privacy</h1>
       <p>squared is a private journal. Here’s exactly what it keeps, and what it doesn’t.</p>
       <p>squared is in beta. I’ll do my best to carry your squares and moments over when it leaves beta (see terms).</p>

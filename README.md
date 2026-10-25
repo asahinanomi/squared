@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 25, 2026, 17:50 UTC_
+_last updated Oct 25, 2026, 21:24 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -197,10 +197,15 @@ Design: board "16 · Pie — line art (final)". Built step by step; I check each
 - Step 3 (done): **ship** — regression pass at 390×844 and 375×667 (the switch on month, year and a life in years, months and days, back to the same level each time; zoom buttons greyed on the pie; every scope adds up — whole life to the life's total; filter resets to whole life; menu from the pie; no birth date → "how many squares?" and back; the glass count leaves the switch in place), README wrapped up, PR ready to merge into `main`.
 - Later (own phase): share my pie, download my pie.
 
-## Onboarding (one journey, one rule)
+## No onboarding: moments first (Oct 25, 2026)
 
-- **Who**: anyone whose squares aren't set (no birth date and lifespan yet). It's the only test: no "welcomed on this device" flag (that let a new account skip it on a phone someone had already used).
-- **The journey** (lab: https://claude.ai/artifact/TdNFeCnenYybjepoDhUt9C): four steps, dots on top. (1) What squared is: "Welcome to squared. / One square for every day of your life. / Each day, ask yourself:" (16px, regular, ink-soft, one group), then the day screen's big question on its own, then "Then paint its square." with the three colours (mattered, empty, slipped) and "let's begin". (2) "what makes a day feel meaningful?" and (3) "and what makes a day feel empty?": three lines each, "next" or "skip this step"; what's written goes into settings → what matters. (4) "Last thing." / "how many squares do you have?": the birth date starts blank and stops 18 years back ("squared is for people 18 and over." if a later one is typed), the years read "choose" until the first tap (79, the average), and the count reads "28,855 / squares in your life / and 13,709 still ahead to paint". No skip: "start painting →" waits for both, saves, and opens today's first square with the ghost brush. Every button sits 36px under its content. Under the button, small and grey: "by starting, you confirm you're 18 or over and agree to the terms and privacy." (no checkbox; the links open in a new tab so nothing is lost). The terms say 18 or older. Until the squares are set, onboarding is the only way in: any other screen (like "back" from the terms page opened in a new tab) leads back to it; only privacy, terms and questions stay open to read.
+squared is a mindful journal for now: the day is lived in moments, then painted. Lab: https://claude.ai/artifact/8RNH3LHkF4RtJ3QchG5fkm (sign-in A, today B, today C, my days cues).
+
+- **Sign-in** (`src/screens/SignIn.tsx`): the mark (56px) with "squared" (15px) under it as one lockup, the same width, no ".today" and no "beta" (the beta capsule lives in the footer); then one message: "An 80-year life is about **29,200** days." (16px, ink-soft, the number semibold) and, 12px under it, *The past is painted. / Today is still yours.* (the serif, 26px); then "continue with Google". The old hero number and the question left sign-in.
+- **Where you land**: today, ready for a moment, unless today is already painted (then home). Someone new lands on today too. The four onboarding steps (welcome, what matters, what doesn't, how many squares) are gone (`Welcome.tsx` deleted).
+- **The first visit** (today C): someone new (nothing painted, squares not set) sees one sheet over today, once on this device (`squared.introSeen`): "Each square is one day of your life." (Inter 18/600, one line), the three colours as plain sentences with their dots, "Add moments as they come. / Paint the square when the day is done.", and a keyline "got it" (a tip is never the day's main action, so no black pill). `?welcome` shows it on any account.
+- **The day, in the order it's lived** (today B, `src/screens/Today.tsx`, `src/components/MomentBox.tsx`): the date at the top; then the moment box, a white keyline box with 14px corners (not a pill: pills are buttons), "this moment…" while today is being lived ("because…" once it's painted), a round + to keep it (Enter keeps it too; it grows as you write); under it, quietly, "last moment added 3:30 pm" (or "Oct 26 · 3:30 pm" for a moment added to another day later); then the question (now 26 to 30px), the square, the palette; the day's moments at the foot ("3 moments · hide older"), oldest first, each stamped with its date and time. "add a moment" under the list is gone: the box replaces it. While the bubble is open (writing "because…" after painting, or updating a moment) the box hides. On a short phone (under 700px tall) the top tightens so the palette stays above the bar.
+- **Set up later, from my days** (my days cues): what isn't set up yet is an empty slot, a dashed edge on paper (the button table's empty slot), with "set up now". The life card shows a ghost of its bar in faint grey ("? days", lived solid, ahead dotted, an empty today dot, "lived · today · ahead") under "how many squares will you paint?"; it opens how many squares, and saving comes back to my days. "a life, in squares" and "a life, in slices" are dashed "set up now" too until the squares are set (they ask on the way). "what matters" shows your own first lines ("family · long walks · making things"), or dashed "set up now". "framed days" with none framed is dashed with a ghost framed square: "none yet · frame a day you want to keep". How many squares asked the first time ends on "done" (it said "start painting"), with the top bar and a back link.
 
 ## Home
 
@@ -255,14 +260,14 @@ All test links live in `docs/test-links.md`.
 
 Split Oct 22, 2026, so each piece lives in one place (no change in behaviour): `src/App.tsx` (about 150 lines) only wires the pieces together.
 
-- `src/state/app.ts`: the screens, and what the web address asked for (the demo, `?welcome`, `/terms`…).
+- `src/state/app.ts`: the screens, and what the web address asked for (the demo, `?welcome`, `/terms`…), and the first visit's sheet, once.
 - `src/state/useAuth.ts`: who's signed in (and finishing Google's sign-in).
 - `src/state/useAccount.ts`: what the account holds: the question, the profile, every painted day, notes a month at a time; "couldn't load your squares" if it fails.
 - `src/state/useDayActions.ts`: paint, start over, frame, and notes (each saved straight to the account).
 - `src/state/useMatters.ts`, `useKept.ts`: what matters, my paintings.
 - `src/state/usePaintingArrival.ts`: the painting that's open, and the new month's (or year's) arrival.
 - `src/state/useNavigation.ts`: where you are and how you move: the zoom ladder, the list and pie, the small print, settings, pinching.
-- `src/state/useLanding.ts`: where you land, and onboarding as the only way in until your squares are set.
+- `src/state/useLanding.ts`: where you land: home when today is painted, otherwise today.
 - `src/state/useBrowserHistory.ts`: the browser's back button.
 - `src/Screens.tsx`: which screen shows, and what each one gets. `src/screens/SignedOut.tsx`: sign-in and its pages.
 

@@ -14,7 +14,7 @@ import { backFromGoogle, supabase } from './lib/supabase'
 import { Screens } from './Screens'
 import { Deleted } from './screens/Deleted'
 import { SignedOut } from './screens/SignedOut'
-import { demo, NO_TOPBAR, PAGES, type Screen } from './state/app'
+import { demo, PAGES, type Screen } from './state/app'
 import { useAccount } from './state/useAccount'
 import { useAuth } from './state/useAuth'
 import { useBrowserHistory } from './state/useBrowserHistory'
@@ -77,9 +77,8 @@ export default function App() {
     if (supabase) supabase.auth.signOut()
     else setDemoIn(false)
   }
-  // Lock when I leave: away longer than you chose, squared signs out (settings → lock when I leave). Never during
-  // onboarding: nothing private is there yet, and signing out would lose what was typed.
-  useLock(signedIn && screen !== 'welcome', signOut)
+  // Lock when I leave: away longer than you chose, squared signs out (settings → lock when I leave).
+  useLock(signedIn, signOut)
 
   const landed = useLanding(signedIn, acc, nav)
   useBrowserHistory(signedIn, nav, () => setWhy(null))
@@ -117,16 +116,14 @@ export default function App() {
       <OpenPainting.Provider value={painting.paintedMonth}>
         {/* Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint). */}
         <div className={'app' + (oneScreen ? ' is-one-screen' : '')}>
-          {!NO_TOPBAR.includes(screen) && !(screen === 'setup' && nav.afterSetup !== 'settings') && (
-            <Topbar
-              onHome={nav.goHome}
-              onToday={nav.goToday}
-              onCalendar={nav.openMyDays}
-              onIdea={() => nav.setScreen('idea')}
-              onSettings={nav.openSettings}
-              onSignOut={signOut}
-            />
-          )}
+          <Topbar
+            onHome={nav.goHome}
+            onToday={nav.goToday}
+            onCalendar={nav.openMyDays}
+            onIdea={() => nav.setScreen('idea')}
+            onSettings={nav.openSettings}
+            onSignOut={signOut}
+          />
           <div
             className={'stage' + (nav.motion ? ` is-zoom-${nav.motion}` : '')}
             key={screen === 'life' ? `life-${nav.lifeRes}` : screen}
