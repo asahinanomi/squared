@@ -42,19 +42,11 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'Can I repaint a day?',
-      'Yes, any time. Sometimes it takes a while to understand how a day really felt. Dip another colour and paint over it, or tap “start over” under the square to begin again.',
-    ],
-    [
-      'What does “painted on time” mean?',
-      'You painted the day while it was still close: on the day itself, or the next day. Later than that, the square remembers when you painted it.',
-    ],
-    [
-      'Why does a square say “repainted”?',
-      'You painted it again, in another colour, after that window. That’s fine, nothing is locked. The square just keeps an honest record: what you felt then, and that you see it differently now.',
+      'Yes, any time. Sometimes it takes a while to understand how a day really felt. Tap “start over” under the square, and paint it again.',
     ],
     [
       'Can I paint days I missed?',
-      'Of course. Life gets busy, that’s why squared exists. Tap “paint another day” on home, or the date on any day, and pick the day.',
+      'Of course. Life gets busy, that’s why squared exists. Tap the date at the top of any day, or swipe back, and pick the day.',
     ],
     [
       'What are moments for?',
