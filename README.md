@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 25, 2026, 23:02 UTC_
+_last updated Oct 25, 2026, 23:10 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -207,7 +207,10 @@ squared is a mindful journal for now: the day is lived in moments, then painted.
 - **The day, in the order it's lived** (today B, `src/screens/Today.tsx`, `src/components/MomentBox.tsx`): the date at the top; then the moment box, a white keyline box with 14px corners (not a pill: pills are buttons), "this moment…" while today is being lived ("because…" once it's painted), a round + to keep it (Enter keeps it too; it grows as you write); under it, quietly, "last moment added 3:30 pm" (or "Oct 26 · 3:30 pm" for a moment added to another day later); then the question (now 26 to 30px), the square, the palette; the day's moments at the foot ("3 moments · hide older"), oldest first, each stamped with its date and time. "add a moment" under the list is gone: the box replaces it. While the bubble is open (writing "because…" after painting, or updating a moment) the box hides. On a short phone (under 700px tall) the top tightens so the palette stays above the bar. "saving…" (shown only when a save takes over 3 seconds) is a small ink capsule under the top bar, white text, the same ink as the bubble when a save can't get through (it was grey text in the bar, and ran into the date). 44px of air above the question (the moment, then the day); the day sits at most 24px under the bar (it was centred in the screen); the top bar sits 16px from the top of the screen and is 48px tall (it was 56px) on every page, with the logo at the zoom icons' size, 24px (it was 30px). **The date pill lives in the top bar on a day**, centred between the logo and the menu (it was the day's first line): tap it for the day finder, it rolls as you swipe days; it speaks up in the bar: 16px, today in full ink and any other day in ink-soft, with the day's paint as a small dot before the date (an empty ring until it's painted); the moment box is then the day's first thing. The bottom bar (today's and the zoom levels') is slimmer: 4px above its buttons, and 10px less of the phone's bottom safe area under them (at least 8px), so there's more room to paint.
 - **Set up later, from my days** (my days cues): what isn't set up yet is an empty slot, a dashed edge on paper (the button table's empty slot), with "set up now". The life card shows a ghost of its bar in faint grey ("? days", lived solid, ahead dotted, an empty today dot, "lived · today · ahead") under "how many squares will you paint?"; it opens how many squares, and saving comes back to my days. "a life, in squares" and "a life, in slices" are dashed "set up now" too until the squares are set (they ask on the way). "what matters" shows your own first lines ("family · long walks · making things"), or dashed "set up now". "framed days" with none framed is dashed with a ghost framed square: "none yet · frame a day you want to keep". Until it's set up, a row's sub says what it is ("what makes a day worth it", "every day of your life, as a square", "your days, as a pie") and "set up now ›" sits at its far right, with the arrow (on the life card, at the top right). "paintings" with none kept is dashed too, with a ghost of a framed painting: "none yet · keep a month’s painting when it ends". How many squares asked the first time ends on "done" (it said "start painting"), with the top bar and a back link.
 
-## Home
+## Home (cut, Oct 25, 2026)
+
+**Home is gone as its own page** (lab row 4): today is now, my days looks back. The logo opens today, and you always land on today. The week ("this week", swipe or ‹ › for earlier weeks, each square opens its day, the full week's rainbow) moved to the top of my days, above a life (`src/components/WeekCard.tsx`). "Today is in colour.", today's card and home's "paint another day" went with it; the painted square, its dot in the date pill and "did I spend Today…" say it. What follows is home as it was, for the record.
+
 
 - **Weeks start on Sunday** everywhere, as North American calendars do: the month grid (S M T W T F S), the month and year paintings' layout, and home's week.
 
@@ -227,7 +230,7 @@ squared is a mindful journal for now: the day is lived in moments, then painted.
 
 **One width** (Oct 25, 2026): every page's content runs the top bar's width, 24px from each edge: settings, my days, how many squares and what matters were 4px narrower each side (and capped at 400px); home was capped at 440px.
 
-**Cuts for one thing at a time** (Oct 25, 2026; an audit of what isn't a must): (1) the foot of a painted day, "paint another day · go home", is gone (the arrows, swipes and the date pill already move between days); (2) after painting, the count "your 3rd day worth it this month" is gone (a stat for its own sake): painting goes straight to "because…"; (3) the sound button left today's bar, which only zooms now (sound lives in settings); on a past day "today" sits in its centre. Home as its own page is next, in the lab first.
+**Cuts for one thing at a time** (Oct 25, 2026; an audit of what isn't a must): (1) the foot of a painted day, "paint another day · go home", is gone (the arrows, swipes and the date pill already move between days); (2) after painting, the count "your 3rd day worth it this month" is gone (a stat for its own sake): painting goes straight to "because…"; (3) the sound button left today's bar, which only zooms now (sound lives in settings); on a past day "today" sits in its centre. Home as its own page was cut next (see Home).
 
 ## Saving: online first, the account is the one truth
 

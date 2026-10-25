@@ -146,7 +146,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - under the square: start over · frame it
 - ~~at the very foot of a painted day: paint another day · go home~~ (cut Oct 25, 2026: the arrows and the date pill already move between days)
 
-**Home**
+**Home** (cut Oct 25, 2026: the logo opens today; the week moved to the top of my days. Kept below for the record.)
 - Before the first square: greeting · **10,962** / "days ahead of you." / "Make each one meaningful, starting with today." · the question · **paint your first square** · or paint yesterday · "getting started" (learned what squared is · named what matters · set how many squares · paint your first square)
 - Today not painted yet: greeting · the question · **paint today** · paint another day · this week
 - Today painted: greeting · **Today is in colour.** · today's square and note · this week · **paint another day**

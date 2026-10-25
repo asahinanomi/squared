@@ -3870,47 +3870,6 @@ button.settings-row:active {
   text-decoration: underline dotted rgba(255, 255, 255, 0.6);
   text-underline-offset: 4px;
 }
-
-/* ---------- home ---------- */
-/* Home: cards on the paper, one column, every card a door. The greeting and the question centred; the rest reads
-   left. Colour only in the paint (the squares, the shares, the paintings). */
-.home {
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 6px 0 40px;
-}
-/* Home, now: the cards centred in the screen with more room between them, squared's line at the foot. */
-.home.is-now {
-  flex: 1;
-  padding-bottom: 8px;
-}
-.home-now {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 22px;
-}
-.home-line {
-  margin: 28px 0 0;
-  text-align: center;
-  font-family: var(--font-reflect);
-  font-optical-sizing: auto;
-  font-size: 20px;
-  font-weight: 450;
-  line-height: 1.3;
-  color: var(--ink-soft);
-  text-wrap: balance;
-}
-.home-greet {
-  margin: 4px 0 2px;
-  text-align: center;
-  font-size: 15px;
-  color: var(--muted);
-}
 .home-card {
   width: 100%;
   box-sizing: border-box;
@@ -3941,59 +3900,6 @@ button.home-card:active {
   width: 18px;
   height: 18px;
   color: var(--faint);
-}
-/* today, not painted yet: the question leads, with the one black pill */
-.home-ask {
-  align-items: center;
-  text-align: center;
-  padding: 22px 18px;
-}
-.home-q {
-  margin: 6px 0 16px;
-  font-family: var(--font-reflect);
-  font-optical-sizing: auto;
-  font-size: 26px;
-  font-weight: 450;
-  line-height: 1.2;
-}
-.home-q u {
-  text-decoration: underline dotted var(--ink);
-  text-underline-offset: 6px;
-}
-/* today, painted: its square, small, signed as on the day's canvas */
-.home-today {
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
-}
-.home-today > span:nth-child(2) {
-  flex: 1;
-  min-width: 0;
-}
-.home-today > svg {
-  flex: none;
-  width: 18px;
-  height: 18px;
-  color: var(--faint);
-}
-.home-sq {
-  flex: none;
-  position: relative;
-  width: 64px;
-  height: 64px;
-  border: 6px solid #ebe6da;
-  outline: 2px solid var(--ink);
-  box-sizing: border-box;
-  border-radius: 2px;
-}
-.home-sq span {
-  position: absolute;
-  right: 5px;
-  bottom: 4px;
-  font-family: var(--font-hand);
-  font-weight: 600;
-  font-size: 12px;
-  transform: rotate(-4deg);
 }
 .home-t {
   display: block;
@@ -4037,29 +3943,6 @@ button.home-card:active {
 /* The days ahead sit over the paper end of the bar. */
 .home-big.is-ahead {
   align-self: flex-end;
-}
-/* Today's note on home: up to two lines. */
-.home-note {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin-top: 4px;
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--ink-soft);
-}
-/* Today painted: the page's title says so. */
-.home-greet.is-over {
-  margin-bottom: -14px; /* sits with the title under it, as one line of greeting */
-}
-.home-title {
-  margin: 0 0 2px;
-  text-align: center; /* home is centred: the greeting, the title, the line at the foot */
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
 }
 .home-legend {
   display: flex;
@@ -4183,51 +4066,6 @@ button.home-card:active {
     animation: none;
   }
 }
-/* Before the first square: your days ahead as the hero, then the question, then getting started (done steps
-   ticked in calm grey, the open one in ink). */
-.home-hero {
-  margin: 14px 0 6px;
-  text-align: center;
-}
-.home-hero p {
-  margin: 0;
-}
-.home-hero-n {
-  font-size: 48px;
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-/* The caption and the line under it read as one group: one size, one ink, one line height. */
-.home-hero-c,
-.home-hero-m {
-  max-width: 280px;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  font-size: 16px;
-  line-height: 1.45;
-  color: var(--ink-soft);
-  text-wrap: balance;
-}
-.home-hero-c {
-  margin-top: 8px !important;
-}
-/* "paint your first square" is longer than the usual pill: it keeps one line, a little wider. */
-.home-ask .pill {
-  width: auto;
-  min-width: min(100%, 250px);
-  padding: 0 28px;
-  white-space: nowrap;
-}
-.home-yesterday {
-  margin-top: 12px;
-  padding: 4px;
-  font-size: 14px;
-  color: var(--ink-soft);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
-}
 /* The week card's ‹ › : quiet, finger-sized, either side of its dates. */
 .home-week-step {
   position: relative;
@@ -4253,65 +4091,6 @@ button.home-card:active {
   font-weight: 400;
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
-}
-/* getting started */
-.home-steps {
-  list-style: none;
-  margin: 8px 0 0;
-  padding: 0;
-}
-.home-steps button {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 40px;
-  width: 100%;
-  font-size: 15px;
-  color: var(--ink);
-  text-align: left;
-}
-.home-box {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1.5px var(--ink);
-  display: grid;
-  place-items: center;
-}
-.home-steps .is-done {
-  color: var(--muted);
-  opacity: 1; /* done, not unavailable: no faded look */
-  cursor: default;
-}
-.home-steps button:not(.is-done) {
-  font-weight: 600;
-}
-.home-steps button svg {
-  margin-left: auto;
-  width: 18px;
-  height: 18px;
-  color: var(--faint);
-}
-.home-steps .is-done .home-box {
-  background: var(--ink);
-  box-shadow: none;
-}
-.home-steps .is-done .home-box::after {
-  content: '';
-  width: 9px;
-  height: 5px;
-  border-left: 2px solid #fff;
-  border-bottom: 2px solid #fff;
-  transform: rotate(-45deg) translate(1px, -1px);
-}
-/* paint another day: under the black "paint today" as its keyline; once today is painted, it's home's one black pill,
-   under the week. */
-.home-ask .pill.is-keyline {
-  margin-top: 10px;
-}
-.home-another {
-  align-self: center;
 }
 /* this month and this year so far, side by side, each titled above (still unsigned) */
 .home-paintings {
@@ -4702,8 +4481,12 @@ button.home-card:active {
   text-wrap: balance;
 }
 /* my days: a life as one bar first, then this month and year so far, as paintings, over the rows. */
-.my-days-life {
+/* my days opens on this week (22px under the line), then a life: 12px between every card. */
+.my-days .home-week {
   margin-top: 22px;
+}
+.my-days-life {
+  margin-top: 12px;
 }
 .my-days-paintings {
   margin-top: 12px;

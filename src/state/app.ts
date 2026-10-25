@@ -3,7 +3,6 @@ import { supabase } from '../lib/supabase'
 // What the whole app shares: its screens, and what the web address asked for when it opened.
 
 export type Screen =
-  | 'home'
   | 'today'
   | 'month'
   | 'year'

@@ -8,7 +8,6 @@ import { About } from './screens/About'
 import { DaysList } from './screens/DaysList'
 import { Export } from './screens/Export'
 import { Framed } from './screens/Framed'
-import { Home } from './screens/Home'
 import { Life } from './screens/Life'
 import { LifeDays } from './screens/LifeDays'
 import { LifeMonths } from './screens/LifeMonths'
@@ -60,24 +59,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
   const { screen, setScreenValue, date, mag, focal, lifeRes, setLifeRes, listRes, listMid } = nav
   const { days, notes, profile } = acc
 
-  if (screen === 'home')
-    return (
-      <Home
-        name={painter}
-        days={days}
-        notes={notes}
-        profile={profile}
-        steps={[
-          { label: 'learned what squared is', done: true, go: nav.goToday },
-          { label: 'named what matters', done: lists.mattersWritten, go: () => nav.openMatters('home') },
-          { label: 'set how many squares', done: !!profile, go: () => nav.askSquares('home') },
-          { label: 'paint your first square', done: Object.keys(days).length > 0, go: nav.goToday },
-        ]}
-        onToday={nav.goToday}
-        onDay={(iso) => nav.openDay(iso)}
-        onFind={ui.onFind}
-      />
-    )
   if (screen === 'today')
     return (
       <Today
@@ -132,6 +113,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         days={days}
         profile={profile}
         matters={lists.matters.meaningful.map((e) => e.text.trim()).filter(Boolean)}
+        onDay={(iso) => nav.openDay(iso)}
         kept={wall.kept}
         onSetUp={() => nav.askSquares('mydays')}
         onPainting={openPainting}

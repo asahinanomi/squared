@@ -80,7 +80,7 @@ export default function App() {
   // Lock when I leave: away longer than you chose, squared signs out (settings → lock when I leave).
   useLock(signedIn, signOut)
 
-  const landed = useLanding(signedIn, acc, nav)
+  const landed = useLanding(signedIn, acc)
   useBrowserHistory(signedIn, nav, () => setWhy(null))
 
   // Your squares couldn't load: say so, rather than showing an empty life in its place.
@@ -103,7 +103,7 @@ export default function App() {
   if (!signedIn) return <SignedOut error={authError} onDemoSignIn={() => setDemoIn(true)} />
 
   const oneScreen = ['month', 'year', 'life', 'pie', 'list'].includes(screen)
-  const withPainting: Screen[] = ['home', 'today', 'month', 'year', 'life', 'list', 'paintings', 'mydays']
+  const withPainting: Screen[] = ['today', 'month', 'year', 'life', 'list', 'paintings', 'mydays']
 
   return (
     <ViewSwitch.Provider

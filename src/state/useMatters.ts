@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { fetchMatters, noMatters, saveMatters, written, type Matters } from '../lib/matters'
 import { demo, type Screen } from './app'
 
-/** What matters, from the account: fresh when home opens, and whenever the app comes back to the screen. */
+/** What matters, from the account: fresh when my days opens, and whenever the app comes back to the screen. */
 export function useMatters(userId: string | undefined, screen: Screen) {
   const [matters, setMatters] = useState<Matters>(noMatters)
   const refresh = useCallback(() => {
@@ -13,7 +13,7 @@ export function useMatters(userId: string | undefined, screen: Screen) {
   }, [userId])
   useEffect(refresh, [refresh])
   useEffect(() => {
-    if (screen === 'home') refresh()
+    if (screen === 'mydays') refresh()
   }, [screen]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     const back = () => document.visibilityState === 'visible' && refresh()

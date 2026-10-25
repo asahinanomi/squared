@@ -48,7 +48,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   // A day opened from the list goes back to the list when you zoom out of it.
   const [dayFromList, setDayFromList] = useState(false)
   // What matters opens from my days, about, the day's compass or home's first steps; back returns there.
-  const [mattersFrom, setMattersFrom] = useState<'idea' | 'today' | 'home' | 'mydays'>('mydays')
+  const [mattersFrom, setMattersFrom] = useState<'idea' | 'today' | 'mydays'>('mydays')
   // Where privacy and terms were opened from (settings or about): back returns there.
   const [legalFrom, setLegalFrom] = useState<Screen>('settings')
   const legalOpened = useRef(false) // opened from inside the app (not straight from its web address)
@@ -77,11 +77,10 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setDate(todayIso())
     setScreen('today')
   }
+  // The logo: today, now (home, its own page, was cut: today is now, my days looks back).
   const goHome = () => {
     setWhy(null)
-    setDayFromList(false)
-    setDate(todayIso())
-    setScreen('home')
+    goToday()
   }
   /** A day, from anywhere that shows days. */
   const openDay = (iso: string, fromList = false) => {
@@ -211,26 +210,23 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setFramedFrom(from)
     setScreenValue('framed')
   }
-  const openMatters = (from: 'idea' | 'today' | 'home' | 'mydays') => {
+  const openMatters = (from: 'idea' | 'today' | 'mydays') => {
     setMattersFrom(from)
     setScreenValue('matters')
   }
   // Back from how many squares: wherever it was asked from.
   const leaveSetup = () =>
-    afterSetup === 'home'
-      ? goHome()
-      : afterSetup === 'life'
-        ? setScreen('year')
-        : afterSetup === 'pie'
-          ? setScreen(pieFrom)
-          : afterSetup === 'settings' || afterSetup === 'mydays'
-            ? setScreenValue(afterSetup)
-            : goToday()
+    afterSetup === 'life'
+      ? setScreen('year')
+      : afterSetup === 'pie'
+        ? setScreen(pieFrom)
+        : afterSetup === 'settings' || afterSetup === 'mydays'
+          ? setScreenValue(afterSetup)
+          : goToday()
   // Saved how many squares the first time: on to what asked for it (a life, the pie, back to my days).
   const afterSquares = () => {
     if (afterSetup === 'pie') setScreen('pie')
     else if (afterSetup === 'life') setScreen('life')
-    else if (afterSetup === 'home') goHome()
     else if (afterSetup === 'mydays') setScreenValue('mydays')
     else if (afterSetup !== 'settings') goToday()
   }

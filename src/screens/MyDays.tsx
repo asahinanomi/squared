@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { PaintingThumb } from '../components/PaintingThumb'
+import { WeekCard } from '../components/WeekCard'
 import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
@@ -15,6 +16,8 @@ type Props = {
   matters: string[]
   /** The paintings you kept (none yet: the row says how to keep one). */
   kept: string[]
+  /** A day of the week card, to open. */
+  onDay: (iso: string) => void
   /** "set up now" on the life card, before the squares are set: how many squares, then back here. */
   onSetUp: () => void
   onPainting: (period: string) => void
@@ -40,6 +43,7 @@ export function MyDays({
   profile,
   matters,
   kept,
+  onDay,
   onSetUp,
   onPainting,
   onList,
@@ -83,6 +87,8 @@ export function MyDays({
       </div>
       {/* squared's line, the page's epigraph: what follows is the past; today is beside it. The tagline candidate. */}
       <p className="my-days-line">The past is painted. Today is still yours.</p>
+      {/* This week first, the nearest look back (it lived on home, which was cut): swipe or ‹ › for earlier weeks. */}
+      <WeekCard days={days} born={profile?.born} onDay={onDay} />
       {/* Before the squares are set: a ghost of the bar (lived solid, ahead dotted, today between), so it's clear
           what's waiting, under the question; "set up now" at the top right, where its arrow will be. */}
       {!profile && (
