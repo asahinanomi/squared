@@ -41,7 +41,8 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
     if (!sound) soundOnChime() // back on: you hear it
   }
   const [asking, setAsking] = useState(false)
-  const [deleting, setDeleting] = useState<'idle' | 'deleting' | 'failed'>('idle')
+  // failed: 'offline' when it couldn't reach the account, 'error' when the account said no.
+  const [deleting, setDeleting] = useState<'idle' | 'deleting' | 'offline' | 'error'>('idle')
   const remove = () => {
     setAsking(false)
     setDeleting('deleting')
@@ -50,7 +51,8 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
       .then(onDeleted)
       .catch((e) => {
         reportError('delete account', e)
-        setDeleting('failed')
+        const msg = String((e as { message?: unknown })?.message ?? e)
+        setDeleting(!navigator.onLine || /fetch|network|load failed/i.test(msg) ? 'offline' : 'error')
       })
   }
   const row = (label: string, sub: string, go: () => void) => (
@@ -107,8 +109,19 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
           </span>
         </button>
       </div>
-      {deleting === 'failed' && (
-        <p className="settings-note">couldn't delete your account. try again, and if it still fails, send feedback</p>
+      {/* Couldn't delete: the same ink bubble as a save that can't get through, under the top bar. */}
+      {(deleting === 'offline' || deleting === 'error') && (
+        <div className="sync-bubble" role="alert">
+          <p>
+            {deleting === 'offline'
+              ? "Not deleted. squared couldn't reach your account. Check your connection."
+              : 'Not deleted. Something went wrong on our side. Try again, or send feedback.'}
+          </p>
+          <span className="sync-actions">
+            <button onClick={remove}>try again</button>
+            <button onClick={() => setDeleting('idle')}>close</button>
+          </span>
+        </div>
       )}
       {/* Deleting: the hourglass over the whole screen, until the account is gone. */}
       {deleting === 'deleting' && (
