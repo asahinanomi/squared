@@ -41,6 +41,10 @@ Sort what testers said: fix now, try next, parked. Decide the big ones (the past
 
 Private notes (end-to-end encryption) first (`docs/future-ideas.md`), then what real people ask for.
 
+### 8 · Promote and support squared
+
+Later, nothing to do yet: how squared keeps finding people after launch, and how people get help (questions, answers, App Store reviews). Its doc, `8-…`, is made when we get here; launch day itself is in `docs/6-growth.md`.
+
 ## Remember
 
 - One step at a time. Design ideas wait in future ideas, they don't jump the road.
