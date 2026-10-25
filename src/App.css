@@ -369,6 +369,27 @@
 .day-nav.is-in-bar {
   width: auto;
 }
+/* In the bar it speaks up a little: 16px, today in full ink, any other day softer, so you know where you are; and
+   the day's paint as a dot before it (an empty ring until it's painted). */
+.day-nav.is-in-bar .day-pick .day-label {
+  font-size: 16px;
+  color: var(--ink-soft);
+}
+.day-nav.is-in-bar.is-today .day-pick .day-label {
+  color: var(--ink);
+}
+.day-dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  margin-right: 2px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
+.day-dot.is-blank {
+  background: none;
+  box-shadow: inset 0 0 0 1.5px var(--ink-soft);
+}
 /* The day's moment box, right under the date: a white keyline box (rounded, not a pill: pills are buttons), "this
    moment…", and a + to keep it. It grows as you write. */
 .moment-box {

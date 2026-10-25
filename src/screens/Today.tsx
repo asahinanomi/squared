@@ -298,8 +298,14 @@ export function Today(props: Props) {
                 the middle of the top bar, between the logo and the menu. */}
             {barCenter &&
               createPortal(
-                <div className="day-nav is-in-bar">
+                <div className={'day-nav is-in-bar' + (date === today ? ' is-today' : '')}>
                   <button className="day-pick" aria-label="Go to a day" onClick={() => setFinding(true)}>
+                    {/* The day's paint, as a small dot (an empty ring until it's painted). */}
+                    <span
+                      className={'day-dot' + (day ? '' : ' is-blank')}
+                      style={day ? { background: paintHex(day.color) } : undefined}
+                      aria-hidden="true"
+                    />
                     <DayLabel iso={date} slide={slide} />
                     <ChevronDown />
                   </button>
