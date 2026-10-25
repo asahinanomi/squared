@@ -907,22 +907,6 @@
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
 }
-/* The foot of a painted day: paint another day · go home, two quiet links. */
-.day-next {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin: 26px 0 8px;
-  font-size: 14px;
-  color: var(--faint);
-}
-.day-next button {
-  padding: 6px 4px;
-  color: var(--muted); /* the same quiet links as start over · frame it: one colour, one size */
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
-}
 .whisper {
   min-height: 1.4em;
   margin: 6px 0 0;
@@ -1272,29 +1256,6 @@
   border-top: 1px solid var(--grey-1);
   transform: translateX(-50%) rotate(45deg);
   border-top-left-radius: 4px;
-}
-/* Just painted: a tiny hourglass and "your 3rd mattered day this month" — the square joins your life. */
-.why-reveal {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: -6px 0 14px;
-  font-size: 14px;
-  color: var(--ink-soft);
-}
-.lifeglass.is-mini {
-  min-height: 0;
-  --zoom-ink: var(--ink-soft);
-}
-.lifeglass.is-mini svg {
-  width: 14px;
-  height: 17px;
-}
-@media (prefers-reduced-motion: reduce) {
-  .lifeglass.is-mini.is-falling svg,
-  .lifeglass.is-mini.is-falling .lifeglass-grain {
-    animation: none;
-  }
 }
 .why-label {
   display: block;
@@ -1894,26 +1855,16 @@ body[data-screen='questions'] .idea {
   place-items: center;
   color: var(--zoom-ink);
 }
-.today-zoom .today-sound {
-  margin-right: auto; /* on the left, apart from the zoom pair */
-}
-/* On a past day, "today" joins them: the bar spaces the three evenly, as on every other level. */
+/* On a past day, "today" joins them in the centre, as on every other level (an empty left balances the pair). */
 .today-zoom:has(.zoombar-today) {
   justify-content: space-between;
 }
-.today-zoom:has(.zoombar-today) .today-sound {
-  margin-right: 0;
+.today-zoom-left {
+  width: 86px; /* the zoom pair's width: 40 + 6 + 40 */
 }
 .today-zoom-pair {
   display: flex;
   gap: 6px;
-}
-.today-zoom .today-sound svg {
-  width: 23px;
-  height: 23px;
-}
-.today-zoom .today-sound[aria-pressed='false'] {
-  color: var(--muted);
 }
 .today-zoom .zoombar-today {
   width: auto;
@@ -3799,7 +3750,6 @@ button.settings-row:active {
 .zoombar-buttons svg,
 .zoombar-recenter svg,
 .today-zoom svg,
-.today-zoom .today-sound svg,
 .month-paint svg {
   width: 24px;
   height: 24px;

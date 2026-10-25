@@ -1,6 +1,5 @@
-import { useCallback, useRef } from 'react'
+import { useCallback } from 'react'
 import { paintedFresh, todayIso } from '../lib/dates'
-import type { Days } from '../lib/days'
 import { draftNote, type Note, type Why } from '../lib/notes'
 import type { Paint } from '../lib/paints'
 import { save } from '../lib/save'
@@ -17,12 +16,9 @@ export function useDayActions(
   why: Why | null,
   setWhy: (w: Why | null) => void,
 ) {
-  const daysNow = useRef<Days>({}) // the days as they are now, for callbacks that mustn't change with them
-  daysNow.current = days
-
   const onFilled = useCallback(
     (color: Paint) => {
-      setWhy({ settled: color, fresh: !daysNow.current[date] })
+      setWhy({}) // just painted: "because…"
       setDays((d) => {
         // A first paint is on time on the day or the next day (the database decides for good);
         // repaints keep the first paint's shade and date.

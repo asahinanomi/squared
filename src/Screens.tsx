@@ -107,8 +107,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onPinNote={act.onPinNote}
         onZoomOut={nav.outOfDay}
         onMatters={() => nav.openMatters('today')}
-        onFind={ui.onFind}
-        onHome={nav.goHome}
         // Someone new (nothing painted, squares not set): the colours, once. ?welcome shows it on any account.
         intro={tryWelcome || (!profile && Object.keys(days).length === 0 && !introSeen())}
         onIntroDone={() => {

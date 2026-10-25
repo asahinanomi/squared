@@ -9,11 +9,10 @@ import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { ZoomInIcon, ZoomOutIcon } from '../components/ZoomBar'
-import { addDays, fromIso, longDate, ordinal, shortDateParts, todayIso } from '../lib/dates'
+import { addDays, fromIso, longDate, shortDateParts, todayIso } from '../lib/dates'
 import { stampLine, type Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
-import { setSoundOn, soundOn, soundOnChime } from '../lib/sound'
 import type { Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
@@ -52,9 +51,6 @@ type Props = {
   onFilled: (p: Paint) => void
   /** Zoom out to the month. */
   onZoomOut: () => void
-  /** At the foot of a painted day: on to another day (the day finder), or home. */
-  onFind: () => void
-  onHome: () => void
   /** Off to my days → what matters, to edit the compass. */
   onMatters: () => void
   /** Someone's first visit: the colours, once, in a sheet (each square is a day, what each colour means). Read when
@@ -66,8 +62,6 @@ type Props = {
 // The blank square says how far back its day is (the date above says which day), so a slip to another day shows
 // before the first stroke, on two lines ("paint" above): "paint your day", "paint yesterday", "paint 3 days ago", "paint last week",
 // "paint 2 months ago", "paint 17 years ago".
-// How the just-painted line counts a colour: "your 3rd day worth it", "your 2nd regret", "your 1st blur".
-const NTH: Record<Paint, string> = { green: 'day worth it', red: 'regret', grey: 'blur' }
 // The first visit's sheet: the three colours, each a plain sentence.
 const INTRO: [Paint, string][] = [
   ['green', 'green means I spent it on what matters.'],
@@ -106,18 +100,11 @@ export function Today(props: Props) {
   const next = addDays(date, 1)
   const day = days[date]
   const special = specialDay(date, born)
-  // Just painted: which of this month's days of that colour it is: "your 3rd day worth it this month".
-  const reveal = (paint: Paint, fresh: boolean) => {
-    const month = date.slice(0, 7)
-    const n = Object.entries(days).filter(([iso, d]) => iso.startsWith(month) && d.color === paint).length
-    return n ? { text: `your ${ordinal(n)} ${NTH[paint]} this month`, fresh } : undefined
-  }
 
   // On each dip, the color's meaning whispers under the palette, then fades (sooner if painting starts).
   const [whisper, setWhisper] = useState<{ paint: Paint; at: number } | null>(null)
   const [whispering, setWhispering] = useState(false)
   const [wiping, setWiping] = useState(false)
-  const [sound, setSound] = useState(soundOn)
   useEffect(() => {
     if (!whisper) return
     setWhispering(true)
@@ -396,7 +383,6 @@ export function Today(props: Props) {
                 onSave={(text) => onSaveNote(why.note, text)}
                 onDelete={why.note ? () => onDeleteNote(why.note!) : undefined}
                 onCancel={onCloseWhy}
-                reveal={why.settled && reveal(why.settled, !!why.fresh)}
                 pinned={(why.pinned || why.note?.pinned) && !!day?.framed}
                 isPinned={why.note?.pinned}
                 onPin={why.note ? () => props.onPinNote(why.note!) : undefined}
@@ -449,14 +435,6 @@ export function Today(props: Props) {
             onOpen={(n) => onOpenWhy(n)}
             onDelete={onDeleteNote}
           />
-        )}
-        {/* The day is done: where next, quietly, at the very end. */}
-        {day && (
-          <p className="day-next">
-            <button onClick={props.onFind}>paint another day</button>
-            <span aria-hidden="true">·</span>
-            <button onClick={props.onHome}>go home</button>
-          </p>
         )}
         <Sheet open={compassOpen} onClose={() => setCompassOpen(false)}>
           <h2 className="sheet-title">what matters to you</h2>
@@ -515,19 +493,8 @@ export function Today(props: Props) {
       {/* The zoom pair, as on every other level (hidden while writing). */}
       {!why && (
         <div className="today-zoom">
-          {/* Sound on or off, one tap from painting (the same switch as in settings). */}
-          <button
-            className="today-sound"
-            aria-label={sound ? 'Sound on: tap to mute' : 'Sound off: tap to turn on'}
-            aria-pressed={sound}
-            onClick={() => {
-              setSoundOn(!sound)
-              setSound(!sound)
-              if (!sound) soundOnChime() // back on: you hear it
-            }}
-          >
-            <SpeakerIcon on={sound} />
-          </button>
+          {/* The bar only zooms (sound lives in settings); on a past day, "today" in the centre needs a left. */}
+          {date !== today && <span className="today-zoom-left" aria-hidden="true" />}
           {/* On a past day, the way back to today, in the centre as on every other bar. */}
           {date !== today && (
             <button

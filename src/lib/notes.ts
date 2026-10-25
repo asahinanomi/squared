@@ -1,4 +1,3 @@
-import type { Paint } from './paints'
 import type { Days } from './days'
 import { supabase } from './supabase'
 
@@ -18,9 +17,6 @@ export type Why = {
   draft?: string
   error?: string
   n?: number
-  /** Just painted: the colour, and whether it's a new square (not a repaint) — for the reveal line. */
-  settled?: Paint
-  fresh?: boolean
   /** A new note for a day just framed: it's pinned, and asks "what do you want to remember?". */
   pinned?: boolean
 }

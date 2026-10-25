@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 25, 2026, 22:25 UTC_
+_last updated Oct 25, 2026, 23:02 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -226,6 +226,8 @@ squared is a mindful journal for now: the day is lived in moments, then painted.
 - **The blank square says how far back its day is** (the date above says which day), so a slip to another day shows before the first stroke: "paint your day", "paint yesterday", "paint 3 days ago", "paint last week", "paint 2 weeks ago", "paint last month", "paint 7 months ago", "paint a year ago", "paint 17 years ago". On two lines, "paint" above how long ago, in the middle of the square, level (#9a9a94): an invitation, not a signature (the corner signature is for the colour word, once painted). The arrows sit a little further from the square (`clamp(26px, 9vw, 44px)`), so a stroke starting just outside the square, or a resting thumb, never steps to another day.
 
 **One width** (Oct 25, 2026): every page's content runs the top bar's width, 24px from each edge: settings, my days, how many squares and what matters were 4px narrower each side (and capped at 400px); home was capped at 440px.
+
+**Cuts for one thing at a time** (Oct 25, 2026; an audit of what isn't a must): (1) the foot of a painted day, "paint another day · go home", is gone (the arrows, swipes and the date pill already move between days); (2) after painting, the count "your 3rd day worth it this month" is gone (a stat for its own sake): painting goes straight to "because…"; (3) the sound button left today's bar, which only zooms now (sound lives in settings); on a past day "today" sits in its centre. Home as its own page is next, in the lab first.
 
 ## Saving: online first, the account is the one truth
 

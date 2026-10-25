@@ -1,6 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ConfirmDialog } from './ConfirmDialog'
-import { Glass } from './LifeGlass'
 
 type Props = {
   /** Text to start with: the note being edited, or text whose save failed; empty for a new note. */
@@ -15,8 +14,6 @@ type Props = {
   onSave: (text: string) => void
   onDelete?: () => void
   onCancel: () => void
-  /** Just painted: "your 3rd mattered day this month", with a tiny hourglass whose grains fall for a new square. */
-  reveal?: { text: string; fresh: boolean }
   /** A framed day's note: it asks "what do you want to remember?" instead of "because…". */
   pinned?: boolean
   /** Today, not painted yet: a moment as it happens, "this moment…". */
@@ -36,7 +33,6 @@ export function WhyBubble({
   onSave,
   onDelete,
   onCancel,
-  reveal,
   pinned,
   onPin,
   isPinned,
@@ -89,14 +85,6 @@ export function WhyBubble({
     <>
       <div className="why-catcher" onClick={outside} />
       <div className="why">
-        {reveal && (
-          <p className="why-reveal">
-            <span className={'lifeglass is-mini' + (reveal.fresh ? ' is-falling' : '')}>
-              <Glass left={0.55} />
-            </span>
-            {reveal.text}
-          </p>
-        )}
         <label className="why-label" htmlFor="why">
           {pinned ? 'what do you want to remember?' : now ? 'this moment…' : 'because…'}
         </label>
