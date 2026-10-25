@@ -1607,7 +1607,7 @@ body[data-screen='questions'] .idea {
   justify-content: space-between;
   gap: 12px;
   /* Down to the phone's home bar, no further (a little room on phones without one). */
-  padding: 6px 0 max(env(safe-area-inset-bottom), 10px);
+  padding: 4px 0 max(calc(env(safe-area-inset-bottom) - 10px), 8px); /* a slim band: more room to paint */
 }
 /* App controls get their own ground: a lighter plain surface (no dot grid), lifted by a soft shadow cast up over
    the content — the ◎ chip's shadow — so the bar reads as its own layer, edge to edge. */
@@ -1834,7 +1834,8 @@ body[data-screen='questions'] .idea {
   justify-content: flex-end;
   gap: 6px;
   /* The same band as the zoom bar on every other level: its own lifted surface, the pair on the right. */
-  padding: 6px max(var(--gutter), calc((100vw - 560px) / 2 + var(--gutter))) max(env(safe-area-inset-bottom), 10px);
+  padding: 4px max(var(--gutter), calc((100vw - 560px) / 2 + var(--gutter)))
+    max(calc(env(safe-area-inset-bottom) - 10px), 8px); /* a slim band: more room to paint */
   background: var(--bar);
   box-shadow: var(--bar-shadow);
 }
@@ -2100,7 +2101,7 @@ body[data-screen='questions'] .idea {
 .day-chip {
   position: absolute;
   left: 50%;
-  bottom: calc(env(safe-area-inset-bottom) + 92px);
+  bottom: calc(env(safe-area-inset-bottom) + 80px);
   transform: translateX(-50%);
   z-index: 5;
   display: flex;
@@ -2793,7 +2794,7 @@ body[data-screen='questions'] .idea {
 button.settings-row:active {
   background: var(--grey-1);
 }
-.settings-row > span {
+.settings-row > span:not(.set-up-now) {
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -4727,17 +4728,27 @@ button.home-card:active {
   gap: 3px;
   min-width: 0;
 }
-.settings-row > .settings-lead {
+.settings-row > span.settings-lead {
   flex-direction: row;
   align-items: center;
   gap: 14px;
 }
-/* "set up now": the sub line as a quiet link. */
-.settings-sub.is-set-up {
-  align-self: flex-start;
+/* "set up now ›": at the far right of a row (or the card's head), where its arrow is, the two one group. */
+.set-up-now {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
   color: var(--ink-soft);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
+  white-space: nowrap;
+}
+.set-up-now svg {
+  width: 18px;
+  height: 18px;
+  color: var(--ink-soft);
 }
 /* The life card before the squares are set: a ghost of the bar in faint grey, lived solid, ahead dotted. */
 .home-big.is-ghost,

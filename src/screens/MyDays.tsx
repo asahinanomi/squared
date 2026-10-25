@@ -57,20 +57,20 @@ export function MyDays({
   const hasMonth = count(month) > 0
   const hasYear = count(year) > 0
   const framed = Object.values(days).some((d) => d.framed)
-  // Each row opens its page; `empty` is an empty slot (dashed), its sub a quiet "set up now" link look.
+  // Each row opens its page; `empty` is an empty slot (dashed). Not set up yet: its sub says what it is, and "set up
+  // now" sits at the far right with the arrow.
   const row = (label: string, sub: string, go: () => void, empty?: 'set up' | 'none', lead?: ReactNode) => (
     <button className={'settings-row' + (empty ? ' is-empty' : '')} onClick={go}>
       <span className={lead ? 'settings-lead' : undefined}>
         {lead}
         <span className="settings-text">
           <span className="settings-label">{label}</span>
-          <span className={'settings-sub' + (empty === 'set up' ? ' is-set-up' : '')}>{sub}</span>
+          <span className="settings-sub">{sub}</span>
         </span>
       </span>
-      <Chevron dir="right" />
+      {empty === 'set up' ? <SetUp /> : <Chevron dir="right" />}
     </button>
   )
-  const setUp = 'set up now'
   return (
     <main className="settings my-days">
       {/* Looking back, with the way to now always at hand, on the title's far right. */}
@@ -84,10 +84,13 @@ export function MyDays({
       {/* squared's line, the page's epigraph: what follows is the past; today is beside it. The tagline candidate. */}
       <p className="my-days-line">The past is painted. Today is still yours.</p>
       {/* Before the squares are set: a ghost of the bar (lived solid, ahead dotted, today between), so it's clear
-          what's waiting, then the question and "set up now". */}
+          what's waiting, under the question; "set up now" at the top right, where its arrow will be. */}
       {!profile && (
         <button className="home-card my-days-life is-empty" onClick={onSetUp}>
-          <span className="home-head">a life</span>
+          <span className="home-head">
+            a life
+            <SetUp />
+          </span>
           <span className="home-big is-ahead is-ghost">
             ?<small>days</small>
           </span>
@@ -100,7 +103,6 @@ export function MyDays({
             <span>ahead</span>
           </span>
           <span className="life-ghost-ask">how many squares will you paint?</span>
-          <span className="settings-sub is-set-up">{setUp}</span>
         </button>
       )}
       {profile &&
@@ -160,13 +162,13 @@ export function MyDays({
       <div className="settings-rows is-last">
         {matters.length
           ? row('what matters', matters.slice(0, 3).join(' · '), onMatters)
-          : row('what matters', setUp, onMatters, 'set up')}
+          : row('what matters', 'what makes a day worth it', onMatters, 'set up')}
         {profile
           ? row('a life, in squares', 'every day, as a square', onSquares)
-          : row('a life, in squares', setUp, onSquares, 'set up')}
+          : row('a life, in squares', 'every day of your life, as a square', onSquares, 'set up')}
         {profile
           ? row('a life, in slices', 'your days, as a pie', onPie)
-          : row('a life, in slices', setUp, onPie, 'set up')}
+          : row('a life, in slices', 'your days, as a pie', onPie, 'set up')}
         {framed
           ? row('framed days', 'the days you framed', onFramed)
           : row(
@@ -193,5 +195,15 @@ export function MyDays({
             )}
       </div>
     </main>
+  )
+}
+
+/** "set up now ›": where the arrow is, on a row or card that isn't set up yet. */
+function SetUp() {
+  return (
+    <span className="set-up-now">
+      set up now
+      <Chevron dir="right" />
+    </span>
   )
 }
