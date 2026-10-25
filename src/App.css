@@ -1104,11 +1104,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px 6px; /* the line sits close under its words: it's the group's header */
-  margin-bottom: 16px; /* clear of the first note, so a tap on the toggle never lands on it */
-  border-bottom: 1px solid #e4e3dc; /* a thin line: the notes start here */
+  padding: 0 4px;
+  margin-bottom: 0; /* close to the moments it opens (no line under it any more); the list's 12px gap keeps taps apart */
 }
-/* show older · hide older: just words, as quiet as the count (it was a keyline pill; it competed with the notes) */
+/* show all 6 moments · show latest only: just words, quiet (it was a keyline pill; it competed with the notes) */
 .notes-toggle {
   display: inline-flex;
   align-items: center;
