@@ -453,7 +453,7 @@ export function Today(props: Props) {
           />
         )}
         {/* Never more than half the screen: one line of question, then your list, which scrolls (a fade at its foot says
-            there's more, and lifts once you reach the end). */}
+            there's more, and lifts once you reach the end; one at its head once scrolled, so the way back up shows too). */}
         <Sheet open={compassOpen} onClose={() => setCompassOpen(false)} className="is-half">
           <h2 className="torn-title">Torn? Did what mattered outweigh the rest?</h2>
           {compass.length ? (
@@ -467,6 +467,7 @@ export function Today(props: Props) {
                 onScroll={(e) => {
                   const el = e.currentTarget
                   el.classList.toggle('is-end', el.scrollTop + el.clientHeight >= el.scrollHeight - 4)
+                  el.classList.toggle('is-down', el.scrollTop > 4)
                 }}
               >
                 {compass.map((text, i) => (

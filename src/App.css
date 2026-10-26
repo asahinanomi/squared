@@ -2556,22 +2556,30 @@ body[data-screen='questions'] .idea {
   color: var(--ink);
 }
 .is-half .compass-sub {
-  margin: 6px 0 12px;
+  flex: none;
+  margin: 6px 0 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e2e2db;
   font-size: 15px;
   color: var(--muted);
 }
+/* A fine line under the lead: only what's below it scrolls. Fades at whichever end has more. */
 .is-half .compass-list {
+  --fade-top: #000;
+  --fade-end: transparent;
   flex: 1 1 auto;
   min-height: 0;
   max-height: none;
   margin: 0;
-  padding-bottom: 16px;
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent);
-  mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent);
+  padding: 14px 0 16px;
+  -webkit-mask-image: linear-gradient(to bottom, var(--fade-top), #000 40px, #000 calc(100% - 48px), var(--fade-end));
+  mask-image: linear-gradient(to bottom, var(--fade-top), #000 40px, #000 calc(100% - 48px), var(--fade-end));
+}
+.is-half .compass-list.is-down {
+  --fade-top: transparent;
 }
 .is-half .compass-list.is-end {
-  -webkit-mask-image: none;
-  mask-image: none;
+  --fade-end: #000;
 }
 .is-half .compass-name {
   margin: 12px 0 8px;
