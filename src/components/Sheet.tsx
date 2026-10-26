@@ -8,6 +8,13 @@ export function Sheet({ open, onClose, children, className }: Props) {
   useEffect(() => {
     if (open) setMounted(true)
   }, [open])
+  // Escape closes it too, for a keyboard (the sheets have no close button).
+  useEffect(() => {
+    if (!open) return
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    document.addEventListener('keydown', esc)
+    return () => document.removeEventListener('keydown', esc)
+  }, [open, onClose])
   // A swipe down closes it too (unless it starts in a list that's scrolled down).
   const start = useRef<number | null>(null)
   if (!mounted) return null

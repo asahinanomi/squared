@@ -2489,6 +2489,14 @@ body[data-screen='questions'] .idea {
   flex-direction: column;
   gap: 16px;
 }
+.meaning-body {
+  margin: 8px 0 20px;
+  font-size: 16px;
+}
+.legend.meaning-legend {
+  gap: 12px;
+  margin-bottom: 8px;
+}
 .legend li {
   display: flex;
   gap: 14px;
