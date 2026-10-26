@@ -237,7 +237,7 @@ export function DaysList({
   const [away, setAway] = useState(false)
 
   // Quiet days (unpainted, no moments, not today or yesterday, not a special day) stay hidden, so each month reads
-  // like a journal: "+ 21 unpainted" at its top right opens the whole month, and "painted only" folds it again.
+  // like a journal: "+ 21 unpainted" at its top right opens the whole month, and "hide 21 unpainted" folds it again.
   // The month you opened the list on starts open if the day you came from is a quiet one.
   const yesterday = addDays(today, -1)
   const quiet = (iso: string) =>
@@ -381,7 +381,7 @@ export function DaysList({
                   {/* A filter shows exactly its days; unfiltered, the quiet ones wait behind this. */}
                   {!only && hidden > 0 && (
                     <button className="days-month-more" aria-expanded={whole} onClick={() => toggle(m)}>
-                      {whole ? 'painted only' : `+ ${hidden} unpainted`}
+                      {whole ? `hide ${hidden} unpainted` : `+ ${hidden} unpainted`}
                     </button>
                   )}
                   {/* As in the month view: the month's painting, at the right edge. */}
