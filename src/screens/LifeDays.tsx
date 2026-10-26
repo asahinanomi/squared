@@ -36,7 +36,7 @@ type Props = {
 
 // Space between squares grows with them, so big squares stay apart (7 and 3 a row match the month view).
 const gapFor = (n: number) => ({ 28: 2, 14: 4, 7: 9, 3: 10 })[n] ?? 2
-const LABEL_H = 18 // year label above each block
+const LABEL_H = 22 // year label above each block (room for its dotted underline over the first row)
 const BLOCK_GAP = 16 // space between years
 const TOP = 24 // room above the first year, clear of the top fade (its label and painting icon stay easy to tap)
 const LIVED_BLANK = '#eeeee8'
@@ -299,17 +299,18 @@ export function LifeDays({
       >
         <canvas ref={canvas} style={{ width: size.w, height: size.h }} aria-hidden="true" />
         <div style={{ height: Math.max(0, totalH - size.h) }} />
-        {/* Each year with squares in it: its painting, at the right edge of its label. */}
+        {/* Each year with squares in it: its name (drawn on the canvas) gets the dotted underline and opens its painting;
+            the button sits exactly over the drawn name, its own text clear so only the underline shows. */}
         {onPainting &&
           cell > 0 &&
           [...new Set(Object.keys(days).map((iso) => iso.slice(0, 4)))].map((y) => (
             <span
               key={y}
               className="life-paint"
-              style={{ top: TOP + (Number(y) - firstYear) * block - 17 }} // centred on the label's line
+              style={{ top: TOP + (Number(y) - firstYear) * block }}
               onClick={(e) => e.stopPropagation()}
             >
-              <PaintingButton days={days} period={y} label={y} onOpen={onPainting} />
+              <PaintingButton period={y} label={y} onOpen={onPainting} className="is-over-canvas" />
             </span>
           ))}
       </div>

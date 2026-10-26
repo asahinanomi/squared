@@ -387,17 +387,18 @@ export function DaysList({
           return (
             <section key={m} className="days-month is-card" data-key={m} hidden={!list.length}>
               <div className="ladder-label month-label">
-                {monthTitle(m)}
+                {/* Its name opens its painting, as in the month view. */}
+                {onPainting && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) ? (
+                  <PaintingButton period={m.slice(0, 7)} label={monthTitle(m)} onOpen={onPainting} />
+                ) : (
+                  monthTitle(m)
+                )}
                 <span className="days-month-tools">
                   {/* A filter shows exactly its days; unfiltered, the quiet ones wait behind this. */}
                   {!only && hidden > 0 && (
                     <button className="days-month-more" aria-expanded={whole} onClick={() => toggle(m)}>
                       {whole ? `hide ${hidden} unpainted` : `+ ${hidden} unpainted`}
                     </button>
-                  )}
-                  {/* As in the month view: the month's painting, at the right edge. */}
-                  {onPainting && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) && (
-                    <PaintingButton days={days} period={m.slice(0, 7)} label={monthTitle(m)} onOpen={onPainting} />
                   )}
                 </span>
               </div>

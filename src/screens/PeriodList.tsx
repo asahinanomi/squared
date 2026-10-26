@@ -74,26 +74,21 @@ function PeriodCard({
   const now = from <= today && today <= to
   return (
     <article className={'period-card' + (now ? ' is-today' : '')} data-key={id}>
-      <button className="period-card-open" aria-label={`Open ${title}`} onClick={() => onOpen(from)}>
-        {title}
-      </button>
+      {/* The whole card opens the period; its name, when it has squares, opens its painting (above the card's tap). */}
+      <button className="period-card-open" aria-label={`Open ${title}`} onClick={() => onOpen(from)} />
+      <span className="period-title">
+        {onPainting && Object.keys(days).some((iso) => iso.startsWith(period)) ? (
+          <PaintingButton period={period} label={title} onOpen={onPainting} />
+        ) : (
+          title
+        )}
+      </span>
       <span className="period-band" aria-hidden="true">
         {bs.map((b, i) => (
           <span key={i} style={{ background: b.fill, width: `${b.share * 100}%` }} />
         ))}
       </span>
       <span className="period-counts">{parts.join(' · ')}</span>
-      {/* Its painting, at the card's top right, once it holds any squares. */}
-      {onPainting && Object.keys(days).some((iso) => iso.startsWith(period)) && (
-        <span className="period-paint">
-          <PaintingButton
-            days={days}
-            period={period}
-            label={title.length === 4 ? title : monthTitle(from)}
-            onOpen={onPainting}
-          />
-        </span>
-      )}
     </article>
   )
 }

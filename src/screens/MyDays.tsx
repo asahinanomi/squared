@@ -208,7 +208,8 @@ export function MyDays({
         <div className="help-pair">
           <PaintingDemo />
           <div className="help-notes">
-            <p>When a month or a year ends, keep its painting.</p>
+            <p>Tap a month’s or a year’s name to open its painting.</p>
+            <p>When it ends, keep it.</p>
           </div>
         </div>
       </Sheet>

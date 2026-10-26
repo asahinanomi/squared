@@ -1958,38 +1958,36 @@ body[data-screen='questions'] .idea {
   letter-spacing: -0.005em;
   color: var(--ink);
 }
-.month-paint {
-  /* The tiny painting's own size, its edge on the last column's edge; the finger-sized target (44px) reaches past it,
-     invisibly, so nothing gets clipped. */
+/* A month's or year's name, the door to its painting: the dotted underline that means "tap for more" (as on
+   "meaningfully"); while its painting is open, the underline turns solid. */
+.painting-name {
   position: relative;
-  width: 28px;
-  height: 28px;
-  margin: 0;
-  display: grid;
-  place-items: center;
-  color: var(--ink);
+  z-index: 1; /* above a card's own tap */
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-align: left;
+  text-decoration: underline dotted currentColor;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
 }
-.month-paint::before {
+.painting-name::before {
   content: '';
   position: absolute;
-  inset: -8px;
+  inset: -10px -6px; /* a finger-sized target around the name */
 }
-/* The tiny painting: pressed, it presses in; while its painting is open, an ink ring marks it (as the view switch
-   marks the one you're on). */
-.month-paint-thumb {
-  display: block;
-  width: 28px;
-  height: 28px;
-  border-radius: 2px;
-  transition: transform 0.12s;
-  filter: drop-shadow(0 1px 2px rgba(20, 20, 19, 0.15));
+.painting-name.is-on {
+  text-decoration-style: solid;
 }
-.month-paint:active .month-paint-thumb {
-  transform: scale(0.88);
-}
-.month-paint.is-on .month-paint-thumb {
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
+/* On a life in days the year's name is drawn on the canvas: the button lies exactly over it, its text clear. */
+.painting-name.is-over-canvas {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 15px;
+  color: transparent;
+  text-decoration-color: #9a9a94;
+  text-underline-offset: 2px; /* clear of the first row of squares under the name */
 }
 .month-block.is-faint {
   padding-bottom: 40vh;
@@ -2096,7 +2094,7 @@ body[data-screen='questions'] .idea {
 /* A year's painting, on its label's line at the right edge, scrolling with its year. */
 .life-paint {
   position: absolute;
-  right: 0;
+  left: 0;
   z-index: 1;
 }
 .life-canvas::-webkit-scrollbar {
@@ -3292,11 +3290,16 @@ button.settings-row:active {
 .period-card.is-today {
   box-shadow: inset 0 0 0 1.5px var(--ink);
 }
-.period-card-open {
+.period-title {
   align-self: flex-start;
   font-size: 16px;
   font-weight: 600;
-  color: inherit;
+  color: var(--ink);
+}
+.period-card-open {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
 }
 .period-card-open::after {
   content: '';
@@ -3305,15 +3308,6 @@ button.settings-row:active {
   border-radius: inherit;
 }
 /* A card's painting: the ink picture icon at its top right, above the card's own tap. */
-.period-paint {
-  position: absolute;
-  top: 12px; /* level with the card's title */
-  right: 16px; /* its edge on the band's end */
-  z-index: 1;
-}
-.period-paint .month-paint {
-  margin: 0;
-}
 .period-band {
   display: flex;
   height: 10px;
@@ -4665,20 +4659,13 @@ button.home-card:active {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   font-size: 12px;
   font-weight: 600;
   color: var(--ink);
 }
-.painting-demo-row .month-paint {
+.painting-demo-row .painting-name {
   position: relative;
-  width: 32px;
-  height: 32px;
-  margin: 0;
-}
-.painting-demo-row .month-paint-thumb {
-  width: 22px;
-  height: 22px;
 }
 .painting-demo-open {
   display: flex;
