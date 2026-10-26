@@ -10,6 +10,9 @@ type Props = {
   onRecenter?: () => void
   /** The day the list should open on if switched to from here (default: today). */
   listAt?: () => string
+  /** "today" in the centre: the app's way back to today by default; the day screen passes its own, or null on today
+   *  itself (you're there). */
+  today?: (() => void) | null
 }
 
 const stroke = {
@@ -88,71 +91,78 @@ export const ViewSwitch = createContext<{
   goToday: () => void
 } | null>(null)
 
-// Bottom of every zoom level, controls only: on the left one switch for the two views — squares · list (the pie is in my days),
-// the one showing raised — then "today" (go paint it)
-// halfway to the zoom pair on the right. ◎ (back to today's square, once it's out of view) floats
-// just above the bar's right end.
-export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
+// Bottom of every square view and the list: the bar is for getting around (the squares · list switch on the left,
+// "today" in the centre, the same on every page). Zoom is a tool on the squares, not a way around, so it floats over
+// them at the bottom right, like a map's + and −: a slim capsule (zoom in on top, zoom out below; on a day, zoom out
+// alone), with ◎ (back to today's square, once it's out of view) on top of it. The list has no zoom: nothing floats.
+export function ZoomBar({ onOut, onIn, onRecenter, listAt, today }: Props) {
   const view = useContext(ViewSwitch)
+  const goToday = today === undefined ? view?.goToday : today
   // Outside the stage, which scales while a zoom animates (a pinned bar inside it would ride along).
   return createPortal(
-    <div className="zoombar">
-      {view ? (
-        // One switch for the two ways to look: squares · list. The one showing is raised.
-        <div className="zoombar-switch" role="group" aria-label="View">
-          {(
-            [
-              ['squares', 'Squares', <SquaresIcon key="s" />],
-              ['list', 'List view', <ListIcon key="l" />],
-            ] as const
-          ).map(([id, label, icon]) => {
-            const now = view.list ? 'list' : 'squares'
-            const go = () => {
-              if (id !== now) view.toggleList(listAt?.())
-            }
-            return (
-              <button
-                key={id}
-                className={id === now ? 'is-on' : undefined}
-                aria-label={label}
-                aria-pressed={id === now}
-                onClick={go}
-              >
-                {icon}
+    <>
+      <div className="zoombar">
+        {view ? (
+          // One switch for the two ways to look: squares · list. The one showing is raised.
+          <div className="zoombar-switch" role="group" aria-label="View">
+            {(
+              [
+                ['squares', 'Squares', <SquaresIcon key="s" />],
+                ['list', 'List view', <ListIcon key="l" />],
+              ] as const
+            ).map(([id, label, icon]) => {
+              const now = view.list ? 'list' : 'squares'
+              const go = () => {
+                if (id !== now) view.toggleList(listAt?.())
+              }
+              return (
+                <button
+                  key={id}
+                  className={id === now ? 'is-on' : undefined}
+                  aria-label={label}
+                  aria-pressed={id === now}
+                  onClick={go}
+                >
+                  {icon}
+                </button>
+              )
+            })}
+          </div>
+        ) : (
+          <span />
+        )}
+        {goToday ? (
+          <button className="zoombar-today" onClick={goToday}>
+            today
+          </button>
+        ) : (
+          <span />
+        )}
+        {/* An empty right as wide as the switch keeps "today" in the centre. */}
+        <span className="zoombar-spacer" aria-hidden="true" />
+      </div>
+      {(onIn || onOut || onRecenter) && (
+        <div className="zoom-stack">
+          {onRecenter && (
+            <button className="zoombar-recenter" aria-label="Back to today's square" onClick={onRecenter}>
+              <RecenterIcon />
+            </button>
+          )}
+          {(onIn || onOut) && (
+            <div className="zoom-capsule">
+              {onIn && (
+                <button aria-label="Zoom in" onClick={onIn}>
+                  <ZoomInIcon />
+                </button>
+              )}
+              <button aria-label="Zoom out" disabled={!onOut} onClick={onOut}>
+                <ZoomOutIcon />
               </button>
-            )
-          })}
-        </div>
-      ) : (
-        <span />
-      )}
-      {view && (
-        <button className="zoombar-today" onClick={view.goToday}>
-          today
-        </button>
-      )}
-      {/* Floats just above the bar's right end, over the content, only while today is out of view. */}
-      {onRecenter && (
-        <button className="zoombar-recenter" aria-label="Back to today's square" onClick={onRecenter}>
-          <RecenterIcon />
-        </button>
-      )}
-      {/* No zoom at all where there's nothing to zoom (the list: its tabs choose years · months · days). */}
-      {(onIn || onOut) && (
-        <div className="zoombar-buttons">
-          {/* Zoom out is always the far right, where it is on the day screen (its only button), lined up with the menu;
-            zoom in sits to its left. */}
-          <button aria-label="Zoom in" disabled={!onIn} onClick={onIn}>
-            <ZoomInIcon />
-          </button>
-          <button aria-label="Zoom out" disabled={!onOut} onClick={onOut}>
-            <ZoomOutIcon />
-          </button>
+            </div>
+          )}
         </div>
       )}
-      {/* With no zoom, an empty right as wide as the switch keeps "today" in the centre. */}
-      {!onIn && !onOut && view && <span className="zoombar-spacer" aria-hidden="true" />}
-    </div>,
+    </>,
     document.body,
   )
 }

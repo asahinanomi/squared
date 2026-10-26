@@ -1774,20 +1774,52 @@ body[data-screen='questions'] .idea {
 .zoombar-spacer {
   width: 84px; /* the view switch's width */
 }
-.zoombar-buttons {
+/* Zoom floats on the squares, bottom right, just above the bar: ◎ on top (while today is out of view), then a slim
+   capsule, zoom in over zoom out, ink on white, the ◎ chip's soft lift. Outside the zooming stage, like the bar. */
+.zoom-stack {
+  position: fixed;
+  z-index: 21;
+  right: max(var(--gutter), calc((100vw - 560px) / 2 + var(--gutter)));
+  bottom: calc(max(calc(env(safe-area-inset-bottom) - 10px), 8px) + 64px);
   display: flex;
-  gap: 2px;
-  flex-shrink: 0;
-  margin-right: -10px; /* the far-right icon (zoom out) ends where the menu's lines do, above */
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  --zoom-ink: #2f2f2b;
 }
-/* ◎ floats over the content, just above the bar's right end: a small paper chip, ink only, there while today is
-   out of view. */
-.zoombar-recenter {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 12px);
-  width: 40px;
-  height: 40px;
+.zoom-capsule {
+  display: flex;
+  flex-direction: column;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow:
+    inset 0 0 0 1px #e4e4dd,
+    0 6px 16px rgba(20, 20, 19, 0.12);
+}
+.zoom-capsule button {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--zoom-ink);
+}
+.zoom-capsule button + button {
+  box-shadow: inset 0 1px 0 #ecece5; /* a hairline between in and out */
+}
+.zoom-capsule button:disabled {
+  color: #c9c9c2;
+}
+.zoom-capsule button:active:not(:disabled) svg {
+  transform: scale(0.88);
+}
+.zoom-capsule svg {
+  width: 22px;
+  height: 22px;
+}
+.zoom-stack .zoombar-recenter {
+  position: relative;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -1795,29 +1827,14 @@ body[data-screen='questions'] .idea {
   color: var(--zoom-ink);
   box-shadow:
     inset 0 0 0 1px #e4e4dd,
-    0 4px 14px rgba(20, 20, 19, 0.1);
-  animation: fade-in 0.25s ease-out;
+    0 6px 16px rgba(20, 20, 19, 0.12);
 }
-.zoombar-recenter svg {
-  width: 20px;
-  height: 20px;
+.zoom-stack .zoombar-recenter svg {
+  width: 22px;
+  height: 22px;
 }
-.zoombar-recenter:active {
+.zoom-stack .zoombar-recenter:active {
   transform: scale(0.95);
-}
-.zoombar-buttons button {
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  color: var(--zoom-ink);
-}
-.zoombar-buttons button:disabled {
-  opacity: 0.25;
-}
-.zoombar-buttons svg {
-  width: 20px;
-  height: 20px;
 }
 /* "today" — go paint it — halfway between the view switch and the zoom pair (the bar spaces the three evenly). */
 .zoombar-today {
@@ -1855,56 +1872,6 @@ body[data-screen='questions'] .idea {
   }
 }
 
-.today-zoom {
-  --zoom-ink: #2f2f2b;
-  position: fixed;
-  z-index: 20;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-  min-height: 48px; /* the same row as every other bar, with or without "today" */
-  /* The same band as the zoom bar on every other level: its own lifted surface, the pair on the right. */
-  padding: 4px max(var(--gutter), calc((100vw - 560px) / 2 + var(--gutter)))
-    max(calc(env(safe-area-inset-bottom) - 10px), 8px); /* a slim band: more room to paint */
-  background: var(--bar);
-  box-shadow: var(--bar-shadow);
-}
-.today-zoom button {
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  color: var(--zoom-ink);
-}
-/* On a past day, "today" joins them in the centre, as on every other level (an empty left balances the pair). */
-.today-zoom:has(.zoombar-today) {
-  justify-content: space-between;
-}
-.today-zoom-left {
-  width: 30px; /* the zoom-out button's width (less its overhang), so "today" sits in the centre */
-}
-/* The rightmost icon lines up with the menu's lines above (the page's one width): the 40px button reaches 10px past
-   the gutter, so its 24px icon ends where the menu's does. */
-.today-zoom-pair {
-  display: flex;
-  gap: 2px;
-  margin-right: -10px;
-}
-.today-zoom .zoombar-today {
-  width: auto;
-  height: 48px; /* the zoom bar's: the same capsule on every level (the day's 40px buttons made it shorter) */
-}
-.today-zoom button:disabled {
-  opacity: 0.25;
-}
-.today-zoom svg {
-  width: 20px;
-  height: 20px;
-}
 
 /* ---------- my squares: a month ---------- */
 /* The zoom bar runs to the bottom edge and carries the safe-area room itself. */
@@ -3847,15 +3814,11 @@ button.settings-row:active {
 /* Finger-sized targets: small icon buttons keep their look, but an invisible margin around each reaches 44px
    (the switch's segments only grow up and down, so neighbours never overlap). */
 .logo-btn,
-.zoombar-buttons button,
-.today-zoom button:not(.zoombar-today),
 .zoombar-switch button,
 .lifeglass {
   position: relative; /* (◎ is already placed absolutely, which holds its margin too) */
 }
 .logo-btn::after,
-.zoombar-buttons button::after,
-.today-zoom button:not(.zoombar-today)::after,
 .zoombar-recenter::after {
   content: '';
   position: absolute;
@@ -3895,21 +3858,9 @@ button.settings-row:active {
 .zoombar-switch button::after {
   inset: -6px 0; /* 48 tall; neighbours never overlap */
 }
-.zoombar-switch svg,
-.zoombar-buttons svg,
-.zoombar-recenter svg,
-.today-zoom svg {
+.zoombar-switch svg {
   width: 24px;
   height: 24px;
-}
-.zoombar-buttons button,
-.today-zoom button:not(.zoombar-today) {
-  width: 48px;
-  height: 48px;
-}
-.zoombar-buttons button::after,
-.today-zoom button:not(.zoombar-today)::after {
-  inset: 0;
 }
 .zoombar-recenter {
   width: 44px;

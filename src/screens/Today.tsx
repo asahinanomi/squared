@@ -8,7 +8,7 @@ import { PaintCanvas } from '../components/PaintCanvas'
 import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
-import { ZoomOutIcon } from '../components/ZoomBar'
+import { ZoomBar } from '../components/ZoomBar'
 import { addDays, firstDay, fromIso, longDate, ordinal, shortDateParts, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
@@ -280,7 +280,7 @@ export function Today(props: Props) {
       const el = trio.current
       if (!el) return
       const top = el.parentElement!.getBoundingClientRect().top + window.scrollY
-      const band = document.querySelector('.today-zoom')?.getBoundingClientRect().height ?? 0
+      const band = document.querySelector('.zoombar')?.getBoundingClientRect().height ?? 0
       // Centred, but never more than 24px under the bar: the day sits high, the moments closer.
       setLift(Math.min(24, Math.max(12, (window.innerHeight - top - band - el.offsetHeight) / 2)))
     }
@@ -558,34 +558,22 @@ export function Today(props: Props) {
           />
         )}
       </div>
-      {/* The zoom pair, as on every other level (hidden while writing). */}
-      {/* Outside the stage, which scales while a zoom animates (a pinned bar inside it would ride along). */}
-      {!why &&
-        createPortal(
-          <div className="today-zoom">
-            {/* The bar only zooms (sound lives in settings); on a past day, "today" in the centre needs a left. */}
-            {date !== today && <span className="today-zoom-left" aria-hidden="true" />}
-            {/* On a past day, the way back to today, in the centre as on every other bar. */}
-            {date !== today && (
-              <button
-                className="zoombar-today"
-                onClick={() => {
+      {/* The same bar as every square view (the switch, "today" in the centre on another day), and zoom out floating
+          on the square, alone: a day is as close as it gets. Hidden while writing. */}
+      {!why && (
+        <ZoomBar
+          onOut={onZoomOut}
+          listAt={() => date}
+          today={
+            date === today
+              ? null
+              : () => {
                   setSlide('from-right')
                   onDate(today)
-                }}
-              >
-                today
-              </button>
-            )}
-            <div className="today-zoom-pair">
-              {/* A day is as close as it gets: only the way out, at the right edge, its icon lined up with the menu's. */}
-              <button aria-label="Zoom out" onClick={onZoomOut}>
-                <ZoomOutIcon />
-              </button>
-            </div>
-          </div>,
-          document.body,
-        )}
+                }
+          }
+        />
+      )}
     </main>
   )
 }
