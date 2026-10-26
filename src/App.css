@@ -347,7 +347,7 @@
   letter-spacing: -0.005em;
   line-height: 1.22;
   text-align: center;
-  margin: 44px 0 0; /* the moment box above, the square below: the question opens the day's close */
+  margin: 36px 0 0; /* the group gap: the moment above, the day below (the same as the square → the moments) */
   max-width: 13em;
   text-wrap: balance;
 }
@@ -461,7 +461,7 @@
     font-size: 24px;
   }
 }
-/* A kept moment: a paper slip lifts out of the box and drifts down toward the list, fading (0.6s). */
+/* A kept moment, sent like mail: a paper slip that flies (in script) from the box into the top of the list. */
 .moment-slip {
   position: fixed;
   z-index: 25;
@@ -469,7 +469,9 @@
   padding: 14px 18px;
   border-radius: 14px;
   background: #fff;
-  box-shadow: 0 8px 24px rgba(20, 20, 19, 0.12);
+  box-shadow:
+    inset 0 0 0 1px #e2e2db,
+    0 10px 26px rgba(20, 20, 19, 0.16);
   font-size: 17px;
   line-height: 22px;
   color: var(--ink);
@@ -477,17 +479,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   pointer-events: none;
-  animation: moment-drift 0.6s cubic-bezier(0.4, 0, 0.6, 1) forwards;
-}
-@keyframes moment-drift {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(240px) scale(0.9);
-    opacity: 0;
-  }
+  transform-origin: center;
 }
 /* Just arrived in the list: a soft glow that fades. */
 .note-card.is-arriving {
@@ -498,11 +490,6 @@
     box-shadow:
       inset 0 0 0 1px var(--ink-soft),
       0 0 0 6px rgba(20, 20, 19, 0.06);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .moment-slip {
-    display: none;
   }
 }
 /* A special day (your birthday, New Year's Day, Christmas): a quiet line under the date. */
@@ -614,7 +601,7 @@
      or a resting thumb never lands on an arrow and steps to another day. */
   gap: clamp(26px, 9vw, 44px);
   width: 100%;
-  margin-top: 14px;
+  margin-top: 22px; /* question → square, the same as square → palette */
 }
 .easel-square {
   position: relative;
@@ -791,7 +778,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 15px; /* 16px of ink from the square to the brush tip, like question → date → square */
+  margin-top: 0; /* the palette's own top (the brush) makes the square → palette gap match question → square */
 }
 .tray-rest {
   width: 100%;
@@ -1130,11 +1117,15 @@
 /* ---------- note under the square ---------- */
 .notes {
   width: min(100%, 360px);
-  margin-top: 32px; /* room under the square (or the palette) before the day's moments */
+  margin-top: 12px; /* with the palette's meaning line above it: the group gap, as box → question */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
+}
+/* A painted day has no palette: the moments keep the same group gap under start over · frame it. */
+.today.is-closed .notes {
+  margin-top: 30px;
 }
 .notes-head {
   width: 100%;

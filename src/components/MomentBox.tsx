@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 type Props = {
@@ -8,8 +8,9 @@ type Props = {
 }
 
 // The day starts with a moment: one box at the top of the day and a + to keep it. It grows as you write; Enter keeps
-// it too. The moments are listed at the foot of the day, newest first, so a kept moment lifts out of the box as a
-// paper slip and drifts down toward them (the new one glows once when it arrives there).
+// it too. The moments are listed at the foot of the day, newest first, so a kept moment is sent like mail: a paper
+// slip lifts out of the box, shrinks along an arc into the top of the list (or toward the screen's foot, if the list
+// is below it), and the card it lands on nudges as it arrives.
 export function MomentBox({ placeholder, onAdd }: Props) {
   const [text, setText] = useState('')
   const [slip, setSlip] = useState<{ text: string; top: number; left: number; width: number; n: number } | null>(null)
@@ -21,11 +22,52 @@ export function MomentBox({ placeholder, onAdd }: Props) {
     el.style.height = 'auto'
     el.style.height = `${el.scrollHeight}px`
   }, [text])
+  // The flight, once the slip is on the page and the list has its new card.
+  const flying = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = flying.current
+    if (!slip || !el) return
+    const from = el.getBoundingClientRect()
+    // The new card (pinned ones sit above it), and the row holding it, which hides the swipe's "delete" too.
+    const card = document.querySelector<HTMLElement>('.notes .note-card.is-arriving')
+    const row = card?.closest<HTMLElement>('.swipe') ?? card
+    const to = card?.getBoundingClientRect()
+    const foot = window.innerHeight - 96
+    const onScreen = !!to && to.top < foot
+    const x = onScreen ? to!.left + to!.width / 2 : window.innerWidth / 2
+    const y = onScreen ? to!.top + to!.height / 2 : foot
+    const dx = x - (from.left + from.width / 2)
+    const dy = y - (from.top + from.height / 2)
+    // The new card waits, unseen, for its slip to land.
+    if (onScreen) row!.style.opacity = '0'
+    const fly = el.animate(
+      [
+        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+        { transform: 'translate(0, -10px) scale(1.02)', opacity: 1, offset: 0.18 },
+        { transform: `translate(${dx * 0.35}px, ${dy * 0.55}px) scale(0.7)`, opacity: 1, offset: 0.6 },
+        { transform: `translate(${dx}px, ${dy}px) scale(0.25)`, opacity: 0.2 },
+      ],
+      { duration: 700, easing: 'cubic-bezier(0.5, 0, 0.3, 1)', fill: 'forwards' },
+    )
+    fly.onfinish = () => {
+      setSlip(null)
+      // Landed: the card it went into gives a small nod.
+      if (!onScreen) return
+      row!.style.opacity = ''
+      card!.animate([{ transform: 'scale(1.03)' }, { transform: 'scale(1)' }], { duration: 260, easing: 'ease-out' })
+    }
+    return () => {
+      fly.cancel()
+      if (row) row.style.opacity = ''
+    }
+  }, [slip])
+  const still = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
+
   const add = () => {
     const t = text.trim()
     if (!t) return box.current?.focus()
     const r = wrap.current?.getBoundingClientRect()
-    if (r) setSlip({ text: t, top: r.top, left: r.left, width: r.width, n: (slip?.n ?? 0) + 1 })
+    if (r && !still()) setSlip({ text: t, top: r.top, left: r.left, width: r.width, n: (slip?.n ?? 0) + 1 })
     onAdd(t)
     setText('')
   }
@@ -58,9 +100,9 @@ export function MomentBox({ placeholder, onAdd }: Props) {
         createPortal(
           <div
             key={slip.n}
+            ref={flying}
             className="moment-slip"
             style={{ top: slip.top, left: slip.left, width: slip.width }}
-            onAnimationEnd={() => setSlip(null)}
             aria-hidden="true"
           >
             {slip.text}

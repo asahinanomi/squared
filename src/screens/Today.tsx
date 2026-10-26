@@ -271,7 +271,7 @@ export function Today(props: Props) {
   )
 
   return (
-    <main className="today">
+    <main className={'today' + (day ? ' is-closed' : '')}>
       <div
         className="today-stage"
         style={lift === undefined ? undefined : { paddingTop: lift }}
