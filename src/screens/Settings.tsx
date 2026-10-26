@@ -139,7 +139,7 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
       {asking && (
         <ConfirmDialog
           title="Delete your account?"
-          body={"Your squares, moments, lists and settings go for good.\nIt can't be undone."}
+          body={"Everything goes for good.\nIt can't be undone."}
           confirm="delete"
           typeToConfirm="delete"
           typeLabel={'have your copy, or don’t need one?\ntype “delete” to go ahead'}

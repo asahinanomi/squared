@@ -2342,6 +2342,7 @@ body[data-screen='questions'] .idea {
 /* A typeLabel may break onto two lines ("\n"). */
 .confirm-type > span {
   white-space: pre-line;
+  color: var(--ink-soft); /* part of the message, so the body's ink, not helper grey */
 }
 .confirm-export {
   width: 100%;
