@@ -53,6 +53,8 @@ type Props = {
   onZoomOut: () => void
   /** Off to my days → what matters, to edit the compass. */
   onMatters: () => void
+  /** "how many squares?", from the day finder (without a birth date, its years start at your first square's). */
+  onSetUp?: () => void
   /** Someone's first visit: the colours, once, in a sheet (each square is a day, what each colour means). Read when
    *  the day opens; "got it" closes it for good. */
   intro?: boolean
@@ -324,6 +326,7 @@ export function Today(props: Props) {
                 setSlide(null)
                 onDate(iso)
               }}
+              onSetUp={props.onSetUp}
             />
           </div>
           {special && <p className="day-special">{special}</p>}

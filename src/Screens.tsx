@@ -88,6 +88,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onPinNote={act.onPinNote}
         onZoomOut={nav.outOfDay}
         onMatters={() => nav.openMatters('today')}
+        onSetUp={() => nav.askSquares('today')}
         // Someone new (nothing painted, squares not set): the colours, once. ?welcome shows it on any account.
         intro={tryWelcome || (!profile && Object.keys(days).length === 0 && !introSeen())}
         onIntroDone={() => {
@@ -148,7 +149,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         why={
           nav.afterSetup === 'life' || nav.afterSetup === 'pie'
             ? 'To see your whole life at once, squared needs two answers.'
-            : nav.afterSetup === 'month' || nav.afterSetup === 'year' || nav.afterSetup === 'list'
+            : nav.afterSetup === 'month' || nav.afterSetup === 'year' || nav.afterSetup === 'list' || nav.afterSetup === 'today'
               ? 'To go further back, squared needs two answers.'
               : undefined
         }

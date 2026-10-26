@@ -95,6 +95,12 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
           <Chevron dir="right" />
         </button>
       </div>
+      {/* Without a birth date: the way further back, under the title (where the capsule sits on the list). */}
+      {!born && onSetUp && (
+        <button className="ladder-setup" onClick={onSetUp}>
+          set your birth date to go further back ›
+        </button>
+      )}
       <div className="month-grid is-weekdays" aria-hidden="true" hidden={zoomed}>
         {WEEKDAYS.map((d, i) => (
           <span key={i}>{d}</span>
@@ -109,11 +115,6 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
           toToday.check()
         }}
       >
-        {!born && back >= maxBack && onSetUp && (
-          <button className="ladder-setup" onClick={onSetUp}>
-            set your birth date to go further back ›
-          </button>
-        )}
         {months.map((m) => (
           <section key={m} className="month-block" data-key={m}>
             <div className="ladder-label month-label">

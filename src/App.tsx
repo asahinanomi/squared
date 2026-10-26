@@ -165,6 +165,7 @@ export default function App() {
               setWhy(null)
               nav.openDay(iso)
             }}
+            onSetUp={() => nav.askSquares('today')}
           />
           {withPainting.includes(screen) && (
             <MonthPainting

@@ -1,6 +1,6 @@
 import { fromIso, isoDate } from './dates'
 
-export const DEFAULT_LIFESPAN = 95
+export const DEFAULT_LIFESPAN = 85
 
 /** Whole days from a to b (both YYYY-MM-DD), ignoring time zones and clock changes. */
 export function daysBetween(a: string, b: string): number {

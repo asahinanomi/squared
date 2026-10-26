@@ -93,6 +93,11 @@ export function Year({ days, born, focus, onPick, onIn, onOut, onPainting, onSet
           <Chevron dir="right" />
         </button>
       </div>
+      {!born && onSetUp && (
+        <button className="ladder-setup" onClick={onSetUp}>
+          set your birth date to go further back ›
+        </button>
+      )}
 
       <div
         className="ladder-scroll"
@@ -102,11 +107,6 @@ export function Year({ days, born, focus, onPick, onIn, onOut, onPainting, onSet
           toToday.check()
         }}
       >
-        {!born && back >= maxBack && onSetUp && (
-          <button className="ladder-setup" onClick={onSetUp}>
-            set your birth date to go further back ›
-          </button>
-        )}
         {years.map((y) => (
           <section key={y} className="year-block" data-key={String(y)}>
             <div className="ladder-label month-label">

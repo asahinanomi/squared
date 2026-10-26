@@ -13,6 +13,8 @@ type Props = {
   born?: string
   days: Days
   onPick: (iso: string) => void
+  /** Without a birth date the years start at your first square's: the way to set one, to go further back. */
+  onSetUp?: () => void
 }
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -23,7 +25,7 @@ const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`
 
 // Find a day from your past the way memory does: which year (with how old you were), which month, then the day.
 // Opened from the date on the day screen; painted days show their colour, so you can see what's there already.
-export function DayFinder({ open, onClose, date, today, born, days, onPick }: Props) {
+export function DayFinder({ open, onClose, date, today, born, days, onPick, onSetUp }: Props) {
   const [step, setStep] = useState<'year' | 'month' | 'day'>('year')
   const [year, setYear] = useState(Number(date.slice(0, 4)))
   const [month, setMonth] = useState(Number(date.slice(5, 7)))
@@ -72,7 +74,7 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
     <Sheet open={open} onClose={onClose}>
       <div className="finder">
         <div className="finder-head">
-          <h2 className="sheet-title">
+          <h2 className="torn-title">
             {step === 'year' ? 'which year?' : step === 'month' ? 'which month?' : 'which day?'}
           </h2>
           {/* What's chosen so far, on the right, apart from the question, growing as you go: "2010", "Feb 2010",
@@ -126,6 +128,18 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
               </li>
             ))}
           </ul>
+        )}
+        {/* Without a birth date the years start at your first square's: a nudge to go further back. */}
+        {step === 'year' && !born && onSetUp && (
+          <button
+            className="ladder-setup is-in-finder"
+            onClick={() => {
+              onClose()
+              onSetUp()
+            }}
+          >
+            set your birth date to go further back ›
+          </button>
         )}
 
         {step === 'month' && (
