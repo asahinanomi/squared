@@ -107,7 +107,7 @@ export function Today(props: Props) {
   const day = days[date]
   const special = specialDay(date, born)
 
-  // On each dip, the color's meaning whispers under the palette, then fades (sooner if painting starts).
+  // On each dip, the color's meaning rises from the bottom of the screen, then goes (sooner if painting starts).
   const [whisper, setWhisper] = useState<{ paint: Paint; at: number } | null>(null)
   const [whispering, setWhispering] = useState(false)
   const [wiping, setWiping] = useState(false)
@@ -410,14 +410,18 @@ export function Today(props: Props) {
               !day && (
                 <>
                   <Palette loaded={loaded} nudge={nudge} onLoad={dip} />
-                  <p className={'whisper' + (whispering ? ' is-on' : '')} aria-live="polite">
-                    {whisper && (
-                      <>
-                        <span className="whisper-dot" style={{ background: paintHex(whisper.paint) }} />
-                        {PAINTS.find((x) => x.id === whisper.paint)!.meaning}
-                      </>
-                    )}
-                  </p>
+                  {/* The colour's meaning rises from the bottom, like the day's other help, and never sits in the day. */}
+                  {createPortal(
+                    <p className={'whisper' + (whispering && !compassOpen ? ' is-on' : '')} aria-live="polite">
+                      {whisper && (
+                        <>
+                          <span className="whisper-dot" style={{ background: paintHex(whisper.paint) }} />
+                          {PAINTS.find((x) => x.id === whisper.paint)!.meaning}
+                        </>
+                      )}
+                    </p>,
+                    document.body,
+                  )}
                 </>
               )
             )}

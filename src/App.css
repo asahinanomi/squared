@@ -943,14 +943,30 @@
   text-underline-offset: 4px;
 }
 .whisper {
-  min-height: 1.4em;
-  margin: 6px 0 0;
-  font-size: 14px;
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  bottom: calc(max(calc(env(safe-area-inset-bottom) - 10px), 8px) + 4px); /* over the bottom bar, clear of the paint */
+  width: max-content;
+  max-width: calc(100vw - 48px);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow:
+    inset 0 0 0 1px #e2e2db,
+    0 8px 24px rgba(20, 20, 19, 0.12);
+  font-size: 15px;
   line-height: 1.4;
-  color: var(--ink-soft);
+  color: var(--ink);
   text-align: center;
+  pointer-events: none;
   opacity: 0;
-  transition: opacity 0.6s;
+  transform: translate(-50%, 16px);
+  transition:
+    opacity 0.4s,
+    transform 0.4s ease-in;
 }
 .whisper-dot {
   display: inline-block;
@@ -963,7 +979,10 @@
 }
 .whisper.is-on {
   opacity: 1;
-  transition-duration: 0.25s;
+  transform: translate(-50%, 0);
+  transition:
+    opacity 0.25s,
+    transform 0.3s ease-out;
 }
 
 /* Torn: the question, then your whole compass, in a sheet. */
@@ -1073,7 +1092,7 @@
 /* ---------- note under the square ---------- */
 .notes {
   width: min(100%, 360px);
-  margin-top: 12px; /* with the palette's meaning line above it: the group gap, as box → question */
+  margin-top: 36px; /* the group gap, as box → question */
   display: flex;
   flex-direction: column;
   align-items: center;
