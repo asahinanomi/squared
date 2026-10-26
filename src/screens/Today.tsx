@@ -543,10 +543,12 @@ export function Today(props: Props) {
             </button>
           )}
           <div className="today-zoom-pair">
-            {/* A day is as close as it gets: only the way out (no greyed-out way in). */}
+            {/* A day is as close as it gets: only the way out, kept in the same spot as on every other level (the
+                way in's place stays empty, not greyed out). */}
             <button aria-label="Zoom out" onClick={onZoomOut}>
               <ZoomOutIcon />
             </button>
+            <span className="today-zoom-slot" aria-hidden="true" />
           </div>
         </div>
       )}

@@ -1859,11 +1859,16 @@ body[data-screen='questions'] .idea {
   justify-content: space-between;
 }
 .today-zoom-left {
-  width: 40px; /* the zoom-out button's width, so "today" sits in the centre */
+  width: 90px; /* the pair and its margin, so "today" sits in the centre */
 }
+/* The same pair as every other level (2px apart), so zoom out never moves; the way in's place is empty. */
 .today-zoom-pair {
   display: flex;
-  gap: 6px;
+  gap: 2px;
+  margin-right: 8px; /* lands on the other bars' pair, to the pixel */
+}
+.today-zoom-slot {
+  width: 40px;
 }
 .today-zoom .zoombar-today {
   width: auto;
@@ -3402,7 +3407,7 @@ button.settings-row:active {
 .days-month.is-card .day-card {
   padding: 16px 2px;
   border-radius: 0;
-  border-bottom: 1px solid #dcdcd4; /* a clear line between days: each one its own entry */
+  border-bottom: 1px solid #c9c9c2; /* a clear line between days, stronger than the dotted one between moments */
 }
 .days-month.is-card li:last-child .day-card {
   border-bottom: 0;
@@ -3508,7 +3513,7 @@ button.settings-row:active {
   flex-direction: column;
   gap: 4px;
   padding: 18px 0;
-  border-top: 1px dotted #d9d9d2;
+  border-top: 1px dotted #e2e2db;
 }
 .day-card-entry:first-child {
   padding-top: 14px;
