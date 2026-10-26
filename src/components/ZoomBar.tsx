@@ -136,11 +136,13 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
         </button>
       )}
       <div className="zoombar-buttons">
-        <button aria-label="Zoom out" disabled={!onOut} onClick={onOut}>
-          <ZoomOutIcon />
-        </button>
+        {/* Zoom out is always the far right, where it is on the day screen (its only button), lined up with the menu;
+            zoom in sits to its left. */}
         <button aria-label="Zoom in" disabled={!onIn} onClick={onIn}>
           <ZoomInIcon />
+        </button>
+        <button aria-label="Zoom out" disabled={!onOut} onClick={onOut}>
+          <ZoomOutIcon />
         </button>
       </div>
     </div>
