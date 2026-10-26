@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react'
 import { PaintingThumb } from '../components/PaintingThumb'
 import { WeekCard } from '../components/WeekCard'
 import { todayIso } from '../lib/dates'
@@ -55,18 +54,22 @@ export function MyDays({
   const framed = Object.values(days).some((d) => d.framed)
   // Each row opens its page; `empty` is an empty slot (dashed). Not set up yet: its sub says what it is, and "set up
   // now" sits at the far right with the arrow.
-  const row = (label: string, sub: string, go: () => void, empty?: 'set up' | 'none', lead?: ReactNode) => (
-    <button className={'settings-row' + (empty ? ' is-empty' : '')} onClick={go}>
-      <span className={lead ? 'settings-lead' : undefined}>
-        {lead}
-        <span className="settings-text">
-          <span className="settings-label">{label}</span>
-          <span className="settings-sub">{sub}</span>
-        </span>
+  const row = (label: string, sub: string, go: () => void, empty?: 'set up' | 'none') => {
+    const text = (
+      <span className="settings-text">
+        <span className="settings-label">{label}</span>
+        <span className="settings-sub">{sub}</span>
       </span>
-      {empty === 'set up' ? <SetUp /> : <Chevron dir="right" />}
-    </button>
-  )
+    )
+    // Nothing there yet: a quiet line, not a door to a blank page (its sub says how to fill it).
+    if (empty === 'none') return <div className="settings-row is-empty is-quiet">{text}</div>
+    return (
+      <button className={'settings-row' + (empty ? ' is-empty' : '')} onClick={go}>
+        {text}
+        {empty === 'set up' ? <SetUp /> : <Chevron dir="right" />}
+      </button>
+    )
+  }
   return (
     <main className="settings my-days">
       {/* The logo and the menu already go to today: the title stands alone. */}
@@ -150,10 +153,15 @@ export function MyDays({
               <span className="home-s">{count(year)} days in colour</span>
             </button>
           )}
-          <button className="my-days-all" onClick={onPaintings}>
-            {kept.length ? `all my paintings (${kept.length})` : 'all my paintings'}
-            <Chevron dir="right" />
-          </button>
+          {/* None kept yet: how to keep one, not a door to a blank page. */}
+          {kept.length ? (
+            <button className="my-days-all" onClick={onPaintings}>
+              all my paintings ({kept.length})
+              <Chevron dir="right" />
+            </button>
+          ) : (
+            <p className="my-days-all is-quiet">keep a month’s painting once it’s over</p>
+          )}
         </section>
       )}
       <div className="settings-rows is-last">
@@ -162,16 +170,7 @@ export function MyDays({
           : row('what matters', 'what makes a day worth it', onMatters, 'set up')}
         {framed
           ? row('framed days', 'the days you framed', onFramed)
-          : row(
-              'framed days',
-              'none yet · frame a day you want to keep',
-              onFramed,
-              'none',
-              // A ghost of a framed square: what will hang here.
-              <span className="framed-ghost" aria-hidden="true">
-                <i />
-              </span>,
-            )}
+          : row('framed days', 'none yet · frame a day you want to keep', onFramed, 'none')}
       </div>
     </main>
   )

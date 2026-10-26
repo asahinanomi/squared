@@ -4259,6 +4259,11 @@ button.home-card:active {
   font-size: 15px;
   color: var(--ink);
 }
+.home-paintings .my-days-all.is-quiet {
+  margin-bottom: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
 .home-paintings .my-days-all svg {
   flex: none;
   width: 20px;
@@ -4636,11 +4641,6 @@ button.home-card:active {
   gap: 3px;
   min-width: 0;
 }
-.settings-row > span.settings-lead {
-  flex-direction: row;
-  align-items: center;
-  gap: 14px;
-}
 /* "set up now ›": at the far right of a row (or the card's head), where its arrow is, the two one group. */
 .settings-row > span.set-up-now,
 .set-up-now {
@@ -4706,29 +4706,6 @@ button.home-card:active {
   margin: 12px 0 4px;
   font-size: 17px;
   font-weight: 500;
-}
-/* No framed days yet: a ghost of one, a small square in a faint frame. */
-.framed-ghost {
-  flex-shrink: 0;
-  width: 42px;
-  height: 42px;
-  box-sizing: border-box;
-  padding: 3px;
-  border: 3px solid var(--faint);
-  border-radius: 3px;
-}
-/* A kept painting's ghost: a grey frame and a pale mat, as the paintings hang. */
-.framed-ghost.is-painting {
-  padding: 4px;
-  border-width: 4px;
-  border-radius: 2px;
-}
-.framed-ghost i {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 1px;
-  background: #e2e2db;
 }
 /* The pie, opened from my days: its way back, at the top left. */
 .pie-back {
