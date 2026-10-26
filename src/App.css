@@ -306,7 +306,7 @@
 }
 .signin-agree button {
   font-size: 13px;
-  color: var(--ink-soft);
+  color: inherit; /* one grey for the whole line; the dotted underline says it's a link */
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 3px;
 }
