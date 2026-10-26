@@ -25,12 +25,14 @@ const BRUSH = 0.58
 // Coverage is tracked on a coarse grid; this much painted counts as filled.
 const GRID = 24
 const FLOW_MS = 450
+const SIGN_MS = 2000 // the word and its sound, once the paint is mostly dry (in step with the CSS)
 const FILLED = 0.9 // most of it painted; the wet paint flows into the gaps left
 
 // When a square last filled (performance.now()) and its strokes as they were: the square that mounts with the saved
 // colour picks the drying up, the wet strokes fading into the flat colour under them.
 let filledAt = -1e9
 let wetStrokes = ''
+let wetPaint: Paint = 'green'
 
 // The ghost brush's stroke: two sweeps across the square, each rising from left to right, like painting it.
 const GHOST = 'M18 46 L82 28 L18 68 L82 50'
@@ -265,8 +267,8 @@ export function PaintCanvas({
     const done = () => {
       flowing.current = false
       wetStrokes = c?.toDataURL() ?? ''
+      wetPaint = p
       setSettling(p)
-      settleSound(p)
     }
     if (!c || !g) return done()
     flowing.current = true
@@ -325,14 +327,19 @@ export function PaintCanvas({
     }, 520)
     return () => clearTimeout(t)
   }, [settling])
-  // Just filled: the paint is still wet (a soft sheen, a shade deeper), then it dries matte and the day's word signs
-  // the corner. Only on the stroke that filled it, never when a painted day opens. Saving a new colour remounts the
-  // square, so the moment it filled is kept outside it.
+  // Just filled: the paint is still wet (a shade deeper), then it dries smooth, and the day's word signs the corner
+  // together with its sound (the drop, the knock, the sand): the answer arrives as one. Only on the stroke that filled
+  // it, never when a painted day opens. Saving a new colour remounts the square, so the moment it filled is kept
+  // outside it.
   const [drying, setDrying] = useState(() => performance.now() - filledAt < 400)
   useEffect(() => {
     if (!drying) return
+    const sound = setTimeout(() => settleSound(wetPaint), Math.max(0, SIGN_MS - (performance.now() - filledAt)))
     const t = setTimeout(() => setDrying(false), 4000)
-    return () => clearTimeout(t)
+    return () => {
+      clearTimeout(sound)
+      clearTimeout(t)
+    }
   }, [drying])
 
   return (
