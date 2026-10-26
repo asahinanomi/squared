@@ -102,8 +102,8 @@ export default function App() {
   if (!signedIn && deleted) return <Deleted onDone={() => setDeleted(false)} />
   if (!signedIn) return <SignedOut error={authError} onDemoSignIn={() => setDemoIn(true)} />
 
-  const oneScreen = ['month', 'year', 'life', 'pie', 'list'].includes(screen)
-  const withPainting: Screen[] = ['today', 'month', 'year', 'life', 'list', 'paintings', 'mydays']
+  const oneScreen = ['month', 'life', 'pie', 'list'].includes(screen)
+  const withPainting: Screen[] = ['today', 'month', 'life', 'list', 'paintings', 'mydays']
 
   return (
     <ViewSwitch.Provider

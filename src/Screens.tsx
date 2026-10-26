@@ -23,7 +23,6 @@ import { Setup } from './screens/Setup'
 import { Terms } from './screens/Terms'
 import { Today } from './screens/Today'
 import { WhatMatters } from './screens/WhatMatters'
-import { Year } from './screens/Year'
 import { demo, endWelcomeTest, introSeen, markIntroSeen, tryWelcome } from './state/app'
 import type { Account } from './state/useAccount'
 import type { useDayActions } from './state/useDayActions'
@@ -149,10 +148,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         why={
           nav.afterSetup === 'life' || nav.afterSetup === 'pie'
             ? 'To see your whole life at once, squared needs two answers.'
-            : nav.afterSetup === 'month' ||
-                nav.afterSetup === 'year' ||
-                nav.afterSetup === 'list' ||
-                nav.afterSetup === 'today'
+            : nav.afterSetup === 'month' || nav.afterSetup === 'list' || nav.afterSetup === 'today'
               ? 'To go further back, squared needs two answers.'
               : undefined
         }
@@ -260,26 +256,13 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onBack={nav.openMyDays}
       />
     )
-  if (screen === 'year')
-    return (
-      <Year
-        days={days}
-        born={profile?.born}
-        focus={nav.yearFocus}
-        onPick={(m) => nav.goMonth(m)}
-        onIn={() => nav.goMonth()}
-        onOut={nav.goLife}
-        onPainting={openPainting}
-        onSetUp={() => nav.askSquares('year')}
-      />
-    )
   if (screen === 'life' && profile)
     return lifeRes === 'days' ? (
       <LifeDays
         days={days}
         profile={profile}
         onPick={(iso) => nav.openDay(iso)}
-        onIn={() => nav.goYear()}
+        onIn={() => nav.goMonth()}
         onResolution={setLifeRes}
         cols={[28, 14, 7, 3][mag]}
         focal={focal}
@@ -291,7 +274,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         days={days}
         profile={profile}
         onPick={(m) => nav.goMonth(m)}
-        onIn={() => nav.goYear()}
+        onIn={() => nav.goMonth()}
         onResolution={setLifeRes}
         cols={[12, 6, 4, 3][mag]}
         focal={focal}
@@ -300,8 +283,8 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
       <Life
         days={days}
         profile={profile}
-        onPick={(y) => nav.goYear(y)}
-        onIn={() => nav.goYear()}
+        onPick={(y) => nav.goMonth(`${y}-${todayIso().slice(5, 7)}-01`)}
+        onIn={() => nav.goMonth()}
         onResolution={setLifeRes}
       />
     )
@@ -312,7 +295,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
       focus={nav.monthFocus}
       onPick={(iso) => nav.openDay(iso)}
       onIn={nav.goToday}
-      onOut={() => nav.goYear()}
+      onOut={nav.goLife}
       zoomed={mag > 0}
       anchor={nav.monthAnchor}
       onPainting={openPainting}

@@ -19,7 +19,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const [motion, setMotion] = useState<'in' | 'out' | null>(null)
   // The month to open on when zooming in from a year (zooming out always lands on today's).
   const [monthFocus, setMonthFocus] = useState<string | undefined>()
-  const [yearFocus, setYearFocus] = useState<number | undefined>()
   // Which view of a life: one square per year (where a life always lands), month or day.
   const [lifeRes, setLifeResValue] = useState<Resolution>('years')
   // A level's own size: pinching no longer enlarges within a level (it steps between levels), so this stays 0.
@@ -98,10 +97,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setDayFromList(false)
     setScreen('list')
   }
-  const goYear = (focus?: number) => {
-    setYearFocus(focus)
-    setScreen('year')
-  }
   /** "how many squares?", then on to `then`. */
   const askSquares = (then: Screen) => {
     setAfterSetup(then)
@@ -120,7 +115,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     askSquares('life')
   }
   // The list of days, the same way: open it on the day you were looking at, and its switch takes you back.
-  // It opens at the level that matches the squares (a life → years, a year → months, a month → days); its
+  // It opens at the level that matches the squares (a life → its tab: years, months or days; a month → days); its
   // switch goes back where you came from, or — if you zoomed within the list — to the squares at that level.
   const toggleList = (at?: string) => {
     setLifeBack(false)
@@ -128,11 +123,12 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     if (screen === 'list') {
       if (!listZoomed) return setScreen(listFrom)
       if (listRes === 'days') return goMonth(day)
-      if (listRes === 'months') return goYear(Number(day.slice(0, 4)))
-      return goLife()
+      if (!profile) return goMonth(day)
+      setLifeResValue(listRes)
+      return setScreen('life')
     }
     const from = screen === 'pie' ? pieFrom : screen
-    const res: Resolution = from === 'life' ? lifeRes : from === 'year' ? 'months' : 'days'
+    const res: Resolution = from === 'life' ? lifeRes : 'days'
     setListFrom(from)
     setListOnly(null)
     setListRes(res)
@@ -214,12 +210,12 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   // Back from how many squares: wherever it was asked from.
   const leaveSetup = () =>
     afterSetup === 'life'
-      ? setScreen('year')
+      ? setScreen('month')
       : afterSetup === 'pie'
         ? setScreen(pieFrom)
         : afterSetup === 'settings' || afterSetup === 'mydays'
           ? setScreenValue(afterSetup)
-          : afterSetup === 'month' || afterSetup === 'year' || afterSetup === 'list'
+          : afterSetup === 'month' || afterSetup === 'list'
             ? setScreen(afterSetup)
             : goToday()
   // Saved how many squares the first time: on to what asked for it (a life, the pie, back to my days).
@@ -227,7 +223,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     if (afterSetup === 'pie') setScreen('pie')
     else if (afterSetup === 'life') setScreen('life')
     else if (afterSetup === 'mydays') setScreenValue('mydays')
-    else if (afterSetup === 'month' || afterSetup === 'year' || afterSetup === 'list') setScreen(afterSetup)
+    else if (afterSetup === 'month' || afterSetup === 'list') setScreen(afterSetup)
     else if (afterSetup !== 'settings') goToday()
   }
   const openLegal = (page: Legal, from: Screen) => {
@@ -254,23 +250,21 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
         ? 'about'
         : 'back'
 
-  // Pinch does what the zoom buttons do, one level at a time: day ↔ month ↔ year ↔ a life (in years). A life in
-  // months or days comes only from its tabs (pinching in there goes to the year); the list has no zoom (its tabs).
+  // Pinch does what the zoom buttons do, one level at a time: day ↔ month ↔ a life (in years). A life in
+  // months or days comes only from its tabs (pinching in there goes to this month); the list has no zoom (its tabs).
   const pinchIn = () => {
     if (screen === 'month') goToday()
-    else if (screen === 'year') goMonth()
     else if (screen === 'pie') {
       // On the pie, closer means fewer days counted: whole life → days I lived → painted only.
       const i = SCOPE_ORDER.indexOf(pieScope)
       if (i >= SCOPE_ORDER.length - 1) return false
       setPieScope(SCOPE_ORDER[i + 1])
-    } else if (screen === 'life') goYear()
+    } else if (screen === 'life') goMonth()
     else return false
   }
   const pinchOut = () => {
     if (screen === 'today') outOfDay()
-    else if (screen === 'month') goYear()
-    else if (screen === 'year') goLife()
+    else if (screen === 'month') goLife()
     else if (screen === 'pie') {
       const i = SCOPE_ORDER.indexOf(pieScope)
       if (i <= 0) return false
@@ -299,7 +293,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     focal,
     monthFocus,
     monthAnchor,
-    yearFocus,
     lifeRes,
     setLifeRes,
     pieScope,
@@ -315,7 +308,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     goToday,
     goHome,
     goMonth,
-    goYear,
     goLife,
     openDay,
     outOfDay,

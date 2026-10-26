@@ -1900,7 +1900,6 @@ body[data-screen='questions'] .idea {
   position: relative;
 }
 .month,
-.year,
 .life {
   flex: 1;
   min-height: 0;
@@ -1942,9 +1941,8 @@ body[data-screen='questions'] .idea {
   justify-content: space-between;
   text-align: left;
 }
-/* On the squares (month and year), the name is a chapter: ink, bold, like the list's, with room above. */
-.month-block .month-label,
-.year-block .month-label {
+/* On the month's squares, the name is a chapter: ink, bold, like the list's, with room above. */
+.month-block .month-label {
   margin-top: 12px;
   font-size: 15px;
   font-weight: 600;
@@ -1987,8 +1985,7 @@ body[data-screen='questions'] .idea {
   padding-bottom: 40vh;
   mask-image: linear-gradient(to bottom, #000, transparent 60%);
 }
-.month-block.is-faint .ladder-label,
-.year-block.is-faint .ladder-label {
+.month-block.is-faint .ladder-label {
   color: var(--faint);
 }
 
@@ -2135,52 +2132,6 @@ body[data-screen='questions'] .idea {
   }
 }
 
-/* ---------- a year: 12 banded month-squares ---------- */
-.year-block {
-  padding: 14px 0 12px;
-}
-.year-block.is-faint {
-  padding-bottom: 22vh;
-  mask-image: linear-gradient(to bottom, #000, transparent 70%);
-}
-.year-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 9px;
-}
-.year-month {
-  position: relative;
-  aspect-ratio: 1;
-  border-radius: 6px;
-  overflow: hidden;
-  display: grid;
-  place-items: center;
-  font-size: 14px;
-  font-weight: 600;
-  background: #eeeee8; /* lived, nothing painted */
-  color: var(--muted);
-}
-.year-month.is-ahead {
-  background: #efefea;
-  color: var(--faint);
-}
-.year-month.is-before {
-  background: transparent;
-  color: #d4d4cd;
-}
-.year-block.is-faint .year-month.is-ahead {
-  background: #f1f1ec;
-  color: var(--faint);
-  font-size: 12px;
-}
-.year-month.is-current {
-  overflow: visible;
-  outline: 2px solid var(--ink);
-  outline-offset: 1.5px;
-}
-.year-month:not(:disabled):active {
-  transform: scale(0.95);
-}
 /* Rising bands: green from the bottom, then grey, then red; unpainted days stay empty on top. */
 .bands {
   position: absolute;
@@ -2192,15 +2143,6 @@ body[data-screen='questions'] .idea {
 }
 .bands > span {
   flex-basis: 0;
-}
-.year-month-name {
-  position: relative;
-  color: #24241f;
-  text-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
-}
-.year-month.is-blank .year-month-name {
-  color: var(--ink-soft); /* on a grey tile */
-  text-shadow: none;
 }
 .month-grid {
   display: grid;

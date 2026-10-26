@@ -5,7 +5,6 @@ import { supabase } from '../lib/supabase'
 export type Screen =
   | 'today'
   | 'month'
-  | 'year'
   | 'life'
   | 'pie'
   | 'list'
@@ -21,7 +20,7 @@ export type Screen =
   | 'framed'
   | 'mydays'
 /** The zoom ladder, closest first. Zooming out always lands on (and centres) today. */
-export const LADDER: Screen[] = ['today', 'month', 'year', 'life']
+export const LADDER: Screen[] = ['today', 'month', 'life']
 /** Settings and the pages it opens. */
 export const PAGES: Screen[] = [
   'settings',
