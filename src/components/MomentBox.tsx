@@ -43,18 +43,18 @@ export function MomentBox({ placeholder, onAdd }: Props) {
     const fly = el.animate(
       [
         { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-        { transform: 'translate(0, -10px) scale(1.02)', opacity: 1, offset: 0.18 },
-        { transform: `translate(${dx * 0.35}px, ${dy * 0.55}px) scale(0.7)`, opacity: 1, offset: 0.6 },
-        { transform: `translate(${dx}px, ${dy}px) scale(0.25)`, opacity: 0.2 },
+        { transform: 'translate(0, -14px) scale(1.03)', opacity: 1, offset: 0.2 },
+        { transform: `translate(${dx * 0.35}px, ${dy * 0.55}px) scale(0.75)`, opacity: 1, offset: 0.65 },
+        { transform: `translate(${dx}px, ${dy}px) scale(0.4)`, opacity: 0.7 },
       ],
-      { duration: 700, easing: 'cubic-bezier(0.5, 0, 0.3, 1)', fill: 'forwards' },
+      { duration: 1200, easing: 'cubic-bezier(0.45, 0, 0.35, 1)', fill: 'forwards' },
     )
     fly.onfinish = () => {
       setSlip(null)
       // Landed: the card it went into gives a small nod.
       if (!onScreen) return
       row!.style.opacity = ''
-      card!.animate([{ transform: 'scale(1.03)' }, { transform: 'scale(1)' }], { duration: 260, easing: 'ease-out' })
+      card!.animate([{ transform: 'scale(1.05)' }, { transform: 'scale(1)' }], { duration: 400, easing: 'ease-out' })
     }
     return () => {
       fly.cancel()

@@ -117,8 +117,9 @@ export function Today(props: Props) {
     const t = setTimeout(() => setWhispering(false), 3500)
     return () => clearTimeout(t)
   }, [whisper])
-  // Torn between green and red: on the third dip into them (both among them), whatever the brush held before,
-  // a question to settle it, and your own compass. Grey dips don't count.
+  // Torn between green and red: on the third dip into them (both among them), whatever the brush held before, a
+  // sheet rises from the bottom (like "meaningful") with a question to settle it, and your own compass. Once a day;
+  // grey dips don't count.
   const dips = useRef<Paint[]>([])
   const [torn, setTorn] = useState(false)
   useEffect(() => {
@@ -148,11 +149,13 @@ export function Today(props: Props) {
     setWhisper({ paint: p, at: Date.now() })
     if (p === 'grey') return
     const d = (dips.current = [...dips.current, p])
-    if (d.length >= 3 && d.includes('green') && d.includes('red')) setTorn(true)
+    if (!torn && d.length >= 3 && d.includes('green') && d.includes('red')) {
+      setTorn(true)
+      setCompassOpen(true)
+    }
   }
-  // Your own "mattered" entries; one is shown (the same all day, so it doesn't flicker), all in a sheet.
+  // Your own "mattered" entries, listed in the sheet.
   const compass = torn ? props.matters.meaningful.map((e) => e.text.trim()).filter(Boolean) : []
-  const pick = [...date].reduce((h, ch) => h + ch.charCodeAt(0), 0)
   const [compassOpen, setCompassOpen] = useState(false)
   useEffect(() => setCompassOpen(false), [date])
 
@@ -415,25 +418,6 @@ export function Today(props: Props) {
                       </>
                     )}
                   </p>
-                  {torn && (
-                    <div className="torn" aria-live="polite">
-                      <p className="torn-ask">torn? ask yourself:</p>
-                      <p className="torn-question">did what mattered outweigh the rest?</p>
-                      {/* Your compass: one line here, all of it in a sheet, so the day never grows. */}
-                      {compass.length ? (
-                        <>
-                          <p className="torn-mine">
-                            <span className="torn-pick">you said: “{compass[pick % compass.length]}”</span>
-                            {compass.length > 1 && (
-                              <button onClick={() => setCompassOpen(true)}>see all {compass.length}</button>
-                            )}
-                          </p>
-                        </>
-                      ) : (
-                        <p className="torn-mine">name what matters to you in my days → what matters</p>
-                      )}
-                    </div>
-                  )}
                 </>
               )
             )}
@@ -454,20 +438,25 @@ export function Today(props: Props) {
           />
         )}
         <Sheet open={compassOpen} onClose={() => setCompassOpen(false)}>
-          <h2 className="sheet-title">what matters to you</h2>
-          <p className="compass-sub">you said these matter to you</p>
-          <button className="compass-edit" onClick={props.onMatters}>
-            edit in my days → what matters
-          </button>
-          <hr className="compass-rule" />
-          <ul className="compass-list">
-            {compass.map((text, i) => (
-              <li key={i}>
-                <span className="compass-dot" style={{ background: paintHex('green') }} aria-hidden="true" />
-                {text}
-              </li>
-            ))}
-          </ul>
+          <h2 className="sheet-title">torn?</h2>
+          <p className="sheet-body">Ask yourself: did what mattered outweigh the rest?</p>
+          {compass.length ? (
+            <>
+              <p className="compass-sub">you said these matter to you</p>
+              <ul className="compass-list">
+                {compass.map((text, i) => (
+                  <li key={i}>
+                    <span className="compass-dot" style={{ background: paintHex('green') }} aria-hidden="true" />
+                    {text}
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <button className="compass-edit compass-name" onClick={props.onMatters}>
+              name what matters to you in my days → what matters
+            </button>
+          )}
           <button className="pill" onClick={() => setCompassOpen(false)}>
             close
           </button>

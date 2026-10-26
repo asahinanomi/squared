@@ -778,7 +778,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 0; /* the palette's own top (the brush) makes the square → palette gap match question → square */
+  margin-top: 0;
+}
+/* Square → palette board, the same 22px as question → square (the brush tip reaches a little higher). */
+.tray > .palette {
+  margin-top: 11px;
 }
 .tray-rest {
   width: 100%;
@@ -962,57 +966,9 @@
   transition-duration: 0.25s;
 }
 
-/* Torn between green and red: a question to settle it, and one line of your own compass. */
-.torn {
-  margin: 12px 0 36px; /* a clear pause before the day's notes, so the two never read as one block */
-  width: min(100%, 300px);
-  text-align: left; /* reads like a note to yourself, top to bottom */
-  animation: fade-in 0.3s ease-out;
-}
-.torn {
-  display: flex;
-  flex-direction: column;
-  gap: 4px; /* one even rhythm between the three lines */
-  line-height: 1.4;
-}
-.torn p {
-  margin: 0;
-}
-.torn-ask {
-  font-size: 14px;
-  color: var(--muted);
-}
-/* In the app's own voice (Inter), so it sits with the palette instead of over it. */
-.torn-question {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--ink);
-}
-/* One of your mattered entries, and the way to all of them. */
-.torn-mine {
-  font-size: 16px;
-  color: var(--ink-soft);
-}
-.torn-mine:has(.torn-pick) {
-  display: flex;
-  gap: 8px;
-}
-/* One line of yours, cut short if long; the whole list is a tap away. */
-.torn-pick {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.torn-mine button {
-  flex: none;
-  color: var(--ink-soft);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
-}
-/* Your whole compass, in a sheet. */
+/* Torn: the question, then your whole compass, in a sheet. */
 .compass-sub {
-  margin: -6px 0 0;
+  margin: 8px 0 14px;
   font-size: 16px;
   color: var(--ink-soft);
 }
@@ -1024,10 +980,10 @@
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
 }
-.compass-rule {
-  border: 0;
-  border-top: 1px dotted #c9c9c2;
-  margin: 14px 0 18px;
+.compass-name {
+  align-self: flex-start;
+  margin: 8px 0 28px;
+  text-align: left;
 }
 .compass-list {
   list-style: none;
