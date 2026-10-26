@@ -148,7 +148,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         why={
           nav.afterSetup === 'life' || nav.afterSetup === 'pie'
             ? 'To see your whole life at once, squared needs two answers.'
-            : nav.afterSetup === 'month' || nav.afterSetup === 'year'
+            : nav.afterSetup === 'month' || nav.afterSetup === 'year' || nav.afterSetup === 'list'
               ? 'To go further back, squared needs two answers.'
               : undefined
         }
@@ -198,13 +198,21 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
       />
     )
   if (screen === 'list') {
-    const head = profile && (
+    // Without a birth date, the capsule's place holds the way to set one (the list stops at your first square's year).
+    const head = profile ? (
       <LifeHead
         profile={profile}
         current={listRes}
         onPick={nav.listTo}
         onBack={nav.lifeBack ? nav.openMyDays : undefined}
       />
+    ) : (
+      <div className="life-head">
+        <h1 className="life-title">a life</h1>
+        <button className="ladder-setup is-in-head" onClick={() => nav.askSquares('list')}>
+          set your birth date to go further back ›
+        </button>
+      </div>
     )
     return listRes === 'days' ? (
       <DaysList
