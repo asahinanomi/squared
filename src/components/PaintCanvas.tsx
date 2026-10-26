@@ -286,7 +286,7 @@ export function PaintCanvas({
   const [drying, setDrying] = useState(() => performance.now() - filledAt < 400)
   useEffect(() => {
     if (!drying) return
-    const t = setTimeout(() => setDrying(false), 2600)
+    const t = setTimeout(() => setDrying(false), 4000)
     return () => clearTimeout(t)
   }, [drying])
 
