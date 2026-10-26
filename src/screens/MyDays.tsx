@@ -76,8 +76,6 @@ export function MyDays({
       <h1 className="settings-title">my days</h1>
       {/* squared's line, the page's epigraph: what follows is the past; today is beside it. The tagline candidate. */}
       <p className="my-days-line">The past is painted. Today is still yours.</p>
-      {/* This week first, the nearest look back (it lived on home, which was cut): swipe or ‹ › for earlier weeks. */}
-      <WeekCard days={days} born={profile?.born} onDay={onDay} />
       {/* Before the squares are set: a ghost of the bar (lived solid, ahead dotted, today between), so it's clear
           what's waiting, under the question; "set up now" at the top right, where its arrow will be. */}
       {!profile && (
@@ -136,6 +134,8 @@ export function MyDays({
             </button>
           )
         })()}
+      {/* This week, after a life: the close-up, the nearest look back (it lived on home, which was cut): swipe or ‹ › for earlier weeks. */}
+      <WeekCard days={days} born={profile?.born} onDay={onDay} />
       {/* This month and this year so far, and the way to every painting you kept (the old "paintings" row). */}
       {(hasMonth || hasYear || kept.length > 0) && (
         <section className="home-card home-paintings my-days-paintings">
