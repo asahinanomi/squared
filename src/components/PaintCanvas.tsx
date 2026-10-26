@@ -24,7 +24,8 @@ type Props = {
 const BRUSH = 0.58
 // Coverage is tracked on a coarse grid; this much painted counts as filled.
 const GRID = 24
-const FILLED = 0.88
+const FLOW_MS = 450
+const FILLED = 0.97 // you paint essentially all of it; the wet paint flows into the last specks you'd never find
 
 // When a square last filled (performance.now()) and its strokes as they were: the square that mounts with the saved
 // colour picks the drying up, the wet strokes fading into the flat colour under them.
@@ -95,6 +96,7 @@ export function PaintCanvas({
   const fingers = useRef(new Set<number>())
   const before = useRef<{ img: ImageData; covered: Uint8Array } | null>(null)
   const [settling, setSettling] = useState<Paint | null>(null)
+  const flowing = useRef(false)
   const moved = useRef<{ x: number; y: number; t: number } | null>(null)
   // The word steps aside once the brush touches the square (a new color is on its way).
   const [touched, setTouched] = useState(false)
@@ -185,7 +187,7 @@ export function PaintCanvas({
       brushStop()
       return
     }
-    if (settling) return
+    if (settling || flowing.current) return
     const p = point(e)
     const s = size.current
     e.currentTarget.setPointerCapture(e.pointerId)
@@ -251,11 +253,35 @@ export function PaintCanvas({
     brushStop()
     wakeSound() // iPhone allows sound from a lifted finger, if the touch-down was too early
     const done = covered.current.reduce((a, b) => a + b, 0) / covered.current.length
-    if (done >= FILLED && loaded) {
-      wetStrokes = canvas.current?.toDataURL() ?? ''
-      setSettling(loaded)
-      settleSound(loaded)
+    if (done >= FILLED && loaded) flow(loaded)
+  }
+
+  // Filled: the wet paint flows into the last blank specks (drawn behind the strokes, so they stay as painted), and
+  // once the square is truly covered it settles with its sound.
+  const flow = (p: Paint) => {
+    const c = canvas.current
+    const g = c?.getContext('2d')
+    const done = () => {
+      flowing.current = false
+      wetStrokes = c?.toDataURL() ?? ''
+      setSettling(p)
+      settleSound(p)
     }
+    if (!c || !g) return done()
+    flowing.current = true
+    const start = performance.now()
+    const step = () => {
+      const k = Math.min(1, (performance.now() - start) / FLOW_MS)
+      g.save()
+      g.globalCompositeOperation = 'destination-over'
+      g.globalAlpha = k < 1 ? 0.12 : 1
+      g.fillStyle = paintHex(p)
+      g.fillRect(0, 0, c.width, c.height)
+      g.restore()
+      if (k < 1) requestAnimationFrame(step)
+      else done()
+    }
+    requestAnimationFrame(step)
   }
 
   const cancel = (e: React.PointerEvent) => {
