@@ -1764,6 +1764,13 @@ body[data-screen='questions'] .idea {
   width: 20px;
   height: 20px;
 }
+.zoombar.is-page {
+  justify-content: center;
+}
+/* A page with the bar: its last lines scroll clear of it. */
+.app.has-page-bar {
+  padding-bottom: calc(max(calc(env(safe-area-inset-bottom) - 10px), 8px) + 72px);
+}
 .zoombar-spacer {
   width: 84px; /* the view switch's width */
 }

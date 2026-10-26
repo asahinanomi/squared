@@ -6,7 +6,7 @@ import { OpenPainting } from './components/PaintingButton'
 import { SyncStatus } from './components/SyncStatus'
 import { Topbar } from './components/Topbar'
 import { Waiting } from './components/Waiting'
-import { ViewSwitch } from './components/ZoomBar'
+import { PageBar, ViewSwitch } from './components/ZoomBar'
 import type { Why } from './lib/notes'
 import type { Paint } from './lib/paints'
 import { todayIso } from './lib/dates'
@@ -103,6 +103,8 @@ export default function App() {
   if (!signedIn) return <SignedOut error={authError} onDemoSignIn={() => setDemoIn(true)} />
 
   const oneScreen = ['month', 'life', 'pie', 'list'].includes(screen)
+  // Every page but the time views (their own bar) and the day (its own) gets the bar with "today" in the centre.
+  const pageBar = !oneScreen && screen !== 'today'
   const withPainting: Screen[] = ['today', 'month', 'life', 'list', 'paintings', 'mydays']
 
   return (
@@ -116,7 +118,12 @@ export default function App() {
       <OpenPainting.Provider value={painting.paintedMonth}>
         {/* Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint). */}
         <div
-          className={'app' + (oneScreen ? ' is-one-screen' : '') + (oneScreen && screen !== 'pie' ? ' has-bar' : '')}
+          className={
+            'app' +
+            (oneScreen ? ' is-one-screen' : '') +
+            (oneScreen && screen !== 'pie' ? ' has-bar' : '') +
+            (pageBar ? ' has-page-bar' : '')
+          }
         >
           <Topbar
             onHome={nav.goHome}
@@ -169,6 +176,7 @@ export default function App() {
             }}
             onSetUp={() => nav.askSquares('today')}
           />
+          {pageBar && <PageBar onToday={nav.goToday} />}
           {withPainting.includes(screen) && (
             <MonthPainting
               month={painting.paintedMonth}

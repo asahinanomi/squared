@@ -156,3 +156,18 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
     document.body,
   )
 }
+
+/**
+ * The same bar on every other page (my days, settings, about…): "today" alone in the centre, the one constant way
+ * back to now, where it sits on every bar. Nothing on the sides: there's nothing to zoom or switch there.
+ */
+export function PageBar({ onToday }: { onToday: () => void }) {
+  return createPortal(
+    <div className="zoombar is-page">
+      <button className="zoombar-today" onClick={onToday}>
+        today
+      </button>
+    </div>,
+    document.body,
+  )
+}

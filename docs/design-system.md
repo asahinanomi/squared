@@ -72,6 +72,8 @@ squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, 
 - **Footer:** one component everywhere: dotted hairline, small print (12px, muted, dot-separated), then "© year squared.today" with the beta capsule, all in muted: it's text you read, never faint. Left-aligned with the page; centred (no hairline) only on sign-in.
 - **Links / dividers:** 1px dotted hairlines.
 
+- **The bottom bar, on every page**: "today" always in the centre (the one constant way back to now); the squares/list switch on the left and zoom on the right only on the time views; zoom out always the far right, lined up with the menu above.
+
 ## Layout — sign-in / home
 Three groups in one vertically centred column. **Brand** (stacked, small). 64px, then **the message** — the number as hero ("29,200", Inter 600 56px), its caption ("days in an 80-year life", ink-soft 18px), then the question (Fraunces ~28px, 450, dotted "Today"). 56px, then **sign-in** (quiet pill) and faint links. The number hits first, the question stays; brand modest; sign-in quiet.
 
