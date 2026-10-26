@@ -196,7 +196,7 @@ Why: now, then the day (be here, then what matters, the order squared works in).
 
 **Settings** — how many squares · sound · lock when I leave · export my data · delete my account (sign out is the menu's last line, under "about")
 
-**A painting** — "October, painted" / "October, so far" · a new month: "a new month. here's the last one." · **keep this painting ↓** (once kept: download ↓) · "Yours to keep once the month ends."
+**The paintings help** — title: *Your days, painted by you.* (nomi, Oct 26, 2026) · **A painting** — "October, painted" / "October, so far" · a new month: "a new month. here's the last one." · **keep this painting ↓** (once kept: download ↓) · "Yours to keep once the month ends."
 
 **Pie / summary** — short labels + counts: 🟩 worth it · 🟥 regret · ⬜ a blur · **unpainted** · **ahead**
 
