@@ -150,11 +150,11 @@ These describe squares, not feelings. Keep them out of the three-colour language
 **Your birthday** (Oct 26, 2026): on the day itself, once, a sheet over today (after a new month's painting, if both land that day):
 - **Happy 55th birthday.**
 - Today starts a new year of your life.
-- Spend it on what matters, and be here for it.
+- Be here for it. Spend it on what matters.
 - — nomi
-- thank you (a keyline, like "got it")
+- no button: a card, not a dialog (a tap outside or a swipe down puts it away)
 
-Why: it looks forward (squared starts today, the story moves forward) and hands the year back, as the line does; nothing about the year behind, which is never graded. (A first line about the year lived, "the worth it ones, the hard ones", was cut by nomi.) Signed, because a birthday wish should come from a person.
+Why: now, then the day (be here, then what matters, the order squared works in). It looks forward (squared starts today, the story moves forward) and hands the year back, as the line does; nothing about the year behind, which is never graded. (A first line about the year lived, "the worth it ones, the hard ones", was cut by nomi.) Signed, because a birthday wish should come from a person.
 
 **Home** (cut Oct 25, 2026: the logo opens today; the week moved to the top of my days. Kept below for the record.)
 - Before the first square: greeting · **10,962** / "days ahead of you." / "Make each one meaningful, starting with today." · the question · **paint your first square** · or paint yesterday · "getting started" (learned what squared is · named what matters · set how many squares · paint your first square)

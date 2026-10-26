@@ -533,11 +533,9 @@ export function Today(props: Props) {
         <Sheet open={birthdayOpen} onClose={() => setBirthdayOpen(false)}>
           <h2 className="intro-title">{age > 0 ? `Happy ${ordinal(age)} birthday.` : 'Happy birthday.'}</h2>
           <p className="intro-how birthday-line">Today starts a new year of your life.</p>
-          <p className="intro-how birthday-line">Spend it on what matters, and be here for it.</p>
+          <p className="intro-how birthday-line">Be here for it. Spend it on what matters.</p>
+          {/* A card, not a dialog: like the other sheets, a tap outside or a swipe down puts it away. */}
           <p className="birthday-sign">— nomi</p>
-          <button className="pill is-keyline intro-done" onClick={() => setBirthdayOpen(false)}>
-            thank you
-          </button>
         </Sheet>
         {wiping && (
           <ConfirmDialog
