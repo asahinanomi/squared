@@ -4698,7 +4698,36 @@ button.home-card:active {
 .frame-demo .day-wipe.is-tapped {
   color: var(--ink);
 }
-/* The fingertip, on "frame it": a soft grey dot that presses once. */
+/* The painting demo: the app's painting, the size of the framing demo's square, its pill in proportion under it. */
+.painting-demo {
+  flex: none;
+  width: 136px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.painting-demo canvas {
+  width: 136px;
+  height: 136px;
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(20, 20, 19, 0.1));
+}
+.painting-demo .pill {
+  position: relative;
+  gap: 5px;
+  width: auto;
+  height: 26px;
+  margin: 10px 0 0;
+  padding: 0 12px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+/* On the black pill the fingertip is light, so it still shows. */
+.painting-demo .frame-demo-finger {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.7);
+}
+/* The fingertip, on "frame it" or the pill: a soft grey dot that presses once. */
 .frame-demo-finger {
   position: absolute;
   left: 50%;

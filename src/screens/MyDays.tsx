@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { FrameDemo } from '../components/FrameDemo'
+import { PaintingDemo } from '../components/PaintingDemo'
 import { Sheet } from '../components/Sheet'
 import { PaintingThumb } from '../components/PaintingThumb'
 import { WeekCard } from '../components/WeekCard'
@@ -202,14 +203,15 @@ export function MyDays({
         </div>
       </Sheet>
       <Sheet open={help === 'paintings'} onClose={() => setHelp(null)}>
-        <h2 className="torn-title">paintings</h2>
-        <p className="sheet-body help-body">
-          Every month you paint becomes a painting, made from its days’ colours. So does every year.
-        </p>
-        <p className="sheet-body help-body">
-          Once a month is over, you can keep its painting. A year’s painting, once the year is over.
-        </p>
-        <p className="sheet-body help-body">Tap a painting, then “keep this painting”. It hangs in all my paintings.</p>
+        {/* As framing: the purpose as the title, the move acted out (the app's own painting and pill), notes beside it. */}
+        <h2 className="torn-title">Every month you paint becomes a painting.</h2>
+        <div className="help-pair">
+          <PaintingDemo />
+          <div className="help-notes">
+            <p>When a month ends, keep its painting.</p>
+            <p>A year becomes one too.</p>
+          </div>
+        </div>
       </Sheet>
     </main>
   )
