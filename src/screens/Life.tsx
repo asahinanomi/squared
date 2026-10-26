@@ -10,7 +10,7 @@ type Props = {
   profile: Profile
   /** Open a year's months. */
   onPick: (year: number) => void
-  /** Zoom in: this year. */
+  /** Zoom in: this month. */
   onIn: () => void
   /** Switch to months or days. */
   onResolution: (r: Resolution) => void

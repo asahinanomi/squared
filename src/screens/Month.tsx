@@ -13,7 +13,7 @@ type Props = {
   days: Days
   /** Earliest month that can be shown (the birth date), if known. */
   born?: string
-  /** Month to open on (zooming in from a year); otherwise the current month. */
+  /** Month to open on (zooming in from a life); otherwise the current month. */
   focus?: string
   onPick: (iso: string) => void
   /** Zoom in: back to the single square. */

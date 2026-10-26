@@ -33,10 +33,6 @@ type Props = {
   onMonthShown: (iso: string) => void
   /** A month's painting ("YYYY-MM"; this one so far): opens it, to look at and keep. */
   onPainting?: (month: string) => void
-  /** Zoom in: today's square. */
-  onIn?: () => void
-  /** Zoom out: the months. */
-  onOut?: () => void
   /** Kept up to date with the day in the middle of the screen, so a zoom or a switch opens there. */
   mid: MutableRefObject<() => string>
   /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */
@@ -191,7 +187,7 @@ function DayCard({
 }
 
 // A life, day by day: the days as a list of short cards, oldest at the top, today at the foot — the closest level
-// of the list (zoom out for months, then years), a view beside the pie. Only a window of months is drawn — the one you opened on and a few around it — and more
+// of the list (its tabs switch to months or years), a view beside the pie. Only a window of months is drawn — the one you opened on and a few around it — and more
 // are added as you scroll toward either end, so it opens at once however far back you are.
 export function DaysList({
   days,
@@ -201,8 +197,6 @@ export function DaysList({
   onPick,
   onMonthShown,
   onPainting,
-  onIn,
-  onOut,
   mid,
   head,
   only,
@@ -417,12 +411,7 @@ export function DaysList({
           )
         })}
       </div>
-      <ZoomBar
-        onIn={onIn}
-        onOut={onOut}
-        onRecenter={away && !only ? backToToday : undefined}
-        listAt={() => mid.current()}
-      />
+      <ZoomBar onRecenter={away && !only ? backToToday : undefined} listAt={() => mid.current()} />
     </main>
   )
 }

@@ -10,14 +10,14 @@ import { ideaAtStart, LADDER, leaveLegalUrl, legalAtStart, type Legal, type Scre
 
 const RES: Resolution[] = ['years', 'months', 'days'] // the three views of a life, outward
 
-/** Where you are and how you move: the screen and day, the zoom ladder (a day → its month → its year → a life), the
+/** Where you are and how you move: the screen and day, the zoom ladder (a day → its month → a life), the
  *  list and the pie beside it, the small print, settings, and pinching. */
 export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) => void, signedIn: boolean) {
   const [screen, setScreenValue] = useState<Screen>(legalAtStart ?? (ideaAtStart ? 'idea' : 'today'))
   const [date, setDate] = useState(todayIso)
   // Which way the last move went, so the new level can zoom in or out into place.
   const [motion, setMotion] = useState<'in' | 'out' | null>(null)
-  // The month to open on when zooming in from a year (zooming out always lands on today's).
+  // The month to open on when zooming in from a life, or tapping a year on it (otherwise this month).
   const [monthFocus, setMonthFocus] = useState<string | undefined>()
   // Which view of a life: one square per year (where a life always lands), month or day.
   const [lifeRes, setLifeResValue] = useState<Resolution>('years')
@@ -30,7 +30,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   // The list of days sits beside the ladder too: where it was opened from, and the day it opens on.
   const [listFrom, setListFrom] = useState<Screen>('month')
   const [listFocus, setListFocus] = useState(todayIso)
-  // The list zooms too, within itself: years → months → days (→ the day). And the level it was opened at.
+  // The list's level (its tabs: years · months · days; tapping a card opens the finer one), and where it opened.
   const [listRes, setListRes] = useState<Resolution>('days')
   const [listZoomed, setListZoomed] = useState(false) // zoomed within the list since it opened
   // Only one slice's days (from the pie's "see them →"), until cleared or the list zooms out.
@@ -130,14 +130,9 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setListFocus(day)
     setScreen('list')
   }
+  // Tapping a year or month card in the list: the finer level, opened there.
   const listIn = (at: string) => {
     setLifeBack(false)
-    // From the days: today's square, and zooming out of it comes back here.
-    if (listRes === 'days') {
-      setDate(todayIso())
-      setScreen('today')
-      return setDayFromList(true)
-    }
     setListZoomed(true)
     setListFocus(at)
     setListRes(listRes === 'years' ? 'months' : 'days')
@@ -236,7 +231,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
         ? 'about'
         : 'back'
 
-  // Pinch does what the zoom buttons do, one level at a time: day ↔ month ↔ a life (in years). A life in
+  // Pinch does what the zoom buttons do, one level at a time: day ↔ month ↔ a life (in days). A life in
   // months or days comes only from its tabs (pinching in there goes to this month); the list has no zoom (its tabs).
   const pinchIn = () => {
     if (screen === 'month') goToday()

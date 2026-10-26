@@ -14,7 +14,7 @@ type Props = {
   profile: Profile
   /** Open a month's days. */
   onPick: (monthIso: string) => void
-  /** Zoom in: this year. */
+  /** Zoom in: this month. */
   onIn: () => void
   onResolution: (r: Resolution) => void
   /** Zoom out: a life in days. */

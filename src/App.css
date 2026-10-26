@@ -2248,7 +2248,7 @@ body[data-screen='questions'] .idea {
   opacity: 1;
   cursor: default;
 }
-/* Before you were born: no square, just a faint number, as on the year view. */
+/* Before you were born: no square, just a faint number. */
 .month-day.is-before {
   background: transparent;
   border-color: transparent;

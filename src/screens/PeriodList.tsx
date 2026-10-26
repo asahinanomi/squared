@@ -17,8 +17,6 @@ type Props = {
   focus: string
   /** Tap a card: zoom in on it (its months, or its days), opening at its first day. */
   onOpen: (first: string) => void
-  onIn?: () => void
-  onOut?: () => void
   /** Kept up to date with the day in the middle of the screen, so a zoom or a switch opens there. */
   mid: MutableRefObject<() => string>
   /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */
@@ -95,9 +93,9 @@ function PeriodCard({
   )
 }
 
-// A life, month by month (or year by year): the zoomed-out levels of the list. Every month — or year — from birth
+// A life, month by month (or year by year): the list's other two tabs. Every month — or year — from birth
 // to now, oldest at the top, as cards with their colour band and counts. Few enough to draw all at once.
-export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid, head, onPainting }: Props) {
+export function PeriodList({ res, days, born, focus, onOpen, mid, head, onPainting }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const first = shiftMonth(firstDay(days, born), 0)
@@ -175,12 +173,7 @@ export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid, h
           <ol className="month-list is-periods">{months.map((m) => card(m, monthTitle(m), m, monthEnd(m)))}</ol>
         )}
       </div>
-      <ZoomBar
-        onIn={onIn}
-        onOut={onOut}
-        onRecenter={away ? () => centre(key(today), true) : undefined}
-        listAt={() => mid.current()}
-      />
+      <ZoomBar onRecenter={away ? () => centre(key(today), true) : undefined} listAt={() => mid.current()} />
     </main>
   )
 }
