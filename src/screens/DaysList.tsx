@@ -34,9 +34,9 @@ type Props = {
   /** A month's painting ("YYYY-MM"; this one so far): opens it, to look at and keep. */
   onPainting?: (month: string) => void
   /** Zoom in: today's square. */
-  onIn: () => void
+  onIn?: () => void
   /** Zoom out: the months. */
-  onOut: () => void
+  onOut?: () => void
   /** Kept up to date with the day in the middle of the screen, so a zoom or a switch opens there. */
   mid: MutableRefObject<() => string>
   /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */

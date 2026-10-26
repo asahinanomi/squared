@@ -135,16 +135,21 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
           <RecenterIcon />
         </button>
       )}
-      <div className="zoombar-buttons">
-        {/* Zoom out is always the far right, where it is on the day screen (its only button), lined up with the menu;
+      {/* No zoom at all where there's nothing to zoom (the list: its tabs choose years · months · days). */}
+      {(onIn || onOut) && (
+        <div className="zoombar-buttons">
+          {/* Zoom out is always the far right, where it is on the day screen (its only button), lined up with the menu;
             zoom in sits to its left. */}
-        <button aria-label="Zoom in" disabled={!onIn} onClick={onIn}>
-          <ZoomInIcon />
-        </button>
-        <button aria-label="Zoom out" disabled={!onOut} onClick={onOut}>
-          <ZoomOutIcon />
-        </button>
-      </div>
+          <button aria-label="Zoom in" disabled={!onIn} onClick={onIn}>
+            <ZoomInIcon />
+          </button>
+          <button aria-label="Zoom out" disabled={!onOut} onClick={onOut}>
+            <ZoomOutIcon />
+          </button>
+        </div>
+      )}
+      {/* With no zoom, an empty right as wide as the switch keeps "today" in the centre. */}
+      {!onIn && !onOut && view && <span className="zoombar-spacer" aria-hidden="true" />}
     </div>
   )
 }

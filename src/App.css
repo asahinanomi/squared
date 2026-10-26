@@ -1751,6 +1751,9 @@ body[data-screen='questions'] .idea {
   width: 20px;
   height: 20px;
 }
+.zoombar-spacer {
+  width: 84px; /* the view switch's width */
+}
 .zoombar-buttons {
   display: flex;
   gap: 2px;

@@ -9,8 +9,6 @@ import { usePinch, type Focal } from '../lib/usePinch'
 import { ideaAtStart, LADDER, leaveLegalUrl, legalAtStart, type Legal, type Screen } from './app'
 
 const RES: Resolution[] = ['years', 'months', 'days'] // the three views of a life, outward
-const MONTH_NOTCHES = 2
-const LIFE_NOTCHES = 4
 
 /** Where you are and how you move: the screen and day, the zoom ladder (a day → its month → its year → a life), the
  *  list and the pie beside it, the small print, settings, and pinching. */
@@ -24,11 +22,10 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const [yearFocus, setYearFocus] = useState<number | undefined>()
   // Which view of a life: one square per year (where a life always lands), month or day.
   const [lifeRes, setLifeResValue] = useState<Resolution>('years')
-  // Pinched in within a level (bigger squares, with labels): a notch, 0 = the level's own size.
-  // Never remembered: every move to another level starts back at 0.
+  // A level's own size: pinching no longer enlarges within a level (it steps between levels), so this stays 0.
   const [mag, setMag] = useState(0)
-  const [focal, setFocal] = useState<Focal | undefined>()
-  const [monthAnchor, setMonthAnchor] = useState<{ iso?: string; y: number } | undefined>()
+  const [focal] = useState<Focal | undefined>()
+  const [monthAnchor] = useState<{ iso?: string; y: number } | undefined>()
   // Where "how many squares?" returns to: a life, when it was asked for on the way there.
   const [afterSetup, setAfterSetup] = useState<Screen>('today')
   // The zoom level the pie was opened from: the switch returns there.
@@ -257,48 +254,27 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
         ? 'about'
         : 'back'
 
-  // Pinch: out walks the ladder outward (today → month → year → a life in years → months → days);
-  // in enlarges the squares where there's more to read (month, a life in months or days), else steps in.
-  const pinchIn = (at: Focal) => {
-    if (screen === 'list') return listIn(listMid.current())
-    else if (screen === 'month') {
-      if (mag >= MONTH_NOTCHES - 1) return false
-      const hit = document.elementsFromPoint(at.x, at.y).find((el) => (el as HTMLElement).dataset?.iso) as HTMLElement
-      setMonthAnchor({ iso: hit?.dataset.iso, y: at.y })
-      setMag(mag + 1)
-    } else if (screen === 'year') goMonth()
+  // Pinch does what the zoom buttons do, one level at a time: day ↔ month ↔ year ↔ a life (in years). A life in
+  // months or days comes only from its tabs (pinching in there goes to the year); the list has no zoom (its tabs).
+  const pinchIn = () => {
+    if (screen === 'month') goToday()
+    else if (screen === 'year') goMonth()
     else if (screen === 'pie') {
       // On the pie, closer means fewer days counted: whole life → days I lived → painted only.
       const i = SCOPE_ORDER.indexOf(pieScope)
       if (i >= SCOPE_ORDER.length - 1) return false
       setPieScope(SCOPE_ORDER[i + 1])
-    } else if (screen === 'life' && lifeRes === 'years') goYear()
-    else if (screen === 'life') {
-      if (mag >= LIFE_NOTCHES - 1) return false
-      setFocal(at)
-      setMag(mag + 1)
-    } else return false
+    } else if (screen === 'life') goYear()
+    else return false
   }
-  const pinchOut = (at: Focal) => {
+  const pinchOut = () => {
     if (screen === 'today') outOfDay()
-    else if (screen === 'list') return listOut(listMid.current())
-    else if (screen === 'month') {
-      if (mag === 0) return goYear()
-      const hit = document.elementsFromPoint(at.x, at.y).find((el) => (el as HTMLElement).dataset?.iso) as HTMLElement
-      setMonthAnchor({ iso: hit?.dataset.iso, y: at.y })
-      setMag(mag - 1)
-    } else if (screen === 'year') goLife()
+    else if (screen === 'month') goYear()
+    else if (screen === 'year') goLife()
     else if (screen === 'pie') {
       const i = SCOPE_ORDER.indexOf(pieScope)
       if (i <= 0) return false
       setPieScope(SCOPE_ORDER[i - 1])
-    } else if (screen === 'life') {
-      if (mag > 0) {
-        setFocal(at)
-        setMag(mag - 1)
-      } else if (lifeRes === 'years') setLifeRes('months')
-      else if (lifeRes === 'months') setLifeRes('days')
-      else return false
     } else return false
   }
   // The current level's stage is what scales under your fingers while you pinch.
@@ -308,8 +284,8 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const live = useRef(signedIn)
   live.current = signedIn
   usePinch(stage, {
-    onIn: (at) => (live.current ? pinchRef.current.onIn(at) : false), // signed out, a pinch does nothing
-    onOut: (at) => (live.current ? pinchRef.current.onOut(at) : false),
+    onIn: () => (live.current ? pinchRef.current.onIn() : false), // signed out, a pinch does nothing
+    onOut: () => (live.current ? pinchRef.current.onOut() : false),
   })
 
   return {

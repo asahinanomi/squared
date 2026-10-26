@@ -18,7 +18,7 @@ type Props = {
   onIn: () => void
   onResolution: (r: Resolution) => void
   /** Zoom out: a life in days. */
-  onOut: () => void
+  onOut?: () => void
   /** Squares per row: 12 (a row is a year), or fewer and bigger when pinched in (6, 4, 3). */
   cols?: number
   /** Where the fingers were when the size changed: the square under them stays put. */

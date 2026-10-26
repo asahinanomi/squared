@@ -17,7 +17,7 @@ type Props = {
   focus: string
   /** Tap a card: zoom in on it (its months, or its days), opening at its first day. */
   onOpen: (first: string) => void
-  onIn: () => void
+  onIn?: () => void
   onOut?: () => void
   /** Kept up to date with the day in the middle of the screen, so a zoom or a switch opens there. */
   mid: MutableRefObject<() => string>

@@ -15,7 +15,7 @@ type Props = {
   /** Switch to months or days. */
   onResolution: (r: Resolution) => void
   /** Zoom out: a life in months. */
-  onOut: () => void
+  onOut?: () => void
 }
 
 // A life, in years — every year of it on one screen, on purpose: the whole life at a glance.

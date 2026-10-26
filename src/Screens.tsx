@@ -149,7 +149,10 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         why={
           nav.afterSetup === 'life' || nav.afterSetup === 'pie'
             ? 'To see your whole life at once, squared needs two answers.'
-            : nav.afterSetup === 'month' || nav.afterSetup === 'year' || nav.afterSetup === 'list' || nav.afterSetup === 'today'
+            : nav.afterSetup === 'month' ||
+                nav.afterSetup === 'year' ||
+                nav.afterSetup === 'list' ||
+                nav.afterSetup === 'today'
               ? 'To go further back, squared needs two answers.'
               : undefined
         }
@@ -231,8 +234,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onPick={(iso) => nav.openDay(iso, true)}
         onMonthShown={acc.loadNotes}
         onPainting={openPainting}
-        onIn={() => nav.listIn(listMid.current())}
-        onOut={() => nav.listOut(listMid.current())}
       />
     ) : (
       <PeriodList
@@ -244,8 +245,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         born={profile?.born}
         focus={nav.listFocus}
         onOpen={(first) => nav.listIn(first)}
-        onIn={() => nav.listIn(listMid.current())}
-        onOut={listRes === 'months' ? () => nav.listOut(listMid.current()) : undefined}
         onPainting={openPainting}
       />
     )
@@ -280,7 +279,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         days={days}
         profile={profile}
         onPick={(iso) => nav.openDay(iso)}
-        onIn={() => setLifeRes('months')}
+        onIn={() => nav.goYear()}
         onResolution={setLifeRes}
         cols={[28, 14, 7, 3][mag]}
         focal={focal}
@@ -292,8 +291,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         days={days}
         profile={profile}
         onPick={(m) => nav.goMonth(m)}
-        onIn={() => setLifeRes('years')}
-        onOut={() => setLifeRes('days')}
+        onIn={() => nav.goYear()}
         onResolution={setLifeRes}
         cols={[12, 6, 4, 3][mag]}
         focal={focal}
@@ -304,7 +302,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         profile={profile}
         onPick={(y) => nav.goYear(y)}
         onIn={() => nav.goYear()}
-        onOut={() => setLifeRes('months')}
         onResolution={setLifeRes}
       />
     )
