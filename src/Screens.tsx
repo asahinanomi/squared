@@ -71,6 +71,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         why={ui.why}
         nudge={ui.nudge}
         onDate={(iso) => {
+          if (iso > todayIso()) return // never a day ahead
           ui.setWhy(null)
           nav.setDate(iso)
         }}

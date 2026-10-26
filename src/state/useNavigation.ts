@@ -80,6 +80,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   }
   /** A day, from anywhere that shows days. */
   const openDay = (iso: string, fromList = false) => {
+    if (iso > todayIso()) return // a day ahead can't be opened, let alone painted
     setDate(iso)
     if (fromList) setDayFromList(true)
     setScreen('today')

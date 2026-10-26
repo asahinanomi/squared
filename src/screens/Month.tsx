@@ -59,8 +59,12 @@ export function Month({
 }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
-  const maxBack = monthsBetween(shiftMonth(firstDay(days, born), 0), current)
-  const start = focus ? shiftMonth(focus, 0) : current
+  const first = shiftMonth(firstDay(days, born), 0)
+  const maxBack = monthsBetween(first, current)
+  // Only months that can be shown: a focus ahead of this month (zooming in from 2055 on a life) opens this month,
+  // one before your first opens your first, so the title and the squares always agree.
+  const start =
+    !focus || shiftMonth(focus, 0) > current ? current : shiftMonth(focus, 0) < first ? first : shiftMonth(focus, 0)
   const { scroller, back, visible, onScroll, jumpTo } = useLadderScroll({
     maxBack,
     batch: 12,
