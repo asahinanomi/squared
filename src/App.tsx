@@ -176,7 +176,7 @@ export default function App() {
             }}
             onSetUp={() => nav.askSquares('today')}
           />
-          {pageBar && <PageBar onToday={nav.goToday} />}
+          {pageBar && <PageBar onToday={nav.goToday} onSquares={() => nav.goMonth()} onList={nav.openList} />}
           {withPainting.includes(screen) && (
             <MonthPainting
               month={painting.paintedMonth}

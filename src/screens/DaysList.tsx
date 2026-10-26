@@ -133,7 +133,13 @@ function DayCard({
             {weekday}, {monthDay}
             <sup>{suffix}</sup>
           </span>
-          {day && <span className="day-card-word"> · {WORD[day.color]}</span>}
+          {/* A real space before the word, so on a narrow line " · worth it" can move down whole, never under the toggle. */}
+          {day && (
+            <>
+              {' '}
+              <span className="day-card-word">· {WORD[day.color]}</span>
+            </>
+          )}
         </button>
         {/* A framed day: a small tag that shows only the framed ones. */}
         {day?.framed && onFramed && (

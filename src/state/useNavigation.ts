@@ -167,6 +167,11 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setScreen('list')
     setLifeBack(true)
   }
+  // The list from a page that isn't a view (settings, about…): on today, and its switch's squares go to the month.
+  const openList = () => {
+    openListFromMyDays()
+    setLifeBack(false)
+  }
   const openLifeFromMyDays = () => {
     goLifeDays()
     if (profile) setLifeBack(true)
@@ -287,6 +292,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     goHome,
     goMonth,
     goLife,
+    openList,
     lifeFocus,
     openDay,
     outOfDay,

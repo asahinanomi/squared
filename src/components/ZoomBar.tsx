@@ -174,15 +174,33 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props)
 }
 
 /**
- * The same bar on every other page (my days, settings, about…): "today" alone in the centre, the one constant way
- * back to now, where it sits on every bar. Nothing on the sides: there's nothing to zoom or switch there.
+ * The same bar on every other page (my days, settings, about…): the squares · list switch on the left, neither raised
+ * (you're not in a view: squares opens this month, list the days), and "today" in the centre, the one constant way back
+ * to now. The bar never changes shape.
  */
-export function PageBar({ onToday }: { onToday: () => void }) {
+export function PageBar({
+  onToday,
+  onSquares,
+  onList,
+}: {
+  onToday: () => void
+  onSquares: () => void
+  onList: () => void
+}) {
   return createPortal(
-    <div className="zoombar is-page">
+    <div className="zoombar">
+      <div className="zoombar-switch" role="group" aria-label="View">
+        <button aria-label="Squares" onClick={onSquares}>
+          <SquaresIcon />
+        </button>
+        <button aria-label="List view" onClick={onList}>
+          <ListIcon />
+        </button>
+      </div>
       <button className="zoombar-today" onClick={onToday}>
         today
       </button>
+      <span className="zoombar-spacer" aria-hidden="true" />
     </div>,
     document.body,
   )
