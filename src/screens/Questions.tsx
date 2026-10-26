@@ -22,6 +22,7 @@ const go = (to: (() => void) | undefined, label: string, path: string) =>
 
 function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNode][] {
   return [
+    // The idea, then every day, setting up, your data, cost, and help.
     [
       'What do the three colours mean?',
       <>
@@ -33,7 +34,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
                 ? 'Green: yes, I spent it on what matters.'
                 : p.id === 'red'
                   ? 'Red: no, I wish I’d spent it differently.'
-                  : 'Grey: I don’t know, I wasn’t paying attention.'}
+                  : 'Grey: I don’t know… I wasn’t paying attention.'}
             </span>
           ))}
         </span>
@@ -41,20 +42,36 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
       </>,
     ],
     [
-      'Can I repaint a day?',
-      'Yes, any time. Sometimes it takes a while to understand how a day really felt. Tap “start over” under the square, and paint it again.',
+      'What are moments for?',
+      'To catch the day as you live it. Write one in the box at the top of the day whenever something happens; each keeps its time, newest first. A day can hold as many as it needs.',
     ],
     [
       'Can I paint days I missed?',
       'Of course. Life gets busy, that’s why squared exists. Tap the date at the top of any day, or swipe back, and pick the day.',
     ],
     [
-      'What are moments for?',
-      'To catch the day as you live it, and as you look back on it. Before you paint today, squared asks “right now…”; after you paint, “because…”: why the day was worth it, a regret, or a blur. Each keeps its time. A day can hold as many moments as it needs.',
+      'Can I repaint a day?',
+      'Yes, any time. Sometimes it takes a while to understand how a day really felt. Tap “start over” under the square, and paint it again.',
+    ],
+    [
+      'What does “frame it” do?',
+      'It keeps a day you want to remember, in any colour. Tap “frame it” under a painted square. Your framed days wait for you in my days → framed.',
     ],
     [
       'What is “what matters”?',
-      'Your own compass: what makes a day worth it to you, and what you’d regret. When you’re torn between colours, squared gently reminds you what you said.',
+      'Your own compass: what makes a day worth it to you, and what you’d regret. Write it in my days → what matters. When you’re torn between colours, squared gently reminds you what you said.',
+    ],
+    [
+      'How do I keep it on my home screen?',
+      'On iPhone, in Safari or Chrome: Share → Add to Home Screen. On Android, in Chrome: ⋮ → Add to home screen. Then squared is one tap away, every day.',
+    ],
+    [
+      'Can I use squared on more than one device?',
+      'Yes. Sign in with the same Google account, and your squares and moments are there.',
+    ],
+    [
+      'Why does squared ask my birth date?',
+      'Only to count your squares and show your life as a whole. It’s up to you: squared works without it, and you can add it any time in my days.',
     ],
     [
       'Is my data private?',
@@ -82,10 +99,6 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
         Thank you for asking. I’m building it myself, one square a day, and every bit of support keeps it going:{' '}
         {go(onSupport, 'help build squared', 'about → support')}. Telling a friend helps too.
       </>,
-    ],
-    [
-      'How do I keep it on my home screen?',
-      'On iPhone, in Safari or Chrome: Share → Add to Home Screen. On Android, in Chrome: ⋮ → Add to home screen. Then squared is one tap away, every day.',
     ],
     [
       'Where do I ask questions?',
