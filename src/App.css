@@ -2440,6 +2440,15 @@ body[data-screen='questions'] .idea {
 .intro-done {
   margin-top: 24px;
 }
+/* Your birthday: the first-visit sheet's voice, two lines and nomi's signature. */
+.birthday-line + .birthday-line {
+  margin-top: 10px;
+}
+.birthday-sign {
+  margin: 14px 0 0;
+  font-size: 16px;
+  color: var(--ink-soft);
+}
 
 /* ---------- bottom sheet ---------- */
 .sheet-backdrop {

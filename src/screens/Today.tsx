@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { MomentBox } from '../components/MomentBox'
@@ -9,13 +9,15 @@ import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { ZoomOutIcon } from '../components/ZoomBar'
-import { addDays, firstDay, fromIso, longDate, shortDateParts, todayIso } from '../lib/dates'
+import { addDays, firstDay, fromIso, longDate, ordinal, shortDateParts, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
 import type { Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
+import { OpenPainting } from '../components/PaintingButton'
+import { tryBirthday } from '../state/app'
 import { questionFor } from '../lib/question'
 
 type Props = {
@@ -104,6 +106,23 @@ export function Today(props: Props) {
     setIntroOpen(false)
     props.onIntroDone?.()
   }
+  // Your birthday: on today, once a year, a few words from nomi (never over the first visit's sheet, and after a
+  // new month's painting is put away, when the two land on the same day).
+  const paintingUp = useContext(OpenPainting)
+  const birthday = tryBirthday || (!!born && today !== born && !!specialDay(today, born)?.includes('birthday'))
+  const age = born ? Number(today.slice(0, 4)) - Number(born.slice(0, 4)) : 0
+  const [birthdayOpen, setBirthdayOpen] = useState(false)
+  useEffect(() => {
+    if (!birthday || date !== today || introOpen || paintingUp) return
+    try {
+      if (!tryBirthday && localStorage.getItem('squared.birthdaySeen') === today) return
+      localStorage.setItem('squared.birthdaySeen', today)
+    } catch {
+      /* no storage: it may show again today, that's fine */
+    }
+    setBirthdayOpen(true)
+  }, [birthday, date, today, introOpen, paintingUp])
+
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
   const day = days[date]
@@ -509,6 +528,17 @@ export function Today(props: Props) {
           </p>
           <button className="pill is-keyline intro-done" onClick={introDone}>
             got it
+          </button>
+        </Sheet>
+        <Sheet open={birthdayOpen} onClose={() => setBirthdayOpen(false)}>
+          <h2 className="intro-title">{age > 0 ? `Happy ${ordinal(age)} birthday.` : 'Happy birthday.'}</h2>
+          <p className="intro-how birthday-line">
+            Another year of days, lived: the worth it ones, the hard ones, all of them yours.
+          </p>
+          <p className="intro-how birthday-line">Today is a gift. Spend it on what matters, and be here for it.</p>
+          <p className="birthday-sign">— nomi</p>
+          <button className="pill is-keyline intro-done" onClick={() => setBirthdayOpen(false)}>
+            thank you
           </button>
         </Sheet>
         {wiping && (

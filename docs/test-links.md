@@ -1,6 +1,6 @@
 # Test links
 
-_last updated Oct 22, 2026, 15:34 UTC_
+_last updated Oct 26, 2026, 13:59 UTC_
 
 Hidden links for trying squared's first-time moments on your own account. Open them on your phone while signed in. They save nothing.
 
@@ -9,6 +9,7 @@ Hidden links for trying squared's first-time moments on your own account. Open t
 | [squared.today/?welcome](https://squared.today/?welcome) | The first visit's sheet over today: each square is a day, the three colours, "got it". (Onboarding's four steps are gone since Oct 25, 2026.) |
 | [squared.today/?month](https://squared.today/?month) | Last month's painting (the new-month moment). Works any day. |
 | [squared.today/?year](https://squared.today/?year) | Last year's painting (the new-year moment). Works any day. |
+| [squared.today/?birthday](https://squared.today/?birthday) | The birthday sheet over today ("Happy 55th birthday.", from your birth date; "Happy birthday." without one). Works any day. |
 
 ## Pages anyone can open (signed in or not)
 
