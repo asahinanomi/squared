@@ -49,15 +49,18 @@ const dated = (cell: number) => cell >= NUM_MIN && textFits('2026.10 Wed', `400 
 const PULSE_MS = 900
 // Every time a life opens, the lived days fill in from the top of the screen down to today: each one lands a clear
 // grey and softens to its resting tone, so the wave shows even with nothing painted. Then today's ring pulses and
-// "This is today." sits under it. The first time is a little slower, pulses twice and keeps the line until you move;
-// after that the line fades on its own. A touch or a scroll skips straight to the end. ?firstlife plays the first
+// "This is today." sits under it until you move. The first time is a little slower and pulses twice. A touch or a scroll skips straight to the end. ?firstlife plays the first
 // time again (a test link).
-const FILL_FIRST = 3000
-const FILL_AGAIN = 2000
-const LAND_MS = 700
-const LAND = [0xc4, 0xc4, 0xbc] // the grey a lived day lands in…
-const REST = [0xe2, 0xe2, 0xda] // …easing to LIVED_BLANK
-const landing = (k: number) => `rgb(${LAND.map((v, n) => Math.round(v + (REST[n] - v) * k)).join(', ')})`
+// Calm, not a rush: the wave eases in and out (no lurch at the start), and every day fades in rather than popping.
+const FILL_FIRST = 4200
+const FILL_AGAIN = 3200
+const LAND_MS = 1200
+const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))
+const AHEAD_RGB = rgb('#f1f1ec')
+const LAND = rgb('#cdcdc6') // the grey a lived day lands in, softening to LIVED_BLANK
+const mix = (a: number[], b: number[], k: number) =>
+  `rgb(${a.map((v, n) => Math.round(v + (b[n] - v) * k)).join(', ')})`
+const smooth = (k: number) => k * k * (3 - 2 * k)
 const FIRST_KEY = 'squared.firstLifeSeen'
 const firstLife = () => {
   try {
@@ -142,7 +145,12 @@ export function LifeDays({
         elapsed = f.at < 0 ? 0 : performance.now() - f.at
       }
       // When the wave reaches a day d days back (easing out: quick from the top, slowing into today).
-      const reachedAt = (d: number) => (f ? (1 - Math.sqrt(Math.min(1, d / f.span))) * f.ms : 0)
+      // (The inverse of an ease-in-out: gentle from the top, gentle into today.)
+      const reachedAt = (d: number) => {
+        if (!f) return 0
+        const q = 1 - Math.min(1, d / f.span)
+        return (q < 0.5 ? Math.sqrt(q / 2) : 1 - Math.sqrt(2 * (1 - q)) / 2) * f.ms
+      }
       for (let b = b0; b <= b1; b++) {
         const year = firstYear + b
         const y0 = b * block + TOP - top
@@ -166,15 +174,23 @@ export function LifeDays({
           const day = hidden ? undefined : days[iso]
           const ahead = iso > today || hidden
           roundRect(ctx, x, y, cell, cell, radius)
-          ctx.fillStyle = day
+          const paint = day
             ? day.framed && day.color === 'green'
               ? FRAME // too small for a frame: a framed day fills in the frame's darker green
               : squareFill(day.color)
             : ahead
               ? AHEAD
-              : age < LAND_MS
-                ? landing(age / LAND_MS)
-                : LIVED_BLANK
+              : LIVED_BLANK
+          // Reached by the wave: a painted day fades in from paper, an unpainted one lands grey and softens.
+          const k = age < LAND_MS ? smooth(age / LAND_MS) : 1
+          ctx.fillStyle =
+            k >= 1 || ahead
+              ? paint
+              : day
+                ? mix(AHEAD_RGB, rgb(paint), Math.min(1, k * 1.6))
+                : k < 0.3
+                  ? mix(AHEAD_RGB, LAND, k / 0.3)
+                  : mix(LAND, rgb(LIVED_BLANK), (k - 0.3) / 0.7)
           ctx.fill()
           if (ahead && labels) {
             ctx.lineWidth = 1
@@ -329,7 +345,6 @@ export function LifeDays({
   }
 
   // Play the fill, then the pulses and the line.
-  const [leaving, setLeaving] = useState(false)
   const skipped = useRef(false)
   useEffect(() => {
     const f = fill.current
@@ -339,7 +354,6 @@ export function LifeDays({
     const pulses = intro ? [f.ms + 200, f.ms + 1100] : [f.ms + 150]
     const lineAt = intro ? f.ms + 1800 : f.ms + 400
     const until = Math.max(pulses[pulses.length - 1] + PULSE_MS + 50, lineAt) + LAND_MS
-    const timers: ReturnType<typeof setTimeout>[] = []
     let raf = 0
     const tick = () => {
       if (skipped.current) return
@@ -347,21 +361,13 @@ export function LifeDays({
       const due = pulses.filter((ms) => t >= ms).pop()
       if (due !== undefined && pulseAt.current < start + due) pulseAt.current = start + due
       onScroll() // repaint
-      if (t >= lineAt && !timers.length) {
-        setThisIsToday(true)
-        if (!intro)
-          timers.push(
-            setTimeout(() => setLeaving(true), 2500),
-            setTimeout(() => setThisIsToday(false), 3100),
-          )
-      }
+      if (t >= lineAt) setThisIsToday(true)
       if (t < until) raf = requestAnimationFrame(tick)
       else fill.current = null
     }
     raf = requestAnimationFrame(tick)
     return () => {
       cancelAnimationFrame(raf)
-      timers.forEach(clearTimeout)
       fill.current = null
     }
   }, [size.w > 0]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -412,7 +418,7 @@ export function LifeDays({
         {/* The first zoom out's line, right under today's square, until you move the life. */}
         {thisIsToday && todayAt && (
           <p
-            className={'life-this-is-today' + (leaving ? ' is-leaving' : '')}
+            className="life-this-is-today"
             style={{
               top: TOP + todayAt.b * block + LABEL_H + todayAt.r * pitch + cell + 14,
               left: Math.min(Math.max(todayAt.c * pitch + cell / 2, 110), size.w - 110),
