@@ -2489,6 +2489,15 @@ body[data-screen='questions'] .idea {
   flex-direction: column;
   gap: 16px;
 }
+/* Narrower sides and gap (like the colour sheet), so the grey line fits on one line on a 375px-wide screen. */
+.sheet.is-legend {
+  padding-left: 22px;
+  padding-right: 22px;
+}
+.colours-sheet .legend li,
+.is-legend .legend li {
+  gap: 12px;
+}
 .meaning-body {
   margin: 8px 0 20px;
   font-size: 16px;

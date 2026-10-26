@@ -5,7 +5,7 @@ type Props = { open: boolean; onClose: () => void }
 
 export function MeaningSheet({ open, onClose }: Props) {
   return (
-    <Sheet open={open} onClose={onClose}>
+    <Sheet open={open} onClose={onClose} className="is-legend">
       {/* The same quiet style as the other help sheets; a tap outside or a swipe down closes it. */}
       <h2 className="torn-title">meaningful</h2>
       <p className="sheet-body meaning-body">
