@@ -1,6 +1,6 @@
 # Growth
 
-_last updated Oct 25, 2026_
+_last updated Oct 26, 2026_
 
 How people find squared. The short version: the store brings credibility, people bring people.
 
@@ -20,6 +20,14 @@ How people find squared. The short version: the store brings credibility, people
 3. **nomi's own paintings, shared:** a month or a year in colour on Instagram or Threads, with the line "The past is painted. Today is still yours." Quiet, beautiful, not selling.
 4. **Store launch day:** Product Hunt, a post, and the testers who loved it saying so.
 5. **The App Store page itself:** subtitle, screenshots and keywords in the brand story's voice (`docs/3-ios-todo.md`, step 5).
+
+## The paintings: the reward, and the best way squared travels
+
+A month's painting is the payoff for showing up. When a month ends, its painting could arrive like a small gift: unwrapped once, signed, and offered to keep or share. It's also squared's best growth channel: beautiful, personal, and with no data in it (no dates, no notes, no counts, just colour). Someone sees a friend's month and asks "what is that?". That's the whole funnel.
+
+- **First:** the month's end as a gift, in the app (a lab first; parked in `docs/future-ideas.md`).
+- **Then:** share from the gift itself, through the phone's share sheet: the painting, signed, and the small line "squared.today". Never a prompt to share, never a count of shares.
+- **Later:** prints and magnets of a month or a year (future ideas).
 
 ## Not doing
 

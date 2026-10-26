@@ -1,6 +1,6 @@
 # iOS to do
 
-_last updated Oct 25, 2026_
+_last updated Oct 26, 2026_
 
 squared on the App Store, started while the web beta runs. Tick items as they're done.
 
@@ -50,7 +50,7 @@ Wrap the same app in **Capacitor** (the web build bundled inside a native iPhone
 
 ## 4 · What the phone does better (Claude)
 
-- [ ] **The evening reminder:** one local notification at a time you choose ("paint your day" at 9 pm, for example). Off until you turn it on; set in settings. No server, no push service.
+- [ ] **The evening reminder:** one gentle local notification at a time you choose ("Today is still yours.", at 9 pm for example). Only if today isn't painted yet, never more than one a day. Off until you turn it on; set in settings. No server, no push service. (The web could do it too, on a home-screen iPhone, but only with a push server: not solid enough. The app does it on the phone itself.)
 - [ ] Haptics: a soft tap when a square is painted (a small touch, optional).
 
 ## 5 · The store page (nomi writes, Claude helps)
