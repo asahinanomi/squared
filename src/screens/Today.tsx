@@ -532,10 +532,8 @@ export function Today(props: Props) {
         </Sheet>
         <Sheet open={birthdayOpen} onClose={() => setBirthdayOpen(false)}>
           <h2 className="intro-title">{age > 0 ? `Happy ${ordinal(age)} birthday.` : 'Happy birthday.'}</h2>
-          <p className="intro-how birthday-line">
-            Another year of days, lived: the worth it ones, the hard ones, all of them yours.
-          </p>
-          <p className="intro-how birthday-line">Today is a gift. Spend it on what matters, and be here for it.</p>
+          <p className="intro-how birthday-line">Today starts a new year of your life.</p>
+          <p className="intro-how birthday-line">Spend it on what matters, and be here for it.</p>
           <p className="birthday-sign">— nomi</p>
           <button className="pill is-keyline intro-done" onClick={() => setBirthdayOpen(false)}>
             thank you

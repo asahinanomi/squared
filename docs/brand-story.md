@@ -149,12 +149,12 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 **Your birthday** (Oct 26, 2026): on the day itself, once, a sheet over today (after a new month's painting, if both land that day):
 - **Happy 55th birthday.**
-- Another year of days, lived: the worth it ones, the hard ones, all of them yours.
-- Today is a gift. Spend it on what matters, and be here for it.
+- Today starts a new year of your life.
+- Spend it on what matters, and be here for it.
 - — nomi
 - thank you (a keyline, like "got it")
 
-Why: it honours the year behind without grading it (the hard days count too: meaningful, not good), then hands today back, as the line does. Signed, because a birthday wish should come from a person.
+Why: it looks forward (squared starts today, the story moves forward) and hands the year back, as the line does; nothing about the year behind, which is never graded. (A first line about the year lived, "the worth it ones, the hard ones", was cut by nomi.) Signed, because a birthday wish should come from a person.
 
 **Home** (cut Oct 25, 2026: the logo opens today; the week moved to the top of my days. Kept below for the record.)
 - Before the first square: greeting · **10,962** / "days ahead of you." / "Make each one meaningful, starting with today." · the question · **paint your first square** · or paint yesterday · "getting started" (learned what squared is · named what matters · set how many squares · paint your first square)
