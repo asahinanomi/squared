@@ -45,20 +45,19 @@ export function SignIn({
           </button>
           {/* Continuing is agreeing (there's no onboarding step for it now): 18 and over, the terms and privacy. */}
           <p className="signin-agree">
-            by continuing, you confirm you’re 18 or over and agree to the <button onClick={onTerms}>terms</button> and{' '}
+            by continuing, you’re 18+ and agree to the <button onClick={onTerms}>terms</button> and{' '}
             <button onClick={onPrivacy}>privacy</button>.
           </p>
           {error && <p className="signin-error">sign-in didn't finish: {error}</p>}
         </div>
       </div>
-      {/* For someone new: why squared exists, and what it keeps, before signing in. */}
+      {/* For someone new: why squared exists, and what it keeps, before signing in. Terms and privacy are linked
+          once, in the line under the button. */}
       <Footer
         centred
         links={[
           ['the idea', onIdea],
           ['faq', onQuestions],
-          ['privacy', onPrivacy],
-          ['terms', onTerms],
         ]}
       />
     </main>
