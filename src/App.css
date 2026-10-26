@@ -1843,8 +1843,10 @@ body[data-screen='questions'] .idea {
   right: 0;
   bottom: 0;
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   gap: 6px;
+  min-height: 48px; /* the same row as every other bar, with or without "today" */
   /* The same band as the zoom bar on every other level: its own lifted surface, the pair on the right. */
   padding: 4px max(var(--gutter), calc((100vw - 560px) / 2 + var(--gutter)))
     max(calc(env(safe-area-inset-bottom) - 10px), 8px); /* a slim band: more room to paint */
@@ -1895,6 +1897,21 @@ body[data-screen='questions'] .idea {
   overflow: hidden;
   overflow: visible clip;
   padding-bottom: 0;
+}
+.app.is-one-screen:has(.zoombar) {
+  padding-bottom: calc(max(calc(env(safe-area-inset-bottom) - 10px), 8px) + 52px); /* room for the pinned bar */
+}
+/* Every zoom bar is pinned to the screen's bottom edge, exactly as the day screen's is, so its icons sit at the
+   same height on every screen (a bar at the foot of a 100dvh page can land a few points off on an iPhone). */
+.app.is-one-screen .zoombar {
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 48px;
+  padding: 4px max(var(--gutter), calc((100vw - 560px) / 2 + var(--gutter)))
+    max(calc(env(safe-area-inset-bottom) - 10px), 8px);
 }
 .life {
   position: relative;
