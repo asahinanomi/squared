@@ -67,7 +67,7 @@ export function Month({
     !focus || shiftMonth(focus, 0) > current ? current : shiftMonth(focus, 0) < first ? first : shiftMonth(focus, 0)
   const { scroller, back, visible, onScroll, jumpTo } = useLadderScroll({
     maxBack,
-    batch: 12,
+    batch: 4, // a few months to open on (it opens faster); more are added as you scroll back
     focus: start,
     focusBack: monthsBetween(start, current),
   })
