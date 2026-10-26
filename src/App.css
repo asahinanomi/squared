@@ -3381,6 +3381,21 @@ button.settings-row:active {
 }
 /* In the days list, every day is one even row on the paper, painted or not, between fine hairlines: a journal's
    lines, not a stack of cards and gaps. */
+/* Its top right: "+ 21 unpainted" / "painted only", then the painting. A title-only card keeps even padding. */
+.days-month-tools {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.days-month-more {
+  padding: 6px 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.days-month.is-card:not(:has(.month-list)) {
+  padding-bottom: 12px;
+}
 .days-month.is-card .month-list {
   gap: 0;
 }
@@ -3415,34 +3430,6 @@ button.settings-row:active {
   border-style: solid;
   border-color: var(--ink);
   box-shadow: none;
-}
-/* A folded run of unpainted days: not a day, a gap — quiet text between two dotted hairlines; a tap opens it. */
-.day-fold {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 10px 4px;
-  color: var(--muted);
-}
-.day-fold::before,
-.day-fold::after {
-  content: '';
-  flex: 1;
-  border-top: 1px dotted #c9c9c2;
-}
-.day-fold-text {
-  font-size: 14px;
-  white-space: nowrap;
-}
-.day-fold-chevron {
-  width: 14px;
-  height: 14px;
-  margin-left: -4px;
-  transition: transform 0.2s;
-}
-.day-fold-chevron.is-open {
-  transform: rotate(180deg);
 }
 .day-card.is-today .day-card-swatch {
   box-shadow:
