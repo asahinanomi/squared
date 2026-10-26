@@ -204,12 +204,11 @@ export function MyDays({
       </Sheet>
       <Sheet open={help === 'paintings'} onClose={() => setHelp(null)}>
         {/* As framing: the purpose as the title, the move acted out (the app's own painting and pill), notes beside it. */}
-        <h2 className="torn-title">Every month you paint becomes a painting.</h2>
+        <h2 className="torn-title">Your months and years become paintings.</h2>
         <div className="help-pair">
           <PaintingDemo />
           <div className="help-notes">
-            <p>When a month ends, keep its painting.</p>
-            <p>A year becomes one too.</p>
+            <p>When a month or a year ends, keep its painting.</p>
           </div>
         </div>
       </Sheet>
