@@ -4874,6 +4874,14 @@ button.home-card:active {
   pointer-events: none;
   animation: this-is-today 0.9s ease-out both;
 }
+.life-this-is-today.is-leaving {
+  animation: this-is-today-out 0.6s ease-in both;
+}
+@keyframes this-is-today-out {
+  to {
+    opacity: 0;
+  }
+}
 @keyframes this-is-today {
   from {
     opacity: 0;

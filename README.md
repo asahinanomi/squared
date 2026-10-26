@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 26, 2026, 19:08 UTC_
+_last updated Oct 26, 2026, 19:12 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -245,7 +245,7 @@ squared is a mindful journal for now: the day is lived in moments, then painted.
 squared's three heroes (the brush, the zoom out, the question) and the test for anything new live in `docs/squared-heroes.md`. Built from it:
 
 - **The paint dries** (lab row 6, A3): the brush is unchanged. When the strokes cover the square and the colour settles, the paint is wet for a moment: a soft sheen, a shade deeper. The sheen fades and the colour dries matte, a touch lighter, as gouache does, then the day's word ("worth it") writes itself into the corner, left to right, in its usual tone-on-tone ink. Only on the stroke that fills it, never when a painted day opens; still with reduced motion.
-- **The first zoom out to a life** (lab row 7): the first time a life opens, your days fill in from the top of the screen down to today (4.5s), today's ring pulses twice, then "This is today." sits right under today's square, in the question's voice (28px Fraunces) on a paper label, until you move the life. Once per device; still, with just the line, under reduced motion. Try it again: squared.today/?firstlife.
+- **The first zoom out to a life** (lab row 7): the first time a life opens, your days fill in from the top of the screen down to today (4.5s), today's ring pulses twice, then "This is today." sits right under today's square, in the question's voice (28px Fraunces) on a paper label, until you move the life. Once per device; still, with just the line, under reduced motion. Try it again: squared.today/?firstlife. **Every time after** (nomi's idea): the short version, no fill: when a life opens with today on screen, today's ring pulses once and "This is today." shows under it for about 2.5 seconds, then fades (off with reduced motion).
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays (nomi is thinking about it).
 
 ## Saving: online first, the account is the one truth

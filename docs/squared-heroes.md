@@ -36,11 +36,10 @@ If it serves none, it goes (stats, counts, extra rows). If it competes with a he
 
 - **The paint dries** (lab row 6, A3): wet sheen, dries matte, the word signs the corner. The brush itself never changes.
 - **The first zoom out to a life**, once (lab row 7): the days fill in, "This is today."
+- **"This is today." every time** a life opens, the short version: one pulse, the line for a moment, no fill.
 - **No counts in my days.**
 
 ## Being worked on
-
-- "This is today." every time you zoom to a life, as a short version (no fill)? Waiting on nomi.
 - The month's painting arriving as a gift, then shared (`docs/6-growth.md`).
 - One gentle evening invitation, iPhone app (`docs/3-ios-todo.md`).
 

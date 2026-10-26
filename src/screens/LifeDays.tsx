@@ -48,7 +48,8 @@ const NUM_MIN = 40 // squares at least this big print their day number…
 const dated = (cell: number) => cell >= NUM_MIN && textFits('2026.10 Wed', `400 ${MIN_TEXT_PX}px ${FONT}`, cell * 0.84)
 const PULSE_MS = 900
 // The first zoom out to a life, once: the lived days fill in up to today, today's ring pulses twice, then "This is
-// today." under it. Slow on purpose, so it's noticed. ?firstlife shows it again (a test link).
+// today." under it. Slow on purpose, so it's noticed. ?firstlife shows it again (a test link). Every time after: the
+// short version (one pulse, the line for a moment).
 const FILL_MS = 4500
 const PULSES = [4700, 5600]
 const LABEL_AT = 6300
@@ -345,6 +346,30 @@ export function LifeDays({
     }
   }, [size.w > 0]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Every other time: the short version. Today's ring pulses once and "This is today." shows for a moment, then
+  // fades (only when today is on screen).
+  const [leaving, setLeaving] = useState(false)
+  useEffect(() => {
+    if (intro || !size.w || calm()) return
+    const el = scroller.current
+    const y = todayTop()
+    if (!el || y + cell < el.scrollTop || y > el.scrollTop + el.clientHeight) return
+    const timers = [
+      setTimeout(() => {
+        pulseAt.current = performance.now()
+        const tick = () => {
+          onScroll() // repaint
+          if (performance.now() - pulseAt.current < PULSE_MS + 50) requestAnimationFrame(tick)
+        }
+        tick()
+        setThisIsToday(true)
+      }, 350),
+      setTimeout(() => setLeaving(true), 2800),
+      setTimeout(() => setThisIsToday(false), 3400),
+    ]
+    return () => timers.forEach(clearTimeout)
+  }, [size.w > 0]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const totalH = TOP + years * block - BLOCK_GAP
   const todayAt = cell ? place(today) : null
   return (
@@ -383,7 +408,7 @@ export function LifeDays({
         {/* The first zoom out's line, right under today's square, until you move the life. */}
         {thisIsToday && todayAt && (
           <p
-            className="life-this-is-today"
+            className={'life-this-is-today' + (leaving ? ' is-leaving' : '')}
             style={{
               top: TOP + todayAt.b * block + LABEL_H + todayAt.r * pitch + cell + 14,
               left: Math.min(Math.max(todayAt.c * pitch + cell / 2, 110), size.w - 110),
