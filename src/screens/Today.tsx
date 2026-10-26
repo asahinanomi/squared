@@ -452,14 +452,23 @@ export function Today(props: Props) {
             onDelete={onDeleteNote}
           />
         )}
-        {/* Never more than a third of the screen: the question stays, your list scrolls under it. */}
-        <Sheet open={compassOpen} onClose={() => setCompassOpen(false)} className="is-third">
-          <h2 className="sheet-title">torn?</h2>
-          <p className="sheet-body">Ask yourself: did what mattered outweigh the rest?</p>
+        {/* Never more than half the screen: one line of question, then your list, which scrolls (a fade at its foot says
+            there's more, and lifts once you reach the end). */}
+        <Sheet open={compassOpen} onClose={() => setCompassOpen(false)} className="is-half">
+          <h2 className="torn-title">Torn? Did what mattered outweigh the rest?</h2>
           {compass.length ? (
             <>
-              <p className="compass-sub">you said these matter to you</p>
-              <ul className="compass-list">
+              <p className="compass-sub">you said these matter:</p>
+              <ul
+                className="compass-list"
+                ref={(el) => {
+                  el?.classList.toggle('is-end', el.scrollHeight - el.clientHeight < 4)
+                }}
+                onScroll={(e) => {
+                  const el = e.currentTarget
+                  el.classList.toggle('is-end', el.scrollTop + el.clientHeight >= el.scrollHeight - 4)
+                }}
+              >
                 {compass.map((text, i) => (
                   <li key={i}>
                     <span className="compass-dot" style={{ background: paintHex('green') }} aria-hidden="true" />
