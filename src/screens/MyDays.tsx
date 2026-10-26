@@ -190,14 +190,14 @@ export function MyDays({
       </div>
       {/* Help, only when asked for: how a day is framed, how a painting is kept. */}
       <Sheet open={help === 'framed'} onClose={() => setHelp(null)}>
-        <h2 className="torn-title">framed days</h2>
-        {/* Two columns: the move acted out (the day screen's real framing) and, beside it, a few words. */}
+        {/* The title is the purpose too. Two columns: the move acted out (the day screen's real framing), and beside it
+            a few words. */}
+        <h2 className="torn-title">Some days deserve a frame.</h2>
         <div className="help-pair">
           <FrameDemo />
           <div className="help-notes">
-            <p>Some days deserve a frame.</p>
             <p>Open a painted day and tap “frame it”.</p>
-            <p>Your framed days wait here.</p>
+            <p>You can always unframe it later.</p>
           </div>
         </div>
       </Sheet>
