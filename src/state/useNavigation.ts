@@ -5,7 +5,7 @@ import { todayIso } from '../lib/dates'
 import type { Why } from '../lib/notes'
 import { SCOPE_ORDER, type Scope, type SliceId } from '../lib/pie'
 import type { Profile } from '../lib/profile'
-import { usePinch, type Focal } from '../lib/usePinch'
+import { usePinch } from '../lib/usePinch'
 import { ideaAtStart, LADDER, leaveLegalUrl, legalAtStart, type Legal, type Screen } from './app'
 
 const RES: Resolution[] = ['years', 'months', 'days'] // the three views of a life, outward
@@ -21,10 +21,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const [monthFocus, setMonthFocus] = useState<string | undefined>()
   // Which view of a life: one square per year (where a life always lands), month or day.
   const [lifeRes, setLifeResValue] = useState<Resolution>('years')
-  // A level's own size: pinching no longer enlarges within a level (it steps between levels), so this stays 0.
-  const [mag, setMag] = useState(0)
-  const [focal] = useState<Focal | undefined>()
-  const [monthAnchor] = useState<{ iso?: string; y: number } | undefined>()
   // Where "how many squares?" returns to: a life, when it was asked for on the way there.
   const [afterSetup, setAfterSetup] = useState<Screen>('today')
   // The zoom level the pie was opened from: the switch returns there.
@@ -55,7 +51,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     const a = LADDER.indexOf(screen)
     const b = LADDER.indexOf(next)
     setMotion(a < 0 || b < 0 || a === b ? null : b > a ? 'out' : 'in')
-    setMag(0)
     if (next !== 'today') setDayFromList(false)
     if (next !== 'life' && next !== 'list') setLifeBack(false)
     setScreenValue(next)
@@ -64,7 +59,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const setLifeRes = (r: Resolution) => {
     setLifeBack(false)
     setMotion(RES.indexOf(r) > RES.indexOf(lifeRes) ? 'out' : RES.indexOf(r) < RES.indexOf(lifeRes) ? 'in' : null)
-    setMag(0)
     setLifeResValue(r)
   }
 
@@ -155,14 +149,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setListZoomed(true)
     setListFocus(listMid.current())
     setListRes(r)
-  }
-  const listOut = (at: string) => {
-    if (listRes === 'years') return false
-    setLifeBack(false)
-    setListOnly(null)
-    setListZoomed(true)
-    setListFocus(at)
-    setListRes(listRes === 'days' ? 'months' : 'years')
   }
   /** The pie's "see them →": that slice's days, in the list; its squares icon goes back to where the pie came from. */
   const seeSlice = (id: Exclude<SliceId, 'ahead'> | 'lived') => {
@@ -289,10 +275,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     date,
     setDate,
     motion,
-    mag,
-    focal,
     monthFocus,
-    monthAnchor,
     lifeRes,
     setLifeRes,
     pieScope,
@@ -316,7 +299,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     toggleList,
     listIn,
     listTo,
-    listOut,
     seeSlice,
     openSettings,
     openMatters,

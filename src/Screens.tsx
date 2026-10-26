@@ -55,7 +55,7 @@ export type ScreensProps = {
 // Which screen shows, and what each one is given. Every screen gets what it needs from the app's pieces (the
 // navigation, the account's data, the day's actions, what matters, paintings); nothing here keeps state.
 export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onDeleted, ui }: ScreensProps) {
-  const { screen, setScreenValue, date, mag, focal, lifeRes, setLifeRes, listRes, listMid } = nav
+  const { screen, setScreenValue, date, lifeRes, setLifeRes, listRes, listMid } = nav
   const { days, notes, profile } = acc
 
   if (screen === 'today')
@@ -267,8 +267,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         focus={nav.lifeFocus}
         mid={listMid}
         onResolution={setLifeRes}
-        cols={[28, 14, 7, 3][mag]}
-        focal={focal}
         onPainting={openPainting}
         onBack={nav.lifeBack ? nav.openMyDays : undefined}
       />
@@ -279,8 +277,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onPick={(m) => nav.goMonth(m)}
         onIn={() => nav.goMonth()}
         onResolution={setLifeRes}
-        cols={[12, 6, 4, 3][mag]}
-        focal={focal}
       />
     ) : (
       <Life
@@ -300,8 +296,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
       onIn={nav.goToday}
       onOut={(at) => nav.goLife(at)}
       mid={listMid}
-      zoomed={mag > 0}
-      anchor={nav.monthAnchor}
       onPainting={openPainting}
       onSetUp={() => nav.askSquares('month')}
     />
