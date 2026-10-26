@@ -64,6 +64,8 @@ function rim(a: number, b: number) {
 // a dashed keyline round the days still to come. Numbers sit inside the wedges that have room for them.
 // Three denominators for the same chart; it always opens on the whole life. Zooming in (pinch or
 // the zoom buttons) steps closer: whole life → days I lived → painted only.
+// PARKED (Oct 26, 2026): no way in any more (my days' "a life, in slices" row was cut: a breakdown for its own sake).
+// Kept for a better idea: see docs/future-ideas.md, "The pie, parked".
 export function Pie({ days, profile, scope, onScope, onSee, onBack }: Props) {
   // A tapped slice (or legend row) lifts and the rest fade; a line under the pie leads to those days.
   const [picked, setPicked] = useState<SliceId | null>(null)

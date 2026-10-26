@@ -23,6 +23,12 @@ Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encry
 
 **Decided: wait for testers.** nomi's feeling may not be everyone's, and testers won't go as deep in two weeks. So hold it, watch what they do with things as they are (do they paint past days? how far back? do they stop after a hard day?), and ask on day 14 (`docs/4-testflight-todo.md`). Then decide. Risks to solve in a lab: the lived tone must never read as grey paint ("a blur"); squared needs to know the day you started (joined, not first painted). The principle is in the brand story, section 2.
 
+## The pie, parked (Oct 26, 2026)
+
+**Cut from my days** ("a life, in slices"): a breakdown of your days by colour, in percentages, read as stats for their own sake, and the squares already show a life in colour. **The code is kept, unreachable**: `src/screens/Pie.tsx` and `src/lib/pie.ts` (zoom steps whole life → days I lived → painted only, "see them →" into the list). To bring it back, give it a door again (it was a row in my days opening `nav.openPie`).
+
+**A better use, nomi's idea: a pie as a way to paint.** When you paint a square, choose a *pie pattern* instead of the brush strokes: the paint fans out from the lower-left corner in slices toward the right, like sunlight rising from the bottom left. The square would read as a sunrise of your day. Worth a lab when painting gets its next round: how you'd choose it (a quiet option, never in the way of the brush), how it looks in each colour, and whether it shows in the month, the life and the paintings as it does on the day.
+
 ## An email when an account is deleted (low priority, noted Oct 25, 2026)
 
 **Low priority:** not required by Apple or privacy law; the goodbye screen already confirms it. Pick it up when squared sends other mail.

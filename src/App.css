@@ -4247,6 +4247,24 @@ button.home-card:active {
   margin: 0;
   font-size: 13px;
 }
+/* Under the two so-far paintings, across the card: the way to every painting you kept. */
+.home-paintings .my-days-all {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid #ecece5;
+  font-size: 15px;
+  color: var(--ink);
+}
+.home-paintings .my-days-all svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--faint); /* the rows' arrow */
+}
 
 /* A wait: the hourglass alone, centred on the paper. Its grains fall, then it's turned over (half a turn, a
    little ease), and again, as long as the wait lasts. Its sand is half and half, so every turn looks the same. */
@@ -4543,25 +4561,6 @@ button.home-card:active {
   overflow: hidden;
 }
 
-/* my days' title row: the title, and "today ›" on its far right, a quiet text link. */
-.my-days-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
-.my-days-today {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 8px 0 8px 8px;
-  font-size: 15px;
-  color: var(--ink-soft);
-}
-.my-days-today svg {
-  width: 18px;
-  height: 18px;
-}
 /* my days' life bar: now marked on it, a dot where lived meets ahead, "today" under it (kept inside the card). */
 .life-track {
   position: relative;

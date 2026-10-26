@@ -21,15 +21,10 @@ type Props = {
   /** "set up now" on the life card, before the squares are set: how many squares, then back here. */
   onSetUp: () => void
   onPainting: (period: string) => void
-  /** The bar: time runs left to right, so it opens the list of days, on today. */
-  onList: () => void
-  onPie: () => void
   onSquares: () => void
   onMatters: () => void
   onFramed: () => void
   onPaintings: () => void
-  /** Beside the title: back to today, now. */
-  onToday: () => void
 }
 
 // my days (the menu): looking back, every door into your past in one place, never a dashboard of numbers. A life as one
@@ -46,13 +41,10 @@ export function MyDays({
   onDay,
   onSetUp,
   onPainting,
-  onList,
-  onPie,
   onSquares,
   onMatters,
   onFramed,
   onPaintings,
-  onToday,
 }: Props) {
   const today = todayIso()
   const month = today.slice(0, 7)
@@ -77,14 +69,8 @@ export function MyDays({
   )
   return (
     <main className="settings my-days">
-      {/* Looking back, with the way to now always at hand, on the title's far right. */}
-      <div className="my-days-head">
-        <h1 className="settings-title">my days</h1>
-        <button className="my-days-today" onClick={onToday}>
-          today
-          <Chevron dir="right" />
-        </button>
-      </div>
+      {/* The logo and the menu already go to today: the title stands alone. */}
+      <h1 className="settings-title">my days</h1>
       {/* squared's line, the page's epigraph: what follows is the past; today is beside it. The tagline candidate. */}
       <p className="my-days-line">The past is painted. Today is still yours.</p>
       {/* This week first, the nearest look back (it lived on home, which was cut): swipe or ‹ › for earlier weeks. */}
@@ -118,7 +104,7 @@ export function MyDays({
           return (
             <button
               className="home-card home-life my-days-life"
-              onClick={onList}
+              onClick={onSquares}
               aria-label={`a life: ${fmt(c.left)} days ahead`}
             >
               <span className="home-head">
@@ -147,7 +133,8 @@ export function MyDays({
             </button>
           )
         })()}
-      {(hasMonth || hasYear) && (
+      {/* This month and this year so far, and the way to every painting you kept (the old "paintings" row). */}
+      {(hasMonth || hasYear || kept.length > 0) && (
         <section className="home-card home-paintings my-days-paintings">
           {hasMonth && (
             <button onClick={() => onPainting(month)}>
@@ -163,18 +150,16 @@ export function MyDays({
               <span className="home-s">{count(year)} days in colour</span>
             </button>
           )}
+          <button className="my-days-all" onClick={onPaintings}>
+            {kept.length ? `all my paintings (${kept.length})` : 'all my paintings'}
+            <Chevron dir="right" />
+          </button>
         </section>
       )}
       <div className="settings-rows is-last">
         {matters.length
           ? row('what matters', matters.slice(0, 3).join(' · '), onMatters)
           : row('what matters', 'what makes a day worth it', onMatters, 'set up')}
-        {profile
-          ? row('a life, in squares', 'every day, as a square', onSquares)
-          : row('a life, in squares', 'every day of your life, as a square', onSquares, 'set up')}
-        {profile
-          ? row('a life, in slices', 'your days, as a pie', onPie)
-          : row('a life, in slices', 'your days, as a pie', onPie, 'set up')}
         {framed
           ? row('framed days', 'the days you framed', onFramed)
           : row(
@@ -184,18 +169,6 @@ export function MyDays({
               'none',
               // A ghost of a framed square: what will hang here.
               <span className="framed-ghost" aria-hidden="true">
-                <i />
-              </span>,
-            )}
-        {kept.length
-          ? row('paintings', 'the paintings you kept', onPaintings)
-          : row(
-              'paintings',
-              'none yet · keep a month’s painting when it ends',
-              onPaintings,
-              'none',
-              // A ghost of a kept painting, in its frame.
-              <span className="framed-ghost is-painting" aria-hidden="true">
                 <i />
               </span>,
             )}

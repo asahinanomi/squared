@@ -118,13 +118,10 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         kept={wall.kept}
         onSetUp={() => nav.askSquares('mydays')}
         onPainting={openPainting}
-        onList={nav.openListFromMyDays}
-        onPie={nav.openPie}
         onSquares={nav.openLifeFromMyDays}
         onMatters={() => nav.openMatters('mydays')}
         onFramed={() => nav.openFramed('mydays')}
         onPaintings={() => setScreenValue('paintings')}
-        onToday={nav.goToday}
       />
     )
   if (screen === 'framed')
