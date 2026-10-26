@@ -25,7 +25,7 @@ const BRUSH = 0.58
 // Coverage is tracked on a coarse grid; this much painted counts as filled.
 const GRID = 24
 const FLOW_MS = 450
-const FILLED = 0.97 // you paint essentially all of it; the wet paint flows into the last specks you'd never find
+const FILLED = 0.9 // most of it painted; the wet paint flows into the gaps left
 
 // When a square last filled (performance.now()) and its strokes as they were: the square that mounts with the saved
 // colour picks the drying up, the wet strokes fading into the flat colour under them.
