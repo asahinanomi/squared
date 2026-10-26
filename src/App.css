@@ -3400,9 +3400,9 @@ button.settings-row:active {
   gap: 0;
 }
 .days-month.is-card .day-card {
-  padding: 12px 2px;
+  padding: 16px 2px;
   border-radius: 0;
-  border-bottom: 1px solid #ecece5;
+  border-bottom: 1px solid #dcdcd4; /* a clear line between days: each one its own entry */
 }
 .days-month.is-card li:last-child .day-card {
   border-bottom: 0;
@@ -3526,16 +3526,25 @@ button.settings-row:active {
   font-size: 12px;
   color: var(--muted);
 }
+/* "see all 5 moments": small and grey on the date's line, at the right, above the card's own tap. */
+.day-card-see {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  margin: -6px -2px 0 0;
+  padding: 8px 2px 8px 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+/* "show less": at the end of the open day, on the right, where the thumb is after reading. */
 .day-card-more {
   position: relative;
   z-index: 1;
-  margin-top: 2px;
-  padding: 6px 10px 6px 0;
+  align-self: flex-end;
+  margin-top: -6px;
+  padding: 8px 2px 8px 8px;
   font-size: 14px;
-  color: var(--ink-soft);
-  text-decoration: underline;
-  text-decoration-color: #c9c9c2;
-  text-underline-offset: 3px;
+  color: var(--muted);
 }
 /* A quiet segmented control: a life's years · months · days, and the pie's filter. */
 /* It sits closer to what it changes than to the title above it: 22px above, about 12px below. */

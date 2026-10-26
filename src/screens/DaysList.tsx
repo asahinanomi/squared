@@ -145,6 +145,12 @@ function DayCard({
         {special && <span className="day-card-special">{special}</span>}
         {/* Only what's worth saying in a list: a late square, or one changed later (on time is the norm). */}
       </div>
+      {/* More to read: "see all 5 moments" on the date's line, at the right; "show less" waits at the end. */}
+      {more && !open && (
+        <button className="day-card-see" aria-expanded={false} onClick={() => setOpen(true)}>
+          {notes.length > 1 ? `see all ${notes.length} moments` : 'see all'}
+        </button>
+      )}
       {/* The latest note under the square and date, the card's full width (more of it fits), two lines. */}
       {!open && latest && (
         <div className="day-card-preview">
@@ -154,11 +160,6 @@ function DayCard({
             </span>
           )}
           <p className="day-card-note">{latest.body}</p>
-          {more && (
-            <button className="day-card-more" aria-expanded={false} onClick={() => setOpen(true)}>
-              {notes.length > 1 ? `more · ${notes.length} moments ⌄` : 'more ⌄'}
-            </button>
-          )}
         </div>
       )}
       {/* Open, the notes take the card's full width, each its own block: its time, then its words. */}
@@ -176,7 +177,7 @@ function DayCard({
             </div>
           ))}
           <button className="day-card-more" aria-expanded={true} onClick={() => setOpen(false)}>
-            less ⌃
+            show less
           </button>
         </div>
       )}
