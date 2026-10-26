@@ -34,7 +34,7 @@ If it serves none, it goes (stats, counts, extra rows). If it competes with a he
 
 ## Built
 
-- **The paint dries** (lab row 6, A3): the strokes stay wet, then dry into one flat colour, and the word signs the corner. The brush itself never changes.
+- **The paint dries** (lab row 6, A3): your textured strokes stay wet (a shade deeper), then soften into one smooth colour as they dry, and the word signs the corner. No gloss. The brush itself never changes.
 - **A life fills in, every time** (lab row 7): the lived days fill in to today, a wave of grey even with nothing painted, then "This is today." Slower the first time; a touch skips it.
 - **No counts in my days.**
 

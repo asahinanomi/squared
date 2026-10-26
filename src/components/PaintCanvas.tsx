@@ -256,8 +256,9 @@ export function PaintCanvas({
     if (done >= FILLED && loaded) flow(loaded)
   }
 
-  // Filled: the wet paint flows into the last blank specks (drawn behind the strokes, so they stay as painted), and
-  // once the square is truly covered it settles with its sound.
+  // Filled: the wet paint flows into the gaps left, in dabs of the same brush (drawn behind the strokes, so they stay
+  // as painted), then a last wash behind everything for any speck the dabs missed. Once the square is truly covered,
+  // it settles with its sound.
   const flow = (p: Paint) => {
     const c = canvas.current
     const g = c?.getContext('2d')
@@ -269,14 +270,29 @@ export function PaintCanvas({
     }
     if (!c || !g) return done()
     flowing.current = true
+    const s = size.current
+    const cell = s / GRID
+    const tip = brushTip(paintHex(p), (s * BRUSH) / 4)
+    // The gaps, in a loose order, so the paint seeps in here and there rather than sweeping.
+    const gaps: number[] = []
+    covered.current.forEach((v, i) => !v && gaps.push(i))
+    gaps.sort(() => Math.random() - 0.5)
+    let drawn = 0
     const start = performance.now()
     const step = () => {
       const k = Math.min(1, (performance.now() - start) / FLOW_MS)
       g.save()
       g.globalCompositeOperation = 'destination-over'
-      g.globalAlpha = k < 1 ? 0.12 : 1
-      g.fillStyle = paintHex(p)
-      g.fillRect(0, 0, c.width, c.height)
+      for (; drawn < Math.ceil(gaps.length * k); drawn++) {
+        const i = gaps[drawn]
+        const x = ((i % GRID) + 0.5) * cell + (Math.random() - 0.5) * cell
+        const y = (Math.floor(i / GRID) + 0.5) * cell + (Math.random() - 0.5) * cell
+        g.drawImage(tip, x - tip.width / 2, y - tip.height / 2)
+      }
+      if (k >= 1) {
+        g.fillStyle = paintHex(p)
+        g.fillRect(0, 0, c.width, c.height)
+      }
       g.restore()
       if (k < 1) requestAnimationFrame(step)
       else done()
@@ -339,11 +355,9 @@ export function PaintCanvas({
         <div className={'canvas-face' + (saved ? ' is-painted' : '')} />
         <canvas ref={canvas} className="paint-surface" />
 
-        {/* Filled: the strokes stay as painted, wet (a still sheen), while it saves; then they dry into the one flat
-            colour, the sheen fading with them. */}
-        {settling && <div className="wet-sheen is-still" />}
+        {/* Filled: the strokes stay as painted, wet (a shade deeper), while it saves; then they dry into the one
+            smooth colour under them. */}
         {drying && wetStrokes && <img className="paint-surface wet-strokes" src={wetStrokes} alt="" />}
-        {drying && <div className="wet-sheen" />}
         {/* For someone new: a ghost brush sweeps across, leaving a faint trail, so the square reads as "paint me". */}
         {!saved && !touched && <GhostBrush />}
         {!touched && !settling && (

@@ -758,41 +758,32 @@ sup.ord {
 .canvas.is-settling {
   animation: press 0.42s cubic-bezier(0.3, 0.7, 0.4, 1);
 }
-/* Then it dries: wet paint sits a shade deeper with a soft sheen; the sheen fades and the colour settles matte, a touch
-   lighter, as gouache does. The day's word signs the corner once it's dry, written left to right. */
-.canvas .wet-sheen {
-  position: absolute;
-  inset: 0;
-  clip-path: inset(var(--margin));
-  pointer-events: none;
-  background: linear-gradient(
-    125deg,
-    rgba(255, 255, 255, 0.5),
-    rgba(255, 255, 255, 0.14) 40%,
-    rgba(255, 255, 255, 0) 60%,
-    rgba(255, 255, 255, 0.1)
-  );
-  animation: wet-sheen 3s ease-in both;
+/* Then it dries, as paint does: your strokes stay as painted, texture and all, a shade deeper while wet; over 3s the
+   texture softens away into one smooth colour, a touch lighter. No gloss. The day's word signs the corner once it's
+   dry, written left to right. */
+.canvas.is-settling .paint-surface {
+  filter: var(--wet);
+  transition: filter 0.4s ease-out;
 }
-@keyframes wet-sheen {
+.canvas {
+  --wet: brightness(0.9) saturate(1.08);
+}
+.canvas .wet-strokes {
+  filter: var(--wet);
+  animation: dry-out 3s ease-in-out both;
+}
+@keyframes dry-out {
   to {
     opacity: 0;
+    filter: none;
   }
-}
-/* While it saves, the sheen just sits on the wet strokes. */
-.canvas .wet-sheen.is-still {
-  animation: none;
-}
-/* The strokes as they were painted, drying into the flat colour under them. */
-.canvas .wet-strokes {
-  animation: wet-sheen 3s ease-in both;
 }
 .canvas.is-drying .canvas-face.is-painted {
   animation: dry 3s ease-in-out both;
 }
 @keyframes dry {
   from {
-    filter: brightness(0.8) saturate(1.1);
+    filter: var(--wet);
   }
 }
 .canvas.is-drying .canvas-word.is-painted .canvas-hand {
@@ -816,7 +807,6 @@ sup.ord {
 }
 @media (prefers-reduced-motion: reduce) {
   .canvas.is-settling,
-  .canvas .wet-sheen,
   .canvas .wet-strokes,
   .canvas.is-drying .canvas-face.is-painted,
   .canvas.is-drying .canvas-word.is-painted .canvas-hand {
