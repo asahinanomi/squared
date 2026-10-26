@@ -262,7 +262,9 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         days={days}
         profile={profile}
         onPick={(iso) => nav.openDay(iso)}
-        onIn={() => nav.goMonth()}
+        onIn={(at) => nav.goMonth(at)}
+        focus={nav.lifeFocus}
+        mid={listMid}
         onResolution={setLifeRes}
         cols={[28, 14, 7, 3][mag]}
         focal={focal}
@@ -295,7 +297,8 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
       focus={nav.monthFocus}
       onPick={(iso) => nav.openDay(iso)}
       onIn={nav.goToday}
-      onOut={nav.goLife}
+      onOut={(at) => nav.goLife(at)}
+      mid={listMid}
       zoomed={mag > 0}
       anchor={nav.monthAnchor}
       onPainting={openPainting}

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, type MutableRefObject } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { firstDay, fromIso, isoDate, longDate, monthCells, monthTitle, todayIso, dayCaption } from '../lib/dates'
 import type { Days } from '../lib/days'
@@ -18,8 +18,10 @@ type Props = {
   onPick: (iso: string) => void
   /** Zoom in: back to the single square. */
   onIn: () => void
-  /** Zoom out to the year. */
-  onOut?: () => void
+  /** Zoom out to a life, on the month in view. */
+  onOut?: (at: string) => void
+  /** Set to "the day in the middle of what's showing", for a pinch to zoom from (and reset when it closes). */
+  mid?: MutableRefObject<() => string>
   /** Pinched in: bigger day squares (3 to a row) that print their full date. */
   zoomed?: boolean
   /** The day under the fingers when the zoom changed, kept where it was on screen. */
@@ -42,7 +44,19 @@ export const monthsBetween = (a: string, b: string) =>
 
 // My squares — your months, one after another in a single scroll, from the birth month
 // down to this one (next month peeks in faintly below). Opens centred on this month.
-export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, anchor, onPainting, onSetUp }: Props) {
+export function Month({
+  days,
+  born,
+  focus,
+  onPick,
+  onIn,
+  onOut,
+  zoomed = false,
+  anchor,
+  onPainting,
+  onSetUp,
+  mid,
+}: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const maxBack = monthsBetween(shiftMonth(firstDay(days, born), 0), current)
@@ -55,6 +69,10 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
   })
 
   const toToday = useBackToToday(scroller, '.month-day.is-today')
+  // The middle of the month in view: where a zoom out (button or pinch) centres the life.
+  const middle = () => `${visible.slice(0, 8)}15`
+  if (mid) mid.current = middle
+  useEffect(() => () => void (mid && (mid.current = todayIso)), [mid])
   const months = Array.from({ length: back + 1 }, (_, i) => shiftMonth(current, i - back))
   const step = (n: number) => {
     const target = shiftMonth(visible, n)
@@ -169,9 +187,9 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
 
       <ZoomBar
         onIn={onIn}
-        onOut={onOut}
+        onOut={onOut && (() => onOut(middle()))}
         onRecenter={toToday.away ? toToday.back : undefined}
-        listAt={() => `${visible.slice(0, 8)}15`}
+        listAt={middle}
       />
     </main>
   )

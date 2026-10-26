@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { glide } from '../lib/backToToday'
 import { LifeHead, type Resolution } from '../components/LifeHead'
 import { ZoomBar } from '../components/ZoomBar'
@@ -16,8 +16,12 @@ type Props = {
   profile: Profile
   /** Open a day (to paint it). */
   onPick: (iso: string) => void
-  /** Zoom in: this year. */
-  onIn: () => void
+  /** Zoom in: the month in the middle of the screen. */
+  onIn: (at: string) => void
+  /** The day to open on (zooming out of a month): it sits in the middle; otherwise today. */
+  focus?: string
+  /** Set to "the day in the middle of the screen", for a pinch to zoom in from (and reset when it closes). */
+  mid?: MutableRefObject<() => string>
   onResolution: (r: Resolution) => void
   /** Opened from my days: "‹ my days". */
   onBack?: () => void
@@ -49,7 +53,19 @@ const daysInYear = (y: number) => (new Date(y, 1, 29).getDate() === 29 ? 366 : 3
 // A life, in days — one solid square per real day, grouped into a block per year (each labelled,
 // with a gap between years). Long by design: you scroll your whole life, year by year.
 // Drawn on a canvas, only the rows on screen. Opens on today, where lived days meet the empty ones.
-export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28, focal, onPainting, onBack }: Props) {
+export function LifeDays({
+  days,
+  profile,
+  onPick,
+  onIn,
+  onResolution,
+  cols = 28,
+  focal,
+  onPainting,
+  onBack,
+  focus,
+  mid,
+}: Props) {
   const today = todayIso()
   const { born, lifespan } = profile
   const end = addYears(born, lifespan) // the first day after the hoped-for last one
@@ -157,10 +173,10 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
         }
       }
     },
-    // Open with today in the middle.
+    // Open with today (or the month you zoomed out of) in the middle.
     (w, h) => {
       const { pitch, block } = geometry(w)
-      const p = place(today)
+      const p = place(focus && focus >= born && focus < end ? focus : today)
       return TOP + p.b * block + LABEL_H + p.r * pitch - h / 2
     },
   )
@@ -178,6 +194,14 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
     const i = Math.min(daysInYear(year) - 1, r * n + c)
     return isoDate(new Date(year, 0, 1 + i))
   }
+
+  // The day in the middle of the screen: where zooming in (button or pinch) opens the month.
+  const middle = () => {
+    const el = scroller.current
+    return el && size.w ? dayAt(size.w / 2, el.scrollTop + el.clientHeight / 2, cols) : today
+  }
+  if (mid) mid.current = middle
+  useEffect(() => () => void (mid && (mid.current = todayIso)), [mid])
 
   // After a pinch changes the size, keep the day that was under the fingers under them.
   const prevCols = useRef(cols)
@@ -291,14 +315,7 @@ export function LifeDays({ days, profile, onPick, onIn, onResolution, cols = 28,
           )}
         </div>
       )}
-      <ZoomBar
-        onIn={onIn}
-        onRecenter={away ? backToToday : undefined}
-        listAt={() => {
-          const el = scroller.current
-          return el ? dayAt(size.w / 2, el.scrollTop + el.clientHeight / 2, cols) : today
-        }}
-      />
+      <ZoomBar onIn={() => onIn(middle())} onRecenter={away ? backToToday : undefined} listAt={middle} />
     </main>
   )
 }

@@ -102,18 +102,17 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setAfterSetup(then)
     setScreenValue('setup')
   }
-  // A life needs a birth date and a lifespan: the first time, ask (gently) on the way.
-  const goLife = () => {
-    setLifeResValue('years')
-    if (profile) return setScreen('life')
-    askSquares('life')
-  }
-  // A life, in days (from home's life card).
-  const goLifeDays = () => {
+  // Zooming out of a month lands on a life in days (every day of it, one square each), centred on the month you
+  // were looking at. A life needs a birth date and a lifespan: the first time, ask (gently) on the way.
+  const [lifeFocus, setLifeFocus] = useState<string | undefined>()
+  const goLife = (focus?: string) => {
     setLifeResValue('days')
+    setLifeFocus(focus)
     if (profile) return setScreen('life')
     askSquares('life')
   }
+  // A life, in days (from my days' life card): on today.
+  const goLifeDays = () => goLife()
   // The list of days, the same way: open it on the day you were looking at, and its switch takes you back.
   // It opens at the level that matches the squares (a life → its tab: years, months or days; a month → days); its
   // switch goes back where you came from, or — if you zoomed within the list — to the squares at that level.
@@ -259,12 +258,12 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
       const i = SCOPE_ORDER.indexOf(pieScope)
       if (i >= SCOPE_ORDER.length - 1) return false
       setPieScope(SCOPE_ORDER[i + 1])
-    } else if (screen === 'life') goMonth()
+    } else if (screen === 'life') goMonth(listMid.current())
     else return false
   }
   const pinchOut = () => {
     if (screen === 'today') outOfDay()
-    else if (screen === 'month') goLife()
+    else if (screen === 'month') goLife(listMid.current())
     else if (screen === 'pie') {
       const i = SCOPE_ORDER.indexOf(pieScope)
       if (i <= 0) return false
@@ -309,6 +308,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     goHome,
     goMonth,
     goLife,
+    lifeFocus,
     openDay,
     outOfDay,
     askSquares,
