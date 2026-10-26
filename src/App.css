@@ -805,10 +805,11 @@
 }
 /* how many squares: why it's asked, on the way somewhere. */
 .setup-why {
-  margin: 8px 0 0;
-  font-size: 16px;
-  line-height: 1.45;
-  color: var(--ink-soft);
+  margin: 6px 0 0;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ink); /* part of the question, not a footnote */
 }
 .tray-rest {
   width: 100%;
@@ -3197,8 +3198,7 @@ button.settings-row:active {
 .days-month {
   padding: 14px 0 10px;
 }
-/* Each month (or year) opens with its name, as on the month view: a plain heading in ink, its painting at the right.
-   (It used to float as a pinned capsule over the cards, which read as clutter.) */
+/* Each month (or year) opens with its name: a plain heading in ink, its painting at the right. */
 .days-month > .ladder-label {
   margin: 10px 0 2px;
   padding: 0 4px;
@@ -3206,6 +3206,21 @@ button.settings-row:active {
   font-weight: 600;
   letter-spacing: -0.005em;
   color: var(--ink);
+}
+/* In the days list, each month is a card (like the months and years lists): its name with the year, then its days
+   as even rows between fine hairlines. */
+.days-month.is-card {
+  margin: 0 0 12px;
+  padding: 12px 14px 2px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #ecece5;
+}
+.days-month.is-card > .ladder-label {
+  position: relative;
+  margin: 0 0 2px;
+  padding: 0 2px;
+  font-size: 16px;
 }
 /* "only empty ×": the list holds one slice's days (from the pie); tap it for all days again. A soft capsule. */
 .days-filter {
@@ -3366,15 +3381,15 @@ button.settings-row:active {
 }
 /* In the days list, every day is one even row on the paper, painted or not, between fine hairlines: a journal's
    lines, not a stack of cards and gaps. */
-.days-month .month-list {
+.days-month.is-card .month-list {
   gap: 0;
 }
-.days-month .day-card {
-  padding: 12px 4px;
+.days-month.is-card .day-card {
+  padding: 12px 2px;
   border-radius: 0;
   border-bottom: 1px solid #ecece5;
 }
-.days-month li:last-child .day-card {
+.days-month.is-card li:last-child .day-card {
   border-bottom: 0;
 }
 .day-card:active {

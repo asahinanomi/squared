@@ -398,7 +398,7 @@ export function DaysList({
             (iso): iso is string => !!iso && iso <= today && (!born || iso >= born) && shown(iso),
           )
           return (
-            <section key={m} className="days-month" data-key={m} hidden={!list.length}>
+            <section key={m} className="days-month is-card" data-key={m} hidden={!list.length}>
               <div className="ladder-label month-label">
                 {monthTitle(m)}
                 {/* As in the month view: the month's painting, at the right edge. */}

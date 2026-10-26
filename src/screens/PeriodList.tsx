@@ -171,19 +171,8 @@ export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid, h
         {res === 'years' ? (
           <ol className="month-list is-periods">{years.map((y) => card(y, y, `${y}-01-01`, `${y}-12-31`))}</ol>
         ) : (
-          years.map((y) => (
-            <section key={y} className="days-month">
-              <div className="ladder-label month-label">
-                {y}
-                {onPainting && Object.keys(days).some((iso) => iso.startsWith(y)) && (
-                  <PaintingButton period={y} label={y} onOpen={onPainting} />
-                )}
-              </div>
-              <ol className="month-list is-periods">
-                {months.filter((m) => m.startsWith(y)).map((m) => card(m, monthTitle(m).split(' ')[0], m, monthEnd(m)))}
-              </ol>
-            </section>
-          ))
+          // One card per month, titled with its year ("October 2028"): no year headings between them.
+          <ol className="month-list is-periods">{months.map((m) => card(m, monthTitle(m), m, monthEnd(m)))}</ol>
         )}
       </div>
       <ZoomBar
