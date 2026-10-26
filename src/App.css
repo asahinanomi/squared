@@ -3776,14 +3776,6 @@ button.settings-row:active {
 .painting-keep:disabled {
   opacity: 0.5;
 }
-.painting-close {
-  margin-top: 10px;
-  padding: 6px;
-  font-size: 14px;
-  color: var(--muted);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
-}
 
 /* my paintings (in settings): the kept paintings, one to a row, as big as the page. No labels: each is signed. */
 .gallery-wall {

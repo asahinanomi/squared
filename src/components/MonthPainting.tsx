@@ -30,7 +30,9 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kep
     drawPainting(c, month, days, name, Math.round(c.clientWidth * (window.devicePixelRatio || 1)))
   }, [month, days, name])
   if (!month) return null
-  const title = `${monthName(month)}, ${inProgress(month) ? 'so far' : 'painted'}`
+  // With its year ("October 2026, so far"), so an old month reads as the one it is.
+  const named = month.length === 4 ? month : `${monthName(month)} ${month.slice(0, 4)}`
+  const title = `${named}, ${inProgress(month) ? 'so far' : 'painted'}`
   const keep = async () => {
     setBusy(true)
     if (!kept) onKeep?.(month)
@@ -46,6 +48,7 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kep
       setBusy(false)
     }
   }
+  // Like the other sheets, no close button: a tap outside, a swipe down or Escape closes it.
   return (
     <Sheet open onClose={onClose}>
       <div className="painting">
@@ -74,9 +77,6 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kep
             </svg>
           </button>
         )}
-        <button className="painting-close" onClick={onClose}>
-          close
-        </button>
       </div>
     </Sheet>
   )
