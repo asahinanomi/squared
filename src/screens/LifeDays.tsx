@@ -197,8 +197,12 @@ export function LifeDays({
   }
 
   // The day in the middle of the screen: where zooming in (button or pinch) opens the month.
+  // Until you move the life yourself, that's the day it opened on (zooming in from a life you only looked at goes back to
+  // the very month you came from; measuring the middle could land a row or two off).
+  const moved = useRef(false)
   const middle = () => {
     const el = scroller.current
+    if (!moved.current) return focus && focus >= born && focus < end ? focus : today
     return el && size.w ? dayAt(size.w / 2, el.scrollTop + el.clientHeight / 2, cols) : today
   }
   if (mid) mid.current = middle
@@ -283,6 +287,9 @@ export function LifeDays({
       <div
         className="life-canvas"
         ref={scroller}
+        onPointerDown={() => (moved.current = true)}
+        onWheel={() => (moved.current = true)}
+        onKeyDown={() => (moved.current = true)}
         onScroll={() => {
           onScroll()
           checkAway()
