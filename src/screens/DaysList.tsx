@@ -20,6 +20,7 @@ import { specialDay } from '../lib/special'
 import { monthsBetween, shiftMonth } from './Month'
 import { PaintingButton } from '../components/PaintingButton'
 import { ChevronDown } from './Today'
+import { Raised } from '../components/Raised'
 
 type Props = {
   days: Days
@@ -140,7 +141,11 @@ function DayCard({
             framed
           </button>
         )}
-        {special && <span className="day-card-special">{special}</span>}
+        {special && (
+          <span className="day-card-special">
+            <Raised text={special} />
+          </span>
+        )}
         {/* Only what's worth saying in a list: a late square, or one changed later (on time is the norm). */}
       </div>
       {/* More to read: "5 moments ⌄" on the date's line, at the right (short, so the date keeps its line); "show

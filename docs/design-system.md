@@ -52,6 +52,7 @@ Two voices (full mapping in `brand-story.md` §9). Both free on Google Fonts.
   - Wordmark 15/600 on sign-in (−0.02em) · the number line 16/400 ink-soft (29,200 in 600 ink) · squared's line, the serif 26/450 · framing & body 16/400 · button 15.5/500 · links 12.5.
 - **Scale (Inter):** 12 labels & timestamps · 14 secondary · 16 body & controls · 18–20 reading text (notes, idea, privacy) · 28 screen titles · 36 the idea's title · 56 hero numbers. Weights 400 / 500 / 600 only. The wordmark (22) sits outside the scale, as a logo.
 - **The hand — Caveat (600).** Only the word signed on the day's canvas: lower-right corner (15% in from the bottom and the right), tilted −4°, 22px blank (soft grey), 30px painted, in a deeper shade of its own paint. Nowhere else.
+- **Ordinals are raised** wherever they're written out (55th, Oct 12th): the suffix at 0.6em, superscript (`<Raised>` in `src/components/Raised.tsx`, or a `<sup>` beside a date). Screen readers hear the word whole.
 - **Floor:** nothing you read is under 12px; inputs are at least 16px (iOS zooms smaller ones).
 - **No hard line breaks** in questions or titles: they wrap where the screen ends.
 - **Accent:** a **dotted** underline (2.5px dotted ink) under the key word in a reflective line ("Today", "meaningful") — never a solid underline.

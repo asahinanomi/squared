@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } f
 import { glide } from '../lib/backToToday'
 import { LifeHead, type Resolution } from '../components/LifeHead'
 import { ZoomBar } from '../components/ZoomBar'
+import { Raised } from '../components/Raised'
 import { dayCaption, isoDate, longDate, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { addYears, daysBetween } from '../lib/life'
@@ -307,7 +308,9 @@ export function LifeDays({
       </div>
       {picked && (
         <div className="day-chip" role="status">
-          <span>{longDate(picked)}</span>
+          <span>
+            <Raised text={longDate(picked)} />
+          </span>
           {picked <= today && (
             <button onClick={() => onPick(picked)} aria-label={`Open ${longDate(picked)}`}>
               open ›

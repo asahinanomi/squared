@@ -16,6 +16,7 @@ import { PAINTS, paintHex, type Paint } from '../lib/paints'
 import type { Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
+import { Raised } from '../components/Raised'
 import { OpenPainting } from '../components/PaintingButton'
 import { tryBirthday } from '../state/app'
 import { questionFor } from '../lib/question'
@@ -348,7 +349,11 @@ export function Today(props: Props) {
               onSetUp={props.onSetUp}
             />
           </div>
-          {special && <p className="day-special">{special}</p>}
+          {special && (
+            <p className="day-special">
+              <Raised text={special} />
+            </p>
+          )}
 
           {/* A moment, any time: "this moment…" while today is being lived, "add to today…" once it's painted, "add to
               this day…" on any other day. Hidden while the bubble is open ("because…" right after painting, or updating
@@ -531,7 +536,9 @@ export function Today(props: Props) {
           </button>
         </Sheet>
         <Sheet open={birthdayOpen} onClose={() => setBirthdayOpen(false)}>
-          <h2 className="intro-title">{age > 0 ? `Happy ${ordinal(age)} birthday.` : 'Happy birthday.'}</h2>
+          <h2 className="intro-title">
+            <Raised text={age > 0 ? `Happy ${ordinal(age)} birthday.` : 'Happy birthday.'} />
+          </h2>
           <p className="intro-how birthday-line">Today starts a new year of your life.</p>
           <p className="intro-how birthday-line">Be here for it. Spend it on what matters.</p>
           {/* A card, not a dialog: like the other sheets, a tap outside or a swipe down puts it away. */}
