@@ -86,7 +86,12 @@ function PeriodCard({
       {/* Its painting, at the card's top right, once it holds any squares. */}
       {onPainting && Object.keys(days).some((iso) => iso.startsWith(period)) && (
         <span className="period-paint">
-          <PaintingButton period={period} label={title.length === 4 ? title : monthTitle(from)} onOpen={onPainting} />
+          <PaintingButton
+            days={days}
+            period={period}
+            label={title.length === 4 ? title : monthTitle(from)}
+            onOpen={onPainting}
+          />
         </span>
       )}
     </article>

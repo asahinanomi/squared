@@ -1988,36 +1988,37 @@ body[data-screen='questions'] .idea {
   color: var(--ink);
 }
 .month-paint {
-  /* A finger-sized target (44px) around a 20px icon, taking no more room than the label's line. */
-  width: 44px;
-  height: 44px;
-  margin: -6px -12px -6px 0; /* the icon's edge on the last column's edge */
+  /* The tiny painting's own size, its edge on the last column's edge; the finger-sized target (44px) reaches past it,
+     invisibly, so nothing gets clipped. */
+  position: relative;
+  width: 28px;
+  height: 28px;
+  margin: 0;
   display: grid;
   place-items: center;
   color: var(--ink);
 }
-/* Pressed, the icon presses in; while its painting is open it's filled (ink frame, paper hills), as the view
-   switch fills the one you're on. Nothing grows past the icon. */
-.month-paint svg {
+.month-paint::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+}
+/* The tiny painting: pressed, it presses in; while its painting is open, an ink ring marks it (as the view switch
+   marks the one you're on). */
+.month-paint-thumb {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border-radius: 2px;
   transition: transform 0.12s;
+  filter: drop-shadow(0 1px 2px rgba(20, 20, 19, 0.15));
 }
-.month-paint:active svg {
-  transform: scale(0.84);
+.month-paint:active .month-paint-thumb {
+  transform: scale(0.88);
 }
-.month-paint.is-on svg rect {
-  fill: currentColor;
-}
-.month-paint.is-on svg path {
-  stroke: var(--paper);
-}
-.month-paint svg {
-  width: 20px;
-  height: 20px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.2; /* as solid as the speaker */
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.month-paint.is-on .month-paint-thumb {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
 }
 .month-block.is-faint {
   padding-bottom: 40vh;
@@ -3335,8 +3336,8 @@ button.settings-row:active {
 /* A card's painting: the ink picture icon at its top right, above the card's own tap. */
 .period-paint {
   position: absolute;
-  top: 3px;
-  right: 4px; /* the icon's edge on the band's end */
+  top: 12px; /* level with the card's title */
+  right: 16px; /* its edge on the band's end */
   z-index: 1;
 }
 .period-paint .month-paint {
@@ -3897,8 +3898,7 @@ button.settings-row:active {
 .zoombar-switch svg,
 .zoombar-buttons svg,
 .zoombar-recenter svg,
-.today-zoom svg,
-.month-paint svg {
+.today-zoom svg {
   width: 24px;
   height: 24px;
 }
@@ -3917,14 +3917,6 @@ button.settings-row:active {
 }
 .zoombar-recenter::after {
   inset: -2px;
-}
-.month-paint {
-  width: 48px;
-  height: 48px;
-  margin: -8px -12px -8px 0; /* the icon's edge on the last column's edge */
-}
-.period-paint {
-  top: 1px;
 }
 .logo-btn::after {
   inset: -5px;
@@ -4705,7 +4697,8 @@ button.home-card:active {
 .frame-demo .day-wipe.is-tapped {
   color: var(--ink);
 }
-/* The painting demo: the app's painting, the size of the framing demo's square, its pill in proportion under it. */
+/* The painting demo: first where a painting lives (a month's name, its tiny painting at the right), then the
+   painting opened over the space below it, the size of the framing demo's square, its pill in proportion. */
 .painting-demo {
   flex: none;
   width: 136px;
@@ -4713,7 +4706,42 @@ button.home-card:active {
   flex-direction: column;
   align-items: center;
 }
-.painting-demo canvas {
+.painting-demo-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.painting-demo-row .month-paint {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+}
+.painting-demo-row .month-paint-thumb {
+  width: 22px;
+  height: 22px;
+}
+.painting-demo-open {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 6px;
+  opacity: 0;
+  transform: scale(0.3) translate(40%, -60%);
+  transform-origin: top right;
+  transition:
+    opacity 0.35s,
+    transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.painting-demo-open.is-open {
+  opacity: 1;
+  transform: none;
+}
+.painting-demo-open canvas {
   width: 136px;
   height: 136px;
   display: block;
@@ -4729,8 +4757,12 @@ button.home-card:active {
   font-size: 11px;
   white-space: nowrap;
 }
+/* The notes sit centred on the painting, below the month's row. */
+.help-pair:has(.painting-demo) .help-notes {
+  margin-top: 38px;
+}
 /* On the black pill the fingertip is light, so it still shows. */
-.painting-demo .frame-demo-finger {
+.painting-demo .pill .frame-demo-finger {
   background: rgba(255, 255, 255, 0.3);
   box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.7);
 }

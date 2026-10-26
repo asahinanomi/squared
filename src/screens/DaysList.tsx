@@ -391,7 +391,7 @@ export function DaysList({
                   )}
                   {/* As in the month view: the month's painting, at the right edge. */}
                   {onPainting && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) && (
-                    <PaintingButton period={m.slice(0, 7)} label={monthTitle(m)} onOpen={onPainting} />
+                    <PaintingButton days={days} period={m.slice(0, 7)} label={monthTitle(m)} onOpen={onPainting} />
                   )}
                 </span>
               </div>

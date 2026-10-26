@@ -302,7 +302,7 @@ export function LifeDays({
               style={{ top: TOP + (Number(y) - firstYear) * block - 17 }} // centred on the label's line
               onClick={(e) => e.stopPropagation()}
             >
-              <PaintingButton period={y} label={y} onOpen={onPainting} />
+              <PaintingButton days={days} period={y} label={y} onOpen={onPainting} />
             </span>
           ))}
       </div>

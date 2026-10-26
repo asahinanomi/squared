@@ -143,7 +143,7 @@ export function Month({
               {monthTitle(m)}
               {/* A month with squares in it: its painting (this one so far), to open, look at and keep. */}
               {onPainting && m <= current && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) && (
-                <PaintingButton period={m.slice(0, 7)} label={monthTitle(m)} onOpen={onPainting} />
+                <PaintingButton days={days} period={m.slice(0, 7)} label={monthTitle(m)} onOpen={onPainting} />
               )}
             </div>
             <div className="month-grid">
