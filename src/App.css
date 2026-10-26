@@ -2342,7 +2342,6 @@ body[data-screen='questions'] .idea {
 /* A typeLabel may break onto two lines ("\n"). */
 .confirm-type > span {
   white-space: pre-line;
-  color: var(--ink-soft); /* part of the message, so the body's ink, not helper grey */
 }
 .confirm-export {
   width: 100%;
@@ -2373,11 +2372,11 @@ body[data-screen='questions'] .idea {
 /* Type the word to confirm: what can't be undone takes one more deliberate step. */
 .confirm-type {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   margin-top: 16px;
-  text-align: left;
-  font-size: 14px;
-  color: var(--muted);
+  text-align: center; /* reads as part of the message above: same size, ink and alignment */
+  font-size: 16px;
+  color: var(--ink-soft);
 }
 .confirm-type input {
   padding: 11px 14px;
