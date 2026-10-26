@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { FrameDemo } from '../components/FrameDemo'
 import { Sheet } from '../components/Sheet'
 import { PaintingThumb } from '../components/PaintingThumb'
 import { WeekCard } from '../components/WeekCard'
@@ -190,18 +191,15 @@ export function MyDays({
       {/* Help, only when asked for: how a day is framed, how a painting is kept. */}
       <Sheet open={help === 'framed'} onClose={() => setHelp(null)}>
         <h2 className="torn-title">framed days</h2>
-        {/* The whole move, acted out: a painted day, a tap on "frame it", a light across the square, the frame. */}
-        <div className="frame-scene" aria-hidden="true">
-          <span className="fs-square">
-            <i className="fs-paint" />
-          </span>
-          <span className="fs-links">
-            start over · <b className="fs-tap">frame it</b>
-          </span>
-          <span className="fs-finger" />
+        {/* Two columns: the move acted out (the day screen's real framing) and, beside it, a few words. */}
+        <div className="help-pair">
+          <FrameDemo />
+          <div className="help-notes">
+            <p>Some days deserve a frame.</p>
+            <p>Open a painted day and tap “frame it”.</p>
+            <p>Your framed days wait here.</p>
+          </div>
         </div>
-        <p className="sheet-body help-body">Open a painted day and tap “frame it”.</p>
-        <p className="sheet-body help-body">Your framed days wait here.</p>
       </Sheet>
       <Sheet open={help === 'paintings'} onClose={() => setHelp(null)}>
         <h2 className="torn-title">paintings</h2>
