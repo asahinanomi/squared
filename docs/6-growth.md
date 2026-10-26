@@ -25,7 +25,8 @@ How people find squared. The short version: the store brings credibility, people
 
 A month's painting is the payoff for showing up. When a month ends, its painting could arrive like a small gift: unwrapped once, signed, and offered to keep or share. It's also squared's best growth channel: beautiful, personal, and with no data in it (no dates, no notes, no counts, just colour). Someone sees a friend's month and asks "what is that?". That's the whole funnel.
 
-- **First:** the month's end as a gift, in the app (a lab first; parked in `docs/future-ideas.md`).
+- **Already there:** on the first visit of a new month, last month's painting arrives ("a new month. here's the last one.") with "keep this painting".
+- **Next:** make that arrival feel like a gift being unwrapped (a lab first; parked in `docs/future-ideas.md`).
 - **Then:** share from the gift itself, through the phone's share sheet: the painting, signed, and the small line "squared.today". Never a prompt to share, never a count of shares.
 - **Later:** prints and magnets of a month or a year (future ideas).
 
