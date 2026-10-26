@@ -2551,19 +2551,20 @@ body[data-screen='questions'] .idea {
   margin-bottom: 16px;
 }
 .torn-title {
+  flex: none;
   margin: 0;
   font-size: 18px;
   font-weight: 600;
   line-height: 1.35;
   color: var(--ink);
 }
-.is-half .compass-sub {
-  flex: none;
-  margin: 6px 0 0;
-  padding-bottom: 10px;
+.torn-title.has-list {
+  padding-bottom: 12px;
   border-bottom: 1px solid #e2e2db;
-  font-size: 15px;
-  color: var(--muted);
+}
+.torn-lead {
+  font-weight: 400;
+  color: var(--ink-soft);
 }
 /* A fine line under the lead: only what's below it scrolls. Fades at whichever end has more. */
 .is-half .compass-list {
