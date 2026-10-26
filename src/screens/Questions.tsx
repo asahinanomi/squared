@@ -66,13 +66,14 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'Can I delete my account?',
-      'Yes: settings → delete my account. Everything goes, right away and for good. I’d be sad to see you go, but it’s always your choice.',
+      'Yes: settings → delete my account. Your squares, moments, lists and settings go, right away and for good. I’d be sad to see you go, but it’s always your choice.',
     ],
     [
-      'Does squared cost anything?',
+      'Is squared free?',
       <>
-        Not while it’s in beta: everything is free. Building and running squared does cost money, though, so one day
-        there may be a paid version to cover it. If that happens, I’ll let you know first.
+        Yes. While it’s in beta, everything is free. After beta, I plan to keep a free version so anyone can use it, and
+        donations are welcome. I’d like to offer a paid version too one day, but I can’t promise it: I’m one person
+        building this.
       </>,
     ],
     [
