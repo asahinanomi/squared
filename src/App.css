@@ -680,8 +680,7 @@ sup.ord {
 .canvas-face.is-painted {
   background: var(--paint);
 }
-.canvas .paint-surface,
-.canvas .settle {
+.canvas .paint-surface {
   clip-path: inset(var(--margin));
 }
 /* The word on the square, under the brush (it never takes a touch). */
@@ -755,18 +754,7 @@ sup.ord {
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
-/* Filled: the strokes smooth into one even colour, and the square gives a soft press, like a stamp on paper. */
-.settle {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  animation: settle 0.4s ease-out both;
-}
-@keyframes settle {
-  from {
-    opacity: 0;
-  }
-}
+/* Filled: the square gives a soft press, like a stamp on paper (then the wet strokes dry, below). */
 .canvas.is-settling {
   animation: press 0.42s cubic-bezier(0.3, 0.7, 0.4, 1);
 }
@@ -4047,12 +4035,6 @@ button.home-card:active {
   font-size: 16px;
   font-weight: 600;
 }
-.home-s {
-  display: block;
-  margin-top: 2px;
-  font-size: 14px;
-  color: var(--muted);
-}
 /* a life, in one line */
 .home-big {
   margin-top: 6px;
@@ -4262,10 +4244,6 @@ button.home-card:active {
   aspect-ratio: 1;
   display: block;
   filter: drop-shadow(0 4px 8px rgba(20, 20, 19, 0.1));
-}
-.home-paintings .home-s {
-  margin: 0;
-  font-size: 13px;
 }
 /* Under the two so-far paintings, across the card: the way to every painting you kept. */
 .home-paintings .my-days-all {

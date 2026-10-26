@@ -2,7 +2,7 @@
 
 _last updated Oct 25, 2026_
 
-Where squared is, in the big steps. Many moving parts, one road. Each step has its own doc; this one only says where we are. Move the "you are here" marker as steps finish. The road's docs are numbered by their step (`2-beta-readiness.md` is step 2); a step with no doc of its own has no file, and two steps at the same time would be 3a and 3b. Reference docs (brand story, design system, future ideas, test links) have no number: they're used at every step.
+Where squared is, in the big steps. Many moving parts, one road. Each step has its own doc; this one only says where we are. Move the "you are here" marker as steps finish. The road's docs are numbered by their step (`2-beta-readiness.md` is step 2); a step with no doc of its own has no file, and two steps at the same time would be 3a and 3b. Reference docs (squared's heroes, brand story, design system, future ideas, test links) have no number: they're used at every step.
 
 ## The road
 
