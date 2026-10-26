@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { Sheet } from '../components/Sheet'
 import { PaintingThumb } from '../components/PaintingThumb'
 import { WeekCard } from '../components/WeekCard'
 import { todayIso } from '../lib/dates'
@@ -51,7 +53,8 @@ export function MyDays({
   const count = (p: string) => Object.keys(days).filter((d) => d.startsWith(p) && d <= today).length
   const hasMonth = count(month) > 0
   const hasYear = count(year) > 0
-  const framed = Object.values(days).some((d) => d.framed)
+  const framedCount = Object.values(days).filter((d) => d.framed).length
+  const [help, setHelp] = useState<'framed' | 'paintings' | null>(null)
   // Each row opens its page; `empty` is an empty slot (dashed). Not set up yet: its sub says what it is, and "set up
   // now" sits at the far right with the arrow.
   const row = (label: string, sub: string, go: () => void, empty?: 'set up' | 'none') => {
@@ -61,8 +64,6 @@ export function MyDays({
         <span className="settings-sub">{sub}</span>
       </span>
     )
-    // Nothing there yet: a quiet line, not a door to a blank page (its sub says how to fill it).
-    if (empty === 'none') return <div className="settings-row is-empty is-quiet">{text}</div>
     return (
       <button className={'settings-row' + (empty ? ' is-empty' : '')} onClick={go}>
         {text}
@@ -136,9 +137,16 @@ export function MyDays({
         })()}
       {/* This week, after a life: the close-up, the nearest look back (it lived on home, which was cut): swipe or ‹ › for earlier weeks. */}
       <WeekCard days={days} born={profile?.born} onDay={onDay} />
+      {/* What matters, right after the week: the compass first, then the paintings. */}
+      <div className="settings-rows">
+        {matters.length
+          ? row('what matters', matters.slice(0, 3).join(' · '), onMatters)
+          : row('what matters', 'what makes a day worth it', onMatters, 'set up')}
+      </div>
       {/* This month and this year so far, and the way to every painting you kept (the old "paintings" row). */}
       {(hasMonth || hasYear || kept.length > 0) && (
         <section className="home-card home-paintings my-days-paintings">
+          <h2 className="home-head my-days-paintings-head">paintings</h2>
           {hasMonth && (
             <button onClick={() => onPainting(month)}>
               <span className="home-t">{new Date().toLocaleDateString('en-US', { month: 'long' })}, so far</span>
@@ -160,18 +168,37 @@ export function MyDays({
               <Chevron dir="right" />
             </button>
           ) : (
-            <p className="my-days-all is-quiet">keep a month’s painting once it’s over</p>
+            <button className="my-days-all is-quiet" onClick={() => setHelp('paintings')}>
+              how to keep a painting
+              <Chevron dir="right" />
+            </button>
           )}
         </section>
       )}
       <div className="settings-rows is-last">
-        {matters.length
-          ? row('what matters', matters.slice(0, 3).join(' · '), onMatters)
-          : row('what matters', 'what makes a day worth it', onMatters, 'set up')}
-        {framed
-          ? row('framed days', 'the days you framed', onFramed)
-          : row('framed days', 'none yet · frame a day you want to keep', onFramed, 'none')}
+        {framedCount
+          ? row('framed days', framedCount === 1 ? '1 day framed' : `${framedCount} days framed`, onFramed)
+          : row('framed days', 'none yet · how to frame a day', () => setHelp('framed'), 'none')}
       </div>
+      {/* Help, only when asked for: how a day is framed, how a painting is kept. */}
+      <Sheet open={help === 'framed'} onClose={() => setHelp(null)}>
+        <h2 className="torn-title">framed days</h2>
+        <p className="sheet-body help-body">Frame a day you want to remember, in any colour.</p>
+        <p className="sheet-body help-body">
+          Open a painted day and tap “frame it” under its square. You can write what you want to remember.
+        </p>
+        <p className="sheet-body help-body">Your framed days wait here.</p>
+      </Sheet>
+      <Sheet open={help === 'paintings'} onClose={() => setHelp(null)}>
+        <h2 className="torn-title">paintings</h2>
+        <p className="sheet-body help-body">
+          Every month you paint becomes a painting, made from its days’ colours. So does every year.
+        </p>
+        <p className="sheet-body help-body">
+          Once a month is over, you can keep its painting. A year’s painting, once the year is over.
+        </p>
+        <p className="sheet-body help-body">Tap a painting, then “keep this painting”. It hangs in all my paintings.</p>
+      </Sheet>
     </main>
   )
 }

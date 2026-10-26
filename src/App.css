@@ -4212,20 +4212,31 @@ button.home-card:active {
   position: relative;
   display: inline-grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
-  margin: -8px 0;
+  width: 32px;
+  height: 32px;
+  margin: -10px 0;
   vertical-align: middle;
-  color: var(--faint);
+  border-radius: 50%;
+  background: #efefea; /* a small round capsule: clearly a button, still quiet */
+  color: var(--ink-soft);
 }
 .home-week-step svg {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
+}
+.home-week-step:disabled {
+  background: none;
+  color: var(--faint);
 }
 .home-week-step::before {
   content: '';
   position: absolute;
   inset: -8px;
+}
+.home-week .home-of {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 .home-of {
   font-size: 12px;
@@ -4273,9 +4284,7 @@ button.home-card:active {
   color: var(--ink);
 }
 .home-paintings .my-days-all.is-quiet {
-  margin-bottom: 0;
-  font-size: 14px;
-  color: var(--muted);
+  color: var(--ink-soft);
 }
 .home-paintings .my-days-all svg {
   flex: none;
@@ -4626,11 +4635,11 @@ button.home-card:active {
   text-wrap: balance;
 }
 /* my days: a life as one bar first, then this month and year so far, as paintings, over the rows. */
-/* my days opens on this week (22px under the line), then a life: 12px between every card. */
-.my-days .home-week {
+/* my days opens on a life (22px under the line), then 12px between every card. */
+.my-days-life {
   margin-top: 22px;
 }
-.my-days-life {
+.my-days .home-week {
   margin-top: 12px;
 }
 .my-days-paintings {
@@ -4640,6 +4649,16 @@ button.home-card:active {
 .my-days .settings-rows {
   margin-top: 12px;
   gap: 12px;
+}
+/* The paintings card's title, like "a life" and "this week" (it spans both paintings). */
+.my-days-paintings-head {
+  grid-column: 1 / -1;
+  margin: 0 0 -4px;
+}
+/* A help sheet's lines (framed days, paintings): the reading size, a little space between. */
+.help-body {
+  margin: 10px 0 0;
+  font-size: 16px;
 }
 /* Not set up yet: an empty slot, as everywhere in squared: a dashed edge on paper, no white fill. */
 .my-days .settings-row.is-empty,

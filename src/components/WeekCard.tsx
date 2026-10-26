@@ -59,20 +59,17 @@ export function WeekCard({ days, born, onDay }: Props) {
       <h2 className="home-head">
         {weekName}
         <small className="home-of">
-          {canBack && (
-            <button className="home-week-step" aria-label="The week before" onClick={() => step(1)}>
-              <Chevron dir="left" />
-            </button>
-          )}
+          {/* Both ways, always in the same place (greyed when there's no further): round, easy to hit. */}
+          <button className="home-week-step" aria-label="The week before" disabled={!canBack} onClick={() => step(1)}>
+            <Chevron dir="left" />
+          </button>
           {/* With its year ("Oct 18 – Oct 24, 2026"); a week across New Year names both ("Dec 28, 2025 – Jan 3, 2026"). */}
           {shortDateParts(week[0]).monthDay}
           {week[0].slice(0, 4) !== week[6].slice(0, 4) && `, ${week[0].slice(0, 4)}`} –{' '}
           {shortDateParts(week[6]).monthDay}, {week[6].slice(0, 4)}
-          {back > 0 && (
-            <button className="home-week-step" aria-label="The week after" onClick={() => step(-1)}>
-              <Chevron dir="right" />
-            </button>
-          )}
+          <button className="home-week-step" aria-label="The week after" disabled={back === 0} onClick={() => step(-1)}>
+            <Chevron dir="right" />
+          </button>
         </small>
       </h2>
       <ul className="home-week-days">
