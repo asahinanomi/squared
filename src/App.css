@@ -784,6 +784,23 @@
 .tray > .palette {
   margin-top: 11px;
 }
+/* Without a birth date, the top of months and years: the way further back. */
+.ladder-setup {
+  display: block;
+  margin: 8px auto 20px;
+  padding: 8px 0;
+  font-size: 15px;
+  color: var(--ink-soft);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
+}
+/* how many squares: why it's asked, on the way somewhere. */
+.setup-why {
+  margin: 8px 0 0;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
 .tray-rest {
   width: 100%;
   display: flex;

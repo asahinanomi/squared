@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { glide, pulse } from '../lib/backToToday'
-import { fromIso, isoDate, monthTitle, todayIso } from '../lib/dates'
+import { firstDay, fromIso, isoDate, monthTitle, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { counted, PAINTS } from '../lib/paints'
 import { bands, monthEnd } from '../lib/tally'
@@ -100,7 +100,7 @@ function PeriodCard({
 export function PeriodList({ res, days, born, focus, onOpen, onIn, onOut, mid, head, onPainting }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
-  const first = born ? shiftMonth(born, 0) : shiftMonth(today, -120)
+  const first = shiftMonth(firstDay(days, born), 0)
   const at = focus > today ? today : born && focus < born ? born : focus
   const key = (iso: string) => (res === 'years' ? iso.slice(0, 4) : shiftMonth(iso, 0))
   const scroller = useRef<HTMLDivElement>(null)

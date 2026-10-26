@@ -2,7 +2,17 @@ import { Fragment, useEffect, useLayoutEffect, useRef, useState, type MutableRef
 import { ZoomBar } from '../components/ZoomBar'
 import { Sheet } from '../components/Sheet'
 import { glide, pulse } from '../lib/backToToday'
-import { addDays, isoDate, longDate, monthCells, monthTitle, plainDate, shortDateParts, todayIso } from '../lib/dates'
+import {
+  addDays,
+  firstDay,
+  isoDate,
+  longDate,
+  monthCells,
+  monthTitle,
+  plainDate,
+  shortDateParts,
+  todayIso,
+} from '../lib/dates'
 import type { Day, Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
 import { frameVars, paintHex, squareFill, WORD, type Paint } from '../lib/paints'
@@ -215,7 +225,7 @@ export function DaysList({
   const [picking, setPicking] = useState(false)
   const today = todayIso()
   const current = shiftMonth(today, 0)
-  const first = born ? shiftMonth(born, 0) : shiftMonth(today, -120)
+  const first = shiftMonth(firstDay(days, born), 0)
   // Open on the day you were looking at — but never ahead of today (nothing to list yet) or before birth.
   const at = focus > today ? today : born && focus < born ? born : focus
   const start = shiftMonth(at, 0)

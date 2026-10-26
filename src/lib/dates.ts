@@ -11,6 +11,10 @@ export function fromIso(iso: string): Date {
 }
 
 export const todayIso = () => isoDate(new Date())
+/** How far back the past goes: your birth date, or without one, January of the year of your first square (this year
+ *  before any), so no view runs back to years you weren't born. */
+export const firstDay = (days: Record<string, unknown>, born?: string) =>
+  born ?? `${Math.min(Number(todayIso().slice(0, 4)), ...Object.keys(days).map((k) => Number(k.slice(0, 4))))}-01-01`
 
 export function addDays(iso: string, n: number): string {
   const d = fromIso(iso)

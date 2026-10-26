@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ageOn, fromIso, monthCells } from '../lib/dates'
+import { ageOn, firstDay, fromIso, monthCells } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { squareFill } from '../lib/paints'
 import { Sheet } from './Sheet'
@@ -44,7 +44,7 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick }: Pr
     return () => clearTimeout(t)
   }, [picked]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const first = born ?? `${Number(today.slice(0, 4)) - 100}-01-01`
+  const first = firstDay(days, born)
   const bornYear = born ? Number(born.slice(0, 4)) : null
   const thisYear = Number(today.slice(0, 4))
   const years = Array.from({ length: thisYear - Number(first.slice(0, 4)) + 1 }, (_, i) => thisYear - i)

@@ -145,6 +145,13 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         profile={profile}
         onBack={nav.leaveSetup}
         mode={nav.afterSetup === 'settings' ? 'settings' : 'onboarding'}
+        why={
+          nav.afterSetup === 'life' || nav.afterSetup === 'pie'
+            ? 'To see your whole life at once, squared needs two answers.'
+            : nav.afterSetup === 'month' || nav.afterSetup === 'year'
+              ? 'To go further back, squared needs two answers.'
+              : undefined
+        }
         onSave={async (p) => {
           await saveProfile(p)
           acc.setProfile(p)
@@ -255,6 +262,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onIn={() => nav.goMonth()}
         onOut={nav.goLife}
         onPainting={openPainting}
+        onSetUp={() => nav.askSquares('year')}
       />
     )
   if (screen === 'life' && profile)
@@ -302,6 +310,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
       zoomed={mag > 0}
       anchor={nav.monthAnchor}
       onPainting={openPainting}
+      onSetUp={() => nav.askSquares('month')}
     />
   )
 }

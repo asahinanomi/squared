@@ -222,12 +222,15 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
         ? setScreen(pieFrom)
         : afterSetup === 'settings' || afterSetup === 'mydays'
           ? setScreenValue(afterSetup)
-          : goToday()
+          : afterSetup === 'month' || afterSetup === 'year'
+            ? setScreen(afterSetup)
+            : goToday()
   // Saved how many squares the first time: on to what asked for it (a life, the pie, back to my days).
   const afterSquares = () => {
     if (afterSetup === 'pie') setScreen('pie')
     else if (afterSetup === 'life') setScreen('life')
     else if (afterSetup === 'mydays') setScreenValue('mydays')
+    else if (afterSetup === 'month' || afterSetup === 'year') setScreen(afterSetup)
     else if (afterSetup !== 'settings') goToday()
   }
   const openLegal = (page: Legal, from: Screen) => {

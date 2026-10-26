@@ -13,6 +13,8 @@ type Props = {
   onBack?: () => void
   /** Rejects if it couldn't be saved. */
   onSave: (p: Profile) => Promise<void>
+  /** Why it's asked, when it's on the way somewhere (zooming out to a life, or further back). */
+  why?: string
 }
 
 const MIN_YEARS = 1
@@ -21,7 +23,7 @@ const fmt = (n: number) => n.toLocaleString('en-US')
 
 // "How many squares?": birth date and hoped-for lifespan, and what they add up to.
 // The one screen where a number belongs: it's there to feel how finite the squares are.
-export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
+export function Setup({ profile, mode = 'onboarding', onBack, onSave, why }: Props) {
   const today = todayIso()
   const [born, setBorn] = useState(profile?.born ?? '')
   const [lifespan, setLifespanValue] = useState(profile?.lifespan ?? DEFAULT_LIFESPAN)
@@ -114,6 +116,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave }: Props) {
 
       <div className="setup-body">
         <h1 className="setup-title">how many squares?</h1>
+        {why && <p className="setup-why">{why}</p>}
 
         <div className="setup-fields">
           <div>

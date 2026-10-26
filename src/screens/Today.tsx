@@ -9,7 +9,7 @@ import { Palette } from '../components/Palette'
 import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { ZoomOutIcon } from '../components/ZoomBar'
-import { addDays, fromIso, longDate, shortDateParts, todayIso } from '../lib/dates'
+import { addDays, firstDay, fromIso, longDate, shortDateParts, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
@@ -164,7 +164,7 @@ export function Today(props: Props) {
   useEffect(() => setCompassOpen(false), [date])
 
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
-  const hasPrev = !born || prev >= born
+  const hasPrev = prev >= firstDay(days, born)
   const hasNext = next <= today
   const [slide, setSlide] = useState<'from-left' | 'from-right' | null>(null)
   // Find a day from your past: which year, which month, which day (the date's capsule opens it).

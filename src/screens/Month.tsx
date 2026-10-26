@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
-import { fromIso, isoDate, longDate, monthCells, monthTitle, todayIso, dayCaption } from '../lib/dates'
+import { firstDay, fromIso, isoDate, longDate, monthCells, monthTitle, todayIso, dayCaption } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { useBackToToday } from '../lib/backToToday'
 import { frameVars, squareFill } from '../lib/paints'
@@ -24,6 +24,8 @@ type Props = {
   zoomed?: boolean
   /** The day under the fingers when the zoom changed, kept where it was on screen. */
   anchor?: { iso?: string; y: number }
+  /** Without a birth date, the months stop at your first square's year; this asks for one, to go further back. */
+  onSetUp?: () => void
   /** A finished month's painting ("YYYY-MM"): opens it, to look at and keep. */
   onPainting?: (month: string) => void
 }
@@ -40,10 +42,10 @@ export const monthsBetween = (a: string, b: string) =>
 
 // My squares — your months, one after another in a single scroll, from the birth month
 // down to this one (next month peeks in faintly below). Opens centred on this month.
-export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, anchor, onPainting }: Props) {
+export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, anchor, onPainting, onSetUp }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
-  const maxBack = born ? monthsBetween(shiftMonth(born, 0), current) : Infinity
+  const maxBack = monthsBetween(shiftMonth(firstDay(days, born), 0), current)
   const start = focus ? shiftMonth(focus, 0) : current
   const { scroller, back, visible, onScroll, jumpTo } = useLadderScroll({
     maxBack,
@@ -107,6 +109,11 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
           toToday.check()
         }}
       >
+        {!born && back >= maxBack && onSetUp && (
+          <button className="ladder-setup" onClick={onSetUp}>
+            set your birth date to go further back ›
+          </button>
+        )}
         {months.map((m) => (
           <section key={m} className="month-block" data-key={m}>
             <div className="ladder-label month-label">
