@@ -44,6 +44,14 @@ export function WeekCard({ days, born, onDay }: Props) {
   const weekName = back === 0 ? 'this week' : back === 1 ? 'last week' : `${back} weeks ago`
   const that = back === 0 ? 'this week' : 'that week'
   const week = Array.from({ length: 7 }, (_, i) => addDays(sunday, i))
+  // "Oct 25 – 31, 2026"; across months "Sep 27 – Oct 3, 2026"; across New Year "Dec 28, 2025 – Jan 3, 2026".
+  const [first, last] = [shortDateParts(week[0]).monthDay, shortDateParts(week[6]).monthDay]
+  const range =
+    week[0].slice(0, 4) !== week[6].slice(0, 4)
+      ? `${first}, ${week[0].slice(0, 4)} – ${last}, ${week[6].slice(0, 4)}`
+      : week[0].slice(0, 7) === week[6].slice(0, 7)
+        ? `${first} – ${last.split(' ')[1]}, ${week[6].slice(0, 4)}`
+        : `${first} – ${last}, ${week[6].slice(0, 4)}`
   const open = (d: string) => d <= today && (!born || d >= born)
   const inColour = week.filter((d) => open(d) && days[d]).length
   const full = week.every((d) => days[d])
@@ -58,37 +66,37 @@ export function WeekCard({ days, born, onDay }: Props) {
     <section className={'home-card home-week' + (full ? ' is-full' : '')} {...swipe}>
       <h2 className="home-head">
         {weekName}
-        <small className="home-of">
-          {/* Both ways, always in the same place (greyed when there's no further): round, easy to hit. */}
-          <button className="home-week-step" aria-label="The week before" disabled={!canBack} onClick={() => step(1)}>
-            <Chevron dir="left" />
-          </button>
-          {/* With its year ("Oct 18 – Oct 24, 2026"); a week across New Year names both ("Dec 28, 2025 – Jan 3, 2026"). */}
-          {shortDateParts(week[0]).monthDay}
-          {week[0].slice(0, 4) !== week[6].slice(0, 4) && `, ${week[0].slice(0, 4)}`} –{' '}
-          {shortDateParts(week[6]).monthDay}, {week[6].slice(0, 4)}
-          <button className="home-week-step" aria-label="The week after" disabled={back === 0} onClick={() => step(-1)}>
-            <Chevron dir="right" />
-          </button>
-        </small>
+        {/* The week it is, beside its name, quiet: "Oct 25 – 31, 2026" (a month or year it crosses is named). */}
+        <small className="home-of">{range}</small>
       </h2>
-      <ul className="home-week-days">
-        {week.map((d, i) => (
-          <li key={d}>
-            <button
-              onClick={() => onDay(d)}
-              disabled={!open(d)}
-              aria-label={`${fromIso(d).toLocaleDateString('en-US', { weekday: 'long' })}: ${days[d] ? WORD[days[d].color] : open(d) ? 'not painted yet' : 'still to come'}`}
-            >
-              <i
-                className={(days[d] ? '' : open(d) ? 'is-paper' : 'is-ahead') + (d === today ? ' is-today' : '')}
-                style={{ ...(days[d] ? { background: paintHex(days[d].color) } : {}), '--i': i } as React.CSSProperties}
-              />
-              {d === today ? <b>today</b> : fromIso(d).toLocaleDateString('en-US', { weekday: 'narrow' })}
-            </button>
-          </li>
-        ))}
-      </ul>
+      {/* The day screen's way to step: big light arrows either side (greyed out of the way where there's no further). */}
+      <div className="home-week-row">
+        <button className="home-week-arrow" aria-label="The week before" disabled={!canBack} onClick={() => step(1)}>
+          <Chevron dir="left" />
+        </button>
+        <ul className="home-week-days">
+          {week.map((d, i) => (
+            <li key={d}>
+              <button
+                onClick={() => onDay(d)}
+                disabled={!open(d)}
+                aria-label={`${fromIso(d).toLocaleDateString('en-US', { weekday: 'long' })}: ${days[d] ? WORD[days[d].color] : open(d) ? 'not painted yet' : 'still to come'}`}
+              >
+                <i
+                  className={(days[d] ? '' : open(d) ? 'is-paper' : 'is-ahead') + (d === today ? ' is-today' : '')}
+                  style={
+                    { ...(days[d] ? { background: paintHex(days[d].color) } : {}), '--i': i } as React.CSSProperties
+                  }
+                />
+                {d === today ? <b>today</b> : fromIso(d).toLocaleDateString('en-US', { weekday: 'narrow' })}
+              </button>
+            </li>
+          ))}
+        </ul>
+        <button className="home-week-arrow" aria-label="The week after" disabled={back === 0} onClick={() => step(-1)}>
+          <Chevron dir="right" />
+        </button>
+      </div>
       {full ? (
         <p className="home-week-line">
           <b>Every day {that}, in colour.</b>

@@ -4094,13 +4094,39 @@ button.home-card:active {
   font-variant-numeric: tabular-nums;
 }
 /* The week in colour: seven squares, paper until painted, today ringed in ink. */
+/* The days between two big light arrows, as the day screen steps between days. */
+.home-week-row {
+  display: flex;
+  align-items: flex-start;
+  margin: 12px -10px 0;
+}
+.home-week-arrow {
+  flex: none;
+  width: 34px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: #d4d4cd;
+}
+.home-week-arrow svg {
+  width: 32px;
+  height: 32px;
+}
+.home-week-arrow svg path {
+  stroke-width: 3;
+}
+.home-week-arrow:disabled {
+  visibility: hidden;
+}
 .home-week-days {
+  flex: 1;
+  min-width: 0;
   list-style: none;
-  margin: 12px 0 0;
+  margin: 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 .home-week-days button {
   width: 100%;
@@ -4208,36 +4234,6 @@ button.home-card:active {
   }
 }
 /* The week card's ‹ › : quiet, finger-sized, either side of its dates. */
-.home-week-step {
-  position: relative;
-  display: inline-grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  margin: -10px 0;
-  vertical-align: middle;
-  border-radius: 50%;
-  background: #efefea; /* a small round capsule: clearly a button, still quiet */
-  color: var(--ink-soft);
-}
-.home-week-step svg {
-  width: 18px;
-  height: 18px;
-}
-.home-week-step:disabled {
-  background: none;
-  color: var(--faint);
-}
-.home-week-step::before {
-  content: '';
-  position: absolute;
-  inset: -8px;
-}
-.home-week .home-of {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
 .home-of {
   font-size: 12px;
   font-weight: 400;
