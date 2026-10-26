@@ -2378,6 +2378,22 @@ body[data-screen='questions'] .idea {
   font-size: 16px;
   color: var(--ink-soft);
 }
+.confirm-why textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 11px 14px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--grey-1);
+  box-shadow: inset 0 0 0 1px #e2e2db; /* the same field as the type "delete" box below */
+  font: inherit;
+  font-size: 16px; /* no zoom on iPhone */
+  color: var(--ink);
+  resize: none;
+}
+.confirm-why textarea:focus {
+  outline: none;
+}
 .confirm-type input {
   padding: 11px 14px;
   border: 0;

@@ -41,13 +41,15 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
     if (!sound) soundOnChime() // back on: you hear it
   }
   const [asking, setAsking] = useState(false)
+  // Why they're leaving: optional, sent with the delete, kept with no name (kept here too, for "try again").
+  const [why, setWhy] = useState('')
   // failed: 'offline' when it couldn't reach the account, 'error' when the account said no.
   const [deleting, setDeleting] = useState<'idle' | 'deleting' | 'offline' | 'error'>('idle')
   const remove = () => {
     setAsking(false)
     setDeleting('deleting')
     // The hourglass stays at least a moment, so a quick delete still shows it happening.
-    Promise.all([deleteMyAccount(), new Promise((r) => setTimeout(r, 1500))])
+    Promise.all([deleteMyAccount(why), new Promise((r) => setTimeout(r, 1500))])
       .then(onDeleted)
       .catch((e) => {
         reportError('delete account', e)
@@ -144,15 +146,21 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
           typeToConfirm="delete"
           typeLabel={'have your copy, or don’t need one?\ntype “delete” to go ahead'}
           aside={
-            <button
-              className="pill is-keyline confirm-export"
-              onClick={() => {
-                setAsking(false)
-                onExport()
-              }}
-            >
-              export my data
-            </button>
+            <>
+              <button
+                className="pill is-keyline confirm-export"
+                onClick={() => {
+                  setAsking(false)
+                  onExport()
+                }}
+              >
+                export my data
+              </button>
+              <label className="confirm-type confirm-why">
+                <span>why are you leaving? (optional)</span>
+                <textarea rows={2} maxLength={2000} value={why} onChange={(e) => setWhy(e.target.value)} />
+              </label>
+            </>
           }
           onConfirm={remove}
           onCancel={() => setAsking(false)}

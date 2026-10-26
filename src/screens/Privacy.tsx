@@ -53,15 +53,16 @@ export function Privacy({ onBack, backLabel }: Props) {
 
       <h2 className="privacy-head">deleting it all</h2>
       <p>
-        Any time: settings → delete my account. It removes your account and everything above, for good, right away. You
-        can also download a copy first: settings → export my data.
+        Any time: settings → delete my account. Your squares, moments, lists and settings go for good, right away. What
+        you wrote to me (feedback, or why you're leaving) stays, with no name on it. You can download a copy first:
+        settings → export my data.
       </p>
 
       <h2 className="privacy-head">questions</h2>
       <p>Use “get in touch” (on the about page), or reply to any email from me.</p>
       <p className="idea-sign">— nomi</p>
       {/* The date it last changed, required for a privacy policy: quiet, at the foot. */}
-      <p className="privacy-date">last updated Oct 24, 2026</p>
+      <p className="privacy-date">last updated Oct 26, 2026</p>
     </main>
   )
 }
