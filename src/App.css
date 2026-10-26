@@ -4656,46 +4656,127 @@ button.home-card:active {
   margin: 10px 0 0;
   font-size: 16px;
 }
-/* "set up now ›" under the life's question, at the card's bottom right. */
-.life-ghost-go {
+/* The framed-days help acts the move out, on a loop (5s): a painted day; a fingertip taps "frame it"; a light
+   sweeps the square; its frame settles (the deeper shade, then the raw sliver); it holds, and starts again.
+   Ink on paper but for the paint. Reduce motion: the framed square, still. */
+.frame-scene {
+  position: relative;
   display: flex;
-  justify-content: flex-end;
-  margin-top: 6px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 8px;
 }
-/* The framed-days help: a green square gets its frame (the deeper shade, then the raw sliver), and lets go,
-   again every few seconds. Still, with reduce motion. */
-.frame-demo {
-  display: block;
+.fs-square {
   box-sizing: border-box;
-  width: 72px;
-  height: 72px;
-  margin: 16px auto 6px;
+  width: 84px;
+  height: 84px;
   border-radius: 4px;
-  animation: frame-demo 3.2s ease-in-out infinite;
+  animation: fs-frame 5s ease-in-out infinite;
 }
-.frame-demo i {
+.fs-paint {
+  position: relative;
   display: block;
   width: 100%;
   height: 100%;
   border-radius: 3px;
+  overflow: hidden;
   background: #6e9b7b;
 }
-@keyframes frame-demo {
+/* The light across the square. */
+.fs-paint::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  background-position: 250% 0;
+  animation: fs-shine 5s ease-in-out infinite;
+}
+.fs-links {
+  font-size: 13px;
+  color: var(--muted);
+}
+.fs-tap {
+  font-weight: 400;
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 3px;
+  animation: fs-tap 5s ease-in-out infinite;
+}
+/* The fingertip: a soft grey dot over "frame it". */
+.fs-finger {
+  position: absolute;
+  bottom: -9px;
+  left: calc(50% + 18px);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(20, 20, 19, 0.16);
+  box-shadow: 0 0 0 1.5px rgba(20, 20, 19, 0.35);
+  opacity: 0;
+  animation: fs-finger 5s ease-in-out infinite;
+}
+@keyframes fs-finger {
   0%,
-  18% {
+  12% {
+    opacity: 0;
+    transform: translate(10px, 14px) scale(1);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: scale(0.8);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  38%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fs-tap {
+  0%,
+  22%,
+  60%,
+  100% {
+    color: var(--muted);
+  }
+  26%,
+  50% {
+    color: var(--ink);
+  }
+}
+@keyframes fs-shine {
+  0%,
+  32% {
+    background-position: 250% 0;
+  }
+  52%,
+  100% {
+    background-position: -150% 0;
+  }
+}
+@keyframes fs-frame {
+  0%,
+  50% {
     padding: 0;
     box-shadow: none;
     transform: scale(1);
   }
-  40% {
+  56% {
     transform: scale(1.06);
   }
-  50%,
-  85% {
-    padding: 6px;
+  62%,
+  92% {
+    padding: 7px;
     box-shadow:
       inset 0 0 0 3px #53735c,
-      inset 0 0 0 6px #ebe6da;
+      inset 0 0 0 7px #ebe6da;
     transform: scale(1);
   }
   100% {
@@ -4704,12 +4785,21 @@ button.home-card:active {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .frame-demo {
+  .fs-square {
     animation: none;
-    padding: 6px;
+    padding: 7px;
     box-shadow:
       inset 0 0 0 3px #53735c,
-      inset 0 0 0 6px #ebe6da;
+      inset 0 0 0 7px #ebe6da;
+  }
+  .fs-paint::after,
+  .fs-tap,
+  .fs-finger {
+    animation: none;
+    opacity: 0;
+  }
+  .fs-tap {
+    opacity: 1;
   }
 }
 /* Not set up yet: an empty slot, as everywhere in squared: a dashed edge on paper, no white fill. */
