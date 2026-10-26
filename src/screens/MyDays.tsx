@@ -160,20 +160,18 @@ export function MyDays({
             <button onClick={() => onPainting(month)}>
               <span className="home-t">{new Date().toLocaleDateString('en-US', { month: 'long' })}, so far</span>
               <PaintingThumb month={month} days={days} />
-              <span className="home-s">{count(month)} days in colour</span>
             </button>
           )}
           {hasYear && (
             <button onClick={() => onPainting(year)}>
               <span className="home-t">{year}, so far</span>
               <PaintingThumb month={year} days={days} />
-              <span className="home-s">{count(year)} days in colour</span>
             </button>
           )}
           {/* None kept yet: how to keep one, not a door to a blank page. */}
           {kept.length ? (
             <button className="my-days-all" onClick={onPaintings}>
-              all my paintings ({kept.length})
+              all my paintings
               <Chevron dir="right" />
             </button>
           ) : (
@@ -186,7 +184,7 @@ export function MyDays({
       )}
       <div className="settings-rows is-last">
         {framedCount
-          ? row('framed days', framedCount === 1 ? '1 day framed' : `${framedCount} days framed`, onFramed)
+          ? row('framed days', 'the days you framed', onFramed)
           : row('framed days', 'none yet · how to frame a day', () => setHelp('framed'), 'none')}
       </div>
       {/* Help, only when asked for: how a day is framed, how a painting is kept. */}

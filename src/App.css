@@ -770,6 +770,46 @@ sup.ord {
 .canvas.is-settling {
   animation: press 0.42s cubic-bezier(0.3, 0.7, 0.4, 1);
 }
+/* Then it dries: wet paint sits a shade deeper with a soft sheen; the sheen fades and the colour settles matte, a touch
+   lighter, as gouache does. The day's word signs the corner once it's dry, written left to right. */
+.canvas .wet-sheen {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(var(--margin));
+  pointer-events: none;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.34),
+    rgba(255, 255, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.1)
+  );
+  animation: wet-sheen 1.6s ease-out both;
+}
+@keyframes wet-sheen {
+  to {
+    opacity: 0;
+  }
+}
+.canvas.is-drying .canvas-face.is-painted {
+  animation: dry 1.6s ease-out both;
+}
+@keyframes dry {
+  from {
+    filter: brightness(0.88);
+  }
+}
+.canvas.is-drying .canvas-word.is-painted .canvas-hand {
+  animation: sign 0.9s 1.1s ease-out both;
+}
+@keyframes sign {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
 @keyframes press {
   35% {
     transform: scale(0.965);
@@ -779,7 +819,10 @@ sup.ord {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .canvas.is-settling {
+  .canvas.is-settling,
+  .canvas .wet-sheen,
+  .canvas.is-drying .canvas-face.is-painted,
+  .canvas.is-drying .canvas-word.is-painted .canvas-hand {
     animation: none;
   }
 }
@@ -4812,4 +4855,28 @@ button.home-card:active {
 .pie-back {
   align-self: flex-start;
   margin-top: 2px;
+}
+/* The first zoom out to a life: "This is today." under today's square, in the question's voice, on a paper label. */
+.life-this-is-today {
+  position: absolute;
+  margin: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--paper, #fafaf8);
+  box-shadow: 0 2px 8px rgba(20, 20, 19, 0.12);
+  font-family: var(--font-reflect);
+  font-size: 28px;
+  font-weight: 450;
+  line-height: 1.22;
+  color: var(--ink);
+  pointer-events: none;
+  animation: this-is-today 0.9s ease-out both;
+}
+@keyframes this-is-today {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(6px);
+  }
 }

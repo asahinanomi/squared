@@ -47,6 +47,23 @@ const NUM_MIN = 40 // squares at least this big print their day number…
 // …and "2026.10 Thu" under it as soon as that fits at a readable size (checked with the widest weekday).
 const dated = (cell: number) => cell >= NUM_MIN && textFits('2026.10 Wed', `400 ${MIN_TEXT_PX}px ${FONT}`, cell * 0.84)
 const PULSE_MS = 900
+// The first zoom out to a life, once: the lived days fill in up to today, today's ring pulses twice, then "This is
+// today." under it. Slow on purpose, so it's noticed. ?firstlife shows it again (a test link).
+const FILL_MS = 4500
+const PULSES = [4700, 5600]
+const LABEL_AT = 6300
+const FIRST_KEY = 'squared.firstLifeSeen'
+const firstLife = () => {
+  try {
+    if (new URLSearchParams(location.search).has('firstlife')) return true
+    if (localStorage.getItem(FIRST_KEY)) return false
+    localStorage.setItem(FIRST_KEY, '1')
+    return true
+  } catch {
+    return false
+  }
+}
+const calm = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 const FONT = "'Inter', system-ui, sans-serif"
 
 const daysInYear = (y: number) => (new Date(y, 1, 29).getDate() === 29 ? 366 : 365)
@@ -75,6 +92,10 @@ export function LifeDays({
   const [picked, setPicked] = useState<string | null>(null)
   const [away, setAway] = useState(false) // today scrolled out of view
   const pulseAt = useRef(-1e9) // when today's square last pulsed
+  // The first time: when the fill started (null: not playing), and how many days back from today it starts.
+  const [intro] = useState(firstLife)
+  const fill = useRef<{ at: number; span: number } | null>(intro && !calm() ? { at: -1, span: 0 } : null)
+  const [thisIsToday, setThisIsToday] = useState(intro && calm())
 
   const geometry = (w: number, n = cols) => {
     const gap = gapFor(n)
@@ -99,6 +120,26 @@ export function LifeDays({
       const radius = Math.min(8, Math.max(2, cell * 0.18))
       const labels = cell >= NUM_MIN
       const withDate = dated(cell)
+      // The first fill: lived days show only up to a cutoff that moves from the top of the screen down to today.
+      let cutoff = ''
+      const f = fill.current
+      if (f) {
+        if (f.at < 0) {
+          const b = Math.max(0, Math.floor((top - TOP) / block))
+          const r = Math.max(0, Math.floor((top - TOP - b * block - LABEL_H) / pitch))
+          const first = isoDate(new Date(firstYear + b, 0, 1 + r * cols))
+          f.span = Math.max(0, daysBetween(first < born ? born : first, today))
+        }
+        const p = f.at < 0 ? 0 : Math.min(1, (performance.now() - f.at) / FILL_MS)
+        const e = 1 - Math.pow(1 - p, 2)
+        cutoff = isoDate(
+          new Date(
+            Number(today.slice(0, 4)),
+            Number(today.slice(5, 7)) - 1,
+            Number(today.slice(8)) - Math.round(f.span * (1 - e)),
+          ),
+        )
+      }
       for (let b = b0; b <= b1; b++) {
         const year = firstYear + b
         const y0 = b * block + TOP - top
@@ -117,8 +158,9 @@ export function LifeDays({
           const x = (i % cols) * pitch
           const iso = isoDate(new Date(year, 0, 1 + i))
           if (iso < born || iso >= end) continue
-          const day = days[iso]
-          const ahead = iso > today
+          const hidden = cutoff !== '' && iso <= today && iso > cutoff
+          const day = hidden ? undefined : days[iso]
+          const ahead = iso > today || hidden
           roundRect(ctx, x, y, cell, cell, radius)
           ctx.fillStyle = day
             ? day.framed && day.color === 'green'
@@ -133,7 +175,7 @@ export function LifeDays({
             ctx.strokeStyle = AHEAD_EDGE
             ctx.stroke()
           }
-          if (iso === today) {
+          if (iso === today && !hidden) {
             roundRect(ctx, x - 1.5, y - 1.5, cell + 3, cell + 3, radius + 1.5)
             ctx.lineWidth = 1.5
             ctx.strokeStyle = INK
@@ -280,7 +322,31 @@ export function LifeDays({
     })
   }
 
+  // The first zoom out: play the fill, the two pulses, then the line.
+  useEffect(() => {
+    const f = fill.current
+    if (!f || !size.w) return
+    const start = performance.now()
+    f.at = start
+    let raf = 0
+    const tick = () => {
+      const t = performance.now() - start
+      if (t >= FILL_MS) fill.current = null
+      const due = PULSES.filter((ms) => t >= ms).pop()
+      if (due !== undefined && pulseAt.current < start + due) pulseAt.current = start + due
+      onScroll() // repaint
+      if (t >= LABEL_AT) setThisIsToday(true)
+      if (t < PULSES[PULSES.length - 1] + PULSE_MS + 50) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => {
+      cancelAnimationFrame(raf)
+      fill.current = null
+    }
+  }, [size.w > 0]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const totalH = TOP + years * block - BLOCK_GAP
+  const todayAt = cell ? place(today) : null
   return (
     <main className="life">
       <LifeHead profile={profile} current="days" onPick={onResolution} onBack={onBack} />
@@ -293,6 +359,7 @@ export function LifeDays({
         onScroll={() => {
           onScroll()
           checkAway()
+          if (thisIsToday && moved.current) setThisIsToday(false)
           if (picked) setPicked(null)
         }}
         onClick={onTap}
@@ -313,6 +380,18 @@ export function LifeDays({
               <PaintingButton period={y} label={y} onOpen={onPainting} className="is-over-canvas" />
             </span>
           ))}
+        {/* The first zoom out's line, right under today's square, until you move the life. */}
+        {thisIsToday && todayAt && (
+          <p
+            className="life-this-is-today"
+            style={{
+              top: TOP + todayAt.b * block + LABEL_H + todayAt.r * pitch + cell + 14,
+              left: Math.min(Math.max(todayAt.c * pitch + cell / 2, 110), size.w - 110),
+            }}
+          >
+            This is today.
+          </p>
+        )}
       </div>
       {picked && (
         <div className="day-chip" role="status">

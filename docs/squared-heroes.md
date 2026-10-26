@@ -28,14 +28,19 @@ If it serves none, it goes (stats, counts, extra rows). If it competes with a he
 
 ## Decided so far
 
-- **The paint is gouache:** dry-brush streaks, opaque, matte, one flat coat. Not watercolour (colours would blur into each other).
-- **The day's word** ("worth it", "regret", "a blur") signs the lower right corner, like an artist's signature.
+- **The paint is gouache, dabbed:** soft round dabs with bristle dots, opaque, matte, settling into one flat coat. Not watercolour (colours would blur into each other). **Never change the brush** without nomi asking.
+- **The day's word** ("worth it", "regret", "a blur") signs the lower right corner, like an artist's signature, in a deeper shade of its paint (dark, not white).
 - **Never:** streaks, badges, scores, feeds, dashboards of numbers.
+
+## Built
+
+- **The paint dries** (lab row 6, A3): wet sheen, dries matte, the word signs the corner. The brush itself never changes.
+- **The first zoom out to a life**, once (lab row 7): the days fill in, "This is today."
+- **No counts in my days.**
 
 ## Being worked on
 
-- The painting ritual (lab, row 6): what painting your day feels like. Leaning A2, gouache drying matte.
-- The first zoom out to a life, shown once (lab, row 7): "This is today."
+- "This is today." every time you zoom to a life, as a short version (no fill)? Waiting on nomi.
 - The month's painting arriving as a gift, then shared (`docs/6-growth.md`).
 - One gentle evening invitation, iPhone app (`docs/3-ios-todo.md`).
 

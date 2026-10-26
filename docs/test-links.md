@@ -10,6 +10,7 @@ Hidden links for trying squared's first-time moments on your own account. Open t
 | [squared.today/?month](https://squared.today/?month) | Last month's painting (the new-month moment). Works any day. |
 | [squared.today/?year](https://squared.today/?year) | Last year's painting (the new-year moment). Works any day. |
 | [squared.today/?birthday](https://squared.today/?birthday) | The birthday sheet over today ("Happy 55th birthday.", from your birth date; "Happy birthday." without one). Works any day. |
+| [squared.today/?firstlife](https://squared.today/?firstlife) | The first zoom out to a life, again: zoom out to a life and the days fill in, today pulses, "This is today." (normally once per device). |
 
 ## Pages anyone can open (signed in or not)
 

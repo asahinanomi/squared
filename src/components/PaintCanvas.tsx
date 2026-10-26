@@ -26,6 +26,9 @@ const BRUSH = 0.58
 const GRID = 24
 const FILLED = 0.88
 
+// When a square last filled (performance.now()): the square that mounts with the saved colour picks the drying up.
+let filledAt = -1e9
+
 // The ghost brush's stroke: two sweeps across the square, each rising from left to right, like painting it.
 const GHOST = 'M18 46 L82 28 L18 68 L82 50'
 
@@ -266,6 +269,8 @@ export function PaintCanvas({
   useEffect(() => {
     if (!settling) return
     const t = setTimeout(() => {
+      filledAt = performance.now()
+      setDrying(true)
       filled.current(settling)
       const c = canvas.current
       if (c) c.getContext('2d')!.clearRect(0, 0, c.width, c.height)
@@ -275,6 +280,15 @@ export function PaintCanvas({
     }, 520)
     return () => clearTimeout(t)
   }, [settling])
+  // Just filled: the paint is still wet (a soft sheen, a shade deeper), then it dries matte and the day's word signs
+  // the corner. Only on the stroke that filled it, never when a painted day opens. Saving a new colour remounts the
+  // square, so the moment it filled is kept outside it.
+  const [drying, setDrying] = useState(() => performance.now() - filledAt < 400)
+  useEffect(() => {
+    if (!drying) return
+    const t = setTimeout(() => setDrying(false), 2600)
+    return () => clearTimeout(t)
+  }, [drying])
 
   return (
     <div className="paint-wrap">
@@ -283,6 +297,7 @@ export function PaintCanvas({
         className={
           'canvas' +
           (settling ? ' is-settling' : '') +
+          (drying ? ' is-drying' : '') +
           (framed && saved ? ' is-framed' : '') +
           (shining ? ' is-shining' : '') +
           (breathing && !saved ? ' is-breathing' : '')
@@ -296,6 +311,7 @@ export function PaintCanvas({
         <canvas ref={canvas} className="paint-surface" />
 
         {settling && <div className="settle" style={{ background: paintHex(settling) }} />}
+        {drying && <div className="wet-sheen" />}
         {/* For someone new: a ghost brush sweeps across, leaving a faint trail, so the square reads as "paint me". */}
         {!saved && !touched && <GhostBrush />}
         {!touched && !settling && (
