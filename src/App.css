@@ -5,7 +5,7 @@
   width: 100%;
   max-width: 560px;
   margin: 0 auto;
-  padding: calc(env(safe-area-inset-top) + 16px) var(--gutter) calc(env(safe-area-inset-bottom) + 20px);
+  padding: calc(env(safe-area-inset-top) + 24px) var(--gutter) calc(env(safe-area-inset-bottom) + 20px);
 }
 
 /* ---------- top bar & menu ---------- */
@@ -74,7 +74,7 @@
 }
 .menu {
   position: absolute;
-  top: calc(env(safe-area-inset-top) + 64px);
+  top: calc(env(safe-area-inset-top) + 72px);
   right: max(var(--gutter), calc(50vw - 280px + var(--gutter)));
   min-width: 190px;
   padding: 8px;
@@ -2572,8 +2572,8 @@ body[data-screen='questions'] .idea {
   flex: 1 1 auto;
   min-height: 0;
   max-height: none;
-  margin: 0;
-  padding: 14px 0 16px;
+  margin: 0 0 0 -4px;
+  padding: 14px 0 16px 4px; /* room for the dots' keyline, which the scroll would clip */
   -webkit-mask-image: linear-gradient(to bottom, var(--fade-top), #000 40px, #000 calc(100% - 48px), var(--fade-end));
   mask-image: linear-gradient(to bottom, var(--fade-top), #000 40px, #000 calc(100% - 48px), var(--fade-end));
 }
@@ -3863,7 +3863,7 @@ button.settings-row:active {
   position: fixed;
   z-index: 30;
   left: 50%;
-  top: calc(env(safe-area-inset-top) + 70px);
+  top: calc(env(safe-area-inset-top) + 78px);
   transform: translateX(-50%);
   margin: 0;
   padding: 7px 14px;
@@ -3879,7 +3879,7 @@ button.settings-row:active {
   position: fixed;
   z-index: 30;
   left: 50%;
-  top: calc(env(safe-area-inset-top) + 70px);
+  top: calc(env(safe-area-inset-top) + 78px);
   transform: translateX(-50%);
   width: min(300px, calc(100vw - 48px));
   box-sizing: border-box;
