@@ -145,10 +145,12 @@ function DayCard({
         {special && <span className="day-card-special">{special}</span>}
         {/* Only what's worth saying in a list: a late square, or one changed later (on time is the norm). */}
       </div>
-      {/* More to read: "see all 5 moments" on the date's line, at the right; "show less" waits at the end. */}
+      {/* More to read: "5 moments ⌄" on the date's line, at the right (short, so the date keeps its line); "show
+          latest only ⌃" waits at the end, in the day screen's words. */}
       {more && !open && (
         <button className="day-card-see" aria-expanded={false} onClick={() => setOpen(true)}>
-          {notes.length > 1 ? `see all ${notes.length} moments` : 'see all'}
+          {notes.length > 1 ? `${notes.length} moments` : 'show all'}
+          <ChevronDown className="day-card-chevron" />
         </button>
       )}
       {/* The latest note under the square and date, the card's full width (more of it fits), two lines. */}
@@ -177,7 +179,8 @@ function DayCard({
             </div>
           ))}
           <button className="day-card-more" aria-expanded={true} onClick={() => setOpen(false)}>
-            show less
+            {notes.length > 1 ? 'show latest only' : 'show less'}
+            <ChevronDown className="day-card-chevron is-up" />
           </button>
         </div>
       )}

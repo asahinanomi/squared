@@ -3558,6 +3558,20 @@ button.settings-row:active {
   font-size: 14px;
   color: var(--muted);
 }
+/* The toggle's chevron, as on the day screen: down to open, up to fold. */
+.day-card-see,
+.day-card-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.day-card-chevron {
+  width: 12px;
+  height: 12px;
+}
+.day-card-chevron.is-up {
+  transform: rotate(180deg);
+}
 /* "show less": at the end of the open day, on the right, where the thumb is after reading. */
 .day-card-more {
   position: relative;
