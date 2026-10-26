@@ -132,8 +132,10 @@ function DayCard({
       <div className="day-card-text">
         {/* The whole card is this button (stretched over it); "more" sits above it. */}
         <button className="day-card-open" aria-label={`Open ${longDate(iso)}`} onClick={() => onPick(iso)}>
-          {weekday}, {monthDay}
-          <sup>{suffix}</sup>
+          <span className="day-card-date">
+            {weekday}, {monthDay}
+            <sup>{suffix}</sup>
+          </span>
           {day && <span className="day-card-word"> · {WORD[day.color]}</span>}
         </button>
         {/* A framed day: a small tag that shows only the framed ones. */}

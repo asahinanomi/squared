@@ -185,7 +185,7 @@ export function Today(props: Props) {
     if (why || e.pointerType === 'mouse') return
     if (swipe.current) return (swipe.current = null) // a second finger: a pinch, not a swipe
     const t = e.target as Element
-    if (t.closest('.paint-reach, .why, .moment-box')) return
+    if (t.closest('.paint-reach, .why, .moment-box, .swipe')) return // a moment swipes its own way (to delete)
     if (e.clientX < 24 || e.clientX > window.innerWidth - 24) return
     swipe.current = { id: e.pointerId, x: e.clientX, y: e.clientY, on: false }
   }
