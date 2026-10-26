@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom'
 import { createContext, useContext } from 'react'
 
 type Props = {
@@ -93,7 +94,8 @@ export const ViewSwitch = createContext<{
 // just above the bar's right end.
 export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
   const view = useContext(ViewSwitch)
-  return (
+  // Outside the stage, which scales while a zoom animates (a pinned bar inside it would ride along).
+  return createPortal(
     <div className="zoombar">
       {view ? (
         // One switch for the two ways to look: squares · list. The one showing is raised.
@@ -150,6 +152,7 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt }: Props) {
       )}
       {/* With no zoom, an empty right as wide as the switch keeps "today" in the centre. */}
       {!onIn && !onOut && view && <span className="zoombar-spacer" aria-hidden="true" />}
-    </div>
+    </div>,
+    document.body,
   )
 }

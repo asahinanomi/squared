@@ -1898,12 +1898,13 @@ body[data-screen='questions'] .idea {
   overflow: visible clip;
   padding-bottom: 0;
 }
-.app.is-one-screen:has(.zoombar) {
+.app.is-one-screen.has-bar {
   padding-bottom: calc(max(calc(env(safe-area-inset-bottom) - 10px), 8px) + 52px); /* room for the pinned bar */
 }
 /* Every zoom bar is pinned to the screen's bottom edge, exactly as the day screen's is, so its icons sit at the
-   same height on every screen (a bar at the foot of a 100dvh page can land a few points off on an iPhone). */
-.app.is-one-screen .zoombar {
+   same height on every screen (a bar at the foot of a 100dvh page can land a few points off on an iPhone). Both
+   bars live outside the zooming stage (portalled to the body), so a zoom's scale never carries them along. */
+.zoombar {
   position: fixed;
   z-index: 20;
   left: 0;

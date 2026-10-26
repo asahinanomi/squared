@@ -115,7 +115,9 @@ export default function App() {
     >
       <OpenPainting.Provider value={painting.paintedMonth}>
         {/* Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint). */}
-        <div className={'app' + (oneScreen ? ' is-one-screen' : '')}>
+        <div
+          className={'app' + (oneScreen ? ' is-one-screen' : '') + (oneScreen && screen !== 'pie' ? ' has-bar' : '')}
+        >
           <Topbar
             onHome={nav.goHome}
             onToday={nav.goToday}

@@ -526,30 +526,33 @@ export function Today(props: Props) {
         )}
       </div>
       {/* The zoom pair, as on every other level (hidden while writing). */}
-      {!why && (
-        <div className="today-zoom">
-          {/* The bar only zooms (sound lives in settings); on a past day, "today" in the centre needs a left. */}
-          {date !== today && <span className="today-zoom-left" aria-hidden="true" />}
-          {/* On a past day, the way back to today, in the centre as on every other bar. */}
-          {date !== today && (
-            <button
-              className="zoombar-today"
-              onClick={() => {
-                setSlide('from-right')
-                onDate(today)
-              }}
-            >
-              today
-            </button>
-          )}
-          <div className="today-zoom-pair">
-            {/* A day is as close as it gets: only the way out, at the right edge, its icon lined up with the menu's. */}
-            <button aria-label="Zoom out" onClick={onZoomOut}>
-              <ZoomOutIcon />
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Outside the stage, which scales while a zoom animates (a pinned bar inside it would ride along). */}
+      {!why &&
+        createPortal(
+          <div className="today-zoom">
+            {/* The bar only zooms (sound lives in settings); on a past day, "today" in the centre needs a left. */}
+            {date !== today && <span className="today-zoom-left" aria-hidden="true" />}
+            {/* On a past day, the way back to today, in the centre as on every other bar. */}
+            {date !== today && (
+              <button
+                className="zoombar-today"
+                onClick={() => {
+                  setSlide('from-right')
+                  onDate(today)
+                }}
+              >
+                today
+              </button>
+            )}
+            <div className="today-zoom-pair">
+              {/* A day is as close as it gets: only the way out, at the right edge, its icon lined up with the menu's. */}
+              <button aria-label="Zoom out" onClick={onZoomOut}>
+                <ZoomOutIcon />
+              </button>
+            </div>
+          </div>,
+          document.body,
+        )}
     </main>
   )
 }
