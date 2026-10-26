@@ -26,8 +26,10 @@ const BRUSH = 0.58
 const GRID = 24
 const FILLED = 0.88
 
-// When a square last filled (performance.now()): the square that mounts with the saved colour picks the drying up.
+// When a square last filled (performance.now()) and its strokes as they were: the square that mounts with the saved
+// colour picks the drying up, the wet strokes fading into the flat colour under them.
 let filledAt = -1e9
+let wetStrokes = ''
 
 // The ghost brush's stroke: two sweeps across the square, each rising from left to right, like painting it.
 const GHOST = 'M18 46 L82 28 L18 68 L82 50'
@@ -250,6 +252,7 @@ export function PaintCanvas({
     wakeSound() // iPhone allows sound from a lifted finger, if the touch-down was too early
     const done = covered.current.reduce((a, b) => a + b, 0) / covered.current.length
     if (done >= FILLED && loaded) {
+      wetStrokes = canvas.current?.toDataURL() ?? ''
       setSettling(loaded)
       settleSound(loaded)
     }
@@ -310,7 +313,10 @@ export function PaintCanvas({
         <div className={'canvas-face' + (saved ? ' is-painted' : '')} />
         <canvas ref={canvas} className="paint-surface" />
 
-        {settling && <div className="settle" style={{ background: paintHex(settling) }} />}
+        {/* Filled: the strokes stay as painted, wet (a still sheen), while it saves; then they dry into the one flat
+            colour, the sheen fading with them. */}
+        {settling && <div className="wet-sheen is-still" />}
+        {drying && wetStrokes && <img className="paint-surface wet-strokes" src={wetStrokes} alt="" />}
         {drying && <div className="wet-sheen" />}
         {/* For someone new: a ghost brush sweeps across, leaving a faint trail, so the square reads as "paint me". */}
         {!saved && !touched && <GhostBrush />}

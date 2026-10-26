@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 26, 2026, 19:14 UTC_
+_last updated Oct 26, 2026, 19:21 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -244,9 +244,9 @@ squared is a mindful journal for now: the day is lived in moments, then painted.
 
 squared's three heroes (the brush, the zoom out, the question) and the test for anything new live in `docs/squared-heroes.md`. Built from it:
 
-- **The paint dries** (lab row 6, A3): the brush is unchanged. When the strokes cover the square and the colour settles, the paint is wet for a moment: a clear sheen, a shade deeper. Over about 3 seconds the sheen fades and the colour dries matte, a touch lighter, as gouache does (slowed on Oct 26, 2026, so it is noticed), then the day's word ("worth it") writes itself into the corner, left to right, in its usual tone-on-tone ink. Only on the stroke that fills it, never when a painted day opens; still with reduced motion.
-- **The first zoom out to a life** (lab row 7): the first time a life opens, your days fill in from the top of the screen down to today (4.5s), today's ring pulses twice, then "This is today." sits right under today's square, in the question's voice (28px Fraunces) on a paper label, until you move the life. Once per device; still, with just the line, under reduced motion. Try it again: squared.today/?firstlife. **Every time after** (nomi's idea): the short version, no fill: when a life opens with today on screen, today's ring pulses once and "This is today." shows under it for about 2.5 seconds, then fades (off with reduced motion).
-- **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays (nomi is thinking about it).
+- **The paint dries** (lab row 6, A3): the brush is unchanged. When the strokes cover the square, they stay as painted, wet: a still sheen over them while it saves. Then, over about 3 seconds, the strokes dry into the one flat colour under them and the sheen fades, matte, a touch lighter, as gouache does. Then the day's word ("worth it") writes itself into the corner, left to right, in its usual tone-on-tone ink. (The flat colour no longer flashes in first; Oct 26, 2026, nomi.) Only on the stroke that fills it, never when a painted day opens; still with reduced motion.
+- **A life fills in, every time** (lab row 7; nomi chose every time): when a life opens, the lived days fill in from the top of the screen down to today, each landing in a clear grey and softening to its resting tone, so the wave shows even with nothing painted. Then today's ring pulses and "This is today." sits under today's square (28px Fraunces on a paper label). The first time per device it takes 3s, pulses twice and keeps the line until you move; after that 2s, one pulse, and the line fades after about 2.5s. A touch or a scroll skips to the end. Still under reduced motion (the line only, the first time). squared.today/?firstlife plays the first time again. **Lived days read apart from the days ahead**: a lived day you didn't paint is a quiet paper grey (#e2e2da, was #eeeee8, almost the ahead tone) in a life in days, in months and in years.
+- **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 
 ## Saving: online first, the account is the one truth
 

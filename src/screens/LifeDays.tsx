@@ -39,7 +39,7 @@ const gapFor = (n: number) => ({ 28: 2, 14: 4, 7: 9, 3: 10 })[n] ?? 2
 const LABEL_H = 22 // year label above each block (room for its dotted underline over the first row)
 const BLOCK_GAP = 16 // space between years
 const TOP = 24 // room above the first year, clear of the top fade (its label and painting icon stay easy to tap)
-const LIVED_BLANK = '#eeeee8'
+const LIVED_BLANK = '#e2e2da' // lived, not painted: a shade deeper than the days ahead, so lived and ahead read apart
 const AHEAD = '#f1f1ec'
 const AHEAD_EDGE = '#e4e4dd'
 const INK = '#141413'
@@ -47,12 +47,17 @@ const NUM_MIN = 40 // squares at least this big print their day number…
 // …and "2026.10 Thu" under it as soon as that fits at a readable size (checked with the widest weekday).
 const dated = (cell: number) => cell >= NUM_MIN && textFits('2026.10 Wed', `400 ${MIN_TEXT_PX}px ${FONT}`, cell * 0.84)
 const PULSE_MS = 900
-// The first zoom out to a life, once: the lived days fill in up to today, today's ring pulses twice, then "This is
-// today." under it. Slow on purpose, so it's noticed. ?firstlife shows it again (a test link). Every time after: the
-// short version (one pulse, the line for a moment).
-const FILL_MS = 4500
-const PULSES = [4700, 5600]
-const LABEL_AT = 6300
+// Every time a life opens, the lived days fill in from the top of the screen down to today: each one lands a clear
+// grey and softens to its resting tone, so the wave shows even with nothing painted. Then today's ring pulses and
+// "This is today." sits under it. The first time is a little slower, pulses twice and keeps the line until you move;
+// after that the line fades on its own. A touch or a scroll skips straight to the end. ?firstlife plays the first
+// time again (a test link).
+const FILL_FIRST = 3000
+const FILL_AGAIN = 2000
+const LAND_MS = 700
+const LAND = [0xc4, 0xc4, 0xbc] // the grey a lived day lands in…
+const REST = [0xe2, 0xe2, 0xda] // …easing to LIVED_BLANK
+const landing = (k: number) => `rgb(${LAND.map((v, n) => Math.round(v + (REST[n] - v) * k)).join(', ')})`
 const FIRST_KEY = 'squared.firstLifeSeen'
 const firstLife = () => {
   try {
@@ -93,9 +98,12 @@ export function LifeDays({
   const [picked, setPicked] = useState<string | null>(null)
   const [away, setAway] = useState(false) // today scrolled out of view
   const pulseAt = useRef(-1e9) // when today's square last pulsed
-  // The first time: when the fill started (null: not playing), and how many days back from today it starts.
+  // The fill: when it started (-1: not yet), how many days back from today it starts, and how long it takes (null
+  // once it's done or skipped).
   const [intro] = useState(firstLife)
-  const fill = useRef<{ at: number; span: number } | null>(intro && !calm() ? { at: -1, span: 0 } : null)
+  const fill = useRef<{ at: number; span: number; ms: number } | null>(
+    calm() ? null : { at: -1, span: 0, ms: intro ? FILL_FIRST : FILL_AGAIN },
+  )
   const [thisIsToday, setThisIsToday] = useState(intro && calm())
 
   const geometry = (w: number, n = cols) => {
@@ -121,26 +129,20 @@ export function LifeDays({
       const radius = Math.min(8, Math.max(2, cell * 0.18))
       const labels = cell >= NUM_MIN
       const withDate = dated(cell)
-      // The first fill: lived days show only up to a cutoff that moves from the top of the screen down to today.
-      let cutoff = ''
+      // The fill: a lived day `d` days back shows once the wave has reached it, landing grey, then softening.
       const f = fill.current
+      let elapsed = 0
       if (f) {
         if (f.at < 0) {
           const b = Math.max(0, Math.floor((top - TOP) / block))
           const r = Math.max(0, Math.floor((top - TOP - b * block - LABEL_H) / pitch))
           const first = isoDate(new Date(firstYear + b, 0, 1 + r * cols))
-          f.span = Math.max(0, daysBetween(first < born ? born : first, today))
+          f.span = Math.max(1, daysBetween(first < born ? born : first, today))
         }
-        const p = f.at < 0 ? 0 : Math.min(1, (performance.now() - f.at) / FILL_MS)
-        const e = 1 - Math.pow(1 - p, 2)
-        cutoff = isoDate(
-          new Date(
-            Number(today.slice(0, 4)),
-            Number(today.slice(5, 7)) - 1,
-            Number(today.slice(8)) - Math.round(f.span * (1 - e)),
-          ),
-        )
+        elapsed = f.at < 0 ? 0 : performance.now() - f.at
       }
+      // When the wave reaches a day d days back (easing out: quick from the top, slowing into today).
+      const reachedAt = (d: number) => (f ? (1 - Math.sqrt(Math.min(1, d / f.span))) * f.ms : 0)
       for (let b = b0; b <= b1; b++) {
         const year = firstYear + b
         const y0 = b * block + TOP - top
@@ -159,7 +161,8 @@ export function LifeDays({
           const x = (i % cols) * pitch
           const iso = isoDate(new Date(year, 0, 1 + i))
           if (iso < born || iso >= end) continue
-          const hidden = cutoff !== '' && iso <= today && iso > cutoff
+          const age = f && iso <= today ? elapsed - reachedAt(daysBetween(iso, today)) : Infinity
+          const hidden = age < 0
           const day = hidden ? undefined : days[iso]
           const ahead = iso > today || hidden
           roundRect(ctx, x, y, cell, cell, radius)
@@ -169,7 +172,9 @@ export function LifeDays({
               : squareFill(day.color)
             : ahead
               ? AHEAD
-              : LIVED_BLANK
+              : age < LAND_MS
+                ? landing(age / LAND_MS)
+                : LIVED_BLANK
           ctx.fill()
           if (ahead && labels) {
             ctx.lineWidth = 1
@@ -323,52 +328,51 @@ export function LifeDays({
     })
   }
 
-  // The first zoom out: play the fill, the two pulses, then the line.
+  // Play the fill, then the pulses and the line.
+  const [leaving, setLeaving] = useState(false)
+  const skipped = useRef(false)
   useEffect(() => {
     const f = fill.current
     if (!f || !size.w) return
     const start = performance.now()
     f.at = start
+    const pulses = intro ? [f.ms + 200, f.ms + 1100] : [f.ms + 150]
+    const lineAt = intro ? f.ms + 1800 : f.ms + 400
+    const until = Math.max(pulses[pulses.length - 1] + PULSE_MS + 50, lineAt) + LAND_MS
+    const timers: ReturnType<typeof setTimeout>[] = []
     let raf = 0
     const tick = () => {
+      if (skipped.current) return
       const t = performance.now() - start
-      if (t >= FILL_MS) fill.current = null
-      const due = PULSES.filter((ms) => t >= ms).pop()
+      const due = pulses.filter((ms) => t >= ms).pop()
       if (due !== undefined && pulseAt.current < start + due) pulseAt.current = start + due
       onScroll() // repaint
-      if (t >= LABEL_AT) setThisIsToday(true)
-      if (t < PULSES[PULSES.length - 1] + PULSE_MS + 50) raf = requestAnimationFrame(tick)
+      if (t >= lineAt && !timers.length) {
+        setThisIsToday(true)
+        if (!intro)
+          timers.push(
+            setTimeout(() => setLeaving(true), 2500),
+            setTimeout(() => setThisIsToday(false), 3100),
+          )
+      }
+      if (t < until) raf = requestAnimationFrame(tick)
+      else fill.current = null
     }
     raf = requestAnimationFrame(tick)
     return () => {
       cancelAnimationFrame(raf)
+      timers.forEach(clearTimeout)
       fill.current = null
     }
   }, [size.w > 0]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Every other time: the short version. Today's ring pulses once and "This is today." shows for a moment, then
-  // fades (only when today is on screen).
-  const [leaving, setLeaving] = useState(false)
-  useEffect(() => {
-    if (intro || !size.w || calm()) return
-    const el = scroller.current
-    const y = todayTop()
-    if (!el || y + cell < el.scrollTop || y > el.scrollTop + el.clientHeight) return
-    const timers = [
-      setTimeout(() => {
-        pulseAt.current = performance.now()
-        const tick = () => {
-          onScroll() // repaint
-          if (performance.now() - pulseAt.current < PULSE_MS + 50) requestAnimationFrame(tick)
-        }
-        tick()
-        setThisIsToday(true)
-      }, 350),
-      setTimeout(() => setLeaving(true), 2800),
-      setTimeout(() => setThisIsToday(false), 3400),
-    ]
-    return () => timers.forEach(clearTimeout)
-  }, [size.w > 0]) // eslint-disable-line react-hooks/exhaustive-deps
+  // A touch or a scroll: straight to the end (everything filled, no pulse, no line).
+  const skip = () => {
+    moved.current = true
+    if (!fill.current) return
+    skipped.current = true
+    fill.current = null
+    onScroll()
+  }
 
   const totalH = TOP + years * block - BLOCK_GAP
   const todayAt = cell ? place(today) : null
@@ -378,8 +382,8 @@ export function LifeDays({
       <div
         className="life-canvas"
         ref={scroller}
-        onPointerDown={() => (moved.current = true)}
-        onWheel={() => (moved.current = true)}
+        onPointerDown={skip}
+        onWheel={skip}
         onKeyDown={() => (moved.current = true)}
         onScroll={() => {
           onScroll()

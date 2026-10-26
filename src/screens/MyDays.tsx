@@ -138,9 +138,7 @@ export function MyDays({
             </button>
           )
         })()}
-      {/* This week, after a life: the close-up, the nearest look back (it lived on home, which was cut): swipe or ‹ › for earlier weeks. */}
-      <WeekCard days={days} born={profile?.born} onDay={onDay} />
-      {/* What matters, right after the week: the compass first, then the paintings. */}
+      {/* What matters, right after a life: the compass first, then the paintings. */}
       <div className="settings-rows">
         {matters.length
           ? row('what matters', matters.slice(0, 3).join(' · '), onMatters)
@@ -182,10 +180,15 @@ export function MyDays({
           )}
         </section>
       )}
-      <div className="settings-rows is-last">
+      <div className="settings-rows">
         {framedCount
           ? row('framed days', 'the days you framed', onFramed)
           : row('framed days', 'none yet · how to frame a day', () => setHelp('framed'), 'none')}
+      </div>
+      {/* This week, last for now (nomi is weighing it): the close-up, the nearest look back. Swipe or ‹ › for earlier
+          weeks. */}
+      <div className="my-days-week">
+        <WeekCard days={days} born={profile?.born} onDay={onDay} />
       </div>
       {/* Help, only when asked for: how a day is framed, how a painting is kept. */}
       <Sheet open={help === 'framed'} onClose={() => setHelp(null)}>

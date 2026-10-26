@@ -28,7 +28,7 @@ type Props = {
 // Space between squares grows with them, so big squares stay apart.
 const gapFor = (n: number) => ({ 12: 4, 6: 7, 4: 9, 3: 10 })[n] ?? 4
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-const LIVED_BLANK = '#eeeee8'
+const LIVED_BLANK = '#e2e2da' // lived, not painted: a shade deeper than the months ahead
 const AHEAD = '#f1f1ec'
 const BEFORE = '#f6f6f2'
 const INK = '#141413'

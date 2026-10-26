@@ -791,6 +791,14 @@ sup.ord {
     opacity: 0;
   }
 }
+/* While it saves, the sheen just sits on the wet strokes. */
+.canvas .wet-sheen.is-still {
+  animation: none;
+}
+/* The strokes as they were painted, drying into the flat colour under them. */
+.canvas .wet-strokes {
+  animation: wet-sheen 3s ease-in both;
+}
 .canvas.is-drying .canvas-face.is-painted {
   animation: dry 3s ease-in-out both;
 }
@@ -821,6 +829,7 @@ sup.ord {
 @media (prefers-reduced-motion: reduce) {
   .canvas.is-settling,
   .canvas .wet-sheen,
+  .canvas .wet-strokes,
   .canvas.is-drying .canvas-face.is-painted,
   .canvas.is-drying .canvas-word.is-painted .canvas-hand {
     animation: none;
@@ -2097,7 +2106,7 @@ body[data-screen='questions'] .idea {
   place-items: center;
   font-size: 12px;
   font-weight: 600;
-  background: #eeeee8;
+  background: #e2e2da;
   color: var(--muted);
 }
 .life-year.is-ahead {
@@ -3014,7 +3023,8 @@ button.settings-row:active {
   padding-right: 4px;
 }
 
-.settings-rows.is-last {
+.settings-rows.is-last,
+.my-days-week {
   margin-bottom: 28px; /* room before the footer's hairline */
 }
 .settings-note {

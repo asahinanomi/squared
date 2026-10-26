@@ -34,9 +34,8 @@ If it serves none, it goes (stats, counts, extra rows). If it competes with a he
 
 ## Built
 
-- **The paint dries** (lab row 6, A3): wet sheen, dries matte, the word signs the corner. The brush itself never changes.
-- **The first zoom out to a life**, once (lab row 7): the days fill in, "This is today."
-- **"This is today." every time** a life opens, the short version: one pulse, the line for a moment, no fill.
+- **The paint dries** (lab row 6, A3): the strokes stay wet, then dry into one flat colour, and the word signs the corner. The brush itself never changes.
+- **A life fills in, every time** (lab row 7): the lived days fill in to today, a wave of grey even with nothing painted, then "This is today." Slower the first time; a touch skips it.
 - **No counts in my days.**
 
 ## Being worked on
