@@ -108,7 +108,8 @@ export function WeekCard({ days, born, onDay }: Props) {
           {that}.
         </p>
       ) : (
-        <p className="home-week-line">{back ? 'Nothing painted that week.' : 'Nothing painted this week yet.'}</p>
+        // Never a debt: this week is still yours; an earlier one was simply quiet.
+        <p className="home-week-line">{back ? 'A quiet week.' : 'This week is yours to paint.'}</p>
       )}
     </section>
   )

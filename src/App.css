@@ -4660,6 +4660,62 @@ button.home-card:active {
   margin: 10px 0 0;
   font-size: 16px;
 }
+/* "set up now ›" under the life's question, at the card's bottom right. */
+.life-ghost-go {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+/* The framed-days help: a green square gets its frame (the deeper shade, then the raw sliver), and lets go,
+   again every few seconds. Still, with reduce motion. */
+.frame-demo {
+  display: block;
+  box-sizing: border-box;
+  width: 72px;
+  height: 72px;
+  margin: 16px auto 6px;
+  border-radius: 4px;
+  animation: frame-demo 3.2s ease-in-out infinite;
+}
+.frame-demo i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  background: #6e9b7b;
+}
+@keyframes frame-demo {
+  0%,
+  18% {
+    padding: 0;
+    box-shadow: none;
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.06);
+  }
+  50%,
+  85% {
+    padding: 6px;
+    box-shadow:
+      inset 0 0 0 3px #53735c,
+      inset 0 0 0 6px #ebe6da;
+    transform: scale(1);
+  }
+  100% {
+    padding: 0;
+    box-shadow: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .frame-demo {
+    animation: none;
+    padding: 6px;
+    box-shadow:
+      inset 0 0 0 3px #53735c,
+      inset 0 0 0 6px #ebe6da;
+  }
+}
 /* Not set up yet: an empty slot, as everywhere in squared: a dashed edge on paper, no white fill. */
 .my-days .settings-row.is-empty,
 .my-days .home-card.is-empty {

@@ -160,7 +160,7 @@ Why: now, then the day (be here, then what matters, the order squared works in).
 - Before the first square: greeting · **10,962** / "days ahead of you." / "Make each one meaningful, starting with today." · the question · **paint your first square** · or paint yesterday · "getting started" (learned what squared is · named what matters · set how many squares · paint your first square)
 - Today not painted yet: greeting · the question · **paint today** · paint another day · this week
 - Today painted: greeting · **Today is in colour.** · today's square and note · this week · **paint another day**
-- This week: "5 days in colour this week." · a full week: **"Every day this week, in colour."** 🌈 (a small rainbow in your week's colours) · "You showed up for every single one."
+- This week: "5 days in colour this week." · empty: "This week is yours to paint." (an earlier week: "A quiet week.") · a full week: **"Every day this week, in colour."** 🌈 (a small rainbow in your week's colours) · "You showed up for every single one."
 
 **The letter, "the idea" — LOCKED COPY** (— nomi; lowercase; keep verbatim; rewritten by nomi Oct 23–24, 2026, on this brand story: meaningful, not good; less regret; now. Titled "the idea" again, Oct 24: before sign-in it reads as an invitation, where "why squared" read like a pitch. Its tab on the about page says "about"; the sign-in link says "the idea"):
 

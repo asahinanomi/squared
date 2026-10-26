@@ -78,13 +78,10 @@ export function MyDays({
       {/* squared's line, the page's epigraph: what follows is the past; today is beside it. The tagline candidate. */}
       <p className="my-days-line">The past is painted. Today is still yours.</p>
       {/* Before the squares are set: a ghost of the bar (lived solid, ahead dotted, today between), so it's clear
-          what's waiting, under the question; "set up now" at the top right, where its arrow will be. */}
+          what's waiting, then the question, and "set up now" at the bottom right, right after it. */}
       {!profile && (
         <button className="home-card my-days-life is-empty" onClick={onSetUp}>
-          <span className="home-head">
-            a life
-            <SetUp />
-          </span>
+          <span className="home-head">a life</span>
           <span className="home-big is-ahead is-ghost">
             ?<small>days</small>
           </span>
@@ -96,7 +93,11 @@ export function MyDays({
             <span>today</span>
             <span>ahead</span>
           </span>
+          {/* The question, then the way to answer it, at the bottom right where the eye lands next. */}
           <span className="life-ghost-ask">how many squares will you paint?</span>
+          <span className="life-ghost-go">
+            <SetUp />
+          </span>
         </button>
       )}
       {profile &&
@@ -144,6 +145,12 @@ export function MyDays({
           : row('what matters', 'what makes a day worth it', onMatters, 'set up')}
       </div>
       {/* This month and this year so far, and the way to every painting you kept (the old "paintings" row). */}
+      {/* Nothing painted yet: the paintings wait as an empty slot, with how they're made. */}
+      {!hasMonth && !hasYear && !kept.length && (
+        <div className="settings-rows">
+          {row('paintings', 'none yet · how a painting is made', () => setHelp('paintings'), 'none')}
+        </div>
+      )}
       {(hasMonth || hasYear || kept.length > 0) && (
         <section className="home-card home-paintings my-days-paintings">
           <h2 className="home-head my-days-paintings-head">paintings</h2>
@@ -183,6 +190,10 @@ export function MyDays({
       {/* Help, only when asked for: how a day is framed, how a painting is kept. */}
       <Sheet open={help === 'framed'} onClose={() => setHelp(null)}>
         <h2 className="torn-title">framed days</h2>
+        {/* A painted square being framed: what it looks like, and the clearest cue. */}
+        <span className="frame-demo" aria-hidden="true">
+          <i />
+        </span>
         <p className="sheet-body help-body">Frame a day you want to remember, in any colour.</p>
         <p className="sheet-body help-body">
           Open a painted day and tap “frame it” under its square. You can write what you want to remember.
