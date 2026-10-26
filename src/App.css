@@ -942,32 +942,6 @@
   text-decoration: underline dotted #c9c9c2;
   text-underline-offset: 4px;
 }
-.whisper {
-  position: fixed;
-  z-index: 20;
-  left: 50%;
-  bottom: calc(max(calc(env(safe-area-inset-bottom) - 10px), 8px) + 4px); /* over the bottom bar, clear of the paint */
-  width: max-content;
-  max-width: calc(100vw - 48px);
-  box-sizing: border-box;
-  margin: 0;
-  padding: 12px 18px;
-  border-radius: 16px;
-  background: #fff;
-  box-shadow:
-    inset 0 0 0 1px #e2e2db,
-    0 8px 24px rgba(20, 20, 19, 0.12);
-  font-size: 15px;
-  line-height: 1.4;
-  color: var(--ink);
-  text-align: center;
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(-50%, 16px);
-  transition:
-    opacity 0.4s,
-    transform 0.4s ease-in;
-}
 .whisper-dot {
   display: inline-block;
   width: 9px;
@@ -976,13 +950,6 @@
   border-radius: 50%;
   vertical-align: 1px;
   box-shadow: 0 0 0 1.5px var(--ink);
-}
-.whisper.is-on {
-  opacity: 1;
-  transform: translate(-50%, 0);
-  transition:
-    opacity 0.25s,
-    transform 0.3s ease-out;
 }
 
 /* Torn: the question, then your whole compass, in a sheet. */
@@ -2536,6 +2503,66 @@ body[data-screen='questions'] .idea {
   margin-top: 6.5px;
   border-radius: 50%;
   box-shadow: 0 0 0 1.5px var(--ink);
+}
+/* The colours, on each dip: the same sheet, without a backdrop, so the next touch paints. Taps pass through it. */
+.colours-sheet {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: 0;
+  box-sizing: border-box;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
+  box-shadow: 0 -8px 28px rgba(20, 20, 19, 0.1);
+  pointer-events: none;
+  transform: translate(-50%, 100%);
+}
+.colours-sheet.is-open {
+  transform: translate(-50%, 0);
+}
+.colours-sheet .sheet-handle {
+  margin-bottom: 18px;
+}
+.colours-sheet .legend {
+  margin: 0;
+  gap: 12px;
+}
+.colours-sheet .legend li {
+  font-size: 16px;
+  color: var(--muted);
+}
+.colours-sheet .legend li.is-dipped {
+  color: var(--ink);
+  font-weight: 500;
+}
+/* Torn: never more than a third of the screen. The question stays; the list scrolls. */
+.sheet.is-third {
+  box-sizing: border-box;
+  max-height: 33vh;
+  max-height: 33dvh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+}
+.is-third .sheet-handle {
+  flex: none;
+  margin-bottom: 14px;
+}
+.is-third .sheet-title {
+  margin-bottom: 4px;
+  font-size: 24px;
+}
+.is-third .sheet-body {
+  margin-bottom: 0;
+  font-size: 16px;
+}
+.is-third .compass-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+}
+.is-third .compass-name {
+  margin-bottom: 0;
 }
 @keyframes fade {
   from {

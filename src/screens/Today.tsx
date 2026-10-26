@@ -107,16 +107,20 @@ export function Today(props: Props) {
   const day = days[date]
   const special = specialDay(date, born)
 
-  // On each dip, the color's meaning rises from the bottom of the screen, then goes (sooner if painting starts).
+  // On each dip, all three colours rise from the bottom (like the other help), the dipped one in ink. No backdrop, so
+  // nothing waits on it: the next touch anywhere puts it away, and a stroke on the square still paints.
   const [whisper, setWhisper] = useState<{ paint: Paint; at: number } | null>(null)
   const [whispering, setWhispering] = useState(false)
   const [wiping, setWiping] = useState(false)
   useEffect(() => {
-    if (!whisper) return
-    setWhispering(true)
-    const t = setTimeout(() => setWhispering(false), 3500)
-    return () => clearTimeout(t)
+    if (whisper) setWhispering(true)
   }, [whisper])
+  useEffect(() => {
+    if (!whispering) return
+    const away = () => setWhispering(false)
+    document.addEventListener('pointerdown', away, true)
+    return () => document.removeEventListener('pointerdown', away, true)
+  }, [whispering])
   // Torn between green and red: on the third dip into them (both among them), whatever the brush held before, a
   // sheet rises from the bottom (like "meaningful") with a question to settle it, and your own compass. Once a day;
   // grey dips don't count.
@@ -410,16 +414,23 @@ export function Today(props: Props) {
               !day && (
                 <>
                   <Palette loaded={loaded} nudge={nudge} onLoad={dip} />
-                  {/* The colour's meaning rises from the bottom, like the day's other help, and never sits in the day. */}
+                  {/* The colours' meanings rise from the bottom, like the day's other help, and never sit in the day. */}
                   {createPortal(
-                    <p className={'whisper' + (whispering && !compassOpen ? ' is-on' : '')} aria-live="polite">
-                      {whisper && (
-                        <>
-                          <span className="whisper-dot" style={{ background: paintHex(whisper.paint) }} />
-                          {PAINTS.find((x) => x.id === whisper.paint)!.meaning}
-                        </>
-                      )}
-                    </p>,
+                    <div
+                      className={'sheet colours-sheet' + (whispering && !compassOpen ? ' is-open' : '')}
+                      aria-live="polite"
+                      aria-hidden={!whispering}
+                    >
+                      <div className="sheet-handle" />
+                      <ul className="legend">
+                        {PAINTS.map((x) => (
+                          <li key={x.id} className={whisper?.paint === x.id ? 'is-dipped' : undefined}>
+                            <span className="legend-swatch" style={{ background: x.hex }} />
+                            {x.meaning}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>,
                     document.body,
                   )}
                 </>
@@ -441,7 +452,8 @@ export function Today(props: Props) {
             onDelete={onDeleteNote}
           />
         )}
-        <Sheet open={compassOpen} onClose={() => setCompassOpen(false)}>
+        {/* Never more than a third of the screen: the question stays, your list scrolls under it. */}
+        <Sheet open={compassOpen} onClose={() => setCompassOpen(false)} className="is-third">
           <h2 className="sheet-title">torn?</h2>
           <p className="sheet-body">Ask yourself: did what mattered outweigh the rest?</p>
           {compass.length ? (
@@ -461,9 +473,6 @@ export function Today(props: Props) {
               name what matters to you in my days → what matters
             </button>
           )}
-          <button className="pill" onClick={() => setCompassOpen(false)}>
-            close
-          </button>
         </Sheet>
         {/* Someone's first visit: what a square is and what its colours mean, once. "got it" is a keyline, not the
             black main pill: dismissing a tip is never the day's main action (painting is). */}
