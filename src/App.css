@@ -2492,7 +2492,7 @@ body[data-screen='questions'] .idea {
 .legend li {
   display: flex;
   gap: 14px;
-  font-size: 18px;
+  font-size: 16px; /* so the grey line fits on one line on a big iPhone */
   line-height: 1.4;
 }
 /* A round paint dot with a keyline, like the idea page and the pie legend; centred on the first line. */
@@ -2500,7 +2500,7 @@ body[data-screen='questions'] .idea {
   flex: none;
   width: 12px;
   height: 12px;
-  margin-top: 6.5px;
+  margin-top: 5px;
   border-radius: 50%;
   box-shadow: 0 0 0 1.5px var(--ink);
 }
@@ -2511,6 +2511,8 @@ body[data-screen='questions'] .idea {
   left: 50%;
   bottom: 0;
   box-sizing: border-box;
+  padding-left: 22px;
+  padding-right: 22px;
   padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
   box-shadow: 0 -8px 28px rgba(20, 20, 19, 0.1);
   pointer-events: none;
