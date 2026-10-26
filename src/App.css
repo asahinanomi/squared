@@ -1755,6 +1755,7 @@ body[data-screen='questions'] .idea {
   display: flex;
   gap: 2px;
   flex-shrink: 0;
+  margin-right: -10px; /* the zoom-in icon ends where the menu's lines do, above */
 }
 /* ◎ floats over the content, just above the bar's right end: a small paper chip, ink only, there while today is
    out of view. */
@@ -1859,16 +1860,14 @@ body[data-screen='questions'] .idea {
   justify-content: space-between;
 }
 .today-zoom-left {
-  width: 90px; /* the pair and its margin, so "today" sits in the centre */
+  width: 30px; /* the zoom-out button's width (less its overhang), so "today" sits in the centre */
 }
-/* The same pair as every other level (2px apart), so zoom out never moves; the way in's place is empty. */
+/* The rightmost icon lines up with the menu's lines above (the page's one width): the 40px button reaches 10px past
+   the gutter, so its 24px icon ends where the menu's does. */
 .today-zoom-pair {
   display: flex;
   gap: 2px;
-  margin-right: 8px; /* lands on the other bars' pair, to the pixel */
-}
-.today-zoom-slot {
-  width: 40px;
+  margin-right: -10px;
 }
 .today-zoom .zoombar-today {
   width: auto;
