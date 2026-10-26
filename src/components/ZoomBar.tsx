@@ -10,9 +10,11 @@ type Props = {
   onRecenter?: () => void
   /** The day the list should open on if switched to from here (default: today). */
   listAt?: () => string
-  /** "today" in the centre: the app's way back to today by default; the day screen passes its own, or null on today
-   *  itself (you're there). */
-  today?: (() => void) | null
+  /** "today" in the centre: the app's way back to today by default; the day screen passes its own. */
+  today?: () => void
+  /** On today itself: "today" stays, raised (you're here, as the switch marks its side), and a tap gives the square a
+   *  small pulse instead. */
+  here?: () => void
 }
 
 const stroke = {
@@ -95,9 +97,9 @@ export const ViewSwitch = createContext<{
 // "today" in the centre, the same on every page). Zoom is a tool on the squares, not a way around, so it floats over
 // them at the bottom right, like a map's + and −: a slim capsule (zoom in on top, zoom out below; on a day, zoom out
 // alone), with ◎ (back to today's square, once it's out of view) on top of it. The list has no zoom: nothing floats.
-export function ZoomBar({ onOut, onIn, onRecenter, listAt, today }: Props) {
+export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props) {
   const view = useContext(ViewSwitch)
-  const goToday = today === undefined ? view?.goToday : today
+  const goToday = today ?? view?.goToday
   // Outside the stage, which scales while a zoom animates (a pinned bar inside it would ride along).
   return createPortal(
     <>
@@ -131,7 +133,11 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today }: Props) {
         ) : (
           <span />
         )}
-        {goToday ? (
+        {here ? (
+          <button className="zoombar-today is-here" aria-current="page" onClick={here}>
+            today
+          </button>
+        ) : goToday ? (
           <button className="zoombar-today" onClick={goToday}>
             today
           </button>

@@ -1859,6 +1859,13 @@ body[data-screen='questions'] .idea {
 .zoombar-today:active::before {
   background: #e6e6e0;
 }
+/* On today itself: "today" stays, raised white like the switch's selected side, so it reads as "you're here". */
+.zoombar-today.is-here::before {
+  background: #fff;
+  box-shadow:
+    inset 0 0 0 1px #e4e4dd,
+    0 1px 3px rgba(20, 20, 19, 0.08);
+}
 /* Just came back to today: the square pulses once, so the eye lands on it. */
 .is-pulse {
   animation: today-pulse 0.9s ease-out;

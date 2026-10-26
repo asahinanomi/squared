@@ -564,13 +564,21 @@ export function Today(props: Props) {
         <ZoomBar
           onOut={onZoomOut}
           listAt={() => date}
-          today={
+          today={() => {
+            setSlide('from-right')
+            onDate(today)
+          }}
+          here={
             date === today
-              ? null
-              : () => {
-                  setSlide('from-right')
-                  onDate(today)
+              ? () => {
+                  // You're here: the square gives a small pulse, so the eye lands on it.
+                  const sq = document.querySelector('.easel .canvas')
+                  sq?.classList.remove('is-pulse')
+                  void (sq as HTMLElement | null)?.offsetWidth
+                  sq?.classList.add('is-pulse')
+                  setTimeout(() => sq?.classList.remove('is-pulse'), 950)
                 }
+              : undefined
           }
         />
       )}
