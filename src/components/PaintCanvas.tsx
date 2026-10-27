@@ -25,6 +25,9 @@ const BRUSH = 0.58
 // Coverage is tracked on a coarse grid; this much painted counts as filled.
 const GRID = 24
 const FLOW_MS = 450
+const WET_MS = 520 // wet, as painted, while it saves
+const DRY_MS = 2400 // then it dries smooth
+const WET_SHADE = 0.1 // how much deeper wet paint looks
 const SIGN_MS = 2000 // the word and its sound, once the paint is mostly dry (in step with the CSS)
 const FILLED = 0.9 // most of it painted; the wet paint flows into the gaps left
 
@@ -261,6 +264,7 @@ export function PaintCanvas({
     const g = c?.getContext('2d')
     const done = () => {
       flowing.current = false
+      if (c && g) dryOn(c, g, p)
       setSettling(p)
     }
     if (!c || !g) return done()
@@ -304,6 +308,38 @@ export function PaintCanvas({
   // the parent hands down a new onFilled meanwhile.
   const filled = useRef(onFilled)
   filled.current = onFilled
+  // The drying, drawn on the canvas itself, frame by frame (CSS filters and fades starting as the colour saves made
+  // iPhone redraw the square, a blink): the strokes as painted, a shade deeper while wet; after a moment they soften
+  // into the one smooth colour, a touch lighter.
+  const drying$ = useRef(0)
+  useEffect(() => () => cancelAnimationFrame(drying$.current), [])
+  const dryOn = (c: HTMLCanvasElement, g: CanvasRenderingContext2D, p: Paint) => {
+    const strokes = document.createElement('canvas')
+    strokes.width = c.width
+    strokes.height = c.height
+    strokes.getContext('2d')!.drawImage(c, 0, 0)
+    const still = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const start = performance.now()
+    const frame = () => {
+      const t = (performance.now() - start - WET_MS) / DRY_MS
+      const k = still ? 1 : Math.min(1, Math.max(0, t))
+      const e = k * k * (3 - 2 * k)
+      g.save()
+      g.setTransform(1, 0, 0, 1, 0, 0)
+      g.globalCompositeOperation = 'copy'
+      g.drawImage(strokes, 0, 0)
+      g.globalCompositeOperation = 'source-atop'
+      g.fillStyle = `rgba(20, 20, 19, ${WET_SHADE * (1 - e)})`
+      g.fillRect(0, 0, c.width, c.height)
+      g.globalAlpha = e
+      g.fillStyle = paintHex(p)
+      g.fillRect(0, 0, c.width, c.height)
+      g.restore()
+      if (k < 1) drying$.current = requestAnimationFrame(frame)
+    }
+    frame()
+  }
+
   // Saved: the square keeps its strokes and dries (the same square throughout, never rebuilt: a new canvas can show a
   // frame late on iPhone, a blink).
   useEffect(() => {
@@ -321,6 +357,7 @@ export function PaintCanvas({
   // it, never when a painted day opens. Then the strokes are cleared, ready for another coat.
   const [drying, setDrying] = useState<Paint | null>(null)
   const dry = () => {
+    cancelAnimationFrame(drying$.current)
     const c = canvas.current
     if (c) c.getContext('2d')!.clearRect(0, 0, c.width, c.height)
     covered.current.fill(0)

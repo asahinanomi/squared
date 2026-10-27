@@ -781,34 +781,8 @@ sup.ord {
 .canvas.is-settling {
   animation: press 0.42s cubic-bezier(0.3, 0.7, 0.4, 1);
 }
-/* Then it dries, as paint does: your strokes stay as painted, texture and all, a shade deeper while wet; over 2.4s the
-   texture softens away into one smooth colour, a touch lighter. No gloss. The day's word signs the corner once it's
+/* Then it dries, as paint does (drawn on the canvas, in PaintCanvas). The day's word signs the corner once it's mostly
    dry, written left to right. */
-.canvas.is-settling .paint-surface {
-  filter: var(--wet);
-  transition: filter 0.4s ease-out;
-}
-.canvas {
-  --wet: brightness(0.9) saturate(1.08);
-}
-.canvas.is-drying .paint-surface {
-  filter: var(--wet);
-  animation: dry-out 2.4s ease-in-out both;
-}
-@keyframes dry-out {
-  to {
-    opacity: 0;
-    filter: none;
-  }
-}
-.canvas.is-drying .canvas-face.is-painted {
-  animation: dry 2.4s ease-in-out both;
-}
-@keyframes dry {
-  from {
-    filter: var(--wet);
-  }
-}
 .canvas.is-drying .canvas-word.is-painted .canvas-hand {
   animation: sign 1s 2s ease-out both; /* with its sound: SIGN_MS */
 }
@@ -830,8 +804,6 @@ sup.ord {
 }
 @media (prefers-reduced-motion: reduce) {
   .canvas.is-settling,
-  .canvas.is-drying .paint-surface,
-  .canvas.is-drying .canvas-face.is-painted,
   .canvas.is-drying .canvas-word.is-painted .canvas-hand {
     animation: none;
   }
