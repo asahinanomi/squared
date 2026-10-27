@@ -4621,7 +4621,7 @@ button.home-card:active {
 /* A help sheet in two columns: the move, acted out, and a few words beside it like notes. */
 .help-pair {
   display: flex;
-  align-items: center; /* the notes sit in the middle of the demo beside them, the same on every help sheet */
+  align-items: flex-start; /* the notes start where the square starts: the eye anchors on the square, not its links */
   gap: 20px;
   margin: 18px 0 6px;
 }
@@ -4667,6 +4667,10 @@ button.home-card:active {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+/* Paintings: the notes start with the painting, below the month's name above it. */
+.help-pair:has(.painting-demo) .help-notes {
+  padding-top: var(--demo-row, 21px);
 }
 .painting-demo-row {
   width: 100%;
