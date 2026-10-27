@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { sendFeedback } from '../lib/feedback'
+
+// Enough to say something ("hello" counts: the page invites it), so a stray tap or a letter can't be sent.
+const MIN_CHARS = 5
 import { supabase } from '../lib/supabase'
 
 type Props = {
@@ -54,7 +57,11 @@ export function Feedback({ onDone }: Props) {
           {state === 'limit' && (
             <p className="feedback-error">that's today's limit of five messages. thank you, send more tomorrow</p>
           )}
-          <button className="pill feedback-send" disabled={!text.trim() || state === 'sending'} onClick={send}>
+          <button
+            className="pill feedback-send"
+            disabled={text.trim().length < MIN_CHARS || state === 'sending'}
+            onClick={send}
+          >
             {state === 'sending' ? 'sending…' : 'send'}
           </button>
         </>
