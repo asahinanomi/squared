@@ -166,7 +166,9 @@ Why: now, then the day (be here, then what matters, the order squared works in).
 
 > **the idea**
 >
-> I had my head down in a busy life. one day, I looked up and saw so many days had gone. scarily fast, faster than I ever thought.
+> for years I kept my head down, busy. one day I looked up, and so many days were gone. faster than I ever thought.
+
+(First paragraph rewritten with nomi, Oct 27, 2026: shorter sentences, the jolt of looking up; was "I had my head down in a busy life. one day, I looked up and saw so many days had gone. scarily fast, faster than I ever thought.")
 >
 > the hard part wasn't the bad days. some of my hardest days were the ones truly worth it, the days I really grew. the worst were the days I wish I'd lived differently, or barely remember.
 >

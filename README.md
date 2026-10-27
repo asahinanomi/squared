@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 27, 2026, 15:27 UTC_
+_last updated Oct 27, 2026, 15:32 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -265,6 +265,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **The list starts where your view starts, and back again** (Oct 27, 2026, nomi): switching to the list opens on today if today's square is on screen; else, from a life, on Jan 1 of the year in the middle of the screen (or your birth date), from a month on its 1st, placed at the top with its month's name. Switching back to the squares opens them where the list is (scrolled back to 2006, you stay in 2006, not today). The list holds that place while moments and fonts load, until you touch it.
 - **Switching never loses your place** (Oct 27, 2026, nomi: "glitchy"; tested end to end): every switch, the list's tabs (days · months · years), the squares' tabs, and squares ↔ list, now opens on what you were looking at. The list keeps the card at the top of the screen at the top (it used to re-centre on the middle, so each switch slid a few months down: Feb → Aug → Oct 2008); a list you haven't moved hands back exactly what it opened on (the years list can't scroll far enough to put a recent year at the top). Back to the squares from a list reached through its tabs returns to the life at the list's tab, not the month. The squares' tabs open on what was in the middle (they all opened on today), and "today on screen?" is checked at the moment you switch, not remembered from the last scroll.
 - **Help notes start with the square** (Oct 27, 2026, nomi): on the framing and paintings help, the notes beside the demo are top-aligned with its square (with the painting, under its month's name), no longer centred: the eye anchors on the square, not its links.
+- **The idea's first lines** (Oct 27, 2026, nomi): "for years I kept my head down, busy. one day I looked up, and so many days were gone. faster than I ever thought."
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 
 ## Saving: online first, the account is the one truth

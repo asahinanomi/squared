@@ -27,8 +27,8 @@ export function Idea({ onMatters, onBack }: Props) {
       )}
       <h1 className="idea-title">the idea</h1>
       <p>
-        I had my head down in a busy life. one day, I looked up and saw so many days had gone. scarily fast, faster than
-        I ever thought.
+        for years I kept my head down, busy. one day I looked up, and so many days were gone. faster than I ever
+        thought.
       </p>
       <p>
         the hard part wasn’t the bad days. some of my hardest days were the ones truly worth it, the days I really grew.
