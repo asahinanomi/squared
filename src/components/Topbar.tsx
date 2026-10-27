@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Logo } from './Logo'
 
 type Props = {
@@ -17,8 +17,16 @@ export function Topbar({ onHome, onToday, onCalendar, onIdea, onSettings, onSign
     setOpen(false)
     fn()
   }
+  // Scrolled: the page passes under the bar, so it gets its soft shadow.
+  const [scrolled, setScrolled] = useState(false)
+  useEffect(() => {
+    const on = () => setScrolled(window.scrollY > 2)
+    on()
+    window.addEventListener('scroll', on, { passive: true })
+    return () => window.removeEventListener('scroll', on)
+  }, [])
   return (
-    <header className="topbar">
+    <header className={'topbar' + (scrolled ? ' is-scrolled' : '')}>
       {/* Every screen's top left: the logo, home, at the zoom icons' size (24px). (Zooming out is the bar's job.) */}
       <button className="logo-btn" onClick={onHome} aria-label="Home">
         <Logo size={24} />

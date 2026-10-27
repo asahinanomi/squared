@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 27, 2026, 09:59 UTC_
+_last updated Oct 27, 2026, 10:04 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -258,6 +258,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **"— nomi" signs at the left** (Oct 27, 2026, nomi): the letter (the idea, privacy, terms, support) now signs at the left, as the birthday note does, instead of the right.
 - **A moment's stamp, the same everywhere** (Oct 27, 2026, nomi): on the day, as in the list, a moment written on its own day shows just its time ("9:41 pm"); one written on another day shows the date too ("Oct 29, 2026 · 10:02 am"), the quiet history of how the day was recorded. The day screen used to repeat the full date on every moment, under a date pill that already said it. (`writtenWhen` in `src/lib/dates.ts`, shared.) The day itself still shows no "painted on" stamp, on purpose.
 - **Swipe to delete a moment, no dialog** (Oct 27, 2026, nomi): swipe left, tap "delete", and the moment is gone (two deliberate moves, as in Mail and Notes). Deleting from inside an open moment still asks first. No "edit" on the swipe: a tap already opens it.
+- **The header always stays** (Oct 27, 2026, nomi): like the bottom bar, the top bar (logo, the day's date, menu) is pinned to the top on every page, on the page's own dotted paper; scrolled content passes under it, with a soft shadow once you scroll. At rest it looks as before.
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 
 ## Saving: online first, the account is the one truth

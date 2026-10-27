@@ -9,19 +9,35 @@
 }
 
 /* ---------- top bar & menu ---------- */
+/* Always there, like the bottom bar (nomi, Oct 27, 2026): pinned to the top, on the page's own dotted paper (fixed,
+   so it lines up seamlessly), reaching the screen's edges and up under the status bar. At rest it looks as before; once
+   the page scrolls under it, a soft hairline shadow. */
 .topbar {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-sizing: content-box;
   height: 48px;
+  margin: calc(-1 * (env(safe-area-inset-top) + 24px)) calc(-1 * var(--gutter)) 0;
+  padding: calc(env(safe-area-inset-top) + 24px) var(--gutter) 0;
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px);
+  background-size: 22px 22px;
+  background-position: 11px 11px;
+  background-attachment: fixed;
+  transition: box-shadow 0.2s;
+}
+.topbar.is-scrolled {
+  box-shadow: 0 6px 14px -8px rgba(20, 20, 19, 0.16);
 }
 /* The bar's middle: empty, except on a day, where its date sits (absolutely centred, between logo and menu). */
 .topbar-center {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: calc(env(safe-area-inset-top) + 24px + 24px); /* the middle of the bar's 48px, under its top padding */
   width: max-content;
   transform: translate(-50%, -50%);
 }
