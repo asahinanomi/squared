@@ -357,14 +357,14 @@ export function Today(props: Props) {
 
           {/* A moment, any time: "this moment…" while today is being lived, "add to today…" once it's painted, "add to
               this day…" on any other day. Hidden while the bubble is open ("because…" right after painting, or updating
-              a moment). */}
-          {!why && (
+              a moment), but it keeps its place, so the square doesn't jump up. */}
+          <div className={'moment-slot' + (why ? ' is-away' : '')} inert={!!why}>
             <MomentBox
               key={date}
               placeholder={date !== today ? 'add to this day…' : day ? 'add to today…' : 'this moment…'}
               onAdd={(text) => void onSaveNote(undefined, text)}
             />
-          )}
+          </div>
 
           {/* "Today" belongs to now: its tense follows the day ("am I spending…" until it's painted, "did I spend…" once
               it is); on any other day, the question asks about "this day". */}

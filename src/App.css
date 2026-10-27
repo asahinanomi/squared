@@ -405,6 +405,13 @@
 }
 /* The day's moment box, right under the date: a white keyline box (rounded, not a pill: pills are buttons), "this
    moment…", and a + to keep it. It grows as you write. */
+/* The moment box's place: it stays while the bubble is open, only unseen (nothing below moves). */
+.moment-slot {
+  display: contents;
+}
+.moment-slot.is-away {
+  visibility: hidden;
+}
 .moment-box {
   margin-top: 8px; /* the first thing on the day, right under the bar (the date sits in the bar) */
   width: min(100%, 342px);

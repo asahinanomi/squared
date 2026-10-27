@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 26, 2026, 20:07 UTC_
+_last updated Oct 27, 2026, 00:52 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -247,6 +247,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **The paint dries** (lab row 6, A3; reworked with nomi, Oct 26, 2026): the brush is unchanged. A square counts as filled at 90% (88% before; 97% was tried and dropped). On the lift that fills it, the wet paint flows into the gaps left in dabs of the same brush (about half a second, behind your strokes so they stay as painted), with a last wash behind everything for any speck. Wet: your strokes, texture and all, a shade deeper. Drying, over about 2.4 seconds: the texture softens away into one smooth colour, a touch lighter, as real paint dries. No gloss (an earlier light corner read as fake). At 2 seconds, once it's mostly dry, the day's word ("worth it") writes itself into the corner, left to right, in its usual tone-on-tone ink, **together with its settle sound** (the drop, the knock, the sand: the answer arrives as one; nomi's idea). The square's press is the instant feedback. Only on the stroke that fills it, never when a painted day opens; still with reduced motion.
 - **A life fills in, every time** (lab row 7; nomi chose every time): when a life opens, the lived days fill in from the top of the screen down to today, each landing in a soft grey and settling to its resting tone, so the wave shows even with nothing painted. Then today's ring pulses and "This is today." sits under today's square (28px Fraunces on a paper label). Calm, not a rush (Oct 26, 2026, nomi: it felt stressful): the wave eases in and out, painted days fade in from paper and unpainted ones land a soft grey, each over 1.2s. The first time per device it takes about 4s and pulses twice; after that about 3s and one pulse. The line stays until you move. A touch or a scroll skips to the end. Still under reduced motion (the line only, the first time). squared.today/?firstlife plays the first time again. **Lived days read apart from the days ahead**: a lived day you didn't paint is a quiet paper grey (#e2e2da, was #eeeee8, almost the ahead tone) in a life in days, in months and in years.
 - **The paintings help's title** is now "Your days, painted by you." (was "Your months and years become paintings.": logistics, not the brand; nomi). The notes under it still say how.
+- **No jump after painting** (Oct 27, 2026, nomi): while the "because…" bubble is open, the moment box is hidden but keeps its place, so the square no longer jumps up the height of the box (it moves 2 to 3px at most, from the question's height changing).
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 
 ## Saving: online first, the account is the one truth
