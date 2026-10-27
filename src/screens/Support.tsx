@@ -10,8 +10,7 @@ export function Support() {
         <b className="beta">beta</b> squared is new, and still growing.
       </p>
       <p>
-        I’m building squared myself, one square a day. I hate to see my days, my life, go by unnoticed. How sad that
-        would be.
+        I’m building squared myself, one square a day. I’d hate to let my days go by unnoticed. How sad that would be.
       </p>
       <p>If you feel the same, help me build it.</p>
       <p className="idea-sign">— nomi</p>
