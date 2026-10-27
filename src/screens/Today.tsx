@@ -368,16 +368,32 @@ export function Today(props: Props) {
 
           {/* "Today" belongs to now: its tense follows the day ("am I spending…" until it's painted, "did I spend…" once
               it is); on any other day, the question asks about "this day". */}
-          {day && date === today ? (
-            // Today, painted: the question is answered, so the day closes with a statement (the same for every colour,
-            // never a verdict) and a quiet note that points forward. "start over" brings the question back.
-            <div className="day-closed">
-              <h1 className="question">Today is in colour.</h1>
-              <p className="day-closed-note">{CLOSING[day.color]}</p>
-            </div>
-          ) : (
-            <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
-          )}
+          {/* The question and today's closing share one place, as tall as the taller of the two (the other sits there
+              unseen), so painting today never moves the square. */}
+          <div className="day-head">
+            {day && date === today ? (
+              // Today, painted: the question is answered, so the day closes with a statement (the same for every
+              // colour, never a verdict) and a quiet note that points forward. "start over" brings the question back.
+              <div className="day-closed">
+                <h1 className="question">Today is in colour.</h1>
+                <p className="day-closed-note">{CLOSING[day.color]}</p>
+              </div>
+            ) : (
+              <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
+            )}
+            {date === today && (
+              <div className="day-head-ghost" aria-hidden="true" inert>
+                {day ? (
+                  <Question text={questionFor(question, true, false)} onDefine={onDefine} />
+                ) : (
+                  <div className="day-closed">
+                    <h1 className="question">Today is in colour.</h1>
+                    <p className="day-closed-note">{CLOSING.red}</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           <div
             className="easel"

@@ -359,6 +359,22 @@
   text-underline-offset: 8px;
 }
 /* Today, painted: "Today is in colour." where the question was, fading in as the paint settles, a quiet note under. */
+/* The question's place on the day: the question or today's closing, stacked with the other unseen, so the place
+   keeps one height and the square never moves when today is painted. */
+.day-head {
+  display: grid;
+  justify-items: center;
+  align-items: start;
+  width: 100%;
+}
+.day-head > * {
+  grid-area: 1 / 1;
+}
+.day-head-ghost {
+  visibility: hidden;
+  display: flex;
+  justify-content: center;
+}
 .day-closed {
   display: flex;
   flex-direction: column;
