@@ -1542,8 +1542,16 @@ body[data-screen='questions'] .idea {
   vertical-align: 1px;
 }
 /* The same 28px from each title to what follows. */
+.about .feedback {
+  padding-left: 4px; /* the same left edge as the idea, faq and support beside it */
+  padding-right: 4px;
+}
 .about .feedback .feedback-lede {
   margin-top: 0;
+  /* In the about tabs it's nomi's voice, like the idea and support: the letters' size and ink. */
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--ink);
 }
 .idea p.idea-ps {
   margin-top: 8px;
