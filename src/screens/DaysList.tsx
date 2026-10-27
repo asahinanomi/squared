@@ -232,16 +232,11 @@ export function DaysList({
 
   // Every day is its own card. Quiet days (unpainted, no moments, not today or yesterday, not a special day) that
   // follow one another lie in a stack ("Oct 13 – 20 · 8 unpainted"): tap it and they fan out as cards, "stack them
-  // again" folds them back. A stack is known by its first day. The one holding the day you came from starts open.
+  // again" folds them back. A stack is known by its first day.
   const yesterday = addDays(today, -1)
   const quiet = (iso: string) =>
     !days[iso] && !notes[iso]?.length && iso !== today && iso !== yesterday && !specialDay(iso, born)
-  const [open, setOpen] = useState<Set<string>>(() => {
-    if (!quiet(at)) return new Set()
-    let s = at
-    while (addDays(s, -1).slice(0, 7) === at.slice(0, 7) && quiet(addDays(s, -1))) s = addDays(s, -1)
-    return new Set([s])
-  })
+  const [open, setOpen] = useState<Set<string>>(() => new Set())
   const toggle = (first: string) =>
     setOpen((s) => {
       const next = new Set(s)
@@ -284,13 +279,30 @@ export function DaysList({
     else el.scrollTop = to
   }
 
-  // Open on the focus day, in the middle. Moments load a moment later and make the cards above it taller, which
-  // would push it off screen the first time: until you touch the list, it re-centres as they arrive.
+  // Open with the focus day at the top (the list starts where the squares' view started: today, a month's 1st, a
+  // year's Jan 1); a day inside a stack lands on its stack. Today, the last card, sits as high as the list allows.
+  // Moments load a moment later and make the cards above taller: until you touch the list, it keeps its place.
+  const top = (iso: string) => {
+    const el = scroller.current
+    if (!el) return
+    let card: HTMLElement | null = null
+    for (const c of el.querySelectorAll<HTMLElement>('[data-iso]')) if (c.dataset.iso! <= iso) card = c
+    if (card) el.scrollTop = card.offsetTop - 44 // room for its month's name above it
+  }
   const touched = useRef(false)
-  useLayoutEffect(() => centre(at), []) // eslint-disable-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => top(at), []) // eslint-disable-line react-hooks/exhaustive-deps
   useLayoutEffect(() => {
-    if (!touched.current) centre(at)
+    if (!touched.current) top(at)
   }, [notes]) // eslint-disable-line react-hooks/exhaustive-deps
+  // Anything else that grows the cards late (the fonts arriving, a special day's line) moves it too: hold the place
+  // through any change of size until you touch the list.
+  useEffect(() => {
+    const el = scroller.current
+    if (!el) return
+    const ro = new ResizeObserver(() => !touched.current && top(at))
+    for (const child of el.children) ro.observe(child)
+    return () => ro.disconnect()
+  }, [range]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Months added above keep what you're reading in place; a day waiting to be centred is centred.
   useLayoutEffect(() => {
@@ -340,6 +352,7 @@ export function DaysList({
 
   // ◎: back to today, at the foot of the list (drawing its month first if it isn't on the page yet).
   const backToToday = () => {
+    touched.current = true // it goes where you asked, not back to where the list opened
     if (range.to < current) {
       pending.current = today
       setRange({ from: shiftMonth(current, -1), to: current })
@@ -432,7 +445,7 @@ export function DaysList({
                       </li>,
                     ]
                   return (
-                    <li key={`${first}-stack`} className="day-stack">
+                    <li key={`${first}-stack`} className="day-stack" data-iso={first}>
                       <button className="day-stack-top" aria-expanded={false} onClick={() => toggle(first)}>
                         <span className="day-card-swatch" aria-hidden="true" />
                         <span className="day-stack-label">

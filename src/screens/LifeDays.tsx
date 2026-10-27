@@ -444,7 +444,12 @@ export function LifeDays({
       <ZoomBar
         onIn={() => onIn(middle())}
         onRecenter={away ? backToToday : undefined}
-        listAt={() => (away ? middle() : today)}
+        listAt={() => {
+          // The list starts where this view starts: today, if it's on screen; else the year in the middle, from Jan 1.
+          if (!away) return today
+          const jan = `${middle().slice(0, 4)}-01-01`
+          return jan < born ? born : jan
+        }}
       />
     </main>
   )

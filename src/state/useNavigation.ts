@@ -115,7 +115,12 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setLifeBack(false)
     const day = at ?? todayIso()
     if (screen === 'list') {
-      if (!listZoomed) return setScreen(listFrom)
+      // Back to the squares where the list is (scrolled back to 2006, the squares open on 2006, not today).
+      if (!listZoomed) {
+        if (listFrom === 'month') return goMonth(day)
+        if (listFrom === 'life') setLifeFocus(day)
+        return setScreen(listFrom)
+      }
       if (listRes === 'days') return goMonth(day)
       if (!profile) return goMonth(day)
       setLifeResValue(listRes)
