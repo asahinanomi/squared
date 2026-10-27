@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 27, 2026, 02:46 UTC_
+_last updated Oct 27, 2026, 02:49 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -254,6 +254,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **"because…", one message** (Oct 27, 2026, nomi): its placeholder is "a few words, or skip" (was "a line, or a page, or skip": not a page), and the "tap anywhere to skip" under it is gone (it said the same). Editing a moment keeps "tap anywhere to leave it as it was".
 - **Under 18, said clearly** (Oct 27, 2026, nomi): iPhone's date picker ignores the 18-years-ago limit, so a too-recent birth date now gets an ink note right under the field, its tail pointing up ("squared is for people 18 and over."), in place of a quiet grey line. Nothing is saved until it's fixed.
 - **The list opens on today** (Oct 27, 2026, nomi): from a life in days or the month, tapping list opens on today (its grey band) whenever today's square is on screen; only once you've moved away does it open on the day in the middle. (A life opened from the month used to open the list mid-month, Oct 11.)
+- **The paintings help's painting rises** (Oct 27, 2026, nomi): in its demo, the painting now rises softly from below and fades in, as the app's painting sheet does (it flew in from the top right, a move found nowhere else).
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 
 ## Saving: online first, the account is the one truth
