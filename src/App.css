@@ -1432,7 +1432,7 @@ body[data-screen='questions'] .idea {
 .idea p.idea-sign {
   font-style: italic;
   color: var(--ink-soft);
-  text-align: right; /* signed at the foot, like a letter */
+  text-align: left; /* signed at the foot, at the left as on the birthday note (nomi, Oct 27, 2026) */
 }
 /* The idea, squared's about page: its four tabs, then the page under them. */
 .about {
