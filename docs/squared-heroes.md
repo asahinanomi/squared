@@ -30,6 +30,7 @@ If it serves none, it goes (stats, counts, extra rows). If it competes with a he
 
 - **The paint is gouache, dabbed:** soft round dabs with bristle dots, opaque, matte, settling into one flat coat. Not watercolour (colours would blur into each other). **Never change the brush** without nomi asking.
 - **The day's word** ("worth it", "regret", "a blur") signs the lower right corner, like an artist's signature, in a deeper shade of its paint (dark, not white).
+- **The zoom out's line is "You are here."** (debated Oct 27, 2026: over "This is today." and "Here, today."). Three words; the picture does the urgency, the words only put you in it. Never longer.
 - **Never:** streaks, badges, scores, feeds, dashboards of numbers.
 
 ## Built
