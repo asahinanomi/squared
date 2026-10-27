@@ -691,6 +691,9 @@ sup.ord {
   border: 2.5px solid var(--ink);
   border-radius: 3px;
   overflow: hidden;
+  /* Always its own layer: the breath and the press move it, and iPhone (WebKit) drops a moved element's layer when
+     the animation's class goes, redrawing the square: a blink half a second after it fills. */
+  will-change: transform;
 }
 .canvas-face {
   position: absolute;
