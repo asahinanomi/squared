@@ -217,7 +217,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         key={`days-${nav.listOnly}`}
         only={nav.listOnly ?? undefined}
         onOnly={nav.setListOnly}
-        onFramedDays={() => nav.openFramed('list')}
         onAllNotes={acc.loadAllNotes}
         mid={listMid}
         head={head}

@@ -42,8 +42,6 @@ type Props = {
   only?: Only
   /** Choose what the list shows: one kind of day, or all (null). */
   onOnly?: (only: Only | null) => void
-  /** A framed card's "framed" tag: framed days. */
-  onFramedDays?: () => void
   /** "only with moments" needs every one, not just the months seen so far. */
   onAllNotes?: () => void
 }
@@ -89,7 +87,6 @@ export function DayCard({
   today,
   born,
   onPick,
-  onFramed,
   withYear,
 }: {
   iso: string
@@ -98,7 +95,6 @@ export function DayCard({
   today: string
   born?: string
   onPick: (iso: string) => void
-  onFramed?: () => void
   /** Framed days run across years: the date carries its year. */
   withYear?: boolean
 }) {
@@ -138,12 +134,6 @@ export function DayCard({
             </>
           )}
         </button>
-        {/* A framed day: a small tag that shows only the framed ones. */}
-        {day?.framed && onFramed && (
-          <button className="day-card-framed" onClick={onFramed} aria-label="Open framed days">
-            framed
-          </button>
-        )}
         {special && (
           <span className="day-card-special">
             <Raised text={special} />
@@ -209,7 +199,6 @@ export function DaysList({
   head,
   only,
   onOnly,
-  onFramedDays,
   onAllNotes,
 }: Props) {
   useEffect(() => {
@@ -284,15 +273,7 @@ export function DaysList({
   }
   const card = (iso: string) => (
     <li key={iso}>
-      <DayCard
-        iso={iso}
-        day={days[iso]}
-        notes={notes[iso]}
-        today={today}
-        born={born}
-        onPick={onPick}
-        onFramed={onFramedDays}
-      />
+      <DayCard iso={iso} day={days[iso]} notes={notes[iso]} today={today} born={born} onPick={onPick} />
     </li>
   )
   const short = (iso: string) => fromIso(iso).toLocaleDateString('en-US', { month: 'short' })
