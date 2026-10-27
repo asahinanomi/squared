@@ -99,3 +99,11 @@ export function monthsAgo(iso: string, n: number): string | null {
   const t = new Date(y, m - 1 - n, d)
   return t.getDate() === d ? isoDate(t) : null
 }
+
+/** When a moment was written: the time if it was written on its own day ("9:41 pm"), else the date too
+ *  ("Oct 29 · 10:02 am"): the date shows only where it says something. The same on the day and in the list. */
+export function writtenWhen(at: string, iso: string) {
+  const d = new Date(at)
+  const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()
+  return isoDate(d) === iso ? time : `${plainDate(isoDate(d))} · ${time}`
+}

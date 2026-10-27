@@ -1,12 +1,5 @@
+import { writtenWhen } from '../lib/dates'
 import type { Note } from '../lib/notes'
-
-/** "Wed, Oct 14, 2026 · 4:52 pm" */
-function stamp(iso: string) {
-  const d = new Date(iso)
-  const day = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
-  const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()
-  return `${day} · ${time}`
-}
 
 // One moment, in full, with when it was written. Tap it to update or delete it.
 export function NoteCard({
@@ -33,7 +26,7 @@ export function NoteCard({
     >
       {/* Pinned: on a framed day it's "to remember", in the day's green; any other day, a quiet "pinned". */}
       {note.pinned && <span className="note-pin">{framed ? 'to remember' : 'pinned'}</span>}
-      <span className="note-stamp">{stamp(note.writtenAt)}</span>
+      <span className="note-stamp">{writtenWhen(note.writtenAt, note.date)}</span>
       <span className="note-text">{note.body}</span>
     </button>
   )

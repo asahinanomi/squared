@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 27, 2026, 09:22 UTC_
+_last updated Oct 27, 2026, 09:50 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -256,6 +256,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **The list opens on today** (Oct 27, 2026, nomi): from a life in days or the month, tapping list opens on today (its grey band) whenever today's square is on screen; only once you've moved away does it open on the day in the middle. (A life opened from the month used to open the list mid-month, Oct 11.)
 - **The paintings help's painting rises** (Oct 27, 2026, nomi): in its demo, the painting now rises softly from below and fades in, as the app's painting sheet does (it flew in from the top right, a move found nowhere else).
 - **"— nomi" signs at the left** (Oct 27, 2026, nomi): the letter (the idea, privacy, terms, support) now signs at the left, as the birthday note does, instead of the right.
+- **A moment's stamp, the same everywhere** (Oct 27, 2026, nomi): on the day, as in the list, a moment written on its own day shows just its time ("9:41 pm"); one written on another day shows the date too ("Oct 29, 2026 · 10:02 am"), the quiet history of how the day was recorded. The day screen used to repeat the full date on every moment, under a date pill that already said it. (`writtenWhen` in `src/lib/dates.ts`, shared.) The day itself still shows no "painted on" stamp, on purpose.
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 
 ## Saving: online first, the account is the one truth

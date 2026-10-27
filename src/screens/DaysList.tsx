@@ -5,13 +5,12 @@ import { glide, pulse } from '../lib/backToToday'
 import {
   addDays,
   firstDay,
-  isoDate,
   longDate,
   monthCells,
   monthTitle,
-  plainDate,
   shortDateParts,
   todayIso,
+  writtenWhen,
 } from '../lib/dates'
 import type { Day, Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
@@ -76,13 +75,6 @@ const PREVIEW_CHARS = 80
 const STEP = 6
 /** How close (px) to an end of the list before more months are added. */
 const NEAR = 900
-
-/** When a note was written: the time, or the date too if it was written on another day. */
-function writtenWhen(at: string, iso: string) {
-  const d = new Date(at)
-  const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()
-  return isoDate(d) === iso ? time : `${plainDate(isoDate(d))} · ${time}`
-}
 
 /**
  * One day in the list: a short card — its colour, date and word, when a late one was first painted, and the
