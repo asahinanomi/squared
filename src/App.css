@@ -780,10 +780,8 @@ sup.ord {
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
-/* Filled: the square gives a soft press, like a stamp on paper (then the wet strokes dry, below). */
-.canvas.is-settling {
-  animation: press 0.42s cubic-bezier(0.3, 0.7, 0.4, 1);
-}
+/* Filled: the square stays still (the old stamp-like press, a quick shrink and spring back, read as a blink on
+   iPhone; removed Oct 27, 2026, a test with nomi). */
 /* Then it dries, as paint does (drawn on the canvas, in PaintCanvas). The day's word signs the corner once it's mostly
    dry, written left to right. */
 .canvas.is-drying .canvas-word.is-painted .canvas-hand {
@@ -797,16 +795,7 @@ sup.ord {
     clip-path: inset(0 0 0 0);
   }
 }
-@keyframes press {
-  35% {
-    transform: scale(0.965);
-  }
-  70% {
-    transform: scale(1.01);
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .canvas.is-settling,
   .canvas.is-drying .canvas-word.is-painted .canvas-hand {
     animation: none;
   }
