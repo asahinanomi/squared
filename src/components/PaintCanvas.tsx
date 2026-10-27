@@ -27,7 +27,6 @@ const GRID = 24
 const FLOW_MS = 450
 const WET_MS = 520 // wet, as painted, while it saves
 const DRY_MS = 2400 // then it dries smooth
-const WET_SHADE = 0.1 // how much deeper wet paint looks
 const SIGN_MS = 2000 // the word and its sound, once the paint is mostly dry (in step with the CSS)
 const FILLED = 0.9 // most of it painted; the wet paint flows into the gaps left
 
@@ -309,8 +308,8 @@ export function PaintCanvas({
   const filled = useRef(onFilled)
   filled.current = onFilled
   // The drying, drawn on the canvas itself, frame by frame (CSS filters and fades starting as the colour saves made
-  // iPhone redraw the square, a blink): the strokes as painted, a shade deeper while wet; after a moment they soften
-  // into the one smooth colour, a touch lighter.
+  // iPhone redraw the square): the strokes stay as painted for a moment, then soften into the one smooth colour. No
+  // darker "wet" step: switching it on in one frame was the blink nomi saw (found in her screen recording).
   const drying$ = useRef(0)
   useEffect(() => () => cancelAnimationFrame(drying$.current), [])
   const dryOn = (c: HTMLCanvasElement, g: CanvasRenderingContext2D, p: Paint) => {
@@ -329,8 +328,6 @@ export function PaintCanvas({
       g.globalCompositeOperation = 'copy'
       g.drawImage(strokes, 0, 0)
       g.globalCompositeOperation = 'source-atop'
-      g.fillStyle = `rgba(20, 20, 19, ${WET_SHADE * (1 - e)})`
-      g.fillRect(0, 0, c.width, c.height)
       g.globalAlpha = e
       g.fillStyle = paintHex(p)
       g.fillRect(0, 0, c.width, c.height)
@@ -352,7 +349,7 @@ export function PaintCanvas({
     }, 520)
     return () => clearTimeout(t)
   }, [settling])
-  // Just filled: the paint is still wet (a shade deeper), then it dries smooth, and the day's word signs the corner
+  // Just filled: the strokes stay as painted, then dry smooth, and the day's word signs the corner
   // together with its sound (the drop, the knock, the sand): the answer arrives as one. Only on the stroke that filled
   // it, never when a painted day opens. Then the strokes are cleared, ready for another coat.
   const [drying, setDrying] = useState<Paint | null>(null)
