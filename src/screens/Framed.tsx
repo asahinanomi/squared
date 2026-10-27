@@ -35,7 +35,7 @@ export function Framed({ days, notes, loadNotes, onDay, onBack, backLabel }: Pro
         <ol className="month-list day-cards">
           {framed.map((iso) => (
             <li key={iso}>
-              <DayCard iso={iso} day={days[iso]} notes={notes[iso]} today={todayIso()} onPick={onDay} withYear />
+              <DayCard iso={iso} day={days[iso]} notes={notes[iso]} today={todayIso()} onPick={onDay} />
             </li>
           ))}
         </ol>

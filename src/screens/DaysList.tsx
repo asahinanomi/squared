@@ -76,7 +76,8 @@ const STEP = 6
 const NEAR = 900
 
 /**
- * One day in the list: a short card — its colour, date and word, when a late one was first painted, and the
+ * One day in the list (and on framed days): a short card, its date with its year (a long page can scroll past the
+ * month's heading) — its colour, date and word, when a late one was first painted, and the
  * latest note cut to two lines. A tap anywhere opens the day (as a square does); "more" opens the card in place
  * to show every note in full, when there's more to read.
  */
@@ -87,7 +88,6 @@ export function DayCard({
   today,
   born,
   onPick,
-  withYear,
 }: {
   iso: string
   day?: Day
@@ -95,8 +95,6 @@ export function DayCard({
   today: string
   born?: string
   onPick: (iso: string) => void
-  /** Framed days run across years: the date carries its year. */
-  withYear?: boolean
 }) {
   const special = specialDay(iso, born)
   const [open, setOpen] = useState(false)
@@ -123,8 +121,7 @@ export function DayCard({
         <button className="day-card-open" aria-label={`Open ${longDate(iso)}`} onClick={() => onPick(iso)}>
           <span className="day-card-date">
             {weekday}, {monthDay}
-            <sup>{suffix}</sup>
-            {withYear && `, ${year}`}
+            <sup>{suffix}</sup>, {year}
           </span>
           {/* A real space before the word, so on a narrow line " · worth it" can move down whole, never under the toggle. */}
           {day && (
