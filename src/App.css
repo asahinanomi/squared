@@ -4829,7 +4829,7 @@ button.home-card:active {
   align-self: flex-start;
   margin-top: 2px;
 }
-/* The first zoom out to a life: "This is today." under today's square, in the question's voice, on a paper label. */
+/* The first zoom out to a life: "You are here." under today's square, in the question's voice, on a paper label. */
 .life-this-is-today {
   position: absolute;
   margin: 0;

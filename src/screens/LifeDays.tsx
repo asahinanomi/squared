@@ -49,7 +49,7 @@ const dated = (cell: number) => cell >= NUM_MIN && textFits('2026.10 Wed', `400 
 const PULSE_MS = 900
 // Every time a life opens, the lived days fill in from the top of the screen down to today: each one lands a clear
 // grey and softens to its resting tone, so the wave shows even with nothing painted. Then today's ring pulses and
-// "This is today." sits under it until you move. The first time is a little slower and pulses twice. A touch or a scroll skips straight to the end. ?firstlife plays the first
+// "You are here." sits under it until you move. The first time is a little slower and pulses twice. A touch or a scroll skips straight to the end. ?firstlife plays the first
 // time again (a test link).
 // Calm, not a rush: the wave eases in and out (no lurch at the start), and every day fades in rather than popping.
 const FILL_FIRST = 4200
@@ -424,7 +424,7 @@ export function LifeDays({
               left: Math.min(Math.max(todayAt.c * pitch + cell / 2, 110), size.w - 110),
             }}
           >
-            This is today.
+            You are here.
           </p>
         )}
       </div>

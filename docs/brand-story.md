@@ -203,3 +203,5 @@ Why: now, then the day (be here, then what matters, the order squared works in).
 ## 10. Kill list (never use again)
 
 The old colour labels, retired Oct 23, 2026: "mattered", "empty", "slipped" (as labels; "mattered" stays in prose like "what mattered"), and red's old line "no, I was busy, but none of it mattered." Also: "here, and it mattered" (as a label), "here, but wasted", "but wasted", "gone before I noticed", "lived, it mattered", "slipped by / slipped past" as a colour label (the letter's "slipped by" stays: it's prose), "busy" as a label, "lived, not painted", "wasted" on screen (the data keeps the name `wasted`; the screen says regret), "you missed", streaks, scores.
+
+**A life, every time it opens** (Oct 27, 2026): "You are here." under today's square. The map pin on your life; it echoes the breath's "be here".
