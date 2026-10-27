@@ -92,7 +92,7 @@ export function WhyBubble({
           id="why"
           ref={input}
           className="why-input"
-          placeholder="a line, or a page, or skip"
+          placeholder="a few words, or skip"
           maxLength={10000}
           rows={1}
           value={text}
@@ -128,7 +128,8 @@ export function WhyBubble({
           onCancel={() => setConfirming(false)}
         />
       )}
-      <p className="why-skip">{editing ? 'tap anywhere to leave it as it was' : 'tap anywhere to skip'}</p>
+      {/* New: the placeholder already says "or skip" (one message, nomi). Editing: how to leave it unchanged. */}
+      {editing && <p className="why-skip">tap anywhere to leave it as it was</p>}
     </>
   )
 }

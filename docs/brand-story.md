@@ -142,7 +142,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 - tap a colour to load the brush; its one-liner shows under the palette
 - the day's first dip, on a blank today: the canvas breathes once and says "be here"
 - moments first: the box at the top of the day, "this moment…" while today is lived, "because…" once painted; kept, it drifts down as a paper slip to the moments at the foot, newest first: the latest counts most (Oct 25, 2026)
-- once painted: "because…" (the count, "your 3rd day worth it this month", was cut Oct 25, 2026: a stat for its own sake) (you finish the sentence, never "why?"; "a line, or a page, or skip"); a framed day asks "what do you want to remember?"
+- once painted: "because…" (placeholder "a few words, or skip", Oct 27, 2026) (the count, "your 3rd day worth it this month", was cut Oct 25, 2026: a stat for its own sake) (you finish the sentence, never "why?"; "a line, or a page, or skip"); a framed day asks "what do you want to remember?"
 - torn between green and red: "torn? ask yourself:" / "did what mattered outweigh the rest?" / "you said: '…'"
 - under the square: start over · frame it
 - ~~at the very foot of a painted day: paint another day · go home~~ (cut Oct 25, 2026: the arrows and the date pill already move between days)
