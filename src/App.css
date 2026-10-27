@@ -791,7 +791,7 @@ sup.ord {
 .canvas {
   --wet: brightness(0.9) saturate(1.08);
 }
-.canvas .wet-strokes {
+.canvas.is-drying .paint-surface {
   filter: var(--wet);
   animation: dry-out 2.4s ease-in-out both;
 }
@@ -830,7 +830,7 @@ sup.ord {
 }
 @media (prefers-reduced-motion: reduce) {
   .canvas.is-settling,
-  .canvas .wet-strokes,
+  .canvas.is-drying .paint-surface,
   .canvas.is-drying .canvas-face.is-painted,
   .canvas.is-drying .canvas-word.is-painted .canvas-hand {
     animation: none;

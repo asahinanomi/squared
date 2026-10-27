@@ -409,7 +409,7 @@ export function Today(props: Props) {
               style={pull ? { transform: `translateX(${pull}px)` } : undefined}
             >
               <PaintCanvas
-                key={`${date}:${day?.color ?? ''}`}
+                key={date} // the same square while it's painted and saved (a rebuilt one can blink on iPhone)
                 saved={day?.color}
                 framed={day?.framed}
                 loaded={loaded}

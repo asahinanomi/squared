@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { brushTip } from '../lib/brush'
 import { frameVars, paintDeep, paintHex, WORD, type Paint } from '../lib/paints'
 import { brushSound, brushStop, settleSound, wakeSound } from '../lib/sound'
@@ -27,12 +27,6 @@ const GRID = 24
 const FLOW_MS = 450
 const SIGN_MS = 2000 // the word and its sound, once the paint is mostly dry (in step with the CSS)
 const FILLED = 0.9 // most of it painted; the wet paint flows into the gaps left
-
-// When a square last filled (performance.now()) and its strokes as they were: the square that mounts with the saved
-// colour picks the drying up, the wet strokes fading into the flat colour under them.
-let filledAt = -1e9
-let wetStrokes: HTMLCanvasElement | null = null
-let wetPaint: Paint = 'green'
 
 // The ghost brush's stroke: two sweeps across the square, each rising from left to right, like painting it.
 const GHOST = 'M18 46 L82 28 L18 68 L82 50'
@@ -190,6 +184,7 @@ export function PaintCanvas({
       return
     }
     if (settling || flowing.current) return
+    if (drying) dry() // a new coat while it dries: it's dry now
     const p = point(e)
     const s = size.current
     e.currentTarget.setPointerCapture(e.pointerId)
@@ -266,15 +261,6 @@ export function PaintCanvas({
     const g = c?.getContext('2d')
     const done = () => {
       flowing.current = false
-      // A copy of the strokes (a canvas, drawn in before the screen paints: an image would load a frame late and blink).
-      if (c) {
-        const copy = document.createElement('canvas')
-        copy.width = c.width
-        copy.height = c.height
-        copy.getContext('2d')!.drawImage(c, 0, 0)
-        wetStrokes = copy
-      }
-      wetPaint = p
       setSettling(p)
     }
     if (!c || !g) return done()
@@ -318,17 +304,13 @@ export function PaintCanvas({
   // the parent hands down a new onFilled meanwhile.
   const filled = useRef(onFilled)
   filled.current = onFilled
-  // Then the square is ready for the next coat. A new colour remounts it anyway; the same colour again
-  // (dipped back to what it already holds) keeps it, so it must clear itself or it would never take paint again.
+  // Saved: the square keeps its strokes and dries (the same square throughout, never rebuilt: a new canvas can show a
+  // frame late on iPhone, a blink).
   useEffect(() => {
     if (!settling) return
     const t = setTimeout(() => {
-      filledAt = performance.now()
-      setDrying(true)
+      setDrying(settling)
       filled.current(settling)
-      const c = canvas.current
-      if (c) c.getContext('2d')!.clearRect(0, 0, c.width, c.height)
-      covered.current.fill(0)
       setTouched(false)
       setSettling(null)
     }, 520)
@@ -336,26 +318,23 @@ export function PaintCanvas({
   }, [settling])
   // Just filled: the paint is still wet (a shade deeper), then it dries smooth, and the day's word signs the corner
   // together with its sound (the drop, the knock, the sand): the answer arrives as one. Only on the stroke that filled
-  // it, never when a painted day opens. Saving a new colour remounts the square, so the moment it filled is kept
-  // outside it.
-  const [drying, setDrying] = useState(() => performance.now() - filledAt < 400)
-  const wet = useRef<HTMLCanvasElement>(null)
-  useLayoutEffect(() => {
-    const el = wet.current
-    if (!drying || !el || !wetStrokes) return
-    el.width = wetStrokes.width
-    el.height = wetStrokes.height
-    el.getContext('2d')!.drawImage(wetStrokes, 0, 0)
-  }, [drying])
+  // it, never when a painted day opens. Then the strokes are cleared, ready for another coat.
+  const [drying, setDrying] = useState<Paint | null>(null)
+  const dry = () => {
+    const c = canvas.current
+    if (c) c.getContext('2d')!.clearRect(0, 0, c.width, c.height)
+    covered.current.fill(0)
+    setDrying(null)
+  }
   useEffect(() => {
     if (!drying) return
-    const sound = setTimeout(() => settleSound(wetPaint), Math.max(0, SIGN_MS - (performance.now() - filledAt)))
-    const t = setTimeout(() => setDrying(false), 4000)
+    const sound = setTimeout(() => settleSound(drying), SIGN_MS)
+    const t = setTimeout(dry, 4000)
     return () => {
       clearTimeout(sound)
       clearTimeout(t)
     }
-  }, [drying])
+  }, [drying]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="paint-wrap">
@@ -377,9 +356,6 @@ export function PaintCanvas({
         <div className={'canvas-face' + (saved ? ' is-painted' : '')} />
         <canvas ref={canvas} className="paint-surface" />
 
-        {/* Filled: the strokes stay as painted, wet (a shade deeper), while it saves; then they dry into the one
-            smooth colour under them. */}
-        {drying && wetStrokes && <canvas ref={wet} className="paint-surface wet-strokes" aria-hidden="true" />}
         {/* For someone new: a ghost brush sweeps across, leaving a faint trail, so the square reads as "paint me". */}
         {!saved && !touched && <GhostBrush />}
         {!touched && !settling && (
