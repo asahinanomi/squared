@@ -866,7 +866,7 @@ sup.ord {
 /* One breath before you paint (the day's first dip): the face glows softly in and out once, 4 seconds, like a breath;
    the hand says "be here". Without motion, just the words. */
 .canvas.is-breathing .canvas-face {
-  animation: breathe 4s ease-in-out;
+  animation: breathe 3s ease-in-out; /* BREATH_MS */
 }
 @keyframes breathe {
   0%,
@@ -881,7 +881,7 @@ sup.ord {
 /* The whole canvas rises toward you with the breath and settles back: it swells (6%) and lifts off the paper (a deeper
    shadow), so the breath is seen, not just sensed. Ink and paper only. */
 .canvas.is-breathing {
-  animation: breathe-in 4s ease-in-out;
+  animation: breathe-in 3s ease-in-out; /* BREATH_MS */
 }
 @keyframes breathe-in {
   0%,
@@ -895,6 +895,15 @@ sup.ord {
   }
 }
 /* "be here", bigger than "paint your day": the word painted days get (30px). */
+/* After the breath, the square's word ("paint your day") writes itself in, left to right, as the painted word does. */
+.canvas-hand.is-writing {
+  animation: sign 0.9s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .canvas-hand.is-writing {
+    animation: none;
+  }
+}
 .canvas.is-breathing .canvas-word:not(.is-painted) .canvas-hand {
   font-size: 30px;
   color: #6f6f69;

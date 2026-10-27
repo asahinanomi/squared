@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 27, 2026, 02:09 UTC_
+_last updated Oct 27, 2026, 02:18 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -248,7 +248,8 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **A life fills in, every time** (lab row 7; nomi chose every time): when a life opens, the lived days fill in from the top of the screen down to today, each landing in a soft grey and settling to its resting tone, so the wave shows even with nothing painted. Then today's ring pulses and "This is today." sits under today's square (28px Fraunces on a paper label). Calm, not a rush (Oct 26, 2026, nomi: it felt stressful): the wave eases in and out, painted days fade in from paper and unpainted ones land a soft grey, each over 1.2s. The first time per device it takes about 4s and pulses twice; after that about 3s and one pulse. The line stays until you move. A touch or a scroll skips to the end. Still under reduced motion (the line only, the first time). squared.today/?firstlife plays the first time again. **Lived days read apart from the days ahead**: a lived day you didn't paint is a quiet paper grey (#e2e2da, was #eeeee8, almost the ahead tone) in a life in days, in months and in years.
 - **The paintings help's title** is now "Your days, painted by you." (was "Your months and years become paintings.": logistics, not the brand; nomi). The notes under it still say how.
 - **No jump after painting** (Oct 27, 2026, nomi): while the "because…" bubble is open, the moment box is hidden but keeps its place, so the square no longer jumps up the height of the box. And the question and "Today is in colour." now share one place, as tall as the taller of the two (the other sits there unseen), so the square doesn't move at all: measured 0px at 390×844 and 375×667.
-- **No press when the square fills** (Oct 27, 2026, a test with nomi): the stamp-like press (a 3.5% shrink and spring back in 0.42s) is gone; it may be the blink left on iPhone. A slower, softer one can come back if it's missed.
+- **No press when the square fills** (Oct 27, 2026): the stamp-like press (a 3.5% shrink and spring back in 0.42s) is gone. It was the blink on iPhone (confirmed by nomi). A slower, softer one can come back if it's missed.
+- **A shorter breath, and the word writes back in** (Oct 27, 2026, nomi): the day's first dip now breathes for 3 seconds (was 4: it felt like a wait), and when it ends, "paint your day" writes itself in left to right (0.9s), as the painted word signs, instead of popping in.
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 
 ## Saving: online first, the account is the one truth

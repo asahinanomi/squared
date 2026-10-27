@@ -99,6 +99,12 @@ export function PaintCanvas({
   // The word steps aside once the brush touches the square (a new color is on its way).
   const [touched, setTouched] = useState(false)
 
+  // The breath just ended: the square's word writes itself back in (never on first sight of the square).
+  const [breathed, setBreathed] = useState(false)
+  useEffect(() => {
+    if (breathing) setBreathed(true)
+  }, [breathing])
+
   // Just framed: a soft light sweeps once across the canvas (never on unframing, or on opening a framed day).
   const [shining, setShining] = useState(false)
   const wasFramed = useRef(framed)
@@ -399,7 +405,12 @@ export function PaintCanvas({
             aria-hidden="true"
           >
             <span className="canvas-sign">
-              <span className="canvas-hand">{saved ? WORD[saved] : breathing ? 'be here' : blank}</span>
+              <span
+                key={breathing ? 'breath' : 'word'}
+                className={'canvas-hand' + (breathed && !breathing && !saved ? ' is-writing' : '')}
+              >
+                {saved ? WORD[saved] : breathing ? 'be here' : blank}
+              </span>
             </span>
           </span>
         )}

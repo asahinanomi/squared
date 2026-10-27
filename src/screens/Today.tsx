@@ -94,6 +94,9 @@ function blankWord(date: string, today: string) {
   return ago(Math.floor(days / 365.25), 'year')
 }
 
+// One breath, in and out (in step with the CSS: breathe, breathe-in). 3s: calm, without feeling like a wait.
+const BREATH_MS = 3000
+
 export function Today(props: Props) {
   const { question, born, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } =
     props
@@ -167,7 +170,7 @@ export function Today(props: Props) {
     fresh.current = null
     breathed.current = true
     setBreathing(true)
-    setTimeout(() => setBreathing(false), 4000)
+    setTimeout(() => setBreathing(false), BREATH_MS)
   }
   const dip = (p: Paint) => {
     breathe()
