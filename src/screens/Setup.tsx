@@ -155,7 +155,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave, why }: Pro
                 like the app's other alerts (never red: red is a paint). */}
             {young && (
               <p className="setup-alert" role="alert">
-                squared is for people 18 and over. Check your birth date.
+                squared is for people 18 and over.
               </p>
             )}
           </div>
