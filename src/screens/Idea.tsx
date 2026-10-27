@@ -34,8 +34,7 @@ export function Idea({ onMatters, onBack }: Props) {
         the hard part wasn’t the bad days. some of my hardest days were the ones truly worth it, the days I really grew.
         the worst were the days I wish I’d lived differently, or barely remember.
       </p>
-      <p>I can’t change those days. but this one, right now, I can still live.</p>
-      <p>squared asks one thing each day:</p>
+      <p>I created squared to ask myself one question each day:</p>
       <p>did I spend Today meaningfully?</p>
       <ul className="idea-colours">
         {COLOURS.map(([paint, line]) => (
