@@ -46,8 +46,8 @@ export function Idea({ onMatters, onBack }: Props) {
         ))}
       </ul>
       <p>
-        paint one square a day. no streaks, no scores. just a moment to be here and now. keep in mind: noticing a regret
-        day is how the next one could go differently ;)
+        paint one square a day. no streaks, no scores. just a moment to be here and now. and noticing a regret day is
+        how the next one could go differently ;)
       </p>
       <p>I’ll try to paint as many green squares as I can.</p>
       <p>the past is painted. today is still yours.</p>

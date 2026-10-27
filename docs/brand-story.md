@@ -182,7 +182,7 @@ Why: now, then the day (be here, then what matters, the order squared works in).
 > 🟥 no, I wish I'd spent it differently.
 > ⬜ I don't know… I wasn't paying attention.
 >
-> paint one square a day. no streaks, no scores. just a moment to be here and now. keep in mind: noticing a regret day is how the next one could go differently ;)
+> paint one square a day. no streaks, no scores. just a moment to be here and now. and noticing a regret day is how the next one could go differently ;)
 >
 > I'll try to paint as many green squares as I can.
 >
