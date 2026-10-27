@@ -284,8 +284,13 @@ export function DaysList({
     else el.scrollTop = to
   }
 
-  // Open on the focus day, in the middle.
+  // Open on the focus day, in the middle. Moments load a moment later and make the cards above it taller, which
+  // would push it off screen the first time: until you touch the list, it re-centres as they arrive.
+  const touched = useRef(false)
   useLayoutEffect(() => centre(at), []) // eslint-disable-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => {
+    if (!touched.current) centre(at)
+  }, [notes]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Months added above keep what you're reading in place; a day waiting to be centred is centred.
   useLayoutEffect(() => {
@@ -385,7 +390,14 @@ export function DaysList({
           </ul>
         </Sheet>
       )}
-      <div className="days-scroll" ref={scroller} onScroll={onScroll}>
+      <div
+        className="days-scroll"
+        ref={scroller}
+        onScroll={onScroll}
+        onPointerDown={() => (touched.current = true)}
+        onWheel={() => (touched.current = true)}
+        onTouchStart={() => (touched.current = true)}
+      >
         {/* A filter with nothing in it says so, rather than an empty page. */}
         {only && !months.some((m) => monthCells(m).some((iso) => !!iso && iso <= today && shown(iso))) && (
           <p className="days-empty">No days here yet.</p>

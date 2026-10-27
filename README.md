@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 27, 2026, 11:44 UTC_
+_last updated Oct 27, 2026, 14:48 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -261,6 +261,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **The header always stays** (Oct 27, 2026, nomi): like the bottom bar, the top bar (logo, the day's date, menu) is pinned to the top on every page, on the page's own dotted paper; scrolled content passes under it, with a soft shadow once you scroll. At rest it looks as before.
 - **How many squares, calmer** (Oct 27, 2026, nomi): the total ("31,047 squares") is 36px, was 56px (overpowering), and its word 18px, was 20px.
 - **The list: every day its own card** (Oct 27, 2026, nomi; lab row 8): in the days list, each day is a white card on the paper under its month's name (still underlined, opening its painting), instead of rows inside a month card: cards are squared's unit everywhere. Today's card has an ink keyline, as today is ringed in ink on the squares (the grey band is gone). Quiet days in a row (unpainted, no moments, not today, yesterday or a special day) lie in a **stack**, "Mar 4 – 6 · 3 unpainted", two cards peeking under it; tap it and they fan out, "stack them again ⌃" folds them back; the stack holding the day you came from starts open. (The month's "+ 21 unpainted" toggle is gone.) A day with several moments keeps "3 moments ⌄". **Framed days use the same card** (`DayCard`, shared): in its frame's colour, the date with its year, "to remember" over its note. The list's small "framed" tag is gone (the frame already says it), so a framed day looks the same in the list's "only framed" and on framed days; and every day card carries its year on the date ("Tue, Oct 27th, 2026"), in the list too: on a long page the month's heading can be far off (nomi).
+- **Fixed: the list opening with today cut off** (Oct 27, 2026, nomi): the first time the list opened, it centred today before the moments loaded; when they arrived, the cards above grew and pushed today off the bottom. Until you touch the list, it now re-centres as moments arrive.
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 
 ## Saving: online first, the account is the one truth
