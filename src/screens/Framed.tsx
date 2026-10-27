@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { fromIso, plainDate } from '../lib/dates'
+import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Notes } from '../lib/notes'
-import { frameVars, paintHex } from '../lib/paints'
+import { DayCard } from './DaysList'
 import { Chevron } from './Today'
 
 type Props = {
@@ -16,9 +16,9 @@ type Props = {
   backLabel: string
 }
 
-// framed days (in my days): the days you framed, any colour, oldest first, like the chapters of a life. Only what matters on
-// each card: its framed square, the date and weekday, and up to three lines of what you wanted to remember.
-// Tap one to open the day. Lab: https://claude.ai/artifact/Ttid43gnYW9XzNRibK5QVc (G, without the age)
+// framed days (in my days): the days you framed, any colour, oldest first, like the chapters of a life. Each is the
+// list's own day card (one card, so the two never drift apart), in its frame, its year with the date, "to remember"
+// over the note. Tap one to open the day. Lab: https://claude.ai/artifact/8RNH3LHkF4RtJ3QchG5fkm (row 8)
 export function Framed({ days, notes, loadNotes, onDay, onBack, backLabel }: Props) {
   const framed = Object.keys(days)
     .filter((iso) => days[iso].framed)
@@ -32,25 +32,12 @@ export function Framed({ days, notes, loadNotes, onDay, onBack, backLabel }: Pro
       </button>
       <h1 className="settings-title">framed days</h1>
       {framed.length ? (
-        <ol className="framed-list">
-          {framed.map((iso) => {
-            const day = days[iso]
-            const list = notes[iso] ?? []
-            const note = list.find((n) => n.pinned) ?? list.at(-1)
-            return (
-              <li key={iso}>
-                <button className="framed-day" onClick={() => onDay(iso)} style={frameVars(day.color)}>
-                  <span className="framed-square" style={{ background: paintHex(day.color) }} aria-hidden="true" />
-                  <span className="framed-text">
-                    <span className="framed-date">
-                      {plainDate(iso)} <small>· {fromIso(iso).toLocaleDateString('en-US', { weekday: 'short' })}</small>
-                    </span>
-                    {note && <span className="framed-note">{note.body}</span>}
-                  </span>
-                </button>
-              </li>
-            )
-          })}
+        <ol className="month-list day-cards">
+          {framed.map((iso) => (
+            <li key={iso}>
+              <DayCard iso={iso} day={days[iso]} notes={notes[iso]} today={todayIso()} onPick={onDay} withYear />
+            </li>
+          ))}
         </ol>
       ) : (
         <p className="gallery-empty">

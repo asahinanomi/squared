@@ -3215,19 +3215,16 @@ button.settings-row:active {
   letter-spacing: -0.005em;
   color: var(--ink);
 }
-/* In the days list, each month is a card (like the months and years lists): its name with the year, then its days
-   as even rows between fine hairlines. */
-.days-month.is-card {
-  margin: 0 0 12px;
-  padding: 12px 14px 2px;
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: inset 0 0 0 1px #ecece5;
+/* In the days list (and framed days), every day is its own card on the paper (cards are squared's unit
+   everywhere), under its month's name. Quiet days in a row lie in a stack. (Oct 27, 2026, nomi; lab row 8.) */
+.days-month.is-cards {
+  margin: 0;
+  padding: 0 0 6px;
 }
-.days-month.is-card > .ladder-label {
+.days-month.is-cards > .ladder-label {
   position: relative;
-  margin: 0 0 2px;
-  padding: 0 2px;
+  margin: 14px 0 10px;
+  padding: 0 4px;
   font-size: 16px;
 }
 /* "only empty ×": the list holds one slice's days (from the pie); tap it for all days again. A soft capsule. */
@@ -3383,65 +3380,91 @@ button.settings-row:active {
   border-radius: 16px;
   color: var(--ink);
 }
-/* In the days list, every day is one even row on the paper, painted or not, between fine hairlines: a journal's
-   lines, not a stack of cards and gaps. */
-/* Its top right: "+ 21 unpainted" / "painted only", then the painting. A title-only card keeps even padding. */
-.days-month-tools {
+.day-cards .day-card {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #e8e8e2;
+}
+/* The date and its word never split mid-way: " · regret" moves down whole when the line is short. */
+.day-cards .day-card-date,
+.day-cards .day-card-word {
+  white-space: nowrap;
+}
+/* A framed day: its card in its frame's colour, like its canvas. */
+.day-cards .day-card.is-painted.is-framed {
+  box-shadow: inset 0 0 0 2.5px var(--frame, #53735c) !important;
+}
+/* Today: an ink keyline, as today is ringed in ink on the squares (one sign for today in every view). */
+.day-cards .day-card.is-today {
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.day-cards .day-card.is-today:not(.is-painted) .day-card-open {
+  font-weight: 600;
+  color: var(--ink);
+}
+/* Framed days: its cards a little under the page title. */
+.framed .day-cards {
+  margin-top: 18px;
+}
+/* Quiet days in a row, stacked: one card on top ("Oct 13 – 20 · 8 unpainted"), two peeking under it. */
+.day-stack {
+  position: relative;
+  margin-bottom: 10px;
+}
+.day-stack::before,
+.day-stack::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -5px;
+  height: 20px;
+  border-radius: 0 0 14px 14px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #e8e8e2;
+}
+.day-stack::after {
+  left: 20px;
+  right: 20px;
+  bottom: -10px;
+  z-index: -1;
+}
+.day-stack-top {
+  position: relative;
+  z-index: 1;
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 14px;
-}
-.days-month-more {
-  padding: 6px 0;
-  font-size: 14px;
-  font-weight: 400;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #e8e8e2;
+  text-align: left;
+  font-size: 15px;
   color: var(--muted);
 }
-.days-month.is-card:not(:has(.month-list)) {
-  padding-bottom: 12px;
-}
-.days-month.is-card .month-list {
-  gap: 0;
-}
-.days-month.is-card .day-card {
-  padding: 16px 2px;
-  border-radius: 0;
-  border-bottom: 1px solid #c9c9c2; /* a clear line between days, stronger than the dotted one between moments */
-}
-.days-month.is-card li:last-child .day-card {
-  border-bottom: 0;
-}
-/* A framed day, in the list: framed like its canvas, but as its own small frame inside the month: rounded, 8px
-   clear of the lines around it, its words held off the frame. */
-.days-month.is-card .day-card.is-painted.is-framed {
-  margin: 8px -8px;
-  padding: 16px 12px;
-  border-radius: 12px;
-  border-bottom-color: transparent;
-  box-shadow: inset 0 0 0 2.5px var(--frame, #53735c) !important;
-}
-/* The date and its word never split mid-way: " · regret" moves down whole when the line is short. */
-.days-month.is-card .day-card-date,
-.days-month.is-card .day-card-word {
-  white-space: nowrap;
-}
-/* Today, in the list: a soft grey band (ink on paper, no colour) so the eye finds it at once. */
-.days-month.is-card .day-card.is-today {
-  margin: 8px -8px; /* clear of the lines above and below it */
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 12px;
-  border-bottom-color: transparent;
-  background: #f1f1ec;
-}
-.days-month.is-card .day-card.is-today.is-painted .day-card-swatch {
-  box-shadow:
-    0 0 0 2px #f1f1ec,
-    0 0 0 3.5px var(--ink);
-}
-.days-month.is-card .day-card.is-today:not(.is-painted) .day-card-open {
+.day-stack-top b {
   font-weight: 600;
   color: var(--ink);
+}
+.day-stack-top .day-card-chevron {
+  margin-left: auto;
+}
+.day-stack-label {
+  flex: 1;
+}
+/* Fanned out: "stack them again" at the end of its days. */
+.day-stack-fold {
+  display: flex;
+  justify-content: flex-end;
+}
+.day-stack-fold button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 4px 6px;
+  font-size: 13px;
+  color: var(--muted);
 }
 .day-card:active {
   transform: scale(0.99);
@@ -3457,7 +3480,8 @@ button.settings-row:active {
   box-shadow: none;
 }
 /* Unpainted: the month view's empty square — dashed, an empty slot to fill, never a checkbox. */
-.day-card:not(.is-painted) .day-card-swatch {
+.day-card:not(.is-painted) .day-card-swatch,
+.day-stack-top .day-card-swatch {
   box-shadow: none;
   border: 1.5px dashed #b0b0a8;
   background: #fff;
@@ -4533,63 +4557,6 @@ button.home-card:active {
 
 /* my framed days: oldest first, a card per day (the list's card), only what matters: the framed square (the list's
    own, 26px), the date and weekday, and up to three lines of what you wanted to remember. */
-.framed-list {
-  list-style: none;
-  margin: 20px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.framed-day {
-  display: grid;
-  grid-template-columns: 26px 1fr;
-  column-gap: 14px;
-  align-items: start;
-  width: 100%;
-  padding: 14px 16px;
-  text-align: left;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: inset 0 0 0 1px #ecece5;
-}
-.framed-day:active {
-  transform: scale(0.99);
-}
-.framed-square {
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
-  box-shadow:
-    inset 0 0 0 2px var(--frame),
-    inset 0 0 0 4px #ebe6da;
-}
-.framed-text {
-  display: grid;
-  gap: 4px;
-  min-width: 0;
-  padding-top: 2px;
-}
-.framed-date {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--ink);
-}
-.framed-date small {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--muted);
-}
-.framed-note {
-  font-size: 15px;
-  line-height: 1.45;
-  color: var(--ink-soft);
-  white-space: pre-line;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
 
 /* my days' life bar: now marked on it, a dot where lived meets ahead, "today" under it (kept inside the card). */
 .life-track {

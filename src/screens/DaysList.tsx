@@ -5,6 +5,7 @@ import { glide, pulse } from '../lib/backToToday'
 import {
   addDays,
   firstDay,
+  fromIso,
   longDate,
   monthCells,
   monthTitle,
@@ -81,7 +82,7 @@ const NEAR = 900
  * latest note cut to two lines. A tap anywhere opens the day (as a square does); "more" opens the card in place
  * to show every note in full, when there's more to read.
  */
-function DayCard({
+export function DayCard({
   iso,
   day,
   notes = [],
@@ -89,6 +90,7 @@ function DayCard({
   born,
   onPick,
   onFramed,
+  withYear,
 }: {
   iso: string
   day?: Day
@@ -97,12 +99,14 @@ function DayCard({
   born?: string
   onPick: (iso: string) => void
   onFramed?: () => void
+  /** Framed days run across years: the date carries its year. */
+  withYear?: boolean
 }) {
   const special = specialDay(iso, born)
   const [open, setOpen] = useState(false)
   // A framed day's pinned note ("to remember") is the one shown; otherwise the latest.
   const latest = notes.find((n) => n.pinned) ?? notes.at(-1)
-  const { weekday, monthDay, suffix } = shortDateParts(iso)
+  const { weekday, monthDay, suffix, year } = shortDateParts(iso)
   // More to read: older notes, or a latest one longer than its two-line preview (judged by its length).
   const more = notes.length > 1 || (!!latest && (latest.body.length > PREVIEW_CHARS || latest.body.includes('\n')))
   return (
@@ -124,6 +128,7 @@ function DayCard({
           <span className="day-card-date">
             {weekday}, {monthDay}
             <sup>{suffix}</sup>
+            {withYear && `, ${year}`}
           </span>
           {/* A real space before the word, so on a narrow line " · worth it" can move down whole, never under the toggle. */}
           {day && (
@@ -239,20 +244,58 @@ export function DaysList({
   const pending = useRef<string | null>(null) // a day to bring to the middle once it's drawn
   const [away, setAway] = useState(false)
 
-  // Quiet days (unpainted, no moments, not today or yesterday, not a special day) stay hidden, so each month reads
-  // like a journal: "+ 21 unpainted" at its top right opens the whole month, and "hide 21 unpainted" folds it again.
-  // The month you opened the list on starts open if the day you came from is a quiet one.
+  // Every day is its own card. Quiet days (unpainted, no moments, not today or yesterday, not a special day) that
+  // follow one another lie in a stack ("Oct 13 – 20 · 8 unpainted"): tap it and they fan out as cards, "stack them
+  // again" folds them back. A stack is known by its first day. The one holding the day you came from starts open.
   const yesterday = addDays(today, -1)
   const quiet = (iso: string) =>
     !days[iso] && !notes[iso]?.length && iso !== today && iso !== yesterday && !specialDay(iso, born)
-  const [open, setOpen] = useState<Set<string>>(() => new Set(quiet(at) ? [start] : []))
-  const toggle = (m: string) =>
+  const [open, setOpen] = useState<Set<string>>(() => {
+    if (!quiet(at)) return new Set()
+    let s = at
+    while (addDays(s, -1).slice(0, 7) === at.slice(0, 7) && quiet(addDays(s, -1))) s = addDays(s, -1)
+    return new Set([s])
+  })
+  const toggle = (first: string) =>
     setOpen((s) => {
       const next = new Set(s)
-      if (next.has(m)) next.delete(m)
-      else next.add(m)
+      if (next.has(first)) next.delete(first)
+      else next.add(first)
       return next
     })
+  /** A month's days as cards and stacks: a run of two or more quiet days becomes one stack. */
+  const groups = (list: string[]): (string | string[])[] => {
+    const out: (string | string[])[] = []
+    let run: string[] = []
+    const flush = () => {
+      if (run.length > 1) out.push(run)
+      else out.push(...run)
+      run = []
+    }
+    for (const iso of list) {
+      if (!only && quiet(iso)) run.push(iso)
+      else {
+        flush()
+        out.push(iso)
+      }
+    }
+    flush()
+    return out
+  }
+  const card = (iso: string) => (
+    <li key={iso}>
+      <DayCard
+        iso={iso}
+        day={days[iso]}
+        notes={notes[iso]}
+        today={today}
+        born={born}
+        onPick={onPick}
+        onFramed={onFramedDays}
+      />
+    </li>
+  )
+  const short = (iso: string) => fromIso(iso).toLocaleDateString('en-US', { month: 'short' })
 
   const centre = (iso: string, smooth = false) => {
     const el = scroller.current
@@ -373,11 +416,8 @@ export function DaysList({
           const list = monthCells(m).filter(
             (iso): iso is string => !!iso && iso <= today && (!born || iso >= born) && shown(iso),
           )
-          const whole = !!only || open.has(m)
-          const seen = whole ? list : list.filter((iso) => !quiet(iso))
-          const hidden = list.length - list.filter((iso) => !quiet(iso)).length
           return (
-            <section key={m} className="days-month is-card" data-key={m} hidden={!list.length}>
+            <section key={m} className="days-month is-cards" data-key={m} hidden={!list.length}>
               <div className="ladder-label month-label">
                 {/* Its name opens its painting, as in the month view. */}
                 {onPainting && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) ? (
@@ -385,32 +425,38 @@ export function DaysList({
                 ) : (
                   monthTitle(m)
                 )}
-                <span className="days-month-tools">
-                  {/* A filter shows exactly its days; unfiltered, the quiet ones wait behind this. */}
-                  {!only && hidden > 0 && (
-                    <button className="days-month-more" aria-expanded={whole} onClick={() => toggle(m)}>
-                      {whole ? `hide ${hidden} unpainted` : `+ ${hidden} unpainted`}
-                    </button>
-                  )}
-                </span>
               </div>
-              {seen.length > 0 && (
-                <ol className="month-list">
-                  {seen.map((iso) => (
-                    <li key={iso}>
-                      <DayCard
-                        iso={iso}
-                        day={days[iso]}
-                        notes={notes[iso]}
-                        today={today}
-                        born={born}
-                        onPick={onPick}
-                        onFramed={onFramedDays}
-                      />
+              <ol className="month-list day-cards">
+                {groups(list).map((g) => {
+                  if (typeof g === 'string') return card(g)
+                  const first = g[0]
+                  const last = g[g.length - 1]
+                  if (open.has(first))
+                    return [
+                      ...g.map(card),
+                      <li key={`${first}-fold`} className="day-stack-fold">
+                        <button onClick={() => toggle(first)}>
+                          stack them again
+                          <ChevronDown className="day-card-chevron is-up" />
+                        </button>
+                      </li>,
+                    ]
+                  return (
+                    <li key={`${first}-stack`} className="day-stack">
+                      <button className="day-stack-top" aria-expanded={false} onClick={() => toggle(first)}>
+                        <span className="day-card-swatch" aria-hidden="true" />
+                        <span className="day-stack-label">
+                          <b>
+                            {short(first)} {Number(first.slice(8))} – {Number(last.slice(8))}
+                          </b>{' '}
+                          · {g.length} unpainted
+                        </span>
+                        <ChevronDown className="day-card-chevron" />
+                      </button>
                     </li>
-                  ))}
-                </ol>
-              )}
+                  )
+                })}
+              </ol>
             </section>
           )
         })}
