@@ -375,36 +375,6 @@
   display: flex;
   justify-content: center;
 }
-/* Just painted: the question fades out where it stood while "Today is in colour." fades in over it. */
-.day-head-ghost.is-leaving {
-  animation: day-head-leave 0.6s ease-out both;
-}
-@keyframes day-head-leave {
-  from {
-    visibility: visible;
-    opacity: 1;
-  }
-  to {
-    visibility: hidden;
-    opacity: 0;
-  }
-}
-/* …and "because…" rises gently into the palette's place (no bounce). */
-.tray.is-after-paint .why {
-  animation: rise-soft 0.55s 0.1s ease-out both;
-}
-@keyframes rise-soft {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .day-head-ghost.is-leaving,
-  .tray.is-after-paint .why {
-    animation: none;
-  }
-}
 .day-closed {
   display: flex;
   flex-direction: column;
@@ -455,17 +425,8 @@
 .moment-slot {
   display: contents;
 }
-.moment-box {
-  transition:
-    opacity 0.45s ease-out,
-    visibility 0s;
-}
-.moment-slot.is-away .moment-box {
-  opacity: 0;
+.moment-slot.is-away {
   visibility: hidden;
-  transition:
-    opacity 0.45s ease-out,
-    visibility 0s 0.45s;
 }
 .moment-box {
   margin-top: 8px; /* the first thing on the day, right under the bar (the date sits in the bar) */
