@@ -37,7 +37,7 @@ export function Feedback({ onDone }: Props) {
         <>
           <p className="feedback-lede">
             a question, a bug, an idea, or just hello. squared is in beta, so what you tell me shapes it. I read every
-            one.
+            message.
           </p>
           <textarea
             className="feedback-input"

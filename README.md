@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 27, 2026, 15:37 UTC_
+_last updated Oct 27, 2026, 15:39 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -268,6 +268,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **The idea's first lines** (Oct 27, 2026, nomi): "for years I kept my head down, busy. one day I looked up, and so many days were gone. faster than I ever thought."
 - **The idea, the turn to the question** (Oct 27, 2026, nomi): "I created squared to ask myself one question each day:" replaces "I can't change those days. but this one, right now, I can still live." and "squared asks one thing each day:".
 - **The idea, softer** (Oct 27, 2026, nomi): "keep in mind: noticing a regret day…" is now "and noticing a regret day is how the next one could go differently ;)".
+- **get in touch** (Oct 27, 2026, nomi): "I read every message." (was "every one"), and its lead runs the page's full width (it was capped at 340px).
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 
 ## Saving: online first, the account is the one truth

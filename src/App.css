@@ -2842,7 +2842,6 @@ body[data-screen='questions'] .idea {
 /* Send feedback: one box and the one black pill. */
 .feedback-lede {
   margin: 10px 0 0;
-  max-width: 340px;
   font-size: 16px;
   line-height: 1.45;
   color: var(--ink-soft);
