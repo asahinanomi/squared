@@ -440,7 +440,12 @@ export function LifeDays({
           )}
         </div>
       )}
-      <ZoomBar onIn={() => onIn(middle())} onRecenter={away ? backToToday : undefined} listAt={middle} />
+      {/* The list opens on today whenever today's square is on screen (else on the day in the middle). */}
+      <ZoomBar
+        onIn={() => onIn(middle())}
+        onRecenter={away ? backToToday : undefined}
+        listAt={() => (away ? middle() : today)}
+      />
     </main>
   )
 }

@@ -194,7 +194,7 @@ export function Month({
         onIn={onIn}
         onOut={onOut && (() => onOut(middle()))}
         onRecenter={toToday.away ? toToday.back : undefined}
-        listAt={middle}
+        listAt={() => (toToday.away ? middle() : todayIso())} // today, whenever it's on screen
       />
     </main>
   )
