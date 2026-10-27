@@ -58,6 +58,8 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   // The three views of a life sit on the ladder too: years → months → days is zooming out.
   const setLifeRes = (r: Resolution) => {
     setLifeBack(false)
+    // The tabs keep your place: the new view opens on what was in the middle of this one (not on today).
+    setLifeFocus(listMid.current())
     setMotion(RES.indexOf(r) > RES.indexOf(lifeRes) ? 'out' : RES.indexOf(r) < RES.indexOf(lifeRes) ? 'in' : null)
     setLifeResValue(r)
   }
@@ -121,9 +123,10 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
         if (listFrom === 'life') setLifeFocus(day)
         return setScreen(listFrom)
       }
-      if (listRes === 'days') return goMonth(day)
-      if (!profile) return goMonth(day)
+      // Back to the squares at the same level and place: a life (from a life) at the list's tab, else the month.
+      if (!profile || (listRes === 'days' && listFrom !== 'life')) return goMonth(day)
       setLifeResValue(listRes)
+      setLifeFocus(day)
       return setScreen('life')
     }
     const from = screen === 'pie' ? pieFrom : screen

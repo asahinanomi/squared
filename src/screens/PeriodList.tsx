@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { glide, pulse } from '../lib/backToToday'
 import { firstDay, fromIso, isoDate, monthTitle, todayIso } from '../lib/dates'
@@ -117,18 +117,35 @@ export function PeriodList({ res, days, born, focus, onOpen, mid, head, onPainti
     if (smooth) glide(el, to, () => pulse(card))
     else el.scrollTop = to
   }
-  useLayoutEffect(() => centre(key(at)), []) // eslint-disable-line react-hooks/exhaustive-deps
+  // Open with the focus's card at the top, so switching tabs keeps what you were looking at in the same place (the
+  // card at the top stays at the top, never drifting down a few months each switch). Until you touch the list, it
+  // holds that place while the page settles (the fonts arriving).
+  const touched = useRef(false)
+  const top = (k: string) => {
+    const el = scroller.current
+    const card = el?.querySelector<HTMLElement>(`[data-key="${k}"]`)
+    if (el && card) el.scrollTop = card.offsetTop - 12
+  }
+  useLayoutEffect(() => top(key(at)), []) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const el = scroller.current
+    if (!el) return
+    const ro = new ResizeObserver(() => !touched.current && top(key(at)))
+    for (const child of el.children) ro.observe(child)
+    return () => ro.disconnect()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // The day a zoom or a switch should open on: the middle of the card in the middle of the screen.
+  // The day a zoom or a switch should open on: the start of the card at the top of the screen.
   mid.current = () => {
     const el = scroller.current
-    if (!el) return at
-    const y = el.scrollTop + el.clientHeight / 2
+    // Not moved since it opened (the page may not scroll far enough to put it at the top): what it opened on.
+    if (!el || !touched.current) return at
+    const y = el.scrollTop + 12
     for (const card of el.querySelectorAll<HTMLElement>('[data-key]'))
       if (card.offsetTop + card.offsetHeight > y) {
         const k = card.dataset.key!
-        const d = k.length === 4 ? `${k}-07-01` : `${k.slice(0, 8)}15`
-        return d > today ? today : d
+        const d = k.length === 4 ? `${k}-01-01` : `${k.slice(0, 8)}01`
+        return d > today ? today : born && d < born ? born : d
       }
     return today
   }
@@ -165,7 +182,14 @@ export function PeriodList({ res, days, born, focus, onOpen, mid, head, onPainti
           <h1 className="life-title">a life</h1>
         </div>
       )}
-      <div className="days-scroll" ref={scroller} onScroll={onScroll}>
+      <div
+        className="days-scroll"
+        ref={scroller}
+        onScroll={onScroll}
+        onPointerDown={() => (touched.current = true)}
+        onWheel={() => (touched.current = true)}
+        onTouchStart={() => (touched.current = true)}
+      >
         {res === 'years' ? (
           <ol className="month-list is-periods">{years.map((y) => card(y, y, `${y}-01-01`, `${y}-12-31`))}</ol>
         ) : (
@@ -173,7 +197,17 @@ export function PeriodList({ res, days, born, focus, onOpen, mid, head, onPainti
           <ol className="month-list is-periods">{months.map((m) => card(m, monthTitle(m), m, monthEnd(m)))}</ol>
         )}
       </div>
-      <ZoomBar onRecenter={away ? () => centre(key(today), true) : undefined} listAt={() => mid.current()} />
+      <ZoomBar
+        onRecenter={
+          away
+            ? () => {
+                touched.current = true
+                centre(key(today), true)
+              }
+            : undefined
+        }
+        listAt={() => mid.current()}
+      />
     </main>
   )
 }

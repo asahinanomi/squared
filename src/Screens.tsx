@@ -273,6 +273,8 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onPick={(m) => nav.goMonth(m)}
         onIn={() => nav.goMonth()}
         onResolution={setLifeRes}
+        focus={nav.lifeFocus}
+        mid={listMid}
       />
     ) : (
       <Life

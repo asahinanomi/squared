@@ -446,7 +446,10 @@ export function LifeDays({
         onRecenter={away ? backToToday : undefined}
         listAt={() => {
           // The list starts where this view starts: today, if it's on screen; else the year in the middle, from Jan 1.
-          if (!away) return today
+          // Today's square on screen right now (a life opened on a past year never scrolled, so ask, don't remember)?
+          const el = scroller.current
+          const y = todayTop()
+          if (el && cell && y + cell >= el.scrollTop && y <= el.scrollTop + el.clientHeight) return today
           const jan = `${middle().slice(0, 4)}-01-01`
           return jan < born ? born : jan
         }}

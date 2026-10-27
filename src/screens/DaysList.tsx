@@ -341,11 +341,13 @@ export function DaysList({
     )
   }
 
+  // The day a switch (tabs, squares) should open on: the card at the top of the screen, so it stays at the top.
   mid.current = () => {
     const el = scroller.current
-    if (!el) return at
-    const y = el.scrollTop + el.clientHeight / 2
-    for (const card of el.querySelectorAll<HTMLElement>('.day-card'))
+    // Not moved since it opened (today, at the foot, can't reach the top): what it opened on.
+    if (!el || !touched.current) return at
+    const y = el.scrollTop + 44
+    for (const card of el.querySelectorAll<HTMLElement>('[data-iso]'))
       if (card.offsetTop + card.offsetHeight > y) return card.dataset.iso!
     return today
   }

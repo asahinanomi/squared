@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react'
 import { glide } from '../lib/backToToday'
 import { LifeHead, type Resolution } from '../components/LifeHead'
 import { ZoomBar } from '../components/ZoomBar'
@@ -23,6 +23,10 @@ type Props = {
   cols?: number
   /** Where the fingers were when the size changed: the square under them stays put. */
   focal?: Focal
+  /** The month to open on (from another tab or the list), else this month. */
+  focus?: string
+  /** Kept up to date with the month in the middle of the screen, for a tab or a switch to open there. */
+  mid?: MutableRefObject<() => string>
 }
 
 // Space between squares grows with them, so big squares stay apart.
@@ -37,7 +41,7 @@ const FONT = "'Inter', system-ui, sans-serif"
 
 // A life, in months — about 1,140 banded month-squares, twelve to a row so each row is a year,
 // read top to bottom. Drawn on a canvas (only the rows on screen), opening on this month.
-export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, cols = 12, focal }: Props) {
+export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, cols = 12, focal, focus, mid }: Props) {
   const today = todayIso()
   const { born, lifespan } = profile
   const firstYear = Number(born.slice(0, 4))
@@ -133,10 +137,11 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
         }
       }
     },
-    // Open with this month's row in the middle.
+    // Open with the focus month's row (else this month's) in the middle.
     (w, h) => {
       const { cell, pitch } = geometry(w)
-      const i = (Number(thisMonth.slice(0, 4)) - firstYear) * 12 + Number(thisMonth.slice(5, 7)) - 1
+      const at = focus && focus.slice(0, 7) >= bornMonth && focus.slice(0, 7) <= thisMonth ? focus : thisMonth
+      const i = (Number(at.slice(0, 4)) - firstYear) * 12 + Number(at.slice(5, 7)) - 1
       return Math.floor(i / cols) * pitch - (h - cell) / 2
     },
   )
@@ -202,12 +207,26 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
     onPick(first)
   }
 
+  // The month in the middle of the screen (until you move, the one it opened on), for a tab or the list.
+  const moved = useRef(false)
+  const middle = () => {
+    const el = scroller.current
+    if (!moved.current || !el || !pitch) return focus ?? today
+    const i = Math.floor((el.scrollTop + el.clientHeight / 2) / pitch) * cols + Math.floor(cols / 2)
+    const d = isoDate(new Date(firstYear + Math.floor(i / 12), i % 12, 1))
+    return d > today ? today : d < born ? born : d
+  }
+  if (mid) mid.current = middle
+  useEffect(() => () => void (mid && (mid.current = todayIso)), [mid])
+
   return (
     <main className="life">
       <LifeHead profile={profile} current="months" onPick={onResolution} />
       <div
         className="life-canvas"
         ref={scroller}
+        onPointerDown={() => (moved.current = true)}
+        onWheel={() => (moved.current = true)}
         onScroll={() => {
           onScroll()
           checkAway()
@@ -217,7 +236,18 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
         <canvas ref={canvas} style={{ width: size.w, height: size.h }} aria-hidden="true" />
         <div style={{ height: Math.max(0, rows * pitch - gapFor(cols) - size.h) }} />
       </div>
-      <ZoomBar onIn={onIn} onOut={onOut} onRecenter={away ? backToToday : undefined} />
+      <ZoomBar
+        onIn={onIn}
+        onOut={onOut}
+        onRecenter={away ? backToToday : undefined}
+        listAt={() => {
+          // Today's month on screen right now (not the last scroll's guess: a life opened on a past month never scrolled)?
+          const el = scroller.current
+          const y = nowTop()
+          const seen = !!el && !!cell && y + cell >= el.scrollTop && y <= el.scrollTop + el.clientHeight
+          return seen ? today : middle()
+        }}
+      />
     </main>
   )
 }
