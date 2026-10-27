@@ -151,7 +151,13 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave, why }: Pro
                 }}
               />
             </div>
-            {young && <p className="setup-hint">squared is for people 18 and over.</p>}
+            {/* iPhone's picker lets any date through (it ignores max), so a too-recent one gets a clear ink note,
+                like the app's other alerts (never red: red is a paint). */}
+            {young && (
+              <p className="setup-alert" role="alert">
+                squared is for people 18 and over. Check your birth date.
+              </p>
+            )}
           </div>
 
           <div>

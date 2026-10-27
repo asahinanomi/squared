@@ -3943,6 +3943,30 @@ button.settings-row:active {
   pointer-events: none;
   animation: fade-in 0.3s ease-out;
 }
+/* How many squares: a birth date under 18, said plainly in the same ink as the alerts, just under the field (its
+   tail points up at it). */
+.setup-alert {
+  position: relative;
+  margin: 12px 0 0;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.4;
+  animation: fade-in 0.3s ease-out;
+}
+.setup-alert::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: -6px;
+  width: 12px;
+  height: 12px;
+  background: var(--ink);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
 .sync-bubble {
   position: fixed;
   z-index: 30;
