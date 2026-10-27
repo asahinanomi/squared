@@ -97,6 +97,9 @@ function blankWord(date: string, today: string) {
 export function Today(props: Props) {
   const { question, born, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } =
     props
+  // Just painted: "because…" opens. The screen hands over softly (the question, the palette and the moment box fade;
+  // the bubble rises gently; the bar stays) instead of swapping half of it in one frame.
+  const afterPaint = !!why && !why.note && !!days[date]
   const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut } = props
   const today = todayIso()
   const [introOpen, setIntroOpen] = useState(!!props.intro)
@@ -382,7 +385,7 @@ export function Today(props: Props) {
               <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
             )}
             {date === today && (
-              <div className="day-head-ghost" aria-hidden="true" inert>
+              <div className={'day-head-ghost' + (afterPaint ? ' is-leaving' : '')} aria-hidden="true" inert>
                 {day ? (
                   <Question text={questionFor(question, true, false)} onDefine={onDefine} />
                 ) : (
@@ -436,7 +439,7 @@ export function Today(props: Props) {
             </div>
           )}
 
-          <div className="tray">
+          <div className={'tray' + (afterPaint ? ' is-after-paint' : '')}>
             {why ? (
               <WhyBubble
                 key={`${why.note?.id ?? 'new'}:${why.n ?? 0}`}
@@ -575,8 +578,9 @@ export function Today(props: Props) {
         )}
       </div>
       {/* The same bar as every square view (the switch, "today" in the centre on another day), and zoom out floating
-          on the square, alone: a day is as close as it gets. Hidden while writing. */}
-      {!why && (
+          on the square, alone: a day is as close as it gets. Hidden while writing a moment, but kept for "because…"
+          right after painting, so the screen keeps its shape. */}
+      {(!why || afterPaint) && (
         <ZoomBar
           onOut={onZoomOut}
           listAt={() => date}
