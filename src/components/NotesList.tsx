@@ -1,7 +1,6 @@
 import { frameVars, type Paint } from '../lib/paints'
 import { useState } from 'react'
 import type { Note } from '../lib/notes'
-import { ConfirmDialog } from './ConfirmDialog'
 import { NoteCard } from './NoteCard'
 import { SwipeRow } from './SwipeRow'
 
@@ -38,16 +37,16 @@ const writeHidden = (hidden: boolean) => {
 // Every note is a moment you captured: as it happened ("this moment…") or looking back ("because…"), each with its time.
 export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
   const [hidden, setHidden] = useState(readHidden)
-  // Only one row is swiped open at a time; deleting always asks first.
+  // Only one row is swiped open at a time. Swipe, then "delete": two deliberate moves, so it deletes at once, with no
+  // dialog (as Mail and Notes do; nomi, Oct 27, 2026). Deleting from inside an open moment still asks.
   const [swiped, setSwiped] = useState<string | null>(null)
-  const [asking, setAsking] = useState<Note | null>(null)
 
   const row = (n: Note) => (
     <SwipeRow
       key={n.id}
       open={swiped === n.id}
       onOpenChange={(o) => setSwiped(o ? n.id : null)}
-      onDelete={() => setAsking(n)}
+      onDelete={() => void remove(n)}
     >
       <NoteCard
         note={n}
@@ -58,11 +57,8 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
     </SwipeRow>
   )
 
-  const confirmDelete = async () => {
-    const n = asking
-    setAsking(null)
+  const remove = async (n: Note) => {
     setSwiped(null)
-    if (!n) return
     try {
       await onDelete(n)
     } catch (e) {
@@ -107,18 +103,6 @@ export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
         <button className="note-add" onClick={onAdd}>
           add a moment
         </button>
-      )}
-      {asking && (
-        <ConfirmDialog
-          title="Delete this moment?"
-          body="It can't be undone."
-          confirm="delete"
-          onConfirm={confirmDelete}
-          onCancel={() => {
-            setAsking(null)
-            setSwiped(null)
-          }}
-        />
       )}
     </div>
   )
