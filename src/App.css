@@ -866,7 +866,7 @@ sup.ord {
 /* One breath before you paint (the day's first dip): the face glows softly in and out once, 4 seconds, like a breath;
    the hand says "be here". Without motion, just the words. */
 .canvas.is-breathing .canvas-face {
-  animation: breathe 3s ease-in-out; /* BREATH_MS */
+  animation: breathe 2.4s ease-in-out; /* BREATH_MS */
 }
 @keyframes breathe {
   0%,
@@ -881,7 +881,7 @@ sup.ord {
 /* The whole canvas rises toward you with the breath and settles back: it swells (6%) and lifts off the paper (a deeper
    shadow), so the breath is seen, not just sensed. Ink and paper only. */
 .canvas.is-breathing {
-  animation: breathe-in 3s ease-in-out; /* BREATH_MS */
+  animation: breathe-in 2.4s ease-in-out; /* BREATH_MS */
 }
 @keyframes breathe-in {
   0%,
@@ -2570,7 +2570,10 @@ body[data-screen='questions'] .idea {
   transform: translate(-50%, 0);
 }
 .colours-sheet .sheet-handle {
-  margin-bottom: 18px;
+  display: none; /* one quiet line, not a sheet to pull */
+}
+.colours-sheet {
+  padding-top: 18px;
 }
 .colours-sheet .legend {
   margin: 0;

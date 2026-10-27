@@ -94,8 +94,8 @@ function blankWord(date: string, today: string) {
   return ago(Math.floor(days / 365.25), 'year')
 }
 
-// One breath, in and out (in step with the CSS: breathe, breathe-in). 3s: calm, without feeling like a wait.
-const BREATH_MS = 3000
+// One breath, in and out (in step with the CSS: breathe, breathe-in). 2.4s: calm, without feeling like a wait.
+const BREATH_MS = 2400
 
 export function Today(props: Props) {
   const { question, born, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } =
@@ -132,13 +132,17 @@ export function Today(props: Props) {
   const day = days[date]
   const special = specialDay(date, born)
 
-  // On each dip, all three colours rise from the bottom (like the other help), the dipped one in ink. No backdrop, so
-  // nothing waits on it: the next touch anywhere puts it away, and a stroke on the square still paints.
+  // On each dip, the dipped colour's meaning rises from the bottom, one line (nomi: three took the focus off
+  // painting). No backdrop, so nothing waits on it: it goes by itself after a few seconds, or at the next touch, and
+  // a stroke on the square still paints.
   const [whisper, setWhisper] = useState<{ paint: Paint; at: number } | null>(null)
   const [whispering, setWhispering] = useState(false)
   const [wiping, setWiping] = useState(false)
   useEffect(() => {
-    if (whisper) setWhispering(true)
+    if (!whisper) return
+    setWhispering(true)
+    const t = setTimeout(() => setWhispering(false), 3000)
+    return () => clearTimeout(t)
   }, [whisper])
   useEffect(() => {
     if (!whispering) return
@@ -469,8 +473,8 @@ export function Today(props: Props) {
                     >
                       <div className="sheet-handle" />
                       <ul className="legend">
-                        {PAINTS.map((x) => (
-                          <li key={x.id} className={whisper?.paint === x.id ? 'is-dipped' : undefined}>
+                        {PAINTS.filter((x) => x.id === whisper?.paint).map((x) => (
+                          <li key={x.id} className="is-dipped">
                             <span className="legend-swatch" style={{ background: x.hex }} />
                             {x.meaning}
                           </li>
