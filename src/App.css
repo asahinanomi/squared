@@ -1875,13 +1875,14 @@ body[data-screen='questions'] .idea {
   justify-content: flex-end;
   padding-right: 11px;
 }
+/* The size of the switch's icons (20px), a touch over: a lone square reads lighter than a drawn icon. */
 .bar-today {
   flex: none; /* always a true square */
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
   background: var(--bar);
-  box-shadow: inset 0 0 0 2.5px var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
 }
 .bar-today.is-painted {
   box-shadow: none;
@@ -1889,35 +1890,35 @@ body[data-screen='questions'] .idea {
 .bar-stack {
   flex: none;
   position: relative;
-  width: 34px;
-  height: 34px;
+  width: 22px;
+  height: 22px;
 }
 .bar-stack i {
   position: absolute;
-  width: 29px;
-  height: 29px;
-  border-radius: 8px;
+  width: 19px;
+  height: 19px;
+  border-radius: 5px;
   background: var(--bar); /* the bar's own ground, so the front day hides the one behind */
-  box-shadow: inset 0 0 0 2.5px var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
 }
 .bar-stack i:first-child {
-  left: 5px;
+  left: 3px;
   top: 0;
-  box-shadow: inset 0 0 0 2.5px #a8a8a1; /* the day behind */
+  box-shadow: inset 0 0 0 2px #a8a8a1; /* the day behind */
 }
 .bar-stack i:last-child {
   left: 0;
-  top: 5px;
+  top: 3px;
 }
 /* Under the square, outside the flow: the squares stay centred, level with the switch. */
 .bar-here {
   position: absolute;
-  top: calc(50% + 17px + 5px);
-  width: 30px;
-  border-top: 2.5px dotted transparent;
+  top: calc(50% + 11px + 5px);
+  width: 22px;
+  border-top: 2px dotted transparent;
 }
 .bar-place-mydays .bar-here {
-  right: 13px; /* centred under the stack */
+  right: 11px; /* under the stack */
 }
 .bar-place.is-here .bar-here {
   border-top-color: var(--ink);
