@@ -4269,7 +4269,10 @@ button.home-card:active {
   grid-template-columns: repeat(4, 1fr);
 }
 .finder-grid.is-days {
-  grid-template-columns: repeat(7, 1fr);
+  /* At most 48px a day: on a computer's wider sheet the squares grew until the month pushed your age (the line
+     under the title) out of view. A phone's are smaller anyway. */
+  grid-template-columns: repeat(7, minmax(0, 48px));
+  justify-content: space-between;
   gap: 6px;
 }
 .finder-grid.is-weekdays {

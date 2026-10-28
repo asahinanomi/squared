@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 28, 2026, 22:42 UTC_
+_last updated Oct 28, 2026, 22:59 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -295,6 +295,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **A link straight to "get in touch"** (Oct 28, 2026, nomi): squared.today/?touch opens about on "get in touch", after Google sign-in if you're signed out (it survives the trip, like the test links), then the address is plain again. For the beta notes: testers and their friends write in one tap. The form itself stays behind sign-in (an open form would need spam protection, and testers sign in anyway).
 - **The framed day opens that day** (Oct 28, 2026, nomi): on my days, the framed card opens that day (its grey › sits in the middle, as on the matters card); every framed day is a quiet text link at its foot, at the right: "see all framed days" (14px, muted, dotted underline, as "start over" on the day; no second arrow, no hairline: two arrows read as too much). (Tapping the day and landing on the list felt lost; an arrow by "you framed this day" still read as this day.) The card shows the day's "to remember" moments, every one in full; a framed day without one shows its latest moment, cut at 2 lines.
 - **my days, in order** (Oct 28, 2026, nomi): where you are; then your own words, "you said this matters" and "you framed this day", side by side; "you painted these" last, the biggest and calmest card, a gallery at the page's end (it sat before the framed day, pushing it below the fold).
+- **Find a day, on a computer** (Oct 28, 2026, nomi): the day squares are at most 48px, so on a computer's wider sheet the whole month fits under "which day?" and your age ("You were about 54."), which used to scroll out of view. A phone's squares were smaller already.
 - **Cleanup** (Oct 28, 2026): styles nothing used any more are gone (the old home cards' head, big number, bar and legend, the old life bar and its ghost, the compass sub-line, a help line, a settings note; about 150 lines).
 - **Today's edge inside its square** (Oct 28, 2026, nomi): in the where-you-are card, today is marked by its own edge in ink, inside the square (as on the month), not a ring around it that crowded its neighbours. A framed today: the ink edge, then its thin white mat.
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
