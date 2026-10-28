@@ -4595,7 +4595,7 @@ button.home-card:active {
   margin-top: 22px; /* the line above stands on its own, as it did over the life card */
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 22px; /* room between this week, this month and this life */
   padding: 22px 18px 20px; /* the same edges as the cards under it */
 }
 .where-row {
@@ -4723,8 +4723,8 @@ button.home-card:active {
 }
 .matters-label {
   display: block;
-  font-size: 12px; /* the system's label size */
-  font-weight: 400; /* a quiet caption: your words lead (it was 600 and competed with them) */
+  font-size: 13px;
+  font-weight: 600; /* lighter (12px, 400) was tried: it read weaker, not calmer (nomi) */
   color: var(--muted);
 }
 .matters-card > svg {

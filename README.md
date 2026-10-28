@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 28, 2026, 17:13 UTC_
+_last updated Oct 28, 2026, 17:21 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -289,7 +289,8 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **today · my days, the switch's twin** (Oct 28, 2026, nomi): words on pills still looked busy, so the two places sit together at the right as their own switch, the twin of squares · list at the left: the same grey capsule, the one you're on raised white (on a month or the list, neither). One language for the whole bar, and no more underline. today keeps its small dot: an ink ring until painted, then today's paint.
 - **The places as tabs** (Oct 28, 2026, nomi; lab row 10, B): two switches felt like too many filters, losing the call to action, so the places became tabs: today's square (24px) in the centre, an ink edge until today is painted, then today's paint, with "today" under it; my days at the right, two squares stacked (the day behind in grey), "my days" under it. Where you are is in ink, the other soft grey, no backgrounds. The squares · list switch stays at the left.
 - **The bar, evenly spaced** (Oct 28, 2026, nomi): the three sets (the switch, today, my days) sit with the same room at both edges and between them (58px on a 390px phone), no longer pushed to the edges. Each tab is as wide as it looks, so the gaps read even; its tap area reaches a little past it.
-- **my days' card labels, quieter** (Oct 28, 2026, nomi): "you said this matters", "you painted these", "you framed this day" are 12px (the system's label size) regular (400) in muted grey, no longer 13px semibold (muted, never fainter: text you read is never faint), so the content under them leads.
+- **my days' card labels** (Oct 28, 2026, nomi): tried quieter (12px regular), then back to 13px semibold: lighter read weaker, not calmer.
+- **Where you are, more room** (Oct 28, 2026, nomi): 22px between this week, this month and this life (was 16), so the card reads less crowded.
 - **Cleanup** (Oct 28, 2026): styles nothing used any more are gone (the old home cards' head, big number, bar and legend, the old life bar and its ghost, the compass sub-line, a help line, a settings note; about 150 lines).
 - **Today's edge inside its square** (Oct 28, 2026, nomi): in the where-you-are card, today is marked by its own edge in ink, inside the square (as on the month), not a ring around it that crowded its neighbours. A framed today: the ink edge, then its thin white mat.
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
