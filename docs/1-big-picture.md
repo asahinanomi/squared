@@ -11,7 +11,7 @@ Where squared is, in the big steps. Many moving parts, one road. Each step has i
 Not only the app: the story too. Ready means comfortable, not perfect. **A time box: about two weeks** (until early Nov). If it isn't there by then, write down what's missing and decide, rather than keep polishing.
 
 - [ ] **The app:** a quiet week of just painting, no design changes; anything odd goes to Claude. (Used it 5 or 6 days so far, changing it daily.)
-- [ ] **The crash log** is clean (`client_errors`, see beta readiness).
+- [ ] **The crash log** is clean (`client_errors`, see beta readiness). Checked Oct 28: only my own rows from Oct 22–26, mostly the iPhone "dead connection after waking" saves, fixed Oct 25 (one row since, Oct 26). **Recheck around Nov 1**: no new rows → tick; new "Fetch is aborted" rows → send them to Claude.
 - [ ] **The brand story** feels true: "squared starts today", the line, the three colours (`docs/brand-story.md`).
 - [ ] **Open questions** I can live with for now, decided or parked:
   - the past: lived, not blank (parked until testers, `docs/future-ideas.md`)
