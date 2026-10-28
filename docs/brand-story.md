@@ -113,6 +113,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 - **Squares and days.** A **square** is the thing you paint: "paint its square", "start over under the square", "how many squares will you paint?", "your squares and notes". A **day** is time you live: "days in colour", "10,961 days ahead", "my days", "framed days". A place named for looking back says days; a thing you touch with the brush says square.
 
+- **A dialog, not labels** (nomi, Oct 28, 2026): squared talks with you. Titles and prompts read as a person would say them, often a question ("Which days would you like to see?", not "show"). A future pass brings the rest of the copy this way.
 - First person, plain-spoken. Honest, never preachy.
 - No streaks. No scores. No judgment from the app, only your own. Counts are days in colour, never days missed.
 - Warm, quiet, a little tender. It's a conscience, not a coach.

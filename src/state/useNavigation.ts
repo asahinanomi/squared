@@ -34,7 +34,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const [listRes, setListRes] = useState<Resolution>('days')
   const [listZoomed, setListZoomed] = useState(false) // zoomed within the list since it opened
   // Only one slice's days (from the pie's "see them →"), until cleared or the list zooms out.
-  const [listOnly, setListOnly] = useState<Only | null>(null)
+  const [listOnly, setListOnly] = useState<Only[]>([]) // none ticked: every day
   // The list keeps this pointed at the day in the middle of the screen, for a pinch to open on.
   const listMid = useRef(() => todayIso())
   // A day opened from the list goes back to the list when you zoom out of it.
@@ -126,7 +126,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     const from = screen === 'pie' ? pieFrom : screen
     const res: Resolution = from === 'life' ? lifeRes : 'days'
     setListFrom(from)
-    setListOnly(null)
+    setListOnly([])
     setListRes(res)
     setListZoomed(false)
     setListFocus(day)
@@ -140,7 +140,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   }
   // The capsule under the life's title jumps straight to a level of the list, where you are.
   const listTo = (r: Resolution) => {
-    setListOnly(null)
+    setListOnly([])
     setListZoomed(true)
     setListFocus(listMid.current())
     setListRes(r)
@@ -151,7 +151,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setListRes('days')
     setListZoomed(false)
     setListFocus(todayIso())
-    setListOnly(id === 'lived' ? null : id)
+    setListOnly(id === 'lived' ? [] : [id])
     setScreen('list')
   }
   const openSettings = () => setScreenValue('settings')
@@ -161,7 +161,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   // month.
   const openList = () => {
     setListFrom('month')
-    setListOnly(null)
+    setListOnly([])
     setListRes('days')
     setListZoomed(false)
     setListFocus(todayIso())

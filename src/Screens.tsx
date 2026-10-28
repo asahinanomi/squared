@@ -191,8 +191,8 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
     )
     return listRes === 'days' ? (
       <DaysList
-        key={`days-${nav.listOnly}`}
-        only={nav.listOnly ?? undefined}
+        key={`days-${nav.listOnly.join()}`}
+        only={nav.listOnly}
         onOnly={nav.setListOnly}
         onAllNotes={acc.loadAllNotes}
         mid={listMid}

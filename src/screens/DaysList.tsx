@@ -38,25 +38,32 @@ type Props = {
   mid: MutableRefObject<() => string>
   /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */
   head?: ReactNode
-  /** Only the days of one colour (or the unpainted ones) — from a slice of the pie — and the way back to all. */
-  only?: Only
-  /** Choose what the list shows: one kind of day, or all (null). */
-  onOnly?: (only: Only | null) => void
+  /** The kinds of day the list shows (any of them); none: every day. A pie slice opens it on one. */
+  only?: Only[]
+  /** Choose what the list shows. */
+  onOnly?: (only: Only[]) => void
   /** "only with moments" needs every one, not just the months seen so far. */
   onAllNotes?: () => void
 }
 
 export type Only = Paint | 'unpainted' | 'framed' | 'notes'
-/** The filter's choices, in the order the app always lists colours. */
+/** The filter's choices: every day, then the colours in the palette's order, then the special kinds (nomi). */
 const FILTERS: [Only | null, string][] = [
   [null, 'all days'],
-  ['notes', 'with moments'],
-  ['framed', 'framed'],
   ['green', 'worth it'],
   ['red', 'regret'],
   ['grey', 'a blur'],
+  ['notes', 'with moments'],
+  ['framed', 'framed'],
   ['unpainted', 'unpainted'],
 ]
+
+/** A funnel: which days the list shows. Filled while it's filtered (the button's colour). */
+const FunnelIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 5.5h16l-6.2 7.4v5.3l-3.6 1.8v-7.1z" />
+  </svg>
+)
 
 /** A filter row's mark: the colour's dot, a little frame, or an empty dashed square. */
 function FilterMark({ id }: { id: Only | null }) {
@@ -67,7 +74,6 @@ function FilterMark({ id }: { id: Only | null }) {
   return <span className="filter-mark" style={{ background: paintHex(id) }} aria-hidden="true" />
 }
 
-const WORD_OF: Record<Only, string> = { ...WORD, unpainted: 'unpainted', framed: 'framed', notes: 'with moments' }
 /** About what two lines of a card's note hold on a phone. */
 const PREVIEW_CHARS = 80
 /** Months added at a time as you scroll toward either end. */
@@ -194,14 +200,19 @@ export function DaysList({
   onPainting,
   mid,
   head,
-  only,
+  only = [],
   onOnly,
   onAllNotes,
 }: Props) {
   useEffect(() => {
-    if (only === 'notes') onAllNotes?.()
-  }, [only]) // eslint-disable-line react-hooks/exhaustive-deps
-  const [picking, setPicking] = useState(false)
+    if (only.includes('notes')) onAllNotes?.()
+  }, [only.join()]) // eslint-disable-line react-hooks/exhaustive-deps
+  // The sheet's ticks, applied when it closes (the list then opens afresh, filtered, in one step).
+  const [picking, setPicking] = useState<Only[] | null>(null)
+  const closePicking = () => {
+    if (picking && picking.join() !== only.join()) onOnly?.(picking)
+    setPicking(null)
+  }
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const first = shiftMonth(firstDay(days, born), 0)
@@ -214,17 +225,21 @@ export function DaysList({
   }))
   // Filtered, every month of the life is in (the empty ones stay hidden), so a framed day or a note from years back
   // shows without scrolling to it first; unfiltered, a window of months that grows as you scroll.
-  const span = only ? { from: first, to: current } : range
+  const filtered = only.length > 0
+  const span = filtered ? { from: first, to: current } : range
   const months = Array.from({ length: monthsBetween(span.from, span.to) + 1 }, (_, i) => shiftMonth(span.from, i))
+  // A day shows if it's any of the kinds ticked.
   const shown = (iso: string) =>
-    !only ||
-    (only === 'unpainted'
-      ? !days[iso]
-      : only === 'framed'
-        ? !!days[iso]?.framed
-        : only === 'notes'
-          ? !!notes[iso]?.length
-          : days[iso]?.color === only)
+    !filtered ||
+    only.some((o) =>
+      o === 'unpainted'
+        ? !days[iso]
+        : o === 'framed'
+          ? !!days[iso]?.framed
+          : o === 'notes'
+            ? !!notes[iso]?.length
+            : days[iso]?.color === o,
+    )
   const scroller = useRef<HTMLDivElement>(null)
   const heightBefore = useRef<number | null>(null) // set when months are added above, to keep your place
   const pending = useRef<string | null>(null) // a day to bring to the middle once it's drawn
@@ -254,7 +269,7 @@ export function DaysList({
       run = []
     }
     for (const iso of list) {
-      if (!only && quiet(iso)) run.push(iso)
+      if (!filtered && quiet(iso)) run.push(iso)
       else {
         flush()
         out.push(iso)
@@ -314,7 +329,7 @@ export function DaysList({
       pending.current = null
     }
     // Filtered, a few months may hold too little to scroll: keep adding older months until there's room to.
-    if (el && only && el.scrollHeight <= el.clientHeight + NEAR && range.from > first) {
+    if (el && filtered && el.scrollHeight <= el.clientHeight + NEAR && range.from > first) {
       heightBefore.current = el.scrollHeight
       const from = shiftMonth(range.from, -STEP * 4)
       setRange({ ...range, from: from < first ? first : from })
@@ -369,40 +384,43 @@ export function DaysList({
           <h1 className="life-title">a life</h1>
         </div>
       )}
-      {/* The one filter: a quiet line under the zoom capsule; its choices open in a sheet. */}
+      {/* The filter: a small funnel at the title's right, in line with the cards (no line of its own); solid ink while
+          the list is filtered. Its choices open in a sheet: tick any kinds of day; the list follows when it closes. */}
       {onOnly && (
-        <div className="days-filter">
-          <button className="days-filter-open" onClick={() => setPicking(true)} aria-haspopup="dialog">
-            {only ? `only ${WORD_OF[only]}` : 'all days'}
-            <ChevronDown className="days-filter-chevron" />
-          </button>
-          {only && (
-            <button className="days-filter-clear" onClick={() => onOnly(null)} aria-label="Show all days">
-              ×
-            </button>
-          )}
-        </div>
+        <button
+          className={'days-filter' + (filtered ? ' is-on' : '')}
+          onClick={() => setPicking(only)}
+          aria-haspopup="dialog"
+          aria-label={filtered ? 'Which days: filtered' : 'Which days'}
+        >
+          <FunnelIcon />
+        </button>
       )}
       {onOnly && (
-        <Sheet open={picking} onClose={() => setPicking(false)}>
-          <h2 className="sheet-title">show</h2>
+        <Sheet open={!!picking} onClose={closePicking}>
+          <h2 className="torn-title">Which days would you like to see?</h2>
           <ul className="filter-list">
-            {FILTERS.map(([id, label]) => (
-              <li key={id ?? 'all'}>
-                <button
-                  className={'filter-row' + (only === id || (!only && !id) ? ' is-on' : '')}
-                  onClick={() => {
-                    setPicking(false)
-                    onOnly(id)
-                  }}
-                >
-                  <FilterMark id={id} />
-                  <span className="filter-label">{label}</span>
-                  {(only === id || (!only && !id)) && <span aria-label="shown">✓</span>}
-                </button>
-              </li>
-            ))}
+            {FILTERS.map(([id, label]) => {
+              const ticked = picking ?? only
+              const on = id ? ticked.includes(id) : !ticked.length
+              return (
+                <li key={id ?? 'all'}>
+                  <button
+                    className={'filter-row' + (on ? ' is-on' : '')}
+                    aria-pressed={on}
+                    onClick={() => setPicking(!id ? [] : on ? ticked.filter((o) => o !== id) : [...ticked, id])}
+                  >
+                    <FilterMark id={id} />
+                    <span className="filter-label">{label}</span>
+                    {on && <span aria-hidden="true">✓</span>}
+                  </button>
+                </li>
+              )
+            })}
           </ul>
+          <button className="pill filter-done" onClick={closePicking}>
+            show these days
+          </button>
         </Sheet>
       )}
       <div
@@ -414,7 +432,7 @@ export function DaysList({
         onTouchStart={() => (touched.current = true)}
       >
         {/* A filter with nothing in it says so, rather than an empty page. */}
-        {only && !months.some((m) => monthCells(m).some((iso) => !!iso && iso <= today && shown(iso))) && (
+        {filtered && !months.some((m) => monthCells(m).some((iso) => !!iso && iso <= today && shown(iso))) && (
           <p className="days-empty">No days here yet.</p>
         )}
         {months.map((m) => {
@@ -466,7 +484,7 @@ export function DaysList({
           )
         })}
       </div>
-      <ZoomBar onRecenter={away && !only ? backToToday : undefined} listAt={() => mid.current()} />
+      <ZoomBar onRecenter={away && !filtered ? backToToday : undefined} listAt={() => mid.current()} />
     </main>
   )
 }

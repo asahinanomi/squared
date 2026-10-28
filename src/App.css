@@ -3178,6 +3178,7 @@ button.settings-row:active {
 /* A life, day by day: the days as short cards, beside the pie. Colour stays in the swatch; ink on paper.
    A tap anywhere on a card opens the day (the date button is stretched over it); "more" opens it in place. */
 .days-list {
+  position: relative; /* the filter's funnel sits over the title row */
   flex: 1;
   min-height: 0;
   display: flex;
@@ -3223,31 +3224,32 @@ button.settings-row:active {
   font-size: 16px;
 }
 /* "only empty ×": the list holds one slice's days (from the pie); tap it for all days again. A soft capsule. */
+/* The filter: a small funnel at the title's right, in line with the cards' right edge (no line of its own). Outline
+   while every day shows, solid ink while filtered. */
 .days-filter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  margin-top: 8px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  margin-right: -8px; /* the funnel itself in line with the cards */
+  display: grid;
+  place-items: center;
+  color: var(--zoom-ink);
 }
-.days-filter-open {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  min-height: 36px;
-  padding: 0 6px;
-  font-size: 14px;
-  color: var(--muted);
+.days-filter svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
 }
-.days-filter-chevron {
-  width: 12px;
-  height: 12px;
+.days-filter.is-on svg {
+  fill: currentColor;
 }
-.days-filter-clear {
-  min-width: 32px;
-  min-height: 36px;
-  font-size: 16px;
-  color: var(--muted);
+.filter-done {
+  margin-top: 20px;
 }
 /* The filter's sheet: one row per kind of day, its mark, its word, a tick on the one shown. */
 .filter-list {
