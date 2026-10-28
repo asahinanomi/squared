@@ -117,8 +117,8 @@ export function MyDays({
       {/* Where you are: this week, this month and a life (it replaced the life card and the week card). */}
       <WhereCard days={days} profile={profile} onDay={onDay} onMonth={onMonth} onLife={onSquares} onSetUp={onSetUp} />
       {/* What matters, right after a life: the compass first, then the paintings. */}
-      {/* What matters, one line at a time: a different one of your own each visit, in the question's serif, a note to
-          yourself under the time you have. The card opens all of them. Not set yet: the empty slot, as before. */}
+      {/* What matters, one line at a time: a different one of your own each visit, in the sans of your own words, a
+          note to yourself under the time you have. The card opens all of them. Not set yet: the empty slot, as before. */}
       {matters.length ? (
         <button className="home-card matters-card" onClick={onMatters}>
           <span className="matters-text">
@@ -161,7 +161,7 @@ export function MyDays({
           )}
         </section>
       )}
-      {/* A day you framed, as itself: its square in its frame, its date, and its note, in the matters line's serif.
+      {/* A day you framed, as itself: its square in its frame, its date, and its note, as on its list card.
           A different one each visit; the card opens every framed day. None yet: the empty slot, as before. */}
       {kept1 ? (
         <button className="home-card matters-card framed-card" onClick={onFramed}>

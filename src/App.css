@@ -4441,7 +4441,7 @@ button.home-card:active {
   grid-column: 1 / -1;
   margin: 0 0 -4px;
 }
-/* A day you framed: its small framed square beside its date, then its note in the serif, two lines at most. */
+/* A day you framed: its small framed square beside its date, then its note as on a list card, two lines at most. */
 .framed-day {
   display: flex;
   align-items: center;
@@ -4455,7 +4455,11 @@ button.home-card:active {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  font-size: 19px;
+  margin-top: 10px; /* under its date, as a list card's note */
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--ink-soft);
 }
 .framed-square {
   flex: none;
@@ -4857,9 +4861,9 @@ button.home-card:active {
 .matters-line {
   display: block;
   margin-top: 18px; /* the same room under the label as "painted by you" */
-  font-family: var(--font-reflect);
-  font-optical-sizing: auto;
-  font-size: 21px;
-  font-weight: 450;
-  line-height: 1.3;
+  /* Your own words, so the sans (as your entries and notes everywhere); the serif is squared's voice, and on my days
+     its line is the hero. */
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.35;
 }
