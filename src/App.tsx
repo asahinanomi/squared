@@ -114,6 +114,7 @@ export default function App() {
         toggleList: nav.toggleList,
         goToday: nav.goToday,
         goMyDays: nav.openMyDays,
+        todayPaint: acc.days[todayIso()]?.color,
       }}
     >
       <OpenPainting.Provider value={painting.paintedMonth}>

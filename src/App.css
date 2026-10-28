@@ -1790,11 +1790,6 @@ body[data-screen='questions'] .idea {
 .zoombar-spacer {
   width: 84px; /* the view switch's width */
 }
-/* my days, at the bar's right: the same soft capsule as "today", as wide as the switch so "today" stays centred. */
-.zoombar-mydays {
-  min-width: 84px;
-  white-space: nowrap;
-}
 /* Zoom floats on the squares, bottom right, just above the bar: ◎ on top (while today is out of view), then a slim
    capsule, zoom in over zoom out, ink on white, the ◎ chip's soft lift. Outside the zooming stage, like the bar. */
 .zoom-stack {
@@ -1864,35 +1859,66 @@ body[data-screen='questions'] .idea {
 .zoom-stack .zoombar-recenter:active {
   transform: scale(0.95);
 }
-/* "today" — go paint it — halfway between the view switch and the zoom pair (the bar spaces the three evenly). */
-.zoombar-today {
+/* The bar in squares (lab row 10, A7). today, in the centre: its square, an ink edge until it's painted, then today's
+   paint. my days, at the right: two squares stacked, the day behind in grey, in a box as wide as the switch so today
+   stays centred. Where you are: the dotted ink underline under it (its room always kept, so nothing shifts). */
+.bar-place {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 56px;
+  height: 48px; /* the switch's height, so all sit on one line */
+  padding-top: 8.5px; /* the underline's room, so the squares sit level with the switch */
+}
+.bar-place-mydays {
+  width: 84px; /* the view switch's width */
+  align-items: flex-end;
+  padding-right: 11px;
+}
+.bar-today {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--bar);
+  box-shadow: inset 0 0 0 2.5px var(--ink);
+}
+.bar-today.is-painted {
+  box-shadow: none;
+}
+.bar-stack {
   position: relative;
-  height: 48px; /* the other controls' height, so all sit on one line */
-  padding: 0 12px;
-  color: var(--zoom-ink);
-  font-size: 14px;
-  font-weight: 600;
-  isolation: isolate;
+  width: 34px;
+  height: 34px;
 }
-/* A soft capsule, like the years · months · days filter: the bar's one action reads as something to tap.
-   Drawn inside the 44px tap area. */
-.zoombar-today::before {
-  content: '';
+.bar-stack i {
   position: absolute;
-  inset: 6px 0;
-  z-index: -1;
-  border-radius: 999px;
-  background: #e9e9e3;
+  width: 29px;
+  height: 29px;
+  border-radius: 8px;
+  background: var(--bar); /* the bar's own ground, so the front day hides the one behind */
+  box-shadow: inset 0 0 0 2.5px var(--ink);
 }
-.zoombar-today:active::before {
-  background: #e6e6e0;
+.bar-stack i:first-child {
+  left: 5px;
+  top: 0;
+  box-shadow: inset 0 0 0 2.5px #a8a8a1; /* the day behind */
 }
-/* On today itself: "today" stays, raised white like the switch's selected side, so it reads as "you're here". */
-.zoombar-today.is-here::before {
-  background: #fff;
-  box-shadow:
-    inset 0 0 0 1px #e4e4dd,
-    0 1px 3px rgba(20, 20, 19, 0.08);
+.bar-stack i:last-child {
+  left: 0;
+  top: 5px;
+}
+.bar-here {
+  width: 30px;
+  border-top: 2.5px dotted transparent;
+}
+.bar-place.is-here .bar-here {
+  border-top-color: var(--ink);
+}
+.bar-place:active .bar-today,
+.bar-place:active .bar-stack {
+  transform: scale(0.94);
 }
 /* Just came back to today: the square pulses once, so the eye lands on it. */
 .is-pulse {

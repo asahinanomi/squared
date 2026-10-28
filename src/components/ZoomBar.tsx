@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom'
 import { createContext, useContext, useEffect, useState } from 'react'
+import { squareFill, type Paint } from '../lib/paints'
 
 type Props = {
   /** Zoom out one level (see more); absent when there's no level further out yet. */
@@ -12,8 +13,8 @@ type Props = {
   listAt?: () => string
   /** "today" in the centre: the app's way back to today by default; the day screen passes its own. */
   today?: () => void
-  /** On today itself: "today" stays, raised (you're here, as the switch marks its side), and a tap gives the square a
-   *  small pulse instead. */
+  /** On today itself: today's square stays, underlined (you're here), and a tap gives the square a small pulse
+   *  instead. */
   here?: () => void
 }
 
@@ -93,7 +94,48 @@ export const ViewSwitch = createContext<{
   goToday: () => void
   /** my days: the bar's right, the reflection home, one tap from anywhere. */
   goMyDays: () => void
+  /** Today's paint, once it's painted: the bar's square shows it. */
+  todayPaint?: Paint
 } | null>(null)
+
+// The bar in squares (lab row 10, A7): today is its square, an ink edge until you paint, then today's paint, so the bar
+// always says whether today is done. my days is two squares, stacked, the day behind in grey. Where you are: squared's
+// dotted ink underline (the one under "meaningfully"), never a pressed or raised look, so it never fights the switch.
+// The underline's room is always kept, so the squares never shift.
+// Lab: https://claude.ai/artifact/8RNH3LHkF4RtJ3QchG5fkm (row 10, A7)
+function TodayPlace({ paint, here, onClick }: { paint?: Paint; here: boolean; onClick: () => void }) {
+  return (
+    <button
+      className={'bar-place' + (here ? ' is-here' : '')}
+      aria-label="today"
+      aria-current={here ? 'page' : undefined}
+      onClick={onClick}
+    >
+      <span
+        className={'bar-today' + (paint ? ' is-painted' : '')}
+        style={paint ? { background: squareFill(paint) } : undefined}
+      />
+      <span className="bar-here" aria-hidden="true" />
+    </button>
+  )
+}
+
+function MyDaysPlace({ here, onClick }: { here: boolean; onClick: () => void }) {
+  return (
+    <button
+      className={'bar-place bar-place-mydays' + (here ? ' is-here' : '')}
+      aria-label="my days"
+      aria-current={here ? 'page' : undefined}
+      onClick={onClick}
+    >
+      <span className="bar-stack" aria-hidden="true">
+        <i />
+        <i />
+      </span>
+      <span className="bar-here" aria-hidden="true" />
+    </button>
+  )
+}
 
 // Bottom of every square view and the list: the bar is for getting around (the squares · list switch on the left,
 // "today" in the centre, the same on every page). Zoom is a tool on the squares, not a way around, so it floats over
@@ -144,22 +186,10 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props)
         ) : (
           <span />
         )}
-        {here ? (
-          <button className="zoombar-today is-here" aria-current="page" onClick={here}>
-            today
-          </button>
-        ) : goToday ? (
-          <button className="zoombar-today" onClick={goToday}>
-            today
-          </button>
-        ) : (
-          <span />
-        )}
-        {/* my days on the right, as wide as the switch, so "today" stays in the centre. */}
+        {here || goToday ? <TodayPlace paint={view?.todayPaint} here={!!here} onClick={here ?? goToday!} /> : <span />}
+        {/* my days on the right, as wide as the switch, so today stays in the centre. */}
         {view ? (
-          <button className="zoombar-today zoombar-mydays" onClick={view.goMyDays}>
-            my days
-          </button>
+          <MyDaysPlace here={false} onClick={view.goMyDays} />
         ) : (
           <span className="zoombar-spacer" aria-hidden="true" />
         )}
@@ -206,9 +236,10 @@ export function PageBar({
   onSquares: () => void
   onList: () => void
   onMyDays: () => void
-  /** On my days itself: its pill raised white ("you're here"), as "today" is on today. */
+  /** On my days itself: its squares underlined ("you're here"), as today's square is on today. */
   atMyDays: boolean
 }) {
+  const view = useContext(ViewSwitch)
   return createPortal(
     <div className="zoombar">
       <div className="zoombar-switch" role="group" aria-label="View">
@@ -219,16 +250,8 @@ export function PageBar({
           <ListIcon />
         </button>
       </div>
-      <button className="zoombar-today" onClick={onToday}>
-        today
-      </button>
-      <button
-        className={'zoombar-today zoombar-mydays' + (atMyDays ? ' is-here' : '')}
-        aria-current={atMyDays ? 'page' : undefined}
-        onClick={onMyDays}
-      >
-        my days
-      </button>
+      <TodayPlace paint={view?.todayPaint} here={false} onClick={onToday} />
+      <MyDaysPlace here={atMyDays} onClick={onMyDays} />
     </div>,
     document.body,
   )
