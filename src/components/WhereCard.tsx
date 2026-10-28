@@ -5,6 +5,10 @@ import { frameOf, squareFill } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 
 const fmt = (n: number) => n.toLocaleString('en-US')
+const md = (iso: string) => fromIso(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+/** "Oct 25 – 31"; across months "Sep 27 – Oct 3". */
+const weekRange = (a: string, b: string) =>
+  a.slice(0, 7) === b.slice(0, 7) ? `${md(a)} – ${Number(b.slice(8))}` : `${md(a)} – ${md(b)}`
 const ahead = (n: number) => (n === 0 ? 'today is the last' : n === 1 ? '1 day ahead' : `${fmt(n)} days ahead`)
 
 type Props = {
@@ -44,13 +48,15 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
           : undefined,
     }
   }
-  const monthName = t.toLocaleDateString('en-US', { month: 'long' })
+  const monthName = t.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   const c = profile ? lifeCounts(profile.born, profile.lifespan, today) : null
   return (
     <section className="home-card where-card" aria-label="where you are">
       <div className="where-row">
         <div className="where-head">
-          <span>this week</span>
+          <span>
+            this week <em className="where-date">{weekRange(week[0], week[6])}</em>
+          </span>
           <small>{ahead(week.filter((d) => d > today).length)}</small>
         </div>
         <div className="where-cells is-week">
@@ -65,7 +71,9 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
       </div>
       <button className="where-row" onClick={onMonth}>
         <span className="where-head">
-          <span>{monthName}</span>
+          <span>
+            this month <em className="where-date">{monthName}</em>
+          </span>
           <small>{ahead(inMonth - t.getDate())}</small>
         </span>
         <span className="where-cells is-month" aria-hidden="true">
@@ -77,7 +85,7 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
       {c ? (
         <button className="where-row" onClick={onLife}>
           <span className="where-head">
-            <span>a life</span>
+            <span>this life</span>
             <small>{ahead(c.left)}</small>
           </span>
           <span className="where-track" aria-hidden="true">
@@ -89,7 +97,7 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
       ) : (
         <button className="where-row" onClick={onSetUp}>
           <span className="where-head">
-            <span>a life</span>
+            <span>this life</span>
             <small className="is-setup">set up now ›</small>
           </span>
           <span className="where-track is-ghost" aria-hidden="true">

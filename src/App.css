@@ -4893,6 +4893,13 @@ button.home-card:active {
   font-size: 15px;
   font-weight: 600;
 }
+.where-date {
+  margin-left: 4px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--muted);
+}
 .where-head small {
   font-size: 13px;
   font-weight: 400;
