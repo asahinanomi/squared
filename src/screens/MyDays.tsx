@@ -119,7 +119,8 @@ export function MyDays({
       <p className="my-days-line">The past is painted. Today is still yours.</p>
       {/* Where you are: this week, this month and a life (it replaced the life card and the week card). */}
       <WhereCard days={days} profile={profile} onDay={onDay} onMonth={onMonth} onLife={onSquares} onSetUp={onSetUp} />
-      {/* What matters, right after a life: the compass first, then the paintings. */}
+      {/* The order: where you are; then your own words, a line that matters and a day you framed; the paintings last,
+          the biggest and calmest, a gallery at the page's end (nomi, Oct 28, 2026). */}
       {/* What matters, one line at a time: a different one of your own each visit, in the sans of your own words, a
           note to yourself under the time you have. The card opens all of them. Not set yet: the empty slot, as before. */}
       {matters.length ? (
@@ -132,37 +133,6 @@ export function MyDays({
         </button>
       ) : (
         <div className="settings-rows">{row('what matters', 'what makes a day worth it', onMatters, 'set up')}</div>
-      )}
-      {/* This month and this year so far, and the way to every painting you kept (the old "paintings" row). */}
-      {/* Nothing painted yet: the paintings wait as an empty slot, with how they're made. */}
-      {!hasMonth && !hasYear && !kept.length && (
-        <div className="settings-rows">
-          {row('paintings', 'none yet · how a painting is made', () => setHelp('paintings'), 'none')}
-        </div>
-      )}
-      {(hasMonth || hasYear || kept.length > 0) && (
-        <section className="home-card home-paintings my-days-paintings">
-          {/* The title is the way to every painting you kept (none kept yet: how to keep one, not a blank page). */}
-          <button
-            className="my-days-card-head my-days-paintings-head"
-            onClick={kept.length ? onPaintings : () => setHelp('paintings')}
-          >
-            <span className="matters-label">you painted these</span>
-            <Chevron dir="right" />
-          </button>
-          {hasMonth && (
-            <button onClick={() => onPainting(month)}>
-              <span className="home-t">{new Date().toLocaleDateString('en-US', { month: 'long' })}, so far</span>
-              <PaintingThumb month={month} days={days} />
-            </button>
-          )}
-          {hasYear && (
-            <button onClick={() => onPainting(year)}>
-              <span className="home-t">{year}, so far</span>
-              <PaintingThumb month={year} days={days} />
-            </button>
-          )}
-        </section>
       )}
       {/* A day you framed, as itself: its square in its frame, its date, and its "to remember" moments, as on its list
           card. A different one each visit. The card opens that day (its arrow, as on the matters card); every framed
@@ -197,6 +167,37 @@ export function MyDays({
         <div className="settings-rows">
           {row('framed days', 'none yet · how to frame a day', () => setHelp('framed'), 'none')}
         </div>
+      )}
+      {/* This month and this year so far, and the way to every painting you kept (the old "paintings" row). */}
+      {/* Nothing painted yet: the paintings wait as an empty slot, with how they're made. */}
+      {!hasMonth && !hasYear && !kept.length && (
+        <div className="settings-rows">
+          {row('paintings', 'none yet · how a painting is made', () => setHelp('paintings'), 'none')}
+        </div>
+      )}
+      {(hasMonth || hasYear || kept.length > 0) && (
+        <section className="home-card home-paintings my-days-paintings">
+          {/* The title is the way to every painting you kept (none kept yet: how to keep one, not a blank page). */}
+          <button
+            className="my-days-card-head my-days-paintings-head"
+            onClick={kept.length ? onPaintings : () => setHelp('paintings')}
+          >
+            <span className="matters-label">you painted these</span>
+            <Chevron dir="right" />
+          </button>
+          {hasMonth && (
+            <button onClick={() => onPainting(month)}>
+              <span className="home-t">{new Date().toLocaleDateString('en-US', { month: 'long' })}, so far</span>
+              <PaintingThumb month={month} days={days} />
+            </button>
+          )}
+          {hasYear && (
+            <button onClick={() => onPainting(year)}>
+              <span className="home-t">{year}, so far</span>
+              <PaintingThumb month={year} days={days} />
+            </button>
+          )}
+        </section>
       )}
       {/* Help, only when asked for: how a day is framed, how a painting is kept. */}
       <Sheet open={help === 'framed'} onClose={() => setHelp(null)}>
