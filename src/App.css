@@ -1003,12 +1003,6 @@ sup.ord {
   box-shadow: 0 0 0 1.5px var(--ink);
 }
 
-/* Torn: the question, then your whole compass, in a sheet. */
-.compass-sub {
-  margin: 8px 0 14px;
-  font-size: 16px;
-  color: var(--ink-soft);
-}
 .compass-edit {
   margin-top: 4px;
   padding: 4px 0;
@@ -3027,14 +3021,8 @@ button.settings-row:active {
   padding-right: 4px;
 }
 
-.settings-rows.is-last,
-.my-days-week {
+.settings-rows.is-last {
   margin-bottom: 28px; /* room before the footer's hairline */
-}
-.settings-note {
-  margin: 12px 0 0;
-  font-size: 14px;
-  color: var(--ink-soft);
 }
 
 /* ---------- what matters ---------- */
@@ -4073,65 +4061,10 @@ button.settings-row:active {
 button.home-card:active {
   transform: scale(0.99);
 }
-.home-head {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-}
-.home-head svg {
-  width: 18px;
-  height: 18px;
-  color: var(--faint);
-}
 .home-t {
   display: block;
   font-size: 16px;
   font-weight: 600;
-}
-/* a life, in one line */
-.home-big {
-  margin-top: 6px;
-  font-size: 28px; /* the same as the page title: one headline size on home */
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.home-big small {
-  margin-left: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0;
-  color: var(--ink-soft);
-}
-/* A calm bar, a fact to glance at: lived in a quiet dark grey, ahead in pale paper. */
-.home-bar {
-  display: flex;
-  margin-top: 10px;
-  height: 6px;
-  border-radius: 3px;
-  overflow: hidden;
-  background: #ecebe5;
-}
-.home-bar i {
-  background: #55554f; /* dark grey ink, clearly not the slipped paint */
-}
-/* The days ahead sit over the paper end of the bar. */
-.home-big.is-ahead {
-  align-self: flex-end;
-}
-.home-legend {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-  font-size: 13px;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
 }
 /* this month and this year so far, side by side, each titled above (still unsigned) */
 .home-paintings {
@@ -4394,41 +4327,6 @@ button.home-card:active {
 /* my framed days: oldest first, a card per day (the list's card), only what matters: the framed square (the list's
    own, 26px), the date and weekday, and up to three lines of what you wanted to remember. */
 
-/* my days' life bar: now marked on it, a dot where lived meets ahead, "today" under it (kept inside the card). */
-.life-track {
-  position: relative;
-  display: block;
-  margin-top: 10px; /* the bar's own space above moves here, so the dot centres on the bar itself */
-}
-.life-track .home-bar {
-  margin-top: 0;
-}
-.life-now {
-  position: absolute;
-  top: 50%;
-  width: 12px;
-  height: 12px;
-  margin: -6px 0 0 -6px;
-  border-radius: 50%;
-  background: var(--ink);
-  box-shadow: 0 0 0 2.5px #fff;
-}
-.life-now-label {
-  position: relative;
-  display: block;
-  height: 16px;
-  margin-top: 5px;
-}
-.life-now-label span {
-  position: absolute;
-  transform: translateX(-50%);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--ink);
-}
-.my-days-life .home-legend {
-  margin-top: 2px;
-}
 /* squared's line, my days' epigraph: under the title, left like it, the serif, no box. */
 .my-days-line {
   margin: 14px 0 0;
@@ -4497,11 +4395,6 @@ button.home-card:active {
   box-shadow:
     inset 0 0 0 3px var(--frame),
     inset 0 0 0 4.5px rgba(255, 255, 255, 0.85);
-}
-/* A help sheet's lines (framed days, paintings): the reading size, a little space between. */
-.help-body {
-  margin: 10px 0 0;
-  font-size: 16px;
 }
 /* A help sheet in two columns: the move, acted out, and a few words beside it like notes. */
 .help-pair {
@@ -4665,53 +4558,6 @@ button.home-card:active {
   width: 18px;
   height: 18px;
   color: var(--ink-soft);
-}
-/* The life card before the squares are set: a ghost of the bar in faint grey, lived solid, ahead dotted. */
-.home-big.is-ghost,
-.home-big.is-ghost small {
-  color: var(--faint);
-}
-.life-ghost {
-  position: relative;
-  display: block;
-  height: 4px;
-  margin-top: 14px;
-  border-top: 4px dotted var(--faint);
-  box-sizing: border-box;
-}
-.life-ghost i {
-  position: absolute;
-  left: 0;
-  top: -4px;
-  width: 50%;
-  height: 4px;
-  border-radius: 999px;
-  background: var(--faint);
-}
-.life-ghost::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: -7px;
-  width: 10px;
-  height: 10px;
-  margin-left: -5px;
-  box-sizing: border-box;
-  border-radius: 50%;
-  border: 2px solid var(--faint);
-  background: var(--bg);
-}
-.life-ghost-legend {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-  font-size: 14px;
-  color: var(--faint);
-}
-.life-ghost-ask {
-  margin: 12px 0 4px;
-  font-size: 17px;
-  font-weight: 500;
 }
 /* The pie, opened from my days: its way back, at the top left. */
 .pie-back {
@@ -4877,7 +4723,7 @@ button.home-card:active {
 }
 .matters-label {
   display: block;
-  font-size: 13px;
+  font-size: 12px; /* the system's label size */
   font-weight: 400; /* a quiet caption: your words lead (it was 600 and competed with them) */
   color: var(--muted);
 }
