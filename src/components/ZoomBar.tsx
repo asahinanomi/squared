@@ -117,11 +117,7 @@ function TodayTab({ paint, here, onClick }: { paint?: Paint; here: boolean; onCl
 
 function MyDaysTab({ here, onClick }: { here: boolean; onClick: () => void }) {
   return (
-    <button
-      className={'bar-tab bar-tab-mydays' + (here ? ' is-here' : '')}
-      aria-current={here ? 'page' : undefined}
-      onClick={onClick}
-    >
+    <button className={'bar-tab' + (here ? ' is-here' : '')} aria-current={here ? 'page' : undefined} onClick={onClick}>
       <span className="bar-stack" aria-hidden="true">
         <i />
         <i />
@@ -181,7 +177,7 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props)
           <span />
         )}
         {goToday ? <TodayTab paint={view?.todayPaint} here={!!here} onClick={here ?? goToday} /> : <span />}
-        {view ? <MyDaysTab here={false} onClick={view.goMyDays} /> : <span className="bar-tab-mydays" />}
+        {view ? <MyDaysTab here={false} onClick={view.goMyDays} /> : <span />}
       </div>
       {(onIn || onOut || onRecenter) && (
         <div className={'zoom-stack' + (reading ? ' is-reading' : '')}>

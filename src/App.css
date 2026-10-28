@@ -1863,7 +1863,7 @@ body[data-screen='questions'] .idea {
   align-items: center;
   justify-content: center;
   gap: 3px;
-  min-width: 56px;
+  position: relative;
   height: 48px; /* the switch's height, so all sit on one line */
   color: #6f6f69;
   font-size: 11px;
@@ -1873,12 +1873,11 @@ body[data-screen='questions'] .idea {
 .bar-tab.is-here {
   color: var(--ink);
 }
-.bar-tab-mydays {
-  width: 84px; /* the view switch's width, so today stays centred */
-  align-items: flex-end;
-}
-.bar-tab-mydays .bar-stack {
-  margin-right: 10px; /* the icon over its word's middle */
+/* As wide as it looks, so the bar's gaps read even; the tap area reaches a little past it. */
+.bar-tab::after {
+  content: '';
+  position: absolute;
+  inset: 0 -12px;
 }
 /* today's square: always ink (the bar's call to paint), filled with today's paint once painted. */
 .bar-today {
@@ -1957,7 +1956,10 @@ body[data-screen='questions'] .idea {
   right: 0;
   bottom: 0;
   min-height: 48px;
-  padding: var(--bar-t) max(var(--gutter), calc((100vw - 560px) / 2 + var(--gutter))) var(--bar-b);
+  /* The three sets evenly spaced, the same room at both edges and between (nomi), within a phone's width. */
+  justify-content: space-evenly;
+  gap: 0;
+  padding: var(--bar-t) max(0px, calc((100vw - 560px) / 2)) var(--bar-b);
 }
 .life {
   position: relative;
