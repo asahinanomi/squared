@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { endTouchLink, touchAtStart } from '../state/app'
 import { Footer } from '../components/Footer'
 import { Feedback } from './Feedback'
 import { Idea } from './Idea'
@@ -22,7 +23,9 @@ type Props = {
 // The idea, squared's about page: four tabs side by side (the letter first, so it's still what's read), then
 // the small print. Each tab switches the page in place, like years · months · days.
 export function About({ onMatters, onLegal }: Props) {
-  const [tab, setTab] = useState<Tab>('idea')
+  // squared.today/?touch opens straight on get in touch (the testers' link).
+  const [tab, setTab] = useState<Tab>(touchAtStart ? 'touch' : 'idea')
+  useEffect(endTouchLink, [])
   const show = (t: Tab) => {
     setTab(t)
     window.scrollTo(0, 0)

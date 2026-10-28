@@ -38,10 +38,10 @@ export const PAGES: Screen[] = [
 // Without Supabase env vars the app runs as a local demo: no sign-in, fake days, nothing saved.
 export const demo = !supabase
 const params = new URLSearchParams(location.search)
-// A test link (?welcome, ?month, ?year, ?birthday) opened while signed out survives the trip through Google sign-in,
-// which returns to the bare address: kept on the device for 10 minutes, used once when it comes back.
+// A test link (?welcome, ?month, ?year, ?birthday) or ?touch opened while signed out survives the trip through Google
+// sign-in, which returns to the bare address: kept on the device for 10 minutes, used once when it comes back.
 const TEST_KEY = 'squared.testLink'
-const TESTS = ['welcome', 'month', 'year', 'birthday']
+const TESTS = ['welcome', 'month', 'year', 'birthday', 'touch']
 // Back from Google: a ?code, or an #id_token (direct sign-in).
 const returning = location.search.includes('code=') || /id_token|access_token/.test(location.hash)
 try {
@@ -107,3 +107,12 @@ export const legalAtStart = legalAt()
 export const leaveLegalUrl = () => legalAt() && history.replaceState(null, '', '/')
 /** squared.today/idea opens the letter (signed out) or the about page (signed in). */
 export const ideaAtStart = location.pathname === '/idea'
+/** squared.today/?touch opens "get in touch" (about's tab), after signing in if need be: the link for testers. */
+export let touchAtStart = params.has('touch')
+/** Get in touch reached from the link: the address is plain again. */
+export const endTouchLink = () => {
+  if (!touchAtStart) return
+  touchAtStart = false // once: about opens on its letter after this
+  history.replaceState(null, '', location.pathname)
+  forgetTestLink()
+}

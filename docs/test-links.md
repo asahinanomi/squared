@@ -12,6 +12,10 @@ Hidden links for trying squared's first-time moments on your own account. Open t
 | [squared.today/?birthday](https://squared.today/?birthday) | The birthday sheet over today ("Happy 55th birthday.", from your birth date; "Happy birthday." without one). Works any day. |
 | [squared.today/?firstlife](https://squared.today/?firstlife) | The first zoom out to a life, again: the slower first fill (about 4s) and two pulses (normally once per device). |
 
+## For testers
+
+- [squared.today/?touch](https://squared.today/?touch) opens "get in touch" (about's tab), after signing in if need be. The link in the beta notes, so testers write without hunting through the menu.
+
 ## Pages anyone can open (signed in or not)
 
 - [squared.today/idea](https://squared.today/idea) (the letter; signed in, the about page)
