@@ -144,7 +144,7 @@ export function MyDays({
             className="my-days-card-head my-days-paintings-head"
             onClick={kept.length ? onPaintings : () => setHelp('paintings')}
           >
-            <span className="matters-label">painted by you</span>
+            <span className="matters-label">you painted these</span>
             <Chevron dir="right" />
           </button>
           {hasMonth && (

@@ -4423,7 +4423,7 @@ button.home-card:active {
   margin-top: 12px;
   gap: 12px;
 }
-/* A card's title on my days ("painted by you", "you framed these"): the small grey label, with the rows' grey arrow
+/* A card's title on my days ("you painted these", "you framed this day"): the small grey label, with the rows' grey arrow
    on its right; on the paintings card it spans both paintings and opens every painting you kept. */
 .my-days-card-head,
 .home-paintings .my-days-card-head {
@@ -4840,7 +4840,7 @@ button.home-card:active {
   gap: 12px;
   width: 100%;
   margin-top: 12px;
-  padding: 22px 18px 20px; /* its label as low as "painted by you" (whose arrow is taller) */
+  padding: 22px 18px 20px; /* its label as low as "you painted these" (whose arrow is taller) */
   text-align: left;
   color: var(--ink);
 }
@@ -4860,7 +4860,7 @@ button.home-card:active {
 }
 .matters-line {
   display: block;
-  margin-top: 18px; /* the same room under the label as "painted by you" */
+  margin-top: 18px; /* the same room under the label as "you painted these" */
   /* Your own words, so the sans (as your entries and notes everywhere); the serif is squared's voice, and on my days
      its line is the hero. */
   font-size: 18px;
