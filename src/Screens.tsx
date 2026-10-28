@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { LifeHead } from './components/LifeHead'
 import { todayIso } from './lib/dates'
 import { fetchMatters } from './lib/matters'
@@ -179,16 +180,21 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
     )
   if (screen === 'list') {
     // Without a birth date, the capsule's place holds the way to set one (the list stops at your first square's year).
-    const head = profile ? (
-      <LifeHead profile={profile} current={listRes} onPick={nav.listTo} />
-    ) : (
-      <div className="life-head">
-        <h1 className="life-title">a life</h1>
-        <button className="ladder-setup is-in-head" onClick={() => nav.askSquares('list')}>
-          set your birth date to go further back ›
-        </button>
-      </div>
-    )
+    // `extra` sits beside the title (the days list's filter).
+    const head = (extra?: ReactNode) =>
+      profile ? (
+        <LifeHead profile={profile} current={listRes} onPick={nav.listTo} extra={extra} />
+      ) : (
+        <div className="life-head">
+          <div className="life-title-row">
+            <h1 className="life-title">a life</h1>
+            {extra}
+          </div>
+          <button className="ladder-setup is-in-head" onClick={() => nav.askSquares('list')}>
+            set your birth date to go further back ›
+          </button>
+        </div>
+      )
     return listRes === 'days' ? (
       <DaysList
         key={`days-${nav.listOnly.join()}`}
@@ -210,7 +216,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         key={listRes}
         res={listRes}
         mid={listMid}
-        head={head}
+        head={head()}
         days={days}
         born={profile?.born}
         focus={nav.listFocus}

@@ -37,7 +37,8 @@ type Props = {
   /** Kept up to date with the day in the middle of the screen, so a zoom or a switch opens there. */
   mid: MutableRefObject<() => string>
   /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */
-  head?: ReactNode
+  /** The list's head, given what goes beside its title (the filter). */
+  head?: (extra: ReactNode) => ReactNode
   /** The kinds of day the list shows (any of them); none: every day. A pie slice opens it on one. */
   only?: Only[]
   /** Choose what the list shows. */
@@ -58,10 +59,13 @@ const FILTERS: [Only | null, string][] = [
   ['unpainted', 'unpainted'],
 ]
 
-/** A funnel: which days the list shows. Filled while it's filtered (the button's colour). */
-const FunnelIcon = () => (
+/** Sliders: which days the list shows. */
+const SlidersIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M4 5.5h16l-6.2 7.4v5.3l-3.6 1.8v-7.1z" />
+    <path d="M3.5 6.5h17M3.5 12h17M3.5 17.5h17" />
+    <circle cx="8.5" cy="6.5" r="2.4" />
+    <circle cx="15.5" cy="12" r="2.4" />
+    <circle cx="10" cy="17.5" r="2.4" />
   </svg>
 )
 
@@ -377,24 +381,30 @@ export function DaysList({
     setAway(false)
   }
 
+  // The filter: a small pill with sliders beside the title and its glass (clear of the menu, no line of its own); ink
+  // while the list is filtered. Its choices open in a sheet: tick any kinds of day; the list follows when it closes.
+  const filter = onOnly && (
+    <button
+      className={'days-filter' + (filtered ? ' is-on' : '')}
+      onClick={() => setPicking(only)}
+      aria-haspopup="dialog"
+      aria-label={filtered ? 'Which days: filtered' : 'Which days'}
+    >
+      <SlidersIcon />
+    </button>
+  )
+
   return (
     <main className="days-list">
-      {head ?? (
+      {head ? (
+        head(filter)
+      ) : (
         <div className="life-head">
-          <h1 className="life-title">a life</h1>
+          <div className="life-title-row">
+            <h1 className="life-title">a life</h1>
+            {filter}
+          </div>
         </div>
-      )}
-      {/* The filter: a small funnel at the title's right, in line with the cards (no line of its own); solid ink while
-          the list is filtered. Its choices open in a sheet: tick any kinds of day; the list follows when it closes. */}
-      {onOnly && (
-        <button
-          className={'days-filter' + (filtered ? ' is-on' : '')}
-          onClick={() => setPicking(only)}
-          aria-haspopup="dialog"
-          aria-label={filtered ? 'Which days: filtered' : 'Which days'}
-        >
-          <FunnelIcon />
-        </button>
       )}
       {onOnly && (
         <Sheet open={!!picking} onClose={closePicking}>

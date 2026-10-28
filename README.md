@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 28, 2026, 18:01 UTC_
+_last updated Oct 28, 2026, 18:11 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -291,7 +291,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **The bar, evenly spaced** (Oct 28, 2026, nomi): the three sets (the switch, today, my days) sit with the same room at both edges and between them (58px on a 390px phone), no longer pushed to the edges. Each tab is as wide as it looks, so the gaps read even; its tap area reaches a little past it.
 - **my days' card labels** (Oct 28, 2026, nomi): tried quieter (12px regular), then back to 13px semibold: lighter read weaker, not calmer.
 - **Where you are, more room** (Oct 28, 2026, nomi): 22px between this week, this month and this life (was 16), so the card reads less crowded.
-- **The list's filter, rethought** (Oct 28, 2026, nomi): the "all days ⌄" line under the tabs is gone (a style used nowhere else, it looked unfinished and cost a line). In its place, a small funnel at the right of "a life", in line with the cards: an outline while every day shows, solid ink while filtered. It opens a sheet titled "Which days would you like to see?" (18px, as every sheet's title; "show" was 28px), in a new order: all days · worth it · regret · a blur · with moments · framed · unpainted. Tick as many as you like (a day shows if it's any of them; "all days" clears the rest); "show these days" (or closing the sheet) applies them. A pie slice still opens the list on its one kind.
+- **The list's filter, rethought** (Oct 28, 2026, nomi): the "all days ⌄" line under the tabs is gone (a style used nowhere else, it looked unfinished and cost a line). In its place, a small pill with sliders beside "a life" and its glass (the tabs' grey; ink while filtered). A funnel at the row's right edge was tried first: too close to the menu. The years · months · days tabs fill their own row, so the pill can't sit beside "days". It opens a sheet titled "Which days would you like to see?" (18px, as every sheet's title; "show" was 28px), in a new order: all days · worth it · regret · a blur · with moments · framed · unpainted. Tick as many as you like (a day shows if it's any of them; "all days" clears the rest); "show these days" (or closing the sheet) applies them. A pie slice still opens the list on its one kind.
 - **Cleanup** (Oct 28, 2026): styles nothing used any more are gone (the old home cards' head, big number, bar and legend, the old life bar and its ghost, the compass sub-line, a help line, a settings note; about 150 lines).
 - **Today's edge inside its square** (Oct 28, 2026, nomi): in the where-you-are card, today is marked by its own edge in ink, inside the square (as on the month), not a ring around it that crowded its neighbours. A framed today: the ink edge, then its thin white mat.
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
