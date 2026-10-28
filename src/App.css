@@ -4384,20 +4384,43 @@ button.home-card:active {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 12px; /* 18px under the label, as on every card (its title row is the arrow's height) */
+  margin-top: 18px; /* under the label, as on every card */
   font-size: 15px;
   font-weight: 600;
 }
-/* The framed day's card: the title (to every framed day) over the day itself (to that day). */
+/* The framed day's card: the day itself (to that day, its arrow in the middle, as on the matters card), then a quiet
+   link at the foot to every framed day. */
 .framed-card {
   margin-top: 12px;
-  padding-bottom: 20px; /* as the other cards */
+  padding: 22px 18px 0; /* as the matters card; the foot link brings its own room */
 }
 .framed-body {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   width: 100%;
   text-align: left;
   color: var(--ink);
+}
+.framed-body > svg {
+  flex: none;
+  color: #b5b5ae;
+}
+.framed-all {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  min-height: 48px;
+  border-top: 1px solid #ecece5;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+.framed-all svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: #b5b5ae;
 }
 /* Its moments as on its list card: "to remember" ones whole, the latest cut at 2 lines. */
 .framed-note {

@@ -165,29 +165,33 @@ export function MyDays({
         </section>
       )}
       {/* A day you framed, as itself: its square in its frame, its date, and its "to remember" moments, as on its list
-          card. A different one each visit. The day opens that day; the title's arrow, every framed day (nomi: a tap
-          on the day expects the day). None yet: the empty slot, as before. */}
+          card. A different one each visit. The card opens that day (its arrow, as on the matters card); every framed
+          day is a quiet link at the foot (nomi: "you framed this day ›" read as this day). None yet: the empty slot. */}
       {kept1 ? (
         <section className="home-card framed-card">
-          <button className="my-days-card-head" onClick={onFramed}>
-            <span className="matters-label">you framed this day</span>
+          <button className="framed-body" onClick={() => onDay(kept1)}>
+            <span className="matters-text">
+              <span className="matters-label">you framed this day</span>
+              <span className="framed-day">
+                <span
+                  className="framed-square"
+                  style={{ '--frame': frameOf(days[kept1].color) } as React.CSSProperties}
+                  aria-hidden="true"
+                />
+                {plainDate(kept1)}
+              </span>
+              {toRemember.map((n) => (
+                <span key={n.id} className="framed-note is-whole">
+                  {n.body}
+                </span>
+              ))}
+              {latest && <span className="framed-note">{latest.body}</span>}
+            </span>
             <Chevron dir="right" />
           </button>
-          <button className="framed-body" onClick={() => onDay(kept1)}>
-            <span className="framed-day">
-              <span
-                className="framed-square"
-                style={{ '--frame': frameOf(days[kept1].color) } as React.CSSProperties}
-                aria-hidden="true"
-              />
-              {plainDate(kept1)}
-            </span>
-            {toRemember.map((n) => (
-              <span key={n.id} className="framed-note is-whole">
-                {n.body}
-              </span>
-            ))}
-            {latest && <span className="framed-note">{latest.body}</span>}
+          <button className="framed-all" onClick={onFramed}>
+            see all framed days
+            <Chevron dir="right" />
           </button>
         </section>
       ) : (
