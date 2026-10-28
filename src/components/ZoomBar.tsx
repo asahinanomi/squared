@@ -97,7 +97,8 @@ export const ViewSwitch = createContext<{
   todayPaint?: Paint
 } | null>(null)
 
-// The bar's places, in words (lab row 10, A8): "today" and "my days" in plain ink, no capsules, so the bar reads at once.
+// The bar's places, in words (lab row 10, A8): "today" and "my days" in ink, each on the same subtle white pill (nomi:
+// bare words looked loose), so the bar reads at once.
 // Where you are: squared's dotted ink underline under the word, as under "meaningfully" (never a raised or grey look:
 // raised looked the most tappable yet did nothing, grey read as "off"). Beside "today", a small dot: an empty ink ring
 // until today is painted, then today's paint (the date pill's dot), so the bar still says whether today is done.
