@@ -119,7 +119,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         kept={wall.kept}
         onSetUp={() => nav.askSquares('mydays')}
         onPainting={openPainting}
-        onSquares={nav.openLifeFromMyDays}
+        onSquares={nav.goLifeDays}
         onMatters={() => nav.openMatters('mydays')}
         onFramed={() => nav.openFramed('mydays')}
         onPaintings={() => setScreenValue('paintings')}
@@ -199,12 +199,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
   if (screen === 'list') {
     // Without a birth date, the capsule's place holds the way to set one (the list stops at your first square's year).
     const head = profile ? (
-      <LifeHead
-        profile={profile}
-        current={listRes}
-        onPick={nav.listTo}
-        onBack={nav.lifeBack ? nav.openMyDays : undefined}
-      />
+      <LifeHead profile={profile} current={listRes} onPick={nav.listTo} />
     ) : (
       <div className="life-head">
         <h1 className="life-title">a life</h1>
@@ -265,7 +260,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         mid={listMid}
         onResolution={setLifeRes}
         onPainting={openPainting}
-        onBack={nav.lifeBack ? nav.openMyDays : undefined}
       />
     ) : lifeRes === 'months' ? (
       <LifeMonths

@@ -1,4 +1,3 @@
-import { Chevron } from '../screens/Today'
 import { LifeGlass } from './LifeGlass'
 import { todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
@@ -13,15 +12,13 @@ type Props = {
   /** Jump to another resolution (absent while that one isn't built yet). */
   onPick: (r: Resolution) => void
   ready?: Resolution[]
-  /** Opened from my days: the way back there. */
-  onBack?: () => void
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 // "a life", and under it a quiet segmented control — 95 years · 1,140 months · 34,699 days —
 // the current one raised, the others straight to that view (the same control as the pie's filter).
-export function LifeHead({ profile, current, onPick, ready = ['years', 'months', 'days'], onBack }: Props) {
+export function LifeHead({ profile, current, onPick, ready = ['years', 'months', 'days'] }: Props) {
   const { total } = lifeCounts(profile.born, profile.lifespan, todayIso())
   const items: [Resolution, string][] = [
     ['years', `${profile.lifespan} years`],
@@ -30,12 +27,6 @@ export function LifeHead({ profile, current, onPick, ready = ['years', 'months',
   ]
   return (
     <div className="life-head">
-      {onBack && (
-        <button className="back-btn life-back" onClick={onBack} aria-label="Back to my days">
-          <Chevron dir="left" />
-          my days
-        </button>
-      )}
       <div className="life-title-row">
         <h1 className="life-title">a life</h1>
         <LifeGlass profile={profile} unit={current} />

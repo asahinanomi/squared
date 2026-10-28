@@ -42,16 +42,12 @@ export function Topbar({ onHome, onIdea, onSettings, onSignOut }: Props) {
       {open && (
         <div className="menu-layer" onClick={() => setOpen(false)}>
           <nav className="menu" onClick={(e) => e.stopPropagation()}>
-            {/* today and my days live in the bar (always one tap away), so the menu is settings and the rest. */}
+            {/* today and my days live in the bar (always one tap away); the menu keeps the rare three, one list: about
+                (the idea, faq, get in touch, support, the small print), settings, and signing out (a private journal:
+                always two taps away). */}
+            <button onClick={go(onIdea)}>about</button>
             <button onClick={go(onSettings)}>settings</button>
-            {/* About the app, not about you: set apart at the foot, quieter. Its page opens on the idea (the letter), then the rest (faq, get in touch, support, the small print). */}
-            <button className="menu-idea" onClick={go(onIdea)}>
-              about
-            </button>
-            {/* A private journal: signing out is always two taps away, the menu's last line. */}
-            <button className="menu-signout" onClick={go(onSignOut)}>
-              sign out
-            </button>
+            <button onClick={go(onSignOut)}>sign out</button>
           </nav>
         </div>
       )}

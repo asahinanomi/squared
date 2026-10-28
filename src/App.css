@@ -110,14 +110,6 @@
 .menu button:active {
   background: var(--grey-1);
 }
-.menu .menu-idea {
-  margin-top: 6px;
-  padding: 12px 18px 8px;
-  border-top: 1px solid var(--grey-1);
-  border-radius: 0 0 12px 12px;
-  font-size: 16px;
-  color: var(--muted);
-}
 /* settings → lock when I leave: its choice under the words, the same quiet capsule as years · months · days. */
 .settings-row.is-lock {
   flex-wrap: wrap;
@@ -127,17 +119,6 @@
   display: flex;
   flex-direction: row;
   margin: 0;
-}
-/* The very last line, under the idea, as quiet: sign out. */
-.menu .menu-signout {
-  padding: 8px 18px 12px;
-  border-radius: 0 0 12px 12px;
-  font-size: 16px;
-  color: var(--muted);
-}
-.menu .menu-idea:has(+ .menu-signout) {
-  border-radius: 0;
-  padding-bottom: 8px;
 }
 /* Under "the idea", as quiet: a form to tell the maker what confused you (shown once its link is set). */
 @keyframes pop {
@@ -2050,9 +2031,6 @@ body[data-screen='questions'] .idea {
   margin-top: 6px;
 }
 /* A life opened from my days: the way back, at the top left, over the title. */
-.life-back {
-  margin-bottom: 4px;
-}
 .life-title-row {
   display: flex;
   align-items: center;

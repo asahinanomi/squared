@@ -24,8 +24,6 @@ type Props = {
   /** Set to "the day in the middle of the screen", for a pinch to zoom in from (and reset when it closes). */
   mid?: MutableRefObject<() => string>
   onResolution: (r: Resolution) => void
-  /** Opened from my days: "‹ my days". */
-  onBack?: () => void
   /** Squares per row: 28, or fewer and bigger when pinched in (14, 7, 3). */
   cols?: number
   /** Where the fingers were when the size changed: the day under them stays put. */
@@ -89,7 +87,6 @@ export function LifeDays({
   cols = 28,
   focal,
   onPainting,
-  onBack,
   focus,
   mid,
 }: Props) {
@@ -384,7 +381,7 @@ export function LifeDays({
   const todayAt = cell ? place(today) : null
   return (
     <main className="life">
-      <LifeHead profile={profile} current="days" onPick={onResolution} onBack={onBack} />
+      <LifeHead profile={profile} current="days" onPick={onResolution} />
       <div
         className="life-canvas"
         ref={scroller}
