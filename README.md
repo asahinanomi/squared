@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 28, 2026, 16:36 UTC_
+_last updated Oct 28, 2026, 16:41 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -92,7 +92,7 @@ In the app the meanings read, in the brand story's words: **green** "yes, I spen
 | **Dashed, on white** | An empty slot in a list, waiting to be filled (white with a dashed edge, like future day squares). | + add (what matters) |
 | ~~Faded keyline + "soon"~~ | Retired before testing: nothing unbuilt is shown (Apple's review also rejects placeholders). | — |
 | **Text link** | Quiet navigation, not an action. | the dotted "meaningful", back arrows |
-| **A place in the bar** | The bar's places, as squares, not words: today's square (ink edge, then today's paint) and my days' stacked squares. Where you are: the dotted ink underline under it. | today, my days (the bar) |
+| **A place in the bar** | The bar's places, in plain ink words, no capsule. Where you are: the dotted ink underline under the word. "today" carries a small dot: an ink ring, then today's paint. | today, my days (the bar) |
 | **Segmented control** | Switching between views of the same content. | years · months · days; whole life · days I lived · painted only |
 
 Width and size:
@@ -284,6 +284,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **my days cards, one rhythm** (Oct 28, 2026, nomi): every card has the same edges, 22px above and 20px below (where you are too: with no title, it looked tight at the top), and the titled ones the same 18px between their small grey label and what follows (you said this matters, you painted these, you framed this day; the line and the day sat 10px under theirs).
 - **The serif is squared's voice; your words are sans** (Oct 28, 2026, nomi): the serif is for what squared says (the question, the statements, my days' line *The past is painted. Today is still yours.*, the page's hero). Your own words are the sans, as your notes and what matters entries are everywhere: on my days the matters line is now 18px sans (medium), and the framed day's note reads as on its list card (16px, soft ink, two lines, 10px under its date). The serif line at 21px sat a hair under the hero's 22px and competed with it.
 - **The bar in squares** (Oct 28, 2026, nomi; lab row 10, A7): the bar's words became squared's shape. **today** in the centre is its square (22px, the size of the switch's icons; 34px at first read too big on the phone), an ink edge until today is painted, then filled with today's paint: the bar always says whether today is done, and pulls you back to paint. **my days** at the right is two squares stacked, the day behind in grey. **Where you are** is squared's dotted ink underline (the one under "meaningfully"), under the square or the stack; nothing is raised or pressed any more (a raised white pill looked like the most tappable thing yet did nothing, and grey read as "off"), so it never fights the switch, whose current view stays raised. It sits outside the flow, under the square, so the squares stay true squares, level with the switch (at first its room squeezed today's square to 34 × 31.5; nomi spotted it). The squares · list switch keeps its pill. Screen readers hear "today" and "my days"; each is a finger-sized button (48px tall).
+- **The bar back to words, with a dotted line and today's dot** (Oct 28, 2026, nomi; lab row 10, A8): on the phone the words read better than the squares, so "today" and "my days" are words again, plain ink, no capsules (15px). Where you are: the dotted ink underline under the word, as under "meaningfully" (outside the flow, so nothing shifts). Beside "today", a small dot: an empty ink ring until today is painted, then today's paint, so the bar still says whether today is done. No grey: grey behind where you are would also read as "off". The switch keeps its pill.
 - **Today's edge inside its square** (Oct 28, 2026, nomi): in the where-you-are card, today is marked by its own edge in ink, inside the square (as on the month), not a ring around it that crowded its neighbours. A framed today: the ink edge, then its thin white mat.
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 

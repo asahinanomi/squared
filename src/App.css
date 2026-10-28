@@ -1859,73 +1859,49 @@ body[data-screen='questions'] .idea {
 .zoom-stack .zoombar-recenter:active {
   transform: scale(0.95);
 }
-/* The bar in squares (lab row 10, A7). today, in the centre: its square, an ink edge until it's painted, then today's
-   paint. my days, at the right: two squares stacked, the day behind in grey, in a box as wide as the switch so today
-   stays centred. Where you are: the dotted ink underline under it (its room always kept, so nothing shifts). */
-.bar-place {
-  position: relative;
+/* The bar's places in words (lab row 10, A8): plain ink, no capsule. Where you are: the dotted ink underline under the
+   word, outside the flow so nothing shifts. "today" carries a small dot: an ink ring until painted, then its paint. */
+.bar-word {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 56px;
+  gap: 7px;
   height: 48px; /* the switch's height, so all sit on one line */
+  padding: 0 12px;
+  color: var(--zoom-ink);
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
 }
-.bar-place-mydays {
-  width: 84px; /* the view switch's width */
-  justify-content: flex-end;
-  padding-right: 11px;
+.bar-word.is-wide {
+  min-width: 84px; /* the view switch's width, so "today" stays centred */
 }
-/* The size of the switch's icons (20px), a touch over: a lone square reads lighter than a drawn icon. */
-.bar-today {
-  flex: none; /* always a true square */
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: var(--bar);
-  box-shadow: inset 0 0 0 2px var(--ink);
+.bar-word.is-here {
+  color: var(--ink);
 }
-.bar-today.is-painted {
-  box-shadow: none;
-}
-.bar-stack {
-  flex: none;
+.bar-label {
   position: relative;
-  width: 22px;
-  height: 22px;
 }
-.bar-stack i {
+.bar-word.is-here .bar-label::after {
+  content: '';
   position: absolute;
-  width: 19px;
-  height: 19px;
-  border-radius: 5px;
-  background: var(--bar); /* the bar's own ground, so the front day hides the one behind */
-  box-shadow: inset 0 0 0 2px var(--ink);
-}
-.bar-stack i:first-child {
-  left: 3px;
-  top: 0;
-  box-shadow: inset 0 0 0 2px #a8a8a1; /* the day behind */
-}
-.bar-stack i:last-child {
   left: 0;
-  top: 3px;
+  right: 0;
+  bottom: -5px;
+  border-top: 2px dotted var(--ink);
 }
-/* Under the square, outside the flow: the squares stay centred, level with the switch. */
-.bar-here {
-  position: absolute;
-  top: calc(50% + 11px + 5px);
-  width: 22px;
-  border-top: 2px dotted transparent;
+.bar-word:active .bar-label {
+  opacity: 0.6;
 }
-.bar-place-mydays .bar-here {
-  right: 11px; /* under the stack */
+.bar-dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.75px var(--zoom-ink);
 }
-.bar-place.is-here .bar-here {
-  border-top-color: var(--ink);
-}
-.bar-place:active .bar-today,
-.bar-place:active .bar-stack {
-  transform: scale(0.94);
+.bar-dot.is-painted {
+  box-shadow: none;
 }
 /* Just came back to today: the square pulses once, so the eye lands on it. */
 .is-pulse {

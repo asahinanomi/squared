@@ -13,8 +13,7 @@ type Props = {
   listAt?: () => string
   /** "today" in the centre: the app's way back to today by default; the day screen passes its own. */
   today?: () => void
-  /** On today itself: today's square stays, underlined (you're here), and a tap gives the square a small pulse
-   *  instead. */
+  /** On today itself: "today" stays, underlined (you're here), and a tap gives the square a small pulse instead. */
   here?: () => void
 }
 
@@ -94,45 +93,44 @@ export const ViewSwitch = createContext<{
   goToday: () => void
   /** my days: the bar's right, the reflection home, one tap from anywhere. */
   goMyDays: () => void
-  /** Today's paint, once it's painted: the bar's square shows it. */
+  /** Today's paint, once it's painted: the dot beside "today" shows it. */
   todayPaint?: Paint
 } | null>(null)
 
-// The bar in squares (lab row 10, A7): today is its square, an ink edge until you paint, then today's paint, so the bar
-// always says whether today is done. my days is two squares, stacked, the day behind in grey. Where you are: squared's
-// dotted ink underline (the one under "meaningfully"), never a pressed or raised look, so it never fights the switch.
-// The underline's room is always kept, so the squares never shift.
-// Lab: https://claude.ai/artifact/8RNH3LHkF4RtJ3QchG5fkm (row 10, A7)
-function TodayPlace({ paint, here, onClick }: { paint?: Paint; here: boolean; onClick: () => void }) {
+// The bar's places, in words (lab row 10, A8): "today" and "my days" in plain ink, no capsules, so the bar reads at once.
+// Where you are: squared's dotted ink underline under the word, as under "meaningfully" (never a raised or grey look:
+// raised looked the most tappable yet did nothing, grey read as "off"). Beside "today", a small dot: an empty ink ring
+// until today is painted, then today's paint (the date pill's dot), so the bar still says whether today is done.
+// Lab: https://claude.ai/artifact/8RNH3LHkF4RtJ3QchG5fkm (row 10, A8)
+function Place({
+  label,
+  here,
+  onClick,
+  paint,
+  wide,
+}: {
+  label: string
+  here: boolean
+  onClick: () => void
+  /** today only: its paint dot (undefined: the empty ring). */
+  paint?: Paint | null
+  /** as wide as the switch, so "today" stays in the centre */
+  wide?: boolean
+}) {
   return (
     <button
-      className={'bar-place' + (here ? ' is-here' : '')}
-      aria-label="today"
+      className={'bar-word' + (here ? ' is-here' : '') + (wide ? ' is-wide' : '')}
       aria-current={here ? 'page' : undefined}
       onClick={onClick}
     >
-      <span
-        className={'bar-today' + (paint ? ' is-painted' : '')}
-        style={paint ? { background: squareFill(paint) } : undefined}
-      />
-      <span className="bar-here" aria-hidden="true" />
-    </button>
-  )
-}
-
-function MyDaysPlace({ here, onClick }: { here: boolean; onClick: () => void }) {
-  return (
-    <button
-      className={'bar-place bar-place-mydays' + (here ? ' is-here' : '')}
-      aria-label="my days"
-      aria-current={here ? 'page' : undefined}
-      onClick={onClick}
-    >
-      <span className="bar-stack" aria-hidden="true">
-        <i />
-        <i />
-      </span>
-      <span className="bar-here" aria-hidden="true" />
+      {paint !== null && (
+        <span
+          className={'bar-dot' + (paint ? ' is-painted' : '')}
+          style={paint ? { background: squareFill(paint) } : undefined}
+          aria-hidden="true"
+        />
+      )}
+      <span className="bar-label">{label}</span>
     </button>
   )
 }
@@ -186,10 +184,14 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props)
         ) : (
           <span />
         )}
-        {here || goToday ? <TodayPlace paint={view?.todayPaint} here={!!here} onClick={here ?? goToday!} /> : <span />}
+        {here || goToday ? (
+          <Place label="today" paint={view?.todayPaint} here={!!here} onClick={here ?? goToday!} />
+        ) : (
+          <span />
+        )}
         {/* my days on the right, as wide as the switch, so today stays in the centre. */}
         {view ? (
-          <MyDaysPlace here={false} onClick={view.goMyDays} />
+          <Place label="my days" paint={null} here={false} onClick={view.goMyDays} wide />
         ) : (
           <span className="zoombar-spacer" aria-hidden="true" />
         )}
@@ -236,7 +238,7 @@ export function PageBar({
   onSquares: () => void
   onList: () => void
   onMyDays: () => void
-  /** On my days itself: its squares underlined ("you're here"), as today's square is on today. */
+  /** On my days itself: underlined ("you're here"), as "today" is on today. */
   atMyDays: boolean
 }) {
   const view = useContext(ViewSwitch)
@@ -250,8 +252,8 @@ export function PageBar({
           <ListIcon />
         </button>
       </div>
-      <TodayPlace paint={view?.todayPaint} here={false} onClick={onToday} />
-      <MyDaysPlace here={atMyDays} onClick={onMyDays} />
+      <Place label="today" paint={view?.todayPaint} here={false} onClick={onToday} />
+      <Place label="my days" paint={null} here={atMyDays} onClick={onMyDays} wide />
     </div>,
     document.body,
   )
