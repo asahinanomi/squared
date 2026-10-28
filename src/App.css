@@ -968,10 +968,19 @@ sup.ord {
     inset 0 0 0 4px #ebe6da !important;
 }
 .month-day.is-framed {
-  /* Framed, on a small square: its paint's deeper shade, no ring (a ring and a raw sliver read as a glitch at this
-     size, and the ink ring means today). The real frame is for the day itself. */
+  /* Framed, on a small square: its paint's deeper shade with a thin white line set inside, like a picture's mat (a
+     coloured ring and a raw sliver read as a glitch at this size, and the ink ring means today). */
   background: var(--frame, #53735c) !important;
   color: #f7f5ef;
+  box-shadow:
+    inset 0 0 0 3px var(--frame, #53735c),
+    inset 0 0 0 4.5px rgba(255, 255, 255, 0.85);
+}
+.month-day.is-framed.is-today {
+  box-shadow:
+    0 0 0 2px var(--ink),
+    inset 0 0 0 3px var(--frame, #53735c),
+    inset 0 0 0 4.5px rgba(255, 255, 255, 0.85);
 }
 .month-day.is-framed .month-num,
 .month-day.is-framed .month-wd {
@@ -4917,9 +4926,25 @@ button.home-card:active {
 .where-cell.is-before {
   background: none;
 }
+.where-cell.is-framed {
+  box-shadow:
+    inset 0 0 0 2.5px var(--frame-fill),
+    inset 0 0 0 3.5px rgba(255, 255, 255, 0.85);
+}
+.where-cells.is-month .where-cell.is-framed {
+  box-shadow:
+    inset 0 0 0 1.5px var(--frame-fill),
+    inset 0 0 0 2.5px rgba(255, 255, 255, 0.85);
+}
 .where-cell.is-today {
   box-shadow: 0 0 0 2px var(--ink);
   background-color: #fff;
+}
+.where-cell.is-today.is-framed {
+  box-shadow:
+    0 0 0 2px var(--ink),
+    inset 0 0 0 2.5px var(--frame-fill),
+    inset 0 0 0 3.5px rgba(255, 255, 255, 0.85);
 }
 .where-cells.is-month .where-cell.is-today {
   box-shadow: 0 0 0 1.5px var(--ink);

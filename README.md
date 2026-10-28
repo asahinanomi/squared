@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 28, 2026, 14:34 UTC_
+_last updated Oct 28, 2026, 14:36 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -271,7 +271,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **get in touch** (Oct 27, 2026, nomi): "I read every message." (was "every one"), and its lead runs the page's full width (it was capped at 340px). In the about tabs its lead is set like the idea and support letters (20px, ink; it was 16px grey), on their same left edge. "send" waits for at least 5 characters ("hello" counts), so a single letter can't be sent.
 - **Support** (Oct 27, 2026, nomi): "I'd hate to let my days go by unnoticed. How sad that would be." (was "I hate to see my days, my life, go by unnoticed.").
 - **my days: where you are** (Oct 28, 2026, nomi; lab row 9, B): one card at the top replaces the life card and the week card: **this week** as its 7 squares and **October** as its days, in their real paint (today ringed in ink, the days ahead empty, lived-but-unpainted a quiet grey), and **a life** as its bar (lived solid, today a ring, ahead dotted). Each says how many days are ahead ("3 days ahead"; "today is the last"). Smaller scales are easier to commit to. Tap a day of the week to open it, the month row for the month, the life row for a life in days ("set up now ›" without a birth date). Never a score. (`WhereCard`.)
-- **Framed, on a small square: deeper paint, no ring** (Oct 28, 2026, nomi): in the month and the where-you-are card, a framed day is filled with its paint's deeper shade (the frame's colour), with no keyline (a ring and a raw sliver read as a glitch at that size, and the ink ring means today). A life already did this. The real frame stays for the day itself and the day cards.
+- **Framed, on a small square: deeper paint, no ring** (Oct 28, 2026, nomi): in the month and the where-you-are card, a framed day is filled with its paint's deeper shade (the frame's colour) with a thin white line set inside, like a picture's mat (nomi: deeper paint alone didn't say "framed"); no coloured keyline (a ring and a raw sliver read as a glitch at that size, and the ink ring means today). A life already did this. The real frame stays for the day itself and the day cards.
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 
 ## Saving: online first, the account is the one truth

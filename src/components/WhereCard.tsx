@@ -32,10 +32,16 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
   const cell = (iso: string) => {
     const day = days[iso]
     const state = iso > today ? 'is-ahead' : iso === today ? 'is-today' : born && iso < born ? 'is-before' : ''
+    const framed = !!day?.framed && iso <= today
     return {
-      className: 'where-cell ' + state,
+      className: 'where-cell ' + state + (framed ? ' is-framed' : ''),
       // Framed: its paint's deeper shade (a small square shows a frame as depth, not a ring).
-      style: day && iso <= today ? { background: day.framed ? frameOf(day.color) : squareFill(day.color) } : undefined,
+      style:
+        day && iso <= today
+          ? framed
+            ? ({ background: frameOf(day.color), '--frame-fill': frameOf(day.color) } as React.CSSProperties)
+            : { background: squareFill(day.color) }
+          : undefined,
     }
   }
   const monthName = t.toLocaleDateString('en-US', { month: 'long' })
