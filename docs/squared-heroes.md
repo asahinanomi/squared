@@ -40,7 +40,7 @@ If it serves none, it goes (stats, counts, extra rows). If it competes with a he
 - **No counts in my days.**
 
 ## Being worked on
-- The month's painting arriving as a gift, then shared (`docs/6-growth.md`).
-- One gentle evening invitation, iPhone app (`docs/3-ios-todo.md`).
+- The month's painting arriving as a gift, then shared (`docs/8-growth.md`).
+- One gentle evening invitation, iPhone app (`docs/5-ios-todo.md`).
 
 Lab: https://claude.ai/artifact/8RNH3LHkF4RtJ3QchG5fkm

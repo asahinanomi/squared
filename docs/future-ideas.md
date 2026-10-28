@@ -21,7 +21,7 @@ Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encry
 
 **The journal path stays open.** Recommended: no lock, lived days are always paintable (tap one, paint it, it turns to colour). Second option: an "unlock" setting ("my past: lived / to paint") that shows the past as blank canvas, for people who choose to fill it.
 
-**Decided: wait for testers.** nomi's feeling may not be everyone's, and testers won't go as deep in two weeks. So hold it, watch what they do with things as they are (do they paint past days? how far back? do they stop after a hard day?), and ask on day 14 (`docs/4-testflight-todo.md`). Then decide. Risks to solve in a lab: the lived tone must never read as grey paint ("a blur"); squared needs to know the day you started (joined, not first painted). The principle is in the brand story, section 2.
+**Decided: wait for testers.** nomi's feeling may not be everyone's, and testers won't go as deep in two weeks. So hold it, watch what they do with things as they are (do they paint past days? how far back? do they stop after a hard day?), and ask on day 14 (`docs/6-beta2-testflight.md`). Then decide. Risks to solve in a lab: the lived tone must never read as grey paint ("a blur"); squared needs to know the day you started (joined, not first painted). The principle is in the brand story, section 2.
 
 ## The pie, parked (Oct 26, 2026)
 
@@ -53,7 +53,7 @@ Real human moments many people will have: a day that mattered more than any othe
 
 
 - **Painting styles when keeping one.** On "keep this painting", offer a few templates to choose from: oil, watercolour, brush and so on. The same month, painted in another manner. (The lab already tried brushstrokes and watercolour beside the current soft style: https://claude.ai/artifact/V8up29C1WmH7MXz8BBMdLE)
-- **A month's painting arrives as a gift.** It already arrives once, on the first visit of a new month. Next: make it feel like a small gift being unwrapped, signed, then offered to keep or share. The reward for showing up, and the way squared travels (`docs/6-growth.md`). Lab first.
+- **A month's painting arrives as a gift.** It already arrives once, on the first visit of a new month. Next: make it feel like a small gift being unwrapped, signed, then offered to keep or share. The reward for showing up, and the way squared travels (`docs/8-growth.md`). Lab first.
 - **Order a print or a magnet** of a month or year. The paintings are square for this.
 - **Share my paintings, see my friends' paintings.** Send a kept painting to a friend (a private link, or the share sheet as an image), and see the paintings friends choose to share with you. Only paintings, never squares or notes, and only ones you pick. To think through first: it's the first social feature (no likes, no counts, no feed pressure, in keeping with no streaks, no scores), how friends find each other, and what it means for privacy (a shared link is public to whoever has it).
 

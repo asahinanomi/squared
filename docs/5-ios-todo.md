@@ -85,7 +85,7 @@ Claude can't run Xcode, so every build passes through these steps. Later, if it 
 ## 6 · TestFlight, then the store
 
 - [ ] **Internal testing** (nomi only, no review): live with it for a few days.
-- [ ] **External testing** (up to 10,000 testers, by link): a light review first. This can be the beta. Who to invite and what to ask: `docs/4-testflight-todo.md`.
+- [ ] **External testing** (up to 10,000 testers, by link): a light review first. This can be the beta. Who to invite and what to ask: `docs/6-beta2-testflight.md`.
 - [ ] **Submit for review** with the test account and notes for the reviewer.
 - [ ] After approval: release by hand, not automatically, so it goes out when nomi is ready.
 
