@@ -98,16 +98,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
       />
     )
   if (screen === 'paintings')
-    return (
-      <Paintings
-        kept={wall.kept}
-        days={days}
-        name={painter}
-        onBack={nav.openMyDays}
-        onRemove={wall.remove}
-        onOpen={openPainting}
-      />
-    )
+    return <Paintings kept={wall.kept} days={days} name={painter} onRemove={wall.remove} onOpen={openPainting} />
   if (screen === 'mydays')
     return (
       <MyDays
@@ -121,21 +112,12 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onPainting={openPainting}
         onSquares={nav.goLifeDays}
         onMatters={nav.openMatters}
-        onFramed={() => nav.openFramed('mydays')}
+        onFramed={() => setScreenValue('framed')}
         onPaintings={() => setScreenValue('paintings')}
       />
     )
   if (screen === 'framed')
-    return (
-      <Framed
-        days={days}
-        notes={notes}
-        loadNotes={acc.loadNotes}
-        onDay={(iso) => nav.openDay(iso)}
-        onBack={() => setScreenValue(nav.framedFrom)}
-        backLabel={nav.framedFrom === 'mydays' ? 'my days' : nav.framedFrom}
-      />
-    )
+    return <Framed days={days} notes={notes} loadNotes={acc.loadNotes} onDay={(iso) => nav.openDay(iso)} />
   if (screen === 'idea') return <About onMatters={nav.openMatters} onLegal={(page) => nav.openLegal(page, 'idea')} />
   if (screen === 'setup')
     return (

@@ -3466,9 +3466,7 @@ button.settings-row:active {
   box-shadow: none;
 }
 .day-card.is-today .day-card-swatch {
-  box-shadow:
-    0 0 0 2px var(--bg),
-    0 0 0 3.5px var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
 }
 .day-card-text {
   display: flex;
@@ -4102,153 +4100,6 @@ button.home-card:active {
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
-/* The week in colour: seven squares, paper until painted, today ringed in ink. */
-/* The days between two big light arrows, as the day screen steps between days. */
-.home-week-row {
-  display: flex;
-  align-items: flex-start;
-  margin: 12px -10px 0;
-}
-.home-week-arrow {
-  flex: none;
-  width: 34px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  color: #d4d4cd;
-}
-.home-week-arrow svg {
-  width: 32px;
-  height: 32px;
-}
-.home-week-arrow svg path {
-  stroke-width: 3;
-}
-.home-week-arrow:disabled {
-  visibility: hidden;
-}
-.home-week-days {
-  flex: 1;
-  min-width: 0;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
-}
-.home-week-days button {
-  width: 100%;
-  display: grid;
-  justify-items: center;
-  gap: 5px;
-  font-size: 11px;
-  color: var(--muted);
-}
-.home-week-days i {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 6px;
-}
-.home-week-days i.is-paper {
-  background: #f6f4ee;
-  box-shadow: inset 0 0 0 1.5px #dcdad2;
-}
-.home-week-days i.is-ahead {
-  box-shadow: inset 0 0 0 1px #ecebe5; /* still to come: a faint outline, like the month's days ahead */
-}
-.home-week-days button:disabled {
-  opacity: 1;
-  cursor: default;
-}
-.home-week-days i.is-today {
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
-}
-.home-week-days b {
-  font-weight: 600;
-  color: var(--ink);
-}
-.home-week-days button:active i {
-  transform: scale(0.94);
-}
-.home-week-line {
-  margin: 12px 0 0;
-  font-size: 15px;
-  color: var(--ink);
-}
-.home-week-line b {
-  font-weight: 600;
-}
-.home-week-line small {
-  display: block;
-  margin-top: 3px;
-  font-size: 14px;
-  color: var(--muted);
-}
-/* A full week's rainbow: arcs in your week's paint, drawn once, outer to inner, after the squares bloom. */
-.home-rainbow {
-  display: inline-block;
-  width: 22px;
-  height: 13px;
-  margin-left: 6px;
-  vertical-align: -1px;
-  overflow: visible;
-}
-.home-rainbow path {
-  fill: none;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: rainbow-draw 0.6s ease-out forwards;
-}
-.home-rainbow path:nth-child(1) {
-  animation-delay: 1s;
-}
-.home-rainbow path:nth-child(2) {
-  animation-delay: 1.15s;
-}
-.home-rainbow path:nth-child(3) {
-  animation-delay: 1.3s;
-}
-@keyframes rainbow-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .home-rainbow path {
-    animation: none;
-    stroke-dashoffset: 0;
-  }
-}
-/* A full week blooms once, left to right. */
-.home-week.is-full i {
-  animation: week-bloom 0.9s ease-in-out both;
-  animation-delay: calc(0.3s + var(--i) * 0.08s);
-}
-@keyframes week-bloom {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  45% {
-    transform: scale(1.1);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .home-week.is-full i {
-    animation: none;
-  }
-}
-/* The week card's ‹ › : quiet, finger-sized, either side of its dates. */
-.home-of {
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0;
-  font-variant-numeric: tabular-nums;
-}
 /* this month and this year so far, side by side, each titled above (still unsigned) */
 .home-paintings {
   display: grid;
@@ -4272,28 +4123,6 @@ button.home-card:active {
   display: block;
   filter: drop-shadow(0 4px 8px rgba(20, 20, 19, 0.1));
 }
-/* Under the two so-far paintings, across the card: the way to every painting you kept. */
-.home-paintings .my-days-all {
-  grid-column: 1 / -1;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 4px;
-  padding-top: 12px;
-  border-top: 1px solid #ecece5;
-  font-size: 15px;
-  color: var(--ink);
-}
-.home-paintings .my-days-all.is-quiet {
-  color: var(--ink-soft);
-}
-.home-paintings .my-days-all svg {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  color: var(--faint); /* the rows' arrow */
-}
-
 /* A wait: the hourglass alone, centred on the paper. Its grains fall, then it's turned over (half a turn, a
    little ease), and again, as long as the wait lasts. Its sand is half and half, so every turn looks the same. */
 .waiting {
@@ -4579,13 +4408,6 @@ button.home-card:active {
   text-wrap: balance;
 }
 /* my days: a life as one bar first, then this month and year so far, as paintings, over the rows. */
-/* my days opens on a life (22px under the line), then 12px between every card. */
-.my-days-life {
-  margin-top: 22px;
-}
-.my-days .home-week {
-  margin-top: 12px;
-}
 .my-days-paintings {
   margin-top: 12px;
 }
@@ -4594,10 +4416,44 @@ button.home-card:active {
   margin-top: 12px;
   gap: 12px;
 }
-/* The paintings card's title, like "a life" and "this week" (it spans both paintings). */
+/* A card's title on my days ("painted by you", "you framed these"): the small grey label, with the rows' grey arrow
+   on its right; on the paintings card it spans both paintings and opens every painting you kept. */
+.my-days-card-head,
+.home-paintings .my-days-card-head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.my-days-card-head svg {
+  flex: none;
+  color: #b5b5ae;
+}
 .my-days-paintings-head {
   grid-column: 1 / -1;
   margin: 0 0 -4px;
+}
+/* The days you framed: up to seven small squares, each in its frame's colour with a white mat set inside. */
+.framed-card {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  text-align: left;
+}
+.framed-squares {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+.framed-square {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  background: var(--frame);
+  box-shadow:
+    inset 0 0 0 3px var(--frame),
+    inset 0 0 0 4.5px rgba(255, 255, 255, 0.85);
 }
 /* A help sheet's lines (framed days, paintings): the reading size, a little space between. */
 .help-body {

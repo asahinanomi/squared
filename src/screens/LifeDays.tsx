@@ -195,8 +195,10 @@ export function LifeDays({
             ctx.stroke()
           }
           if (iso === today && !hidden) {
-            roundRect(ctx, x - 1.5, y - 1.5, cell + 3, cell + 3, radius + 1.5)
-            ctx.lineWidth = 1.5
+            // Today's edge in ink, inside its square (as everywhere), so it never crowds its neighbours.
+            const w = Math.min(1.5, cell / 4)
+            roundRect(ctx, x + w / 2, y + w / 2, cell - w, cell - w, Math.max(0, radius - w / 2))
+            ctx.lineWidth = w
             ctx.strokeStyle = INK
             ctx.stroke()
             // Just came back to today: a ring that grows and fades.

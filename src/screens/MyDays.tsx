@@ -5,6 +5,7 @@ import { Sheet } from '../components/Sheet'
 import { PaintingThumb } from '../components/PaintingThumb'
 import { WhereCard } from '../components/WhereCard'
 import { todayIso } from '../lib/dates'
+import { frameOf } from '../lib/paints'
 import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { Chevron } from './Today'
@@ -74,7 +75,11 @@ export function MyDays({
   const count = (p: string) => Object.keys(days).filter((d) => d.startsWith(p) && d <= today).length
   const hasMonth = count(month) > 0
   const hasYear = count(year) > 0
-  const framedCount = Object.values(days).filter((d) => d.framed).length
+  // Your latest framed days (up to a week's worth), oldest first: time runs left to right.
+  const framed = Object.keys(days)
+    .filter((d) => days[d].framed && d <= today)
+    .sort()
+    .slice(-7)
   const [help, setHelp] = useState<'framed' | 'paintings' | null>(null)
   // Picked once per visit (and again only if the list itself changes, say once it has loaded).
   const line = useMemo(() => (matters.length ? oneOf(matters) : ''), [matters.join('\n')]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -125,7 +130,14 @@ export function MyDays({
       )}
       {(hasMonth || hasYear || kept.length > 0) && (
         <section className="home-card home-paintings my-days-paintings">
-          <h2 className="home-head my-days-paintings-head">paintings</h2>
+          {/* The title is the way to every painting you kept (none kept yet: how to keep one, not a blank page). */}
+          <button
+            className="my-days-card-head my-days-paintings-head"
+            onClick={kept.length ? onPaintings : () => setHelp('paintings')}
+          >
+            <span className="matters-label">painted by you</span>
+            <Chevron dir="right" />
+          </button>
           {hasMonth && (
             <button onClick={() => onPainting(month)}>
               <span className="home-t">{new Date().toLocaleDateString('en-US', { month: 'long' })}, so far</span>
@@ -138,25 +150,30 @@ export function MyDays({
               <PaintingThumb month={year} days={days} />
             </button>
           )}
-          {/* None kept yet: how to keep one, not a door to a blank page. */}
-          {kept.length ? (
-            <button className="my-days-all" onClick={onPaintings}>
-              all my paintings
-              <Chevron dir="right" />
-            </button>
-          ) : (
-            <button className="my-days-all is-quiet" onClick={() => setHelp('paintings')}>
-              how to keep a painting
-              <Chevron dir="right" />
-            </button>
-          )}
         </section>
       )}
-      <div className="settings-rows">
-        {framedCount
-          ? row('framed days', 'the days you framed', onFramed)
-          : row('framed days', 'none yet · how to frame a day', () => setHelp('framed'), 'none')}
-      </div>
+      {/* The days you framed, as themselves: your latest framed squares, framed. None yet: the empty slot, as before. */}
+      {framed.length ? (
+        <button className="home-card framed-card" onClick={onFramed}>
+          <span className="my-days-card-head">
+            <span className="matters-label">you framed these</span>
+            <Chevron dir="right" />
+          </span>
+          <span className="framed-squares" aria-hidden="true">
+            {framed.map((d) => (
+              <span
+                key={d}
+                className="framed-square"
+                style={{ '--frame': frameOf(days[d].color) } as React.CSSProperties}
+              />
+            ))}
+          </span>
+        </button>
+      ) : (
+        <div className="settings-rows">
+          {row('framed days', 'none yet · how to frame a day', () => setHelp('framed'), 'none')}
+        </div>
+      )}
       {/* Help, only when asked for: how a day is framed, how a painting is kept. */}
       <Sheet open={help === 'framed'} onClose={() => setHelp(null)}>
         {/* The title is the purpose too. Two columns: the move acted out (the day screen's real framing), and beside it

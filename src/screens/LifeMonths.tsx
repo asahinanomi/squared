@@ -120,8 +120,10 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
             ctx.fillText(String(year), x + cell / 2, y + cell / 2 + Math.max(cell * 0.2, MIN_TEXT_PX + 4))
           }
           if (key === thisMonth) {
-            roundRect(ctx, x - 2, y - 2, cell + 4, cell + 4, radius + 2)
-            ctx.lineWidth = 2
+            // This month's edge in ink, inside its square (as everywhere).
+            const w = Math.min(2, cell / 4)
+            roundRect(ctx, x + w / 2, y + w / 2, cell - w, cell - w, Math.max(0, radius - w / 2))
+            ctx.lineWidth = w
             ctx.strokeStyle = INK
             ctx.stroke()
             // Just came back to today: a ring that grows and fades.

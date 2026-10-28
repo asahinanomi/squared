@@ -17,7 +17,7 @@ type Props = {
 
 const LISTS: { kind: Kind; label: string; dot: string; hint: string }[] = [
   { kind: 'meaningful', label: 'worth it', dot: paintHex('green'), hint: 'what does a meaningful day look like?' },
-  { kind: 'wasted', label: 'regret', dot: paintHex('red'), hint: 'what makes a day feel empty?' },
+  { kind: 'wasted', label: 'regret', dot: paintHex('red'), hint: 'what would you regret?' },
 ]
 
 /** A text box that grows with what's typed (one or two lines). */
@@ -163,7 +163,7 @@ export function WhatMatters({ onPaint, paintedToday, initial, onSaved }: Props) 
   return (
     <main className="matters">
       <h1 className="settings-title">what matters</h1>
-      <p className="matters-lede">what does a meaningful day look like to you? and what feels empty?</p>
+      <p className="matters-lede">what does a meaningful day look like to you? and what would you regret?</p>
 
       <div className="seg matters-seg" role="group" aria-label="Show">
         <button

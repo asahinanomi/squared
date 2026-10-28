@@ -174,12 +174,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     if (profile) return setScreen('pie')
     askSquares('pie')
   }
-  // framed days opens from my days or a framed card in the list; back returns there.
-  const [framedFrom, setFramedFrom] = useState<'mydays' | 'list'>('mydays')
-  const openFramed = (from: 'mydays' | 'list') => {
-    setFramedFrom(from)
-    setScreenValue('framed')
-  }
   const openMatters = () => setScreenValue('matters')
   // Back from how many squares: wherever it was asked from.
   const leaveSetup = () =>
@@ -291,8 +285,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     seeSlice,
     openSettings,
     openMatters,
-    framedFrom,
-    openFramed,
     openMyDays,
     openPie,
     leaveSetup,
