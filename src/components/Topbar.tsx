@@ -3,15 +3,12 @@ import { Logo } from './Logo'
 
 type Props = {
   onHome: () => void
-  /** The menu's "today": always the day, painted or not. */
-  onToday: () => void
-  onCalendar: () => void
   onIdea: () => void
   onSettings: () => void
   onSignOut: () => void
 }
 
-export function Topbar({ onHome, onToday, onCalendar, onIdea, onSettings, onSignOut }: Props) {
+export function Topbar({ onHome, onIdea, onSettings, onSignOut }: Props) {
   const [open, setOpen] = useState(false)
   const go = (fn: () => void) => () => {
     setOpen(false)
@@ -45,8 +42,7 @@ export function Topbar({ onHome, onToday, onCalendar, onIdea, onSettings, onSign
       {open && (
         <div className="menu-layer" onClick={() => setOpen(false)}>
           <nav className="menu" onClick={(e) => e.stopPropagation()}>
-            <button onClick={go(onToday)}>today</button>
-            <button onClick={go(onCalendar)}>my days</button>
+            {/* today and my days live in the bar (always one tap away), so the menu is settings and the rest. */}
             <button onClick={go(onSettings)}>settings</button>
             {/* About the app, not about you: set apart at the foot, quieter. Its page opens on the idea (the letter), then the rest (faq, get in touch, support, the small print). */}
             <button className="menu-idea" onClick={go(onIdea)}>

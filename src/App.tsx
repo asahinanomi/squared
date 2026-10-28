@@ -113,6 +113,7 @@ export default function App() {
         list: screen === 'list',
         toggleList: nav.toggleList,
         goToday: nav.goToday,
+        goMyDays: nav.openMyDays,
       }}
     >
       <OpenPainting.Provider value={painting.paintedMonth}>
@@ -127,8 +128,6 @@ export default function App() {
         >
           <Topbar
             onHome={nav.goHome}
-            onToday={nav.goToday}
-            onCalendar={nav.openMyDays}
             onIdea={() => nav.setScreen('idea')}
             onSettings={nav.openSettings}
             onSignOut={signOut}
@@ -176,7 +175,15 @@ export default function App() {
             }}
             onSetUp={() => nav.askSquares('today')}
           />
-          {pageBar && <PageBar onToday={nav.goToday} onSquares={() => nav.goMonth()} onList={nav.openList} />}
+          {pageBar && (
+            <PageBar
+              onToday={nav.goToday}
+              onSquares={() => nav.goMonth()}
+              onList={nav.openList}
+              onMyDays={nav.openMyDays}
+              atMyDays={screen === 'mydays'}
+            />
+          )}
           {withPainting.includes(screen) && (
             <MonthPainting
               month={painting.paintedMonth}

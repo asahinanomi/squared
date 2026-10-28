@@ -91,6 +91,8 @@ export const ViewSwitch = createContext<{
   list: boolean
   toggleList: (at?: string) => void
   goToday: () => void
+  /** my days: the bar's right, the reflection home, one tap from anywhere. */
+  goMyDays: () => void
 } | null>(null)
 
 // Bottom of every square view and the list: the bar is for getting around (the squares · list switch on the left,
@@ -144,8 +146,14 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props)
         ) : (
           <span />
         )}
-        {/* An empty right as wide as the switch keeps "today" in the centre. */}
-        <span className="zoombar-spacer" aria-hidden="true" />
+        {/* my days on the right, as wide as the switch, so "today" stays in the centre. */}
+        {view ? (
+          <button className="zoombar-today zoombar-mydays" onClick={view.goMyDays}>
+            my days
+          </button>
+        ) : (
+          <span className="zoombar-spacer" aria-hidden="true" />
+        )}
       </div>
       {(onIn || onOut || onRecenter) && (
         <div className="zoom-stack">
@@ -182,10 +190,15 @@ export function PageBar({
   onToday,
   onSquares,
   onList,
+  onMyDays,
+  atMyDays,
 }: {
   onToday: () => void
   onSquares: () => void
   onList: () => void
+  onMyDays: () => void
+  /** On my days itself: its pill raised white ("you're here"), as "today" is on today. */
+  atMyDays: boolean
 }) {
   return createPortal(
     <div className="zoombar">
@@ -200,7 +213,13 @@ export function PageBar({
       <button className="zoombar-today" onClick={onToday}>
         today
       </button>
-      <span className="zoombar-spacer" aria-hidden="true" />
+      <button
+        className={'zoombar-today zoombar-mydays' + (atMyDays ? ' is-here' : '')}
+        aria-current={atMyDays ? 'page' : undefined}
+        onClick={onMyDays}
+      >
+        my days
+      </button>
     </div>,
     document.body,
   )

@@ -1814,6 +1814,11 @@ body[data-screen='questions'] .idea {
 .zoombar-spacer {
   width: 84px; /* the view switch's width */
 }
+/* my days, at the bar's right: the same soft capsule as "today", as wide as the switch so "today" stays centred. */
+.zoombar-mydays {
+  min-width: 84px;
+  white-space: nowrap;
+}
 /* Zoom floats on the squares, bottom right, just above the bar: ◎ on top (while today is out of view), then a slim
    capsule, zoom in over zoom out, ink on white, the ◎ chip's soft lift. Outside the zooming stage, like the bar. */
 .zoom-stack {
