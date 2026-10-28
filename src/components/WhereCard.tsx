@@ -1,7 +1,7 @@
 import { addDays, fromIso, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
-import { squareFill } from '../lib/paints'
+import { frameOf, squareFill } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 
 const fmt = (n: number) => n.toLocaleString('en-US')
@@ -34,7 +34,8 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
     const state = iso > today ? 'is-ahead' : iso === today ? 'is-today' : born && iso < born ? 'is-before' : ''
     return {
       className: 'where-cell ' + state,
-      style: day && iso <= today ? { background: squareFill(day.color, day.framed) } : undefined,
+      // Framed: its paint's deeper shade (a small square shows a frame as depth, not a ring).
+      style: day && iso <= today ? { background: day.framed ? frameOf(day.color) : squareFill(day.color) } : undefined,
     }
   }
   const monthName = t.toLocaleDateString('en-US', { month: 'long' })

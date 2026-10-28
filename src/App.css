@@ -968,14 +968,10 @@ sup.ord {
     inset 0 0 0 4px #ebe6da !important;
 }
 .month-day.is-framed {
-  background: var(
-    --paint,
-    #6e9b7b
-  ) !important; /* the day's own paint, framed: a deeper ring, a raw sliver, a light number */
+  /* Framed, on a small square: its paint's deeper shade, no ring (a ring and a raw sliver read as a glitch at this
+     size, and the ink ring means today). The real frame is for the day itself. */
+  background: var(--frame, #53735c) !important;
   color: #f7f5ef;
-  box-shadow:
-    inset 0 0 0 2.5px var(--frame, #53735c),
-    inset 0 0 0 4px #ebe6da;
 }
 .month-day.is-framed .month-num,
 .month-day.is-framed .month-wd {
