@@ -4416,6 +4416,7 @@ button.home-card:active {
 /* my days: a life as one bar first, then this month and year so far, as paintings, over the rows. */
 .my-days-paintings {
   margin-top: 12px;
+  padding-bottom: 20px; /* as the matters and framed cards */
 }
 /* One space between every card on my days: the bar, the paintings, each row. */
 .my-days .settings-rows {
@@ -4445,7 +4446,7 @@ button.home-card:active {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 18px;
   font-size: 15px;
   font-weight: 600;
 }
@@ -4718,7 +4719,7 @@ button.home-card:active {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 16px 18px 18px;
+  padding: 22px 18px 20px; /* the same edges as the cards under it */
 }
 .where-row {
   display: block;
@@ -4835,7 +4836,7 @@ button.home-card:active {
   gap: 12px;
   width: 100%;
   margin-top: 12px;
-  padding: 16px 18px 20px;
+  padding: 22px 18px 20px; /* its label as low as "painted by you" (whose arrow is taller) */
   text-align: left;
   color: var(--ink);
 }
@@ -4855,7 +4856,7 @@ button.home-card:active {
 }
 .matters-line {
   display: block;
-  margin-top: 10px;
+  margin-top: 18px; /* the same room under the label as "painted by you" */
   font-family: var(--font-reflect);
   font-optical-sizing: auto;
   font-size: 21px;
