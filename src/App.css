@@ -1863,21 +1863,20 @@ body[data-screen='questions'] .idea {
    paint. my days, at the right: two squares stacked, the day behind in grey, in a box as wide as the switch so today
    stays centred. Where you are: the dotted ink underline under it (its room always kept, so nothing shifts). */
 .bar-place {
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
   min-width: 56px;
   height: 48px; /* the switch's height, so all sit on one line */
-  padding-top: 8.5px; /* the underline's room, so the squares sit level with the switch */
 }
 .bar-place-mydays {
   width: 84px; /* the view switch's width */
-  align-items: flex-end;
+  justify-content: flex-end;
   padding-right: 11px;
 }
 .bar-today {
+  flex: none; /* always a true square */
   width: 34px;
   height: 34px;
   border-radius: 9px;
@@ -1888,6 +1887,7 @@ body[data-screen='questions'] .idea {
   box-shadow: none;
 }
 .bar-stack {
+  flex: none;
   position: relative;
   width: 34px;
   height: 34px;
@@ -1909,9 +1909,15 @@ body[data-screen='questions'] .idea {
   left: 0;
   top: 5px;
 }
+/* Under the square, outside the flow: the squares stay centred, level with the switch. */
 .bar-here {
+  position: absolute;
+  top: calc(50% + 17px + 5px);
   width: 30px;
   border-top: 2.5px dotted transparent;
+}
+.bar-place-mydays .bar-here {
+  right: 13px; /* centred under the stack */
 }
 .bar-place.is-here .bar-here {
   border-top-color: var(--ink);
