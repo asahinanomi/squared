@@ -3013,10 +3013,6 @@ button.settings-row:active {
   flex-direction: column;
   padding: 8px 0 28px;
 }
-.matters-back {
-  align-self: flex-start;
-  margin-left: -6px;
-}
 .matters .settings-title {
   margin-top: 14px;
 }
@@ -4966,22 +4962,28 @@ button.home-card:active {
 
 /* my days: one of your "what matters" lines, a note to yourself, in the question's serif. */
 .matters-card {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
   width: 100%;
   margin-top: 12px;
   padding: 16px 18px 20px;
   text-align: left;
   color: var(--ink);
 }
+.matters-text {
+  flex: 1;
+  min-width: 0;
+}
 .matters-label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: block;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
 }
-.matters-label svg {
+.matters-card > svg {
+  flex: none;
   color: #b5b5ae;
 }
 .matters-line {

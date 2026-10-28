@@ -107,11 +107,11 @@ export function MyDays({
           yourself under the time you have. The card opens all of them. Not set yet: the empty slot, as before. */}
       {matters.length ? (
         <button className="home-card matters-card" onClick={onMatters}>
-          <span className="matters-label">
-            you said this matters
-            <Chevron dir="right" />
+          <span className="matters-text">
+            <span className="matters-label">you said this matters</span>
+            <span className="matters-line">{line}</span>
           </span>
-          <span className="matters-line">{line}</span>
+          <Chevron dir="right" />
         </button>
       ) : (
         <div className="settings-rows">{row('what matters', 'what makes a day worth it', onMatters, 'set up')}</div>

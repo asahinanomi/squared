@@ -39,8 +39,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const listMid = useRef(() => todayIso())
   // A day opened from the list goes back to the list when you zoom out of it.
   const [dayFromList, setDayFromList] = useState(false)
-  // What matters opens from my days, about, the day's compass or home's first steps; back returns there.
-  const [mattersFrom, setMattersFrom] = useState<'idea' | 'today' | 'mydays'>('mydays')
   // Where privacy and terms were opened from (settings or about): back returns there.
   const [legalFrom, setLegalFrom] = useState<Screen>('settings')
   const legalOpened = useRef(false) // opened from inside the app (not straight from its web address)
@@ -182,10 +180,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setFramedFrom(from)
     setScreenValue('framed')
   }
-  const openMatters = (from: 'idea' | 'today' | 'mydays') => {
-    setMattersFrom(from)
-    setScreenValue('matters')
-  }
+  const openMatters = () => setScreenValue('matters')
   // Back from how many squares: wherever it was asked from.
   const leaveSetup = () =>
     afterSetup === 'life'
@@ -279,7 +274,6 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setListOnly,
     listMid,
     afterSetup,
-    mattersFrom,
     legalBack,
     goToday,
     goHome,

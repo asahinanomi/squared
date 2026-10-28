@@ -87,7 +87,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onFrame={act.onFrame}
         onPinNote={act.onPinNote}
         onZoomOut={nav.outOfDay}
-        onMatters={() => nav.openMatters('today')}
+        onMatters={nav.openMatters}
         onSetUp={() => nav.askSquares('today')}
         // Someone new (nothing painted, squares not set): the colours, once. ?welcome shows it on any account.
         intro={tryWelcome || (!profile && Object.keys(days).length === 0 && !introSeen())}
@@ -120,7 +120,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onSetUp={() => nav.askSquares('mydays')}
         onPainting={openPainting}
         onSquares={nav.goLifeDays}
-        onMatters={() => nav.openMatters('mydays')}
+        onMatters={nav.openMatters}
         onFramed={() => nav.openFramed('mydays')}
         onPaintings={() => setScreenValue('paintings')}
       />
@@ -136,8 +136,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         backLabel={nav.framedFrom === 'mydays' ? 'my days' : nav.framedFrom}
       />
     )
-  if (screen === 'idea')
-    return <About onMatters={() => nav.openMatters('idea')} onLegal={(page) => nav.openLegal(page, 'idea')} />
+  if (screen === 'idea') return <About onMatters={nav.openMatters} onLegal={(page) => nav.openLegal(page, 'idea')} />
   if (screen === 'setup')
     return (
       <Setup
@@ -188,8 +187,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
   if (screen === 'matters')
     return (
       <WhatMatters
-        onBack={() => setScreenValue(nav.mattersFrom)}
-        backLabel={nav.mattersFrom === 'idea' ? 'about' : nav.mattersFrom === 'mydays' ? 'my days' : nav.mattersFrom}
         onPaint={nav.goToday}
         paintedToday={!!days[todayIso()]}
         initial={lists.matters}

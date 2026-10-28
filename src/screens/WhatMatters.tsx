@@ -3,12 +3,8 @@ import { ConfirmDialog } from '../components/ConfirmDialog'
 import { SwipeRow } from '../components/SwipeRow'
 import { fetchMatters, MAX_CHARS, newEntry, saveMatters, type Entry, type Kind, type Matters } from '../lib/matters'
 import { paintHex } from '../lib/paints'
-import { Chevron } from './Today'
 
 type Props = {
-  onBack: () => void
-  /** Where back leads: "my days", "about", "today" or "home". */
-  backLabel?: string
   /** Off to today's square, compass in mind. */
   onPaint: () => void
   /** Today already has its colour (the link then just leads back). */
@@ -57,7 +53,7 @@ function EntryInput({ entry, onChange, onDone }: { entry: Entry; onChange: (t: s
 // What matters: two short lists — what a meaningful day and a wasted day look like to you.
 // Your compass when you paint; it never judges or colours a day for you. Every change saves itself,
 // to this device and the account; opening it picks up changes made on another device.
-export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedToday, initial, onSaved }: Props) {
+export function WhatMatters({ onPaint, paintedToday, initial, onSaved }: Props) {
   const [lists, setLists] = useState<Matters>(initial)
   const [editing, setEditing] = useState<string | null>(null)
   const [swiped, setSwiped] = useState<string | null>(null)
@@ -166,10 +162,6 @@ export function WhatMatters({ onBack, backLabel = 'settings', onPaint, paintedTo
 
   return (
     <main className="matters">
-      <button className="back-btn matters-back" onClick={onBack} aria-label={`Back to ${backLabel}`}>
-        <Chevron dir="left" />
-        {backLabel}
-      </button>
       <h1 className="settings-title">what matters</h1>
       <p className="matters-lede">what does a meaningful day look like to you? and what feels empty?</p>
 
