@@ -1856,27 +1856,68 @@ body[data-screen='questions'] .idea {
 .zoom-stack .zoombar-recenter:active {
   transform: scale(0.95);
 }
-/* The places, today · my days, as the view switch's twin at the right: words in its segments, the one you're on raised
-   white (the switch's own look). */
-.zoombar-switch.zoombar-places button {
-  width: auto;
+/* The places as tabs (lab row 10, B): a small square icon over its word, ink where you are, soft grey elsewhere. */
+.bar-tab {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 0 13px;
-  font-size: 15px;
+  justify-content: center;
+  gap: 3px;
+  min-width: 56px;
+  height: 48px; /* the switch's height, so all sit on one line */
+  color: #6f6f69;
+  font-size: 11px;
   font-weight: 600;
   white-space: nowrap;
 }
-.bar-dot {
-  flex: none;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1.75px currentColor;
+.bar-tab.is-here {
+  color: var(--ink);
 }
-.bar-dot.is-painted {
+.bar-tab-mydays {
+  width: 84px; /* the view switch's width, so today stays centred */
+  align-items: flex-end;
+}
+.bar-tab-mydays .bar-stack {
+  margin-right: 10px; /* the icon over its word's middle */
+}
+/* today's square: always ink (the bar's call to paint), filled with today's paint once painted. */
+.bar-today {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.bar-today.is-painted {
   box-shadow: none;
+}
+/* my days: two squares stacked, the day behind in grey. */
+.bar-stack {
+  flex: none;
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+.bar-stack i {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: var(--bar); /* the bar's own ground, so the front day hides the one behind */
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+.bar-stack i:first-child {
+  left: 4px;
+  top: 0;
+  box-shadow: inset 0 0 0 2px #b5b5ae; /* the day behind */
+}
+.bar-stack i:last-child {
+  left: 0;
+  top: 4px;
+}
+.bar-tab:active .bar-today,
+.bar-tab:active .bar-stack {
+  transform: scale(0.92);
 }
 /* Just came back to today: the square pulses once, so the eye lands on it. */
 .is-pulse {

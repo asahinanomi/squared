@@ -73,7 +73,7 @@ squared's signature ground: **dotted grid** — `radial-gradient(#DDDCD6 1.2px, 
 - **Links / dividers:** 1px dotted hairlines.
 
 - **The bottom bar, on every page**: for getting around only. "today" always in the centre (the one constant way back to now); the squares/list switch on the left on the time views (the day, the month, a life, the list).
-- **The bar** (Oct 28, 2026): two twin switches, squares · list at the left and today · my days at the right, the same grey capsule (#e9e9e3), the one showing raised white. Words 15px/600. Beside "today", a 9px dot: a ring in the word's colour until painted, then today's paint. (Tried and dropped: squares for the places, A7; bare words with a dotted underline, A8; words on pills.)
+- **The bar** (Oct 28, 2026): squares · list switch at the left; the places as tabs: today's square in the centre (24px, a 2px ink edge until painted, then today's paint) and my days at the right (two stacked 20px squares, the day behind #b5b5ae), each over its word (11px/600). Where you are in ink, the other #6f6f69, no backgrounds. (Tried and dropped: squares alone, A7; bare words with a dotted underline, A8; words on pills; a twin switch, too many filters.)
 - **Zoom floats on the squares**: a slim white capsule at the bottom right, just above the bar (zoom in over zoom out), ◎ on top of it when today is out of view. Only where there are squares to zoom.
 
 ## Layout — sign-in / home
