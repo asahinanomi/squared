@@ -88,7 +88,10 @@ export function MyDays({
     [framedDays.sort().join()],
   ) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => void (kept1 && loadNotes(kept1)), [kept1]) // eslint-disable-line react-hooks/exhaustive-deps
-  const keptNote = kept1 ? ((notes[kept1] ?? []).find((n) => n.pinned) ?? notes[kept1]?.at(-1)) : undefined
+  // Its "to remember" moments, every one in full; none: its latest moment, cut at 2 lines.
+  const keptNotes = kept1 ? (notes[kept1] ?? []) : []
+  const toRemember = keptNotes.filter((n) => n.pinned)
+  const latest = toRemember.length ? null : keptNotes.at(-1)
   const [help, setHelp] = useState<'framed' | 'paintings' | null>(null)
   // Picked once per visit (and again only if the list itself changes, say once it has loaded).
   const line = useMemo(() => (matters.length ? oneOf(matters, 'squared.mattersShown') : ''), [matters.join('\n')]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -161,12 +164,16 @@ export function MyDays({
           )}
         </section>
       )}
-      {/* A day you framed, as itself: its square in its frame, its date, and its note, as on its list card.
-          A different one each visit; the card opens every framed day. None yet: the empty slot, as before. */}
+      {/* A day you framed, as itself: its square in its frame, its date, and its "to remember" moments, as on its list
+          card. A different one each visit. The day opens that day; the title's arrow, every framed day (nomi: a tap
+          on the day expects the day). None yet: the empty slot, as before. */}
       {kept1 ? (
-        <button className="home-card matters-card framed-card" onClick={onFramed}>
-          <span className="matters-text">
+        <section className="home-card framed-card">
+          <button className="my-days-card-head" onClick={onFramed}>
             <span className="matters-label">you framed this day</span>
+            <Chevron dir="right" />
+          </button>
+          <button className="framed-body" onClick={() => onDay(kept1)}>
             <span className="framed-day">
               <span
                 className="framed-square"
@@ -175,10 +182,14 @@ export function MyDays({
               />
               {plainDate(kept1)}
             </span>
-            {keptNote && <span className="matters-line framed-note">{keptNote.body}</span>}
-          </span>
-          <Chevron dir="right" />
-        </button>
+            {toRemember.map((n) => (
+              <span key={n.id} className="framed-note is-whole">
+                {n.body}
+              </span>
+            ))}
+            {latest && <span className="framed-note">{latest.body}</span>}
+          </button>
+        </section>
       ) : (
         <div className="settings-rows">
           {row('framed days', 'none yet · how to frame a day', () => setHelp('framed'), 'none')}
