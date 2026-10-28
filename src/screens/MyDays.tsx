@@ -166,7 +166,7 @@ export function MyDays({
       )}
       {/* A day you framed, as itself: its square in its frame, its date, and its "to remember" moments, as on its list
           card. A different one each visit. The card opens that day (its arrow, as on the matters card); every framed
-          day is a quiet link at the foot (nomi: "you framed this day ›" read as this day). None yet: the empty slot. */}
+          day is a quiet text link at the foot, at the right (nomi: "you framed this day ›" read as this day). None yet: the empty slot. */}
       {kept1 ? (
         <section className="home-card framed-card">
           <button className="framed-body" onClick={() => onDay(kept1)}>
@@ -191,7 +191,6 @@ export function MyDays({
           </button>
           <button className="framed-all" onClick={onFramed}>
             see all framed days
-            <Chevron dir="right" />
           </button>
         </section>
       ) : (
