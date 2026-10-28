@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FrameDemo } from '../components/FrameDemo'
 import { PaintingDemo } from '../components/PaintingDemo'
 import { Sheet } from '../components/Sheet'
@@ -29,6 +29,25 @@ type Props = {
   onPaintings: () => void
 }
 
+// One of your "what matters" lines, a different one each visit (never the one shown last time, when there are more).
+const LAST = 'squared.mattersShown'
+const oneOf = (lines: string[]) => {
+  let last: string | null = null
+  try {
+    last = localStorage.getItem(LAST)
+  } catch {
+    /* fine without it */
+  }
+  const pool = lines.length > 1 ? lines.filter((l) => l !== last) : lines
+  const pick = pool[Math.floor(Math.random() * pool.length)]
+  try {
+    localStorage.setItem(LAST, pick)
+  } catch {
+    /* fine without it */
+  }
+  return pick
+}
+
 // my days (the menu): looking back, every door into your past in one place, never a dashboard of numbers. A life as one
 // bar (days lived, days ahead; it opens the list), this month and year so far as paintings, then what matters, a life
 // in squares, in slices, the days you framed and the paintings you kept. Home stays today, now. Each row is named
@@ -57,6 +76,8 @@ export function MyDays({
   const hasYear = count(year) > 0
   const framedCount = Object.values(days).filter((d) => d.framed).length
   const [help, setHelp] = useState<'framed' | 'paintings' | null>(null)
+  // Picked once per visit (and again only if the list itself changes, say once it has loaded).
+  const line = useMemo(() => (matters.length ? oneOf(matters) : ''), [matters.join('\n')]) // eslint-disable-line react-hooks/exhaustive-deps
   // Each row opens its page; `empty` is an empty slot (dashed). Not set up yet: its sub says what it is, and "set up
   // now" sits at the far right with the arrow.
   const row = (label: string, sub: string, go: () => void, empty?: 'set up' | 'none') => {
@@ -82,11 +103,19 @@ export function MyDays({
       {/* Where you are: this week, this month and a life (it replaced the life card and the week card). */}
       <WhereCard days={days} profile={profile} onDay={onDay} onMonth={onMonth} onLife={onSquares} onSetUp={onSetUp} />
       {/* What matters, right after a life: the compass first, then the paintings. */}
-      <div className="settings-rows">
-        {matters.length
-          ? row('what matters', matters.slice(0, 3).join(' · '), onMatters)
-          : row('what matters', 'what makes a day worth it', onMatters, 'set up')}
-      </div>
+      {/* What matters, one line at a time: a different one of your own each visit, in the question's serif, a note to
+          yourself under the time you have. The card opens all of them. Not set yet: the empty slot, as before. */}
+      {matters.length ? (
+        <button className="home-card matters-card" onClick={onMatters}>
+          <span className="matters-label">
+            you said this matters
+            <Chevron dir="right" />
+          </span>
+          <span className="matters-line">{line}</span>
+        </button>
+      ) : (
+        <div className="settings-rows">{row('what matters', 'what makes a day worth it', onMatters, 'set up')}</div>
+      )}
       {/* This month and this year so far, and the way to every painting you kept (the old "paintings" row). */}
       {/* Nothing painted yet: the paintings wait as an empty slot, with how they're made. */}
       {!hasMonth && !hasYear && !kept.length && (

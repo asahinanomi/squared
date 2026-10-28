@@ -4968,3 +4968,33 @@ button.home-card:active {
 .where-track.is-ghost {
   opacity: 0.4;
 }
+
+/* my days: one of your "what matters" lines, a note to yourself, in the question's serif. */
+.matters-card {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 16px 18px 20px;
+  text-align: left;
+  color: var(--ink);
+}
+.matters-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.matters-label svg {
+  color: #b5b5ae;
+}
+.matters-line {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-reflect);
+  font-optical-sizing: auto;
+  font-size: 21px;
+  font-weight: 450;
+  line-height: 1.3;
+}
