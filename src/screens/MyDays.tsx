@@ -1,18 +1,22 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { FrameDemo } from '../components/FrameDemo'
 import { PaintingDemo } from '../components/PaintingDemo'
 import { Sheet } from '../components/Sheet'
 import { PaintingThumb } from '../components/PaintingThumb'
 import { WhereCard } from '../components/WhereCard'
-import { todayIso } from '../lib/dates'
+import { plainDate, todayIso } from '../lib/dates'
 import { frameOf } from '../lib/paints'
 import type { Days } from '../lib/days'
+import type { Notes } from '../lib/notes'
 import type { Profile } from '../lib/profile'
 import { Chevron } from './Today'
 
 type Props = {
   days: Days
   profile: Profile | null
+  notes: Notes
+  /** Notes load a month at a time: the framed day shown needs its month's. */
+  loadNotes: (iso: string) => void
   /** Your "mattered" lines (empty until written): the row shows the first few. */
   matters: string[]
   /** The paintings you kept (none yet: the row says how to keep one). */
@@ -30,19 +34,19 @@ type Props = {
   onPaintings: () => void
 }
 
-// One of your "what matters" lines, a different one each visit (never the one shown last time, when there are more).
-const LAST = 'squared.mattersShown'
-const oneOf = (lines: string[]) => {
+// One of a few (your "what matters" lines, your framed days), a different one each visit (never the one shown last
+// time, when there are more).
+const oneOf = (lines: string[], key: string) => {
   let last: string | null = null
   try {
-    last = localStorage.getItem(LAST)
+    last = localStorage.getItem(key)
   } catch {
     /* fine without it */
   }
   const pool = lines.length > 1 ? lines.filter((l) => l !== last) : lines
   const pick = pool[Math.floor(Math.random() * pool.length)]
   try {
-    localStorage.setItem(LAST, pick)
+    localStorage.setItem(key, pick)
   } catch {
     /* fine without it */
   }
@@ -58,6 +62,8 @@ const oneOf = (lines: string[]) => {
 export function MyDays({
   days,
   profile,
+  notes,
+  loadNotes,
   matters,
   kept,
   onDay,
@@ -75,14 +81,17 @@ export function MyDays({
   const count = (p: string) => Object.keys(days).filter((d) => d.startsWith(p) && d <= today).length
   const hasMonth = count(month) > 0
   const hasYear = count(year) > 0
-  // Your latest framed days (up to a week's worth), oldest first: time runs left to right.
-  const framed = Object.keys(days)
-    .filter((d) => days[d].framed && d <= today)
-    .sort()
-    .slice(-7)
+  // One of the days you framed, a different one each visit, with its note ("to remember", else the latest).
+  const framedDays = Object.keys(days).filter((d) => days[d].framed && d <= today)
+  const kept1 = useMemo(
+    () => (framedDays.length ? oneOf(framedDays, 'squared.framedShown') : ''),
+    [framedDays.sort().join()],
+  ) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => void (kept1 && loadNotes(kept1)), [kept1]) // eslint-disable-line react-hooks/exhaustive-deps
+  const keptNote = kept1 ? ((notes[kept1] ?? []).find((n) => n.pinned) ?? notes[kept1]?.at(-1)) : undefined
   const [help, setHelp] = useState<'framed' | 'paintings' | null>(null)
   // Picked once per visit (and again only if the list itself changes, say once it has loaded).
-  const line = useMemo(() => (matters.length ? oneOf(matters) : ''), [matters.join('\n')]) // eslint-disable-line react-hooks/exhaustive-deps
+  const line = useMemo(() => (matters.length ? oneOf(matters, 'squared.mattersShown') : ''), [matters.join('\n')]) // eslint-disable-line react-hooks/exhaustive-deps
   // Each row opens its page; `empty` is an empty slot (dashed). Not set up yet: its sub says what it is, and "set up
   // now" sits at the far right with the arrow.
   const row = (label: string, sub: string, go: () => void, empty?: 'set up' | 'none') => {
@@ -152,22 +161,23 @@ export function MyDays({
           )}
         </section>
       )}
-      {/* The days you framed, as themselves: your latest framed squares, framed. None yet: the empty slot, as before. */}
-      {framed.length ? (
-        <button className="home-card framed-card" onClick={onFramed}>
-          <span className="my-days-card-head">
-            <span className="matters-label">you framed these</span>
-            <Chevron dir="right" />
-          </span>
-          <span className="framed-squares" aria-hidden="true">
-            {framed.map((d) => (
+      {/* A day you framed, as itself: its square in its frame, its date, and its note, in the matters line's serif.
+          A different one each visit; the card opens every framed day. None yet: the empty slot, as before. */}
+      {kept1 ? (
+        <button className="home-card matters-card framed-card" onClick={onFramed}>
+          <span className="matters-text">
+            <span className="matters-label">you framed this day</span>
+            <span className="framed-day">
               <span
-                key={d}
                 className="framed-square"
-                style={{ '--frame': frameOf(days[d].color) } as React.CSSProperties}
+                style={{ '--frame': frameOf(days[kept1].color) } as React.CSSProperties}
+                aria-hidden="true"
               />
-            ))}
+              {plainDate(kept1)}
+            </span>
+            {keptNote && <span className="matters-line framed-note">{keptNote.body}</span>}
           </span>
+          <Chevron dir="right" />
         </button>
       ) : (
         <div className="settings-rows">

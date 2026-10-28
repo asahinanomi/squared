@@ -104,6 +104,8 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
       <MyDays
         days={days}
         profile={profile}
+        notes={notes}
+        loadNotes={acc.loadNotes}
         matters={lists.matters.meaningful.map((e) => e.text.trim()).filter(Boolean)}
         onDay={(iso) => nav.openDay(iso)}
         onMonth={() => nav.goMonth()}
