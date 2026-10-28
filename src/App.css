@@ -1787,9 +1787,6 @@ body[data-screen='questions'] .idea {
 .app.has-page-bar {
   padding-bottom: calc(var(--bar-b) + 80px);
 }
-.zoombar-spacer {
-  width: 84px; /* the view switch's width */
-}
 /* Zoom floats on the squares, bottom right, just above the bar: ◎ on top (while today is out of view), then a slim
    capsule, zoom in over zoom out, ink on white, the ◎ chip's soft lift. Outside the zooming stage, like the bar. */
 .zoom-stack {
@@ -1859,61 +1856,24 @@ body[data-screen='questions'] .idea {
 .zoom-stack .zoombar-recenter:active {
   transform: scale(0.95);
 }
-/* The bar's places in words (lab row 10, A8), each on a subtle white pill. Where you are: the dotted ink underline under the
-   word, outside the flow so nothing shifts. "today" carries a small dot: an ink ring until painted, then its paint. */
-.bar-word {
-  position: relative;
-  isolation: isolate;
+/* The places, today · my days, as the view switch's twin at the right: words in its segments, the one you're on raised
+   white (the switch's own look). */
+.zoombar-switch.zoombar-places button {
+  width: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 7px;
-  height: 48px; /* the switch's height, so all sit on one line */
-  padding: 0 16px 2px; /* a touch high, so the underline sits inside the pill */
-  color: var(--zoom-ink);
+  gap: 6px;
+  padding: 0 13px;
   font-size: 15px;
   font-weight: 600;
   white-space: nowrap;
-}
-/* Each place on the same subtle white pill (the same for both, so the pill never says where you are: the underline
-   does), drawn inside the 48px tap area. */
-.bar-word::before {
-  content: '';
-  position: absolute;
-  inset: 4px 0; /* 40px tall: room for the underline inside */
-  z-index: -1;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow:
-    inset 0 0 0 1px #e4e4dd,
-    0 1px 3px rgba(20, 20, 19, 0.08);
-}
-.bar-word.is-wide {
-  min-width: 84px; /* the view switch's width, so "today" stays centred */
-}
-.bar-word.is-here {
-  color: var(--ink);
-}
-.bar-label {
-  position: relative;
-}
-.bar-word.is-here .bar-label::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -4px;
-  border-top: 2px dotted var(--ink);
-}
-.bar-word:active::before {
-  background: #f4f4f0;
 }
 .bar-dot {
   flex: none;
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1.75px var(--zoom-ink);
+  box-shadow: inset 0 0 0 1.75px currentColor;
 }
 .bar-dot.is-painted {
   box-shadow: none;

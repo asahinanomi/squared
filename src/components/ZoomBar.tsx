@@ -11,7 +11,7 @@ type Props = {
   onRecenter?: () => void
   /** The day the list should open on if switched to from here (default: today). */
   listAt?: () => string
-  /** "today" in the centre: the app's way back to today by default; the day screen passes its own. */
+  /** "today": the app's way back to today by default; the day screen passes its own. */
   today?: () => void
   /** On today itself: "today" stays, underlined (you're here), and a tap gives the square a small pulse instead. */
   here?: () => void
@@ -97,47 +97,48 @@ export const ViewSwitch = createContext<{
   todayPaint?: Paint
 } | null>(null)
 
-// The bar's places, in words (lab row 10, A8): "today" and "my days" in ink, each on the same subtle white pill (nomi:
-// bare words looked loose), so the bar reads at once.
-// Where you are: squared's dotted ink underline under the word, as under "meaningfully" (never a raised or grey look:
-// raised looked the most tappable yet did nothing, grey read as "off"). Beside "today", a small dot: an empty ink ring
-// until today is painted, then today's paint (the date pill's dot), so the bar still says whether today is done.
-// Lab: https://claude.ai/artifact/8RNH3LHkF4RtJ3QchG5fkm (row 10, A8)
-function Place({
-  label,
-  here,
-  onClick,
+// The bar's places, together at the right as their own switch, the twin of squares · list at the left (nomi): the one
+// you're on is raised white, as in the view switch, so the bar speaks one language. On neither (a month, the list…),
+// neither is raised. Beside "today", a small dot: an empty ink ring until today is painted, then today's paint (the
+// date pill's dot), so the bar still says whether today is done.
+function Places({
+  at,
   paint,
-  wide,
+  onToday,
+  onMyDays,
 }: {
-  label: string
-  here: boolean
-  onClick: () => void
-  /** today only: its paint dot (undefined: the empty ring). */
-  paint?: Paint | null
-  /** as wide as the switch, so "today" stays in the centre */
-  wide?: boolean
+  at: 'today' | 'mydays' | null
+  paint?: Paint
+  onToday: () => void
+  onMyDays: () => void
 }) {
   return (
-    <button
-      className={'bar-word' + (here ? ' is-here' : '') + (wide ? ' is-wide' : '')}
-      aria-current={here ? 'page' : undefined}
-      onClick={onClick}
-    >
-      {paint !== null && (
+    <div className="zoombar-switch zoombar-places" role="group" aria-label="Places">
+      <button
+        className={at === 'today' ? 'is-on' : undefined}
+        aria-current={at === 'today' ? 'page' : undefined}
+        onClick={onToday}
+      >
         <span
           className={'bar-dot' + (paint ? ' is-painted' : '')}
           style={paint ? { background: squareFill(paint) } : undefined}
           aria-hidden="true"
         />
-      )}
-      <span className="bar-label">{label}</span>
-    </button>
+        today
+      </button>
+      <button
+        className={at === 'mydays' ? 'is-on' : undefined}
+        aria-current={at === 'mydays' ? 'page' : undefined}
+        onClick={onMyDays}
+      >
+        my days
+      </button>
+    </div>
   )
 }
 
 // Bottom of every square view and the list: the bar is for getting around (the squares · list switch on the left,
-// "today" in the centre, the same on every page). Zoom is a tool on the squares, not a way around, so it floats over
+// today · my days at the right, the same on every page). Zoom is a tool on the squares, not a way around, so it floats over
 // them at the bottom right, like a map's + and −: a slim capsule (zoom in on top, zoom out below; on a day, zoom out
 // alone), with ◎ (back to today's square, once it's out of view) on top of it. The list has no zoom: nothing floats.
 export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props) {
@@ -185,16 +186,15 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props)
         ) : (
           <span />
         )}
-        {here || goToday ? (
-          <Place label="today" paint={view?.todayPaint} here={!!here} onClick={here ?? goToday!} />
+        {view && goToday ? (
+          <Places
+            at={here ? 'today' : null}
+            paint={view.todayPaint}
+            onToday={here ?? goToday}
+            onMyDays={view.goMyDays}
+          />
         ) : (
           <span />
-        )}
-        {/* my days on the right, as wide as the switch, so today stays in the centre. */}
-        {view ? (
-          <Place label="my days" paint={null} here={false} onClick={view.goMyDays} wide />
-        ) : (
-          <span className="zoombar-spacer" aria-hidden="true" />
         )}
       </div>
       {(onIn || onOut || onRecenter) && (
@@ -225,7 +225,7 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props)
 
 /**
  * The same bar on every other page (my days, settings, about…): the squares · list switch on the left, neither raised
- * (you're not in a view: squares opens this month, list the days), and "today" in the centre, the one constant way back
+ * (you're not in a view: squares opens this month, list the days), and today · my days at the right, the one constant way back
  * to now. The bar never changes shape.
  */
 export function PageBar({
@@ -253,8 +253,7 @@ export function PageBar({
           <ListIcon />
         </button>
       </div>
-      <Place label="today" paint={view?.todayPaint} here={false} onClick={onToday} />
-      <Place label="my days" paint={null} here={atMyDays} onClick={onMyDays} wide />
+      <Places at={atMyDays ? 'mydays' : null} paint={view?.todayPaint} onToday={onToday} onMyDays={onMyDays} />
     </div>,
     document.body,
   )
