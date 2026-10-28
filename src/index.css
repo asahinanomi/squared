@@ -1,4 +1,8 @@
 :root {
+  /* The bar's room above and below its pills: even, in the band above the phone's home line (12 and 18 on an
+     iPhone with one; 8 and 8 without). */
+  --bar-t: min(12px, calc(8px + env(safe-area-inset-bottom)));
+  --bar-b: max(calc(env(safe-area-inset-bottom) - 16px), 8px);
   /* Ink & paper — the only non-paint colors in the app. */
   --paper: #fafaf8;
   --ink: #141413;

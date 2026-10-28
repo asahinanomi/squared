@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 28, 2026, 15:13 UTC_
+_last updated Oct 28, 2026, 15:19 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -280,6 +280,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **What matters, one word for each side** (Oct 28, 2026, nomi): the line under the title reads "what does a meaningful day look like to you? and what would you regret?", and the red list's hint is "what would you regret?", matching its "regret" label (it said "empty").
 - **No more "‹ my days" on paintings and framed days** (Oct 28, 2026, nomi): the bar's "my days" leads back.
 - **Today's ink edge sits inside its square everywhere** (Oct 28, 2026, nomi): a life in days and in months draw today's (this month's) ink edge inside the square, never around it, as on the month, the list and where you are; the list card's swatch too. The old week card (`WeekCard.tsx`, unused since where you are) and its styles are gone.
+- **The bar, centred; the zoom steps aside while you read** (Oct 28, 2026, nomi): the bar's pills sit in the middle of the band above the phone's home line (12px above, 18px below on an iPhone with one; 8 and 8 without; it was 4 and 24, so they sat high). The bar stays paper, never dark: weight belongs to the painting. On a day, scrolled down into the notes, the floating zoom fades away (you're reading, not zooming; it sat on the notes' words) and comes back at the top. Pinch works all the while.
 - **Today's edge inside its square** (Oct 28, 2026, nomi): in the where-you-are card, today is marked by its own edge in ink, inside the square (as on the month), not a ring around it that crowded its neighbours. A framed today: the ink edge, then its thin white mat.
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).
 

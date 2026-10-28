@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom'
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 type Props = {
   /** Zoom out one level (see more); absent when there's no level further out yet. */
@@ -102,6 +102,15 @@ export const ViewSwitch = createContext<{
 export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props) {
   const view = useContext(ViewSwitch)
   const goToday = today ?? view?.goToday
+  // Scrolled down the page (a day's notes): you're reading, not zooming, so the zoom steps aside until you're back up.
+  // The squares and the list scroll inside themselves, so this only happens on a day. Pinch works all the while.
+  const [reading, setReading] = useState(false)
+  useEffect(() => {
+    const on = () => setReading(window.scrollY > 24)
+    on()
+    window.addEventListener('scroll', on, { passive: true })
+    return () => window.removeEventListener('scroll', on)
+  }, [])
   // Outside the stage, which scales while a zoom animates (a pinned bar inside it would ride along).
   return createPortal(
     <>
@@ -156,7 +165,7 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props)
         )}
       </div>
       {(onIn || onOut || onRecenter) && (
-        <div className="zoom-stack">
+        <div className={'zoom-stack' + (reading ? ' is-reading' : '')}>
           {onRecenter && (
             <button className="zoombar-recenter" aria-label="Back to today's square" onClick={onRecenter}>
               <RecenterIcon />
