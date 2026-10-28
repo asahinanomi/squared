@@ -3,14 +3,11 @@ import { FrameDemo } from '../components/FrameDemo'
 import { PaintingDemo } from '../components/PaintingDemo'
 import { Sheet } from '../components/Sheet'
 import { PaintingThumb } from '../components/PaintingThumb'
-import { WeekCard } from '../components/WeekCard'
+import { WhereCard } from '../components/WhereCard'
 import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
-import { lifeCounts } from '../lib/life'
 import type { Profile } from '../lib/profile'
 import { Chevron } from './Today'
-
-const fmt = (n: number) => n.toLocaleString('en-US')
 
 type Props = {
   days: Days
@@ -19,8 +16,10 @@ type Props = {
   matters: string[]
   /** The paintings you kept (none yet: the row says how to keep one). */
   kept: string[]
-  /** A day of the week card, to open. */
+  /** A day of this week, to open. */
   onDay: (iso: string) => void
+  /** This month, in squares. */
+  onMonth: () => void
   /** "set up now" on the life card, before the squares are set: how many squares, then back here. */
   onSetUp: () => void
   onPainting: (period: string) => void
@@ -42,6 +41,7 @@ export function MyDays({
   matters,
   kept,
   onDay,
+  onMonth,
   onSetUp,
   onPainting,
   onSquares,
@@ -79,65 +79,8 @@ export function MyDays({
       <h1 className="settings-title">my days</h1>
       {/* squared's line, the page's epigraph: what follows is the past; today is beside it. The tagline candidate. */}
       <p className="my-days-line">The past is painted. Today is still yours.</p>
-      {/* Before the squares are set: a ghost of the bar (lived solid, ahead dotted, today between), so it's clear
-          what's waiting, under the question; "set up now" at the top right, where its arrow will be (at the bottom it
-          read too busy on a phone). */}
-      {!profile && (
-        <button className="home-card my-days-life is-empty" onClick={onSetUp}>
-          <span className="home-head">
-            a life
-            <SetUp />
-          </span>
-          <span className="home-big is-ahead is-ghost">
-            ?<small>days</small>
-          </span>
-          <span className="life-ghost" aria-hidden="true">
-            <i />
-          </span>
-          <span className="life-ghost-legend" aria-hidden="true">
-            <span>lived</span>
-            <span>today</span>
-            <span>ahead</span>
-          </span>
-          <span className="life-ghost-ask">how many squares will you paint?</span>
-        </button>
-      )}
-      {profile &&
-        (() => {
-          const c = lifeCounts(profile.born, profile.lifespan, today)
-          const lived = Math.round((c.sofar / c.total) * 100)
-          return (
-            <button
-              className="home-card home-life my-days-life"
-              onClick={onSquares}
-              aria-label={`a life: ${fmt(c.left)} days ahead`}
-            >
-              <span className="home-head">
-                a life
-                <Chevron dir="right" />
-              </span>
-              {/* Time runs left to right: the past in ink, so the days ahead (the number) sit on the right. */}
-              <span className="home-big is-ahead">
-                {fmt(c.left)}
-                <small>days</small>
-              </span>
-              {/* Now, on the line: a dot where the days lived meet the days ahead, "today" under it. */}
-              <span className="life-track" aria-hidden="true">
-                <span className="home-bar">
-                  <i style={{ width: `${(c.sofar / c.total) * 100}%` }} />
-                </span>
-                <i className="life-now" style={{ left: `${(c.sofar / c.total) * 100}%` }} />
-              </span>
-              <span className="life-now-label" aria-hidden="true">
-                <span style={{ left: `clamp(18px, ${(c.sofar / c.total) * 100}%, calc(100% - 18px))` }}>today</span>
-              </span>
-              <span className="home-legend">
-                <span>{lived}% lived</span>
-                <span>{100 - lived}% ahead</span>
-              </span>
-            </button>
-          )
-        })()}
+      {/* Where you are: this week, this month and a life (it replaced the life card and the week card). */}
+      <WhereCard days={days} profile={profile} onDay={onDay} onMonth={onMonth} onLife={onSquares} onSetUp={onSetUp} />
       {/* What matters, right after a life: the compass first, then the paintings. */}
       <div className="settings-rows">
         {matters.length
@@ -184,11 +127,6 @@ export function MyDays({
         {framedCount
           ? row('framed days', 'the days you framed', onFramed)
           : row('framed days', 'none yet · how to frame a day', () => setHelp('framed'), 'none')}
-      </div>
-      {/* This week, last for now (nomi is weighing it): the close-up, the nearest look back. Swipe or ‹ › for earlier
-          weeks. */}
-      <div className="my-days-week">
-        <WeekCard days={days} born={profile?.born} onDay={onDay} />
       </div>
       {/* Help, only when asked for: how a day is framed, how a painting is kept. */}
       <Sheet open={help === 'framed'} onClose={() => setHelp(null)}>

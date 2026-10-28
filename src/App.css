@@ -4864,3 +4864,96 @@ button.home-card:active {
     transform: translateX(-50%) translateY(6px);
   }
 }
+/* Where you are (the top of my days): this week, this month, a life. The week and the month as their own days in
+   their real paint, today ringed in ink, the days ahead empty; a life as its bar (lived solid, today a ring, ahead
+   dotted). */
+.where-card {
+  margin-top: 22px; /* the line above stands on its own, as it did over the life card */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 18px 18px;
+}
+.where-row {
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: var(--ink);
+}
+.where-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.where-head small {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.where-head small.is-setup {
+  color: var(--ink);
+  font-weight: 500;
+}
+.where-cells {
+  display: flex;
+  gap: 4px;
+}
+.where-cells.is-month {
+  gap: 2px;
+}
+.where-cell {
+  flex: 1;
+  height: 16px;
+  border-radius: 4px;
+  background: #e2e2da; /* lived, not painted */
+}
+.where-cells.is-month .where-cell {
+  height: 11px;
+  border-radius: 2px;
+}
+.where-cell.is-ahead {
+  background: none;
+  box-shadow: inset 0 0 0 1px #e2e2db;
+}
+.where-cell.is-before {
+  background: none;
+}
+.where-cell.is-today {
+  box-shadow: 0 0 0 2px var(--ink);
+  background-color: #fff;
+}
+.where-cells.is-month .where-cell.is-today {
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
+.where-track {
+  display: flex;
+  align-items: center;
+  height: 12px;
+}
+.where-lived {
+  height: 4px;
+  border-radius: 2px;
+  background: #55554f;
+}
+.where-now {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  margin: 0 3px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.where-ahead {
+  flex: 1;
+  height: 4px;
+  background-image: radial-gradient(#b8b8b1 1.3px, transparent 1.5px);
+  background-size: 7px 4px;
+  background-repeat: repeat-x;
+}
+.where-track.is-ghost {
+  opacity: 0.4;
+}
