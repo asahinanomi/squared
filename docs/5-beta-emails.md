@@ -1,5 +1,7 @@
 # Beta emails
 
+**The live, editable copy:** https://claude.ai/artifact/XCBouMs5cG6owch95TTMA5 (edit there; this file is the record).
+
 The emails for the first testers: 10–15 friends nomi trusts. squared is not explained on purpose, to see whether it
 makes sense on its own.
 
