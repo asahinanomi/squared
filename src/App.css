@@ -4878,7 +4878,7 @@ button.home-card:active {
 .matters-label {
   display: block;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 400; /* a quiet caption: your words lead (it was 600 and competed with them) */
   color: var(--muted);
 }
 .matters-card > svg {
