@@ -1159,7 +1159,12 @@ sup.ord {
   border-radius: 0;
   box-shadow: none;
   border: 0;
+  /* The row rises, not the note: a note fading in alone let the delete behind it flash through (nomi, Oct 29). */
+  animation: none;
 } /* the row clips the corners */
+.swipe:has(.note-card) {
+  animation: rise 0.25s ease-out;
+}
 /* The note's keyline, drawn on the row, so it follows the rounded corners the row clips. */
 .swipe:has(.note-card)::after {
   content: '';
