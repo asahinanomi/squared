@@ -17,7 +17,7 @@ const POOLS: Record<Paint, string[]> = {
   red: [
     "A hard day. You're allowed to feel it.",
     'Regret means you care.',
-    "This day doesn't decide who you are.",
+    'You can hold this one gently.',
     'Heavy to look at. You looked.',
     'Be as kind to yourself as to a friend.',
     'Looking back honestly takes courage.',
