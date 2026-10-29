@@ -3,7 +3,8 @@ import type { Paint } from './paints'
 // Words for past days (nomi, Oct 29, 2026): a painted day before today closes with one line from its colour's pool,
 // as the heading itself (2 lines at most on a phone, so every line is short). squared listens, then speaks back. Never
 // a verdict, a conscience not a coach, no pressure; worth it is about the choice (spent on what matters), never how
-// the day felt. The pools were written and edited in "squared: words for past days":
+// the day felt. The same truth in fresh words is welcome (identical words wear out, varied ones feel personal): only
+// weak lines are cut. The pools were written and edited in "squared: words for past days":
 // https://claude.ai/artifact/UfASTFU84pv9CXBzfr8ZMD
 
 // One line from a pool, chosen by the date: the same day always gets the same line.
@@ -23,6 +24,7 @@ const POOLS: Record<Paint, string[]> = {
     "It's painted. You can set it down.",
     "You're still here. That counts.",
     "This day is painted. Today isn't, yet.",
+    'Looking back honestly takes courage.',
   ],
   green: [
     'You spent this day meaningfully.',
@@ -34,6 +36,8 @@ const POOLS: Record<Paint, string[]> = {
     'Proof of what you care about.',
     'This is what your time is for.',
     'A day you can stand behind.',
+    'You honoured what matters to you.',
+    'You lived by what you care about.',
   ],
   grey: [
     "Some days just pass. That's okay.",
@@ -45,6 +49,7 @@ const POOLS: Record<Paint, string[]> = {
     'Some days are just in between.',
     'A day that slipped by, gently.',
     'Seeing the blur is paying attention.',
+    'Not every day has to mean something.',
   ],
 }
 
