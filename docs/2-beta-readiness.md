@@ -35,7 +35,7 @@ What has to be true before squared opens to beta testers, and what comes after. 
 
 ## When real users join
 
-- [ ] **Private notes (end-to-end encryption)**: top priority after beta; see `docs/future-ideas.md`.
+- [ ] **Private notes (end-to-end encryption)**: not urgent; in the iOS app, the Day One way (no setup). See `docs/future-ideas.md` and `docs/5-ios-todo.md`.
 - [ ] **Automatic weekly backup**: a separate private repo (`squared-backups`) exports the database weekly, encrypted with a password only nomi knows. About 30 minutes to set up.
 - [ ] **Vercel Pro** if squared ever charges (the free plan is for non-commercial use).
 - [ ] **Privacy page**: name the region the data lives in, for testers in the EU.
@@ -45,4 +45,4 @@ What has to be true before squared opens to beta testers, and what comes after. 
 
 - **Captcha** on feedback: the daily limit is enough, and it would add a third-party script.
 - **Offline painting**: saving needs a connection, so nothing ever hides on a device.
-- **End-to-end encryption** of notes: much more complex; the privacy page says plainly that it isn't.
+- **End-to-end encryption** of notes: not for beta; the privacy page says plainly that it isn't. It comes in the iOS app, the Day One way, with zero setup (`docs/5-ios-todo.md` → "Private notes").

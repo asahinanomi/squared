@@ -53,6 +53,18 @@ Wrap the same app in **Capacitor** (the web build bundled inside a native iPhone
 - [ ] **The evening reminder:** one gentle local notification at a time you choose ("Today is still yours.", at 9 pm for example). Only if today isn't painted yet, never more than one a day. Off until you turn it on; set in settings. No server, no push service. (The web could do it too, on a home-screen iPhone, but only with a push server: not solid enough. The app does it on the phone itself.)
 - [ ] Haptics: a soft tap when a square is painted (a small touch, optional).
 
+## Private notes, the Day One way (after the first store version)
+
+Why and what was weighed: `docs/future-ideas.md` → "Private notes, the Day One way".
+
+- [ ] **The key, made on the phone:** created automatically the first time, kept in the iCloud Keychain (synced, so your other Apple devices get it). Nothing to set up, no passphrase.
+- [ ] **Notes encrypted on the phone** before they're saved (AES-GCM, Web Crypto); the database only holds gibberish. Search, export and "to remember" decrypt on the phone.
+- [ ] **Existing notes encrypted once**, on the phone, then the readable copies removed (backups expire on their own).
+- [ ] **A recovery code**, shown once ("keep this somewhere safe"), for a lost phone with no iCloud.
+- [ ] **The web, if you use both:** unlock with a passkey or the recovery code. Decide when it's needed.
+- [ ] **The promise, once true:** "Only you can read your notes. Not even me." Update privacy, terms and questions. Never "100%".
+- [ ] **One framed-day photo** rides on the same key (`docs/future-ideas.md`).
+
 ## 5 · The store page (nomi writes, Claude helps)
 
 - [ ] Subtitle (30 characters), description, keywords. In the voice of the brand story.

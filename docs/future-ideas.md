@@ -2,18 +2,18 @@
 
 Ideas parked for later. Not promises, not in order. When one ships, move it into the README.
 
-## ⭐ Top priority: private notes (end-to-end encryption)
+## Private notes, the Day One way, in the iOS app (rethought Oct 29, 2026)
 
-Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encrypted on Supabase's disks, not end-to-end; the privacy page says so plainly). Do this first after beta, or sooner if testers ask.
+Not urgent: squared already does what most journals do (notes locked to your account, encrypted on the server's disks; the privacy page says plainly it isn't end to end). This is a trust upgrade for when squared reaches strangers, not a blocker. Regret notes are raw, and "not even I can read them" turns nomi's promise into a fact.
 
-- **What**: notes (the sensitive part of a journal) encrypted on your device before they're saved, so no one but you can read them, not even the maker. Squares (just colours) and what matters may stay as they are, or follow later.
-- **Why**: the journal leaders do it. Day One encrypts end to end by default, with the key made on the device; Penzu's paid tier uses a key partly made from your password, so the company can't unlock entries.
-- **The trade-offs to design carefully** (solid over clever): a passphrase you enter once per device, a recovery option (or a plain warning that a lost passphrase means lost notes), and export and search working on the device. Existing notes would be encrypted once, on your device.
-- **Before building**: a lab for the passphrase moments (set it, enter it on a new device, forgot it), and a short plan of the simplest safe design.
+- **How (Day One's way, zero friction):** in the iOS app, notes are encrypted on the phone before they're saved. The key is made on the phone automatically and kept in the iCloud Keychain, so it follows you to your other Apple devices. No passphrase, nothing to set up. Plan: `docs/5-ios-todo.md` → "Private notes".
+- **Why not the web now:** the web has no invisible safe place for a key. A passphrase adds friction a new app can't afford (Journey does it opt-in, and loses search). Passkeys can unlock a key with Face ID, but they're new and need a recovery code: clever, not solid. A key kept in the browser isn't reliable (Safari can wipe it), and losing it loses the notes.
+- **Later, if you use squared on the web too:** the web unlocks with a passkey or a recovery code, the same trade-off Day One makes on its web app.
+- **Now (cheap):** the privacy wording stays plain and honest; note text never goes into logs, crash reports, analytics or emails.
 
-## Next after private notes: one photo on a framed day (agreed Oct 29, 2026)
+## One photo on a framed day (agreed Oct 29, 2026)
 
-One photo per framed day only, to keep with it: rare and special, tucked with the note, never on the square (colour lives in the paint). Built encrypted from the start, after private notes, so it's done once. Shrunk on the phone before upload, private storage, deleted when the day is unframed or the account goes. Beta 1 can confirm the wish. Later, in the iOS app: a quiet "photos from this day" that reads your own library on the phone, storing and uploading nothing.
+One photo per framed day only, to keep with it: rare and special, tucked with the note, never on the square (colour lives in the paint). Built with private notes in the iOS app, encrypted from the start, so it's done once. Shrunk on the phone before upload, private storage, deleted when the day is unframed or the account goes. Beta 1 can confirm the wish. Later, in the iOS app: a quiet "photos from this day" that reads your own library on the phone, storing and uploading nothing.
 
 ## The past: lived, not blank (thinking it through, Oct 25, 2026)
 
