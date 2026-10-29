@@ -26,8 +26,8 @@ const BRUSH = 0.58
 const GRID = 24
 const FLOW_MS = 450
 const WET_MS = 520 // wet, as painted, while it saves
-const DRY_MS = 2400 // then it dries smooth
-const SIGN_MS = 2000 // the word and its sound, once the paint is mostly dry (in step with the CSS)
+const DRY_MS = 1700 // then it dries smooth (2400 until Oct 29, 2026: nomi found the wait a little slow)
+const SIGN_MS = 1400 // the word and its sound, once the paint is mostly dry (in step with the CSS)
 const FILLED = 0.9 // most of it painted; the wet paint flows into the gaps left
 
 // The ghost brush's stroke: two sweeps across the square, each rising from left to right, like painting it.
@@ -369,7 +369,7 @@ export function PaintCanvas({
   useEffect(() => {
     if (!drying) return
     const sound = setTimeout(() => settleSound(drying), SIGN_MS)
-    const t = setTimeout(dry, 4000)
+    const t = setTimeout(dry, 3000)
     return () => {
       clearTimeout(sound)
       clearTimeout(t)

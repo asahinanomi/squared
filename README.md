@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 29, 2026, 03:08 UTC_
+_last updated Oct 29, 2026, 20:02 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -302,6 +302,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **Today, one big line** (Oct 29, 2026, nomi): painted today drops its title and subtitle for one heading, like every painted day: its colour line, now big ("Spent on what matters.", "Tomorrow is still yours.", "Tomorrow, be here."), or a first square's or a special day's words. "Today is in colour." stays on home. The title area holds a 2-line heading on every day, a little shorter than before, so the square sits a touch higher and still never moves.
 - **Today's line says "today"** (Oct 29, 2026, nomi): the day you're living always names itself. Green "Today, spent on what matters.", red "Today is painted. Tomorrow is still yours.", grey "Today is painted. Tomorrow, be here."; special todays too: "Today, your first square.", "Today, your 55th birthday.", "Today, a new year begins.", "Today is Christmas." All in `todayWords`, `src/lib/pastWords.ts`.
 - **A birthday names itself** (Oct 29, 2026, nomi): every birthday line says which one, so the day reads as yours: "Your 55th birthday, spent on what matters.", "A hard 55th birthday. You're allowed that.", "Your 55th birthday, softly come and gone." (2 for a blur, 3 for the others; milestones already named it).
+- **Drying, a touch quicker** (Oct 29, 2026, nomi): the paint dries in 1.7s (was 2.4s) and the word signs the corner with its sound at 1.4s after saving (was 2s), so the answer lands about 30% sooner without feeling rushed.
 - **Special days without the extra row** (Oct 29, 2026, nomi): the "your 55th birthday" pill above the moment box (it pushed the day down) is gone. A blank special day says it in its square's handwritten label, "paint your 55th birthday" ("paint New Year's Day", "paint the day you were born"); painted, the heading speaks to it from the occasion's own pool, 3 lines per colour for your birthday, New Year's Day and Christmas ("A birthday spent on what matters.", "Not the start you hoped for.", "A quiet Christmas. That's okay."); the day you were born says "The day you were born, in colour." On today, the heading sits over today's note.
 - **Paintings, easier to find** (Oct 29, 2026, nomi): a month's or a year's name now carries a small ink picture right after it ("October 2026 🖼"): the dotted name alone was too quiet a cue. Name and picture are one button (no more dotted underline). The month view's big title opens its painting too (it shrinks a touch on the narrowest phones so the name and picture fit between the arrows). The paintings help says so.
 - **Fix: "delete" flashing between days** (Oct 29, 2026, nomi): stepping to the day before or after, each note fades in, and while it was see-through the grey "delete" hidden behind it (swipe to delete) flashed through. Now the whole row fades in, the note opaque within it, so the button stays covered.

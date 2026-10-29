@@ -764,7 +764,7 @@ sup.ord {
 /* Then it dries, as paint does (drawn on the canvas, in PaintCanvas). The day's word signs the corner once it's mostly
    dry, written left to right. */
 .canvas.is-drying .canvas-word.is-painted .canvas-hand {
-  animation: sign 1s 2s ease-out both; /* with its sound: SIGN_MS */
+  animation: sign 1s 1.4s ease-out both; /* with its sound: SIGN_MS */
 }
 @keyframes sign {
   from {
