@@ -59,13 +59,17 @@ const POOLS: Record<Paint, string[]> = {
 // birthday's ordinal ("55th").
 const OCCASIONS: Record<string, Record<Paint, string[]>> = {
   birthday: {
-    green: ['Your {n} birthday, well spent.', 'A birthday spent on what matters.', 'Another year begins on purpose.'],
-    red: [
-      "A hard birthday. You're allowed that.",
-      'Birthdays can be heavy. You looked.',
-      'Not every birthday goes as hoped.',
+    green: [
+      'Your {n} birthday, well spent.',
+      'Your {n} birthday, spent on what matters.',
+      'Your {n} birthday. A year begins on purpose.',
     ],
-    grey: ['A quiet birthday, all your own.', 'A birthday, softly come and gone.', 'Your {n} birthday, a quiet one.'],
+    red: [
+      "A hard {n} birthday. You're allowed that.",
+      'Your {n} birthday. Heavy, and you looked.',
+      'Your {n} birthday, not as hoped.',
+    ],
+    grey: ['Your {n} birthday, softly come and gone.', 'Your {n} birthday, a quiet one.'],
   },
   newyear: {
     green: ['A new year, begun on purpose.', 'The year began with what matters.', "New Year's Day, well spent."],
