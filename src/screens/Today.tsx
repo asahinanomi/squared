@@ -68,12 +68,6 @@ type Props = {
 // The blank square says how far back its day is (the date above says which day), so a slip to another day shows
 // before the first stroke, on two lines ("paint" above): "paint your day", "paint yesterday", "paint 3 days ago", "paint last week",
 // "paint 2 months ago", "paint 17 years ago".
-// Today, once painted: its heading, one line per colour, pointing forward (the colour itself is never named).
-const CLOSING: Record<Paint, string> = {
-  green: 'Spent on what matters.',
-  red: 'Tomorrow is still yours.',
-  grey: 'Tomorrow, be here.',
-}
 // The first visit's sheet: the three colours, each a plain sentence.
 const INTRO: [Paint, string][] = [
   ['green', 'green means I spent it on what matters.'],
@@ -134,7 +128,7 @@ export function Today(props: Props) {
   const special = specialDay(date, born)
   // The day you started squared: found once per change to your squares, not on every render.
   const first = useMemo(() => firstSquare(days), [days])
-  // A painted day speaks back: its own words, from where you stand (src/lib/pastWords.ts). Null on a plain today.
+  // A painted day speaks back: its own words, from where you stand (src/lib/pastWords.ts).
   const words = day ? dayWords({ iso: date, today, paint: day.color, special, born, framed: day.framed, first }) : null
 
   // On each dip, the dipped colour's meaning rises from the bottom, one line (nomi: three took the focus off
@@ -382,10 +376,10 @@ export function Today(props: Props) {
           <div className="day-head">
             {day && date === today ? (
               // Today, painted: the question is answered, so the day closes with one line, as the heading alone like
-              // every painted day (nomi, Oct 29, 2026): its colour's line, never a verdict, pointing forward (or a first
-              // square's or a special day's words). "start over" brings the question back.
+              // every painted day (nomi, Oct 29, 2026): always saying "today", never a verdict, pointing forward
+              // (src/lib/pastWords.ts). "start over" brings the question back.
               <div className="day-closed">
-                <h1 className="question">{words ?? CLOSING[day.color]}</h1>
+                <h1 className="question">{words}</h1>
               </div>
             ) : day ? (
               // A past day, painted: squared speaks back, the day's own words as the heading (2 lines at most), from its

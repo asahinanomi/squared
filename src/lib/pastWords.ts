@@ -185,11 +185,27 @@ export function firstSquare(days: Days): string | undefined {
   return start && days[start] ? start : undefined
 }
 
+// Today, painted (nomi, Oct 29, 2026): one big line that always says "today", pointing forward, never naming the colour.
+const TODAY: Record<Paint, string> = {
+  green: 'Today, spent on what matters.',
+  red: 'Today is painted. Tomorrow is still yours.',
+  grey: 'Today is painted. Tomorrow, be here.',
+}
+
+/** Today's own words: its colour line, or what makes it special (always saying "today"). */
+function todayWords(paint: Paint, occasion: string | undefined, first: boolean): string {
+  if (first) return 'Today, your first square.'
+  const birthday = occasion && /^your (\S+) birthday$/.exec(occasion)
+  if (birthday) return `Today, your ${birthday[1]} birthday.`
+  if (occasion === "New Year's Day") return 'Today, a new year begins.'
+  if (occasion === 'Christmas') return 'Today is Christmas.'
+  return TODAY[paint]
+}
+
 /**
- * A painted day's heading. When a day is more than one thing, the strongest wins: the day you were born, then early
- * years (before 4), your first square, a holiday or birthday (milestones first), framed, then the colour's own pool
- * (mixed with far-back lines from 3 years ago). Today speaks only when it's a first square or a special day (null
- * otherwise: it keeps "Today is in colour.").
+ * A painted day's heading. Today has its own words (todayWords). For a past day, when it's more than one thing, the
+ * strongest wins: the day you were born, then early years (before 4), your first square, a holiday or birthday
+ * (milestones first), framed, then the colour's own pool (mixed with far-back lines from 3 years ago).
  */
 export function dayWords(o: {
   iso: string
@@ -199,9 +215,10 @@ export function dayWords(o: {
   born?: string
   framed?: boolean
   first?: string
-}): string | null {
+}): string {
   const { iso, today, paint, special, born } = o
   const occasion = special?.split(' · ')[0]
+  if (iso === today) return todayWords(paint, occasion, iso === o.first)
   if (occasion === 'the day you were born') return pick(BORN, iso)
   if (born && iso < yearsAfter(born, 4)) return pick(EARLY[paint], iso)
   if (iso === o.first) return pick(FIRST, iso)
@@ -213,7 +230,6 @@ export function dayWords(o: {
     }
     return occasionLine(special, paint, iso)
   }
-  if (iso === today) return null
   if (o.framed) return pick([...FRAMED_ANY, FRAMED[paint]], iso)
   return pick(iso <= yearsAfter(today, -3) ? [...POOLS[paint], ...FAR[paint]] : POOLS[paint], iso)
 }
