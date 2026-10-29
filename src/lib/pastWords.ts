@@ -20,7 +20,6 @@ const POOLS: Record<Paint, string[]> = {
     'Wishing it were different is human.',
     'Heavy to look at. You looked.',
     'You can hold this one gently.',
-    'You deserve your own kindness, too.',
     "It's painted. You can set it down.",
     "You're still here. That counts.",
     "This day is painted. Today isn't, yet.",
