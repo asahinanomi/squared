@@ -13,7 +13,7 @@ import { addDays, firstDay, fromIso, longDate, ordinal, shortDateParts, todayIso
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
-import { occasionLine, pastLine } from '../lib/pastWords'
+import { dayWords, firstSquare } from '../lib/pastWords'
 import type { Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
@@ -132,8 +132,10 @@ export function Today(props: Props) {
   const next = addDays(date, 1)
   const day = days[date]
   const special = specialDay(date, born)
-  // A special day, painted, speaks to its occasion: its own small pool per colour (src/lib/pastWords.ts).
-  const occasion = special && day ? occasionLine(special, day.color, date) : null
+  // A painted day speaks back: its own words, from where you stand (src/lib/pastWords.ts). Null on a plain today.
+  const words = day
+    ? dayWords({ iso: date, today, paint: day.color, special, born, framed: day.framed, first: firstSquare(days) })
+    : null
 
   // On each dip, the dipped colour's meaning rises from the bottom, one line (nomi: three took the focus off
   // painting). No backdrop, so nothing waits on it: it goes by itself after a few seconds, or at the next touch, and
@@ -382,14 +384,14 @@ export function Today(props: Props) {
               // Today, painted: the question is answered, so the day closes with a statement (the same for every
               // colour, never a verdict) and a quiet note that points forward. "start over" brings the question back.
               <div className="day-closed">
-                <h1 className="question">{occasion ?? 'Today is in colour.'}</h1>
+                <h1 className="question">{words ?? 'Today is in colour.'}</h1>
                 <p className="day-closed-note">{CLOSING[day.color]}</p>
               </div>
             ) : day ? (
               // A past day, painted: squared speaks back, the day's own words as the heading (2 lines at most), from its
-              // colour's pool, the same each time you come back (src/lib/pastWords.ts); a special day says its occasion.
+              // colour's pool, the same each time you come back (src/lib/pastWords.ts), knowing where you stand.
               <div className="day-closed">
-                <h1 className="question">{occasion ?? pastLine(day.color, date)}</h1>
+                <h1 className="question">{words}</h1>
               </div>
             ) : (
               <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
