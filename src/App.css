@@ -382,6 +382,9 @@
 .day-closed-note {
   margin: 8px 0 6px;
   font-size: 15px;
+  line-height: 1.5;
+  min-height: 3em; /* always 2 lines' room: a short line or a long one, the title area keeps one height (nomi) */
+  max-width: 300px;
   color: var(--ink-soft);
   text-align: center;
 }

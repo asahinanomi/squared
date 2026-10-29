@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 28, 2026, 22:59 UTC_
+_last updated Oct 29, 2026, 01:51 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -213,7 +213,7 @@ squared is a mindful journal for now: the day is lived in moments, then painted.
 
 **A painted day is closed** (Oct 25, 2026, a second round of cuts): the palette is put away once a day is painted ("start over" brings it back, the one way to change a day); today's bar shows only zoom out (the greyed-out zoom in went: a day is as close as it gets); no square shows a stamp any more ("painted on time", "painted Oct 20", "repainted Oct 23": the lighter shade it explained was dropped earlier), only its hand-signed word; and once painted, "last moment added…" goes (the moments sit right under the square).
 
-**Today, painted, closes with a statement** (Oct 25, 2026): once today is painted, the question gives way (fading in) to *Today is in colour.* (the serif, where the question was), the same for every colour, never a verdict, with a quiet note under it (15px, ink-soft) that never names the colour: green "Spent on what matters.", red "Tomorrow is still yours.", grey "Tomorrow, be here." Only on today: a painted past day keeps "did I spend this day meaningfully?". "start over" brings the question back.
+**Today, painted, closes with a statement** (Oct 25, 2026): once today is painted, the question gives way (fading in) to *Today is in colour.* (the serif, where the question was), the same for every colour, never a verdict, with a quiet note under it (15px, ink-soft) that never names the colour: green "Spent on what matters.", red "Tomorrow is still yours.", grey "Tomorrow, be here." (A painted past day closes too since Oct 29, 2026: see "Words for past days".) "start over" brings the question back.
 
 ## Home (cut, Oct 25, 2026)
 
@@ -296,6 +296,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **The framed day opens that day** (Oct 28, 2026, nomi): on my days, the framed card opens that day (its grey › sits in the middle, as on the matters card); every framed day is a quiet text link at its foot, at the right: "see all framed days" (14px, muted, dotted underline, as "start over" on the day; no second arrow, no hairline: two arrows read as too much). (Tapping the day and landing on the list felt lost; an arrow by "you framed this day" still read as this day.) The card shows the day's "to remember" moments, every one in full; a framed day without one shows its latest moment, cut at 2 lines.
 - **my days, in order** (Oct 28, 2026, nomi): where you are; then your own words, "you said this matters" and "you framed this day", side by side; "you painted these" last, the biggest and calmest card, a gallery at the page's end (it sat before the framed day, pushing it below the fold).
 - **Find a day, on a computer** (Oct 28, 2026, nomi): the day squares are at most 48px, so on a computer's wider sheet the whole month fits under "which day?" and your age ("You were about 54."), which used to scroll out of view. A phone's squares were smaller already.
+- **Words for past days** (Oct 29, 2026, nomi): a painted day before today closes like today does, with *This day is in colour.*, and squared speaks back with one kind line from its colour's pool (8 each, `src/lib/pastWords.ts`), picked by the date so a day always says the same thing. Written with a therapist's care: never a verdict, a conscience not a coach, no pressure; regret meets self-compassion ("A hard day. You're allowed to feel it."), worth it speaks to the choice, never the feeling ("Your time went where your heart is."), a blur is normalised ("Rest counts, too."). The pools were shaped in the doc "squared: words for past days". The line always has two lines' room, so the title area keeps one height on every day and the square never moves.
 - **Cleanup** (Oct 28, 2026): styles nothing used any more are gone (the old home cards' head, big number, bar and legend, the old life bar and its ghost, the compass sub-line, a help line, a settings note; about 150 lines).
 - **Today's edge inside its square** (Oct 28, 2026, nomi): in the where-you-are card, today is marked by its own edge in ink, inside the square (as on the month), not a ring around it that crowded its neighbours. A framed today: the ink edge, then its thin white mat.
 - **No counts in my days**: the paintings card lost "22 days in colour" under each painting and the "(n)" after "all my paintings"; framed days says "the days you framed", not "3 days framed". The painting says it. This week stays, moved to the bottom of my days for now (nomi is thinking about it).

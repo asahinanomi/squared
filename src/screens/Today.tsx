@@ -13,6 +13,7 @@ import { addDays, firstDay, fromIso, longDate, ordinal, shortDateParts, todayIso
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
+import { longestPastLine, pastLine } from '../lib/pastWords'
 import type { Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
@@ -385,21 +386,26 @@ export function Today(props: Props) {
                 <h1 className="question">Today is in colour.</h1>
                 <p className="day-closed-note">{CLOSING[day.color]}</p>
               </div>
+            ) : day ? (
+              // A past day, painted: it closes too, and squared speaks back with one kind line from its colour's pool,
+              // the same each time you come back (src/lib/pastWords.ts).
+              <div className="day-closed">
+                <h1 className="question">This day is in colour.</h1>
+                <p className="day-closed-note">{pastLine(day.color, date)}</p>
+              </div>
             ) : (
               <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
             )}
-            {date === today && (
-              <div className="day-head-ghost" aria-hidden="true" inert>
-                {day ? (
-                  <Question text={questionFor(question, true, false)} onDefine={onDefine} />
-                ) : (
-                  <div className="day-closed">
-                    <h1 className="question">Today is in colour.</h1>
-                    <p className="day-closed-note">{CLOSING.red}</p>
-                  </div>
-                )}
-              </div>
-            )}
+            <div className="day-head-ghost" aria-hidden="true" inert>
+              {day ? (
+                <Question text={questionFor(question, date === today, false)} onDefine={onDefine} />
+              ) : (
+                <div className="day-closed">
+                  <h1 className="question">{date === today ? 'Today' : 'This day'} is in colour.</h1>
+                  <p className="day-closed-note">{date === today ? CLOSING.red : longestPastLine(date)}</p>
+                </div>
+              )}
+            </div>
           </div>
 
           <div
