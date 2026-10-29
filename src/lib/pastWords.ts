@@ -40,7 +40,7 @@ const POOLS: Record<Paint, string[]> = {
     'You lived by what you care about.',
   ],
   grey: [
-    "Some days just pass. That's okay.",
+    'Some days simply pass.',
     'Some days are soft around the edges.',
     'Not every day needs a story.',
     'Memory lets some days go.',
@@ -67,12 +67,12 @@ const OCCASIONS: Record<string, Record<Paint, string[]>> = {
       'Birthdays can be heavy. You looked.',
       'Not every birthday goes as hoped.',
     ],
-    grey: ["A quiet birthday. That's okay.", 'Birthdays can just pass, too.', 'Your {n} birthday, a quiet one.'],
+    grey: ['A quiet birthday, all your own.', 'Birthdays can just pass, too.', 'Your {n} birthday, a quiet one.'],
   },
   newyear: {
     green: ['A new year, begun on purpose.', 'The year began with what matters.', "New Year's Day, well spent."],
     red: ['A hard start. The year is still yours.', 'Not the start you hoped for.', 'A heavy first day. You looked.'],
-    grey: ['A quiet start to the year.', 'The year began softly.', "A blur of a first day. That's okay."],
+    grey: ['A quiet start to the year.', 'The year began softly.', 'The year began in a soft blur.'],
   },
   christmas: {
     green: ['Christmas, spent on what matters.', 'Christmas, close to what matters.', 'Christmas, well spent.'],
@@ -81,7 +81,7 @@ const OCCASIONS: Record<string, Record<Paint, string[]>> = {
       'Not the Christmas you hoped for.',
       'A heavy Christmas. Be gentle with yourself.',
     ],
-    grey: ["A quiet Christmas. That's okay.", 'Christmas came and went softly.', 'Some Christmases just pass.'],
+    grey: ['A quiet Christmas, gently held.', 'Christmas came and went softly.', 'Some Christmases just pass.'],
   },
 }
 
