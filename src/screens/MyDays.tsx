@@ -218,7 +218,7 @@ export function MyDays({
         <div className="help-pair">
           <PaintingDemo />
           <div className="help-notes">
-            <p>Tap a month’s or a year’s name to open its painting.</p>
+            <p>Tap a month’s or a year’s name, with its little picture, to open its painting.</p>
             <p>When it ends, keep it.</p>
           </div>
         </div>

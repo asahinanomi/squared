@@ -112,7 +112,14 @@ export function Month({
         >
           <Chevron dir="left" />
         </button>
-        <h1 className="ladder-title">{monthTitle(visible)}</h1>
+        {/* The big title opens its month's painting too, the most obvious place for it. */}
+        <h1 className="ladder-title">
+          {onPainting && visible <= current && Object.keys(days).some((iso) => iso.startsWith(visible.slice(0, 7))) ? (
+            <PaintingButton period={visible.slice(0, 7)} label={monthTitle(visible)} onOpen={onPainting} />
+          ) : (
+            monthTitle(visible)
+          )}
+        </h1>
         <button aria-label="Next month" disabled={visible >= current} onClick={() => step(1)}>
           <Chevron dir="right" />
         </button>
