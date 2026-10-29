@@ -38,7 +38,7 @@ const POOLS: Record<Paint, string[]> = {
     "Some days just pass. That's okay.",
     'Not every day needs a story.',
     'Not remembering is human.',
-    'Rest counts, too.',
+    'Some days are soft around the edges.',
     'A quiet one. Those count too.',
     'Not every day has to mean something.',
     'Some days are just in between.',
