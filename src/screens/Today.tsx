@@ -1,4 +1,4 @@
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { MomentBox } from '../components/MomentBox'
@@ -132,10 +132,10 @@ export function Today(props: Props) {
   const next = addDays(date, 1)
   const day = days[date]
   const special = specialDay(date, born)
+  // The day you started squared: found once per change to your squares, not on every render.
+  const first = useMemo(() => firstSquare(days), [days])
   // A painted day speaks back: its own words, from where you stand (src/lib/pastWords.ts). Null on a plain today.
-  const words = day
-    ? dayWords({ iso: date, today, paint: day.color, special, born, framed: day.framed, first: firstSquare(days) })
-    : null
+  const words = day ? dayWords({ iso: date, today, paint: day.color, special, born, framed: day.framed, first }) : null
 
   // On each dip, the dipped colour's meaning rises from the bottom, one line (nomi: three took the focus off
   // painting). No backdrop, so nothing waits on it: it goes by itself after a few seconds, or at the next touch, and

@@ -114,6 +114,15 @@ const EARLY: Record<Paint, string[]> = {
   ],
 }
 
+// The day you were born, any colour: a newborn has no choice to regret or stand behind, so these hold the scale of it.
+const BORN = [
+  'Day one. Everything began here.',
+  'Your very first day.',
+  'The first square of your life.',
+  'Day one of every day since.',
+  'You arrived. Every day after starts here.',
+]
+
 // The day you started squared, any colour.
 const FIRST = ['Your first square. It began here.', 'The first day you painted. Hello.', 'Where your squares began.']
 
@@ -193,7 +202,7 @@ export function dayWords(o: {
 }): string | null {
   const { iso, today, paint, special, born } = o
   const occasion = special?.split(' · ')[0]
-  if (occasion === 'the day you were born') return 'The day you were born, in colour.'
+  if (occasion === 'the day you were born') return pick(BORN, iso)
   if (born && iso < yearsAfter(born, 4)) return pick(EARLY[paint], iso)
   if (iso === o.first) return pick(FIRST, iso)
   if (special) {
