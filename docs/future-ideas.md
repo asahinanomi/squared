@@ -23,6 +23,8 @@ Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encry
 
 **Decided: wait for testers.** nomi's feeling may not be everyone's, and testers won't go as deep in two weeks. So hold it, watch what they do with things as they are (do they paint past days? how far back? do they stop after a hard day?), and ask on day 14 (`docs/6-beta2-testflight.md`). Then decide. Risks to solve in a lab: the lived tone must never read as grey paint ("a blur"); squared needs to know the day you started (joined, not first painted). The principle is in the brand story, section 2.
 
+**First evidence, nomi (Oct 29, 2026): painting the past turns red.** Logging past days, nomi found a lot of regret days. Memory keeps the days we wish had gone differently (the hard ones, the missed chances, what we didn't do), while ordinary okay days fade, so a painted past can look redder than it was. Honest, and it's what "today is still yours" answers. But it may weigh on testers: backfilling and seeing mostly red could feel worse, not better. Watch in beta 1 (do people paint the past, how far back, and question 5, how it felt). If it reads heavy, gentle options to lab: a kind line when a past day is painted red; "a blur" made to feel like a fair answer for days you don't remember; or the lived idea above.
+
 ## The pie, parked (Oct 26, 2026)
 
 **Cut from my days** ("a life, in slices"): a breakdown of your days by colour, in percentages, read as stats for their own sake, and the squares already show a life in colour. **The code is kept, unreachable**: `src/screens/Pie.tsx` and `src/lib/pie.ts` (zoom steps whole life → days I lived → painted only, "see them →" into the list). To bring it back, give it a door again (it was a row in my days opening `nav.openPie`).
