@@ -67,7 +67,7 @@ const OCCASIONS: Record<string, Record<Paint, string[]>> = {
       'Birthdays can be heavy. You looked.',
       'Not every birthday goes as hoped.',
     ],
-    grey: ['A quiet birthday, all your own.', 'Birthdays can just pass, too.', 'Your {n} birthday, a quiet one.'],
+    grey: ['A quiet birthday, all your own.', 'A birthday, softly come and gone.', 'Your {n} birthday, a quiet one.'],
   },
   newyear: {
     green: ['A new year, begun on purpose.', 'The year began with what matters.', "New Year's Day, well spent."],
