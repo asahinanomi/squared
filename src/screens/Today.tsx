@@ -13,7 +13,7 @@ import { addDays, firstDay, fromIso, longDate, ordinal, shortDateParts, todayIso
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
-import { pastLine } from '../lib/pastWords'
+import { occasionLine, pastLine } from '../lib/pastWords'
 import type { Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
@@ -132,9 +132,8 @@ export function Today(props: Props) {
   const next = addDays(date, 1)
   const day = days[date]
   const special = specialDay(date, born)
-  // A special day, painted, says its occasion as the heading: "Your 55th birthday, in colour."
-  const first = special?.split(' · ')[0]
-  const occasion = first ? `${first[0].toUpperCase()}${first.slice(1)}, in colour.` : null
+  // A special day, painted, speaks to its occasion: its own small pool per colour (src/lib/pastWords.ts).
+  const occasion = special && day ? occasionLine(special, day.color, date) : null
 
   // On each dip, the dipped colour's meaning rises from the bottom, one line (nomi: three took the focus off
   // painting). No backdrop, so nothing waits on it: it goes by itself after a few seconds, or at the next touch, and
