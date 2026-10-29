@@ -68,7 +68,7 @@ type Props = {
 // The blank square says how far back its day is (the date above says which day), so a slip to another day shows
 // before the first stroke, on two lines ("paint" above): "paint your day", "paint yesterday", "paint 3 days ago", "paint last week",
 // "paint 2 months ago", "paint 17 years ago".
-// Today, once painted: a quiet note under "Today is in colour." (the colour itself is never named).
+// Today, once painted: its heading, one line per colour, pointing forward (the colour itself is never named).
 const CLOSING: Record<Paint, string> = {
   green: 'Spent on what matters.',
   red: 'Tomorrow is still yours.',
@@ -377,15 +377,15 @@ export function Today(props: Props) {
               it is); on any other day, the question asks about "this day". */}
           {/* The question and today's closing share one place, as tall as the taller of the two (the other sits there
               unseen), so painting today never moves the square. */}
-          {/* The title area keeps one height on every day (the ghost holds today's closing, the tallest), so the square
+          {/* The title area keeps one height on every day (the ghost holds a 2-line heading, the tallest), so the square
               never moves; whatever shows sits in its middle. */}
           <div className="day-head">
             {day && date === today ? (
-              // Today, painted: the question is answered, so the day closes with a statement (the same for every
-              // colour, never a verdict) and a quiet note that points forward. "start over" brings the question back.
+              // Today, painted: the question is answered, so the day closes with one line, as the heading alone like
+              // every painted day (nomi, Oct 29, 2026): its colour's line, never a verdict, pointing forward (or a first
+              // square's or a special day's words). "start over" brings the question back.
               <div className="day-closed">
-                <h1 className="question">{words ?? 'Today is in colour.'}</h1>
-                <p className="day-closed-note">{CLOSING[day.color]}</p>
+                <h1 className="question">{words ?? CLOSING[day.color]}</h1>
               </div>
             ) : day ? (
               // A past day, painted: squared speaks back, the day's own words as the heading (2 lines at most), from its
@@ -398,8 +398,10 @@ export function Today(props: Props) {
             )}
             <div className="day-head-ghost" aria-hidden="true" inert>
               <div className="day-closed">
-                <h1 className="question">Today is in colour.</h1>
-                <p className="day-closed-note">{CLOSING.red}</p>
+                <h1 className="question">
+                  two lines,
+                  <br />a heading
+                </h1>
               </div>
             </div>
           </div>

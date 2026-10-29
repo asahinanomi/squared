@@ -82,7 +82,7 @@ Voice rule: all three one-liners are **first person** (it's your own conscience,
 
 > **did I spend Today meaningfully?**
 
-- **Once today is painted, it's answered** (Oct 25, 2026): the question gives way to *Today is in colour.*, the same for every colour, with a quiet note that points forward and never names the colour: "Spent on what matters." · "Tomorrow is still yours." · "Tomorrow, be here." (red and grey look to tomorrow: the line's hope moves on once today is painted). Past painted days keep the question.
+- **Once today is painted, it's answered** (Oct 25, 2026): the question gives way to *Today is in colour.*, the same for every colour, with a quiet note that points forward and never names the colour: "Spent on what matters." · "Tomorrow is still yours." · "Tomorrow, be here." (red and grey look to tomorrow: the line's hope moves on once today is painted). Since Oct 29, 2026, one big line only, like every painted day: that colour line is the heading itself, and *Today is in colour.* stays on home. Past painted days speak back too (see README → "Words for past days").
 - **Its tense follows the day** (Oct 24, 2026). Today, until it's painted: *am I spending Today meaningfully?*, a nudge to be present while it's lived. Once today is painted: *did I spend Today meaningfully?*, the honest look back. Any other day: *did I spend this day meaningfully?* Sign-in now says the line instead of asking (Oct 25, 2026). The letter keeps *did I spend Today meaningfully?*: its three answers speak in the past ("yes, I spent it on what matters"). 
 - First person. Always.
 - **Today** is capitalised, with a dotted underline: it's the day itself, any day you're looking at.
