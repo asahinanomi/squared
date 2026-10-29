@@ -362,7 +362,7 @@
 .day-head {
   display: grid;
   justify-items: center;
-  align-items: start;
+  align-items: center; /* one height for every day: what shows sits in the middle of it */
   width: 100%;
 }
 .day-head > * {
@@ -517,19 +517,6 @@
   }
 }
 /* A special day (your birthday, New Year's Day, Christmas): a quiet line under the date. */
-/* A special day (your birthday, New Year's Day, Christmas): a quiet capsule over the moment box, ink on the
-   capsules' grey, so it reads as the day's own small label rather than stray text. */
-.day-special {
-  align-self: center;
-  width: fit-content;
-  margin: 0 auto 12px;
-  padding: 5px 14px;
-  border-radius: 999px;
-  background: #efefea;
-  font-size: 14px;
-  line-height: 1.3;
-  color: var(--ink);
-}
 /* An ordinal's suffix, raised small (55th, Oct 12th), everywhere it's written out. */
 sup.ord {
   font-size: 0.6em;

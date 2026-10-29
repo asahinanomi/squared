@@ -13,7 +13,7 @@ import { addDays, firstDay, fromIso, longDate, ordinal, shortDateParts, todayIso
 import type { Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
-import { longestPastLine, pastLine } from '../lib/pastWords'
+import { pastLine } from '../lib/pastWords'
 import type { Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
@@ -132,6 +132,9 @@ export function Today(props: Props) {
   const next = addDays(date, 1)
   const day = days[date]
   const special = specialDay(date, born)
+  // A special day, painted, says its occasion as the heading: "Your 55th birthday, in colour."
+  const first = special?.split(' · ')[0]
+  const occasion = first ? `${first[0].toUpperCase()}${first.slice(1)}, in colour.` : null
 
   // On each dip, the dipped colour's meaning rises from the bottom, one line (nomi: three took the focus off
   // painting). No backdrop, so nothing waits on it: it goes by itself after a few seconds, or at the next touch, and
@@ -357,11 +360,6 @@ export function Today(props: Props) {
               onSetUp={props.onSetUp}
             />
           </div>
-          {special && (
-            <p className="day-special">
-              <Raised text={special} />
-            </p>
-          )}
 
           {/* A moment, any time: "this moment…" while today is being lived, "add to today…" once it's painted, "add to
               this day…" on any other day. Hidden while the bubble is open ("because…" right after painting, or updating
@@ -378,33 +376,30 @@ export function Today(props: Props) {
               it is); on any other day, the question asks about "this day". */}
           {/* The question and today's closing share one place, as tall as the taller of the two (the other sits there
               unseen), so painting today never moves the square. */}
+          {/* The title area keeps one height on every day (the ghost holds today's closing, the tallest), so the square
+              never moves; whatever shows sits in its middle. */}
           <div className="day-head">
             {day && date === today ? (
               // Today, painted: the question is answered, so the day closes with a statement (the same for every
               // colour, never a verdict) and a quiet note that points forward. "start over" brings the question back.
               <div className="day-closed">
-                <h1 className="question">Today is in colour.</h1>
+                <h1 className="question">{occasion ?? 'Today is in colour.'}</h1>
                 <p className="day-closed-note">{CLOSING[day.color]}</p>
               </div>
             ) : day ? (
-              // A past day, painted: it closes too, and squared speaks back with one kind line from its colour's pool,
-              // the same each time you come back (src/lib/pastWords.ts).
+              // A past day, painted: squared speaks back, the day's own words as the heading (2 lines at most), from its
+              // colour's pool, the same each time you come back (src/lib/pastWords.ts); a special day says its occasion.
               <div className="day-closed">
-                <h1 className="question">This day is in colour.</h1>
-                <p className="day-closed-note">{pastLine(day.color, date)}</p>
+                <h1 className="question">{occasion ?? pastLine(day.color, date)}</h1>
               </div>
             ) : (
               <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
             )}
             <div className="day-head-ghost" aria-hidden="true" inert>
-              {day ? (
-                <Question text={questionFor(question, date === today, false)} onDefine={onDefine} />
-              ) : (
-                <div className="day-closed">
-                  <h1 className="question">{date === today ? 'Today' : 'This day'} is in colour.</h1>
-                  <p className="day-closed-note">{date === today ? CLOSING.red : longestPastLine(date)}</p>
-                </div>
-              )}
+              <div className="day-closed">
+                <h1 className="question">Today is in colour.</h1>
+                <p className="day-closed-note">{CLOSING.red}</p>
+              </div>
             </div>
           </div>
 
@@ -428,7 +423,7 @@ export function Today(props: Props) {
                 loaded={loaded}
                 onDryBrush={onDryBrush}
                 onFilled={onFilled}
-                blank={blankWord(date, today)}
+                blank={special ? `paint\n${special.split(' · ')[0]}` : blankWord(date, today)}
                 breathing={breathing}
               />
             </div>
