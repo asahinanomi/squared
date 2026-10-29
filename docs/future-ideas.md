@@ -11,6 +11,10 @@ Decided Oct 23, 2026: keep data as it is for beta (locked to each account, encry
 - **The trade-offs to design carefully** (solid over clever): a passphrase you enter once per device, a recovery option (or a plain warning that a lost passphrase means lost notes), and export and search working on the device. Existing notes would be encrypted once, on your device.
 - **Before building**: a lab for the passphrase moments (set it, enter it on a new device, forgot it), and a short plan of the simplest safe design.
 
+## Next after private notes: one photo on a framed day (agreed Oct 29, 2026)
+
+One photo per framed day only, to keep with it: rare and special, tucked with the note, never on the square (colour lives in the paint). Built encrypted from the start, after private notes, so it's done once. Shrunk on the phone before upload, private storage, deleted when the day is unframed or the account goes. Beta 1 can confirm the wish. Later, in the iOS app: a quiet "photos from this day" that reads your own library on the phone, storing and uploading nothing.
+
 ## The past: lived, not blank (thinking it through, Oct 25, 2026)
 
 **Why it came up.** nomi painted heavy, painful years from before squared, and doesn't want to revisit them again. squared asks "how many squares?" from birth, so most of a life starts blank, and the days before you started can never all be painted. Blank squares read as unfinished: the zoom quietly calls you to fill them.
@@ -70,7 +74,6 @@ Real human moments many people will have: a day that mattered more than any othe
 ## Days
 
 - **My framed days**: a page for the days you framed, maybe in settings beside my paintings.
-- **A photo on a framed day**: let you add an image to a day you framed, to keep with it.
 - **Your own special days** (special days, step 2): add your own in settings (a `special_days` table).
 - **Hashtags in notes**: nomi is trying them by hand first.
 
