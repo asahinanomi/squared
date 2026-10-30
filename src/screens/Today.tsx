@@ -42,6 +42,8 @@ type Props = {
   onFrame: () => void
   /** Pin a note to the top of its day, or unpin it. */
   onPinNote: (note: Note) => void
+  /** Paint a moment in its own colour, or take it away (null). */
+  onPaintNote: (note: Note, color: Paint | null) => void
   /** On this day: a year (or a month) ago, painted — shown on today's screen; a tap opens it. */
   /** Framing didn't save: what to say, quietly, under the square. */
   onLoad: (p: Paint) => void
@@ -455,6 +457,8 @@ export function Today(props: Props) {
                 pinned={(why.pinned || why.note?.pinned) && !!day?.framed}
                 isPinned={why.note?.pinned}
                 onPin={why.note ? () => props.onPinNote(why.note!) : undefined}
+                paint={why.note?.color}
+                onPaint={why.note ? (c) => props.onPaintNote(why.note!, c) : undefined}
                 now={!day && date === today && !why.note}
               />
             ) : (
@@ -497,6 +501,7 @@ export function Today(props: Props) {
             notes={notes}
             framed={day?.framed ? day.color : undefined}
             onOpen={(n) => onOpenWhy(n)}
+            onPaint={props.onPaintNote}
             onDelete={onDeleteNote}
           />
         )}

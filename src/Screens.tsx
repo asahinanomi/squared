@@ -87,6 +87,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onWipe={act.onWipe}
         onFrame={act.onFrame}
         onPinNote={act.onPinNote}
+        onPaintNote={act.onPaintNote}
         onZoomOut={nav.outOfDay}
         onMatters={nav.openMatters}
         onSetUp={() => nav.askSquares('today')}

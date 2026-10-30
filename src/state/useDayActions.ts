@@ -88,11 +88,18 @@ export function useDayActions(
     save({ k: 'note-pin', note, pinned })
   }
 
+  // Paint a moment in its own colour (optional, any time), or take it away: the square keeps the day's answer.
+  const onPaintNote = (note: Note, color: Paint | null) => {
+    setWhy(null)
+    swap(note.date, note.id, { ...note, color: color ?? undefined })
+    save({ k: 'note-color', note, color })
+  }
+
   const onDeleteNote = async (note: Note) => {
     setWhy(null)
     putNotes(note.date, (l) => l.filter((n) => n.id !== note.id))
     save({ k: 'note-del', note })
   }
 
-  return { onFilled, onFrame, onWipe, onSaveNote, onPinNote, onDeleteNote }
+  return { onFilled, onFrame, onWipe, onSaveNote, onPinNote, onPaintNote, onDeleteNote }
 }

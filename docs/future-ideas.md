@@ -13,7 +13,7 @@ Not urgent: squared already does what most journals do (notes locked to your acc
 
 ## Torn days: a green and red split square (after beta 1, noted Oct 30, 2026)
 
-Real days can be half worth it, half regret, and one colour feels dishonest. No fourth colour (green and red mixed is mud, and a middle option becomes the easy exit). Instead, maybe a square split in green and red, your two real paints, reached only through the "torn?" sheet ("it was both"), never a button on the day. Its cost: every view, filter, word pool and painting learns split days. Evidence first: nomi notes each torn day in the quiet week (a moment starting "torn"), and beta 1 asks "Were there days you couldn't pick just one colour?". Often → lab it. Rarely → the torn sheet plus a moment's own colour (lab 11, MomentA–D) may be enough.
+Real days can be half worth it, half regret, and one colour feels dishonest. No fourth colour (green and red mixed is mud, and a middle option becomes the easy exit). Instead, maybe a square split in green and red, your two real paints, reached only through the "torn?" sheet ("it was both"), never a button on the day. Its cost: every view, filter, word pool and painting learns split days. Evidence first: nomi notes each torn day in the quiet week (a moment starting "torn"), and beta 1 asks "Were there days you couldn't pick just one colour?". Often → lab it. Rarely → the torn sheet plus a moment's own colour (built Oct 30, 2026, lab 11) may be enough.
 
 ## One photo on a framed day (agreed Oct 29, 2026)
 

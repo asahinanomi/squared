@@ -1,5 +1,5 @@
 import { saveColor, saveFramed, wipeDay } from './days'
-import { addNote, deleteNote, replaceNote, setPinned, type Note } from './notes'
+import { addNote, deleteNote, replaceNote, setNoteColor, setPinned, type Note } from './notes'
 import type { Paint } from './paints'
 import { reportError, sendErrors } from './report'
 import { supabase } from './supabase'
@@ -16,6 +16,7 @@ export type Op =
   | { k: 'note-add'; note: Note }
   | { k: 'note-body'; note: Note; body: string }
   | { k: 'note-pin'; note: Note; pinned: boolean }
+  | { k: 'note-color'; note: Note; color: Paint | null }
   | { k: 'note-del'; note: Note }
 
 type Job = { what: string; run: () => Promise<unknown> }
@@ -110,6 +111,8 @@ export function save(op: Op) {
         return replaceNote(op.note, op.body)
       case 'note-pin':
         return setPinned(op.note, op.pinned)
+      case 'note-color':
+        return setNoteColor(op.note, op.color)
       case 'note-del':
         return deleteNote(op.note)
     }

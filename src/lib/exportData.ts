@@ -93,7 +93,12 @@ export async function exportWord(all: Everything) {
         body.push(
           new Paragraph({
             spacing: { after: 80 },
-            children: [run(`${time(n.writtenAt)}  `, { color: SOFT, size: 18 }), run(n.body)],
+            children: [
+              run(`${time(n.writtenAt)}  `, { color: SOFT, size: 18 }),
+              // A moment painted in its own colour keeps its word, in its paint.
+              ...(n.color ? [run(`${WORD[n.color]}  `, { color: paintHex(n.color).slice(1), size: 18 })] : []),
+              run(n.body),
+            ],
           }),
         )
     }

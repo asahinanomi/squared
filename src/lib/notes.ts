@@ -1,4 +1,5 @@
 import type { Days } from './days'
+import type { Paint } from './paints'
 import { supabase } from './supabase'
 
 export type Note = {
@@ -8,6 +9,8 @@ export type Note = {
   writtenAt: string
   /** A framed day's note, "what do you want to remember?": always first, in the frame's green. */
   pinned?: boolean
+  /** The moment's own colour, if you painted it (optional): a torn day's mix lives in its moments. */
+  color?: Paint
 }
 /** Notes per day (YYYY-MM-DD), oldest first. */
 export type Notes = Record<string, Note[]>
@@ -21,24 +24,32 @@ export type Why = {
   pinned?: boolean
 }
 
-type Row = { id: string; date: string; body: string; written_at: string; pinned?: boolean }
+type Row = { id: string; date: string; body: string; written_at: string; pinned?: boolean; color?: Paint | null }
 const toNote = (r: Row): Note => ({
   id: r.id,
   date: r.date,
   body: r.body,
   writtenAt: r.written_at,
   pinned: r.pinned || undefined,
+  color: r.color || undefined,
 })
 
-// The columns to read, with pinned once migration 0014 has run (until then, notes load without it).
-let withPinned = true
-const cols = () => (withPinned ? 'id, date, body, written_at, pinned' : 'id, date, body, written_at')
-/** Run a query; if the pinned column doesn't exist yet, remember that and run it again without. */
+// The columns to read: color once migration 0022 has run, pinned once 0014 has (until then, notes load without them).
+const COLS = [
+  'id, date, body, written_at, pinned, color',
+  'id, date, body, written_at, pinned',
+  'id, date, body, written_at',
+]
+let level = 0
+const cols = () => COLS[level]
+const withPinned = () => level < 2
+const withColor = () => level < 1
+/** Run a query; if a newer column doesn't exist yet, remember that and run it again without. */
 async function tryPinned<T extends { error: { code?: string } | null }>(run: () => PromiseLike<T>): Promise<T> {
-  const res = await run()
-  if (withPinned && res.error?.code === '42703') {
-    withPinned = false
-    return run()
+  let res = await run()
+  while (res.error?.code === '42703' && level < COLS.length - 1) {
+    level++
+    res = await run()
   }
   return res
 }
@@ -109,13 +120,19 @@ export async function addNote(note: Note): Promise<Note> {
   const { data, error } = await tryPinned(() =>
     sb
       .from('notes')
-      .insert({ id: note.id, date: note.date, body: note.body, ...(withPinned && note.pinned ? { pinned: true } : {}) })
+      .insert({
+        id: note.id,
+        date: note.date,
+        body: note.body,
+        ...(withPinned() && note.pinned ? { pinned: true } : {}),
+        ...(withColor() && note.color ? { color: note.color } : {}),
+      })
       .select(cols())
       .single(),
   )
   if (error?.code === '23505') return note // the first try got through after all
   if (error) throw error
-  return { ...toNote(data as unknown as Row), pinned: note.pinned }
+  return { ...toNote(data as unknown as Row), pinned: note.pinned, color: note.color }
 }
 
 /** Overwrite a note's text; the database refreshes its time. */
@@ -126,12 +143,19 @@ export async function replaceNote(note: Note, body: string): Promise<Note> {
     sb.from('notes').update({ body }).eq('id', note.id).select(cols()).single(),
   )
   if (error) throw error
-  return { ...toNote(data as unknown as Row), pinned: note.pinned }
+  return { ...toNote(data as unknown as Row), pinned: note.pinned, color: note.color }
+}
+
+/** Paint a moment in its own colour, or take the colour away (null). */
+export async function setNoteColor(note: Note, color: Paint | null): Promise<void> {
+  if (!supabase || !withColor()) return
+  const { error } = await supabase.from('notes').update({ color }).eq('id', note.id)
+  if (error) throw error
 }
 
 /** Pin or unpin a note (a framed day's note; unframing the day unpins it). */
 export async function setPinned(note: Note, pinned: boolean): Promise<void> {
-  if (!supabase || !withPinned) return
+  if (!supabase || !withPinned()) return
   const { error } = await supabase.from('notes').update({ pinned }).eq('id', note.id)
   if (error) throw error
 }
