@@ -1,5 +1,6 @@
 import type { Days } from './days'
 import type { Paint } from './paints'
+import { reportError } from './report'
 import { supabase } from './supabase'
 
 export type Note = {
@@ -44,10 +45,14 @@ let level = 0
 const cols = () => COLS[level]
 const withPinned = () => level < 2
 const withColor = () => level < 1
-/** Run a query; if a newer column doesn't exist yet, remember that and run it again without. */
+/** Whether a moment's colour can be saved: if not, the colour strip doesn't show, so nothing you pick can vanish. */
+export const noteColorsOn = withColor
+/** Run a query; if a newer column doesn't exist yet, remember that and run it again without (and write it down: a
+ *  missing column means a migration to run, never something to hide). */
 async function tryPinned<T extends { error: { code?: string } | null }>(run: () => PromiseLike<T>): Promise<T> {
   let res = await run()
   while (res.error?.code === '42703' && level < COLS.length - 1) {
+    reportError('notes columns', res.error)
     level++
     res = await run()
   }

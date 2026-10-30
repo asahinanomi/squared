@@ -1,3 +1,4 @@
+import { noteColorsOn } from '../lib/notes'
 import { PAINTS, WORD, type Paint } from '../lib/paints'
 
 // A moment's own colour, optional: the square holds the day's answer, the moments hold the mix. No verb ("paint" is the
@@ -8,6 +9,8 @@ import { PAINTS, WORD, type Paint } from '../lib/paints'
 const SIDES = PAINTS.filter((p) => p.id !== 'grey')
 
 export function MomentColour({ value, onChange }: { value?: Paint; onChange: (p: Paint | undefined) => void }) {
+  // Colours can't be saved (the database is missing its column): no strip, rather than a pick that vanishes.
+  if (!noteColorsOn()) return null
   return (
     <div className={'moment-colour' + (value ? ' has-pick' : '')} role="group" aria-label="This moment was">
       {SIDES.map((p) => (
