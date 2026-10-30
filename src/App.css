@@ -1301,45 +1301,62 @@ sup.ord {
 .why-input:focus {
   border-bottom-color: var(--grey-3);
 }
-/* A moment's own colour (optional): each choice is its word with its dot; the chosen one in ink, its dot ringed. In the
-   box at the top once there's something written, and inside an opened moment. */
+/* A moment's own colour (optional): one thin strip in three parts (a dot is a day, a bar is a moment, like the card's
+   edge), each word under its part. The chosen part thickens, its word in ink; the others fade. In the box at the top
+   once there's something written, and inside an opened moment. */
 .moment-colour {
   flex-basis: 100%;
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 16px;
-  padding: 8px 0 4px;
+  gap: 3px;
+  padding: 10px 0 2px;
   animation: fade-in 0.3s ease-out;
 }
 .why .moment-colour {
-  margin-top: 12px;
+  margin-top: 10px;
 }
 .moment-colour-pick {
-  display: inline-flex;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 7px;
-  min-height: 32px;
+  gap: 6px;
+  min-height: 40px;
   padding: 0;
   border: none;
   background: none;
   font: inherit;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--ink-soft);
+  transition: opacity 0.2s ease-out;
 }
-.moment-colour-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  flex: none;
+.moment-colour-bar {
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin: 2px 0;
+  transition:
+    height 0.2s ease-out,
+    margin 0.2s ease-out;
 }
-.moment-colour-pick.is-on {
+.moment-colour-pick:first-child .moment-colour-bar {
+  border-radius: 4px 0 0 4px;
+}
+.moment-colour-pick:last-child .moment-colour-bar {
+  border-radius: 0 4px 4px 0;
+}
+.moment-colour.has-pick .moment-colour-pick {
+  opacity: 0.35;
+}
+.moment-colour.has-pick .moment-colour-pick.is-on {
+  opacity: 1;
   color: var(--ink);
   font-weight: 600;
 }
-.moment-colour-pick.is-on .moment-colour-dot {
-  box-shadow:
-    0 0 0 2px #fff,
-    0 0 0 3.5px var(--ink);
+.moment-colour-pick.is-on .moment-colour-bar {
+  height: 10px;
+  margin: 0;
+  border-radius: 4px;
 }
 .why-actions {
   display: flex;
