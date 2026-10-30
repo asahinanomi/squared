@@ -11,6 +11,10 @@ Not urgent: squared already does what most journals do (notes locked to your acc
 - **Later, if you use squared on the web too:** the web unlocks with a passkey or a recovery code, the same trade-off Day One makes on its web app.
 - **Now (cheap):** the privacy wording stays plain and honest; note text never goes into logs, crash reports, analytics or emails.
 
+## Torn days: a green and red split square (after beta 1, noted Oct 30, 2026)
+
+Real days can be half worth it, half regret, and one colour feels dishonest. No fourth colour (green and red mixed is mud, and a middle option becomes the easy exit). Instead, maybe a square split in green and red, your two real paints, reached only through the "torn?" sheet ("it was both"), never a button on the day. Its cost: every view, filter, word pool and painting learns split days. Evidence first: nomi notes each torn day in the quiet week (a moment starting "torn"), and beta 1 asks "Were there days you couldn't pick just one colour?". Often → lab it. Rarely → the torn sheet plus a moment's own colour (lab 11, MomentA–D) may be enough.
+
 ## One photo on a framed day (agreed Oct 29, 2026)
 
 One photo per framed day only, to keep with it: rare and special, tucked with the note, never on the square (colour lives in the paint). Built with private notes in the iOS app, encrypted from the start, so it's done once. Shrunk on the phone before upload, private storage, deleted when the day is unframed or the account goes. Beta 1 can confirm the wish. Later, in the iOS app: a quiet "photos from this day" that reads your own library on the phone, storing and uploading nothing.
