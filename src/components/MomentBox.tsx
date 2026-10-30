@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { PAINTS, type Paint } from '../lib/paints'
+import type { Paint } from '../lib/paints'
+import { MomentColour } from './MomentColour'
 
 type Props = {
   /** "this moment…" while today is being lived, "add to today…" once painted, "add to this day…" on any other day. */
@@ -99,24 +100,8 @@ export function MomentBox({ placeholder, onAdd }: Props) {
             <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
           </svg>
         </button>
-        {/* A moment can carry its own colour (optional): the square keeps the day's answer. Tap again to clear. */}
-        {text.trim() && (
-          <div className="moment-paint">
-            paint it
-            {PAINTS.map((p) => (
-              <button
-                key={p.id}
-                className={'paint-dot' + (color === p.id ? ' is-on' : '')}
-                style={{ background: p.hex }}
-                onPointerDown={(e) => e.preventDefault()} // keep the keyboard up while choosing
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => setColor(color === p.id ? undefined : p.id)}
-                aria-label={color === p.id ? 'Take the colour away' : `Paint this moment ${p.id}`}
-                aria-pressed={color === p.id}
-              />
-            ))}
-          </div>
-        )}
+        {/* A moment can carry its own colour (optional), once there's something written. */}
+        {text.trim() && <MomentColour value={color} onChange={setColor} />}
       </div>
       {slip &&
         createPortal(

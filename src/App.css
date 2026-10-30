@@ -450,21 +450,6 @@
 .moment-box.has-text {
   flex-wrap: wrap;
 }
-/* Once there's something written: the moment's own colour, optional, in a quiet row inside the box. */
-.moment-paint {
-  flex-basis: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 0 4px;
-  font-size: 14px;
-  color: var(--ink-soft);
-  animation: fade-in 0.3s ease-out;
-}
-.moment-paint .paint-dot {
-  width: 26px;
-  height: 26px;
-}
 .moment-box textarea::placeholder {
   color: var(--muted);
 }
@@ -1316,27 +1301,45 @@ sup.ord {
 .why-input:focus {
   border-bottom-color: var(--grey-3);
 }
-/* A moment's own colour (optional), inside an opened moment: "paint it" and the three paints; the painted one ringed. */
-.why-paint {
+/* A moment's own colour (optional): each choice is its word with its dot; the chosen one in ink, its dot ringed. In the
+   box at the top once there's something written, and inside an opened moment. */
+.moment-colour {
+  flex-basis: 100%;
   display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding: 8px 0 4px;
+  animation: fade-in 0.3s ease-out;
+}
+.why .moment-colour {
+  margin-top: 12px;
+}
+.moment-colour-pick {
+  display: inline-flex;
   align-items: center;
-  gap: 14px;
-  margin-top: 16px;
+  gap: 7px;
+  min-height: 32px;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
   font-size: 14px;
   color: var(--ink-soft);
 }
-.paint-dot {
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: none;
+.moment-colour-dot {
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   flex: none;
 }
-.paint-dot.is-on {
+.moment-colour-pick.is-on {
+  color: var(--ink);
+  font-weight: 600;
+}
+.moment-colour-pick.is-on .moment-colour-dot {
   box-shadow:
     0 0 0 2px #fff,
-    0 0 0 4px var(--ink);
+    0 0 0 3.5px var(--ink);
 }
 .why-actions {
   display: flex;
@@ -2695,6 +2698,13 @@ body[data-screen='questions'] .idea {
 .torn-title.has-list {
   padding-bottom: 12px;
   border-bottom: 1px solid #e2e2db;
+}
+.torn-mix {
+  flex: none;
+  margin: 12px 0 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink-soft);
 }
 .torn-lead {
   font-weight: 400;

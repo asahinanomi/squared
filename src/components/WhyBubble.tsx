@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { PAINTS, type Paint } from '../lib/paints'
+import type { Paint } from '../lib/paints'
+import { MomentColour } from './MomentColour'
 import { ConfirmDialog } from './ConfirmDialog'
 
 type Props = {
@@ -105,22 +106,8 @@ export function WhyBubble({
           onChange={(e) => setText(e.target.value)}
         />
         {error && <p className="why-error">{error}</p>}
-        {/* A moment's own colour, optional: the square keeps the day's answer, a moment can carry its own. */}
-        {editing && onPaint && (
-          <div className="why-paint">
-            paint it
-            {PAINTS.map((p) => (
-              <button
-                key={p.id}
-                className={'paint-dot' + (paint === p.id ? ' is-on' : '')}
-                style={{ background: p.hex }}
-                onClick={() => onPaint(paint === p.id ? null : p.id)}
-                aria-label={paint === p.id ? 'Take the colour away' : `Paint this moment ${p.id}`}
-                aria-pressed={paint === p.id}
-              />
-            ))}
-          </div>
-        )}
+        {/* A moment's own colour, optional: the square holds the answer, the moments hold the mix. */}
+        {editing && onPaint && <MomentColour value={paint} onChange={(c) => onPaint(c ?? null)} />}
         <div className="why-actions">
           <button className="why-done" onClick={save} disabled={editing && !value}>
             {editing ? 'update' : 'done'}

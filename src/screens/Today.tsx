@@ -538,6 +538,8 @@ export function Today(props: Props) {
               name what matters to you in my days → what matters
             </button>
           )}
+          {/* A day can be both: the square holds the answer, the moments hold the mix (nomi, Oct 30, 2026). */}
+          <p className="torn-mix">Paint what won. Keep the rest in a moment, in its own colour.</p>
         </Sheet>
         {/* Someone's first visit: what a square is and what its colours mean, once. "got it" is a keyline, not the
             black main pill: dismissing a tip is never the day's main action (painting is). */}

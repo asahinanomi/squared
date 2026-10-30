@@ -42,6 +42,10 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
       </>,
     ],
     [
+      'What if a day was both?',
+      'Many are. Paint the colour that weighed more: did what mattered outweigh the rest? Then keep the other side in a moment, and give it its own colour. The square holds the answer, the moments hold the mix.',
+    ],
+    [
       'What are moments for?',
       'To catch the day as you live it. Write one in the box at the top of the day whenever something happens; each keeps its time, newest first. A day can hold as many as it needs.',
     ],
