@@ -68,13 +68,13 @@ export function useDayActions(
     setNotes((all) => ({ ...all, [day]: fn(all[day] ?? []).sort(byTime) }))
   const swap = (day: string, id: string, to: Note) => putNotes(day, (l) => l.map((n) => (n.id === id ? to : n)))
 
-  const onSaveNote = async (note: Note | undefined, text: string) => {
+  const onSaveNote = async (note: Note | undefined, text: string, color?: Paint) => {
     setWhy(null)
     if (note) {
       swap(note.date, note.id, { ...note, body: text, writtenAt: new Date().toISOString() })
       save({ k: 'note-body', note, body: text })
     } else {
-      const draft = draftNote(date, text, why?.pinned)
+      const draft = draftNote(date, text, why?.pinned, color)
       putNotes(draft.date, (l) => [...l, draft])
       save({ k: 'note-add', note: draft })
     }

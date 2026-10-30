@@ -1,5 +1,5 @@
-import { frameVars, PAINTS, type Paint } from '../lib/paints'
-import { useEffect, useRef, useState } from 'react'
+import { frameVars, type Paint } from '../lib/paints'
+import { useState } from 'react'
 import type { Note } from '../lib/notes'
 import { NoteCard } from './NoteCard'
 import { SwipeRow } from './SwipeRow'
@@ -9,8 +9,6 @@ type Props = {
   /** A framed day's colour: its pinned notes are "to remember" cards in that paint. */
   framed?: Paint
   onOpen: (n: Note) => void
-  /** Paint a moment in its own colour (offered once, right after it's added). */
-  onPaint?: (n: Note, color: Paint) => void
   /** A way to add one here (the day screen adds them in its box at the top instead). */
   onAdd?: () => void
   onDelete: (n: Note) => Promise<void>
@@ -37,25 +35,7 @@ const writeHidden = (hidden: boolean) => {
 // A day's notes, newest first: the latest is what counts most (today over the past), and it's always on top, where a
 // moment just added lands (it glows once as it arrives). The earlier ones unfold below it, or stay tucked away.
 // Every note is a moment you captured: as it happened ("this moment…") or looking back ("because…"), each with its time.
-export function NotesList({ notes, framed, onOpen, onPaint, onAdd, onDelete }: Props) {
-  // A moment just added: one quiet row under it offers its own colour, once. Tap a dot, or let it fade by itself;
-  // it never asks again for that moment (and can still be painted from inside it).
-  const [offer, setOffer] = useState<string | null>(null)
-  const offered = useRef(new Set<string>())
-  useEffect(() => {
-    if (!onPaint) return
-    const fresh = notes.find(
-      (n) => !n.pinned && !n.color && !offered.current.has(n.id) && Date.now() - Date.parse(n.writtenAt) < 4000,
-    )
-    if (!fresh) return
-    offered.current.add(fresh.id)
-    setOffer(fresh.id)
-  }, [notes, onPaint])
-  useEffect(() => {
-    if (!offer) return
-    const t = setTimeout(() => setOffer(null), 8000)
-    return () => clearTimeout(t)
-  }, [offer])
+export function NotesList({ notes, framed, onOpen, onAdd, onDelete }: Props) {
   const [hidden, setHidden] = useState(readHidden)
   // Only one row is swiped open at a time. Swipe, then "delete": two deliberate moves, so it deletes at once, with no
   // dialog (as Mail and Notes do; nomi, Oct 27, 2026). Deleting from inside an open moment still asks.
@@ -76,29 +56,6 @@ export function NotesList({ notes, framed, onOpen, onPaint, onAdd, onDelete }: P
       />
     </SwipeRow>
   )
-  const withOffer = (n: Note) => (
-    <div key={n.id} className="note-with-offer">
-      {row(n)}
-      {offer === n.id && onPaint && (
-        <div className="note-offer">
-          paint this moment?
-          {PAINTS.map((p) => (
-            <button
-              key={p.id}
-              className="paint-dot"
-              style={{ background: p.hex }}
-              onClick={() => {
-                setOffer(null)
-                onPaint(n, p.id)
-              }}
-              aria-label={`Paint this moment ${p.id}`}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  )
-
   const remove = async (n: Note) => {
     setSwiped(null)
     try {
@@ -139,7 +96,7 @@ export function NotesList({ notes, framed, onOpen, onPaint, onAdd, onDelete }: P
         </div>
       )}
       {pinned.map(row)}
-      {latest && withOffer(latest)}
+      {latest && row(latest)}
       {!hidden && older.map(row)}
       {onAdd && (
         <button className="note-add" onClick={onAdd}>

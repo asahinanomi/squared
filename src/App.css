@@ -447,6 +447,24 @@
   line-height: 22px;
   color: var(--ink);
 }
+.moment-box.has-text {
+  flex-wrap: wrap;
+}
+/* Once there's something written: the moment's own colour, optional, in a quiet row inside the box. */
+.moment-paint {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0 4px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  animation: fade-in 0.3s ease-out;
+}
+.moment-paint .paint-dot {
+  width: 26px;
+  height: 26px;
+}
 .moment-box textarea::placeholder {
   color: var(--muted);
 }
@@ -1187,25 +1205,6 @@ sup.ord {
   bottom: 16px;
   width: 5px;
   border-radius: 0 4px 4px 0;
-}
-/* Right after a moment is added: one quiet row under it offers its own colour, once, then fades by itself. */
-.note-with-offer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.note-offer {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 10px 0 0 20px;
-  font-size: 14px;
-  color: var(--ink-soft);
-  animation: fade-in 0.4s ease-out;
-}
-.note-offer .paint-dot {
-  width: 26px;
-  height: 26px;
 }
 .note-stamp {
   display: block;

@@ -105,12 +105,13 @@ export async function fetchAllNotes(): Promise<Notes | null> {
 }
 
 /** A note made on this device, shown at once while it saves. */
-export const draftNote = (date: string, body: string, pinned?: boolean): Note => ({
+export const draftNote = (date: string, body: string, pinned?: boolean, color?: Paint): Note => ({
   id: crypto.randomUUID(),
   date,
   body,
   writtenAt: new Date().toISOString(),
   pinned,
+  color,
 })
 
 /** Save a new note. Its id is made here, so a retried insert can't create a twin. */

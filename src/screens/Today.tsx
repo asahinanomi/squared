@@ -49,7 +49,7 @@ type Props = {
   onLoad: (p: Paint) => void
   onDefine: () => void
   /** Saves a new note, or updates `note` (instantly; a failure reopens the box). */
-  onSaveNote: (note: Note | undefined, text: string) => Promise<void>
+  onSaveNote: (note: Note | undefined, text: string, color?: Paint) => Promise<void>
   onDeleteNote: (note: Note) => Promise<void>
   onCloseWhy: () => void
   onOpenWhy: (note?: Note) => void
@@ -365,7 +365,7 @@ export function Today(props: Props) {
             <MomentBox
               key={date}
               placeholder={date !== today ? 'add to this day…' : day ? 'add to today…' : 'this moment…'}
-              onAdd={(text) => void onSaveNote(undefined, text)}
+              onAdd={(text, color) => void onSaveNote(undefined, text, color)}
             />
           </div>
 
@@ -501,7 +501,6 @@ export function Today(props: Props) {
             notes={notes}
             framed={day?.framed ? day.color : undefined}
             onOpen={(n) => onOpenWhy(n)}
-            onPaint={props.onPaintNote}
             onDelete={onDeleteNote}
           />
         )}

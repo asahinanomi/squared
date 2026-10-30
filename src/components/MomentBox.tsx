@@ -1,10 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { PAINTS, type Paint } from '../lib/paints'
 
 type Props = {
   /** "this moment…" while today is being lived, "add to today…" once painted, "add to this day…" on any other day. */
   placeholder: string
-  onAdd: (text: string) => void
+  onAdd: (text: string, color?: Paint) => void
 }
 
 // The day starts with a moment: one box at the top of the day and a + to keep it. It grows as you write; Enter keeps
@@ -13,6 +14,8 @@ type Props = {
 // is below it), and the card it lands on nudges as it arrives.
 export function MomentBox({ placeholder, onAdd }: Props) {
   const [text, setText] = useState('')
+  // The moment's own colour, optional, chosen as you write it (the dots show once there's something written).
+  const [color, setColor] = useState<Paint | undefined>()
   const [slip, setSlip] = useState<{ text: string; top: number; left: number; width: number; n: number } | null>(null)
   const wrap = useRef<HTMLDivElement>(null)
   const box = useRef<HTMLTextAreaElement>(null)
@@ -68,12 +71,13 @@ export function MomentBox({ placeholder, onAdd }: Props) {
     if (!t) return box.current?.focus()
     const r = wrap.current?.getBoundingClientRect()
     if (r && !still()) setSlip({ text: t, top: r.top, left: r.left, width: r.width, n: (slip?.n ?? 0) + 1 })
-    onAdd(t)
+    onAdd(t, color)
     setText('')
+    setColor(undefined)
   }
   return (
     <>
-      <div className="moment-box" ref={wrap}>
+      <div className={'moment-box' + (text.trim() ? ' has-text' : '')} ref={wrap}>
         <textarea
           ref={box}
           rows={1}
@@ -95,6 +99,24 @@ export function MomentBox({ placeholder, onAdd }: Props) {
             <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
           </svg>
         </button>
+        {/* A moment can carry its own colour (optional): the square keeps the day's answer. Tap again to clear. */}
+        {text.trim() && (
+          <div className="moment-paint">
+            paint it
+            {PAINTS.map((p) => (
+              <button
+                key={p.id}
+                className={'paint-dot' + (color === p.id ? ' is-on' : '')}
+                style={{ background: p.hex }}
+                onPointerDown={(e) => e.preventDefault()} // keep the keyboard up while choosing
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => setColor(color === p.id ? undefined : p.id)}
+                aria-label={color === p.id ? 'Take the colour away' : `Paint this moment ${p.id}`}
+                aria-pressed={color === p.id}
+              />
+            ))}
+          </div>
+        )}
       </div>
       {slip &&
         createPortal(
