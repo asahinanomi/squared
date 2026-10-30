@@ -1014,32 +1014,6 @@ sup.ord {
   margin: 8px 0 28px;
   text-align: left;
 }
-.compass-list {
-  list-style: none;
-  margin: 0 0 28px;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-height: 46vh;
-  overflow-y: auto;
-  padding: 2px; /* room for the dots' keylines, which the scroll edge would clip */
-}
-.compass-list li {
-  display: flex;
-  gap: 12px;
-  font-size: 16px;
-  line-height: 1.45;
-  color: var(--ink-soft);
-}
-.compass-dot {
-  flex: none;
-  width: 10px;
-  height: 10px;
-  margin-top: 6px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 1.5px var(--ink);
-}
 
 /* The ghost brush (for someone new): a faint green trail drawn as the brush sweeps, then it fades and repeats. */
 .ghost {
@@ -2804,18 +2778,6 @@ body[data-screen='questions'] .idea {
 }
 /* Torn: never more than half the screen. One line of question; the list scrolls, with a fade at its foot while
    there's more below. */
-.sheet.is-half {
-  box-sizing: border-box;
-  max-height: 50vh;
-  max-height: 50dvh;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
-}
-.is-half .sheet-handle {
-  flex: none;
-  margin-bottom: 16px;
-}
 .torn-title {
   flex: none;
   margin: 0;
@@ -2824,44 +2786,70 @@ body[data-screen='questions'] .idea {
   line-height: 1.35;
   color: var(--ink);
 }
-.torn-title.has-list {
-  padding-bottom: 12px;
-  border-bottom: 1px solid #e2e2db;
+.torn-sheet .sheet-handle {
+  margin-bottom: 16px;
+}
+/* The two reasons a day is torn, each a question in ink, with its tip under it in soft grey. */
+.torn-q {
+  margin: 10px 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.torn-sheet .compass-name {
+  margin: 8px 0 0;
+}
+.torn-q.is-second {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #e2e2db;
+}
+/* What you said matters, one at a time: the thought in the middle, ‹ › either side (the day's own chevrons). */
+.matter-one {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 14px -10px 0;
+  min-height: 84px;
+}
+.matter-text {
+  flex: 1;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--ink);
+  animation: fade-in 0.3s ease-out;
+}
+.matter-arrow {
+  flex: none;
+  width: 36px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--ink-soft);
+  display: grid;
+  place-items: center;
+}
+.matter-arrow svg {
+  width: 14px;
+  height: 22px;
+}
+.matter-arrow:disabled {
+  opacity: 0.2;
 }
 .torn-mix {
   flex: none;
   margin: 12px 0 0;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.45;
   color: var(--ink-soft);
-}
-.torn-mix.is-next {
-  margin-top: 6px;
 }
 .torn-lead {
   font-weight: 400;
   color: var(--ink-soft);
-}
-/* A fine line under the lead: only what's below it scrolls. Fades at whichever end has more. */
-.is-half .compass-list {
-  --fade-top: #000;
-  --fade-end: transparent;
-  flex: 1 1 auto;
-  min-height: 0;
-  max-height: none;
-  margin: 0 0 0 -4px;
-  padding: 14px 0 16px 4px; /* room for the dots' keyline, which the scroll would clip */
-  -webkit-mask-image: linear-gradient(to bottom, var(--fade-top), #000 40px, #000 calc(100% - 48px), var(--fade-end));
-  mask-image: linear-gradient(to bottom, var(--fade-top), #000 40px, #000 calc(100% - 48px), var(--fade-end));
-}
-.is-half .compass-list.is-down {
-  --fade-top: transparent;
-}
-.is-half .compass-list.is-end {
-  --fade-end: #000;
-}
-.is-half .compass-name {
-  margin: 12px 0 8px;
 }
 @keyframes fade {
   from {

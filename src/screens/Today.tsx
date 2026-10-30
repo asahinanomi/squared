@@ -210,6 +210,16 @@ export function Today(props: Props) {
   // Your own "mattered" entries, listed in the sheet.
   const compass = torn ? props.matters.meaningful.map((e) => e.text.trim()).filter(Boolean) : []
   const [compassOpen, setCompassOpen] = useState(false)
+  // The matter on show when torn: the same one all day to start (picked by the date), then ‹ › or a swipe, looping
+  // round (the start can be any of them, so neither end is a wall).
+  const [matterAt, setMatterAt] = useState(0)
+  const swipeAt = useRef<number | null>(null)
+  useEffect(() => {
+    if (!compassOpen || !compass.length) return
+    let h = 0
+    for (const ch of today) h = (h * 31 + ch.charCodeAt(0)) >>> 0
+    setMatterAt(h % compass.length)
+  }, [compassOpen]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => setCompassOpen(false), [date])
 
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
@@ -524,47 +534,58 @@ export function Today(props: Props) {
             onDelete={onDeleteNote}
           />
         )}
-        {/* Never more than half the screen: one line of question, then your list, which scrolls (a fade at its foot says
-            there's more, and lifts once you reach the end; one at its head once scrolled, so the way back up shows too). */}
-        <Sheet open={compassOpen} onClose={() => setCompassOpen(false)} className="is-half">
-          {/* One lead, in sentence case: the question, then what leads into your list. */}
-          <h2 className={'torn-title' + (compass.length ? ' has-list' : '')}>
-            Torn? Did what mattered outweigh the rest?
+        {/* Torn has two reasons, so it asks both (nomi, Oct 30, 2026): was it mixed (what you said matters, one at a
+            time, ‹ › to move through, never a scrolling list), or was it out of your hands. Each with its own tip, a fine
+            line between them. */}
+        <Sheet open={compassOpen} onClose={() => setCompassOpen(false)} className="torn-sheet">
+          <h2 className="torn-title">Torn?</h2>
+          <p className="torn-q">
+            Did what mattered outweigh the rest?
             {compass.length > 0 && <span className="torn-lead"> You said these matter:</span>}
-          </h2>
+          </p>
           {compass.length ? (
-            <>
-              <ul
-                className="compass-list"
-                ref={(el) => {
-                  el?.classList.toggle('is-end', el.scrollHeight - el.clientHeight < 4)
-                }}
-                onScroll={(e) => {
-                  const el = e.currentTarget
-                  el.classList.toggle('is-end', el.scrollTop + el.clientHeight >= el.scrollHeight - 4)
-                  el.classList.toggle('is-down', el.scrollTop > 4)
-                }}
+            <div
+              className="matter-one"
+              onTouchStart={(e) => (swipeAt.current = e.touches[0].clientX)}
+              onTouchEnd={(e) => {
+                const dx = e.changedTouches[0].clientX - (swipeAt.current ?? e.changedTouches[0].clientX)
+                swipeAt.current = null
+                if (Math.abs(dx) > 40) setMatterAt((i) => (i - Math.sign(dx) + compass.length) % compass.length)
+              }}
+            >
+              <button
+                className="matter-arrow"
+                aria-label="Previous"
+                disabled={compass.length < 2}
+                onClick={() => setMatterAt((i) => (i - 1 + compass.length) % compass.length)}
               >
-                {compass.map((text, i) => (
-                  <li key={i}>
-                    <span className="compass-dot" style={{ background: paintHex('green') }} aria-hidden="true" />
-                    {text}
-                  </li>
-                ))}
-              </ul>
-            </>
+                <Chevron dir="left" />
+              </button>
+              <p key={matterAt} className="matter-text">
+                {compass[Math.min(matterAt, compass.length - 1)]}
+              </p>
+              <button
+                className="matter-arrow"
+                aria-label="Next"
+                disabled={compass.length < 2}
+                onClick={() => setMatterAt((i) => (i + 1) % compass.length)}
+              >
+                <Chevron dir="right" />
+              </button>
+            </div>
           ) : (
             <button className="compass-edit compass-name" onClick={props.onMatters}>
               name what matters to you in my days → what matters
             </button>
           )}
-          {/* A day can be both: the square holds the answer, the moments hold the mix (nomi, Oct 30, 2026). */}
+          {/* A day can be both: the square holds the answer, the moments hold the mix. */}
           <p className="torn-mix">Paint what won. Keep the rest in a moment, in its own colour.</p>
           {/* A day that wasn't yours to choose: the mark, one step away under the painted square. */}
           {handsOn() && (
-            <p className="torn-mix is-next">
-              Not your choice at all? Paint it honestly, then tap “more” → “out of my hands”.
-            </p>
+            <>
+              <p className="torn-q is-second">Or was it out of your hands?</p>
+              <p className="torn-mix">Paint it honestly, then tap “more” → “out of my hands”.</p>
+            </>
           )}
         </Sheet>
         {/* Someone's first visit: what a square is and what its colours mean, once. "got it" is a keyline, not the
@@ -654,7 +675,7 @@ export function Today(props: Props) {
                 <span>
                   {day?.outOfHands
                     ? 'back to its colour’s own words. what happened stays.'
-                    : 'some days aren’t up to you. it’s never called a regret.'}
+                    : 'some days aren’t up to you. your colour stays; the day is marked.'}
                 </span>
               </span>
             </button>
@@ -663,7 +684,9 @@ export function Today(props: Props) {
         <Sheet open={handsOpen} onClose={() => setHandsOpen(false)}>
           <h2 className="intro-title">Out of your hands?</h2>
           <p className="hands-lead">
-            Some days aren’t yours to choose. Your colour stays; the day is marked, and never called a regret.
+            Some days aren’t yours to choose. Your colour stays, and the day is marked as out of your hands.
+            {/* Only a red day would have been signed "regret" (nomi: a green or grey one never was). */}
+            {day?.color === 'red' && ' It’s never called a regret.'}
           </p>
           <textarea
             className="hands-what"

@@ -63,7 +63,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'What does “out of my hands” do?',
-      'Some days aren’t yours to choose: an accident, a loss, someone else’s decision. Paint the day as honestly as you can, then tap “more” → “out of my hands” and write what happened. Your colour stays, the day is never called a regret, and its words never blame. If many days feel this way, please talk to someone you trust.',
+      'Some days aren’t yours to choose: an accident, a loss, someone else’s decision. Paint the day as honestly as you can, then tap “more” → “out of my hands” and write what happened. Your colour stays, a red day is never called a regret, and its words never blame. If many days feel this way, please talk to someone you trust.',
     ],
     [
       'What is “what matters”?',
