@@ -84,7 +84,7 @@ const OCCASIONS: Record<string, Record<Paint, string[]>> = {
     ],
     red: [
       'A hard start. The year is still yours.',
-      'Not the start you hoped for. The rest is unwritten.',
+      'Not the start you hoped for. Still unwritten.',
       'A heavy first day. You looked.',
     ],
     grey: ['A quiet start to the year.', 'The year began softly.', 'The year began in a soft blur.'],
