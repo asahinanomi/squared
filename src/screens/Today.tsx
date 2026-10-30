@@ -144,6 +144,7 @@ export function Today(props: Props) {
         framed: day.framed,
         outOfHands: day.outOfHands,
         first,
+        moments: notes.flatMap((n) => (n.color ? [n.color] : [])),
       })
     : null
 

@@ -132,7 +132,6 @@ const EARLY: Record<Paint, string[]> = {
     'Too young to remember. Time kept it for you.',
     'Early days, held by time, not memory.',
     'Painted from far away.',
-    'Once, you were small.',
   ],
 }
 
@@ -142,6 +141,23 @@ const BORN = ['Hello, world.', 'Once upon a time, you.', 'And then there was you
 // Out of my hands (nomi, Oct 30, 2026): a marked day keeps its colour's own words, one voice everywhere. Only two red
 // lines can't speak to a day that wasn't yours to choose: one names regret, one leans on next time.
 const NOT_IF_MARKED = new Set(['Regret means you care.', "This day is painted. Today isn't, yet."])
+
+// A conflict day (nomi, Oct 30, 2026): every coloured moment disagrees with the square, a past red day whose coloured
+// moments are all worth it, or a green one whose are all regret (moments with no colour don't count). The square
+// holds the answer, the moments hold the mix: squared notices, without reading a word you wrote.
+const CONFLICT: Partial<Record<Paint, string[]>> = {
+  red: [
+    'Not the day you wanted. Some of it still mattered.',
+    'Heavy, and still, something good in it.',
+    'Some of it was worth it. You kept that too.',
+  ],
+  green: [
+    'Not all of it went well. It mattered anyway.',
+    'Worth it, even with the hard part.',
+    'What mattered won. The rest is kept too.',
+  ],
+}
+const OTHER: Partial<Record<Paint, Paint>> = { red: 'green', green: 'red' }
 
 // The day you started squared, any colour.
 const FIRST = ['Your first square. It began here.', 'Square one. Hello, you.']
@@ -209,8 +225,8 @@ function todayWords(paint: Paint, occasion: string | undefined, first: boolean):
 
 /**
  * A painted day's heading. Today has its own words (todayWords). For a past day, when it's more than one thing, the
- * strongest wins: the day you were born, then early years (before 4), your first square, a holiday or birthday,
- * framed, then the colour's own pool (mixed with far-back lines from 3 years ago).
+ * strongest wins: the day you were born, then early years (before 4), your first square, a holiday or birthday, a
+ * conflict day (every coloured moment the other colour), framed, then the colour's own pool (mixed with far-back lines from 3 years ago).
  */
 export function dayWords(o: {
   iso: string
@@ -221,6 +237,8 @@ export function dayWords(o: {
   framed?: boolean
   outOfHands?: boolean
   first?: string
+  /** The colours of the day's coloured moments (moments with no colour left out). */
+  moments?: Paint[]
 }): string {
   const { iso, today, paint, special, born } = o
   const occasion = special?.split(' · ')[0]
@@ -229,6 +247,8 @@ export function dayWords(o: {
   if (born && iso < yearsAfter(born, 4)) return pick(EARLY[paint], iso)
   if (iso === o.first) return pick(FIRST, iso)
   if (special) return occasionLine(special, paint, iso)
+  const moments = o.moments ?? []
+  if (CONFLICT[paint] && moments.length && moments.every((c) => c === OTHER[paint])) return pick(CONFLICT[paint]!, iso)
   if (o.framed) return pick([...FRAMED_ANY, FRAMED[paint]], iso)
   const pool = o.outOfHands ? POOLS[paint].filter((l) => !NOT_IF_MARKED.has(l)) : POOLS[paint]
   return pick(iso <= yearsAfter(today, -3) ? [...pool, ...FAR[paint]] : pool, iso)
