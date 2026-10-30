@@ -11,6 +11,15 @@ Not urgent: squared already does what most journals do (notes locked to your acc
 - **Later, if you use squared on the web too:** the web unlocks with a passkey or a recovery code, the same trade-off Day One makes on its web app.
 - **Now (cheap):** the privacy wording stays plain and honest; note text never goes into logs, crash reports, analytics or emails.
 
+## ⭐ Watch closely: days done to you, a blind spot (noted Oct 30, 2026)
+
+squared asks "did *I* spend Today meaningfully?", and the colours answer about your own choice. But many days are bad out of your choice: as a child, catching a parent in an affair at home; an illness, a layoff, a loss, someone else's decision landing on your day. Past or present. None of the three colours fits: red's "I wish I'd spent it differently" and its signature "regret" can quietly suggest it was your fault. nomi painted such a childhood day red anyway ("I wish this day had gone differently"), the second time after Oct 23's "The colours, for the hardest days".
+
+- **Not now:** changing red's meaning ("I wish this day had gone differently", or "it went against what matters to me") would move the colours from choice toward mood and unsettle the clean yes / no / I don't know answer, pulling the label, palette, pie, idea letter, intro and brand story with it. Considered and held (Oct 30, 2026).
+- **Watch in beta 1:** how friends paint their hard days that weren't their choice, and whether "regret" stings on them. Many people will have these.
+- **Gentle tools that already exist:** the words (red past days speak without blame; early years say "None of it was yours to choose."), framing with "what do you want to remember?".
+- **Options to lab if it's confirmed:** red's wording widened; a "marked day" (a ring for days that changed you, any colour, below); words for red past days that never imply blame; a Questions answer, "What if a hard day wasn't my choice?".
+
 ## Torn days: a green and red split square (after beta 1, noted Oct 30, 2026)
 
 Real days can be half worth it, half regret, and one colour feels dishonest. No fourth colour (green and red mixed is mud, and a middle option becomes the easy exit). Instead, maybe a square split in green and red, your two real paints, reached only through the "torn?" sheet ("it was both"), never a button on the day. Its cost: every view, filter, word pool and painting learns split days. Evidence first: nomi notes each torn day in the quiet week (a moment starting "torn"), and beta 1 asks "Were there days you couldn't pick just one colour?". Often → lab it. Rarely → the torn sheet plus a moment's own colour (built Oct 30, 2026, lab 11) may be enough.
