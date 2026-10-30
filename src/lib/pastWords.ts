@@ -209,7 +209,7 @@ function todayWords(paint: Paint, occasion: string | undefined, first: boolean):
 
 /**
  * A painted day's heading. Today has its own words (todayWords). For a past day, when it's more than one thing, the
- * strongest wins: the day you were born, then early years (before 4), your first square, a holiday or birthday
+ * strongest wins: the day you were born, then early years (before 4), your first square, a holiday or birthday,
  * framed, then the colour's own pool (mixed with far-back lines from 3 years ago).
  */
 export function dayWords(o: {
