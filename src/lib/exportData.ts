@@ -87,7 +87,7 @@ export async function exportWord(all: Everything) {
               ? [
                   run('   '),
                   run('■ ', { color: paintHex(day.color).slice(1) }),
-                  run(day.outOfHands ? 'out of my hands' : WORD[day.color], { color: SOFT }),
+                  run(day.outOfHands && day.color === 'red' ? 'out of my hands' : WORD[day.color], { color: SOFT }),
                 ]
               : []),
           ],

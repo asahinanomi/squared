@@ -10,7 +10,8 @@ type Props = {
   loaded: Paint | null
   /** A day that mattered most: its edge drawn in a darker green, thicker. */
   framed?: boolean
-  /** Marked "out of my hands": soft eraser strokes over the paint, and it signs "out of my hands", never "regret". */
+  /** Marked "out of my hands": soft eraser strokes over the paint; a red one signs "out of my hands", never "regret"
+   *  (green and grey keep their word: they never blamed anyone). */
   marked?: boolean
   onDryBrush: () => void
   onFilled: (p: Paint) => void
@@ -414,10 +415,10 @@ export function PaintCanvas({
                 className={
                   'canvas-hand' +
                   (breathed && !breathing && !saved ? ' is-writing' : '') +
-                  (saved && marked ? ' is-two' : '')
+                  (marked && saved === 'red' ? ' is-two' : '')
                 }
               >
-                {saved ? (marked ? 'out of\nmy hands' : WORD[saved]) : breathing ? 'be here' : blank}
+                {saved ? (marked && saved === 'red' ? 'out of\nmy hands' : WORD[saved]) : breathing ? 'be here' : blank}
               </span>
             </span>
           </span>

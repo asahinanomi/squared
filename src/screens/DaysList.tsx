@@ -137,7 +137,9 @@ export function DayCard({
           {day && (
             <>
               {' '}
-              <span className="day-card-word">· {day.outOfHands ? 'out of my hands' : WORD[day.color]}</span>
+              <span className="day-card-word">
+                · {day.outOfHands && day.color === 'red' ? 'out of my hands' : WORD[day.color]}
+              </span>
             </>
           )}
         </button>
