@@ -1301,7 +1301,7 @@ sup.ord {
 .why-input:focus {
   border-bottom-color: var(--grey-3);
 }
-/* A moment's own colour (optional): one thin strip in three parts (a dot is a day, a bar is a moment, like the card's
+/* A moment's own colour (optional): one thin strip in two parts, worth it and regret (a dot is a day, a bar is a moment, like the card's
    edge), each word under its part. The chosen part thickens, its word in ink; the others fade. In the box at the top
    once there's something written, and inside an opened moment. */
 .moment-colour {
@@ -1352,6 +1352,10 @@ sup.ord {
   opacity: 1;
   color: var(--ink);
   font-weight: 600;
+}
+.moment-colour-clear {
+  font-weight: 400;
+  color: var(--ink-soft);
 }
 .moment-colour-pick.is-on .moment-colour-bar {
   height: 10px;
