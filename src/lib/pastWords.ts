@@ -178,19 +178,6 @@ const FAR: Record<Paint, string[]> = {
   ],
 }
 
-// Your 18th, 30th, 40th … 100th birthdays. `{a}` is the age, `{n}` the ordinal ("50th").
-const MILESTONES = new Set([18, 30, 40, 50, 60, 70, 80, 90, 100])
-const MILESTONE: Record<Paint, string[]> = {
-  green: [
-    '{a} years. A day well spent.',
-    'Your {n} birthday, lived on purpose.',
-    '{a} years. You made room for what matters.',
-    'And then, {a}.',
-  ],
-  red: ['{a} years, and a heavy day.', 'Your {n}, not as hoped.', "{a} years. You're allowed to feel it."],
-  grey: ['{a} years, quietly marked.', 'Your {n} birthday, softly come and gone.', '{a} years, soft around the edges.'],
-}
-
 const yearsAfter = (iso: string, years: number) => `${Number(iso.slice(0, 4)) + years}${iso.slice(4)}`
 
 /** The day you started squared: the first date you painted on (any square), if that day itself is painted. */
@@ -223,7 +210,7 @@ function todayWords(paint: Paint, occasion: string | undefined, first: boolean):
 /**
  * A painted day's heading. Today has its own words (todayWords). For a past day, when it's more than one thing, the
  * strongest wins: the day you were born, then early years (before 4), your first square, a holiday or birthday
- * (milestones first), framed, then the colour's own pool (mixed with far-back lines from 3 years ago).
+ * framed, then the colour's own pool (mixed with far-back lines from 3 years ago).
  */
 export function dayWords(o: {
   iso: string
@@ -241,14 +228,7 @@ export function dayWords(o: {
   if (occasion === 'the day you were born') return pick(BORN, iso)
   if (born && iso < yearsAfter(born, 4)) return pick(EARLY[paint], iso)
   if (iso === o.first) return pick(FIRST, iso)
-  if (special) {
-    const age = born ? Number(iso.slice(0, 4)) - Number(born.slice(0, 4)) : 0
-    if (occasion?.endsWith('birthday') && MILESTONES.has(age)) {
-      const n = /^your (\S+) birthday$/.exec(occasion)![1]
-      return pick(MILESTONE[paint], iso).replace('{a}', String(age)).replace('{n}', n)
-    }
-    return occasionLine(special, paint, iso)
-  }
+  if (special) return occasionLine(special, paint, iso)
   if (o.framed) return pick([...FRAMED_ANY, FRAMED[paint]], iso)
   const pool = o.outOfHands ? POOLS[paint].filter((l) => !NOT_IF_MARKED.has(l)) : POOLS[paint]
   return pick(iso <= yearsAfter(today, -3) ? [...pool, ...FAR[paint]] : pool, iso)
