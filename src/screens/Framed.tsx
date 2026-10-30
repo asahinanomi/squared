@@ -33,7 +33,7 @@ export function Framed({ days, notes, loadNotes, onDay }: Props) {
         </ol>
       ) : (
         <p className="gallery-empty">
-          The days you frame hang here, the ones you want to keep. Under a painted day, tap "frame it".
+          The days you frame hang here, the ones you want to keep. Under a painted day, tap "more", then "frame it".
         </p>
       )}
     </main>

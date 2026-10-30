@@ -10,7 +10,7 @@ import { Question } from '../components/Question'
 import { WhyBubble } from '../components/WhyBubble'
 import { ZoomBar } from '../components/ZoomBar'
 import { addDays, firstDay, fromIso, longDate, ordinal, shortDateParts, todayIso } from '../lib/dates'
-import type { Days } from '../lib/days'
+import { handsOn, type Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
 import { dayWords, firstSquare } from '../lib/pastWords'
@@ -40,6 +40,9 @@ type Props = {
   onWipe: () => void
   /** Frame (or unframe) a day you want to keep. */
   onFrame: () => void
+  /** Mark the day "out of my hands", with what happened (it becomes the day's moment); or unmark it. */
+  onMarkHands: (text: string) => void
+  onUnmarkHands: () => void
   /** Pin a note to the top of its day, or unpin it. */
   onPinNote: (note: Note) => void
   /** Paint a moment in its own colour, or take it away (null). */
@@ -131,7 +134,18 @@ export function Today(props: Props) {
   // The day you started squared: found once per change to your squares, not on every render.
   const first = useMemo(() => firstSquare(days), [days])
   // A painted day speaks back: its own words, from where you stand (src/lib/pastWords.ts).
-  const words = day ? dayWords({ iso: date, today, paint: day.color, special, born, framed: day.framed, first }) : null
+  const words = day
+    ? dayWords({
+        iso: date,
+        today,
+        paint: day.color,
+        special,
+        born,
+        framed: day.framed,
+        outOfHands: day.outOfHands,
+        first,
+      })
+    : null
 
   // On each dip, the dipped colour's meaning rises from the bottom, one line (nomi: three took the focus off
   // painting). No backdrop, so nothing waits on it: it goes by itself after a few seconds, or at the next touch, and
@@ -139,6 +153,11 @@ export function Today(props: Props) {
   const [whisper, setWhisper] = useState<{ paint: Paint; at: number } | null>(null)
   const [whispering, setWhispering] = useState(false)
   const [wiping, setWiping] = useState(false)
+  // "more" under the square: the rare ways to keep a day (frame it, out of my hands), each with a line about it.
+  const [moreOpen, setMoreOpen] = useState(false)
+  // Marking a day "out of my hands" asks what happened first: writing it is the honesty check.
+  const [handsOpen, setHandsOpen] = useState(false)
+  const [handsText, setHandsText] = useState('')
   useEffect(() => {
     if (!whisper) return
     setWhispering(true)
@@ -419,6 +438,7 @@ export function Today(props: Props) {
                 key={date} // the same square while it's painted and saved (a rebuilt one can blink on iPhone)
                 saved={day?.color}
                 framed={day?.framed}
+                marked={day?.outOfHands}
                 loaded={loaded}
                 onDryBrush={onDryBrush}
                 onFilled={onFilled}
@@ -435,10 +455,10 @@ export function Today(props: Props) {
               <button className="day-wipe" onClick={() => setWiping(true)}>
                 start over
               </button>
-              {/* A day you want to keep, any colour: framed in its paint's deeper shade. */}
-              {/* Framing a day you want to keep: a quiet link, the same as start over. */}
-              <button className="day-wipe" onClick={props.onFrame} aria-pressed={!!day.framed}>
-                {day.framed ? 'unframe' : 'frame it'}
+              {/* The rare ways to keep a day sit one step away, in a sheet that says what each does (nomi, Oct 30,
+                  2026: three links under every day was a lot of choice). Start over stays one tap. */}
+              <button className="day-wipe" onClick={() => setMoreOpen(true)}>
+                more
               </button>
             </div>
           )}
@@ -570,6 +590,94 @@ export function Today(props: Props) {
           <p className="intro-how birthday-line">Be here for it. Spend it on what matters.</p>
           {/* A card, not a dialog: like the other sheets, a tap outside or a swipe down puts it away. */}
           <p className="birthday-sign">— nomi</p>
+        </Sheet>
+        <Sheet open={moreOpen} onClose={() => setMoreOpen(false)}>
+          <h2 className="intro-title">Keep this day in a special way?</h2>
+          <button
+            className="more-row"
+            onClick={() => {
+              setMoreOpen(false)
+              props.onFrame()
+            }}
+          >
+            <span className="more-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="2" />
+                <rect x="7.5" y="7.5" width="9" height="9" rx="1" />
+              </svg>
+            </span>
+            <span>
+              <b>{day?.framed ? 'unframe' : 'frame it'}</b>
+              <span>
+                {day?.framed
+                  ? 'it leaves my days → framed. its moments stay.'
+                  : 'a day worth keeping. it waits for you in my days → framed.'}
+              </span>
+            </span>
+          </button>
+          {(handsOn() || day?.outOfHands) && (
+            <button
+              className="more-row"
+              onClick={() => {
+                setMoreOpen(false)
+                if (day?.outOfHands) props.onUnmarkHands()
+                else {
+                  setHandsText('')
+                  setHandsOpen(true)
+                }
+              }}
+            >
+              <span className="more-icon" aria-hidden="true">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.6"
+                  strokeLinecap="round"
+                  strokeOpacity=".7"
+                >
+                  <path d="M4 13 Q8 9 11 4" />
+                  <path d="M5 20 Q12 14 18 5" />
+                  <path d="M12 21 Q17 16 21 11" />
+                </svg>
+              </span>
+              <span>
+                <b>{day?.outOfHands ? 'unmark' : 'out of my hands'}</b>
+                <span>
+                  {day?.outOfHands
+                    ? 'back to its colour’s own words. what happened stays.'
+                    : 'some days aren’t up to you. it’s never called a regret.'}
+                </span>
+              </span>
+            </button>
+          )}
+        </Sheet>
+        <Sheet open={handsOpen} onClose={() => setHandsOpen(false)}>
+          <h2 className="intro-title">Out of your hands?</h2>
+          <p className="hands-lead">
+            Some days aren’t yours to choose. Your colour stays; the day is marked, and never called a regret.
+          </p>
+          <textarea
+            className="hands-what"
+            rows={3}
+            maxLength={10000}
+            placeholder="what happened…"
+            value={handsText}
+            onChange={(e) => setHandsText(e.target.value)}
+          />
+          <button
+            className="pill hands-mark"
+            disabled={!handsText.trim()}
+            onClick={() => {
+              setHandsOpen(false)
+              props.onMarkHands(handsText.trim())
+            }}
+          >
+            mark it
+          </button>
+          <p className="hands-quiet">you can unmark it any time</p>
         </Sheet>
         {wiping && (
           <ConfirmDialog

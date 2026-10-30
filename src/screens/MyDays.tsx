@@ -207,7 +207,7 @@ export function MyDays({
         <div className="help-pair">
           <FrameDemo />
           <div className="help-notes">
-            <p>Open a painted day and tap “frame it”.</p>
+            <p>Open a painted day, tap “more”, then “frame it”.</p>
             <p>You can always unframe it later.</p>
           </div>
         </div>

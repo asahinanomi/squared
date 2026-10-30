@@ -168,7 +168,8 @@ export function Month({
                       (day ? ' is-painted' : '') +
                       (iso === today ? ' is-today' : '') +
                       (before ? ' is-before' : '') +
-                      (day?.framed ? ' is-framed' : '')
+                      (day?.framed ? ' is-framed' : '') +
+                      (day?.outOfHands ? ' is-marked' : '')
                     }
                     style={fill ? { background: fill, ...(day?.framed ? frameVars(day.color) : {}) } : undefined}
                     disabled={iso > today || before}

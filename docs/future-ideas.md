@@ -11,7 +11,11 @@ Not urgent: squared already does what most journals do (notes locked to your acc
 - **Later, if you use squared on the web too:** the web unlocks with a passkey or a recovery code, the same trade-off Day One makes on its web app.
 - **Now (cheap):** the privacy wording stays plain and honest; note text never goes into logs, crash reports, analytics or emails.
 
-## ⭐ Watch closely: days done to you, a blind spot (noted Oct 30, 2026)
+## Days done to you: built as "out of my hands" (noted and built Oct 30, 2026)
+
+**Built** as a mark on a painted day (README → "Out of my hands"; lab 12 and 13). Still open: the mark alone on an unpainted day (lab M3), if people ask; watch how beta friends use it.
+
+The thinking that led there:
 
 squared asks "did *I* spend Today meaningfully?", and the colours answer about your own choice. But many days are bad out of your choice: as a child, catching a parent in an affair at home; an illness, a layoff, a loss, someone else's decision landing on your day. Past or present. None of the three colours fits: red's "I wish I'd spent it differently" and its signature "regret" can quietly suggest it was your fault. nomi painted such a childhood day red anyway ("I wish this day had gone differently"), the second time after Oct 23's "The colours, for the hardest days".
 

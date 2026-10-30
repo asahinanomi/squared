@@ -84,7 +84,11 @@ export async function exportWord(all: Everything) {
           children: [
             run(longDay(d), { bold: true }),
             ...(day
-              ? [run('   '), run('■ ', { color: paintHex(day.color).slice(1) }), run(WORD[day.color], { color: SOFT })]
+              ? [
+                  run('   '),
+                  run('■ ', { color: paintHex(day.color).slice(1) }),
+                  run(day.outOfHands ? 'out of my hands' : WORD[day.color], { color: SOFT }),
+                ]
               : []),
           ],
         }),

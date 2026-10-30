@@ -51,6 +51,23 @@ export function useDayActions(
     save({ k: 'framed', date: day, framed: !was })
   }
 
+  // Out of my hands: a day that wasn't yours to choose. The colour stays; the mark makes sure it's never called a
+  // regret. Marking asks what happened first: that sentence becomes the day's moment. Unmarking keeps the moment.
+  const onMarkHands = (text: string) => {
+    const day = date
+    if (!days[day]) return
+    setDays((d) => (d[day] ? { ...d, [day]: { ...d[day], outOfHands: true } } : d))
+    save({ k: 'hands', date: day, outOfHands: true })
+    const draft = draftNote(day, text)
+    putNotes(day, (l) => [...l, draft])
+    save({ k: 'note-add', note: draft })
+  }
+  const onUnmarkHands = () => {
+    const day = date
+    setDays((d) => (d[day] ? { ...d, [day]: { ...d[day], outOfHands: undefined } } : d))
+    save({ k: 'hands', date: day, outOfHands: false })
+  }
+
   // Start over: the square goes blank at once and leaves every count.
   const onWipe = () => {
     const day = date
@@ -101,5 +118,5 @@ export function useDayActions(
     save({ k: 'note-del', note })
   }
 
-  return { onFilled, onFrame, onWipe, onSaveNote, onPinNote, onPaintNote, onDeleteNote }
+  return { onFilled, onFrame, onMarkHands, onUnmarkHands, onWipe, onSaveNote, onPinNote, onPaintNote, onDeleteNote }
 }

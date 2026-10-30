@@ -688,6 +688,15 @@ sup.ord {
 .canvas-face.is-painted {
   background: var(--paint);
 }
+/* Out of my hands: the eraser strokes over the paint, never taking a touch. */
+.mark-strokes {
+  position: absolute;
+  inset: var(--margin);
+  width: calc(100% - 2 * var(--margin));
+  height: calc(100% - 2 * var(--margin));
+  pointer-events: none;
+  animation: fade-in 0.6s ease-out;
+}
 .canvas .paint-surface {
   clip-path: inset(var(--margin));
 }
@@ -724,6 +733,11 @@ sup.ord {
   transform-origin: right bottom;
 }
 /* Blank: not a signature but the square's invitation, so it sits in the middle, level, a shade stronger. */
+/* "out of my hands" is too long for one line in the corner: signed on two, right-aligned. */
+.canvas-hand.is-two {
+  white-space: pre-line;
+  line-height: 1.05;
+}
 .canvas-word:not(.is-painted) .canvas-sign {
   inset: 0;
   align-items: center;
@@ -832,7 +846,7 @@ sup.ord {
 .tray-rest[hidden] {
   display: none;
 }
-/* Under a painted square: "start over" and "frame it", side by side. */
+/* Under a painted square: "start over" and "more", side by side. */
 .day-links {
   display: flex;
   justify-content: center;
@@ -1094,7 +1108,7 @@ sup.ord {
   align-items: center;
   gap: 12px;
 }
-/* A painted day has no palette: the moments keep the same group gap under start over · frame it. */
+/* A painted day has no palette: the moments keep the same group gap under start over · more. */
 .today.is-closed .notes {
   margin-top: 30px;
 }
@@ -2344,6 +2358,21 @@ body[data-screen='questions'] .idea {
   border-radius: 50%;
   background: var(--ink);
 }
+/* Out of my hands, in a month: a small ink stroke over its colour (the full eraser strokes are on the day itself). */
+.month-day.is-marked::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    45deg,
+    transparent 24%,
+    rgba(47, 47, 43, 0.36) 24% 34%,
+    transparent 34% 52%,
+    rgba(47, 47, 43, 0.3) 52% 62%,
+    transparent 62%
+  );
+}
 .month-day {
   position: relative;
   overflow: hidden;
@@ -2599,6 +2628,85 @@ body[data-screen='questions'] .idea {
 .sheet-backdrop.is-open .sheet {
   transform: none;
   animation: slide 0.32s cubic-bezier(0.2, 1, 0.3, 1);
+}
+/* "more" under the square: the rare ways to keep a day, each a row with its icon and a line about it. */
+.more-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 0;
+  border: none;
+  border-bottom: 1px solid #ecece5;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: var(--ink);
+}
+.more-row:last-child {
+  border-bottom: none;
+}
+.more-row b {
+  display: block;
+  font-size: 17px;
+  font-weight: 600;
+}
+.more-row b + span {
+  display: block;
+  margin-top: 2px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+.more-icon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #efeee8;
+  display: grid;
+  place-items: center;
+}
+.intro-title + .more-row {
+  margin-top: 6px;
+}
+/* "Out of your hands?": a sentence first, then the black pill. */
+.hands-lead {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.hands-what {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1.5px #e2e2db;
+  font: inherit;
+  font-size: 17px;
+  line-height: 1.4;
+  resize: none;
+  color: var(--ink);
+  background: #fff;
+}
+.hands-what:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1.5px var(--ink-soft);
+}
+.hands-mark {
+  margin-top: 18px;
+}
+.hands-mark:disabled {
+  opacity: 0.35;
+}
+.hands-quiet {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--ink-soft);
 }
 .sheet-handle {
   width: 44px;

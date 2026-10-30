@@ -115,6 +115,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 
 - **A dialog, not labels** (nomi, Oct 28, 2026): squared talks with you. Titles and prompts read as a person would say them, often a question ("Which days would you like to see?", not "show"). A future pass brings the rest of the copy this way.
 - **The square holds the answer. The moments hold the mix.** (nomi, Oct 30, 2026): real days can be both. The square still answers with one colour (paint what won); a moment can carry its own colour, so the rest is kept honestly. "Paint" stays the day's word: a moment is never painted, it just says what it was: worth it or regret (never a blur: a moment is noticing). A dot is a day, a bar is a moment: a moment's colour is a strip to pick from and an edge on its card. Said in four places: the idea (nomi's own admission), the torn sheet ("Paint what won. Keep the rest in a moment, in its own colour."), questions ("What if a day was both?"), and here.
+- **Out of my hands, a mark, not a colour** (nomi, Oct 30, 2026): squared asks what *you* did with a day, and some days weren't yours to choose. The colour stays the honest answer; the mark makes sure such a day is never called a regret, and its words never blame. squared isn't a grief or trauma app: it only promises to do no harm on these days.
 - First person, plain-spoken. Honest, never preachy.
 - No streaks. No scores. No judgment from the app, only your own. Counts are days in colour, never days missed.
 - Warm, quiet, a little tender. It's a conscience, not a coach.

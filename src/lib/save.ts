@@ -1,4 +1,4 @@
-import { saveColor, saveFramed, wipeDay } from './days'
+import { saveColor, saveFramed, saveOutOfHands, wipeDay } from './days'
 import { addNote, deleteNote, replaceNote, setNoteColor, setPinned, type Note } from './notes'
 import type { Paint } from './paints'
 import { reportError, sendErrors } from './report'
@@ -13,6 +13,7 @@ export type Op =
   | { k: 'color'; date: string; color: Paint }
   | { k: 'wipe'; date: string }
   | { k: 'framed'; date: string; framed: boolean }
+  | { k: 'hands'; date: string; outOfHands: boolean }
   | { k: 'note-add'; note: Note }
   | { k: 'note-body'; note: Note; body: string }
   | { k: 'note-pin'; note: Note; pinned: boolean }
@@ -105,6 +106,8 @@ export function save(op: Op) {
         return wipeDay(op.date)
       case 'framed':
         return saveFramed(op.date, op.framed)
+      case 'hands':
+        return saveOutOfHands(op.date, op.outOfHands)
       case 'note-add':
         return addNote(op.note)
       case 'note-body':

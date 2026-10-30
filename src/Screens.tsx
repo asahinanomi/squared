@@ -86,6 +86,8 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onD
         onFilled={act.onFilled}
         onWipe={act.onWipe}
         onFrame={act.onFrame}
+        onMarkHands={act.onMarkHands}
+        onUnmarkHands={act.onUnmarkHands}
         onPinNote={act.onPinNote}
         onPaintNote={act.onPaintNote}
         onZoomOut={nav.outOfDay}

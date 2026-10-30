@@ -10,6 +10,8 @@ type Props = {
   loaded: Paint | null
   /** A day that mattered most: its edge drawn in a darker green, thicker. */
   framed?: boolean
+  /** Marked "out of my hands": soft eraser strokes over the paint, and it signs "out of my hands", never "regret". */
+  marked?: boolean
   onDryBrush: () => void
   onFilled: (p: Paint) => void
   /** The quiet word on a blank square: "paint your day" (today) or "paint this day". */
@@ -76,6 +78,7 @@ function brushCursor(tip: string) {
 export function PaintCanvas({
   saved,
   framed,
+  marked,
   loaded,
   onDryBrush,
   onFilled,
@@ -395,6 +398,7 @@ export function PaintCanvas({
             day's paint once painted. Strokes and the settle stay inside it too. */}
         <div className={'canvas-face' + (saved ? ' is-painted' : '')} />
         <canvas ref={canvas} className="paint-surface" />
+        {saved && marked && <MarkStrokes />}
 
         {/* For someone new: a ghost brush sweeps across, leaving a faint trail, so the square reads as "paint me". */}
         {!saved && !touched && <GhostBrush />}
@@ -407,9 +411,13 @@ export function PaintCanvas({
             <span className="canvas-sign">
               <span
                 key={breathing ? 'breath' : 'word'}
-                className={'canvas-hand' + (breathed && !breathing && !saved ? ' is-writing' : '')}
+                className={
+                  'canvas-hand' +
+                  (breathed && !breathing && !saved ? ' is-writing' : '') +
+                  (saved && marked ? ' is-two' : '')
+                }
               >
-                {saved ? WORD[saved] : breathing ? 'be here' : blank}
+                {saved ? (marked ? 'out of\nmy hands' : WORD[saved]) : breathing ? 'be here' : blank}
               </span>
             </span>
           </span>
@@ -425,5 +433,37 @@ export function PaintCanvas({
         onPointerCancel={cancel}
       />
     </div>
+  )
+}
+
+/** "Out of my hands": three broad, broken strokes in squared's ink, like an eraser rubbed softly across the day (lab 13,
+ *  A6). They fade in and out, rough-edged and grainy, so the paint still shows through: the colour stays the answer. */
+export function MarkStrokes({ id = 'mark' }: { id?: string }) {
+  return (
+    <svg className="mark-strokes" viewBox="0 0 156 156" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <filter id={`${id}-rough`} x="-10%" y="-10%" width="120%" height="120%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="3" />
+          <feDisplacementMap in="SourceGraphic" scale="7" />
+          <feGaussianBlur stdDeviation="0.6" />
+        </filter>
+        <filter id={`${id}-grain`}>
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="8" result="n" />
+          <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.2 1" result="m" />
+          <feComposite in="SourceGraphic" in2="m" operator="in" />
+        </filter>
+        <linearGradient id={`${id}-fade`} x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stopColor="#2f2f2b" stopOpacity="0" />
+          <stop offset=".25" stopColor="#2f2f2b" stopOpacity=".42" />
+          <stop offset=".7" stopColor="#2f2f2b" stopOpacity=".28" />
+          <stop offset="1" stopColor="#2f2f2b" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <g filter={`url(#${id}-rough)`} fill="none" stroke={`url(#${id}-fade)`} strokeLinecap="round">
+        <path filter={`url(#${id}-grain)`} d="M10 70 Q44 50 74 14" strokeWidth="15" />
+        <path filter={`url(#${id}-grain)`} d="M18 116 Q70 80 112 18" strokeWidth="18" />
+        <path filter={`url(#${id}-grain)`} d="M44 146 Q96 104 146 46" strokeWidth="14" />
+      </g>
+    </svg>
   )
 }

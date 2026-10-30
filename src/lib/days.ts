@@ -1,5 +1,6 @@
 import type { Paint } from './paints'
 import { isoDate } from './dates'
+import { reportError } from './report'
 import { supabase } from './supabase'
 
 export type Day = {
@@ -15,6 +16,8 @@ export type Day = {
   changedOn?: string
   /** a day you want to keep, framed (any colour) */
   framed?: boolean
+  /** marked "out of my hands": a day that wasn't yours to choose (the colour stays; it's never called a regret) */
+  outOfHands?: boolean
 }
 
 export type Days = Record<string, Day>
@@ -30,7 +33,13 @@ type Row = {
   note_at?: string | null
   changed_at?: string | null
   framed?: boolean
+  out_of_hands?: boolean
 }
+
+// Whether the out_of_hands column exists (migration 0023): if not, "out of my hands" isn't offered, so a mark can never
+// vanish quietly; the missing column is written down.
+let withHands = true
+export const handsOn = () => withHands
 
 const PAGE = 1000 // Supabase returns at most this many rows per request
 
@@ -44,11 +53,17 @@ export async function fetchAllDays(): Promise<Days> {
       .select(cols)
       .order('date')
       .range(from, from + PAGE - 1)
-  let cols = 'date, color, painted_on_day, created_at, changed_at, framed, note, note_at'
+  let cols = 'date, color, painted_on_day, created_at, changed_at, framed, out_of_hands, note, note_at'
   const out: Days = {}
   for (let from = 0; ; from += PAGE) {
     let { data, error } = await page(cols, from)
-    // Before migrations 0012 and 0013 there's no changed_at or framed yet; load the squares without them.
+    // Before migration 0023 there's no out_of_hands yet; before 0012 and 0013 no changed_at or framed.
+    if (error?.code === '42703' && cols.includes('out_of_hands')) {
+      reportError('days columns', error)
+      withHands = false
+      cols = cols.replace(' out_of_hands,', '')
+      ;({ data, error } = await page(cols, from))
+    }
     if (error?.code === '42703' && cols.includes('framed')) {
       cols = cols.replace(' framed,', '')
       ;({ data, error } = await page(cols, from))
@@ -73,6 +88,7 @@ export async function fetchAllDays(): Promise<Days> {
         noteAt: r.note_at ?? undefined,
         changedOn: r.changed_at ? isoDate(new Date(r.changed_at)) : undefined,
         framed: r.framed || undefined,
+        outOfHands: r.out_of_hands || undefined,
       }
     if (rows.length < PAGE) return out
   }
@@ -89,6 +105,13 @@ export async function wipeDay(date: string): Promise<void> {
 export async function saveFramed(date: string, framed: boolean): Promise<void> {
   if (!supabase) return
   const { error } = await supabase.from('days').update({ framed }).eq('date', date)
+  if (error) throw error
+}
+
+/** Mark (or unmark) a painted day "out of my hands". */
+export async function saveOutOfHands(date: string, outOfHands: boolean): Promise<void> {
+  if (!supabase) return
+  const { error } = await supabase.from('days').update({ out_of_hands: outOfHands }).eq('date', date)
   if (error) throw error
 }
 
