@@ -2835,6 +2835,9 @@ body[data-screen='questions'] .idea {
   line-height: 1.45;
   color: var(--ink-soft);
 }
+.torn-mix.is-next {
+  margin-top: 6px;
+}
 .torn-lead {
   font-weight: 400;
   color: var(--ink-soft);

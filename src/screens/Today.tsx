@@ -560,6 +560,12 @@ export function Today(props: Props) {
           )}
           {/* A day can be both: the square holds the answer, the moments hold the mix (nomi, Oct 30, 2026). */}
           <p className="torn-mix">Paint what won. Keep the rest in a moment, in its own colour.</p>
+          {/* A day that wasn't yours to choose: the mark, one step away under the painted square. */}
+          {handsOn() && (
+            <p className="torn-mix is-next">
+              Not your choice at all? Paint it honestly, then tap “more” → “out of my hands”.
+            </p>
+          )}
         </Sheet>
         {/* Someone's first visit: what a square is and what its colours mean, once. "got it" is a keyline, not the
             black main pill: dismissing a tip is never the day's main action (painting is). */}
