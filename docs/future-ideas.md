@@ -13,7 +13,7 @@ Not urgent: squared already does what most journals do (notes locked to your acc
 
 ## Days done to you: built as "out of my hands" (noted and built Oct 30, 2026)
 
-**Built** as a mark on a painted day (README → "Out of my hands"; lab 12 and 13). Still open: the mark alone on an unpainted day (lab M3), if people ask; watch how beta friends use it.
+**Built** as a mark on a painted day (README → "Out of my hands"; lab 12 and 13). Left for later (nomi): the framed page's little demo (`FrameDemo`) still taps "frame it" under the square; it now lives under "more". Still open: the mark alone on an unpainted day (lab M3), if people ask; watch how beta friends use it.
 
 The thinking that led there:
 
