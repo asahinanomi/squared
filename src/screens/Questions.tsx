@@ -47,7 +47,7 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
     ],
     [
       'What are moments for?',
-      'To catch the day as you live it. Write one in the box at the top of the day whenever something happens; each keeps its time, newest first. A day can hold as many as it needs.',
+      'To catch the day as you live it. Write one in the box at the top of the day whenever something happens; each keeps its time, newest first. A day can hold as many as it needs. If a moment was worth it or a regret, you can mark it: on a mixed day, that’s how the rest is kept.',
     ],
     [
       'Can I paint days I missed?',
