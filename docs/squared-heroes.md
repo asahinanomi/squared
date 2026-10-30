@@ -8,7 +8,7 @@ What squared is best at. Come back to this whenever squared grows: every new thi
 
 1. **The brush: painting your day.** No typing, no mood faces: you paint. Physical, a little slow, honest. The moment people remember.
 2. **The zoom out: a life in days.** Two pinches and today is one small square among every day you'll have. The urgency, felt, not told.
-3. **The question: "am I spending Today meaningfully?"** The voice of squared. Not how you feel, but what you did with your life today.
+3. **The question: "am I spending Today meaningfully?"** The voice of squared. Not how you feel, but what you did with your life today. **And squared speaking back** (nomi, Oct 30, 2026): once a day is painted, its heading answers in squared's own words, one line kept per day, chosen by what squared knows about it (today, a birthday, the early years, framed, far back, a torn day…). A dialog, not a form: it gives a sense of comfort. Every line is written and approved by hand (`docs` "squared: words for past days").
 
 **The supporting cast:** moments feed the brush; the paintings reward it.
 

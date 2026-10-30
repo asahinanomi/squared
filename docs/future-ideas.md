@@ -28,6 +28,14 @@ squared asks "did *I* spend Today meaningfully?", and the colours answer about y
 
 Real days can be half worth it, half regret, and one colour feels dishonest. No fourth colour (green and red mixed is mud, and a middle option becomes the easy exit). Instead, maybe a square split in green and red, your two real paints, reached only through the "torn?" sheet ("it was both"), never a button on the day. Its cost: every view, filter, word pool and painting learns split days. Evidence first: nomi notes each torn day in the quiet week (a moment starting "torn"), and beta 1 asks "Were there days you couldn't pick just one colour?". Often → lab it. Rarely → the torn sheet plus a moment's own colour (built Oct 30, 2026, lab 11) may be enough.
 
+## squared speaking back, more personal (noted Oct 30, 2026)
+
+The words already answer by what squared knows about a day. Making them more personal, in this order:
+
+1. **Signals, not words (now):** use what squared already knows, never the text of your moments. First: a torn day (a moment's colour disagrees with the square), drafts in the words doc. Considered and dropped: "coming back" (the first green after a run of red days), since days can be revisited and repainted, so the pattern is unreliable.
+2. **Later, on iPhone:** on-device AI that reads the day's moments and **picks** the best-fitting line from the approved lists (never writes one). The moments never leave the phone. Only if signals aren't enough.
+3. **No, for squared:** AI on a server reading moments, or writing lines freely. Moments are the most private thing in squared, and a generated line on someone's darkest day can't be checked first.
+
 ## One photo on a framed day (agreed Oct 29, 2026)
 
 One photo per framed day only, to keep with it: rare and special, tucked with the note, never on the square (colour lives in the paint). Built with private notes in the iOS app, encrypted from the start, so it's done once. Shrunk on the phone before upload, private storage, deleted when the day is unframed or the account goes. Beta 1 can confirm the wish. Later, in the iOS app: a quiet "photos from this day" that reads your own library on the phone, storing and uploading nothing.
