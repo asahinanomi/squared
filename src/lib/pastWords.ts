@@ -152,6 +152,13 @@ const MARKED: Record<Paint, string[]> = {
   grey: ['Some days happen to us.', "Out of your hands. Still, you're here."],
 }
 
+// Today, marked out of my hands: its own line per colour, always saying "today", never heavy (nomi, Oct 30, 2026).
+const MARKED_TODAY: Record<Paint, string[]> = {
+  green: ["Today wasn't up to you. You showed up anyway.", 'Not your choice today. Your heart was in it.'],
+  red: ['Not your choice today. Still yours to hold.', "Today happened to you. It isn't who you are."],
+  grey: ["Today wasn't up to you. It just went by.", 'Today just happened to you.'],
+}
+
 // The day you started squared, any colour.
 const FIRST = ['Your first square. It began here.', 'Square one. Hello, you.']
 
@@ -220,8 +227,8 @@ const TODAY: Record<Paint, string> = {
 }
 
 /** Today's own words: its colour line, or what makes it special (always saying "today"). */
-function todayWords(paint: Paint, occasion: string | undefined, first: boolean, marked?: boolean): string {
-  if (marked) return "Today was out of your hands. You're still here."
+function todayWords(iso: string, paint: Paint, occasion: string | undefined, first: boolean, marked?: boolean): string {
+  if (marked) return pick(MARKED_TODAY[paint], iso)
   if (first) return 'Today, your first square.'
   const birthday = occasion && /^your (\S+) birthday$/.exec(occasion)
   if (birthday) return `Today, your ${birthday[1]} birthday.`
@@ -247,7 +254,7 @@ export function dayWords(o: {
 }): string {
   const { iso, today, paint, special, born } = o
   const occasion = special?.split(' · ')[0]
-  if (iso === today) return todayWords(paint, occasion, iso === o.first, o.outOfHands)
+  if (iso === today) return todayWords(iso, paint, occasion, iso === o.first, o.outOfHands)
   if (occasion === 'the day you were born') return pick(BORN, iso)
   if (born && iso < yearsAfter(born, 4)) return pick(EARLY[paint], iso)
   if (o.outOfHands) return pick(MARKED[paint], iso)
