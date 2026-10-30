@@ -26,6 +26,7 @@ const POOLS: Record<Paint, string[]> = {
     "You're still here. That counts.",
     "This day is painted. Today isn't, yet.",
     'Looking back honestly takes courage.',
+    "And still, you're here.",
   ],
   green: [
     'You spent this day meaningfully.',
@@ -38,7 +39,8 @@ const POOLS: Record<Paint, string[]> = {
     'This is what your time is for.',
     'A day you can stand behind.',
     'You honoured what matters to you.',
-    'You lived by what you care about.',
+    'You were where you needed to be.',
+    'And this one, you chose.',
   ],
   grey: [
     'Some days simply pass.',
@@ -51,6 +53,7 @@ const POOLS: Record<Paint, string[]> = {
     'A day that slipped by, gently.',
     'Seeing the blur is paying attention.',
     'Not every day has to mean something.',
+    'A quiet page, still yours.',
   ],
 }
 
@@ -63,27 +66,38 @@ const OCCASIONS: Record<string, Record<Paint, string[]>> = {
       'Your {n} birthday, well spent.',
       'Your {n} birthday, spent on what matters.',
       'Your {n} birthday. A year begins on purpose.',
+      'And then you were {a}.',
     ],
     red: [
       "A hard {n} birthday. You're allowed that.",
       'Your {n} birthday. Heavy, and you looked.',
-      'Your {n} birthday, not as hoped.',
+      'Your {n} birthday. It still counts.',
     ],
     grey: ['Your {n} birthday, softly come and gone.', 'Your {n} birthday, a quiet one.'],
   },
   newyear: {
-    green: ['A new year, begun on purpose.', 'The year began with what matters.', "New Year's Day, well spent."],
-    red: ['A hard start. The year is still yours.', 'Not the start you hoped for.', 'A heavy first day. You looked.'],
+    green: [
+      'A new year, begun on purpose.',
+      'The year began with what matters.',
+      "New Year's Day, well spent.",
+      'And so, a new year.',
+    ],
+    red: [
+      'A hard start. The year is still yours.',
+      'Not the start you hoped for. The rest is unwritten.',
+      'A heavy first day. You looked.',
+    ],
     grey: ['A quiet start to the year.', 'The year began softly.', 'The year began in a soft blur.'],
   },
   christmas: {
-    green: ['Christmas, spent on what matters.', 'Christmas, close to what matters.', 'Christmas, well spent.'],
-    red: [
-      "Christmas can be hard. That's allowed.",
-      'Not the Christmas you hoped for.',
-      'A heavy Christmas. Be gentle with yourself.',
+    green: ['Christmas, spent on what matters.', 'Christmas, and your heart was in it.', 'Christmas, well spent.'],
+    red: ['Christmas can be heavy, too.', 'Not the Christmas you hoped for.', 'A heavy Christmas, seen.'],
+    grey: [
+      'A quiet Christmas, gently held.',
+      'Christmas came and went softly.',
+      'Some Christmases just pass.',
+      'Once more, Christmas.',
     ],
-    grey: ['A quiet Christmas, gently held.', 'Christmas came and went softly.', 'Some Christmases just pass.'],
   },
 }
 
@@ -92,7 +106,10 @@ const OCCASIONS: Record<string, Record<Paint, string[]>> = {
 function occasionLine(special: string, paint: Paint, iso: string): string {
   const first = special.split(' · ')[0]
   const birthday = /^your (\S+) birthday$/.exec(first)
-  if (birthday) return pick(OCCASIONS.birthday[paint], iso).replace('{n}', birthday[1])
+  if (birthday)
+    return pick(OCCASIONS.birthday[paint], iso)
+      .replace('{n}', birthday[1])
+      .replace('{a}', String(parseInt(birthday[1])))
   if (first === "New Year's Day") return pick(OCCASIONS.newyear[paint], iso)
   if (first === 'Christmas') return pick(OCCASIONS.christmas[paint], iso)
   return `${first[0].toUpperCase()}${first.slice(1)}, in colour.`
@@ -105,33 +122,28 @@ function occasionLine(special: string, paint: Paint, iso: string): string {
 // these speak to the grown-up who came back, painting now for the little one they were. No assumptions about what
 // happened: not every early childhood was safe.
 const EARLY: Record<Paint, string[]> = {
-  green: ['You went back for this day.', 'Painted now, for the little you.', 'A little life, already in colour.'],
+  green: ['You went back for this day.', 'Painted now, for who you were.', 'Your early days, already in colour.'],
   red: [
     "You came back for this. That's brave.",
     'You were small. None of it was yours to choose.',
-    'Looking back for the little you, gently.',
+    'Held gently, all these years later.',
   ],
   grey: [
     'Too young to remember. Time kept it for you.',
     'Early days, held by time, not memory.',
     'Painted from far away.',
+    'Once, you were small.',
   ],
 }
 
 // The day you were born, any colour: a newborn has no choice to regret or stand behind, so these hold the scale of it.
-const BORN = [
-  'Day one. Everything began here.',
-  'Your very first day.',
-  'The first square of your life.',
-  'Day one of every day since.',
-  'You arrived. Every day after starts here.',
-]
+const BORN = ['Hello, world.', 'Once upon a time, you.', 'And then there was you.']
 
 // The day you started squared, any colour.
-const FIRST = ['Your first square. It began here.', 'The first day you painted. Hello.', 'Where your squares began.']
+const FIRST = ['Your first square. It began here.', 'Square one. Hello, you.']
 
 // You framed it because it matters: three for any colour, one adapted from each colour's pool.
-const FRAMED_ANY = ['You kept this one.', 'Worth framing. You knew.', 'Some days ask to be kept.']
+const FRAMED_ANY = ['Of all your days, this one.', 'Worth framing. You knew.', 'Some days ask to be kept.']
 const FRAMED: Record<Paint, string> = {
   green: 'Proof of what you care about, kept.',
   red: 'Heavy to look at. You kept it anyway.',
@@ -158,6 +170,7 @@ const FAR: Record<Paint, string[]> = {
     'Time softened this one.',
     'Painted from far away.',
     'Memory let this one go. You came back.',
+    'Once upon a time, this day.',
   ],
 }
 
@@ -168,12 +181,9 @@ const MILESTONE: Record<Paint, string[]> = {
     '{a} years. A day well spent.',
     'Your {n} birthday, lived on purpose.',
     '{a} years. You made room for what matters.',
+    'And then, {a}.',
   ],
-  red: [
-    '{a} years. A heavy one, seen.',
-    'Your {n}. Not as hoped. You looked.',
-    "{a} years. You're allowed to feel it.",
-  ],
+  red: ['{a} years, and a heavy day.', 'Your {n}, not as hoped.', "{a} years. You're allowed to feel it."],
   grey: ['{a} years, quietly marked.', 'Your {n} birthday, softly come and gone.', '{a} years, soft around the edges.'],
 }
 
