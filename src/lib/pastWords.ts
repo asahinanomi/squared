@@ -139,25 +139,9 @@ const EARLY: Record<Paint, string[]> = {
 // The day you were born, any colour: a newborn has no choice to regret or stand behind, so these hold the scale of it.
 const BORN = ['Hello, world.', 'Once upon a time, you.', 'And then there was you.']
 
-// Out of my hands (nomi, Oct 30, 2026): a day that wasn't yours to choose, marked. The colour stays the honest answer;
-// these words never blame, and never call it a regret. They win over everything but the day you were born and the
-// early years.
-const MARKED: Record<Paint, string[]> = {
-  green: ['Out of your hands. You showed up anyway.', 'Not your choice. Still, you were there.'],
-  red: [
-    'Not yours to choose. Still yours to hold.',
-    "It happened. It isn't who you are.",
-    "Out of your hands. Still, you're here.",
-  ],
-  grey: ['Some days happen to us.', "Out of your hands. Still, you're here."],
-}
-
-// Today, marked out of my hands: its own line per colour, always saying "today", never heavy (nomi, Oct 30, 2026).
-const MARKED_TODAY: Record<Paint, string[]> = {
-  green: ["Today wasn't up to you. You showed up anyway.", 'Not your choice today. Your heart was in it.'],
-  red: ['Not your choice today. Still yours to hold.', "Today happened to you. It isn't who you are."],
-  grey: ["Today wasn't up to you. It just went by.", 'Today just happened to you.'],
-}
+// Out of my hands (nomi, Oct 30, 2026): a marked day keeps its colour's own words, one voice everywhere. Only two red
+// lines can't speak to a day that wasn't yours to choose: one names regret, one leans on next time.
+const NOT_IF_MARKED = new Set(['Regret means you care.', "This day is painted. Today isn't, yet."])
 
 // The day you started squared, any colour.
 const FIRST = ['Your first square. It began here.', 'Square one. Hello, you.']
@@ -227,8 +211,7 @@ const TODAY: Record<Paint, string> = {
 }
 
 /** Today's own words: its colour line, or what makes it special (always saying "today"). */
-function todayWords(iso: string, paint: Paint, occasion: string | undefined, first: boolean, marked?: boolean): string {
-  if (marked) return pick(MARKED_TODAY[paint], iso)
+function todayWords(paint: Paint, occasion: string | undefined, first: boolean): string {
   if (first) return 'Today, your first square.'
   const birthday = occasion && /^your (\S+) birthday$/.exec(occasion)
   if (birthday) return `Today, your ${birthday[1]} birthday.`
@@ -239,7 +222,7 @@ function todayWords(iso: string, paint: Paint, occasion: string | undefined, fir
 
 /**
  * A painted day's heading. Today has its own words (todayWords). For a past day, when it's more than one thing, the
- * strongest wins: the day you were born, then early years (before 4), out of my hands, your first square, a holiday or birthday
+ * strongest wins: the day you were born, then early years (before 4), your first square, a holiday or birthday
  * (milestones first), framed, then the colour's own pool (mixed with far-back lines from 3 years ago).
  */
 export function dayWords(o: {
@@ -254,10 +237,9 @@ export function dayWords(o: {
 }): string {
   const { iso, today, paint, special, born } = o
   const occasion = special?.split(' · ')[0]
-  if (iso === today) return todayWords(iso, paint, occasion, iso === o.first, o.outOfHands)
+  if (iso === today) return todayWords(paint, occasion, iso === o.first)
   if (occasion === 'the day you were born') return pick(BORN, iso)
   if (born && iso < yearsAfter(born, 4)) return pick(EARLY[paint], iso)
-  if (o.outOfHands) return pick(MARKED[paint], iso)
   if (iso === o.first) return pick(FIRST, iso)
   if (special) {
     const age = born ? Number(iso.slice(0, 4)) - Number(born.slice(0, 4)) : 0
@@ -268,5 +250,6 @@ export function dayWords(o: {
     return occasionLine(special, paint, iso)
   }
   if (o.framed) return pick([...FRAMED_ANY, FRAMED[paint]], iso)
-  return pick(iso <= yearsAfter(today, -3) ? [...POOLS[paint], ...FAR[paint]] : POOLS[paint], iso)
+  const pool = o.outOfHands ? POOLS[paint].filter((l) => !NOT_IF_MARKED.has(l)) : POOLS[paint]
+  return pick(iso <= yearsAfter(today, -3) ? [...pool, ...FAR[paint]] : pool, iso)
 }
