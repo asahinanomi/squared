@@ -2779,39 +2779,44 @@ body[data-screen='questions'] .idea {
 /* Torn: never more than half the screen. One line of question; the list scrolls, with a fade at its foot while
    there's more below. */
 .torn-title {
-  flex: none;
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 1.35;
+  margin: 0 0 14px;
+  font-family: var(--font-reflect);
+  font-optical-sizing: auto;
+  font-size: 28px;
+  font-weight: 450;
+  line-height: 1.2;
   color: var(--ink);
+}
+/* The two reasons, two equal cards: the question in ink, its tip running on in soft grey. */
+.torn-card {
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: #f6f6f3;
+}
+.torn-card + .torn-card {
+  margin-top: 10px;
 }
 .torn-sheet .sheet-handle {
   margin-bottom: 16px;
 }
 /* The two reasons a day is torn, each a question in ink, with its tip under it in soft grey. */
 .torn-q {
-  margin: 10px 0 0;
+  margin: 0;
   font-size: 16px;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--ink);
 }
 .torn-sheet .compass-name {
-  margin: 8px 0 0;
-}
-.torn-q.is-second {
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid #e2e2db;
+  margin: 10px 0 0;
 }
 /* What you said matters, one at a time: the thought in the middle, ‹ › either side (the day's own chevrons). */
 .matter-one {
   display: flex;
   align-items: center;
   gap: 4px;
-  margin: 14px -10px 0;
-  min-height: 84px;
+  margin: 10px -12px 0;
+  min-height: 72px;
 }
 .matter-text {
   flex: 1;
@@ -2839,13 +2844,6 @@ body[data-screen='questions'] .idea {
 }
 .matter-arrow:disabled {
   opacity: 0.2;
-}
-.torn-mix {
-  flex: none;
-  margin: 12px 0 0;
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--ink-soft);
 }
 .torn-lead {
   font-weight: 400;

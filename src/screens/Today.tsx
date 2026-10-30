@@ -535,57 +535,62 @@ export function Today(props: Props) {
           />
         )}
         {/* Torn has two reasons, so it asks both (nomi, Oct 30, 2026): was it mixed (what you said matters, one at a
-            time, ‹ › to move through, never a scrolling list), or was it out of your hands. Each with its own tip, a fine
-            line between them. */}
+            time, ‹ › to move through, never a scrolling list), or was it out of your hands. Each its own card. */}
         <Sheet open={compassOpen} onClose={() => setCompassOpen(false)} className="torn-sheet">
+          {/* squared asks, in the question's serif; the two reasons a day is torn answer in two equal cards. */}
           <h2 className="torn-title">Torn?</h2>
-          <p className="torn-q">
-            Did what mattered outweigh the rest?
-            {compass.length > 0 && <span className="torn-lead"> You said these matter:</span>}
-          </p>
-          {compass.length ? (
-            <div
-              className="matter-one"
-              onTouchStart={(e) => (swipeAt.current = e.touches[0].clientX)}
-              onTouchEnd={(e) => {
-                const dx = e.changedTouches[0].clientX - (swipeAt.current ?? e.changedTouches[0].clientX)
-                swipeAt.current = null
-                if (Math.abs(dx) > 40) setMatterAt((i) => (i - Math.sign(dx) + compass.length) % compass.length)
-              }}
-            >
-              <button
-                className="matter-arrow"
-                aria-label="Previous"
-                disabled={compass.length < 2}
-                onClick={() => setMatterAt((i) => (i - 1 + compass.length) % compass.length)}
+          <div className="torn-card">
+            <p className="torn-q">
+              Did what mattered outweigh the rest?{' '}
+              <span className="torn-lead">
+                Paint what won. Keep the rest in a moment, in its own colour.
+                {compass.length > 0 && ' You said these matter:'}
+              </span>
+            </p>
+            {compass.length ? (
+              <div
+                className="matter-one"
+                onTouchStart={(e) => (swipeAt.current = e.touches[0].clientX)}
+                onTouchEnd={(e) => {
+                  const dx = e.changedTouches[0].clientX - (swipeAt.current ?? e.changedTouches[0].clientX)
+                  swipeAt.current = null
+                  if (Math.abs(dx) > 40) setMatterAt((i) => (i - Math.sign(dx) + compass.length) % compass.length)
+                }}
               >
-                <Chevron dir="left" />
+                <button
+                  className="matter-arrow"
+                  aria-label="Previous"
+                  disabled={compass.length < 2}
+                  onClick={() => setMatterAt((i) => (i - 1 + compass.length) % compass.length)}
+                >
+                  <Chevron dir="left" />
+                </button>
+                <p key={matterAt} className="matter-text">
+                  {compass[Math.min(matterAt, compass.length - 1)]}
+                </p>
+                <button
+                  className="matter-arrow"
+                  aria-label="Next"
+                  disabled={compass.length < 2}
+                  onClick={() => setMatterAt((i) => (i + 1) % compass.length)}
+                >
+                  <Chevron dir="right" />
+                </button>
+              </div>
+            ) : (
+              <button className="compass-edit compass-name" onClick={props.onMatters}>
+                name what matters to you in my days → what matters
               </button>
-              <p key={matterAt} className="matter-text">
-                {compass[Math.min(matterAt, compass.length - 1)]}
-              </p>
-              <button
-                className="matter-arrow"
-                aria-label="Next"
-                disabled={compass.length < 2}
-                onClick={() => setMatterAt((i) => (i + 1) % compass.length)}
-              >
-                <Chevron dir="right" />
-              </button>
-            </div>
-          ) : (
-            <button className="compass-edit compass-name" onClick={props.onMatters}>
-              name what matters to you in my days → what matters
-            </button>
-          )}
-          {/* A day can be both: the square holds the answer, the moments hold the mix. */}
-          <p className="torn-mix">Paint what won. Keep the rest in a moment, in its own colour.</p>
-          {/* A day that wasn't yours to choose: the mark, one step away under the painted square. */}
+            )}
+          </div>
+          {/* A day that wasn't yours to choose: the same weight as a mixed one, never a footnote. */}
           {handsOn() && (
-            <>
-              <p className="torn-q is-second">Or was it out of your hands?</p>
-              <p className="torn-mix">Paint it honestly, then tap “more” → “out of my hands”.</p>
-            </>
+            <div className="torn-card">
+              <p className="torn-q">
+                Or was it out of your hands?{' '}
+                <span className="torn-lead">Paint it honestly, then tap “more” → “out of my hands”.</span>
+              </p>
+            </div>
           )}
         </Sheet>
         {/* Someone's first visit: what a square is and what its colours mean, once. "got it" is a keyline, not the
