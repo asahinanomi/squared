@@ -82,9 +82,10 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setMonthFocus(focus)
     setScreen('month')
   }
-  // Zoom out of a day: to its month — or back to the list, if it was opened from there.
+  // Zoom out of a day: to its own month (a day in 2013 zooms out to that December, not this month; nomi, Oct 30,
+  // 2026) — or back to the list, if it was opened from there.
   const outOfDay = () => {
-    if (!dayFromList) return goMonth()
+    if (!dayFromList) return goMonth(date)
     setWhy(null)
     setDayFromList(false)
     setScreen('list')
