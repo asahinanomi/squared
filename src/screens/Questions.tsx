@@ -50,6 +50,10 @@ function answers(onTouch?: () => void, onSupport?: () => void): [string, ReactNo
       'To catch the day as you live it. Write one in the box at the top of the day whenever something happens; each keeps its time, newest first. A day can hold as many as it needs. If a moment was worth it or a regret, you can mark it: on a mixed day, that’s how the rest is kept.',
     ],
     [
+      'Can I tag a day?',
+      'Yes: write a #word in a moment, like #travel or #sick. squared keeps every tag you use, and the list’s filter (in the list view, the sliders) shows the days that carry one.',
+    ],
+    [
       'Can I paint days I missed?',
       'Of course. Life gets busy, that’s why squared exists. Tap the date at the top of any day, or swipe back, and pick the day.',
     ],

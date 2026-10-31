@@ -1179,6 +1179,11 @@ sup.ord {
   width: 5px;
   border-radius: 0 4px 4px 0;
 }
+/* A #tag in a moment's words: set quietly apart, so it reads as a tag. */
+.tag {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
 .note-stamp {
   display: block;
   margin: 0 0 6px;
@@ -3456,6 +3461,9 @@ button.settings-row:active {
   list-style: none;
   margin: 0 0 8px;
   padding: 0;
+  /* your tags can make it long: it scrolls, the pill stays in reach */
+  max-height: 52vh;
+  overflow-y: auto;
 }
 .filter-row {
   width: 100%;
@@ -3496,6 +3504,16 @@ button.settings-row:active {
     linear-gradient(var(--ink-soft), var(--ink-soft)) 3px 9px / 6px 1.5px no-repeat,
     #fff;
   box-shadow: inset 0 0 0 1.5px var(--ink-soft);
+}
+.filter-mark.is-tag::before {
+  content: '#';
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-soft);
 }
 .filter-mark.is-framed {
   background: #6e9b7b;

@@ -1,6 +1,7 @@
 import { writtenWhen } from '../lib/dates'
 import type { Note } from '../lib/notes'
 import { paintHex } from '../lib/paints'
+import { withTags } from '../lib/tags'
 
 // One moment, in full, with when it was written. Tap it to update or delete it.
 export function NoteCard({
@@ -32,7 +33,7 @@ export function NoteCard({
       {/* Pinned: on a framed day it's "to remember", in the day's green; any other day, a quiet "pinned". */}
       {note.pinned && <span className="note-pin">{framed ? 'to remember' : 'pinned'}</span>}
       <span className="note-stamp">{writtenWhen(note.writtenAt, note.date)}</span>
-      <span className="note-text">{note.body}</span>
+      <span className="note-text">{withTags(note.body)}</span>
     </button>
   )
 }

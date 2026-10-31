@@ -15,6 +15,7 @@ import {
 } from '../lib/dates'
 import type { Day, Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
+import { allTags, dayHasTag, withTags } from '../lib/tags'
 import { frameVars, paintHex, squareFill, WORD, type Paint } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { monthsBetween, shiftMonth } from './Month'
@@ -47,7 +48,8 @@ type Props = {
   onAllNotes?: () => void
 }
 
-export type Only = Paint | 'unpainted' | 'framed' | 'notes'
+/** A kind of day to show; a tag is its #word ("#travel"). */
+export type Only = Paint | 'unpainted' | 'framed' | 'notes' | `#${string}`
 /** The filter's choices: every day, then the colours in the palette's order, then the special kinds (nomi). */
 const FILTERS: [Only | null, string][] = [
   [null, 'all days'],
@@ -75,7 +77,8 @@ function FilterMark({ id }: { id: Only | null }) {
   if (id === 'unpainted') return <span className="filter-mark is-unpainted" aria-hidden="true" />
   if (id === 'framed') return <span className="filter-mark is-framed" aria-hidden="true" />
   if (id === 'notes') return <span className="filter-mark is-notes" aria-hidden="true" />
-  return <span className="filter-mark" style={{ background: paintHex(id) }} aria-hidden="true" />
+  if (id.startsWith('#')) return <span className="filter-mark is-tag" aria-hidden="true" />
+  return <span className="filter-mark" style={{ background: paintHex(id as Paint) }} aria-hidden="true" />
 }
 
 /** About what two lines of a card's note hold on a phone. */
@@ -166,7 +169,7 @@ export function DayCard({
               {day?.framed ? 'to remember' : 'pinned'}
             </span>
           )}
-          <p className="day-card-note">{latest.body}</p>
+          <p className="day-card-note">{withTags(latest.body)}</p>
         </div>
       )}
       {/* Open, the notes take the card's full width, each its own block: its time, then its words. */}
@@ -180,7 +183,7 @@ export function DayCard({
                 </span>
               )}
               <span className="day-card-time">{writtenWhen(n.writtenAt, iso)}</span>
-              <p className="day-card-note is-full">{n.body}</p>
+              <p className="day-card-note is-full">{withTags(n.body)}</p>
             </div>
           ))}
           <button className="day-card-more" aria-expanded={true} onClick={() => setOpen(false)}>
@@ -210,8 +213,9 @@ export function DaysList({
   onOnly,
   onAllNotes,
 }: Props) {
+  // "with moments" and tags need every moment, not just the months seen so far.
   useEffect(() => {
-    if (only.includes('notes')) onAllNotes?.()
+    if (only.some((o) => o === 'notes' || o.startsWith('#'))) onAllNotes?.()
   }, [only.join()]) // eslint-disable-line react-hooks/exhaustive-deps
   // The sheet's ticks, applied when it closes (the list then opens afresh, filtered, in one step).
   const [picking, setPicking] = useState<Only[] | null>(null)
@@ -244,7 +248,9 @@ export function DaysList({
           ? !!days[iso]?.framed
           : o === 'notes'
             ? !!notes[iso]?.length
-            : days[iso]?.color === o,
+            : o.startsWith('#')
+              ? dayHasTag(notes, iso, o.slice(1))
+              : days[iso]?.color === o,
     )
   const scroller = useRef<HTMLDivElement>(null)
   const heightBefore = useRef<number | null>(null) // set when months are added above, to keep your place
@@ -388,7 +394,10 @@ export function DaysList({
   const filter = onOnly && (
     <button
       className={'days-filter' + (filtered ? ' is-on' : '')}
-      onClick={() => setPicking(only)}
+      onClick={() => {
+        onAllNotes?.() // your tags come from every moment
+        setPicking(only)
+      }}
       aria-haspopup="dialog"
       aria-label={filtered ? 'Which days: filtered' : 'Which days'}
     >
@@ -412,7 +421,7 @@ export function DaysList({
         <Sheet open={!!picking} onClose={closePicking}>
           <h2 className="torn-title">Which days would you like to see?</h2>
           <ul className="filter-list">
-            {FILTERS.map(([id, label]) => {
+            {[...FILTERS, ...allTags(notes).map((t): [Only, string] => [`#${t}`, t])].map(([id, label]) => {
               const ticked = picking ?? only
               const on = id ? ticked.includes(id) : !ticked.length
               return (
