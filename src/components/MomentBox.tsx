@@ -72,14 +72,14 @@ export function MomentBox({ placeholder, onAdd }: Props) {
   const still = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
   // Added with its colour, if one is tapped: choosing it is the last step, so it keeps the moment (nomi, Oct 31, 2026).
-  const add = (color?: Paint) => {
-    const t = text.trim()
+  const add = (color?: Paint, written = text) => {
+    const t = written.trim()
     if (!t) return box.current?.focus()
     const w = wrap.current
     if (w && !still()) {
       const r = w.getBoundingClientRect()
       const ghost = w.cloneNode(true) as HTMLElement
-      ghost.querySelector('textarea')!.value = text
+      ghost.querySelector('textarea')!.value = written
       ghost.classList.add('is-flying')
       ghost.setAttribute('aria-hidden', 'true')
       Object.assign(ghost.style, {
@@ -102,6 +102,7 @@ export function MomentBox({ placeholder, onAdd }: Props) {
   // keyboard only closes it, and with no + there was no other way without a colour). Not while a colour is being kept,
   // nor when squared itself puts the keyboard away, nor when the app is only being left.
   const leaving = useRef(false)
+  const shifted = useRef(false)
   const onBlur = () => {
     if (leaving.current || picked || document.visibilityState === 'hidden') return
     if (text.trim()) add()
@@ -113,8 +114,15 @@ export function MomentBox({ placeholder, onAdd }: Props) {
           ref={box}
           rows={1}
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => {
+            const v = e.target.value
+            // A new line typed at the end keeps the moment: some Android keyboards send Enter mid-word, in a way the
+            // key check below misses (shift+Enter on a computer still makes a new line).
+            if (!shifted.current && v === text + '\n') return add(undefined, text)
+            setText(v)
+          }}
           onKeyDown={(e) => {
+            shifted.current = e.shiftKey
             if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
               e.preventDefault()
               add()
