@@ -63,9 +63,10 @@ export default function App() {
   useEffect(() => {
     if (location.pathname === '/idea' && screen !== 'idea') history.replaceState(null, '', '/')
   }, [screen])
-  // Settings and its pages open at their top (a link at the foot of settings kept its scroll).
+  // Settings and its pages open at their top (a link at the foot of settings kept its scroll), and so does a day
+  // (opened from my days, far down the page, it kept that scroll and landed on its moments; nomi, Oct 31, 2026).
   useEffect(() => {
-    if (PAGES.includes(screen)) window.scrollTo(0, 0)
+    if (PAGES.includes(screen) || screen === 'today') window.scrollTo(0, 0)
   }, [screen])
   useEffect(() => {
     document.body.dataset.screen = document.documentElement.dataset.screen = signedIn ? screen : 'signin'

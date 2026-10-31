@@ -112,3 +112,5 @@ Real human moments many people will have: a day that mattered more than any othe
 - The privacy page must say it plainly: what's collected (pages visited, the browser, not your squares or notes), by whom (Google), and how to opt out. For testers in the EU and the UK, a cookie consent banner before anything loads.
 - Keep it off the signed-in screens if possible (landing and sign-in only), so nothing about your days is ever near it.
 - **A copy pass, as a dialog** (nomi, Oct 28, 2026): read every title, prompt and empty state and make it sound like squared talking with you (see brand story, voice principles).
+
+- **Framed days, one at a time, swipeable** (Oct 31, 2026, nomi): on my days, swipe the framed card left and right to move through your framed days, words and all (not a shelf: a framed day is its words). After beta 1, if friends frame days.
