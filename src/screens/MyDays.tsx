@@ -3,6 +3,7 @@ import { FrameDemo } from '../components/FrameDemo'
 import { PaintingDemo } from '../components/PaintingDemo'
 import { Sheet } from '../components/Sheet'
 import { PaintingThumb } from '../components/PaintingThumb'
+import { monthName } from '../lib/painting'
 import { WhereCard } from '../components/WhereCard'
 import { plainDate, todayIso } from '../lib/dates'
 import { frameOf } from '../lib/paints'
@@ -93,6 +94,17 @@ export function MyDays({
   const toRemember = keptNotes.filter((n) => n.pinned)
   const latest = toRemember.length ? null : keptNotes.at(-1)
   const [help, setHelp] = useState<'framed' | 'paintings' | null>(null)
+  // The shelf: this month and this year so far, then the paintings you kept, newest first.
+  const short = (p: string) => (p.length === 4 ? p : `${monthName(p).slice(0, 3)} ${p.slice(0, 4)}`)
+  const shelf: [string, string][] = [
+    ...(hasMonth ? [[month, `${short(month).slice(0, 3)}, so far`] as [string, string]] : []),
+    ...(hasYear ? [[year, `${year}, so far`] as [string, string]] : []),
+    ...[...kept]
+      .filter((p) => p !== month && p !== year)
+      .sort()
+      .reverse()
+      .map((p): [string, string] => [p, short(p)]),
+  ]
   // Picked once per visit (and again only if the list itself changes, say once it has loaded).
   const line = useMemo(() => (matters.length ? oneOf(matters, 'squared.mattersShown') : ''), [matters.join('\n')]) // eslint-disable-line react-hooks/exhaustive-deps
   // Each row opens its page; `empty` is an empty slot (dashed). Not set up yet: its sub says what it is, and "set up
@@ -119,8 +131,8 @@ export function MyDays({
       <p className="my-days-line">The past is painted. Today is still yours.</p>
       {/* Where you are: this week, this month and a life (it replaced the life card and the week card). */}
       <WhereCard days={days} profile={profile} onDay={onDay} onMonth={onMonth} onLife={onSquares} onSetUp={onSetUp} />
-      {/* The order: where you are; then your own words, a line that matters and a day you framed; the paintings last,
-          the biggest and calmest, a gallery at the page's end (nomi, Oct 28, 2026). */}
+      {/* The order: where you are; a line that matters, under the time you have; your paintings (seeing your life, a
+          hero); then a day you framed, a memory to end on (nomi, Oct 31, 2026). */}
       {/* What matters, one line at a time: a different one of your own each visit, in the sans of your own words, a
           note to yourself under the time you have. The card opens all of them. Not set yet: the empty slot, as before. */}
       {matters.length ? (
@@ -133,6 +145,31 @@ export function MyDays({
         </button>
       ) : (
         <div className="settings-rows">{row('what matters', 'what makes a day worth it', onMatters, 'set up')}</div>
+      )}
+      {/* Your paintings, a shelf (nomi, Oct 31, 2026: seeing your life is a hero, so they sit above the framed day, and
+          small, so they take a strip, not half the page): this month and this year so far, then every painting you
+          kept, newest first, side by side; more than fit, the shelf scrolls sideways. Each opens its painting; the title
+          opens all you kept. Nothing painted yet: the empty slot, with how a painting is made. */}
+      {!hasMonth && !hasYear && !kept.length && (
+        <div className="settings-rows">
+          {row('paintings', 'none yet · how a painting is made', () => setHelp('paintings'), 'none')}
+        </div>
+      )}
+      {shelf.length > 0 && (
+        <section className="home-card my-days-paintings">
+          <button className="my-days-card-head" onClick={kept.length ? onPaintings : () => setHelp('paintings')}>
+            <span className="matters-label">you painted these</span>
+            <Chevron dir="right" />
+          </button>
+          <div className="paintings-shelf">
+            {shelf.map(([p, label]) => (
+              <button key={p} className="shelf-item" onClick={() => onPainting(p)}>
+                <PaintingThumb month={p} days={days} />
+                <span>{label}</span>
+              </button>
+            ))}
+          </div>
+        </section>
       )}
       {/* A day you framed, as itself: its square in its frame, its date, and its "to remember" moments, as on its list
           card. A different one each visit. The card opens that day (its arrow, as on the matters card); every framed
@@ -167,37 +204,6 @@ export function MyDays({
         <div className="settings-rows">
           {row('framed days', 'none yet · how to frame a day', () => setHelp('framed'), 'none')}
         </div>
-      )}
-      {/* This month and this year so far, and the way to every painting you kept (the old "paintings" row). */}
-      {/* Nothing painted yet: the paintings wait as an empty slot, with how they're made. */}
-      {!hasMonth && !hasYear && !kept.length && (
-        <div className="settings-rows">
-          {row('paintings', 'none yet · how a painting is made', () => setHelp('paintings'), 'none')}
-        </div>
-      )}
-      {(hasMonth || hasYear || kept.length > 0) && (
-        <section className="home-card home-paintings my-days-paintings">
-          {/* The title is the way to every painting you kept (none kept yet: how to keep one, not a blank page). */}
-          <button
-            className="my-days-card-head my-days-paintings-head"
-            onClick={kept.length ? onPaintings : () => setHelp('paintings')}
-          >
-            <span className="matters-label">you painted these</span>
-            <Chevron dir="right" />
-          </button>
-          {hasMonth && (
-            <button onClick={() => onPainting(month)}>
-              <span className="home-t">{new Date().toLocaleDateString('en-US', { month: 'long' })}, so far</span>
-              <PaintingThumb month={month} days={days} />
-            </button>
-          )}
-          {hasYear && (
-            <button onClick={() => onPainting(year)}>
-              <span className="home-t">{year}, so far</span>
-              <PaintingThumb month={year} days={days} />
-            </button>
-          )}
-        </section>
       )}
       {/* Help, only when asked for: how a day is framed, how a painting is kept. */}
       <Sheet open={help === 'framed'} onClose={() => setHelp(null)}>

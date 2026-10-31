@@ -4345,28 +4345,6 @@ button.home-card:active {
   font-weight: 600;
 }
 /* this month and this year so far, side by side, each titled above (still unsigned) */
-.home-paintings {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.home-paintings button {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: left;
-  color: var(--ink);
-  min-width: 0;
-}
-.home-paintings .home-t {
-  font-size: 15px;
-}
-.home-paintings canvas {
-  width: 100%;
-  aspect-ratio: 1;
-  display: block;
-  filter: drop-shadow(0 4px 8px rgba(20, 20, 19, 0.1));
-}
 /* A wait: the hourglass alone, centred on the paper. Its grains fall, then it's turned over (half a turn, a
    little ease), and again, as long as the wait lasts. Its sand is half and half, so every turn looks the same. */
 .waiting {
@@ -4619,7 +4597,7 @@ button.home-card:active {
   color: var(--ink);
   text-wrap: balance;
 }
-/* my days: a life as one bar first, then this month and year so far, as paintings, over the rows. */
+/* my days: your paintings, as a shelf. */
 .my-days-paintings {
   margin-top: 12px;
   padding-bottom: 20px; /* as the matters and framed cards */
@@ -4631,8 +4609,7 @@ button.home-card:active {
 }
 /* A card's title on my days ("you painted these", "you framed this day"): the small grey label, with the rows' grey arrow
    on its right; on the paintings card it spans both paintings and opens every painting you kept. */
-.my-days-card-head,
-.home-paintings .my-days-card-head {
+.my-days-card-head {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -4643,9 +4620,33 @@ button.home-card:active {
   flex: none;
   color: #b5b5ae;
 }
-.my-days-paintings-head {
-  grid-column: 1 / -1;
-  margin: 0 0 -4px;
+/* The shelf: small framed paintings side by side, a gallery wall in a strip; it scrolls sideways to the card's edges. */
+.paintings-shelf {
+  display: flex;
+  gap: 14px;
+  margin: 16px -18px 0;
+  padding: 2px 18px 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.paintings-shelf::-webkit-scrollbar {
+  display: none;
+}
+.shelf-item {
+  flex: none;
+  width: 76px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.shelf-item canvas {
+  width: 76px;
+  aspect-ratio: 1;
+  display: block;
+  filter: drop-shadow(0 3px 6px rgba(20, 20, 19, 0.1));
 }
 /* A day you framed: its small framed square beside its date, then its note as on a list card, two lines at most. */
 .framed-day {

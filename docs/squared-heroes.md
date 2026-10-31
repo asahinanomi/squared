@@ -49,7 +49,7 @@ If it serves none, it goes (stats, counts, extra rows). If it competes with a he
 
 ## Being worked on
 - The month's painting arriving as a gift, then shared (`docs/8-growth.md`).
-- The paintings' door: easier to find (ideas: the paintings card higher on my days; the arrival saying where they live).
+- The paintings' door: the shelf on my days, above the framed day, built Oct 31, 2026. Still to try: the arrival saying where they live.
 - One gentle evening invitation, iPhone app (`docs/5-ios-todo.md`).
 
 Lab: https://claude.ai/artifact/8RNH3LHkF4RtJ3QchG5fkm
