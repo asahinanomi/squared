@@ -68,9 +68,18 @@ function colours(month: string, days: Days): (Rgb | null)[] {
   })
 }
 
-/** Draws the framed, signed painting into a square canvas of `px` pixels. */
-export async function drawPainting(c: HTMLCanvasElement, month: string, days: Days, name: string, px: number) {
+/** Draws the framed, signed painting into a square canvas of `px` pixels. `label`: the picture you keep carries
+ *  "squared.today" on a deeper mat under the painting, like a gallery's label (nomi, Oct 31, 2026). */
+export async function drawPainting(
+  c: HTMLCanvasElement,
+  month: string,
+  days: Days,
+  name: string,
+  px: number,
+  label = false,
+) {
   await document.fonts.load('600 40px Caveat').catch(() => undefined)
+  if (label) await document.fonts.load('500 20px Inter').catch(() => undefined)
   c.width = c.height = px
   const ctx = c.getContext('2d')!
   const list = colours(month, days)
@@ -81,6 +90,7 @@ export async function drawPainting(c: HTMLCanvasElement, month: string, days: Da
   const f = Math.round(px * 0.035)
   const x = f + Math.round(px * 0.03)
   const s = px - 2 * x
+  const sh = s - (label ? Math.round(px * 0.045) : 0) // the painting's height: shorter by the label's mat
   ctx.fillStyle = '#9c9a93'
   ctx.fillRect(0, 0, px, px)
   ctx.fillStyle = '#f6f3ec'
@@ -88,14 +98,14 @@ export async function drawPainting(c: HTMLCanvasElement, month: string, days: Da
 
   ctx.save()
   ctx.beginPath()
-  ctx.rect(x, x, s, s)
+  ctx.rect(x, x, s, sh)
   ctx.clip()
   ctx.fillStyle = rgba(RAW, 1)
-  ctx.fillRect(x, x, s, s)
+  ctx.fillRect(x, x, s, sh)
   const cols = isYear(month) ? 19 : 7 // a month in its calendar; a year's days in rows, nearly square
   const rows = Math.ceil(list.length / cols)
   const cw = s / cols
-  const ch = s / rows
+  const ch = sh / rows
   const u = Math.max(cw, ch)
   const at = list.flatMap((c, k) =>
     c
@@ -129,10 +139,10 @@ export async function drawPainting(c: HTMLCanvasElement, month: string, days: Da
   // A fine grain, like canvas (too fine to see on a thumbnail).
   if (px < 200) {
     ctx.restore()
-    frameLines(ctx, px, f, x, s)
+    frameLines(ctx, px, f, x, s, sh)
     return
   }
-  const im = ctx.getImageData(x, x, s, s)
+  const im = ctx.getImageData(x, x, s, sh)
   const d = im.data
   for (let i = 0; i < d.length; i += 4) {
     const n = (r() - 0.5) * 10
@@ -143,12 +153,23 @@ export async function drawPainting(c: HTMLCanvasElement, month: string, days: Da
   ctx.putImageData(im, x, x)
   ctx.restore()
 
-  frameLines(ctx, px, f, x, s)
+  frameLines(ctx, px, f, x, s, sh)
+
+  // The label, quiet on the mat: where the painting hangs, never on it.
+  if (label) {
+    ctx.save()
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillStyle = 'rgba(20,20,19,0.42)'
+    ctx.font = `500 ${Math.round(px * 0.019)}px Inter, system-ui, sans-serif`
+    ctx.fillText('squared.today', px / 2, (x + sh + px - f) / 2)
+    ctx.restore()
+  }
 
   // Signed in the hand, low in the lower right, once the month is done: the title, and the painter under it.
   if (inProgress(month)) return
   ctx.save()
-  ctx.translate(x + s * 0.93, x + s * 0.95)
+  ctx.translate(x + s * 0.93, x + sh - s * 0.05)
   ctx.rotate((-4 * Math.PI) / 180)
   ctx.textAlign = 'right'
   ctx.fillStyle = 'rgba(20,20,19,0.6)'
@@ -161,16 +182,16 @@ export async function drawPainting(c: HTMLCanvasElement, month: string, days: Da
   ctx.restore()
 }
 
-function frameLines(ctx: CanvasRenderingContext2D, px: number, f: number, x: number, s: number) {
+function frameLines(ctx: CanvasRenderingContext2D, px: number, f: number, x: number, s: number, sh: number) {
   ctx.strokeStyle = 'rgba(20,20,19,0.22)'
   ctx.lineWidth = Math.max(1, px / 540)
   ctx.strokeRect(f + 1, f + 1, px - 2 * f - 2, px - 2 * f - 2)
-  ctx.strokeRect(x - 1, x - 1, s + 2, s + 2)
+  ctx.strokeRect(x - 1, x - 1, s + 2, sh + 2)
 }
 
 /** The painting as a picture to keep: exactly what's in the frame, 1080×1080. */
 export async function paintingImage(month: string, days: Days, name: string): Promise<Blob> {
   const c = document.createElement('canvas')
-  await drawPainting(c, month, days, name, 1080)
+  await drawPainting(c, month, days, name, 1080, true)
   return new Promise((ok) => c.toBlob((b) => ok(b!), 'image/png'))
 }
