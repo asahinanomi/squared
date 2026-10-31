@@ -70,9 +70,12 @@ export function WhyBubble({
 
   const value = text.trim()
 
+  const kept = useRef(false)
   const save = () => {
+    if (kept.current) return
     if (!value) return editing ? undefined : onCancel()
     if (editing && value === (original ?? initial).trim()) return onCancel()
+    kept.current = true
     onSave(value)
   }
 
@@ -104,6 +107,12 @@ export function WhyBubble({
           rows={1}
           value={text}
           onChange={(e) => setText(e.target.value)}
+          // A new moment: closing the keyboard (the ✓ above an iPhone's keyboard) keeps it, as in the moment box (nomi,
+          // Oct 31, 2026). A beat later, so a tap on done or outside lands first and nothing is kept twice. An edit
+          // stays as it was until "update".
+          onBlur={() => {
+            if (!editing) setTimeout(save, 150)
+          }}
         />
         {error && <p className="why-error">{error}</p>}
         {/* A moment's own colour, optional: the square holds the answer, the moments hold the mix. */}
