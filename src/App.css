@@ -469,6 +469,14 @@
 .moment-add:active {
   transform: scale(0.94);
 }
+/* Empty, the + is muted, so the box reads as a quiet place to write, not the main action (the brush is); once there are
+   words to keep, it wakes up in ink (nomi, Oct 31, 2026). */
+.moment-add {
+  transition: color 0.2s ease-out;
+}
+.moment-box:not(.has-text) .moment-add {
+  color: var(--muted);
+}
 /* A short phone (an iPhone SE): the day's top tightens, so the palette stays above the bar. */
 @media (max-height: 700px) {
   .moment-box {
