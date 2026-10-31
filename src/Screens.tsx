@@ -39,6 +39,8 @@ export type ScreensProps = {
   wall: ReturnType<typeof useKept>
   openPainting: (p: string) => void
   painter: string
+  /** Today's layout D, on trial (?today=d). */
+  layoutD: boolean
   /** The account was deleted: say so, then sign out. */
   onDeleted: () => void
   ui: {
@@ -55,13 +57,14 @@ export type ScreensProps = {
 
 // Which screen shows, and what each one is given. Every screen gets what it needs from the app's pieces (the
 // navigation, the account's data, the day's actions, what matters, paintings); nothing here keeps state.
-export function Screens({ nav, acc, act, lists, wall, openPainting, painter, onDeleted, ui }: ScreensProps) {
+export function Screens({ nav, acc, act, lists, wall, openPainting, painter, layoutD, onDeleted, ui }: ScreensProps) {
   const { screen, setScreenValue, date, lifeRes, setLifeRes, listRes, listMid } = nav
   const { days, notes, profile } = acc
 
   if (screen === 'today')
     return (
       <Today
+        layoutD={layoutD}
         matters={lists.matters}
         question={acc.question}
         born={profile?.born}

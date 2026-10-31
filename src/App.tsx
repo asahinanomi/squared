@@ -21,6 +21,7 @@ import { useAuth } from './state/useAuth'
 import { useBrowserHistory } from './state/useBrowserHistory'
 import { useDayActions } from './state/useDayActions'
 import { useKept } from './state/useKept'
+import { useTodayD } from './state/useTodayD'
 import { useLanding } from './state/useLanding'
 import { useLock } from './state/useLock'
 import { useMatters } from './state/useMatters'
@@ -53,6 +54,7 @@ export default function App() {
   const act = useDayActions(date, acc, why, setWhy)
   const lists = useMatters(userId, screen)
   const wall = useKept(session)
+  const layoutD = useTodayD(session)
   const painting = usePaintingArrival(acc.days, !!userId && acc.checking)
 
   // Notes load a month at a time: the day you're on.
@@ -149,6 +151,7 @@ export default function App() {
               wall={wall}
               openPainting={painting.openPainting}
               painter={painter}
+              layoutD={layoutD}
               onDeleted={() => {
                 setDeleted(true)
                 signOut()

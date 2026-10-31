@@ -19,10 +19,12 @@ import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
 import { Raised } from '../components/Raised'
 import { OpenPainting } from '../components/PaintingButton'
-import { todayD, tryBirthday } from '../state/app'
+import { tryBirthday } from '../state/app'
 import { questionFor } from '../lib/question'
 
 type Props = {
+  /** Layout D, on trial (?today=d): the square first, the moment box under the palette. */
+  layoutD?: boolean
   question: string
   /** Birth date, if known: the earliest day you can step back to. */
   born?: string
@@ -99,7 +101,7 @@ const BREATH_MS = 2400
 export function Today(props: Props) {
   const { question, born, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } =
     props
-  const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut } = props
+  const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut, layoutD } = props
   const today = todayIso()
   const [introOpen, setIntroOpen] = useState(!!props.intro)
   // The top bar's middle, where the date goes (found once the bar is on the page).
@@ -349,7 +351,7 @@ export function Today(props: Props) {
     </div>
   )
   return (
-    <main className={'today' + (day ? ' is-closed' : '') + (todayD ? ' is-d' : '')}>
+    <main className={'today' + (day ? ' is-closed' : '') + (layoutD ? ' is-d' : '')}>
       <div
         className="today-stage"
         style={lift === undefined ? undefined : { paddingTop: lift }}
@@ -399,7 +401,7 @@ export function Today(props: Props) {
             />
           </div>
 
-          {!todayD && momentSlot}
+          {!layoutD && momentSlot}
 
           {/* "Today" belongs to now: its tense follows the day ("am I spending…" until it's painted, "did I spend…" once
               it is); on any other day, the question asks about "this day". */}
@@ -523,7 +525,7 @@ export function Today(props: Props) {
             )}
           </div>
           {/* D: the moment box under the palette, right above the moments it adds to. */}
-          {todayD && momentSlot}
+          {layoutD && momentSlot}
         </div>
       </div>
 
