@@ -1,5 +1,4 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import type { Paint } from '../lib/paints'
 import { MomentColour } from './MomentColour'
 
@@ -10,22 +9,16 @@ type Props = {
 }
 
 // The day starts with a moment: one box at the top of the day and a + to keep it. It grows as you write; Enter keeps
-// it too. The moments are listed at the foot of the day, newest first, so a kept moment is sent like mail: a paper
-// slip lifts out of the box, shrinks along an arc into the top of the list (or toward the screen's foot, if the list
+// it too. The moments are listed at the foot of the day, newest first, so a kept moment is sent like mail: the box
+// itself lifts off the page, shrinks along an arc into the top of the list (or toward the screen's foot, if the list
 // is below it), and the card it lands on nudges as it arrives.
 export function MomentBox({ placeholder, onAdd }: Props) {
   const [text, setText] = useState('')
   // The colour just tapped: its bar breathes out, swelling and glowing (the other greys out), held a beat at its
   // fullest, then the moment is added (nomi, Oct 31, 2026).
   const [picked, setPicked] = useState<Paint>()
-  const [slip, setSlip] = useState<{
-    text: string
-    color?: Paint
-    top: number
-    left: number
-    width: number
-    n: number
-  } | null>(null)
+  // The box itself flies (a copy of it, exactly as it looks), so nothing swaps or vanishes before the flight.
+  const [slip, setSlip] = useState<{ ghost: HTMLElement; shadow: string } | null>(null)
   const wrap = useRef<HTMLDivElement>(null)
   const box = useRef<HTMLTextAreaElement>(null)
   useLayoutEffect(() => {
@@ -34,11 +27,11 @@ export function MomentBox({ placeholder, onAdd }: Props) {
     el.style.height = 'auto'
     el.style.height = `${el.scrollHeight}px`
   }, [text])
-  // The flight, once the slip is on the page and the list has its new card.
-  const flying = useRef<HTMLDivElement>(null)
+  // The flight: the box lifts off the page, its shadow growing, then shrinks along an arc into the list.
   useEffect(() => {
-    const el = flying.current
-    if (!slip || !el) return
+    if (!slip) return
+    const el = slip.ghost
+    document.body.appendChild(el)
     const from = el.getBoundingClientRect()
     // The new card (pinned ones sit above it), and the row holding it, which hides the swipe's "delete" too.
     const card = document.querySelector<HTMLElement>('.notes .note-card.is-arriving')
@@ -52,16 +45,18 @@ export function MomentBox({ placeholder, onAdd }: Props) {
     const dy = y - (from.top + from.height / 2)
     // The new card waits, unseen, for its slip to land.
     if (onScreen) row!.style.opacity = '0'
+    const lifted = 'inset 0 0 0 1.5px #e2e2db, 0 10px 26px rgba(20, 20, 19, 0.16)'
     const fly = el.animate(
       [
-        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-        { transform: 'translate(0, -14px) scale(1.03)', opacity: 1, offset: 0.2 },
+        { transform: 'translate(0, 0) scale(1)', opacity: 1, boxShadow: slip.shadow },
+        { transform: 'translate(0, -14px) scale(1.03)', opacity: 1, boxShadow: lifted, offset: 0.25 },
         { transform: `translate(${dx * 0.35}px, ${dy * 0.55}px) scale(0.75)`, opacity: 1, offset: 0.65 },
         { transform: `translate(${dx}px, ${dy}px) scale(0.4)`, opacity: 0.7 },
       ],
-      { duration: 1200, easing: 'cubic-bezier(0.45, 0, 0.35, 1)', fill: 'forwards' },
+      { duration: 1400, easing: 'cubic-bezier(0.45, 0, 0.35, 1)', fill: 'forwards' },
     )
     fly.onfinish = () => {
+      el.remove()
       setSlip(null)
       // Landed: the card it went into gives a small nod.
       if (!onScreen) return
@@ -70,6 +65,7 @@ export function MomentBox({ placeholder, onAdd }: Props) {
     }
     return () => {
       fly.cancel()
+      el.remove()
       if (row) row.style.opacity = ''
     }
   }, [slip])
@@ -79,8 +75,22 @@ export function MomentBox({ placeholder, onAdd }: Props) {
   const add = (color?: Paint) => {
     const t = text.trim()
     if (!t) return box.current?.focus()
-    const r = wrap.current?.getBoundingClientRect()
-    if (r && !still()) setSlip({ text: t, color, top: r.top, left: r.left, width: r.width, n: (slip?.n ?? 0) + 1 })
+    const w = wrap.current
+    if (w && !still()) {
+      const r = w.getBoundingClientRect()
+      const ghost = w.cloneNode(true) as HTMLElement
+      ghost.querySelector('textarea')!.value = text
+      ghost.classList.add('is-flying')
+      ghost.setAttribute('aria-hidden', 'true')
+      Object.assign(ghost.style, {
+        top: `${r.top}px`,
+        left: `${r.left}px`,
+        width: `${r.width}px`,
+        height: `${r.height}px`,
+      })
+      // Its outline as it was (darker while you were writing), plus a shadow not yet cast.
+      setSlip({ ghost, shadow: `${getComputedStyle(w).boxShadow}, rgba(20, 20, 19, 0) 0px 0px 0px 0px` })
+    }
     onAdd(t, color)
     setText('')
   }
@@ -124,21 +134,6 @@ export function MomentBox({ placeholder, onAdd }: Props) {
           />
         )}
       </div>
-      {slip &&
-        createPortal(
-          <div
-            key={slip.n}
-            ref={flying}
-            className="moment-slip"
-            style={{ top: slip.top, left: slip.left, width: slip.width }}
-            aria-hidden="true"
-          >
-            {slip.text}
-            {/* Its colour flies with it, as chosen: the whole moment goes, not just its words. */}
-            {slip.color && <MomentColour adds value={slip.color} onChange={() => undefined} />}
-          </div>,
-          document.body,
-        )}
     </>
   )
 }

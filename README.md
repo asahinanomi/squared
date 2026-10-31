@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 31, 2026, 02:59 UTC_
+_last updated Oct 31, 2026, 03:05 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -335,6 +335,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **The chosen colour breathes out** (Oct 31, 2026, nomi): instead of thickening at once, the tapped bar swells and glows softly in its own paint (0.7s, eased), the other greys out, then the moment is added (0.8s in all).
 - **…and holds a beat** (Oct 31, 2026, nomi): at its fullest the bar rests a moment (0.4s) before the moment is added (1.1s in all).
 - **The whole moment flies** (Oct 31, 2026, nomi): the colour strip no longer vanishes before the flight. The slip that flies down to its card carries the words and the strip as chosen (the bar at its fullest, the other grey), so it reads as one thing put away.
+- **The box itself flies** (Oct 31, 2026, nomi): no blink before the flight. What flies is a copy of the whole box exactly as it looked (its outline, the +, the colour strip if there is one), so nothing swaps; it starts flat on the page, lifts slowly as its shadow grows (0.35s), then shrinks along its arc into the list (1.4s in all). With or without a colour, the same.
 - **The idea says it all, in order** (Oct 30, 2026, nomi): right after the three colours, "some days are both, worth it and regret at once. I paint what won, and keep the rest in a moment, in its own colour." then "and some days aren’t mine to choose. I still paint them honestly, and mark them out of my hands.", before "paint one square a day…".
 - **Special days without the extra row** (Oct 29, 2026, nomi): the "your 55th birthday" pill above the moment box (it pushed the day down) is gone. A blank special day says it in its square's handwritten label, "paint your 55th birthday" ("paint New Year's Day", "paint the day you were born"); painted, the heading speaks to it from the occasion's own pool, 3 lines per colour for your birthday, New Year's Day and Christmas ("A birthday spent on what matters.", "Not the start you hoped for.", "A quiet Christmas. That's okay."); the day you were born says "The day you were born, in colour." On today, the heading sits over today's note.
 - **Paintings, easier to find** (Oct 29, 2026, nomi): a month's or a year's name now carries a small ink picture right after it ("October 2026 🖼"): the dotted name alone was too quiet a cue. Name and picture are one button (no more dotted underline). The month view's big title opens its painting too (it shrinks a touch on the narrowest phones so the name and picture fit between the arrows). The paintings help says so.
