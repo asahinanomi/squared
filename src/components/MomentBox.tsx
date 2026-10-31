@@ -144,12 +144,12 @@ export function MomentBox({ placeholder, onAdd }: Props) {
             onChange={(c) => {
               if (!c || picked) return
               setPicked(c)
-              // The keyboard goes down now, while the bar breathes out, so the page has settled by the time the moment
-              // flies: one movement, not two (nomi's recording, Oct 31, 2026).
-              leaving.current = true
-              box.current?.blur()
-              leaving.current = false
               setTimeout(() => {
+                // Then just as ✓ does: the keyboard goes first, the moment flies (nomi's recordings, Oct 31, 2026:
+                // closing it at the tap moved the whole page during the breath).
+                leaving.current = true
+                box.current?.blur()
+                leaving.current = false
                 add(c)
                 setPicked(undefined)
               }, 1100)
