@@ -94,7 +94,17 @@ export function MomentBox({ placeholder, onAdd }: Props) {
     onAdd(t, color)
     setText('')
     // Kept: the keyboard goes down while the box lifts, so nothing covers where the moment lands (nomi, Oct 31, 2026).
+    leaving.current = true
     box.current?.blur()
+    leaving.current = false
+  }
+  // Closing the keyboard with words in the box keeps them as a moment (nomi, Oct 31, 2026: the ✓ above the iPhone's
+  // keyboard only closes it, and with no + there was no other way without a colour). Not while a colour is being kept,
+  // nor when squared itself puts the keyboard away, nor when the app is only being left.
+  const leaving = useRef(false)
+  const onBlur = () => {
+    if (leaving.current || picked || document.visibilityState === 'hidden') return
+    if (text.trim()) add()
   }
   return (
     <>
@@ -110,6 +120,7 @@ export function MomentBox({ placeholder, onAdd }: Props) {
               add()
             }
           }}
+          onBlur={onBlur}
           placeholder={placeholder}
           aria-label="a moment"
           enterKeyHint="done"
