@@ -15,8 +15,6 @@ type Props = {
 // is below it), and the card it lands on nudges as it arrives.
 export function MomentBox({ placeholder, onAdd }: Props) {
   const [text, setText] = useState('')
-  // The moment's own colour, optional, chosen as you write it (the dots show once there's something written).
-  const [color, setColor] = useState<Paint | undefined>()
   const [slip, setSlip] = useState<{ text: string; top: number; left: number; width: number; n: number } | null>(null)
   const wrap = useRef<HTMLDivElement>(null)
   const box = useRef<HTMLTextAreaElement>(null)
@@ -67,14 +65,14 @@ export function MomentBox({ placeholder, onAdd }: Props) {
   }, [slip])
   const still = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  const add = () => {
+  // Added with its colour, if one is tapped: choosing it is the last step, so it keeps the moment (nomi, Oct 31, 2026).
+  const add = (color?: Paint) => {
     const t = text.trim()
     if (!t) return box.current?.focus()
     const r = wrap.current?.getBoundingClientRect()
     if (r && !still()) setSlip({ text: t, top: r.top, left: r.left, width: r.width, n: (slip?.n ?? 0) + 1 })
     onAdd(t, color)
     setText('')
-    setColor(undefined)
   }
   return (
     <>
@@ -95,13 +93,13 @@ export function MomentBox({ placeholder, onAdd }: Props) {
           enterKeyHint="done"
           maxLength={10000}
         />
-        <button className="moment-add" onClick={add} aria-label="Add this moment">
+        <button className="moment-add" onClick={() => add()} aria-label="Add this moment">
           <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
             <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
           </svg>
         </button>
-        {/* A moment can carry its own colour (optional), once there's something written. */}
-        {text.trim() && <MomentColour value={color} onChange={setColor} />}
+        {/* A moment can carry its own colour (optional), once there's something written: tapping one adds it. */}
+        {text.trim() && <MomentColour onChange={(c) => add(c)} />}
       </div>
       {slip &&
         createPortal(
