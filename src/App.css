@@ -4962,9 +4962,37 @@ button.home-card:active {
   height: 12px;
 }
 .where-lived {
+  width: var(--lived, 40%);
   height: 4px;
   border-radius: 2px;
   background: #55554f;
+}
+/* The first visit each day: the days lived pour in from the left, then "now" pulses once (WhereCard). */
+.where-track.is-pouring .where-lived {
+  animation: where-pour 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.where-track.is-pouring .where-now {
+  animation: where-pulse 0.7s 1.05s ease-out;
+}
+@keyframes where-pour {
+  from {
+    width: 0;
+  }
+}
+@keyframes where-pulse {
+  40% {
+    transform: scale(1.45);
+  }
+}
+/* …and the days ahead tick down by one. */
+.where-ticked {
+  animation: where-tick 0.5s ease-out;
+}
+@keyframes where-tick {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 }
 .where-now {
   flex: none;

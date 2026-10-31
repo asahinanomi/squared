@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { addDays, fromIso, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
@@ -10,6 +11,21 @@ const md = (iso: string) => fromIso(iso).toLocaleDateString('en-US', { month: 's
 const weekRange = (a: string, b: string) =>
   a.slice(0, 7) === b.slice(0, 7) ? `${md(a)} – ${Number(b.slice(8))}` : `${md(a)} – ${md(b)}`
 const ahead = (n: number) => (n === 0 ? 'today is the last' : n === 1 ? '1 day ahead' : `${fmt(n)} days ahead`)
+
+// The first visit each day, a life's bar pours in from the left to where you are, the "now" mark pulses once, and the
+// days ahead tick down by one: yesterday's count, then today's. A day has passed (nomi, Oct 31, 2026). Once a day, so
+// it stays a moment, not a wait; never with "reduce motion".
+const POUR = 'squared.lifePour'
+function pourToday(today: string): boolean {
+  if (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches) return false
+  try {
+    if (localStorage.getItem(POUR) === today) return false
+    localStorage.setItem(POUR, today)
+    return true
+  } catch {
+    return false
+  }
+}
 
 type Props = {
   days: Days
@@ -50,6 +66,14 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
   }
   const monthName = t.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   const c = profile ? lifeCounts(profile.born, profile.lifespan, today) : null
+  const [pour] = useState(() => !!c && pourToday(today))
+  // Yesterday's count first, then one less, once the bar has poured in.
+  const [tick, setTick] = useState(pour)
+  useEffect(() => {
+    if (!tick) return
+    const t = setTimeout(() => setTick(false), 1300)
+    return () => clearTimeout(t)
+  }, [tick])
   return (
     <section className="home-card where-card" aria-label="where you are">
       <div className="where-row">
@@ -86,10 +110,12 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
         <button className="where-row" onClick={onLife}>
           <span className="where-head">
             <span>this life</span>
-            <small>{ahead(c.left)}</small>
+            <small key={tick ? 'yesterday' : 'today'} className={pour && !tick ? 'where-ticked' : undefined}>
+              {ahead(tick ? c.left + 1 : c.left)}
+            </small>
           </span>
-          <span className="where-track" aria-hidden="true">
-            <i className="where-lived" style={{ width: `${(c.sofar / c.total) * 100}%` }} />
+          <span className={'where-track' + (pour ? ' is-pouring' : '')} aria-hidden="true">
+            <i className="where-lived" style={{ '--lived': `${(c.sofar / c.total) * 100}%` } as React.CSSProperties} />
             <i className="where-now" />
             <i className="where-ahead" />
           </span>
@@ -101,7 +127,7 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
             <small className="is-setup">set up now ›</small>
           </span>
           <span className="where-track is-ghost" aria-hidden="true">
-            <i className="where-lived" style={{ width: '40%' }} />
+            <i className="where-lived" />
             <i className="where-now" />
             <i className="where-ahead" />
           </span>
