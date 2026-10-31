@@ -12,8 +12,9 @@ const weekRange = (a: string, b: string) =>
   a.slice(0, 7) === b.slice(0, 7) ? `${md(a)} – ${Number(b.slice(8))}` : `${md(a)} – ${md(b)}`
 const ahead = (n: number) => (n === 0 ? 'today is the last' : n === 1 ? '1 day ahead' : `${fmt(n)} days ahead`)
 
-// Once per sign-in, a life's bar pours in from the left to where you are, the "now" mark grows gently twice, and then
-// the days ahead tick down by one, yesterday's count fading to today's: a day has passed (nomi, Oct 31, 2026). Each
+// Once per sign-in, a life's bar pours in from the left to where you are and comes to rest; the "now" mark breathes
+// out and in (the square's own breath, 2.4s); then the days ahead breathe too, and at the breath's height yesterday's
+// count becomes today's: a day has passed (nomi, Oct 31, 2026). Each
 // person sees it the first time they open my days after signing in (or opening squared); signing out resets it, so the
 // next person does too. Never with "reduce motion".
 let poured = false
@@ -69,7 +70,8 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
   const [tick, setTick] = useState(pour)
   useEffect(() => {
     if (!tick) return
-    const t = setTimeout(() => setTick(false), 2500) // after the pour (1.1s) and the dot's two breaths
+    // At the height of the number's breath: after the pour (1.2s), the dot's breath (2.4s), and half of its own.
+    const t = setTimeout(() => setTick(false), 4900)
     return () => clearTimeout(t)
   }, [tick])
   return (
@@ -108,9 +110,7 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
         <button className="where-row" onClick={onLife}>
           <span className="where-head">
             <span>this life</span>
-            <small key={tick ? 'yesterday' : 'today'} className={pour && !tick ? 'where-ticked' : undefined}>
-              {ahead(tick ? c.left + 1 : c.left)}
-            </small>
+            <small className={pour ? 'where-breath' : undefined}>{ahead(tick ? c.left + 1 : c.left)}</small>
           </span>
           <span className={'where-track' + (pour ? ' is-pouring' : '')} aria-hidden="true">
             <i className="where-lived" style={{ '--lived': `${(c.sofar / c.total) * 100}%` } as React.CSSProperties} />

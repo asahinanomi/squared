@@ -4967,30 +4967,44 @@ button.home-card:active {
   border-radius: 2px;
   background: #55554f;
 }
-/* Once per sign-in: the days lived pour in from the left, then "now" grows gently twice (WhereCard). */
+/* Once per sign-in (WhereCard): the days lived pour in from the left and come to rest; then "now" breathes out and in,
+   then the days ahead breathe, their number changing at the breath's height. The square's own breath: 2.4s, eased,
+   held a moment at its fullest (BREATH_MS). */
 .where-track.is-pouring .where-lived {
-  animation: where-pour 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: where-pour 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 .where-track.is-pouring .where-now {
-  animation: where-pulse 0.6s 1.15s ease-in-out 2;
+  animation: where-breathe 2.4s 1.3s ease-in-out;
+}
+.where-breath {
+  display: inline-block;
+  transform-origin: right center;
+  animation: where-breathe-words 2.4s 3.7s ease-in-out;
 }
 @keyframes where-pour {
   from {
     width: 0;
   }
 }
-@keyframes where-pulse {
-  50% {
-    transform: scale(1.3);
+@keyframes where-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45%,
+  55% {
+    transform: scale(1.5);
   }
 }
-/* …and the days ahead tick down by one. */
-.where-ticked {
-  animation: where-tick 0.8s ease-out;
-}
-@keyframes where-tick {
-  from {
-    opacity: 0.25;
+@keyframes where-breathe-words {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45%,
+  55% {
+    transform: scale(1.18);
+    color: var(--ink);
   }
 }
 .where-now {
