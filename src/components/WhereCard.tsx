@@ -66,21 +66,22 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
   const monthName = t.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   const c = profile ? lifeCounts(profile.born, profile.lifespan, today) : null
   const [pour] = useState(() => !!c && pourNow())
-  // The pour, to the bar's exact width in pixels (a percentage ended short on iPhone Safari and then snapped forward
-  // when the dot began to breathe).
+  // The pour, to the bar's own width in pixels. offsetWidth, not the on-screen box: my days slides in slightly scaled
+  // down, so the box measured short, the pour ended there and snapped to the real end (nomi's recording, iPhone).
   const lived = useRef<HTMLElement>(null)
   useLayoutEffect(() => {
     const el = lived.current
     if (!pour || !el) return
-    const w = el.getBoundingClientRect().width
+    const w = el.offsetWidth
     el.animate([{ width: '0px' }, { width: `${w}px` }], { duration: 1200, easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)' })
   }, [pour])
   // Yesterday's count first, then one less, once the bar has poured in and the dot has settled.
   const [tick, setTick] = useState(pour)
   useEffect(() => {
     if (!tick) return
-    // At the height of the number's breath: after the pour (1.2s), the dot's breath (2.4s), and half of its own.
-    const t = setTimeout(() => setTick(false), 4900)
+    // At the height of the number's breath, while it has faded: after the pour (1.2s), the dot's breath (2.4s), and
+    // half of its own slower breath (3.6s).
+    const t = setTimeout(() => setTick(false), 5500)
     return () => clearTimeout(t)
   }, [tick])
   return (

@@ -4976,7 +4976,7 @@ button.home-card:active {
 .where-breath {
   display: inline-block;
   transform-origin: right center;
-  animation: where-breathe-words 2.4s 3.7s ease-in-out;
+  animation: where-breathe-words 3.6s 3.7s ease-in-out;
 }
 @keyframes where-breathe {
   0%,
@@ -4988,15 +4988,22 @@ button.home-card:active {
     transform: scale(1.5);
   }
 }
+/* The days ahead: a slower breath, and at its fullest the old count fades almost out and the new one fades in. */
 @keyframes where-breathe-words {
   0%,
   100% {
     transform: scale(1);
   }
-  45%,
-  55% {
+  30%,
+  70% {
     transform: scale(1.18);
     color: var(--ink);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.18);
+    color: var(--ink);
+    opacity: 0.15;
   }
 }
 .where-now {
