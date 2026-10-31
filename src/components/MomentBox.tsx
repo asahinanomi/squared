@@ -88,11 +88,13 @@ export function MomentBox({ placeholder, onAdd }: Props) {
         width: `${r.width}px`,
         height: `${r.height}px`,
       })
-      // Its outline as it was (darker while you were writing), plus a shadow not yet cast.
+      // Its outline as it was (ink while you were writing; it softens to grey as it lifts), plus a shadow not yet cast.
       setSlip({ ghost, shadow: `${getComputedStyle(w).boxShadow}, rgba(20, 20, 19, 0) 0px 0px 0px 0px` })
     }
     onAdd(t, color)
     setText('')
+    // Kept: the keyboard goes down while the box lifts, so nothing covers where the moment lands (nomi, Oct 31, 2026).
+    box.current?.blur()
   }
   return (
     <>
@@ -113,7 +115,14 @@ export function MomentBox({ placeholder, onAdd }: Props) {
           enterKeyHint="done"
           maxLength={10000}
         />
-        <button className="moment-add" onClick={() => add()} aria-label="Add this moment">
+        <button
+          className="moment-add"
+          // The box stays as it was (its ink outline) until it lifts, rather than flipping grey as + takes the focus.
+          onPointerDown={(e) => e.preventDefault()}
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => add()}
+          aria-label="Add this moment"
+        >
           <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
             <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
           </svg>
