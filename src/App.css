@@ -2822,10 +2822,11 @@ body[data-screen='questions'] .idea {
   margin: 0 0 14px;
   font-family: var(--font-reflect);
   font-optical-sizing: auto;
-  font-size: 28px;
+  font-size: 24px; /* a step under the day's question (26–30px): a sheet asks, the question leads (nomi, Oct 31, 2026) */
   font-weight: 450;
   line-height: 1.2;
   color: var(--ink);
+  text-wrap: balance;
 }
 /* The two reasons, two equal cards: the question in ink, its tip running on in soft grey. */
 .torn-card {
