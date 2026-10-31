@@ -8,8 +8,8 @@ type Props = {
   onAdd: (text: string, color?: Paint) => void
 }
 
-// The day starts with a moment: one box at the top of the day and a + to keep it. It grows as you write; Enter keeps
-// it too. The moments are listed at the foot of the day, newest first, so a kept moment is sent like mail: the box
+// The day starts with a moment: one box, no button (nomi, Oct 31, 2026: the keyboard's ✓, Enter or a colour keeps
+// it; the box reads as a place to write, never a second main action). It grows as you write. The moments are listed at the foot of the day, newest first, so a kept moment is sent like mail: the box
 // itself lifts off the page, shrinks along an arc into the top of the list (or toward the screen's foot, if the list
 // is below it), and the card it lands on nudges as it arrives.
 export function MomentBox({ placeholder, onAdd }: Props) {
@@ -115,18 +115,6 @@ export function MomentBox({ placeholder, onAdd }: Props) {
           enterKeyHint="done"
           maxLength={10000}
         />
-        <button
-          className="moment-add"
-          // The box stays as it was (its focused outline) until it lifts, rather than flipping pale as + takes the focus.
-          onPointerDown={(e) => e.preventDefault()}
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={() => add()}
-          aria-label="Add this moment"
-        >
-          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-            <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-          </svg>
-        </button>
         {/* A moment can carry its own colour (optional), once there's something written: tapping one adds it. */}
         {text.trim() && (
           <MomentColour

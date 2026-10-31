@@ -412,7 +412,7 @@
   box-shadow: inset 0 0 0 1.5px var(--ink-soft);
 }
 /* The day's moment box, right under the date: a white keyline box (rounded, not a pill: pills are buttons), "this
-   moment…", and a + to keep it. It grows as you write. */
+   moment…", no button (the keyboard's ✓, Enter or a colour keeps it). It grows as you write. */
 /* The moment box's place: it stays while the bubble is open, only unseen (nothing below moves). */
 .moment-slot {
   display: contents;
@@ -427,7 +427,7 @@
   display: flex;
   align-items: flex-end;
   gap: 8px;
-  padding: 7px 7px 7px 18px;
+  padding: 7px 18px;
   border-radius: 14px;
   background: #fff;
   box-shadow: inset 0 0 0 1.5px #e2e2db;
@@ -455,27 +455,6 @@
 }
 .moment-box:focus-within {
   box-shadow: inset 0 0 0 1.5px var(--grey-3); /* every writing box, focused: the same soft grey (nomi, Oct 31, 2026) */
-}
-.moment-add {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #efeee8;
-  color: var(--ink);
-  display: grid;
-  place-items: center;
-}
-.moment-add:active {
-  transform: scale(0.94);
-}
-/* Empty, the + is muted, so the box reads as a quiet place to write, not the main action (the brush is); once there are
-   words to keep, it wakes up in ink (nomi, Oct 31, 2026). */
-.moment-add {
-  transition: color 0.2s ease-out;
-}
-.moment-box:not(.has-text) .moment-add {
-  color: var(--muted);
 }
 /* A short phone (an iPhone SE): the day's top tightens, so the palette stays above the bar. */
 @media (max-height: 700px) {
