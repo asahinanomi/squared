@@ -15,8 +15,8 @@ type Props = {
 // is below it), and the card it lands on nudges as it arrives.
 export function MomentBox({ placeholder, onAdd }: Props) {
   const [text, setText] = useState('')
-  // The colour just tapped: its bar breathes out, swelling and glowing (the other greys out), then the moment is added
-  // (nomi, Oct 31, 2026).
+  // The colour just tapped: its bar breathes out, swelling and glowing (the other greys out), held a beat at its
+  // fullest, then the moment is added (nomi, Oct 31, 2026).
   const [picked, setPicked] = useState<Paint>()
   const [slip, setSlip] = useState<{ text: string; top: number; left: number; width: number; n: number } | null>(null)
   const wrap = useRef<HTMLDivElement>(null)
@@ -112,7 +112,7 @@ export function MomentBox({ placeholder, onAdd }: Props) {
               setTimeout(() => {
                 add(c)
                 setPicked(undefined)
-              }, 800)
+              }, 1100)
             }}
           />
         )}

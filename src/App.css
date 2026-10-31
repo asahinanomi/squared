@@ -1348,7 +1348,7 @@ sup.ord {
   font-weight: 600;
 }
 /* In the box at the top of the day, a tap adds the moment: the chosen bar breathes out, swelling and glowing in its
-   paint, while the other side greys out; then the moment goes (MomentBox, 0.8s). */
+   paint, while the other side greys out; held a moment at its fullest, then the moment goes (MomentBox, 1.1s). */
 .moment-colour.is-adding.has-pick .moment-colour-pick:not(.is-on) .moment-colour-bar {
   filter: grayscale(1);
 }
