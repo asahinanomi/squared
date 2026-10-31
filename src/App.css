@@ -2105,8 +2105,9 @@ body[data-screen='questions'] .idea {
 /* The small ink picture right after the name: the cue that the name opens its painting. */
 .painting-icon {
   flex: none;
-  width: 0.95em;
-  height: 0.95em;
+  /* As tall as the name's capitals (the picture fills about 70% of its box), so the two read as one line. */
+  width: 1.05em;
+  height: 1.05em;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -2140,8 +2141,6 @@ body[data-screen='questions'] .idea {
   inset: -13px -8px -9px; /* not over the first row */
 }
 .painting-name.is-over-canvas .painting-icon {
-  width: 17px;
-  height: 17px;
   stroke: #6f6f69;
 }
 .month-block.is-faint {
@@ -3600,7 +3599,7 @@ button.settings-row:active {
 }
 .period-title {
   align-self: flex-start;
-  font-size: 16px;
+  font-size: 15px; /* the same as a month's and a year's name on the squares */
   font-weight: 600;
   color: var(--ink);
 }
