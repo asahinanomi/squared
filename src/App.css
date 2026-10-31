@@ -2244,6 +2244,7 @@ body[data-screen='questions'] .idea {
   position: absolute;
   left: 0;
   z-index: 1;
+  display: flex; /* no line box of its own: the button sits exactly on the drawn year, its picture level with it */
 }
 .life-canvas::-webkit-scrollbar {
   display: none;
