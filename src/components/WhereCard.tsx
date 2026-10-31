@@ -67,14 +67,29 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
   const c = profile ? lifeCounts(profile.born, profile.lifespan, today) : null
   const [pour] = useState(() => !!c && pourNow())
   const pct = c ? (c.sofar / c.total) * 100 : 0
+  // The pour waits for the page to settle: just after signing in, my days is still drawing (the paintings), and a pour
+  // run during that work stuttered and jumped on iPhone (nomi, Oct 31, 2026). The bar waits empty, then pours: a
+  // frame, a quiet moment (timers wait for busy work to end), another frame.
+  const [go, setGo] = useState(false)
+  useEffect(() => {
+    if (!pour) return
+    let t = 0
+    let f = requestAnimationFrame(() => {
+      t = window.setTimeout(() => (f = requestAnimationFrame(() => setGo(true))), 250)
+    })
+    return () => {
+      cancelAnimationFrame(f)
+      clearTimeout(t)
+    }
+  }, [pour])
   // Yesterday's count first, then one less, at the breath's height.
   const [tick, setTick] = useState(pour)
   useEffect(() => {
-    if (!tick) return
+    if (!tick || !go) return
     // At the height of the breath (the dot's and the number's, together), while the number has faded: 1.3s + 1.2s.
     const t = setTimeout(() => setTick(false), 2500)
     return () => clearTimeout(t)
-  }, [tick])
+  }, [tick, go])
   return (
     <section className="home-card where-card" aria-label="where you are">
       <div className="where-row">
@@ -115,15 +130,14 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
               {/* Only the number breathes, not the line. */}
               {c.left > 1 ? (
                 <>
-                  <span className={pour ? 'where-breath' : undefined}>{fmt(tick ? c.left + 1 : c.left)}</span> days
-                  ahead
+                  <span className={go ? 'where-breath' : undefined}>{fmt(tick ? c.left + 1 : c.left)}</span> days ahead
                 </>
               ) : (
                 ahead(c.left)
               )}
             </small>
           </span>
-          <span className={'where-track' + (pour ? ' is-pouring' : '')} aria-hidden="true">
+          <span className={'where-track' + (go ? ' is-pouring' : pour ? ' is-waiting' : '')} aria-hidden="true">
             <span className="where-reach" style={{ '--lived': `${pct}%` } as React.CSSProperties}>
               <i className="where-lived" />
               <i className="where-now" />

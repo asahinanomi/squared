@@ -4979,8 +4979,12 @@ button.home-card:active {
    height yesterday's count becomes today's.
    The pour slides the days lived (and the "now" mark with them) in from the left: a transform, so it runs smoothly even
    while the app is busy starting up (a width animation stalled and jumped in the iPhone home screen app). */
-.where-track.is-pouring {
+.where-track.is-pouring,
+.where-track.is-waiting {
   clip-path: inset(-8px -8px -8px 0);
+}
+.where-track.is-waiting .where-reach {
+  transform: translateX(-100%);
 }
 .where-track.is-pouring .where-reach {
   animation: where-pour 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
