@@ -3456,17 +3456,12 @@ button.settings-row:active {
 .filter-done {
   margin-top: 20px;
 }
-/* The filter's choices: chips in small labelled groups (every day, colour, kind, your tags), so it all fits. */
+/* The filter's choices: chips in small groups (every day, colour, kind, your tags), space between, so it all fits. */
 .filter-group + .filter-group {
-  margin-top: 16px;
+  margin-top: 20px;
 }
 .torn-title + .filter-group {
   margin-top: 16px;
-}
-.filter-group-label {
-  margin: 0 0 8px;
-  font-size: 13px;
-  color: var(--ink-soft);
 }
 .filter-chips {
   display: flex;

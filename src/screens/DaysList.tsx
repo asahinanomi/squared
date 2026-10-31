@@ -424,7 +424,8 @@ export function DaysList({
         <Sheet open={!!picking} onClose={closePicking}>
           <h2 className="torn-title">Which days would you like to see?</h2>
           {/* Chips in small groups, not a row each (nomi, Oct 31, 2026: with tags, a row each ran off the screen):
-              every day, the colours, the kinds of day, then your tags. */}
+              every day, the colours, the kinds of day, then your tags. No group labels: the dots, marks and # say it,
+              and space alone keeps the groups apart. */}
           {(
             [
               [null, [[null, 'all days']]],
@@ -441,7 +442,6 @@ export function DaysList({
             .filter(([, chips]) => chips.length)
             .map(([group, chips]) => (
               <div key={group ?? 'all'} className="filter-group">
-                {group && <p className="filter-group-label">{group}</p>}
                 <div className={'filter-chips' + (group === 'your tags' ? ' is-tags' : '')}>
                   {chips.map(([id, label]) => {
                     const ticked = picking ?? only
