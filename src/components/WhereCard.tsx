@@ -12,19 +12,17 @@ const weekRange = (a: string, b: string) =>
   a.slice(0, 7) === b.slice(0, 7) ? `${md(a)} – ${Number(b.slice(8))}` : `${md(a)} – ${md(b)}`
 const ahead = (n: number) => (n === 0 ? 'today is the last' : n === 1 ? '1 day ahead' : `${fmt(n)} days ahead`)
 
-// The first visit each day, a life's bar pours in from the left to where you are, the "now" mark pulses once, and the
-// days ahead tick down by one: yesterday's count, then today's. A day has passed (nomi, Oct 31, 2026). Once a day, so
-// it stays a moment, not a wait; never with "reduce motion".
-const POUR = 'squared.lifePour'
-function pourToday(today: string): boolean {
-  if (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches) return false
-  try {
-    if (localStorage.getItem(POUR) === today) return false
-    localStorage.setItem(POUR, today)
-    return true
-  } catch {
-    return false
-  }
+// Once per sign-in, a life's bar pours in from the left to where you are, the "now" mark grows gently twice, and then
+// the days ahead tick down by one, yesterday's count fading to today's: a day has passed (nomi, Oct 31, 2026). Each
+// person sees it the first time they open my days after signing in (or opening squared); signing out resets it, so the
+// next person does too. Never with "reduce motion".
+let poured = false
+/** Signed out: the next sign-in pours again. */
+export const resetPour = () => void (poured = false)
+function pourNow(): boolean {
+  if (poured) return false
+  poured = true
+  return !(typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches)
 }
 
 type Props = {
@@ -66,12 +64,12 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
   }
   const monthName = t.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   const c = profile ? lifeCounts(profile.born, profile.lifespan, today) : null
-  const [pour] = useState(() => !!c && pourToday(today))
-  // Yesterday's count first, then one less, once the bar has poured in.
+  const [pour] = useState(() => !!c && pourNow())
+  // Yesterday's count first, then one less, once the bar has poured in and the dot has settled.
   const [tick, setTick] = useState(pour)
   useEffect(() => {
     if (!tick) return
-    const t = setTimeout(() => setTick(false), 1300)
+    const t = setTimeout(() => setTick(false), 2500) // after the pour (1.1s) and the dot's two breaths
     return () => clearTimeout(t)
   }, [tick])
   return (
