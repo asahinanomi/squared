@@ -3528,6 +3528,21 @@ button.settings-row:active {
     #fff;
   box-shadow: inset 0 0 0 1.5px var(--ink-soft);
 }
+.filter-mark.is-hands {
+  /* two soft ink strokes, like the eraser strokes on a marked day */
+  border-radius: 3px;
+  background:
+    linear-gradient(
+      135deg,
+      transparent 30%,
+      rgba(47, 47, 43, 0.55) 30% 42%,
+      transparent 42% 58%,
+      rgba(47, 47, 43, 0.45) 58% 70%,
+      transparent 70%
+    ),
+    #f6f4ee;
+  box-shadow: inset 0 0 0 1px #d6d6cf;
+}
 .filter-mark.is-framed {
   background: #6e9b7b;
   box-shadow:

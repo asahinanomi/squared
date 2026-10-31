@@ -13,7 +13,7 @@ import {
   todayIso,
   writtenWhen,
 } from '../lib/dates'
-import type { Day, Days } from '../lib/days'
+import { handsOn, type Day, type Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
 import { allTags, dayHasTag, withTags } from '../lib/tags'
 import { frameVars, paintHex, squareFill, WORD, type Paint } from '../lib/paints'
@@ -49,7 +49,7 @@ type Props = {
 }
 
 /** A kind of day to show; a tag is its #word ("#travel"). */
-export type Only = Paint | 'unpainted' | 'framed' | 'notes' | `#${string}`
+export type Only = Paint | 'unpainted' | 'framed' | 'hands' | 'notes' | `#${string}`
 /** The filter's choices: every day, then the colours in the palette's order, then the special kinds (nomi). */
 const FILTERS: [Only | null, string][] = [
   [null, 'all days'],
@@ -58,6 +58,7 @@ const FILTERS: [Only | null, string][] = [
   ['grey', 'a blur'],
   ['notes', 'with moments'],
   ['framed', 'framed'],
+  ['hands', 'out of my hands'],
   ['unpainted', 'unpainted'],
 ]
 
@@ -76,6 +77,7 @@ function FilterMark({ id }: { id: Only | null }) {
   if (!id) return <span className="filter-mark is-all" aria-hidden="true" />
   if (id === 'unpainted') return <span className="filter-mark is-unpainted" aria-hidden="true" />
   if (id === 'framed') return <span className="filter-mark is-framed" aria-hidden="true" />
+  if (id === 'hands') return <span className="filter-mark is-hands" aria-hidden="true" />
   if (id === 'notes') return <span className="filter-mark is-notes" aria-hidden="true" />
   return <span className="filter-mark" style={{ background: paintHex(id as Paint) }} aria-hidden="true" />
 }
@@ -245,11 +247,13 @@ export function DaysList({
         ? !days[iso]
         : o === 'framed'
           ? !!days[iso]?.framed
-          : o === 'notes'
-            ? !!notes[iso]?.length
-            : o.startsWith('#')
-              ? dayHasTag(notes, iso, o.slice(1))
-              : days[iso]?.color === o,
+          : o === 'hands'
+            ? !!days[iso]?.outOfHands
+            : o === 'notes'
+              ? !!notes[iso]?.length
+              : o.startsWith('#')
+                ? dayHasTag(notes, iso, o.slice(1))
+                : days[iso]?.color === o,
     )
   const scroller = useRef<HTMLDivElement>(null)
   const heightBefore = useRef<number | null>(null) // set when months are added above, to keep your place
@@ -425,7 +429,12 @@ export function DaysList({
             [
               [null, [[null, 'all days']]],
               ['colour', FILTERS.filter(([id]) => id === 'green' || id === 'red' || id === 'grey')],
-              ['kind', FILTERS.filter(([id]) => id === 'notes' || id === 'framed' || id === 'unpainted')],
+              [
+                'kind',
+                FILTERS.filter(
+                  ([id]) => id === 'notes' || id === 'framed' || id === 'unpainted' || (id === 'hands' && handsOn()),
+                ),
+              ],
               ['your tags', allTags(notes).map((t): [Only, string] => [`#${t}`, `#${t}`])],
             ] as [string | null, [Only | null, string][]][]
           )
