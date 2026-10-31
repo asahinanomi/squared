@@ -79,7 +79,7 @@ export async function drawPainting(
   label = false,
 ) {
   await document.fonts.load('600 40px Caveat').catch(() => undefined)
-  if (label) await document.fonts.load('500 20px Inter').catch(() => undefined)
+  if (label) await document.fonts.load('600 20px Inter').catch(() => undefined)
   c.width = c.height = px
   const ctx = c.getContext('2d')!
   const list = colours(month, days)
@@ -160,10 +160,13 @@ export async function drawPainting(
     ctx.save()
     const ink = '#b1afa9' // 30% ink on the mat, solid, so the mark's paint and edge don't darken where they meet
     const fs = Math.round(px * 0.019)
-    ctx.font = `500 ${fs}px Inter, system-ui, sans-serif`
+    // squared's horizontal lockup (docs/design-system.md): the mark, then the name in Inter 600 at −0.02em, ~⅔ of its
+    // size apart. Here the name is the address, so it keeps ".today".
+    ctx.font = `600 ${fs}px Inter, system-ui, sans-serif`
+    if ('letterSpacing' in ctx) ctx.letterSpacing = `${-0.02 * fs}px`
     const words = 'squared.today'
     const mark = Math.round(fs * 1.15)
-    const gap = Math.round(fs * 0.45)
+    const gap = Math.round(fs * 0.67)
     const w = mark + gap + ctx.measureText(words).width
     const cy = (x + sh + px - f) / 2
     const left = px / 2 - w / 2
