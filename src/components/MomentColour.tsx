@@ -35,7 +35,11 @@ export function MomentColour({ value, onChange, adds }: Props) {
           aria-pressed={value === p.id}
           aria-label={value === p.id ? `${WORD[p.id]}, tap to clear` : WORD[p.id]}
         >
-          <span className="moment-colour-bar" style={{ background: p.hex }} aria-hidden="true" />
+          <span
+            className="moment-colour-bar"
+            style={{ background: p.hex, '--paint': p.hex } as React.CSSProperties}
+            aria-hidden="true"
+          />
           <span>
             {WORD[p.id]}
             {value === p.id && !adds && (

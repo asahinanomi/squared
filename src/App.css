@@ -1347,9 +1347,26 @@ sup.ord {
   color: var(--ink);
   font-weight: 600;
 }
-/* In the box at the top of the day, a tap adds the moment: for the pause before it goes, the other side greys out. */
+/* In the box at the top of the day, a tap adds the moment: the chosen bar breathes out, swelling and glowing in its
+   paint, while the other side greys out; then the moment goes (MomentBox, 0.8s). */
 .moment-colour.is-adding.has-pick .moment-colour-pick:not(.is-on) .moment-colour-bar {
   filter: grayscale(1);
+}
+.moment-colour.is-adding .moment-colour-pick.is-on .moment-colour-bar {
+  animation: moment-breathe-out 0.7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+@keyframes moment-breathe-out {
+  from {
+    height: 6px;
+    margin: 2px 0;
+    box-shadow: 0 0 0 0 transparent;
+  }
+  to {
+    height: 14px;
+    margin: -2px 0;
+    border-radius: 7px;
+    box-shadow: 0 0 14px 3px color-mix(in srgb, var(--paint) 45%, transparent);
+  }
 }
 .moment-colour-clear {
   font-weight: 400;
