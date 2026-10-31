@@ -155,14 +155,29 @@ export async function drawPainting(
 
   frameLines(ctx, px, f, x, s, sh)
 
-  // The label, quiet on the mat: where the painting hangs, never on it.
+  // The label, quiet on the mat: squared's mark, then its address, muted. Where the painting hangs, never on it.
   if (label) {
     ctx.save()
-    ctx.textAlign = 'center'
+    const ink = '#b1afa9' // 30% ink on the mat, solid, so the mark's paint and edge don't darken where they meet
+    const fs = Math.round(px * 0.019)
+    ctx.font = `500 ${fs}px Inter, system-ui, sans-serif`
+    const words = 'squared.today'
+    const mark = Math.round(fs * 1.15)
+    const gap = Math.round(fs * 0.45)
+    const w = mark + gap + ctx.measureText(words).width
+    const cy = (x + sh + px - f) / 2
+    const left = px / 2 - w / 2
+    // The mark (Logo.tsx), drawn from its 100×100 paths.
+    ctx.translate(left, cy - mark / 2)
+    ctx.scale(mark / 100, mark / 100)
+    ctx.fillStyle = ctx.strokeStyle = ink
+    ctx.fill(new Path2D('M8 80C22 64 34 57 48 55C62 53 70 51 76 46C81 42 86 40 92 39V80Q92 92 80 92H20Q8 92 8 80Z'))
+    ctx.lineWidth = 10
+    ctx.stroke(new Path2D('M25 7H75Q93 7 93 25V75Q93 93 75 93H25Q7 93 7 75V25Q7 7 25 7Z'))
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+    ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
-    ctx.fillStyle = 'rgba(20,20,19,0.42)'
-    ctx.font = `500 ${Math.round(px * 0.019)}px Inter, system-ui, sans-serif`
-    ctx.fillText('squared.today', px / 2, (x + sh + px - f) / 2)
+    ctx.fillText(words, left + mark + gap, cy)
     ctx.restore()
   }
 
