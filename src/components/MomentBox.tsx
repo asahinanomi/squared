@@ -82,9 +82,11 @@ export function MomentBox({ placeholder, onAdd }: Props) {
       ghost.querySelector('textarea')!.value = written
       ghost.classList.add('is-flying')
       ghost.setAttribute('aria-hidden', 'true')
+      // Placed on the page, not the screen: the keyboard closing scrolls the page back as it lifts, and the copy moves
+      // with it (pinned to the screen, it was left behind, over the square; nomi's recording, Oct 31, 2026).
       Object.assign(ghost.style, {
-        top: `${r.top}px`,
-        left: `${r.left}px`,
+        top: `${r.top + window.scrollY}px`,
+        left: `${r.left + window.scrollX}px`,
         width: `${r.width}px`,
         height: `${r.height}px`,
       })

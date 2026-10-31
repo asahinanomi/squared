@@ -468,7 +468,7 @@
 }
 /* A kept moment, sent like mail: the box itself (a copy, in script) lifts off the page and flies into the list. */
 .moment-box.is-flying {
-  position: fixed;
+  position: absolute;
   z-index: 25;
   margin: 0;
   pointer-events: none;
