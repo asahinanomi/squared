@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { addDays, fromIso, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
@@ -13,8 +13,8 @@ const weekRange = (a: string, b: string) =>
 const ahead = (n: number) => (n === 0 ? 'today is the last' : n === 1 ? '1 day ahead' : `${fmt(n)} days ahead`)
 
 // Once per sign-in, a life's bar pours in from the left to where you are and comes to rest; the "now" mark breathes
-// out and in (the square's own breath, 2.4s); then the days ahead breathe too, and at the breath's height yesterday's
-// count becomes today's: a day has passed (nomi, Oct 31, 2026). Each
+// out and in (the square's own breath, 2.4s) and the days ahead breathe with it, in step; at the breath's height
+// yesterday's count becomes today's: a day has passed (nomi, Oct 31, 2026). Each
 // person sees it the first time they open my days after signing in (or opening squared); signing out resets it, so the
 // next person does too. Never with "reduce motion".
 let poured = false
@@ -66,24 +66,13 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
   const monthName = t.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   const c = profile ? lifeCounts(profile.born, profile.lifespan, today) : null
   const [pour] = useState(() => !!c && pourNow())
-  // The pour, in percent of the track, never a measured width: on iPhone the card isn't at its full width yet when it
-  // mounts, so a measured pour ended short and snapped to the real end (nomi's recordings).
   const pct = c ? (c.sofar / c.total) * 100 : 0
-  const lived = useRef<HTMLElement>(null)
-  useLayoutEffect(() => {
-    if (!pour) return
-    lived.current?.animate([{ width: '0%' }, { width: `${pct}%` }], {
-      duration: 1200,
-      easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
-    })
-  }, [pour, pct])
-  // Yesterday's count first, then one less, once the bar has poured in and the dot has settled.
+  // Yesterday's count first, then one less, at the breath's height.
   const [tick, setTick] = useState(pour)
   useEffect(() => {
     if (!tick) return
-    // At the height of the number's breath, while it has faded: after the pour (1.2s), the dot's breath (2.4s), and
-    // half of its own slower breath (3.6s).
-    const t = setTimeout(() => setTick(false), 5500)
+    // At the height of the breath (the dot's and the number's, together), while the number has faded: 1.3s + 1.2s.
+    const t = setTimeout(() => setTick(false), 2500)
     return () => clearTimeout(t)
   }, [tick])
   return (
@@ -135,8 +124,10 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
             </small>
           </span>
           <span className={'where-track' + (pour ? ' is-pouring' : '')} aria-hidden="true">
-            <i ref={lived} className="where-lived" style={{ '--lived': `${pct}%` } as React.CSSProperties} />
-            <i className="where-now" />
+            <span className="where-reach" style={{ '--lived': `${pct}%` } as React.CSSProperties}>
+              <i className="where-lived" />
+              <i className="where-now" />
+            </span>
             <i className="where-ahead" />
           </span>
         </button>
@@ -147,8 +138,10 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
             <small className="is-setup">set up now ›</small>
           </span>
           <span className="where-track is-ghost" aria-hidden="true">
-            <i className="where-lived" />
-            <i className="where-now" />
+            <span className="where-reach">
+              <i className="where-lived" />
+              <i className="where-now" />
+            </span>
             <i className="where-ahead" />
           </span>
         </button>

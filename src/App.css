@@ -4961,22 +4961,42 @@ button.home-card:active {
   align-items: center;
   height: 12px;
 }
+.where-reach {
+  display: flex;
+  flex: none;
+  align-items: center;
+  width: calc(var(--lived, 40%) + 16px);
+}
 .where-lived {
-  width: var(--lived, 40%);
+  flex: 1;
   height: 4px;
   border-radius: 2px;
   background: #55554f;
 }
 /* Once per sign-in (WhereCard): the days lived pour in from the left and come to rest; then "now" breathes out and in,
    then the days ahead breathe, their number changing at the breath's height. The square's own breath: 2.4s, eased,
-   held a moment at its fullest (BREATH_MS). */
+   held a moment at its fullest (BREATH_MS). The number of days ahead breathes with it, in step, and at the breath's
+   height yesterday's count becomes today's.
+   The pour slides the days lived (and the "now" mark with them) in from the left: a transform, so it runs smoothly even
+   while the app is busy starting up (a width animation stalled and jumped in the iPhone home screen app). */
+.where-track.is-pouring {
+  clip-path: inset(-8px -8px -8px 0);
+}
+.where-track.is-pouring .where-reach {
+  animation: where-pour 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+@keyframes where-pour {
+  from {
+    transform: translateX(-100%);
+  }
+}
 .where-track.is-pouring .where-now {
   animation: where-breathe 2.4s 1.3s ease-in-out;
 }
 .where-breath {
   display: inline-block;
   transform-origin: right center;
-  animation: where-breathe-words 3.6s 3.7s ease-in-out;
+  animation: where-breathe-words 2.4s 1.3s ease-in-out;
 }
 @keyframes where-breathe {
   0%,
@@ -4988,14 +5008,14 @@ button.home-card:active {
     transform: scale(1.5);
   }
 }
-/* The days ahead: a slower breath, and at its fullest the old count fades almost out and the new one fades in. */
+/* The days ahead: at the breath's fullest the old count fades almost out and the new one fades in. */
 @keyframes where-breathe-words {
   0%,
   100% {
     transform: scale(1);
   }
-  30%,
-  70% {
+  40%,
+  60% {
     transform: scale(1.18);
     color: var(--ink);
     opacity: 1;
