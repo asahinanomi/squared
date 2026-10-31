@@ -2078,7 +2078,7 @@ body[data-screen='questions'] .idea {
 /* On the month's squares, the name is a chapter: ink, bold, like the list's, with room above. */
 .month-block .month-label {
   margin-top: 12px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.005em;
   color: var(--ink);
@@ -2096,6 +2096,14 @@ body[data-screen='questions'] .idea {
   letter-spacing: inherit;
   color: inherit;
   text-align: left;
+}
+.painting-label {
+  text-decoration: underline dotted #b9b9b2;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+.painting-name.is-on .painting-label {
+  text-decoration-style: solid;
 }
 .painting-name::before {
   content: '';
@@ -2131,9 +2139,9 @@ body[data-screen='questions'] .idea {
 /* On a life in days the year's name is drawn on the canvas: the button lies exactly over it, its text clear, only its
    picture drawn. */
 .painting-name.is-over-canvas {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
-  line-height: 19px;
+  line-height: 20px;
   color: transparent;
 }
 /* A finger's reach around the year and its picture (about 44px tall). */
@@ -3426,7 +3434,7 @@ button.settings-row:active {
 .days-month > .ladder-label {
   margin: 10px 0 2px;
   padding: 0 4px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.005em;
   color: var(--ink);
@@ -3599,7 +3607,7 @@ button.settings-row:active {
 }
 .period-title {
   align-self: flex-start;
-  font-size: 15px; /* the same as a month's and a year's name on the squares */
+  font-size: 16px; /* the same as a month's and a year's name everywhere */
   font-weight: 600;
   color: var(--ink);
 }
