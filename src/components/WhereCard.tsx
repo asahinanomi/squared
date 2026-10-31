@@ -102,8 +102,8 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
   const [tick, setTick] = useState(pour)
   useEffect(() => {
     if (!tick || !go) return
-    // Once the number has swelled to its fullest (1.3s + 35% of its 2.4s breath), the count turns.
-    const t = setTimeout(() => setTick(false), 2150)
+    // Once the number has swelled to its fullest (1.3s + 30% of its 2.4s breath), the count turns.
+    const t = setTimeout(() => setTick(false), 2050)
     return () => clearTimeout(t)
   }, [tick, go])
   return (

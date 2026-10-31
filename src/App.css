@@ -5053,8 +5053,8 @@ button.home-card:active {
   100% {
     transform: scale(1);
   }
-  35%,
-  65% {
+  30%,
+  70% {
     transform: scale(1.6);
     color: var(--ink);
   }
@@ -5069,10 +5069,10 @@ button.home-card:active {
   text-align: right;
 }
 .where-roll-out {
-  animation: where-roll-out 0.55s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+  animation: where-roll-out 0.85s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
 }
 .where-roll-in {
-  animation: where-roll-in 0.55s cubic-bezier(0.3, 0.7, 0.3, 1) both;
+  animation: where-roll-in 0.85s cubic-bezier(0.3, 0.7, 0.3, 1) both;
 }
 @keyframes where-roll-out {
   to {

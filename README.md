@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Oct 31, 2026, 02:54 UTC_
+_last updated Oct 31, 2026, 02:56 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -328,6 +328,7 @@ squared's three heroes (the brush, the zoom out, the question) and the test for 
 - **The pour slides; the count breathes with the dot** (Oct 31, 2026, nomi): it still jumped in the home screen app (not in Chrome), where the app is busy starting up: a width animation waits on that work, stalls, then jumps. The days lived (and the "now" mark with them) now slide in from the left as a transform, which runs smoothly however busy the app is. And the number breathes in step with the dot (same 2.4s breath, together), changing to today's count at the breath's height.
 - **The pour waits for the page to settle** (Oct 31, 2026, nomi's tests): it only jumped when my days was opened right after signing in, while the page was still drawing (the paintings). The bar now waits empty for a quiet moment (a frame, a short pause that busy work holds back, another frame), then pours; the count's breath follows it.
 - **The count turns like a day picker** (Oct 31, 2026, nomi): the days ahead swell much more (1.6×, from 1.18×) and rest at their fullest while the count turns: no fade, the digits that change roll like a picker's wheel (yesterday's down and away, today's in from above), the others stay.
+- **…a slower turn** (Oct 31, 2026, nomi): the roll takes 0.85s (from 0.55s), and the number rests at its fullest a little longer to hold it.
 - **A moment's colour adds it** (Oct 31, 2026, nomi): in the box at the top of the day, tapping worth it or regret now adds the moment with that colour, one tap instead of two; choosing the colour is the last step. The + still adds a moment without one, and a colour can still be changed later by opening the moment.
 - **A moment's colour, a beat before it goes** (Oct 31, 2026, nomi): after the tap, a short pause (under half a second) shows the choice: the chosen bar thickens and its word darkens, the other greys out, then the moment is added and flies to its place.
 - **The chosen colour breathes out** (Oct 31, 2026, nomi): instead of thickening at once, the tapped bar swells and glows softly in its own paint (0.7s, eased), the other greys out, then the moment is added (0.8s in all).
