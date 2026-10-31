@@ -2130,14 +2130,18 @@ body[data-screen='questions'] .idea {
 /* On a life in days the year's name is drawn on the canvas: the button lies exactly over it, its text clear, only its
    picture drawn. */
 .painting-name.is-over-canvas {
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
-  line-height: 15px;
+  line-height: 19px;
   color: transparent;
 }
+/* A finger's reach around the year and its picture (about 44px tall). */
+.painting-name.is-over-canvas::before {
+  inset: -13px -8px -9px; /* not over the first row */
+}
 .painting-name.is-over-canvas .painting-icon {
-  width: 13px;
-  height: 13px;
+  width: 17px;
+  height: 17px;
   stroke: #6f6f69;
 }
 .month-block.is-faint {

@@ -34,7 +34,7 @@ type Props = {
 
 // Space between squares grows with them, so big squares stay apart (7 and 3 a row match the month view).
 const gapFor = (n: number) => ({ 28: 2, 14: 4, 7: 9, 3: 10 })[n] ?? 2
-const LABEL_H = 22 // year label above each block (room for its dotted underline over the first row)
+const LABEL_H = 28 // year label above each block (a finger-sized name and picture, clear of the first row)
 const BLOCK_GAP = 16 // space between years
 const TOP = 24 // room above the first year, clear of the top fade (its label and painting icon stay easy to tap)
 const LIVED_BLANK = '#e2e2da' // lived, not painted: a shade deeper than the days ahead, so lived and ahead read apart
@@ -153,9 +153,9 @@ export function LifeDays({
         const y0 = b * block + TOP - top
         ctx.textAlign = 'left'
         ctx.textBaseline = 'alphabetic'
-        ctx.font = `600 12px ${FONT}`
+        ctx.font = `600 15px ${FONT}`
         ctx.fillStyle = String(year) === today.slice(0, 4) ? INK : '#6f6f6a'
-        ctx.fillText(String(year), 0, y0 + 12)
+        ctx.fillText(String(year), 0, y0 + 15)
         const n = daysInYear(year)
         const rowFrom = Math.max(0, Math.floor((-y0 - LABEL_H) / pitch)) // first row on screen
         for (let i = rowFrom * cols; i < n; i++) {
