@@ -77,7 +77,6 @@ function FilterMark({ id }: { id: Only | null }) {
   if (id === 'unpainted') return <span className="filter-mark is-unpainted" aria-hidden="true" />
   if (id === 'framed') return <span className="filter-mark is-framed" aria-hidden="true" />
   if (id === 'notes') return <span className="filter-mark is-notes" aria-hidden="true" />
-  if (id.startsWith('#')) return <span className="filter-mark is-tag" aria-hidden="true" />
   return <span className="filter-mark" style={{ background: paintHex(id as Paint) }} aria-hidden="true" />
 }
 
@@ -420,25 +419,39 @@ export function DaysList({
       {onOnly && (
         <Sheet open={!!picking} onClose={closePicking}>
           <h2 className="torn-title">Which days would you like to see?</h2>
-          <ul className="filter-list">
-            {[...FILTERS, ...allTags(notes).map((t): [Only, string] => [`#${t}`, t])].map(([id, label]) => {
-              const ticked = picking ?? only
-              const on = id ? ticked.includes(id) : !ticked.length
-              return (
-                <li key={id ?? 'all'}>
-                  <button
-                    className={'filter-row' + (on ? ' is-on' : '')}
-                    aria-pressed={on}
-                    onClick={() => setPicking(!id ? [] : on ? ticked.filter((o) => o !== id) : [...ticked, id])}
-                  >
-                    <FilterMark id={id} />
-                    <span className="filter-label">{label}</span>
-                    {on && <span aria-hidden="true">✓</span>}
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
+          {/* Chips in small groups, not a row each (nomi, Oct 31, 2026: with tags, a row each ran off the screen):
+              every day, the colours, the kinds of day, then your tags. */}
+          {(
+            [
+              [null, [[null, 'all days']]],
+              ['colour', FILTERS.filter(([id]) => id === 'green' || id === 'red' || id === 'grey')],
+              ['kind', FILTERS.filter(([id]) => id === 'notes' || id === 'framed' || id === 'unpainted')],
+              ['your tags', allTags(notes).map((t): [Only, string] => [`#${t}`, `#${t}`])],
+            ] as [string | null, [Only | null, string][]][]
+          )
+            .filter(([, chips]) => chips.length)
+            .map(([group, chips]) => (
+              <div key={group ?? 'all'} className="filter-group">
+                {group && <p className="filter-group-label">{group}</p>}
+                <div className={'filter-chips' + (group === 'your tags' ? ' is-tags' : '')}>
+                  {chips.map(([id, label]) => {
+                    const ticked = picking ?? only
+                    const on = id ? ticked.includes(id) : !ticked.length
+                    return (
+                      <button
+                        key={id ?? 'all'}
+                        className={'filter-chip' + (on ? ' is-on' : '')}
+                        aria-pressed={on}
+                        onClick={() => setPicking(!id ? [] : on ? ticked.filter((o) => o !== id) : [...ticked, id])}
+                      >
+                        {id && !id.startsWith('#') && <FilterMark id={id} />}
+                        {label}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
           <button className="pill filter-done" onClick={closePicking}>
             show these days
           </button>
