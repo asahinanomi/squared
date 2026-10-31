@@ -1,4 +1,4 @@
-import type { Days } from './days'
+import { dayWord, type Days } from './days'
 import { fromIso, todayIso } from './dates'
 import type { Matters } from './matters'
 import type { Notes } from './notes'
@@ -84,11 +84,7 @@ export async function exportWord(all: Everything) {
           children: [
             run(longDay(d), { bold: true }),
             ...(day
-              ? [
-                  run('   '),
-                  run('■ ', { color: paintHex(day.color).slice(1) }),
-                  run(day.outOfHands && day.color === 'red' ? 'out of my hands' : WORD[day.color], { color: SOFT }),
-                ]
+              ? [run('   '), run('■ ', { color: paintHex(day.color).slice(1) }), run(dayWord(day), { color: SOFT })]
               : []),
           ],
         }),

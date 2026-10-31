@@ -49,7 +49,7 @@ const withColor = () => level < 1
 export const noteColorsOn = withColor
 /** Run a query; if a newer column doesn't exist yet, remember that and run it again without (and write it down: a
  *  missing column means a migration to run, never something to hide). */
-async function tryPinned<T extends { error: { code?: string } | null }>(run: () => PromiseLike<T>): Promise<T> {
+async function tryCols<T extends { error: { code?: string } | null }>(run: () => PromiseLike<T>): Promise<T> {
   let res = await run()
   while (res.error?.code === '42703' && level < COLS.length - 1) {
     reportError('notes columns', res.error)
@@ -80,7 +80,7 @@ export async function fetchMonthNotes(iso: string): Promise<Notes | null> {
   const first = `${iso.slice(0, 7)}-01`
   const last = `${iso.slice(0, 7)}-${String(new Date(y, m, 0).getDate()).padStart(2, '0')}`
   const sb = supabase
-  const { data, error } = await tryPinned(() =>
+  const { data, error } = await tryCols(() =>
     sb.from('notes').select(cols()).gte('date', first).lte('date', last).order('written_at'),
   )
   if (error?.code === 'PGRST205' || error?.code === '42P01') return null
@@ -94,7 +94,7 @@ export async function fetchAllNotes(): Promise<Notes | null> {
   const all: Row[] = []
   for (let from = 0; ; from += 1000) {
     const sb = supabase
-    const { data, error } = await tryPinned(() =>
+    const { data, error } = await tryCols(() =>
       sb
         .from('notes')
         .select(cols())
@@ -123,7 +123,7 @@ export const draftNote = (date: string, body: string, pinned?: boolean, color?: 
 export async function addNote(note: Note): Promise<Note> {
   if (!supabase) return note
   const sb = supabase
-  const { data, error } = await tryPinned(() =>
+  const { data, error } = await tryCols(() =>
     sb
       .from('notes')
       .insert({
@@ -145,7 +145,7 @@ export async function addNote(note: Note): Promise<Note> {
 export async function replaceNote(note: Note, body: string): Promise<Note> {
   if (!supabase) return { ...note, body, writtenAt: new Date().toISOString() }
   const sb = supabase
-  const { data, error } = await tryPinned(() =>
+  const { data, error } = await tryCols(() =>
     sb.from('notes').update({ body }).eq('id', note.id).select(cols()).single(),
   )
   if (error) throw error

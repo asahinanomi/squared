@@ -1,4 +1,4 @@
-import type { Paint } from './paints'
+import { WORD, type Paint } from './paints'
 import { isoDate } from './dates'
 import { reportError } from './report'
 import { supabase } from './supabase'
@@ -21,6 +21,9 @@ export type Day = {
 }
 
 export type Days = Record<string, Day>
+
+/** A painted day's word: its colour's, but a red day marked "out of my hands" is never called a regret. */
+export const dayWord = (d: Day) => (d.outOfHands && d.color === 'red' ? 'out of my hands' : WORD[d.color])
 
 const timeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone
 

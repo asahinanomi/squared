@@ -14,9 +14,9 @@ const ahead = (n: number) => (n === 0 ? 'today is the last' : n === 1 ? '1 day a
 
 // Once per sign-in, a life's bar pours in from the left to where you are and comes to rest; the "now" mark breathes
 // out and in (the square's own breath, 2.4s) and the days ahead breathe with it, in step; at the breath's height
-// yesterday's count becomes today's: a day has passed (nomi, Oct 31, 2026). Each
-// person sees it the first time they open my days after signing in (or opening squared); signing out resets it, so the
-// next person does too. Never with "reduce motion".
+// yesterday's count becomes today's: a day has passed (nomi, Oct 31, 2026). Each person sees it the first time they
+// open my days after signing in (or opening squared); signing out resets it, so the next person does too. Never with
+// "reduce motion".
 let poured = false
 /** Signed out: the next sign-in pours again. */
 export const resetPour = () => void (poured = false)

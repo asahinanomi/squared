@@ -47,8 +47,7 @@ type Props = {
   onPinNote: (note: Note) => void
   /** Paint a moment in its own colour, or take it away (null). */
   onPaintNote: (note: Note, color: Paint | null) => void
-  /** On this day: a year (or a month) ago, painted — shown on today's screen; a tap opens it. */
-  /** Framing didn't save: what to say, quietly, under the square. */
+  /** Dip the brush in a colour. */
   onLoad: (p: Paint) => void
   onDefine: () => void
   /** Saves a new note, or updates `note` (instantly; a failure reopens the box). */

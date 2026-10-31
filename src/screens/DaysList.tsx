@@ -13,10 +13,10 @@ import {
   todayIso,
   writtenWhen,
 } from '../lib/dates'
-import { handsOn, type Day, type Days } from '../lib/days'
+import { dayWord, handsOn, type Day, type Days } from '../lib/days'
 import type { Note, Notes } from '../lib/notes'
 import { allTags, dayHasTag, withTags } from '../lib/tags'
-import { frameVars, paintHex, squareFill, WORD, type Paint } from '../lib/paints'
+import { frameVars, paintHex, squareFill, type Paint } from '../lib/paints'
 import { specialDay } from '../lib/special'
 import { monthsBetween, shiftMonth } from './Month'
 import { PaintingButton } from '../components/PaintingButton'
@@ -141,9 +141,7 @@ export function DayCard({
           {day && (
             <>
               {' '}
-              <span className="day-card-word">
-                · {day.outOfHands && day.color === 'red' ? 'out of my hands' : WORD[day.color]}
-              </span>
+              <span className="day-card-word">· {dayWord(day)}</span>
             </>
           )}
         </button>
