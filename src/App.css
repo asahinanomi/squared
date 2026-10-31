@@ -3492,20 +3492,14 @@ button.settings-row:active {
   margin-top: 20px;
 }
 /* The filter's choices: chips in small groups (every day, colour, kind, your tags), space between, so it all fits. */
-.filter-group + .filter-group {
-  margin-top: 20px;
-}
-.torn-title + .filter-group {
+.torn-title + .filter-chips {
   margin-top: 16px;
 }
 .filter-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-}
-/* Many tags: about three lines show, the rest scroll inside, so "show these days" stays on screen. */
-.filter-chips.is-tags {
-  max-height: 136px;
+  max-height: 50vh; /* many tags: the rest scroll inside, so "show these days" stays on screen */
   overflow-y: auto;
 }
 .filter-chip {

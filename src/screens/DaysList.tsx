@@ -421,44 +421,29 @@ export function DaysList({
       {onOnly && (
         <Sheet open={!!picking} onClose={closePicking}>
           <h2 className="torn-title">Which days would you like to see?</h2>
-          {/* Chips in small groups, not a row each (nomi, Oct 31, 2026: with tags, a row each ran off the screen):
-              every day, the colours, the kinds of day, then your tags. No group labels: the dots, marks and # say it,
-              and space alone keeps the groups apart. */}
-          {(
-            [
-              [null, [[null, 'all days']]],
-              ['colour', FILTERS.filter(([id]) => id === 'green' || id === 'red' || id === 'grey')],
-              [
-                'kind',
-                FILTERS.filter(
-                  ([id]) => id === 'notes' || id === 'framed' || id === 'unpainted' || (id === 'hands' && handsOn()),
-                ),
-              ],
-              ['your tags', allTags(notes).map((t): [Only, string] => [`#${t}`, `#${t}`])],
-            ] as [string | null, [Only | null, string][]][]
-          )
-            .filter(([, chips]) => chips.length)
-            .map(([group, chips]) => (
-              <div key={group ?? 'all'} className="filter-group">
-                <div className={'filter-chips' + (group === 'your tags' ? ' is-tags' : '')}>
-                  {chips.map(([id, label]) => {
-                    const ticked = picking ?? only
-                    const on = id ? ticked.includes(id) : !ticked.length
-                    return (
-                      <button
-                        key={id ?? 'all'}
-                        className={'filter-chip' + (on ? ' is-on' : '')}
-                        aria-pressed={on}
-                        onClick={() => setPicking(!id ? [] : on ? ticked.filter((o) => o !== id) : [...ticked, id])}
-                      >
-                        {id && !id.startsWith('#') && <FilterMark id={id} />}
-                        {label}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            ))}
+          {/* Chips, not a row each (nomi, Oct 31, 2026: with tags, a row each ran off the screen), in one flow, evenly
+              spaced: every day, the colours, the kinds of day, then your tags. The dots, marks and # tell them apart.
+              Many tags: the chips scroll inside, so "show these days" stays on screen. */}
+          <div className="filter-chips">
+            {[
+              ...FILTERS.filter(([id]) => id !== 'hands' || handsOn()),
+              ...allTags(notes).map((t): [Only, string] => [`#${t}`, `#${t}`]),
+            ].map(([id, label]) => {
+              const ticked = picking ?? only
+              const on = id ? ticked.includes(id) : !ticked.length
+              return (
+                <button
+                  key={id ?? 'all'}
+                  className={'filter-chip' + (on ? ' is-on' : '')}
+                  aria-pressed={on}
+                  onClick={() => setPicking(!id ? [] : on ? ticked.filter((o) => o !== id) : [...ticked, id])}
+                >
+                  {id && !id.startsWith('#') && <FilterMark id={id} />}
+                  {label}
+                </button>
+              )
+            })}
+          </div>
           <button className="pill filter-done" onClick={closePicking}>
             show these days
           </button>
