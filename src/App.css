@@ -5046,22 +5046,44 @@ button.home-card:active {
     transform: scale(1.5);
   }
 }
-/* The days ahead: at the breath's fullest the old count fades almost out and the new one fades in. */
+/* The days ahead: they swell well past their size and rest there while the count turns, a day picker's wheel turning by
+   one (nomi, Oct 31, 2026): yesterday's number rolls down and away, today's rolls in from above. */
 @keyframes where-breathe-words {
   0%,
   100% {
     transform: scale(1);
   }
-  40%,
-  60% {
-    transform: scale(1.18);
+  35%,
+  65% {
+    transform: scale(1.6);
     color: var(--ink);
-    opacity: 1;
   }
-  50% {
-    transform: scale(1.18);
-    color: var(--ink);
-    opacity: 0.15;
+}
+.where-roll {
+  display: inline-grid;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.where-roll > span {
+  grid-area: 1 / 1;
+  text-align: right;
+}
+.where-roll-out {
+  animation: where-roll-out 0.55s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+}
+.where-roll-in {
+  animation: where-roll-in 0.55s cubic-bezier(0.3, 0.7, 0.3, 1) both;
+}
+@keyframes where-roll-out {
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+@keyframes where-roll-in {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
   }
 }
 .where-now {

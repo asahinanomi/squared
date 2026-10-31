@@ -26,6 +26,22 @@ function pourNow(): boolean {
   return !(typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches)
 }
 
+/** A count turning by one, like a day picker's wheel: the digits that stay, stay; the rest roll (yesterday's down and
+ *  away, today's in from above). */
+function Turn({ from, to }: { from: string; to: string }) {
+  let k = 0
+  while (k < to.length && to.length === from.length && to[k] === from[k]) k++
+  return (
+    <>
+      {to.slice(0, k)}
+      <span className="where-roll">
+        <span className="where-roll-out">{from.slice(k)}</span>
+        <span className="where-roll-in">{to.slice(k)}</span>
+      </span>
+    </>
+  )
+}
+
 type Props = {
   days: Days
   profile: Profile | null
@@ -86,8 +102,8 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
   const [tick, setTick] = useState(pour)
   useEffect(() => {
     if (!tick || !go) return
-    // At the height of the breath (the dot's and the number's, together), while the number has faded: 1.3s + 1.2s.
-    const t = setTimeout(() => setTick(false), 2500)
+    // Once the number has swelled to its fullest (1.3s + 35% of its 2.4s breath), the count turns.
+    const t = setTimeout(() => setTick(false), 2150)
     return () => clearTimeout(t)
   }, [tick, go])
   return (
@@ -130,7 +146,10 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
               {/* Only the number breathes, not the line. */}
               {c.left > 1 ? (
                 <>
-                  <span className={go ? 'where-breath' : undefined}>{fmt(tick ? c.left + 1 : c.left)}</span> days ahead
+                  <span className={go ? 'where-breath' : undefined}>
+                    {tick ? fmt(c.left + 1) : go ? <Turn from={fmt(c.left + 1)} to={fmt(c.left)} /> : fmt(c.left)}
+                  </span>{' '}
+                  days ahead
                 </>
               ) : (
                 ahead(c.left)
