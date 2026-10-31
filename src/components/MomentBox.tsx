@@ -18,7 +18,14 @@ export function MomentBox({ placeholder, onAdd }: Props) {
   // The colour just tapped: its bar breathes out, swelling and glowing (the other greys out), held a beat at its
   // fullest, then the moment is added (nomi, Oct 31, 2026).
   const [picked, setPicked] = useState<Paint>()
-  const [slip, setSlip] = useState<{ text: string; top: number; left: number; width: number; n: number } | null>(null)
+  const [slip, setSlip] = useState<{
+    text: string
+    color?: Paint
+    top: number
+    left: number
+    width: number
+    n: number
+  } | null>(null)
   const wrap = useRef<HTMLDivElement>(null)
   const box = useRef<HTMLTextAreaElement>(null)
   useLayoutEffect(() => {
@@ -73,7 +80,7 @@ export function MomentBox({ placeholder, onAdd }: Props) {
     const t = text.trim()
     if (!t) return box.current?.focus()
     const r = wrap.current?.getBoundingClientRect()
-    if (r && !still()) setSlip({ text: t, top: r.top, left: r.left, width: r.width, n: (slip?.n ?? 0) + 1 })
+    if (r && !still()) setSlip({ text: t, color, top: r.top, left: r.left, width: r.width, n: (slip?.n ?? 0) + 1 })
     onAdd(t, color)
     setText('')
   }
@@ -127,6 +134,8 @@ export function MomentBox({ placeholder, onAdd }: Props) {
             aria-hidden="true"
           >
             {slip.text}
+            {/* Its colour flies with it, as chosen: the whole moment goes, not just its words. */}
+            {slip.color && <MomentColour adds value={slip.color} onChange={() => undefined} />}
           </div>,
           document.body,
         )}

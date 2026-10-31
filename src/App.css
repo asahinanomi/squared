@@ -499,6 +499,18 @@
   pointer-events: none;
   transform-origin: center;
 }
+/* A coloured moment's slip carries its strip as chosen: still, at its fullest (no fade-in, no breath again). */
+.moment-slip .moment-colour {
+  white-space: normal;
+  animation: none;
+}
+.moment-slip .moment-colour .moment-colour-pick.is-on .moment-colour-bar {
+  animation: none;
+  height: 14px;
+  margin: -2px 0;
+  border-radius: 7px;
+  box-shadow: 0 0 14px 3px color-mix(in srgb, var(--paint) 45%, transparent);
+}
 /* Just arrived in the list: a soft glow that fades. */
 .note-card.is-arriving {
   animation: moment-arrive 2.4s ease-out;
