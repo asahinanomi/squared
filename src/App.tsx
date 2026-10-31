@@ -5,7 +5,7 @@ import { MonthPainting } from './components/MonthPainting'
 import { OpenPainting } from './components/PaintingButton'
 import { SyncStatus } from './components/SyncStatus'
 import { Topbar } from './components/Topbar'
-import { resetPour } from './components/WhereCard'
+import { pourFor } from './components/WhereCard'
 import { Waiting } from './components/Waiting'
 import { PageBar, ViewSwitch } from './components/ZoomBar'
 import type { Why } from './lib/notes'
@@ -78,10 +78,8 @@ export default function App() {
     if (supabase) supabase.auth.signOut()
     else setDemoIn(false)
   }
-  // Signed out (any way, the lock included): the next sign-in sees a day pass on my days again.
-  useEffect(() => {
-    if (!signedIn) resetPour()
-  }, [signedIn])
+  // A day passes on my days once a day for each person: whose day it is.
+  useEffect(() => pourFor(userId), [userId])
   // Lock when I leave: away longer than you chose, squared signs out (settings → lock when I leave).
   useLock(signedIn, signOut)
 

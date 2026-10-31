@@ -12,18 +12,24 @@ const weekRange = (a: string, b: string) =>
   a.slice(0, 7) === b.slice(0, 7) ? `${md(a)} – ${Number(b.slice(8))}` : `${md(a)} – ${md(b)}`
 const ahead = (n: number) => (n === 0 ? 'today is the last' : n === 1 ? '1 day ahead' : `${fmt(n)} days ahead`)
 
-// Once per sign-in, a life's bar pours in from the left to where you are and comes to rest; the "now" mark breathes
-// out and in (the square's own breath, 2.4s) and the days ahead breathe with it, in step; at the breath's height
-// yesterday's count becomes today's: a day has passed (nomi, Oct 31, 2026). Each person sees it the first time they
-// open my days after signing in (or opening squared); signing out resets it, so the next person does too. Never with
-// "reduce motion".
-let poured = false
-/** Signed out: the next sign-in pours again. */
-export const resetPour = () => void (poured = false)
+// Once a day, a life's bar pours in from the left to where you are and comes to rest; the "now" mark breathes out and
+// in (the square's own breath, 2.4s) and the days ahead breathe with it, in step; at the breath's height yesterday's
+// count turns to today's: a day has passed. Once a day for each person on this device, the first time they open my
+// days that day (signing out and in again doesn't replay it; someone else signing in still sees it). Always by one,
+// however long you were away: squared never counts an absence (nomi, Oct 31, 2026). Never with "reduce motion".
+let who = 'demo'
+/** Whose day it is: the signed-in person (each sees the pour once a day). */
+export const pourFor = (id: string | undefined) => void (who = id ?? 'demo')
 function pourNow(): boolean {
-  if (poured) return false
-  poured = true
-  return !(typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches)
+  if (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches) return false
+  const key = `squared.poured.${who}`
+  try {
+    if (localStorage.getItem(key) === todayIso()) return false
+    localStorage.setItem(key, todayIso())
+  } catch {
+    return false // no storage: never replay it on every visit
+  }
+  return true
 }
 
 /** A count turning by one, like a day picker's wheel: the digits that stay, stay; the rest roll (yesterday's down and
