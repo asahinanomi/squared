@@ -1,6 +1,6 @@
 # Test links
 
-_last updated Oct 26, 2026, 13:59 UTC_
+_last updated Oct 31, 2026, 16:52 UTC_
 
 Hidden links for trying squared's first-time moments on your own account. Open them on your phone while signed in. They save nothing.
 
@@ -11,6 +11,7 @@ Hidden links for trying squared's first-time moments on your own account. Open t
 | [squared.today/?year](https://squared.today/?year) | Last year's painting (the new-year moment). Works any day. |
 | [squared.today/?birthday](https://squared.today/?birthday) | The birthday sheet over today ("Happy 55th birthday.", from your birth date; "Happy birthday." without one). Works any day. |
 | [squared.today/?firstlife](https://squared.today/?firstlife) | The first zoom out to a life, again: the slower first fill (about 4s) and two pulses (normally once per device). |
+| [squared.today/?today=d](https://squared.today/?today=d) | Today's layout D, on trial (lab row 14): the square first, a little smaller, the moment box under the palette. Stays on for this device; [?today=now](https://squared.today/?today=now) turns it off. Rollback point if D goes: commit 3743f11. |
 
 ## For testers
 

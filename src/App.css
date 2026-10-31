@@ -815,6 +815,15 @@ sup.ord {
   align-items: center;
   margin-top: 0;
 }
+/* Layout D, on trial (?today=d): the square first and a little smaller, as wide as "meaningfully" in the question
+   (it grows with the question), the palette with it; the moment box under the palette, a group gap below it. */
+.today.is-d .canvas,
+.today.is-d .palette {
+  width: min(37vw, 148px);
+}
+.today.is-d .moment-box {
+  margin-top: 22px;
+}
 /* Square → palette board, the same 22px as question → square (the brush tip reaches a little higher). */
 .tray > .palette {
   margin-top: 11px;

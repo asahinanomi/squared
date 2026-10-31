@@ -19,7 +19,7 @@ import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
 import { Raised } from '../components/Raised'
 import { OpenPainting } from '../components/PaintingButton'
-import { tryBirthday } from '../state/app'
+import { todayD, tryBirthday } from '../state/app'
 import { questionFor } from '../lib/question'
 
 type Props = {
@@ -336,8 +336,20 @@ export function Today(props: Props) {
     </button>
   )
 
+  // A moment, any time: "this moment…" while today is being lived, "add to today…" once it's painted, "add to this
+  // day…" on any other day. Hidden while the bubble is open ("because…" right after painting, or updating a moment), but
+  // it keeps its place, so the square doesn't jump. At the top of the day, or under the palette in layout D (on trial).
+  const momentSlot = (
+    <div className={'moment-slot' + (why ? ' is-away' : '')} inert={!!why}>
+      <MomentBox
+        key={date}
+        placeholder={date !== today ? 'add to this day…' : day ? 'add to today…' : 'this moment…'}
+        onAdd={(text, color) => void onSaveNote(undefined, text, color)}
+      />
+    </div>
+  )
   return (
-    <main className={'today' + (day ? ' is-closed' : '')}>
+    <main className={'today' + (day ? ' is-closed' : '') + (todayD ? ' is-d' : '')}>
       <div
         className="today-stage"
         style={lift === undefined ? undefined : { paddingTop: lift }}
@@ -387,16 +399,7 @@ export function Today(props: Props) {
             />
           </div>
 
-          {/* A moment, any time: "this moment…" while today is being lived, "add to today…" once it's painted, "add to
-              this day…" on any other day. Hidden while the bubble is open ("because…" right after painting, or updating
-              a moment), but it keeps its place, so the square doesn't jump up. */}
-          <div className={'moment-slot' + (why ? ' is-away' : '')} inert={!!why}>
-            <MomentBox
-              key={date}
-              placeholder={date !== today ? 'add to this day…' : day ? 'add to today…' : 'this moment…'}
-              onAdd={(text, color) => void onSaveNote(undefined, text, color)}
-            />
-          </div>
+          {!todayD && momentSlot}
 
           {/* "Today" belongs to now: its tense follows the day ("am I spending…" until it's painted, "did I spend…" once
               it is); on any other day, the question asks about "this day". */}
@@ -519,6 +522,8 @@ export function Today(props: Props) {
               )
             )}
           </div>
+          {/* D: the moment box under the palette, right above the moments it adds to. */}
+          {todayD && momentSlot}
         </div>
       </div>
 
