@@ -88,7 +88,7 @@ export function MomentBox({ placeholder, onAdd }: Props) {
         width: `${r.width}px`,
         height: `${r.height}px`,
       })
-      // Its outline as it was (ink while you were writing; it softens to grey as it lifts), plus a shadow not yet cast.
+      // Its outline as it was (darker while you were writing; it softens as it lifts), plus a shadow not yet cast.
       setSlip({ ghost, shadow: `${getComputedStyle(w).boxShadow}, rgba(20, 20, 19, 0) 0px 0px 0px 0px` })
     }
     onAdd(t, color)
@@ -117,7 +117,7 @@ export function MomentBox({ placeholder, onAdd }: Props) {
         />
         <button
           className="moment-add"
-          // The box stays as it was (its ink outline) until it lifts, rather than flipping grey as + takes the focus.
+          // The box stays as it was (its focused outline) until it lifts, rather than flipping pale as + takes the focus.
           onPointerDown={(e) => e.preventDefault()}
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => add()}

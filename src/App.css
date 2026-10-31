@@ -454,7 +454,7 @@
   color: var(--muted);
 }
 .moment-box:focus-within {
-  box-shadow: inset 0 0 0 1.5px var(--ink-soft);
+  box-shadow: inset 0 0 0 1.5px var(--grey-3); /* every writing box, focused: the same soft grey (nomi, Oct 31, 2026) */
 }
 .moment-add {
   flex-shrink: 0;
@@ -2557,6 +2557,7 @@ body[data-screen='questions'] .idea {
 }
 .confirm-why textarea:focus {
   outline: none;
+  box-shadow: inset 0 0 0 1.5px var(--grey-3);
 }
 .confirm-type input {
   padding: 11px 14px;
@@ -2717,7 +2718,7 @@ body[data-screen='questions'] .idea {
 }
 .hands-what:focus {
   outline: none;
-  box-shadow: inset 0 0 0 1.5px var(--ink-soft);
+  box-shadow: inset 0 0 0 1.5px var(--grey-3);
 }
 .hands-mark {
   margin-top: 18px;
@@ -2963,7 +2964,7 @@ body[data-screen='questions'] .idea {
   font-weight: 500;
 }
 .setup-field:focus-within {
-  border-color: var(--ink);
+  border-color: var(--grey-3);
 }
 .setup-placeholder {
   color: var(--grey-4);
@@ -3038,7 +3039,7 @@ body[data-screen='questions'] .idea {
   outline: none;
 }
 .setup-years input:focus {
-  border-bottom-color: var(--ink);
+  border-bottom-color: var(--grey-3);
 }
 /* What it adds up to: left-aligned with the fields above, the number and its word on one line. */
 .setup-hero {
