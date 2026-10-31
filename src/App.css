@@ -1330,7 +1330,8 @@ sup.ord {
   margin: 2px 0;
   transition:
     height 0.2s ease-out,
-    margin 0.2s ease-out;
+    margin 0.2s ease-out,
+    filter 0.2s ease-out;
 }
 .moment-colour-pick:first-child .moment-colour-bar {
   border-radius: 4px 0 0 4px;
@@ -1345,6 +1346,10 @@ sup.ord {
   opacity: 1;
   color: var(--ink);
   font-weight: 600;
+}
+/* In the box at the top of the day, a tap adds the moment: for the pause before it goes, the other side greys out. */
+.moment-colour.is-adding.has-pick .moment-colour-pick:not(.is-on) .moment-colour-bar {
+  filter: grayscale(1);
 }
 .moment-colour-clear {
   font-weight: 400;

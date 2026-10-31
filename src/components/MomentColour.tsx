@@ -8,11 +8,22 @@ import { PAINTS, WORD, type Paint } from '../lib/paints'
 // clears (nomi, Oct 30, 2026).
 const SIDES = PAINTS.filter((p) => p.id !== 'grey')
 
-export function MomentColour({ value, onChange }: { value?: Paint; onChange: (p: Paint | undefined) => void }) {
+type Props = {
+  value?: Paint
+  onChange: (p: Paint | undefined) => void
+  /** Choosing adds the moment (the box at the top of the day): no ✕, and the other side greys out for the pause. */
+  adds?: boolean
+}
+
+export function MomentColour({ value, onChange, adds }: Props) {
   // Colours can't be saved (the database is missing its column): no strip, rather than a pick that vanishes.
   if (!noteColorsOn()) return null
   return (
-    <div className={'moment-colour' + (value ? ' has-pick' : '')} role="group" aria-label="This moment was">
+    <div
+      className={'moment-colour' + (value ? ' has-pick' : '') + (adds ? ' is-adding' : '')}
+      role="group"
+      aria-label="This moment was"
+    >
       {SIDES.map((p) => (
         <button
           key={p.id}
@@ -27,7 +38,7 @@ export function MomentColour({ value, onChange }: { value?: Paint; onChange: (p:
           <span className="moment-colour-bar" style={{ background: p.hex }} aria-hidden="true" />
           <span>
             {WORD[p.id]}
-            {value === p.id && (
+            {value === p.id && !adds && (
               <span className="moment-colour-clear" aria-hidden="true">
                 {' '}
                 ✕
