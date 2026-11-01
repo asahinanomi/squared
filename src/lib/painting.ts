@@ -95,7 +95,7 @@ export async function drawPainting(
   const x = f + Math.round(px * (year ? 0.045 : 0.03))
   const s = px - 2 * x
   const sh = s - (label ? Math.round(px * 0.045) : 0) // the painting's height: shorter by the label's mat
-  ctx.fillStyle = year ? '#66645e' : '#9c9a93'
+  ctx.fillStyle = year ? '#7f7d77' : '#9c9a93'
   ctx.fillRect(0, 0, px, px)
   if (year) {
     // The bead: a thin lighter line set into the frame, a little in from its inner edge.
