@@ -114,3 +114,4 @@ Real human moments many people will have: a day that mattered more than any othe
 - **A copy pass, as a dialog** (nomi, Oct 28, 2026): read every title, prompt and empty state and make it sound like squared talking with you (see brand story, voice principles).
 
 - **Framed days, one at a time, swipeable** (Oct 31, 2026, nomi): on my days, swipe the framed card left and right to move through your framed days, words and all (not a shelf: a framed day is its words). After beta 1, if friends frame days.
+- **Swipe back on my days: last week, last month** (Nov 1, 2026, nomi): on the where-you-are card, swipe the week or the month row left and right to see the weeks and months before. Parked for the freeze: today the month view (tap "this month", scroll up) and the list already look back, and the card speaks of now ("days ahead"). Revisit if beta friends ask for it too.
