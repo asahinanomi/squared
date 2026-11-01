@@ -27,7 +27,8 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kep
   useEffect(() => {
     const c = art.current
     if (!month || !c) return
-    drawPainting(c, month, days, name, Math.round(c.clientWidth * (window.devicePixelRatio || 1)))
+    // With its label on the mat, as the picture you keep: this view is its honest preview (nomi, Nov 1, 2026).
+    drawPainting(c, month, days, name, Math.round(c.clientWidth * (window.devicePixelRatio || 1)), true)
   }, [month, days, name])
   if (!month) return null
   // With its year ("October 2026, so far"), so an old month reads as the one it is.

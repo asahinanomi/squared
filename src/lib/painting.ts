@@ -68,8 +68,9 @@ function colours(month: string, days: Days): (Rgb | null)[] {
   })
 }
 
-/** Draws the framed, signed painting into a square canvas of `px` pixels. `label`: the picture you keep carries
- *  "squared.today" on a deeper mat under the painting, like a gallery's label (nomi, Oct 31, 2026). */
+/** Draws the framed, signed painting into a square canvas of `px` pixels. `label`: the picture you keep, and its
+ *  preview (the big painting view), carry squared's mark and "squared.today" on a deeper mat under the painting, like a
+ *  gallery's label (nomi, Oct 31, 2026); the small ones never do. */
 export async function drawPainting(
   c: HTMLCanvasElement,
   month: string,
