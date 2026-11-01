@@ -53,6 +53,17 @@ export default function App() {
   const act = useDayActions(date, acc, why, setWhy)
   const lists = useMatters(userId, screen)
   const layoutD = useTodayD(session)
+  // Paintings aren't kept any more, every one hangs by itself (nomi, Nov 1, 2026): the old list of kept paintings
+  // leaves the account (and this device's demo), once.
+  useEffect(() => {
+    try {
+      localStorage.removeItem('squared.keptPaintings.demo')
+    } catch {
+      /* nothing to clear */
+    }
+    if (supabase && session?.user.user_metadata?.kept_paintings != null)
+      supabase.auth.updateUser({ data: { kept_paintings: null } }).catch(() => undefined)
+  }, [session])
   const painting = usePaintingArrival(acc.days, !!userId && acc.checking)
 
   // Notes load a month at a time: the day you're on.
