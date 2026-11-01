@@ -158,14 +158,14 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const openSettings = () => setScreenValue('settings')
   // my days (the menu): a life as a pie, all your squares, what matters, your framed days and paintings.
   const openMyDays = () => setScreenValue('mydays')
-  // The list from a page that isn't a view (my days, settings, about…): on today, and its switch's squares go to the
-  // month.
-  const openList = () => {
+  // The list from a page that isn't a view (my days, settings, about…): on today (or on a day asked for, at the tab
+  // asked for: a year on paintings opens its months), and its switch's squares go to the month.
+  const openList = (focus = todayIso(), res: Resolution = 'days') => {
     setListFrom('month')
     setListOnly([])
-    setListRes('days')
+    setListRes(res)
     setListZoomed(false)
-    setListFocus(todayIso())
+    setListFocus(focus)
     setScreen('list')
   }
   // The pie lives in my days now: its back arrow returns there; its squares and list switch go to a life.

@@ -102,7 +102,15 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, layoutD, 
         }}
       />
     )
-  if (screen === 'paintings') return <Paintings days={days} name={painter} onOpen={openPainting} />
+  if (screen === 'paintings')
+    return (
+      <Paintings
+        days={days}
+        name={painter}
+        onOpen={openPainting}
+        onYear={(y) => nav.openList(`${y}-01-01`, 'months')}
+      />
+    )
   if (screen === 'mydays')
     return (
       <MyDays

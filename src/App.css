@@ -4134,6 +4134,21 @@ button.settings-row:active {
   font-weight: 600;
   letter-spacing: -0.005em;
 }
+.gallery-year-name button {
+  position: relative;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-decoration: underline dotted #b9b9b2;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+.gallery-year-name button::before {
+  content: '';
+  position: absolute;
+  inset: -12px -10px; /* a finger's reach */
+}
 .gallery-wall {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

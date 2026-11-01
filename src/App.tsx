@@ -195,7 +195,7 @@ export default function App() {
             <PageBar
               onToday={nav.goToday}
               onSquares={() => nav.goMonth()}
-              onList={nav.openList}
+              onList={() => nav.openList()}
               onMyDays={nav.openMyDays}
               atMyDays={screen === 'mydays'}
             />
