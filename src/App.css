@@ -4116,25 +4116,47 @@ button.settings-row:active {
 .painting-keep:disabled {
   opacity: 0.5;
 }
-
-/* my paintings (in settings): the kept paintings, one to a row, as big as the page. No labels: each is signed. */
-.gallery-wall {
-  margin-top: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
+/* A kept painting can come off the wall here, quietly, under its download. */
+.painting-down {
+  display: block;
+  margin: 14px auto 0;
+  padding: 6px;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: underline dotted #c9c9c2;
+  text-underline-offset: 4px;
 }
-.gallery-wall .swipe {
-  border-radius: 0; /* a painting keeps its square corners */
+
+/* paintings (my days): a gallery wall, three to a row, grouped by year under its name (16px, as every month's and
+   year's name); each painting with a small caption, as on the shelf. */
+.gallery-year {
+  margin-top: 24px;
+}
+.gallery-year-name {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.gallery-wall {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px 14px;
 }
 .gallery-item {
-  display: block;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  text-align: left;
+  font-size: 12px;
+  color: var(--ink-soft);
 }
 .gallery-item canvas {
   width: 100%;
   aspect-ratio: 1;
   display: block;
+  filter: drop-shadow(0 3px 6px rgba(20, 20, 19, 0.1));
 }
 .gallery-empty {
   margin: 20px 0 0;

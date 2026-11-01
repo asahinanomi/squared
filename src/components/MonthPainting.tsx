@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { Days } from '../lib/days'
 import { save } from '../lib/exportData'
 import { drawPainting, inProgress, monthName, paintingImage } from '../lib/painting'
+import { ConfirmDialog } from './ConfirmDialog'
 import { Sheet } from './Sheet'
 
 type Props = {
@@ -17,12 +18,15 @@ type Props = {
   onKeep?: (month: string) => void
   /** Already kept: the button only downloads it again. */
   kept?: boolean
+  /** Take a kept painting off the wall (asks first). */
+  onRemove?: (month: string) => void
 }
 
 // A new month: the last one, shown once as a finished painting (see lib/painting), framed and signed. Any finished
 // month opens it again from its picture icon; kept ones hang in paintings (my days); this month shows "so far", unsigned. No counts: it's a painting, not a score. "keep this painting" saves it as a picture (on a phone, the share sheet: Save to Photos, or send it).
-export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kept }: Props) {
+export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kept, onRemove }: Props) {
   const [busy, setBusy] = useState(false)
+  const [asking, setAsking] = useState(false)
   const art = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
     const c = art.current
@@ -78,7 +82,26 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kep
             </svg>
           </button>
         )}
+        {/* Off the wall: here, where you look at it, rather than a swipe on the wall (nomi, Nov 1, 2026). */}
+        {kept && onRemove && (
+          <button className="painting-down" onClick={() => setAsking(true)}>
+            take it down
+          </button>
+        )}
       </div>
+      {asking && (
+        <ConfirmDialog
+          title="Take this painting down?"
+          body="It comes off your wall. You can keep it again from its picture icon."
+          confirm="take down"
+          onConfirm={() => {
+            setAsking(false)
+            onRemove?.(month)
+            onClose()
+          }}
+          onCancel={() => setAsking(false)}
+        />
+      )}
     </Sheet>
   )
 }

@@ -201,6 +201,7 @@ export default function App() {
               onClose={painting.closePainting}
               onKeep={wall.keep}
               kept={!!painting.paintedMonth && wall.kept.includes(painting.paintedMonth)}
+              onRemove={wall.remove}
             />
           )}
           {!demo && <SyncStatus />}

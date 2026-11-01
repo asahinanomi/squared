@@ -104,8 +104,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, lay
         }}
       />
     )
-  if (screen === 'paintings')
-    return <Paintings kept={wall.kept} days={days} name={painter} onRemove={wall.remove} onOpen={openPainting} />
+  if (screen === 'paintings') return <Paintings kept={wall.kept} days={days} name={painter} onOpen={openPainting} />
   if (screen === 'mydays')
     return (
       <MyDays
