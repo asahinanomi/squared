@@ -101,8 +101,12 @@ export function WhyBubble({
       <div className="why-catcher" onClick={outside} />
       <div
         className="why"
-        onPointerDownCapture={() => (inside.current = true)}
-        onPointerUp={() => (inside.current = false)}
+        // A tap inside the bubble: the keyboard may let go only as the tap ends (phones move focus on the click), so
+        // the mark lasts a moment, never just until the finger lifts.
+        onPointerDownCapture={() => {
+          inside.current = true
+          setTimeout(() => (inside.current = false), 700)
+        }}
       >
         <label className="why-label" htmlFor="why">
           {pinned ? 'what do you want to remember?' : now ? 'this moment…' : 'because…'}
@@ -118,7 +122,7 @@ export function WhyBubble({
           onChange={(e) => setText(e.target.value)}
           // A beat later, so a tap outside lands first and nothing is kept twice.
           onBlur={() => {
-            if (inside.current) return void (inside.current = false)
+            if (inside.current) return
             setTimeout(save, 150)
           }}
         />
