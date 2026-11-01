@@ -111,7 +111,7 @@ export default function App() {
   const oneScreen = ['month', 'life', 'pie', 'list'].includes(screen)
   // Every page but the time views (their own bar) and the day (its own) gets the bar with "today" in the centre.
   const pageBar = !oneScreen && screen !== 'today'
-  const withPainting: Screen[] = ['today', 'month', 'life', 'list', 'paintings', 'mydays']
+  const withPainting: Screen[] = ['today', 'month', 'life', 'list', 'paintings', 'mydays', 'framed']
 
   return (
     <ViewSwitch.Provider
