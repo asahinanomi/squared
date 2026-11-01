@@ -1,6 +1,6 @@
 # squared's heroes
 
-_last updated Oct 31, 2026_
+_last updated Nov 1, 2026_
 
 What squared is best at. Come back to this whenever squared grows: every new thing should make a hero stronger, or it doesn't belong.
 
@@ -33,6 +33,11 @@ Before adding anything, ask: which hero does this serve?
 If it serves none, it goes (stats, counts, extra rows). If it competes with a hero, it goes.
 
 ## Decided so far
+
+- **squared always opens on now** (Nov 1, 2026, nomi). Not "the latest on top" everywhere, but two kinds of order:
+  - **Things you collect** (paintings, framed days, a day's moments, tags): newest on top. You browse them, and the latest matters most.
+  - **Time itself** (the month, a life, the list, the months): reads forward, like a calendar or a book, and opens on today. Calendars read down; the life view needs the days ahead below today (the unread pages); the squares and the list are one switch, so they run the same way.
+  Check anything new against it: a collection newest first, a timeline forward, and every view landing on now.
 
 - **The paint is gouache, dabbed:** soft round dabs with bristle dots, opaque, matte, settling into one flat coat. Not watercolour (colours would blur into each other). **Never change the brush** without nomi asking.
 - **The day's word** ("worth it", "regret", "a blur") signs the lower right corner, like an artist's signature, in a deeper shade of its paint (dark, not white).
