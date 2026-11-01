@@ -14,9 +14,9 @@ const DEMO: Days = Object.fromEntries(
   ]),
 )
 
-// Finding and keeping a painting, acted out for the help, with the app's own pieces (a month's name with its dotted
-// underline, the painting, its "keep this painting" pill). A fingertip taps "September 2025", the painting opens; it taps "keep this painting", which becomes "download", as once kept; it holds, and
-// starts again. With reduce motion: the month's name and its painting, open, still.
+// Finding a painting, acted out for the help, with the app's own pieces (a month's name with its dotted underline, the
+// painting, its "download" pill). A fingertip taps "September 2025", the painting opens; it taps "download"; it holds,
+// and starts again. With reduce motion: the month's name and its painting, open, still.
 export function PaintingDemo() {
   const still = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
   const [step, setStep] = useState<'list' | 'find' | 'open' | 'tap' | 'kept'>(still ? 'open' : 'list')
@@ -49,7 +49,7 @@ export function PaintingDemo() {
       <span className={'painting-demo-open' + (open ? ' is-open' : '')}>
         <PaintingThumb month={MONTH} days={DEMO} />
         <span className="pill painting-keep">
-          {step === 'kept' ? 'download' : 'keep this painting'}
+          download
           <svg
             viewBox="0 0 24 24"
             width="12"

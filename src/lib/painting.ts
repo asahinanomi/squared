@@ -224,3 +224,25 @@ export async function paintingImage(month: string, days: Days, name: string): Pr
   await drawPainting(c, month, days, name, 1080, true)
   return new Promise((ok) => c.toBlob((b) => ok(b!), 'image/png'))
 }
+
+/** Every painting there is: each month and year with a painted day (this one "so far"), the wall's order: the newest
+ *  year first, each year's own painting first, then its months, newest first. Nothing to keep or take down: the past
+ *  is painted, so every finished month and year hangs by itself (nomi, Nov 1, 2026). */
+export function allPaintings(days: Days): string[] {
+  const today = todayIso()
+  const months = [
+    ...new Set(
+      Object.keys(days)
+        .filter((d) => d <= today)
+        .map((d) => d.slice(0, 7)),
+    ),
+  ]
+  const years = [...new Set(months.map((m) => m.slice(0, 4)))].sort().reverse()
+  return years.flatMap((y) => [
+    y,
+    ...months
+      .filter((m) => m.startsWith(y))
+      .sort()
+      .reverse(),
+  ])
+}

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import type { Days } from '../lib/days'
 import { save } from '../lib/exportData'
 import { drawPainting, inProgress, monthName, paintingImage } from '../lib/painting'
-import { ConfirmDialog } from './ConfirmDialog'
 import { Sheet } from './Sheet'
 
 type Props = {
@@ -14,19 +13,14 @@ type Props = {
   /** The signature: the painter's first name. */
   name: string
   onClose: () => void
-  /** Kept: it hangs in paintings (my days). */
-  onKeep?: (month: string) => void
-  /** Already kept: the button only downloads it again. */
-  kept?: boolean
-  /** Take a kept painting off the wall (asks first). */
-  onRemove?: (month: string) => void
 }
 
 // A new month: the last one, shown once as a finished painting (see lib/painting), framed and signed. Any finished
-// month opens it again from its picture icon; kept ones hang in paintings (my days); this month shows "so far", unsigned. No counts: it's a painting, not a score. "keep this painting" saves it as a picture (on a phone, the share sheet: Save to Photos, or send it).
-export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kept, onRemove }: Props) {
+// month opens it again from its picture icon, and every one hangs in paintings (my days); this month shows "so far",
+// unsigned. No counts: it's a painting, not a score. "download" saves a finished one as a picture (on a phone, the share
+// sheet: Save to Photos, or send it). Nothing to keep or take down (nomi, Nov 1, 2026).
+export function MonthPainting({ month, days, name, onClose, arrived }: Props) {
   const [busy, setBusy] = useState(false)
-  const [asking, setAsking] = useState(false)
   const art = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
     const c = art.current
@@ -38,9 +32,8 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kep
   // With its year ("October 2026, so far"), so an old month reads as the one it is.
   const named = month.length === 4 ? month : `${monthName(month)} ${month.slice(0, 4)}`
   const title = `${named}, ${inProgress(month) ? 'so far' : 'painted'}`
-  const keep = async () => {
+  const download = async () => {
     setBusy(true)
-    if (!kept) onKeep?.(month)
     try {
       const blob = await paintingImage(month, days, name)
       const file = new File([blob], `squared-${month}.png`, { type: 'image/png' })
@@ -63,10 +56,10 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kep
         <p className="painting-title">{title}</p>
         <canvas ref={art} className="painting-art" role="img" aria-label={title} />
         {inProgress(month) ? (
-          <p className="painting-later">Yours to keep once {month.length === 4 ? 'the year' : 'the month'} ends.</p>
+          <p className="painting-later">Yours to download once {month.length === 4 ? 'the year' : 'the month'} ends.</p>
         ) : (
-          <button className="pill painting-keep" onClick={keep} disabled={busy}>
-            {kept ? 'download' : 'keep this painting'}
+          <button className="pill painting-keep" onClick={download} disabled={busy}>
+            download
             <svg
               viewBox="0 0 24 24"
               width="20"
@@ -82,26 +75,7 @@ export function MonthPainting({ month, days, name, onClose, arrived, onKeep, kep
             </svg>
           </button>
         )}
-        {/* Off the wall: here, where you look at it, rather than a swipe on the wall (nomi, Nov 1, 2026). */}
-        {kept && onRemove && (
-          <button className="painting-down" onClick={() => setAsking(true)}>
-            take it down
-          </button>
-        )}
       </div>
-      {asking && (
-        <ConfirmDialog
-          title="Take this painting down?"
-          body="It comes off your wall. You can keep it again from its picture icon."
-          confirm="take down"
-          onConfirm={() => {
-            setAsking(false)
-            onRemove?.(month)
-            onClose()
-          }}
-          onCancel={() => setAsking(false)}
-        />
-      )}
     </Sheet>
   )
 }

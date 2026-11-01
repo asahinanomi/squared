@@ -27,7 +27,6 @@ import { WhatMatters } from './screens/WhatMatters'
 import { demo, endWelcomeTest, introSeen, markIntroSeen, tryWelcome } from './state/app'
 import type { Account } from './state/useAccount'
 import type { useDayActions } from './state/useDayActions'
-import type { useKept } from './state/useKept'
 import type { useMatters } from './state/useMatters'
 import type { Navigation } from './state/useNavigation'
 
@@ -36,7 +35,6 @@ export type ScreensProps = {
   acc: Account
   act: ReturnType<typeof useDayActions>
   lists: ReturnType<typeof useMatters>
-  wall: ReturnType<typeof useKept>
   openPainting: (p: string) => void
   painter: string
   /** Today's layout D, on trial (?today=d). */
@@ -57,7 +55,7 @@ export type ScreensProps = {
 
 // Which screen shows, and what each one is given. Every screen gets what it needs from the app's pieces (the
 // navigation, the account's data, the day's actions, what matters, paintings); nothing here keeps state.
-export function Screens({ nav, acc, act, lists, wall, openPainting, painter, layoutD, onDeleted, ui }: ScreensProps) {
+export function Screens({ nav, acc, act, lists, openPainting, painter, layoutD, onDeleted, ui }: ScreensProps) {
   const { screen, setScreenValue, date, lifeRes, setLifeRes, listRes, listMid } = nav
   const { days, notes, profile } = acc
 
@@ -104,7 +102,7 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, lay
         }}
       />
     )
-  if (screen === 'paintings') return <Paintings kept={wall.kept} days={days} name={painter} onOpen={openPainting} />
+  if (screen === 'paintings') return <Paintings days={days} name={painter} onOpen={openPainting} />
   if (screen === 'mydays')
     return (
       <MyDays
@@ -115,7 +113,6 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, lay
         matters={lists.matters.meaningful.map((e) => e.text.trim()).filter(Boolean)}
         onDay={(iso) => nav.openDay(iso)}
         onMonth={() => nav.goMonth()}
-        kept={wall.kept}
         onSetUp={() => nav.askSquares('mydays')}
         onPainting={openPainting}
         onSquares={nav.goLifeDays}

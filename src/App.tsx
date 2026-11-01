@@ -20,7 +20,6 @@ import { useAccount } from './state/useAccount'
 import { useAuth } from './state/useAuth'
 import { useBrowserHistory } from './state/useBrowserHistory'
 import { useDayActions } from './state/useDayActions'
-import { useKept } from './state/useKept'
 import { useTodayD } from './state/useTodayD'
 import { useLanding } from './state/useLanding'
 import { useLock } from './state/useLock'
@@ -53,7 +52,6 @@ export default function App() {
   const { screen, date } = nav
   const act = useDayActions(date, acc, why, setWhy)
   const lists = useMatters(userId, screen)
-  const wall = useKept(session)
   const layoutD = useTodayD(session)
   const painting = usePaintingArrival(acc.days, !!userId && acc.checking)
 
@@ -148,7 +146,6 @@ export default function App() {
               acc={acc}
               act={act}
               lists={lists}
-              wall={wall}
               openPainting={painting.openPainting}
               painter={painter}
               layoutD={layoutD}
@@ -199,9 +196,6 @@ export default function App() {
               days={acc.days}
               name={painter}
               onClose={painting.closePainting}
-              onKeep={wall.keep}
-              kept={!!painting.paintedMonth && wall.kept.includes(painting.paintedMonth)}
-              onRemove={wall.remove}
             />
           )}
           {!demo && <SyncStatus />}

@@ -3,7 +3,7 @@ import { FrameDemo } from '../components/FrameDemo'
 import { PaintingDemo } from '../components/PaintingDemo'
 import { Sheet } from '../components/Sheet'
 import { PaintingThumb } from '../components/PaintingThumb'
-import { monthName } from '../lib/painting'
+import { allPaintings, inProgress, monthName } from '../lib/painting'
 import { WhereCard } from '../components/WhereCard'
 import { plainDate, todayIso } from '../lib/dates'
 import { frameOf } from '../lib/paints'
@@ -20,8 +20,6 @@ type Props = {
   loadNotes: (iso: string) => void
   /** Your "mattered" lines (empty until written): the row shows the first few. */
   matters: string[]
-  /** The paintings you kept (none yet: the row says how to keep one). */
-  kept: string[]
   /** A day of this week, to open. */
   onDay: (iso: string) => void
   /** This month, in squares. */
@@ -55,8 +53,8 @@ const oneOf = (lines: string[], key: string) => {
 }
 
 // my days (the menu): looking back, every door into your past in one place, never a dashboard of numbers. A life as one
-// bar (days lived, days ahead; it opens the list), this month and year so far as paintings, then what matters, a life
-// in squares, in slices, the days you framed and the paintings you kept. Home stays today, now. Each row is named
+// bar (days lived, days ahead; it opens the list), what matters, your paintings, a life
+// in squares, in slices, the days you framed and your paintings. Home stays today, now. Each row is named
 // after the page it opens; the page is "my days", so no row says "my".
 // There's no onboarding: what isn't set up yet waits here, an empty slot (a dashed edge on paper, as for every
 // empty slot) that says "set up now". The life card shows a ghost of its bar, so you can see what's coming.
@@ -66,7 +64,6 @@ export function MyDays({
   notes,
   loadNotes,
   matters,
-  kept,
   onDay,
   onMonth,
   onSetUp,
@@ -77,11 +74,6 @@ export function MyDays({
   onPaintings,
 }: Props) {
   const today = todayIso()
-  const month = today.slice(0, 7)
-  const year = today.slice(0, 4)
-  const count = (p: string) => Object.keys(days).filter((d) => d.startsWith(p) && d <= today).length
-  const hasMonth = count(month) > 0
-  const hasYear = count(year) > 0
   // One of the days you framed, a different one each visit, with its note ("to remember", else the latest).
   const framedDays = Object.keys(days).filter((d) => days[d].framed && d <= today)
   const kept1 = useMemo(
@@ -94,17 +86,11 @@ export function MyDays({
   const toRemember = keptNotes.filter((n) => n.pinned)
   const latest = toRemember.length ? null : keptNotes.at(-1)
   const [help, setHelp] = useState<'framed' | 'paintings' | null>(null)
-  // The shelf: this month and this year so far, then the paintings you kept, newest first.
-  const short = (p: string) => (p.length === 4 ? p : `${monthName(p).slice(0, 3)} ${p.slice(0, 4)}`)
-  const shelf: [string, string][] = [
-    ...(hasMonth ? [[month, `${short(month).slice(0, 3)}, so far`] as [string, string]] : []),
-    ...(hasYear ? [[year, `${year}, so far`] as [string, string]] : []),
-    ...[...kept]
-      .filter((p) => p !== month && p !== year)
-      .sort()
-      .reverse()
-      .map((p): [string, string] => [p, short(p)]),
-  ]
+  // The shelf: every painting, in the wall's order (this year so far and its months first, newest first).
+  const shelf: [string, string][] = allPaintings(days).map((p) => [
+    p,
+    (p.length === 4 ? p : monthName(p).slice(0, 3)) + (inProgress(p) ? ', so far' : ''),
+  ])
   // Picked once per visit (and again only if the list itself changes, say once it has loaded).
   const line = useMemo(() => (matters.length ? oneOf(matters, 'squared.mattersShown') : ''), [matters.join('\n')]) // eslint-disable-line react-hooks/exhaustive-deps
   // Each row opens its page; `empty` is an empty slot (dashed). Not set up yet: its sub says what it is, and "set up
@@ -147,17 +133,17 @@ export function MyDays({
         <div className="settings-rows">{row('what matters', 'what makes a day worth it', onMatters, 'set up')}</div>
       )}
       {/* Your paintings, a shelf (nomi, Oct 31, 2026: seeing your life is a hero, so they sit above the framed day, and
-          small, so they take a strip, not half the page): this month and this year so far, then every painting you
-          kept, newest first, side by side; more than fit, the shelf scrolls sideways. Each opens its painting; the title
-          opens all you kept. Nothing painted yet: the empty slot, with how a painting is made. */}
-      {!hasMonth && !hasYear && !kept.length && (
+          small, so they take a strip, not half the page): every painting, newest first, side by side; more than fit, the
+          shelf scrolls sideways. Each opens its painting; the title opens them all. Nothing painted yet: the empty slot,
+          with how a painting is made. */}
+      {!shelf.length && (
         <div className="settings-rows">
           {row('paintings', 'none yet · how a painting is made', () => setHelp('paintings'), 'none')}
         </div>
       )}
       {shelf.length > 0 && (
         <section className="home-card my-days-paintings">
-          <button className="my-days-card-head" onClick={kept.length ? onPaintings : () => setHelp('paintings')}>
+          <button className="my-days-card-head" onClick={onPaintings}>
             <span className="matters-label">you painted these</span>
             <Chevron dir="right" />
           </button>
@@ -205,7 +191,7 @@ export function MyDays({
           {row('framed days', 'none yet · how to frame a day', () => setHelp('framed'), 'none')}
         </div>
       )}
-      {/* Help, only when asked for: how a day is framed, how a painting is kept. */}
+      {/* Help, only when asked for: how a day is framed, how a painting is made. */}
       <Sheet open={help === 'framed'} onClose={() => setHelp(null)}>
         {/* The title is the purpose too. Two columns: the move acted out (the day screen's real framing), and beside it
             a few words. */}
@@ -225,7 +211,7 @@ export function MyDays({
           <PaintingDemo />
           <div className="help-notes">
             <p>Tap a month’s or a year’s name, with its little picture, to open its painting.</p>
-            <p>When it ends, keep it.</p>
+            <p>When it ends, it hangs in my days → paintings, yours to download.</p>
           </div>
         </div>
       </Sheet>
