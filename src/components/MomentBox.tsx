@@ -8,8 +8,9 @@ type Props = {
   onAdd: (text: string, color?: Paint) => void
 }
 
-// The day starts with a moment: one box, no button (nomi, Oct 31, 2026: the keyboard's ✓, Enter or a colour keeps
-// it; the box reads as a place to write, never a second main action). It grows as you write. The moments are listed at the foot of the day, newest first, so a kept moment is sent like mail: the box
+// The day starts with a moment: one box, no button (nomi, Oct 31, 2026: leaving the box, a colour or Cmd/Ctrl+Enter
+// keeps it; return makes a new line; the box reads as a place to write, never a second main action). It grows as you
+// write. The moments are listed at the foot of the day, newest first, so a kept moment is sent like mail: the box
 // itself lifts off the page, shrinks along an arc into the top of the list (or toward the screen's foot, if the list
 // is below it), and the card it lands on nudges as it arrives.
 export function MomentBox({ placeholder, onAdd }: Props) {
@@ -104,7 +105,6 @@ export function MomentBox({ placeholder, onAdd }: Props) {
   // keyboard only closes it, and with no + there was no other way without a colour). Not while a colour is being kept,
   // nor when squared itself puts the keyboard away, nor when the app is only being left.
   const leaving = useRef(false)
-  const shifted = useRef(false)
   const onBlur = () => {
     if (leaving.current || picked || document.visibilityState === 'hidden') return
     if (text.trim()) add()
@@ -116,16 +116,11 @@ export function MomentBox({ placeholder, onAdd }: Props) {
           ref={box}
           rows={1}
           value={text}
-          onChange={(e) => {
-            const v = e.target.value
-            // A new line typed at the end keeps the moment: some Android keyboards send Enter mid-word, in a way the
-            // key check below misses (shift+Enter on a computer still makes a new line).
-            if (!shifted.current && v === text + '\n') return add(undefined, text)
-            setText(v)
-          }}
+          onChange={(e) => setText(e.target.value)}
+          // Return makes a new line, as in "because…" and everywhere else (nomi, Nov 1, 2026). A moment is kept by
+          // leaving the box (the ✓ above a phone's keyboard, a tap or click outside), by a colour, or Cmd/Ctrl+Enter.
           onKeyDown={(e) => {
-            shifted.current = e.shiftKey
-            if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+            if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && !e.nativeEvent.isComposing) {
               e.preventDefault()
               add()
             }
@@ -133,7 +128,7 @@ export function MomentBox({ placeholder, onAdd }: Props) {
           onBlur={onBlur}
           placeholder={placeholder}
           aria-label="a moment"
-          enterKeyHint="done"
+          enterKeyHint="enter"
           maxLength={10000}
         />
         {/* A moment can carry its own colour (optional), once there's something written: tapping one adds it. */}
