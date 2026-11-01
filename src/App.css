@@ -466,8 +466,9 @@
     font-size: 24px;
   }
 }
-/* A kept moment, sent like mail: the box itself (a copy, in script) lifts off the page and flies into the list. */
-.moment-box.is-flying {
+/* A kept moment, sent like mail (lib/fly.ts): a copy of the box or the bubble it was written in lifts off the page and
+   flies into the list. On the body, so its own rules (the bubble is placed relatively) never place it. */
+body > .is-flying {
   position: absolute;
   z-index: 25;
   margin: 0;
@@ -476,12 +477,12 @@
 }
 /* The flying copy stays exactly as the box looked: nothing replays (no fade-in, no breath); a chosen colour at its
    fullest. */
-.moment-box.is-flying,
-.moment-box.is-flying * {
+.is-flying,
+.is-flying * {
   animation: none !important;
   transition: none !important;
 }
-.moment-box.is-flying .moment-colour-pick.is-on .moment-colour-bar {
+.is-flying .moment-colour-pick.is-on .moment-colour-bar {
   height: 14px;
   margin: -2px 0;
   border-radius: 7px;

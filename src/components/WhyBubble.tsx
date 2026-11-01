@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { Paint } from '../lib/paints'
 import { MomentColour } from './MomentColour'
+import { flyAway } from '../lib/fly'
 import { ConfirmDialog } from './ConfirmDialog'
 
 type Props = {
@@ -74,11 +75,13 @@ export function WhyBubble({
   const value = text.trim()
 
   const kept = useRef(false)
+  const bubble = useRef<HTMLDivElement>(null)
   const save = () => {
     if (kept.current) return
     if (!value) return editing ? undefined : onCancel()
     if (editing && value === (original ?? initial).trim()) return onCancel()
     kept.current = true
+    flyAway(bubble.current) // sent like mail, as from the moment box
     onSave(value)
   }
 
@@ -100,6 +103,7 @@ export function WhyBubble({
     <>
       <div className="why-catcher" onClick={outside} />
       <div
+        ref={bubble}
         className="why"
         // A tap inside the bubble: the keyboard may let go only as the tap ends (phones move focus on the click), so
         // the mark lasts a moment, never just until the finger lifts.
@@ -140,7 +144,8 @@ export function WhyBubble({
               }
               setPicked(c)
               setTimeout(() => {
-                save() // leaving keeps your words too
+                save() // leaving keeps your words too (and flies them)
+                if (!kept.current) flyAway(bubble.current) // only the colour changed: it flies all the same
                 onPaint(c)
               }, 1100)
             }}
