@@ -125,7 +125,16 @@ export function Screens({ nav, acc, act, lists, wall, openPainting, painter, lay
       />
     )
   if (screen === 'framed')
-    return <Framed days={days} notes={notes} loadNotes={acc.loadNotes} onDay={(iso) => nav.openDay(iso)} />
+    return (
+      <Framed
+        days={days}
+        notes={notes}
+        loadNotes={acc.loadNotes}
+        onDay={(iso) => nav.openDay(iso)}
+        born={profile?.born}
+        onPainting={openPainting}
+      />
+    )
   if (screen === 'idea') return <About onMatters={nav.openMatters} onLegal={(page) => nav.openLegal(page, 'idea')} />
   if (screen === 'setup')
     return (

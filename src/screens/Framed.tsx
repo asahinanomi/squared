@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Notes } from '../lib/notes'
-import { DayCard } from './DaysList'
+import { DayCard, MonthHead } from './DaysList'
 
 type Props = {
   days: Days
@@ -10,31 +10,42 @@ type Props = {
   /** Notes load a month at a time: each framed day's month. */
   loadNotes: (iso: string) => void
   onDay: (iso: string) => void
+  /** Birth date: the cards name your birthdays, as in the list. */
+  born?: string
+  /** A month's name opens its painting. */
+  onPainting?: (period: string) => void
 }
 
-// framed days (in my days): the days you framed, any colour, newest first (squared is about now, so the latest is
-// always on top; nomi, Nov 1, 2026), grouped by year under its name, laid out as the list filtered to "framed" (its own
-// day cards and headings, so the two never drift apart). Tap one to open the day.
-export function Framed({ days, notes, loadNotes, onDay }: Props) {
+// framed days (in my days): the days you framed, any colour, newest first (squared is about now; nomi, Nov 1, 2026),
+// exactly as the list filtered to "framed": the same month headings (opening their paintings) and the same day cards,
+// so the two never drift apart. Tap one to open the day.
+export function Framed({ days, notes, loadNotes, onDay, born, onPainting }: Props) {
   const framed = Object.keys(days)
     .filter((iso) => days[iso].framed)
     .sort()
     .reverse()
-  const years = [...new Set(framed.map((iso) => iso.slice(0, 4)))]
+  const months = [...new Set(framed.map((iso) => `${iso.slice(0, 7)}-01`))]
   useEffect(() => framed.forEach(loadNotes), [framed.join()]) // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <main className="settings framed">
       <h1 className="settings-title">framed days</h1>
       {framed.length ? (
-        years.map((y) => (
-          <section key={y} className="days-month is-cards">
-            <div className="ladder-label month-label">{y}</div>
+        months.map((m) => (
+          <section key={m} className="days-month is-cards">
+            <MonthHead month={m} days={days} onPainting={onPainting} />
             <ol className="month-list day-cards">
               {framed
-                .filter((iso) => iso.startsWith(y))
+                .filter((iso) => iso.startsWith(m.slice(0, 7)))
                 .map((iso) => (
                   <li key={iso}>
-                    <DayCard iso={iso} day={days[iso]} notes={notes[iso]} today={todayIso()} onPick={onDay} />
+                    <DayCard
+                      iso={iso}
+                      day={days[iso]}
+                      notes={notes[iso]}
+                      today={todayIso()}
+                      born={born}
+                      onPick={onDay}
+                    />
                   </li>
                 ))}
             </ol>

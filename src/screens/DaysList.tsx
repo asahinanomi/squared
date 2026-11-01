@@ -82,6 +82,29 @@ function FilterMark({ id }: { id: Only | null }) {
   return <span className="filter-mark" style={{ background: paintHex(id as Paint) }} aria-hidden="true" />
 }
 
+/** A month's heading over its day cards (the list, and framed days): its name, which opens its painting (underlined,
+ *  with the picture icon) once it has squares, as in the month view. */
+export function MonthHead({
+  month,
+  days,
+  onPainting,
+}: {
+  month: string
+  days: Days
+  onPainting?: (p: string) => void
+}) {
+  const has = Object.keys(days).some((iso) => iso.startsWith(month.slice(0, 7)))
+  return (
+    <div className="ladder-label month-label">
+      {onPainting && has ? (
+        <PaintingButton period={month.slice(0, 7)} label={monthTitle(month)} onOpen={onPainting} />
+      ) : (
+        monthTitle(month)
+      )}
+    </div>
+  )
+}
+
 /** About what two lines of a card's note hold on a phone. */
 const PREVIEW_CHARS = 80
 /** Months added at a time as you scroll toward either end. */
@@ -467,14 +490,7 @@ export function DaysList({
           )
           return (
             <section key={m} className="days-month is-cards" data-key={m} hidden={!list.length}>
-              <div className="ladder-label month-label">
-                {/* Its name opens its painting, as in the month view. */}
-                {onPainting && Object.keys(days).some((iso) => iso.startsWith(m.slice(0, 7))) ? (
-                  <PaintingButton period={m.slice(0, 7)} label={monthTitle(m)} onOpen={onPainting} />
-                ) : (
-                  monthTitle(m)
-                )}
-              </div>
+              <MonthHead month={m} days={days} onPainting={onPainting} />
               <ol className="month-list day-cards">
                 {groups(list).map((g) => {
                   if (typeof g === 'string') return card(g)
