@@ -4128,6 +4128,13 @@ button.settings-row:active {
 .gallery-year {
   margin-top: 24px;
 }
+/* The years · months tabs, as the list's, under the page's title at its left. */
+.gallery .seg {
+  margin: 16px 0 0;
+}
+.gallery-years {
+  margin-top: 24px;
+}
 .gallery-year-name {
   margin: 0 0 12px;
   font-size: 16px;
