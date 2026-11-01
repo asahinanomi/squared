@@ -8,9 +8,8 @@ type Props = {
   onAdd: (text: string, color?: Paint) => void
 }
 
-// The day starts with a moment: one box, no button (nomi, Oct 31, 2026: leaving the box, a colour or Cmd/Ctrl+Enter
-// keeps it; return makes a new line; the box reads as a place to write, never a second main action). It grows as you
-// write. The moments are listed at the foot of the day, newest first, so a kept moment is sent like mail: the box
+// The day starts with a moment: one box, no button, as in Notes (nomi, Nov 1, 2026): leaving it, or a colour, keeps
+// it; return makes a new line; the box reads as a place to write, never a second main action. It grows as you write. The moments are listed at the foot of the day, newest first, so a kept moment is sent like mail: the box
 // itself lifts off the page, shrinks along an arc into the top of the list (or toward the screen's foot, if the list
 // is below it), and the card it lands on nudges as it arrives.
 export function MomentBox({ placeholder, onAdd }: Props) {
@@ -105,7 +104,6 @@ export function MomentBox({ placeholder, onAdd }: Props) {
   // keyboard only closes it, and with no + there was no other way without a colour). Not while a colour is being kept,
   // nor when squared itself puts the keyboard away, nor when the app is only being left.
   const leaving = useRef(false)
-  const touch = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches
   const onBlur = () => {
     if (leaving.current || picked || document.visibilityState === 'hidden') return
     if (text.trim()) add()
@@ -118,35 +116,14 @@ export function MomentBox({ placeholder, onAdd }: Props) {
           rows={1}
           value={text}
           onChange={(e) => setText(e.target.value)}
-          // Return makes a new line, as in "because…" and everywhere else (nomi, Nov 1, 2026). A moment is kept by
-          // leaving the box (the ✓ above a phone's keyboard, a tap or click outside), by a colour, or Cmd/Ctrl+Enter.
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && !e.nativeEvent.isComposing) {
-              e.preventDefault()
-              add()
-            }
-          }}
+          // One rule for every box, as in Notes (nomi, Nov 1, 2026): return makes a new line; leaving the box (the ✓
+          // above a phone's keyboard, a tap or click anywhere else) keeps what you wrote, as does a colour.
           onBlur={onBlur}
           placeholder={placeholder}
           aria-label="a moment"
           enterKeyHint="enter"
           maxLength={10000}
         />
-        {/* On a computer, the + to keep it (nomi, Nov 1, 2026): there's no ✓ above a keyboard there, and "click outside"
-            is invisible. Muted while empty, ink once there are words. A phone keeps the quiet box. */}
-        {!touch && (
-          <button
-            className="moment-add"
-            // The box stays as it was (its focused outline) until it lifts, rather than flipping pale as + takes focus.
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => add()}
-            aria-label="Add this moment"
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-              <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-            </svg>
-          </button>
-        )}
         {/* A moment can carry its own colour (optional), once there's something written: tapping one adds it. */}
         {text.trim() && (
           <MomentColour

@@ -97,18 +97,22 @@ export function useDayActions(
     }
   }
 
+  // Change a note's pin or colour on its latest self (its words may have just been kept, as you left the bubble).
+  const patch = (note: Note, fields: Partial<Note>) =>
+    putNotes(note.date, (l) => l.map((n) => (n.id === note.id ? { ...n, ...fields } : n)))
+
   // Pin a note to the top of its day (or unpin it).
   const onPinNote = (note: Note) => {
     setWhy(null)
     const pinned = !note.pinned
-    swap(note.date, note.id, { ...note, pinned: pinned || undefined })
+    patch(note, { pinned: pinned || undefined })
     save({ k: 'note-pin', note, pinned })
   }
 
   // Paint a moment in its own colour (optional, any time), or take it away: the square keeps the day's answer.
   const onPaintNote = (note: Note, color: Paint | null) => {
     setWhy(null)
-    swap(note.date, note.id, { ...note, color: color ?? undefined })
+    patch(note, { color: color ?? undefined })
     save({ k: 'note-color', note, color })
   }
 

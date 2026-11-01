@@ -447,27 +447,6 @@
   line-height: 22px;
   color: var(--ink);
 }
-.moment-box:has(.moment-add) {
-  padding-right: 7px; /* the + sits close to the edge, as before */
-}
-/* The + on a computer: a soft grey circle; muted while empty, ink once there's something to keep. */
-.moment-add {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #efeee8;
-  color: var(--ink);
-  display: grid;
-  place-items: center;
-  transition: color 0.2s ease-out;
-}
-.moment-add:active {
-  transform: scale(0.94);
-}
-.moment-box:not(.has-text) .moment-add {
-  color: var(--muted);
-}
 .moment-box.has-text {
   flex-wrap: wrap;
 }
@@ -1407,17 +1386,6 @@ sup.ord {
   gap: 24px;
   margin-top: 14px;
 }
-.why-done {
-  padding: 9px 18px;
-  border-radius: 999px;
-  font-size: 16px;
-  background: var(--ink);
-  color: #fff;
-  min-width: 88px;
-}
-.why-done:disabled {
-  opacity: 0.35;
-}
 .why-pin {
   margin-left: auto;
   width: 44px;
@@ -1442,14 +1410,6 @@ sup.ord {
   font-size: 14px;
   line-height: 1.4;
   color: var(--ink-soft);
-}
-.why-skip {
-  position: relative;
-  z-index: 6;
-  pointer-events: none;
-  color: var(--ink-soft);
-  font-size: 16px;
-  margin: 18px 0 0;
 }
 @keyframes rise {
   from {

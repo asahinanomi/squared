@@ -87,17 +87,23 @@ export function WhyBubble({
     onDelete?.()
   }
 
-  // Outside tap: a new note keeps what's typed; an edit is left as it was.
+  // One rule for every box, as in Notes (nomi, Nov 1, 2026): leaving keeps what you wrote, a new moment or an edit
+  // alike: a tap outside, or closing the keyboard (the ✓ above a phone's). Not when the tap was inside the bubble (its
+  // colours, delete, pin): those close the keyboard too, and are their own actions.
   const outside = () => {
     if (confirming) return
-    if (editing) onCancel()
-    else save()
+    save()
   }
+  const inside = useRef(false)
 
   return (
     <>
       <div className="why-catcher" onClick={outside} />
-      <div className="why">
+      <div
+        className="why"
+        onPointerDownCapture={() => (inside.current = true)}
+        onPointerUp={() => (inside.current = false)}
+      >
         <label className="why-label" htmlFor="why">
           {pinned ? 'what do you want to remember?' : now ? 'this moment…' : 'because…'}
         </label>
@@ -110,11 +116,10 @@ export function WhyBubble({
           rows={1}
           value={text}
           onChange={(e) => setText(e.target.value)}
-          // A new moment: closing the keyboard (the ✓ above an iPhone's keyboard) keeps it, as in the moment box (nomi,
-          // Oct 31, 2026). A beat later, so a tap on done or outside lands first and nothing is kept twice. An edit
-          // stays as it was until "update".
+          // A beat later, so a tap outside lands first and nothing is kept twice.
           onBlur={() => {
-            if (!editing) setTimeout(save, 150)
+            if (inside.current) return void (inside.current = false)
+            setTimeout(save, 150)
           }}
         />
         {error && <p className="why-error">{error}</p>}
@@ -125,31 +130,37 @@ export function WhyBubble({
             adds={!!picked}
             onChange={(c) => {
               if (picked) return
-              if (!c) return onPaint(null) // cleared: nothing to breathe, it's done at once
+              if (!c) {
+                save() // leaving keeps your words too
+                return onPaint(null) // cleared: nothing to breathe, it's done at once
+              }
               setPicked(c)
-              setTimeout(() => onPaint(c), 1100)
+              setTimeout(() => {
+                save() // leaving keeps your words too
+                onPaint(c)
+              }, 1100)
             }}
           />
         )}
-        <div className="why-actions">
-          <button className="why-done" onClick={save} disabled={editing && !value}>
-            {editing ? 'update' : 'done'}
-          </button>
-          {editing && (
+        {editing && (
+          <div className="why-actions">
             <button className="why-delete" onClick={() => setConfirming(true)}>
               delete
             </button>
-          )}
-          {editing && onPin && (
-            <button
-              className="why-pin"
-              onClick={onPin}
-              aria-label={isPinned ? 'Unpin this moment' : 'Pin this moment to the top'}
-            >
-              <PinIcon off={isPinned} />
-            </button>
-          )}
-        </div>
+            {onPin && (
+              <button
+                className="why-pin"
+                onClick={() => {
+                  save() // leaving keeps your words too
+                  onPin()
+                }}
+                aria-label={isPinned ? 'Unpin this moment' : 'Pin this moment to the top'}
+              >
+                <PinIcon off={isPinned} />
+              </button>
+            )}
+          </div>
+        )}
       </div>
       {confirming && (
         <ConfirmDialog
@@ -160,8 +171,6 @@ export function WhyBubble({
           onCancel={() => setConfirming(false)}
         />
       )}
-      {/* New: the placeholder already says "or skip" (one message, nomi). Editing: how to leave it unchanged. */}
-      {editing && <p className="why-skip">tap anywhere to leave it as it was</p>}
     </>
   )
 }
