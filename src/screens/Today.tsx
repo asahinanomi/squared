@@ -531,7 +531,7 @@ export function Today(props: Props) {
 
       {/* Notes stay just as they were, below; kept mounted (hidden) while writing so opened notes stay open. */}
       <div className="tray-rest" hidden={!!why}>
-        {/* The day's moments, oldest first, to read back (they're added in the box at the top). */}
+        {/* The day's moments, newest first, to read back. */}
         {notes.length > 0 && (
           <NotesList
             key={date}

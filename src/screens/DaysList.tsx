@@ -171,10 +171,10 @@ export function DayCard({
           <p className="day-card-note">{withTags(latest.body)}</p>
         </div>
       )}
-      {/* Open, the notes take the card's full width, each its own block: its time, then its words. */}
+      {/* Open, the notes take the card's full width, each its own block (pinned first, then newest first). */}
       {open && (
         <div className="day-card-notes">
-          {[...notes.filter((n) => n.pinned), ...notes.filter((n) => !n.pinned)].map((n) => (
+          {[...notes.filter((n) => n.pinned), ...notes.filter((n) => !n.pinned).reverse()].map((n) => (
             <div key={n.id} className="day-card-entry">
               {n.pinned && (
                 <span className={'day-card-pin' + (day?.framed ? '' : ' is-plain')}>

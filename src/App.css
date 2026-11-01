@@ -3669,10 +3669,6 @@ button.settings-row:active {
   font-weight: 600;
   color: var(--ink);
 }
-/* Framed days: its cards a little under the page title. */
-.framed .day-cards {
-  margin-top: 18px;
-}
 /* Quiet days in a row, stacked: one card on top ("Oct 13 – 20 · 8 unpainted"), two peeking under it. */
 .day-stack {
   position: relative;
