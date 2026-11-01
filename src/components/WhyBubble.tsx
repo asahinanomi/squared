@@ -48,6 +48,9 @@ export function WhyBubble({
   const [text, setText] = useState(initial)
   const error = initialError
   const [confirming, setConfirming] = useState(false)
+  // A colour just chosen for this moment: its bar breathes out and holds, as when a moment is added, then it's kept
+  // and the bubble closes (nomi, Nov 1, 2026: it closed at once, so you couldn't see your choice land).
+  const [picked, setPicked] = useState<Paint>()
   const input = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -116,7 +119,18 @@ export function WhyBubble({
         />
         {error && <p className="why-error">{error}</p>}
         {/* A moment's own colour, optional: the square holds the answer, the moments hold the mix. */}
-        {editing && onPaint && <MomentColour value={paint} onChange={(c) => onPaint(c ?? null)} />}
+        {editing && onPaint && (
+          <MomentColour
+            value={picked ?? paint}
+            adds={!!picked}
+            onChange={(c) => {
+              if (picked) return
+              if (!c) return onPaint(null) // cleared: nothing to breathe, it's done at once
+              setPicked(c)
+              setTimeout(() => onPaint(c), 1100)
+            }}
+          />
+        )}
         <div className="why-actions">
           <button className="why-done" onClick={save} disabled={editing && !value}>
             {editing ? 'update' : 'done'}

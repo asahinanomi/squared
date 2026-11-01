@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Nov 1, 2026, 16:29 UTC_
+_last updated Nov 1, 2026, 16:38 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -369,6 +369,7 @@ squared's three heroes (the question, the brush, and seeing your life: a life in
 - **Every painting hangs by itself** (Nov 1, 2026, nomi): no more "keep this painting" and "take it down". The past is painted, so every month and year with a painted day is on the wall (my days → paintings) and on the shelf, in the wall's order (newest year first, its own painting, then its months). One action: "download" on a finished painting; one in progress says "Yours to download once the month ends." The code for kept paintings is gone (`lib/kept.ts`, `useKept`); and the old list leaves the account (`kept_paintings` set to null, once, on the next sign-in; nomi approved).
 - **A year's name on paintings is a link** (Nov 1, 2026, nomi: "I tried to tap it"): dotted, as every link; it opens the list on its months tab at that year's January, the whole year a scroll away.
 - **Paintings in two tabs: years · months** (Nov 1, 2026, nomi: the wall grows long), the list's own capsule under the title: years, every year's painting three to a row; months, grouped under each year's name (its link), only the months. Opens on months; the tab is remembered on the device.
+- **A moment's colour, changed, breathes too** (Nov 1, 2026, nomi): editing a moment, tapping worth it or regret no longer closes the bubble at once; the chosen bar breathes out and holds (the other greys), as when a moment is added, then it's saved and the bubble closes. Clearing a colour is still at once.
 - **The idea says it all, in order** (Oct 30, 2026, nomi): right after the three colours, "some days are both, worth it and regret at once. I paint what won, and keep the rest in a moment, in its own colour." then "and some days aren’t mine to choose. I still paint them honestly, and mark them out of my hands.", before "paint one square a day…".
 - **Special days without the extra row** (Oct 29, 2026, nomi): the "your 55th birthday" pill above the moment box (it pushed the day down) is gone. A blank special day says it in its square's handwritten label, "paint your 55th birthday" ("paint New Year's Day", "paint the day you were born"); painted, the heading speaks to it from the occasion's own pool, 3 lines per colour for your birthday, New Year's Day and Christmas ("A birthday spent on what matters.", "Not the start you hoped for.", "A quiet Christmas. That's okay."); the day you were born says "The day you were born, in colour." On today, the heading sits over today's note.
 - **Paintings, easier to find** (Oct 29, 2026, nomi): a month's or a year's name now carries a small ink picture right after it ("October 2026 🖼"): the dotted name alone was too quiet a cue. Name and picture are one button (no more dotted underline). The month view's big title opens its painting too (it shrinks a touch on the narrowest phones so the name and picture fit between the arrows). The paintings help says so.
