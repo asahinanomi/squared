@@ -1253,7 +1253,7 @@ sup.ord {
 .why::before {
   content: '';
   position: absolute;
-  top: -9px;
+  top: -10px; /* from inside the 1px edge: its middle lands exactly on the edge */
   left: 50%;
   width: 18px;
   height: 18px;
@@ -1262,6 +1262,9 @@ sup.ord {
   border-top: 1px solid var(--grey-1);
   transform: translateX(-50%) rotate(45deg);
   border-top-left-radius: 4px;
+  /* Only the tip above the bubble's edge: its two lines end where they meet the edge, never running on inside it
+     (nomi, Nov 1, 2026: they overshot by a pixel). The cut sits just under the edge, so the white still covers it. */
+  clip-path: polygon(0 0, 100% 0, 100% 1.5px, 1.5px 100%, 0 100%);
 }
 .why-label {
   display: block;
