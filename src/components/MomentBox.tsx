@@ -105,6 +105,7 @@ export function MomentBox({ placeholder, onAdd }: Props) {
   // keyboard only closes it, and with no + there was no other way without a colour). Not while a colour is being kept,
   // nor when squared itself puts the keyboard away, nor when the app is only being left.
   const leaving = useRef(false)
+  const touch = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches
   const onBlur = () => {
     if (leaving.current || picked || document.visibilityState === 'hidden') return
     if (text.trim()) add()
@@ -131,6 +132,21 @@ export function MomentBox({ placeholder, onAdd }: Props) {
           enterKeyHint="enter"
           maxLength={10000}
         />
+        {/* On a computer, the + to keep it (nomi, Nov 1, 2026): there's no ✓ above a keyboard there, and "click outside"
+            is invisible. Muted while empty, ink once there are words. A phone keeps the quiet box. */}
+        {!touch && (
+          <button
+            className="moment-add"
+            // The box stays as it was (its focused outline) until it lifts, rather than flipping pale as + takes focus.
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => add()}
+            aria-label="Add this moment"
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+              <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          </button>
+        )}
         {/* A moment can carry its own colour (optional), once there's something written: tapping one adds it. */}
         {text.trim() && (
           <MomentColour
