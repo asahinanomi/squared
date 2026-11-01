@@ -88,24 +88,7 @@ export async function drawPainting(
   const gauss = () => Math.sqrt(-2 * Math.log(r() + 1e-9)) * Math.cos(2 * Math.PI * r())
 
   // The frame (flat warm grey), the thin mat, then the painting inside.
-  // A year hangs in a grander frame than a month (nomi, Nov 1, 2026): deeper, darker, with a fine inner bead, and a
-  // wider mat; the painting itself is the same kind. (A year's own composition is still to find: docs/future-ideas.md.)
-  const year = isYear(month)
-  const f = Math.round(px * (year ? 0.055 : 0.035))
-  const x = f + Math.round(px * (year ? 0.045 : 0.03))
-  const s = px - 2 * x
-  const sh = s - (label ? Math.round(px * 0.045) : 0) // the painting's height: shorter by the label's mat
-  ctx.fillStyle = year ? '#7f7d77' : '#9c9a93'
-  ctx.fillRect(0, 0, px, px)
-  if (year) {
-    // The bead: a thin lighter line set into the frame, a little in from its inner edge.
-    const b = Math.round(f * 0.55)
-    ctx.strokeStyle = 'rgba(255,255,255,0.22)'
-    ctx.lineWidth = Math.max(1, px / 360)
-    ctx.strokeRect(b, b, px - 2 * b, px - 2 * b)
-  }
-  ctx.fillStyle = '#f6f3ec'
-  ctx.fillRect(f, f, px - 2 * f, px - 2 * f)
+  const { f, x, s, sh } = hang(ctx, month, px, label)
 
   ctx.save()
   ctx.beginPath()
@@ -245,4 +228,37 @@ export function allPaintings(days: Days): string[] {
       .sort()
       .reverse(),
   ])
+}
+
+/** The frame and the mat, empty (and the size of the painting inside). A year hangs in a grander frame than a month
+ *  (nomi, Nov 1, 2026): deeper, darker, with a fine inner bead, and a wider mat; the painting itself is the same kind.
+ *  (A year's own composition is still to find: docs/future-ideas.md.) */
+function hang(ctx: CanvasRenderingContext2D, month: string, px: number, label: boolean) {
+  const year = isYear(month)
+  const f = Math.round(px * (year ? 0.055 : 0.035))
+  const x = f + Math.round(px * (year ? 0.045 : 0.03))
+  const s = px - 2 * x
+  const sh = s - (label ? Math.round(px * 0.045) : 0) // the painting's height: shorter by the label's mat
+  ctx.fillStyle = year ? '#7f7d77' : '#9c9a93'
+  ctx.fillRect(0, 0, px, px)
+  if (year) {
+    // The bead: a thin lighter line set into the frame, a little in from its inner edge.
+    const b = Math.round(f * 0.55)
+    ctx.strokeStyle = 'rgba(255,255,255,0.22)'
+    ctx.lineWidth = Math.max(1, px / 360)
+    ctx.strokeRect(b, b, px - 2 * b, px - 2 * b)
+  }
+  ctx.fillStyle = '#f6f3ec'
+  ctx.fillRect(f, f, px - 2 * f, px - 2 * f)
+  return { f, x, s, sh }
+}
+
+/** A painting not drawn yet: its frame and mat around bare canvas, at once (drawing the paint takes a moment). */
+export function drawBlank(c: HTMLCanvasElement, month: string, px: number) {
+  c.width = c.height = px
+  const ctx = c.getContext('2d')!
+  const { f, x, s, sh } = hang(ctx, month, px, false)
+  ctx.fillStyle = rgba(RAW, 1)
+  ctx.fillRect(x, x, s, sh)
+  frameLines(ctx, px, f, x, s, sh)
 }
