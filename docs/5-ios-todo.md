@@ -69,10 +69,37 @@ Why and what was weighed: `docs/future-ideas.md` → "Private notes, the Day One
 
 - [ ] Subtitle (30 characters), description, keywords. In the voice of the brand story.
 - [ ] Screenshots at the size App Store Connect asks for (the largest iPhone): home, painting a day, my days, a life in squares.
-- [ ] Privacy policy URL (squared.today/privacy) and support URL.
+- [ ] Privacy policy URL (squared.today/privacy) and support URL (squared.today/support, see Support at launch).
 - [ ] Age rating: the terms say 18+, so answer the questionnaire to match.
 - [ ] Privacy labels (see above).
 - [ ] Update privacy, terms and questions to mention the iPhone app and Sign in with Apple.
+
+## Support at launch (nomi, no code; before beta 2 at the latest)
+
+Apple needs a public **Support URL** with a real way to reach you, usable without signing in (reviewers check it;
+people who can't sign in need it most). The in-app "get in touch" stays for signed-in people, but isn't enough alone.
+Decided (Nov 2, 2026): an **email address on a public page**, not a public form. Replies go out by email anyway, so a
+support address is needed either way; a form would add code and spam to handle for little.
+
+- [ ] **support@squared.today, free** (about 20 minutes; DNS is at GoDaddy, the A record to Vercel stays untouched):
+  1. ImprovMX (improvmx.com): sign up with your Gmail, add `squared.today`. Copy the records **its** screen shows,
+     usually MX `@` → `mx1.improvmx.com` (10), MX `@` → `mx2.improvmx.com` (20), TXT `@` → `v=spf1 include:spf.improvmx.com ~all`.
+  2. GoDaddy → My Products → squared.today → DNS: add them. Remove any GoDaddy MX records already there (parking or
+     their email), or mail won't route. Don't touch the A record (the website).
+  3. ImprovMX: once verified, alias **support** → your Gmail. Send a test to support@squared.today.
+  4. Gmail → Settings → Accounts → Send mail as → add "nomi" / support@squared.today, server `smtp.gmail.com`, port
+     587, your Gmail and an app password (needs 2-step verification). Confirm with the code that arrives.
+  5. Change the TXT record to `v=spf1 include:spf.improvmx.com include:_spf.google.com ~all`, so replies sent as
+     support@ don't land in spam.
+- [ ] **A short public support page**, squared.today/support (Claude builds it): how to reach me (the address), a
+  link to the faq, "I read every message myself and reply within a few days", signed "— nomi". Its address goes in App
+  Store Connect as the Support URL.
+- [ ] **3–5 saved replies** in Gmail: fixed in the next update; how to export your days; how to delete your account;
+  thanks for the idea.
+- [ ] **App Store reviews**: read weekly; reply briefly and kindly from App Store Connect, ideally with "fixed".
+- [ ] **Crash reports**: Xcode Organizer and App Store Connect (the iPhone's `client_errors`).
+- The routine stays beta 1's (`docs/3-beta1-web.md` → Support): bug, confusion or idea; same day for sign-in and lost
+  data; never change anyone's data without asking.
 
 ## How a build gets made
 
