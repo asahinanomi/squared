@@ -74,6 +74,38 @@ Why and what was weighed: `docs/future-ideas.md` → "Private notes, the Day One
 - [ ] Privacy labels (see above).
 - [ ] Update privacy, terms and questions to mention the iPhone app and Sign in with Apple.
 
+### The store page, drafted (Nov 2, 2026; read together with the share card below)
+
+The tagline for strangers is **"Your life, one square a day."** (it says what squared is); "The past is painted. Today
+is still yours." stays the brand line inside (sign-in, my days, the letter), and sign-in stays as it is.
+
+- **Name:** squared
+- **Subtitle** (27 of 30): Your life, one square a day
+- **Promotional text** (164 of 170; changeable any time without a review):
+  > Did you spend Today meaningfully? Paint one square: worth it, a regret, or a blur. Watch your life take shape, one day at a time, and keep each month as a painting.
+- **Description:**
+  > squared asks one question each day: am I spending Today meaningfully?
+  >
+  > You answer with a brush. Paint the day's square green if it was worth it, red if you wish you'd spent it differently, grey if it passed in a blur. No typing needed, no mood faces, no scores.
+  >
+  > During the day, keep moments as they happen: a line, a #tag, a colour of their own. Some days are both; the square holds the answer, the moments hold the mix.
+  >
+  > Then zoom out. Your week, your month, and a life in days: today is one small square among every day you'll have. Each month and year you paint becomes a painting, yours to keep and share.
+  >
+  > Free, private, no ads. No streaks, no badges, nothing to keep up with. Just a moment, once a day, to be here and now.
+  >
+  > Made by one person, one square a day. I read every message.
+  > — nomi
+- **Keywords** (exactly 100 characters): `journal,diary,daily reflection,mindful,life in days,memento mori,mood,year in pixels,gratitude,habit`
+- [ ] Re-read before submitting: anything renamed since (a feature, a word) changed here too.
+
+### The share card, to match (Claude, when the store page goes up)
+
+- [ ] `index.html`: og:title → "squared.today: your life, one square a day"; og:description → "Did I spend Today
+  meaningfully? Paint one square a day: worth it, a regret, or a blur, and watch your life take shape."
+- [ ] `public/og.png`: keep the card (the question, the grid of squares); only its small line under the question
+  becomes "Your life, one square a day." (was "Paint one square a day.").
+
 ## Support at launch (nomi, no code; before beta 2 at the latest)
 
 Apple needs a public **Support URL** with a real way to reach you, usable without signing in (reviewers check it;
