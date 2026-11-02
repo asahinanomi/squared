@@ -84,9 +84,18 @@ support address is needed either way; a form would add code and spam to handle f
 - [ ] **support@squared.today, free** (about 20 minutes; DNS is at GoDaddy, the A record to Vercel stays untouched):
   1. ImprovMX (improvmx.com): sign up with your Gmail, add `squared.today`. Copy the records **its** screen shows,
      usually MX `@` → `mx1.improvmx.com` (10), MX `@` → `mx2.improvmx.com` (20), TXT `@` → `v=spf1 include:spf.improvmx.com ~all`.
-  2. GoDaddy → My Products → squared.today → DNS: add them. Remove any GoDaddy MX records already there (parking or
-     their email), or mail won't route. Don't touch the A record (the website).
-  3. ImprovMX: once verified, alias **support** → your Gmail. Send a test to support@squared.today.
+  2. GoDaddy, one record at a time:
+     - Sign in → **My Products** → next to squared.today, **DNS** (or Domain → Manage DNS).
+     - Look at the list first: if there are **MX** records already (GoDaddy's parking or email), delete them, or mail
+       won't route. Leave the **A** record alone (that's the website on Vercel), and the CNAME for `www` if there is one.
+     - **Add New Record** → Type **MX** → Name `@` → Value `mx1.improvmx.com` → Priority `10` → TTL as it is → Save.
+     - **Add New Record** → Type **MX** → Name `@` → Value `mx2.improvmx.com` → Priority `20` → Save.
+     - **Add New Record** → Type **TXT** → Name `@` → Value `v=spf1 include:spf.improvmx.com ~all` → Save. (If a TXT
+       starting `v=spf1` already exists, edit that one instead: a domain may have only one.)
+     - Changes usually take minutes, sometimes a few hours.
+  3. ImprovMX: open squared.today in its dashboard and press **Check again** until the records show green ("verified").
+     Then **Add alias**: `support` → your Gmail address. From another account (or a friend), send a test to
+     support@squared.today and check it lands in Gmail.
   4. Gmail → Settings → Accounts → Send mail as → add "nomi" / support@squared.today, server `smtp.gmail.com`, port
      587, your Gmail and an app password (needs 2-step verification). Confirm with the code that arrives.
   5. Change the TXT record to `v=spf1 include:spf.improvmx.com include:_spf.google.com ~all`, so replies sent as
