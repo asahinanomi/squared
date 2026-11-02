@@ -32,6 +32,41 @@ order by u.created_at;
 
 - Their answers go to Claude, sorted into: fix now, try next, parked.
 
+## Support
+
+One door, read every day, a personal reply. At this size, the reply is the support.
+
+**Where messages come in**
+- **In the app:** about → get in touch, or the link **squared.today/?touch** in the beta email. Each message lands in the
+  `feedback` table (5 a day per person at most) and arrives in nomi's email straight away.
+- **Directly:** friends will also text. Copy those into the same place (or a note), so nothing is lost.
+- **Silently:** anything that breaks without a word is logged in `client_errors`.
+
+**Reading them** (Supabase → SQL Editor; both only read):
+
+```sql
+select * from feedback_inbox;                                        -- every message, newest first, with the sender's email
+select * from public.client_errors order by happened_at desc limit 50; -- what broke quietly
+```
+
+**The routine**
+1. **A message arrives** (email, live). Glance at it; the urgent ones can't wait (below), the rest wait for the evening.
+2. **Every evening**, once: the inbox and `client_errors` together.
+3. **Sort each message** into one of three:
+   - **Bug** (something broke): ask for a screenshot or a screen recording if it isn't clear, then bring it to Claude.
+     Fixed, deployed, then the reply: "fixed, try again".
+   - **Confusion** (they didn't understand something): design feedback, the most valuable kind. Note it; when two
+     people trip on the same thing, change it.
+   - **Idea** (they want something): `docs/future-ideas.md`, with their name. Not built during the freeze; count repeats.
+4. **Reply personally within a day or two**, from nomi's own email, signed "— nomi".
+5. **Close the loop:** when something they told you is fixed, tell them. That's what keeps friends telling you.
+
+**Same day, never waiting**
+- "I can't sign in" and "my days are gone" (or anything about losing what they wrote).
+- Never change someone's data without asking them first, the same rule as nomi's own account.
+
+**Later (beta 2, strangers):** a short support page and a reply template; not needed for friends.
+
 ## The emails
 
 In an editable doc, in nomi's voice (casual, a fun side project, numbers as numerals):
