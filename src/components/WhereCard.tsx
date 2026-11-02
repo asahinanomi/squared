@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { addDays, fromIso, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { lifeCounts } from '../lib/life'
+import { onceToday } from '../lib/onceADay'
+import { Turn } from './Turn'
 import { frameOf, squareFill } from '../lib/paints'
 import type { Profile } from '../lib/profile'
 
@@ -17,36 +19,7 @@ const ahead = (n: number) => (n === 0 ? 'today is the last' : n === 1 ? '1 day a
 // count turns to today's: a day has passed. Once a day for each person on this device, the first time they open my
 // days that day (signing out and in again doesn't replay it; someone else signing in still sees it). Always by one,
 // however long you were away: squared never counts an absence (nomi, Oct 31, 2026). Never with "reduce motion".
-let who = 'demo'
-/** Whose day it is: the signed-in person (each sees the pour once a day). */
-export const pourFor = (id: string | undefined) => void (who = id ?? 'demo')
-function pourNow(): boolean {
-  if (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches) return false
-  const key = `squared.poured.${who}`
-  try {
-    if (localStorage.getItem(key) === todayIso()) return false
-    localStorage.setItem(key, todayIso())
-  } catch {
-    return false // no storage: never replay it on every visit
-  }
-  return true
-}
-
-/** A count turning by one, like a day picker's wheel: the digits that stay, stay; the rest roll (yesterday's down and
- *  away, today's in from above). */
-function Turn({ from, to }: { from: string; to: string }) {
-  let k = 0
-  while (k < to.length && to.length === from.length && to[k] === from[k]) k++
-  return (
-    <>
-      {to.slice(0, k)}
-      <span className="where-roll">
-        <span className="where-roll-out">{from.slice(k)}</span>
-        <span className="where-roll-in">{to.slice(k)}</span>
-      </span>
-    </>
-  )
-}
+const pourNow = () => onceToday('poured')
 
 type Props = {
   days: Days

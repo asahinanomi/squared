@@ -2,6 +2,8 @@ import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } fro
 import { createPortal } from 'react-dom'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { MomentBox } from '../components/MomentBox'
+import { Turn } from '../components/Turn'
+import { onceToday } from '../lib/onceADay'
 import { NotesList } from '../components/NotesList'
 import { Sheet } from '../components/Sheet'
 import { PaintCanvas } from '../components/PaintCanvas'
@@ -831,6 +833,48 @@ function DayLabel({ iso, slide }: { iso: string; slide: 'from-left' | 'from-righ
   const text = (d: string) => {
     const p = shortDateParts(d)
     return `${p.weekday}, ${p.monthDay}, ${p.year}`
+  }
+  // A new day begins (nomi, Nov 2, 2026; with the life bar on my days, the only "a day passes" moments): once a day, the
+  // first time today is opened, the date turns over from yesterday's, like a day picker: only what changes rolls (the
+  // weekday and the day, the month and year when they change). Always from yesterday, however long you were away. It
+  // waits for the page to settle; stepping to another day ends it.
+  const today = todayIso()
+  const [turn, setTurn] = useState<'wait' | 'go' | null>(() =>
+    iso === today && onceToday('dayTurned') ? 'wait' : null,
+  )
+  useEffect(() => {
+    if (turn === 'wait') {
+      let t = 0
+      let f = requestAnimationFrame(() => {
+        t = window.setTimeout(() => (f = requestAnimationFrame(() => setTurn('go'))), 400)
+      })
+      return () => {
+        cancelAnimationFrame(f)
+        clearTimeout(t)
+      }
+    }
+    if (turn === 'go') {
+      const t = setTimeout(() => setTurn(null), 1000)
+      return () => clearTimeout(t)
+    }
+  }, [turn])
+  useEffect(() => {
+    if (iso !== today) setTurn(null)
+  }, [iso]) // eslint-disable-line react-hooks/exhaustive-deps
+  if (turn) {
+    const a = shortDateParts(addDays(today, -1))
+    const b = shortDateParts(today)
+    const go = turn === 'go'
+    return (
+      <span className="day-roll" aria-label={longDate(iso)} aria-live="polite">
+        <span className="day-label" aria-hidden="true">
+          <span className="day-turn">
+            <Turn from={a.weekday} to={b.weekday} go={go} />, <Turn from={a.monthDay} to={b.monthDay} go={go} />,{' '}
+            <Turn from={String(a.year)} to={String(b.year)} go={go} />
+          </span>
+        </span>
+      </span>
+    )
   }
   const back = slide === 'from-left'
   return (

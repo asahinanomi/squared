@@ -5,7 +5,7 @@ import { MonthPainting } from './components/MonthPainting'
 import { OpenPainting } from './components/PaintingButton'
 import { SyncStatus } from './components/SyncStatus'
 import { Topbar } from './components/Topbar'
-import { pourFor } from './components/WhereCard'
+import { onceADayFor } from './lib/onceADay'
 import { Waiting } from './components/Waiting'
 import { PageBar, ViewSwitch } from './components/ZoomBar'
 import type { Why } from './lib/notes'
@@ -91,7 +91,7 @@ export default function App() {
     else setDemoIn(false)
   }
   // A day passes on my days once a day for each person: whose day it is.
-  useEffect(() => pourFor(userId), [userId])
+  useEffect(() => onceADayFor(userId), [userId])
   // Lock when I leave: away longer than you chose, squared signs out (settings → lock when I leave).
   useLock(signedIn, signOut)
 

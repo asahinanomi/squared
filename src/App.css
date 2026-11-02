@@ -557,6 +557,10 @@ sup.ord {
   display: grid;
   place-items: center;
 }
+/* The date turning over, once a day: one line, its changing parts rolling inside it. */
+.day-turn {
+  white-space: nowrap;
+}
 .day-label.is-in-up {
   animation: roll-in-up 0.32s cubic-bezier(0.3, 0.7, 0.3, 1);
 }
@@ -5082,28 +5086,28 @@ button.home-card:active {
     color: var(--ink);
   }
 }
-.where-roll {
+.roll {
   display: inline-grid;
   overflow: hidden;
   vertical-align: bottom;
 }
-.where-roll > span {
+.roll > span {
   grid-area: 1 / 1;
   text-align: right;
 }
-.where-roll-out {
-  animation: where-roll-out 0.85s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+.roll-out {
+  animation: roll-out 0.85s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
 }
-.where-roll-in {
-  animation: where-roll-in 0.85s cubic-bezier(0.3, 0.7, 0.3, 1) both;
+.roll-in {
+  animation: roll-in 0.85s cubic-bezier(0.3, 0.7, 0.3, 1) both;
 }
-@keyframes where-roll-out {
+@keyframes roll-out {
   to {
     transform: translateY(100%);
     opacity: 0;
   }
 }
-@keyframes where-roll-in {
+@keyframes roll-in {
   from {
     transform: translateY(-100%);
     opacity: 0;
