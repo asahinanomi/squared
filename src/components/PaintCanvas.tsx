@@ -19,6 +19,8 @@ type Props = {
   blank?: string
   /** The day's first dip: the canvas breathes once ("be here"). */
   breathing?: boolean
+  /** When the brush's hint sweeps across a blank square: later on the day the date turns over, so the two take turns. */
+  ghostDelay?: number
 }
 
 // A quiet word in the middle of the square: what it holds, or that it's waiting.
@@ -39,7 +41,7 @@ const GHOST = 'M18 46 L82 28 L18 68 L82 50'
 // Every blank square, once, as it appears: a ghost brush sweeps the stroke, leaving a faint trail that fades, so the
 // square reads as "paint me". Moved by script (SVG's own animation clock can start at page load); in step with the
 // CSS: 0.4s in, a 0.85s sweep (the calm pace, over a shorter stroke).
-function GhostBrush() {
+function GhostBrush({ delay }: { delay: number }) {
   const trail = useRef<SVGPathElement>(null)
   const brush = useRef<SVGGElement>(null)
   useEffect(() => {
@@ -50,16 +52,21 @@ function GhostBrush() {
     const start = performance.now()
     let raf = 0
     const tick = (now: number) => {
-      const k = Math.min(1, Math.max(0, (now - start - 400) / 850))
+      const k = Math.min(1, Math.max(0, (now - start - delay) / 850))
       const pt = path.getPointAtLength(k * total)
       g.setAttribute('transform', `translate(${pt.x} ${pt.y})`)
       if (k < 1) raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [])
+  }, [delay])
   return (
-    <svg className="ghost" viewBox="0 0 100 100" aria-hidden="true">
+    <svg
+      className="ghost"
+      viewBox="0 0 100 100"
+      aria-hidden="true"
+      style={{ '--ghost-delay': `${delay}ms` } as React.CSSProperties}
+    >
       <path ref={trail} className="ghost-trail" pathLength="1" d={GHOST} />
       <g ref={brush} className="ghost-brush" transform="translate(18 40)">
         <path d="M30 -27c2-1.5 4 .5 2.5 2.5L18 -9l-3-3z" fill="#8c8c87" />
@@ -85,6 +92,7 @@ export function PaintCanvas({
   onFilled,
   blank = 'paint your day',
   breathing,
+  ghostDelay = 400,
 }: Props) {
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
@@ -402,7 +410,7 @@ export function PaintCanvas({
         {saved && marked && <MarkStrokes />}
 
         {/* For someone new: a ghost brush sweeps across, leaving a faint trail, so the square reads as "paint me". */}
-        {!saved && !touched && <GhostBrush />}
+        {!saved && !touched && <GhostBrush delay={ghostDelay} />}
         {!touched && !settling && (
           <span
             className={'canvas-word' + (saved ? ' is-painted' : '')}

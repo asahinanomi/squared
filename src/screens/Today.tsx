@@ -187,6 +187,9 @@ export function Today(props: Props) {
   // once (4s, "be here"); more dips in the same visit choose quietly. Starting any day over is a fresh start too.
   // It never holds the brush.
   const [breathing, setBreathing] = useState(false)
+  // A new day begins: once a day the date turns over (DayLabel), and the brush's hint on a blank square waits for it to
+  // finish, so the two take turns instead of moving at once (nomi, Nov 2, 2026).
+  const [dayTurns] = useState(() => date === todayIso() && onceToday('dayTurned'))
   const breathed = useRef(false)
   const fresh = useRef<string | null>(null)
   useEffect(() => {
@@ -381,7 +384,7 @@ export function Today(props: Props) {
                       style={day ? { background: paintHex(day.color) } : undefined}
                       aria-hidden="true"
                     />
-                    <DayLabel iso={date} slide={slide} />
+                    <DayLabel iso={date} slide={slide} turns={dayTurns} />
                     <ChevronDown />
                   </button>
                 </div>,
@@ -461,6 +464,7 @@ export function Today(props: Props) {
                 onFilled={onFilled}
                 blank={special ? `paint\n${special.split(' · ')[0]}` : blankWord(date, today)}
                 breathing={breathing}
+                ghostDelay={dayTurns ? 1700 : 400}
               />
             </div>
             {hasNext ? peek(next, 1) : <span className="peek is-none" />}
@@ -820,7 +824,7 @@ export function ChevronDown({ className = 'day-pick-chevron' }: { className?: st
 /** "Sat, Oct 17th, 2026" with the "th" raised; read aloud in full. It slides in with its day. */
 // The date, in a quiet capsule, rolls like a counter when you step a day: back a day, the new date comes down from
 // above and the old one leaves below; forward, the other way. The one motion on the day (the square stays still).
-function DayLabel({ iso, slide }: { iso: string; slide: 'from-left' | 'from-right' | null }) {
+function DayLabel({ iso, slide, turns }: { iso: string; slide: 'from-left' | 'from-right' | null; turns: boolean }) {
   const [shown, setShown] = useState(iso)
   const [leaving, setLeaving] = useState<string | null>(null)
   useEffect(() => {
@@ -839,9 +843,7 @@ function DayLabel({ iso, slide }: { iso: string; slide: 'from-left' | 'from-righ
   // weekday and the day, the month and year when they change). Always from yesterday, however long you were away. It
   // waits for the page to settle; stepping to another day ends it.
   const today = todayIso()
-  const [turn, setTurn] = useState<'wait' | 'go' | null>(() =>
-    iso === today && onceToday('dayTurned') ? 'wait' : null,
-  )
+  const [turn, setTurn] = useState<'wait' | 'go' | null>(() => (turns && iso === today ? 'wait' : null))
   useEffect(() => {
     if (turn === 'wait') {
       let t = 0
