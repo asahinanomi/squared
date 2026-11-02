@@ -43,11 +43,10 @@ export function SignIn({
             <GoogleG />
             continue with Google
           </button>
-          {/* Continuing is agreeing (there's no onboarding step for it now): 18 and over, the terms and privacy. One quiet
-              line with air above it, so the button stands alone (nomi, Nov 2, 2026), close enough to be part of it. */}
+          {/* Continuing is agreeing (there's no onboarding step for it now): 18 and over, the terms and privacy. */}
           <p className="signin-agree">
-            by continuing, you agree to the <button onClick={onTerms}>terms</button> and{' '}
-            <button onClick={onPrivacy}>privacy</button> (18+)
+            by continuing, you’re 18+ and agree to the <button onClick={onTerms}>terms</button> and{' '}
+            <button onClick={onPrivacy}>privacy policy</button>.
           </p>
           {error && <p className="signin-error">sign-in didn't finish: {error}</p>}
         </div>
