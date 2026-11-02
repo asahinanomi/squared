@@ -47,13 +47,20 @@ export function Idea({ onBegin, onBack }: Props) {
       <p>no streaks, no scores. just a moment to be here and now. noticing a red day is how the next one changes ;)</p>
       <p>the past is painted. today is still yours.</p>
       <p className="idea-sign">— nomi</p>
-      {/* The way on, as a letter would end: a quiet p.s. under the signature. */}
-      <p className="idea-ps">
-        p.s.{' '}
-        <button className="idea-inline" onClick={onBegin}>
-          begin with today →
+      {/* The way on. Signed out (a stranger, often from a shared link): the page's one black pill, the moment the letter
+          has moved them (nomi, Nov 2, 2026). Signed in: a quiet p.s., as a letter would end. */}
+      {onBack ? (
+        <button className="pill idea-begin" onClick={onBegin}>
+          begin with today
         </button>
-      </p>
+      ) : (
+        <p className="idea-ps">
+          p.s.{' '}
+          <button className="idea-inline" onClick={onBegin}>
+            begin with today →
+          </button>
+        </p>
+      )}
     </main>
   )
 }

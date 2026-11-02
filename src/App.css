@@ -1591,6 +1591,10 @@ body[data-screen='questions'] .idea {
   font-size: 16px;
   color: var(--muted);
 }
+/* Signed out, the letter ends in its one main action, with room above it. */
+.idea-begin {
+  margin-top: 40px;
+}
 .idea-inline {
   font: inherit;
   color: inherit;
