@@ -8,15 +8,16 @@ const COLOURS: [Paint, string][] = [
 ]
 
 type Props = {
-  /** Signed in: the soft link on to what matters. */
-  onMatters?: () => void
+  /** The letter's p.s., "begin with today": to sign in (signed out) or to today (signed in). */
+  onBegin: () => void
   /** Opened from the sign-in screen: the way back to it. */
   onBack?: () => void
 }
 
-// "the idea" (the letter): why squared exists, in the maker's own words. Rewritten by nomi, Oct 23, 2026, on
-// the brand story: meaningful, not good; less regret; noticing without blame.
-export function Idea({ onMatters, onBack }: Props) {
+// "the idea" (the letter): why squared exists, in the maker's own words. Rewritten by nomi, Oct 23, 2026, on the brand
+// story; made shorter, all why, Nov 2, 2026 (the how lives in the faq): the lost days, the question and its colours,
+// the zoom out, noticing without blame, the line. Its p.s. begins where squared does: today.
+export function Idea({ onBegin, onBack }: Props) {
   return (
     <main className="idea">
       {onBack && (
@@ -26,15 +27,12 @@ export function Idea({ onMatters, onBack }: Props) {
         </button>
       )}
       <h1 className="idea-title">the idea</h1>
+      <p>for years I kept my head down, busy. one day I looked up, and so many days were gone.</p>
       <p>
-        for years I kept my head down, busy. one day I looked up, and so many days were gone. faster than I ever
-        thought.
+        the hardest days weren’t the worst. some were truly worth it; they’re where I grew. the worst were the days I
+        wish I’d lived differently, or barely remember.
       </p>
-      <p>
-        the hard part wasn’t the bad days. some of my hardest days were the ones truly worth it, the days I really grew.
-        the worst were the days I wish I’d lived differently, or barely remember.
-      </p>
-      <p>I created squared to ask myself one question each day:</p>
+      <p>so I made squared to ask myself one question each day:</p>
       <p>did I spend Today meaningfully?</p>
       <ul className="idea-colours">
         {COLOURS.map(([paint, line]) => (
@@ -45,27 +43,17 @@ export function Idea({ onMatters, onBack }: Props) {
           </li>
         ))}
       </ul>
-      <p>
-        some days are both, worth it and regret at once. I paint what won, and keep the rest in a moment, in its own
-        colour.
-      </p>
-      <p>and some days aren’t mine to choose. I still paint them honestly, and mark them out of my hands.</p>
-      <p>
-        paint one square a day. no streaks, no scores. just a moment to be here and now. and noticing a regret day is
-        how the next one could go differently ;)
-      </p>
-      <p>I’ll try to paint as many green squares as I can.</p>
+      <p>then I zoom out, and today is one small square among all the days I’ll have.</p>
+      <p>no streaks, no scores. just a moment to be here and now. noticing a red day is how the next one changes ;)</p>
       <p>the past is painted. today is still yours.</p>
       <p className="idea-sign">— nomi</p>
       {/* The way on, as a letter would end: a quiet p.s. under the signature. */}
-      {onMatters && (
-        <p className="idea-ps">
-          p.s.{' '}
-          <button className="idea-inline" onClick={onMatters}>
-            start by naming what matters to you →
-          </button>
-        </p>
-      )}
+      <p className="idea-ps">
+        p.s.{' '}
+        <button className="idea-inline" onClick={onBegin}>
+          begin with today →
+        </button>
+      </p>
     </main>
   )
 }

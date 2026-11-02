@@ -140,7 +140,7 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, layoutD, 
         onPainting={openPainting}
       />
     )
-  if (screen === 'idea') return <About onMatters={nav.openMatters} onLegal={(page) => nav.openLegal(page, 'idea')} />
+  if (screen === 'idea') return <About onToday={nav.goToday} onLegal={(page) => nav.openLegal(page, 'idea')} />
   if (screen === 'setup')
     return (
       <Setup

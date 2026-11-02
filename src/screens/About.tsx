@@ -15,14 +15,15 @@ const TABS: [Tab, string][] = [
 ]
 
 type Props = {
-  onMatters: () => void
+  /** The letter's p.s., "begin with today": today. */
+  onToday: () => void
   /** The small print, in the footer. */
   onLegal: (page: 'privacy' | 'terms') => void
 }
 
 // The idea, squared's about page: four tabs side by side (the letter first, so it's still what's read), then
 // the small print. Each tab switches the page in place, like years · months · days.
-export function About({ onMatters, onLegal }: Props) {
+export function About({ onToday, onLegal }: Props) {
   // squared.today/?touch opens straight on get in touch (the testers' link).
   const [tab, setTab] = useState<Tab>(touchAtStart ? 'touch' : 'idea')
   useEffect(endTouchLink, [])
@@ -46,7 +47,7 @@ export function About({ onMatters, onLegal }: Props) {
         ))}
       </div>
       {tab === 'idea' ? (
-        <Idea onMatters={onMatters} />
+        <Idea onBegin={onToday} />
       ) : tab === 'questions' ? (
         <Questions onTouch={() => show('touch')} onSupport={() => show('support')} />
       ) : tab === 'touch' ? (

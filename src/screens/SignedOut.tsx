@@ -23,6 +23,10 @@ export function SignedOut({ error, onDemoSignIn }: Props) {
     return (
       <div className="app">
         <Idea
+          onBegin={() => {
+            if (location.pathname === '/idea') history.replaceState(null, '', '/')
+            setPage(null)
+          }}
           onBack={() => {
             if (location.pathname === '/idea') history.replaceState(null, '', '/')
             setPage(null)
