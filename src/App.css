@@ -746,6 +746,14 @@ sup.ord {
 .canvas-word.is-painted .canvas-hand {
   font-size: 30px;
 }
+/* The smaller square (layout D) signs a little smaller too, so the word sits in balance (nomi, Nov 3, 2026); "out of my
+   hands", on two lines, a touch smaller again. Still readable at a glance. */
+.today.is-d .canvas-word.is-painted .canvas-hand {
+  font-size: 26px;
+}
+.today.is-d .canvas-word.is-painted .canvas-hand.is-two {
+  font-size: 23px;
+}
 .paint-wrap {
   position: relative;
   z-index: 1;
