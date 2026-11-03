@@ -64,10 +64,15 @@ export async function exportWord(all: Everything) {
 
   for (const m of months) {
     const inMonth = dates.filter((d) => d.startsWith(m))
-    const counts = PAINTS.map((p) => [p.id, inMonth.filter((d) => all.days[d]?.color === p.id).length] as const)
-      .filter(([, n]) => n)
-      .map(([p, n]) => counted(p, n))
-      .join(' · ')
+    // A red day marked out of my hands is never counted as a regret.
+    const marked = (d: string) => all.days[d]?.color === 'red' && !!all.days[d]?.outOfHands
+    const hands = inMonth.filter(marked).length
+    const counts = [
+      ...PAINTS.map((p) => [p.id, inMonth.filter((d) => all.days[d]?.color === p.id && !marked(d)).length] as const)
+        .filter(([, n]) => n)
+        .map(([p, n]) => counted(p, n)),
+      ...(hands ? [`${hands} out of my hands`] : []),
+    ].join(' · ')
     body.push(
       new Paragraph({
         heading: HeadingLevel.HEADING_1,

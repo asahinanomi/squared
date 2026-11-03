@@ -495,6 +495,7 @@ export function Today(props: Props) {
                 pinned={(why.pinned || why.note?.pinned) && !!day?.framed}
                 isPinned={why.note?.pinned}
                 happened={why.happened && !why.note}
+                dayRed={day?.color === 'red'}
                 onPin={why.note ? () => props.onPinNote(why.note!) : undefined}
                 paint={why.note?.color}
                 onPaint={why.note ? (c) => props.onPaintNote(why.note!, c) : undefined}

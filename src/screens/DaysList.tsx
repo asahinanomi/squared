@@ -274,7 +274,9 @@ export function DaysList({
               ? !!notes[iso]?.length
               : o.startsWith('#')
                 ? dayHasTag(notes, iso, o.slice(1))
-                : days[iso]?.color === o,
+                : // a red day marked out of my hands is never filed as a regret (nomi, Nov 3, 2026): it lives under
+                  // "out of my hands" only
+                  days[iso]?.color === o && !(o === 'red' && days[iso]?.outOfHands),
     )
   const scroller = useRef<HTMLDivElement>(null)
   const heightBefore = useRef<number | null>(null) // set when months are added above, to keep your place

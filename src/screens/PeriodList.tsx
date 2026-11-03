@@ -29,13 +29,15 @@ type Props = {
 function counts(days: Days, from: string, to: string, today: string, born?: string) {
   const start = born && born > from ? born : from
   const end = to < today ? to : today
-  const out = { green: 0, red: 0, grey: 0, unpainted: 0 }
+  const out = { green: 0, red: 0, grey: 0, hands: 0, unpainted: 0 }
   if (start > end) return out
   for (let d = fromIso(start); ; d.setDate(d.getDate() + 1)) {
     const iso = isoDate(d)
     if (iso > end) break
     const day = days[iso]
-    if (day) out[day.color]++
+    // A red day marked out of my hands is never counted as a regret.
+    if (day?.outOfHands && day.color === 'red') out.hands++
+    else if (day) out[day.color]++
     else out.unpainted++
   }
   return out
@@ -70,6 +72,7 @@ function PeriodCard({
   const bs = bands(days, from, to, today, born)
   const c = counts(days, from, to, today, born)
   const parts = PAINTS.filter((p) => c[p.id]).map((p) => counted(p.id, c[p.id]))
+  if (c.hands) parts.push(`${c.hands} out of my hands`)
   if (c.unpainted) parts.push(`${c.unpainted} unpainted`)
   const now = from <= today && today <= to
   return (

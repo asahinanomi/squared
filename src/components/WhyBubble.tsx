@@ -26,6 +26,8 @@ type Props = {
   isPinned?: boolean
   /** A day just marked out of my hands: asks "what happened?". */
   happened?: boolean
+  /** That day is painted red: then it also says it's never called a regret. */
+  dayRed?: boolean
   /** Editing a note: its own colour, if painted, and painting it (the painted dot again takes it away). */
   paint?: Paint
   onPaint?: (color: Paint | null) => void
@@ -45,6 +47,7 @@ export function WhyBubble({
   onPin,
   isPinned,
   happened,
+  dayRed,
   paint,
   onPaint,
   now,
@@ -115,6 +118,18 @@ export function WhyBubble({
           setTimeout(() => (inside.current = false), 700)
         }}
       >
+        {happened && (
+          // Said the moment a day is marked: it isn't your fault (nomi, Nov 3, 2026). Only a red day was ever a regret.
+          <p className="why-comfort">
+            Some days aren’t yours to choose.
+            {dayRed && (
+              <>
+                <br />
+                It’s never called a regret.
+              </>
+            )}
+          </p>
+        )}
         <label className="why-label" htmlFor="why">
           {pinned ? 'what do you want to remember?' : happened ? 'what happened?' : now ? 'this moment…' : 'because…'}
         </label>
