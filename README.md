@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Nov 2, 2026, 23:57 UTC_
+_last updated Nov 3, 2026, 00:01 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -381,6 +381,7 @@ squared's three heroes (the question, the brush, and seeing your life: a life in
 - **The idea's way in, a pill for strangers** (Nov 2, 2026, nomi): signed out, the letter ends in the page's one black pill, "begin with today" (to sign in), 40px under the signature: the letter is often a stranger's first page. Signed in, it stays the quiet p.s.
 - **A new day begins, on today** (Nov 2, 2026, nomi): once a day, the first time today is opened, the date in the top bar turns over from yesterday's, like a day picker: only what changes rolls (the weekday and the day; the month and year when they change), 0.85s, after the page settles; no swelling (the pill sits between the logo and the menu). Always from yesterday, however long you were away; stepping to another day ends it. With the life bar on my days, the only "a day passes" moments. Shared: `components/Turn.tsx` (the roll) and `lib/onceADay.ts` (once a day per person on a device).
 - **The date and the brush take turns** (Nov 2, 2026, nomi: both moved at once, busy): on the day the date turns over, the brush's hint on a blank square waits for it (it sweeps at 1.7s instead of 0.4s): first a new day, then paint it. Other days, the brush is as before.
+- **A calmer brush hint** (Nov 3, 2026, nomi): halfway through its sweep, the brush and its trail begin to fade, and they're gone just as the stroke reaches its end (0.85s in all; it used to finish, hold, then fade over 1.37s).
 - **The idea says it all, in order** (Oct 30, 2026, nomi): right after the three colours, "some days are both, worth it and regret at once. I paint what won, and keep the rest in a moment, in its own colour." then "and some days aren’t mine to choose. I still paint them honestly, and mark them out of my hands.", before "paint one square a day…".
 - **Special days without the extra row** (Oct 29, 2026, nomi): the "your 55th birthday" pill above the moment box (it pushed the day down) is gone. A blank special day says it in its square's handwritten label, "paint your 55th birthday" ("paint New Year's Day", "paint the day you were born"); painted, the heading speaks to it from the occasion's own pool, 3 lines per colour for your birthday, New Year's Day and Christmas ("A birthday spent on what matters.", "Not the start you hoped for.", "A quiet Christmas. That's okay."); the day you were born says "The day you were born, in colour." On today, the heading sits over today's note.
 - **Paintings, easier to find** (Oct 29, 2026, nomi): a month's or a year's name now carries a small ink picture right after it ("October 2026 🖼"): the dotted name alone was too quiet a cue. Name and picture are one button (no more dotted underline). The month view's big title opens its painting too (it shrinks a touch on the narrowest phones so the name and picture fit between the arrows). The paintings help says so.
