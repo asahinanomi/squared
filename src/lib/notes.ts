@@ -23,6 +23,8 @@ export type Why = {
   n?: number
   /** A new note for a day just framed: it's pinned, and asks "what do you want to remember?". */
   pinned?: boolean
+  /** A new note for a day just marked out of my hands: it asks "what happened?" (skippable, as framing's). */
+  happened?: boolean
 }
 
 type Row = { id: string; date: string; body: string; written_at: string; pinned?: boolean; color?: Paint | null }

@@ -2676,43 +2676,6 @@ body[data-screen='questions'] .idea {
   margin-top: 6px;
 }
 /* "Out of your hands?": a sentence first, then the black pill. */
-.hands-lead {
-  margin: 8px 0 0;
-  font-size: 15px;
-  line-height: 1.45;
-  color: var(--ink-soft);
-}
-.hands-what {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 16px;
-  padding: 14px 16px;
-  border: none;
-  border-radius: 14px;
-  box-shadow: inset 0 0 0 1.5px #e2e2db;
-  font: inherit;
-  font-size: 17px;
-  line-height: 1.4;
-  resize: none;
-  color: var(--ink);
-  background: #fff;
-}
-.hands-what:focus {
-  outline: none;
-  box-shadow: inset 0 0 0 1.5px var(--grey-3);
-}
-.hands-mark {
-  margin-top: 18px;
-}
-.hands-mark:disabled {
-  opacity: 0.35;
-}
-.hands-quiet {
-  margin: 12px 0 0;
-  font-size: 14px;
-  color: var(--ink-soft);
-}
 .sheet-handle {
   width: 44px;
   height: 4px;

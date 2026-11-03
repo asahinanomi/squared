@@ -44,8 +44,8 @@ type Props = {
   onWipe: () => void
   /** Frame (or unframe) a day you want to keep. */
   onFrame: () => void
-  /** Mark the day "out of my hands", with what happened (it becomes the day's moment); or unmark it. */
-  onMarkHands: (text: string) => void
+  /** Mark the day "out of my hands" (then "what happened?", skippable); or unmark it. */
+  onMarkHands: () => void
   onUnmarkHands: () => void
   /** Pin a note to the top of its day, or unpin it. */
   onPinNote: (note: Note) => void
@@ -159,9 +159,6 @@ export function Today(props: Props) {
   const [wiping, setWiping] = useState(false)
   // "more" under the square: the rare ways to keep a day (frame it, out of my hands), each with a line about it.
   const [moreOpen, setMoreOpen] = useState(false)
-  // Marking a day "out of my hands" asks what happened first: writing it is the honesty check.
-  const [handsOpen, setHandsOpen] = useState(false)
-  const [handsText, setHandsText] = useState('')
   useEffect(() => {
     if (!whisper) return
     setWhispering(true)
@@ -497,6 +494,7 @@ export function Today(props: Props) {
                 onCancel={onCloseWhy}
                 pinned={(why.pinned || why.note?.pinned) && !!day?.framed}
                 isPinned={why.note?.pinned}
+                happened={why.happened && !why.note}
                 onPin={why.note ? () => props.onPinNote(why.note!) : undefined}
                 paint={why.note?.color}
                 onPaint={why.note ? (c) => props.onPaintNote(why.note!, c) : undefined}
@@ -666,10 +664,7 @@ export function Today(props: Props) {
               onClick={() => {
                 setMoreOpen(false)
                 if (day?.outOfHands) props.onUnmarkHands()
-                else {
-                  setHandsText('')
-                  setHandsOpen(true)
-                }
+                else props.onMarkHands()
               }}
             >
               <span className="more-icon" aria-hidden="true">
@@ -698,33 +693,6 @@ export function Today(props: Props) {
               </span>
             </button>
           )}
-        </Sheet>
-        <Sheet open={handsOpen} onClose={() => setHandsOpen(false)}>
-          <h2 className="intro-title">Out of your hands?</h2>
-          <p className="hands-lead">
-            Some days aren’t yours to choose. Your colour stays, and the day is marked as out of your hands.
-            {/* Only a red day would have been signed "regret" (nomi: a green or grey one never was). */}
-            {day?.color === 'red' && ' It’s never called a regret.'}
-          </p>
-          <textarea
-            className="hands-what"
-            rows={3}
-            maxLength={10000}
-            placeholder="what happened…"
-            value={handsText}
-            onChange={(e) => setHandsText(e.target.value)}
-          />
-          <button
-            className="pill hands-mark"
-            disabled={!handsText.trim()}
-            onClick={() => {
-              setHandsOpen(false)
-              props.onMarkHands(handsText.trim())
-            }}
-          >
-            mark it
-          </button>
-          <p className="hands-quiet">you can unmark it any time</p>
         </Sheet>
         {wiping && (
           <ConfirmDialog

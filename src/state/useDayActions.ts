@@ -52,15 +52,14 @@ export function useDayActions(
   }
 
   // Out of my hands: a day that wasn't yours to choose. The colour stays; the mark makes sure it's never called a
-  // regret. Marking asks what happened first: that sentence becomes the day's moment. Unmarking keeps the moment.
-  const onMarkHands = (text: string) => {
+  // regret. As framing: marked at once, then "what happened?" (a few words, or skip: nomi, Nov 3, 2026, never required
+  // to explain your pain); what you write becomes the day's moment. Unmarking keeps the moment.
+  const onMarkHands = () => {
     const day = date
     if (!days[day]) return
     setDays((d) => (d[day] ? { ...d, [day]: { ...d[day], outOfHands: true } } : d))
     save({ k: 'hands', date: day, outOfHands: true })
-    const draft = draftNote(day, text)
-    putNotes(day, (l) => [...l, draft])
-    save({ k: 'note-add', note: draft })
+    setWhy({ happened: true }) // then, as framing does: what happened? (a few words, or skip)
   }
   const onUnmarkHands = () => {
     const day = date

@@ -24,6 +24,8 @@ type Props = {
   /** Editing a note: pin it to the top of its day, or unpin it. */
   onPin?: () => void
   isPinned?: boolean
+  /** A day just marked out of my hands: asks "what happened?". */
+  happened?: boolean
   /** Editing a note: its own colour, if painted, and painting it (the painted dot again takes it away). */
   paint?: Paint
   onPaint?: (color: Paint | null) => void
@@ -42,6 +44,7 @@ export function WhyBubble({
   pinned,
   onPin,
   isPinned,
+  happened,
   paint,
   onPaint,
   now,
@@ -113,7 +116,7 @@ export function WhyBubble({
         }}
       >
         <label className="why-label" htmlFor="why">
-          {pinned ? 'what do you want to remember?' : now ? 'this moment…' : 'because…'}
+          {pinned ? 'what do you want to remember?' : happened ? 'what happened?' : now ? 'this moment…' : 'because…'}
         </label>
         <textarea
           id="why"
