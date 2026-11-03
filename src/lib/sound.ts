@@ -1,8 +1,8 @@
 import type { Paint } from './paints'
 
 // Quiet sounds for painting, made in the browser (no audio files): a bristle-on-paper hiss that follows the
-// brush, and a small sound when a square settles — a drop for mattered, a hollow knock for empty, sand for
-// slipped. Like a pencil on paper: never louder than that. Off with the "sound" switch in settings. (On iPhone, the
+// brush, and a small sound when a square settles — a drop for worth it, a pebble in a well for regret, sand
+// for a blur. Like a pencil on paper: never louder than that. Off with the "sound" switch in settings. (On iPhone, the
 // silent switch silences it too.)
 
 const KEY = 'squared.sound'
@@ -92,9 +92,8 @@ export function brushStop() {
   b.src.stop(ctx.currentTime + 0.3)
 }
 
-// The settle sounds act out the answer: mattered is a water drop and a kalimba sparkle (a day that filled
-// up), empty a knock on an empty wooden box ("tok-tok", nothing inside), slipped sand running through and
-// landing softly on the floor. Chosen by ear in the sound lab; its levels were heard at 0.3, so they're
+// The settle sounds act out the answer: worth it is a water drop and a kalimba sparkle (a day that filled
+// up), regret a pebble in an empty well (only its echo comes back), a blur sand running through your fingers. Chosen by ear in the sound lab; its levels were heard at 0.3, so they're
 // lifted by that much over the brush's master volume.
 const SETTLE = 0.3 / VOLUME
 
@@ -138,39 +137,31 @@ function kalimba(a: AudioContext, out: AudioNode, at: number, f: number, level: 
   }
 }
 
-/** A knock on a hollow wooden box: a tiny click through three woody resonances, plus a short low thump. */
-function knock(a: AudioContext, out: AudioNode, at: number, pitch: number, level: number) {
-  const src = a.createBufferSource()
-  src.buffer = white(a, 0.03)
-  const env = a.createGain()
-  env.gain.setValueAtTime(level, at)
-  env.gain.exponentialRampToValueAtTime(0.0001, at + 0.025)
-  src.connect(env)
-  for (const [f, q, share] of [
-    [230, 14, 1.4],
-    [520, 18, 0.7],
-    [1150, 10, 0.25],
-  ]) {
-    const bp = a.createBiquadFilter()
-    bp.type = 'bandpass'
-    bp.frequency.value = f * pitch
-    bp.Q.value = q
-    const g = a.createGain()
-    g.gain.value = share * 3
-    env.connect(bp).connect(g).connect(out)
-  }
+/** A pebble dropped into an empty well: a dull tap far below, then its echo coming back, two or three times, fainter
+ * each time. Only the echo answers: where did the day go? (nomi, Nov 3, 2026: the knock was the weakest, too low for a
+ * phone and stopping dead; "3c" in the sound lab.) */
+function well(a: AudioContext, out: AudioNode, at: number) {
+  const delay = a.createDelay(1)
+  delay.delayTime.value = 0.28
+  const fade = a.createGain()
+  fade.gain.value = 0.2
+  const lp = a.createBiquadFilter()
+  lp.type = 'lowpass'
+  lp.frequency.value = 900
+  delay.connect(lp).connect(fade).connect(delay)
+  lp.connect(out)
   const o = a.createOscillator()
   const g = a.createGain()
-  o.frequency.setValueAtTime(190 * pitch, at)
-  o.frequency.exponentialRampToValueAtTime(140 * pitch, at + 0.09)
+  o.frequency.setValueAtTime(330, at)
+  o.frequency.exponentialRampToValueAtTime(150, at + 0.12)
   g.gain.setValueAtTime(0, at)
-  g.gain.linearRampToValueAtTime(0.5 * level, at + 0.004)
-  g.gain.exponentialRampToValueAtTime(0.0001, at + 0.12)
-  o.connect(g).connect(out)
+  g.gain.linearRampToValueAtTime(0.7, at + 0.005)
+  g.gain.exponentialRampToValueAtTime(0.0001, at + 0.2)
+  o.connect(g)
+  g.connect(out)
+  g.connect(delay)
   o.start(at)
-  o.stop(at + 0.14)
-  src.start(at)
-  src.stop(at + 0.03)
+  o.stop(at + 0.25)
 }
 
 let pour: AudioBuffer | null = null
@@ -192,7 +183,8 @@ function sandPour(a: AudioContext, seconds: number) {
   return pour
 }
 
-/** Sand pours, then lands: a soft, low puff as it settles on the floor. */
+/** Sand pours through, then is gone: only a faint soft puff where it lands. (Nov 3, 2026, nomi: a touch quieter, it
+ * was the loudest on a phone, and no low drum at the end.) */
 function sand(a: AudioContext, out: AudioNode, at: number) {
   const seconds = 0.65
   const src = a.createBufferSource()
@@ -204,20 +196,10 @@ function sand(a: AudioContext, out: AudioNode, at: number) {
   lp.type = 'lowpass'
   lp.frequency.value = 1700 // rounded off: sand, not sizzle
   const g = a.createGain()
-  g.gain.value = 0.28
+  g.gain.value = 0.2
   src.connect(hp).connect(lp).connect(g).connect(out)
   src.start(at)
   const end = at + seconds - 0.02
-  const o = a.createOscillator()
-  const og = a.createGain()
-  o.frequency.setValueAtTime(110, end)
-  o.frequency.exponentialRampToValueAtTime(70, end + 0.18)
-  og.gain.setValueAtTime(0, end)
-  og.gain.linearRampToValueAtTime(0.45, end + 0.012)
-  og.gain.exponentialRampToValueAtTime(0.0001, end + 0.22)
-  o.connect(og).connect(out)
-  o.start(end)
-  o.stop(end + 0.25)
   const puff = a.createBufferSource()
   puff.buffer = white(a, 0.25)
   const plp = a.createBiquadFilter()
@@ -225,7 +207,7 @@ function sand(a: AudioContext, out: AudioNode, at: number) {
   plp.frequency.value = 900
   const pg = a.createGain()
   pg.gain.setValueAtTime(0.0001, end)
-  pg.gain.linearRampToValueAtTime(0.35, end + 0.015)
+  pg.gain.linearRampToValueAtTime(0.18, end + 0.02)
   pg.gain.exponentialRampToValueAtTime(0.0001, end + 0.2)
   puff.connect(plp).connect(pg).connect(out)
   puff.start(end)
@@ -280,7 +262,7 @@ export function handsSound() {
   src.stop(at + dur + 0.1)
 }
 
-/** The square settles: its colour's sound — a drop, a knock, or sand. */
+/** The square settles: its colour's sound: a drop, a well, or sand. */
 export function settleSound(paint: Paint) {
   const a = audio()
   if (!a || !master) return
@@ -291,8 +273,6 @@ export function settleSound(paint: Paint) {
   if (paint === 'green') {
     drop(a, out, t)
     kalimba(a, out, t + 0.14, 1318.5, 0.42)
-  } else if (paint === 'red') {
-    knock(a, out, t, 1, 2.2)
-    knock(a, out, t + 0.16, 0.92, 1.9)
-  } else sand(a, out, t)
+  } else if (paint === 'red') well(a, out, t)
+  else sand(a, out, t)
 }
