@@ -5181,6 +5181,9 @@ button.home-card:active {
   color: var(--ink);
   box-shadow: inset 0 0 0 1.5px var(--ink);
 }
+.matters-add:focus {
+  outline: none; /* Safari ringed it as the keyboard's next stop (nomi, Nov 3, 2026) */
+}
 .matters-add:active {
   transform: scale(0.98);
 }

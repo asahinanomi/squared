@@ -272,12 +272,20 @@ function FirstMatter({ onAdd, test }: { onAdd: (text: string) => void; test?: bo
           enterKeyHint="done"
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && add()}
+          // Leaving the box keeps it, as every writing box does (the ✓ above a phone's keyboard, or a tap away): the
+          // keyboard's ✓, return and "add" all do the same thing (nomi, Nov 3, 2026: the ✓ above the keyboard didn't).
+          onBlur={add}
         />
         {added ? (
           <span className="matters-added">{test ? 'added ✓ (a test: nothing saved)' : 'added to what matters ✓'}</span>
         ) : (
           text.trim() && (
-            <button className="matters-add" onClick={add}>
+            <button
+              className="matters-add"
+              tabIndex={-1} // not a stop for the keyboard's arrows: the box is the only field
+              onMouseDown={(e) => e.preventDefault()} // the tap adds; the box needn't blur first
+              onClick={add}
+            >
               add
             </button>
           )
