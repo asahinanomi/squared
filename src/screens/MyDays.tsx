@@ -11,9 +11,8 @@ import type { Days } from '../lib/days'
 import type { Notes } from '../lib/notes'
 import type { Profile } from '../lib/profile'
 import { Chevron } from './Today'
-import { MAX_CHARS, type Kind } from '../lib/matters'
-import type { Ask } from '../state/useAsked'
-import { askTest } from '../state/app'
+import { MAX_CHARS } from '../lib/matters'
+import { askFirstTest } from '../state/app'
 
 type Props = {
   days: Days
@@ -32,13 +31,8 @@ type Props = {
   onPainting: (period: string) => void
   onSquares: () => void
   onMatters: () => void
-  /** How many regret lines are written (the first red day's question waits while there are none). */
-  regrets: number
-  /** A line of what matters, written right here (worth it, or regret). */
-  onAddMatter: (kind: Kind, text: string) => void
-  /** The once-only questions: asked already (answered or skipped), and marking one asked. */
-  asked: (a: Ask) => boolean
-  onAsked: (a: Ask) => void
+  /** The first line of what matters (worth it), written right here on the card. */
+  onAddMatter: (text: string) => void
   onFramed: () => void
   onPaintings: () => void
 }
@@ -81,9 +75,6 @@ export function MyDays({
   onSquares,
   onMatters,
   onAddMatter,
-  regrets,
-  asked,
-  onAsked,
   onFramed,
   onPaintings,
 }: Props) {
@@ -105,46 +96,12 @@ export function MyDays({
     p,
     (p.length === 4 ? p : monthName(p).slice(0, 3)) + (inProgress(p) ? ', so far' : ''),
   ])
-  // What matters asks, at its moment, one question at a time (nomi, Nov 3, 2026): after a week painted (with a green
-  // one), "What made the green ones green?"; after the first red day (and once that's answered or set aside), "What
-  // would you regret?". Each once: answered or skipped, never again. Before either, with nothing written: the plain
-  // question, which stays until a line is written. A card on my days, never a sheet: it waits, it doesn't interrupt.
-  const painted = Object.values(days)
-  const CARDS = {
-    week: {
-      id: 'week',
-      kind: 'meaningful',
-      label: 'a week painted',
-      question: 'What made the green ones green?',
-      hint: 'time with people I love…',
-    },
-    red: {
-      id: 'red',
-      kind: 'wasted',
-      label: 'what matters',
-      question: 'What would you regret?',
-      hint: 'an evening lost to my phone…',
-    },
-    first: {
-      id: 'first',
-      kind: 'meaningful',
-      label: 'what matters',
-      question: 'What makes a day worth it to you?',
-      hint: 'a walk without my phone…',
-    },
-  } as const
-  // A test link forces one (it saves nothing: answering or skipping only hides it).
+  // What matters, before any line is written: the question itself, on the card (nomi, Nov 3, 2026: asked, not
+  // assigned). It stays until a line is written. (A week's and a first red day's questions, once each, were tried the
+  // same day and cut: once-and-gone was too weak, and "add this to what matters" in the moment bubble already asks at the
+  // true moment.) ?askfirst shows it whatever your lists hold, saving nothing.
   const [testDone, setTestDone] = useState(false)
-  const testing = !!askTest && !testDone
-  const ask = testing
-    ? CARDS[askTest!]
-    : painted.length >= 7 && painted.some((d) => d.color === 'green') && !asked('week')
-      ? CARDS.week
-      : painted.some((d) => d.color === 'red' && !d.outOfHands) && !regrets && !asked('red')
-        ? CARDS.red
-        : !matters.length
-          ? CARDS.first
-          : null
+  const testing = askFirstTest && !testDone
   // Picked once per visit (and again only if the list itself changes, say once it has loaded).
   const line = useMemo(() => (matters.length ? oneOf(matters, 'squared.mattersShown') : ''), [matters.join('\n')]) // eslint-disable-line react-hooks/exhaustive-deps
   // Each row opens its page; `empty` is an empty slot (dashed). Not set up yet: its sub says what it is, and "set up
@@ -175,20 +132,9 @@ export function MyDays({
           hero); then a day you framed, a memory to end on (nomi, Oct 31, 2026). */}
       {/* What matters, one line at a time: a different one of your own each visit, in the sans of your own words, a
           note to yourself under the time you have. The card opens all of them. Not set yet: the empty slot, as before. */}
-      {ask ? (
-        <AskMatter
-          key={ask.id}
-          label={ask.label}
-          question={ask.question}
-          hint={ask.hint}
-          onAdd={(t) => {
-            if (testing) return setTestDone(true)
-            onAddMatter(ask.kind, t)
-            if (ask.id !== 'first') onAsked(ask.id)
-          }}
-          onNotNow={ask.id === 'first' ? undefined : () => (testing ? setTestDone(true) : onAsked(ask.id as Ask))}
-        />
-      ) : matters.length ? (
+      {testing || !matters.length ? (
+        <FirstMatter onAdd={(t) => (testing ? setTestDone(true) : onAddMatter(t))} />
+      ) : (
         <button className="home-card matters-card" onClick={onMatters}>
           <span className="matters-text">
             <span className="matters-label">you said this matters</span>
@@ -196,7 +142,7 @@ export function MyDays({
           </span>
           <Chevron dir="right" />
         </button>
-      ) : null}
+      )}
       {/* Your paintings, a shelf (nomi, Oct 31, 2026: seeing your life is a hero, so they sit above the framed day, and
           small, so they take a strip, not half the page): every painting, newest first, side by side; more than fit, the
           shelf scrolls sideways. Each opens its painting; the title opens them all. Nothing painted yet: the empty slot,
@@ -295,45 +241,46 @@ function SetUp() {
 }
 
 /**
- * A question of what matters, asked on the card, not a row to "set up" (nomi, Nov 3, 2026: asked, not assigned). One
- * line is enough; it's kept as you leave the box (or press return). No link to the page while it's empty (nomi:
- * there's nothing to open). The once-only questions have "skip" (nomi: "not now" was unclear, and promised a later that never comes), and never
- * come back.
+ * What matters, not written yet: the question on the card, and a box to answer it (the moment box's look). Typing
+ * brings a small "add" (nomi, Nov 3, 2026: leaving the box to keep it never happened on iPhone, where a tap on the page
+ * doesn't take the cursor away, and nothing said it was kept). Added: "added to what matters ✓" a moment, then the
+ * card becomes "you said this matters". No link to the page while it's empty: there's nothing to open.
  */
-function AskMatter(props: {
-  label: string
-  question: string
-  hint: string
-  onAdd: (text: string) => void
-  onNotNow?: () => void
-}) {
+function FirstMatter({ onAdd }: { onAdd: (text: string) => void }) {
   const [text, setText] = useState('')
-  const keep = () => {
+  const [added, setAdded] = useState(false)
+  const add = () => {
     const t = text.trim()
-    if (t) props.onAdd(t)
+    if (!t || added) return
+    setAdded(true)
+    setTimeout(() => onAdd(t), 900)
   }
   return (
     <div className="home-card matters-card matters-ask">
       <span className="matters-text">
-        <span className="matters-label">{props.label}</span>
-        <label className="matters-line" htmlFor="ask-matter">
-          {props.question}
+        <span className="matters-label">what matters</span>
+        <label className="matters-line" htmlFor="first-matter">
+          What makes a day worth it to you?
         </label>
         <input
-          id="ask-matter"
+          id="first-matter"
           className="matters-first"
           maxLength={MAX_CHARS}
-          placeholder={props.hint}
+          placeholder="a walk without my phone…"
           value={text}
+          readOnly={added}
           enterKeyHint="done"
           onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-          onBlur={keep}
+          onKeyDown={(e) => e.key === 'Enter' && add()}
         />
-        {props.onNotNow && (
-          <button className="matters-later" onMouseDown={(e) => e.preventDefault()} onClick={props.onNotNow}>
-            skip
-          </button>
+        {added ? (
+          <span className="matters-added">added to what matters ✓</span>
+        ) : (
+          text.trim() && (
+            <button className="matters-add" onClick={add}>
+              add
+            </button>
+          )
         )}
       </span>
     </div>

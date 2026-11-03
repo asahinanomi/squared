@@ -5169,20 +5169,28 @@ button.home-card:active {
 .matters-first::placeholder {
   color: var(--muted);
 }
-/* "skip": a small keyline pill, the secondary action (the buttons table), clearly a button, never louder than the box. */
-.matters-later {
+/* "add": a small keyline pill, the secondary action (the buttons table): clearly a button, quieter than the box. */
+.matters-add {
   display: inline-flex;
   align-items: center;
   height: 40px;
   margin-top: 14px;
-  padding: 0 20px;
+  padding: 0 22px;
   border-radius: 999px;
   font-size: 16px;
   color: var(--ink);
   box-shadow: inset 0 0 0 1.5px var(--ink);
 }
-.matters-later:active {
+.matters-add:active {
   transform: scale(0.98);
+}
+.matters-added {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  margin-top: 14px;
+  font-size: 15px;
+  color: var(--ink);
 }
 .matters-card > svg {
   flex: none;

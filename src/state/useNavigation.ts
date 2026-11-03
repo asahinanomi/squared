@@ -6,7 +6,16 @@ import type { Why } from '../lib/notes'
 import { SCOPE_ORDER, type Scope, type SliceId } from '../lib/pie'
 import type { Profile } from '../lib/profile'
 import { usePinch } from '../lib/usePinch'
-import { askTest, ideaAtStart, LADDER, leaveLegalUrl, legalAtStart, touchAtStart, type Legal, type Screen } from './app'
+import {
+  askFirstTest,
+  ideaAtStart,
+  LADDER,
+  leaveLegalUrl,
+  legalAtStart,
+  touchAtStart,
+  type Legal,
+  type Screen,
+} from './app'
 
 const RES: Resolution[] = ['years', 'months', 'days'] // the three views of a life, outward
 
@@ -14,7 +23,7 @@ const RES: Resolution[] = ['years', 'months', 'days'] // the three views of a li
  *  list and the pie beside it, the small print, settings, and pinching. */
 export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) => void, signedIn: boolean) {
   const [screen, setScreenValue] = useState<Screen>(
-    legalAtStart ?? (ideaAtStart || touchAtStart ? 'idea' : askTest ? 'mydays' : 'today'),
+    legalAtStart ?? (ideaAtStart || touchAtStart ? 'idea' : askFirstTest ? 'mydays' : 'today'),
   )
   const [date, setDate] = useState(todayIso)
   // Which way the last move went, so the new level can zoom in or out into place.

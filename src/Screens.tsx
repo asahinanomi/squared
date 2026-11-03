@@ -28,7 +28,6 @@ import { demo, endWelcomeTest, introSeen, markIntroSeen, tryWelcome } from './st
 import type { Account } from './state/useAccount'
 import type { useDayActions } from './state/useDayActions'
 import type { useMatters } from './state/useMatters'
-import type { useAsked } from './state/useAsked'
 import type { Navigation } from './state/useNavigation'
 
 export type ScreensProps = {
@@ -40,8 +39,6 @@ export type ScreensProps = {
   painter: string
   /** Today's layout D, on trial (?today=d). */
   layoutD: boolean
-  /** my days' once-only questions (a week painted, a first red day). */
-  asked: ReturnType<typeof useAsked>
   /** The account was deleted: say so, then sign out. */
   onDeleted: () => void
   ui: {
@@ -58,7 +55,7 @@ export type ScreensProps = {
 
 // Which screen shows, and what each one is given. Every screen gets what it needs from the app's pieces (the
 // navigation, the account's data, the day's actions, what matters, paintings); nothing here keeps state.
-export function Screens({ nav, acc, act, lists, openPainting, painter, layoutD, asked, onDeleted, ui }: ScreensProps) {
+export function Screens({ nav, acc, act, lists, openPainting, painter, layoutD, onDeleted, ui }: ScreensProps) {
   const { screen, setScreenValue, date, lifeRes, setLifeRes, listRes, listMid } = nav
   const { days, notes, profile } = acc
 
@@ -131,12 +128,12 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, layoutD, 
         onPainting={openPainting}
         onSquares={nav.goLifeDays}
         onMatters={nav.openMatters}
-        regrets={lists.matters.wasted.length}
-        onAddMatter={(kind, text) =>
-          lists.addLines({ ...lists.matters, [kind]: [...lists.matters[kind], { id: crypto.randomUUID(), text }] })
+        onAddMatter={(text) =>
+          lists.addLines({
+            ...lists.matters,
+            meaningful: [...lists.matters.meaningful, { id: crypto.randomUUID(), text }],
+          })
         }
-        asked={asked.asked}
-        onAsked={asked.done}
         onFramed={() => setScreenValue('framed')}
         onPaintings={() => setScreenValue('paintings')}
       />
