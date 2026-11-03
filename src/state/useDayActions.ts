@@ -3,7 +3,7 @@ import { paintedFresh, todayIso } from '../lib/dates'
 import { draftNote, type Note, type Why } from '../lib/notes'
 import type { Paint } from '../lib/paints'
 import { save } from '../lib/save'
-import { frameSound } from '../lib/sound'
+import { frameSound, handsSound } from '../lib/sound'
 import type { Account } from './useAccount'
 
 const byTime = (a: Note, b: Note) => a.writtenAt.localeCompare(b.writtenAt)
@@ -58,6 +58,7 @@ export function useDayActions(
     const day = date
     if (!days[day]) return
     setDays((d) => (d[day] ? { ...d, [day]: { ...d[day], outOfHands: true } } : d))
+    handsSound()
     save({ k: 'hands', date: day, outOfHands: true })
     setWhy({ happened: true }) // then, as framing does: what happened? (a few words, or skip)
   }

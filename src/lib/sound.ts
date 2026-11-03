@@ -232,7 +232,6 @@ function sand(a: AudioContext, out: AudioNode, at: number) {
   puff.stop(end + 0.25)
 }
 
-/** A day framed: a little magic — three kalimba notes rising, then a soft shimmer of high bells. */
 /** Sound turned on: two soft rising plucks, so you hear that it's back. */
 export function soundOnChime() {
   const a = audio()
@@ -245,6 +244,7 @@ export function soundOnChime() {
   kalimba(a, out, t + 0.1, 1568, 0.26)
 }
 
+/** A day framed: a little magic, three kalimba notes rising, then a soft shimmer of high bells. */
 export function frameSound() {
   const a = audio()
   if (!a || !master) return
@@ -254,6 +254,30 @@ export function frameSound() {
   const t = a.currentTime + 0.03
   ;[1046.5, 1318.5, 1568].forEach((f, i) => kalimba(a, out, t + i * 0.11, f, 0.34))
   for (let i = 0; i < 7; i++) kalimba(a, out, t + 0.36 + i * 0.045, 2093 * (1 + (i % 3) * 0.25), 0.07)
+}
+
+/** A day out of my hands: a wave far off, coming in and going out on its own. No notes, nothing to celebrate:
+ * soft air that rises and falls, like a tide you can't hold (chosen by ear in the sound lab, "4c"). */
+export function handsSound() {
+  const a = audio()
+  if (!a || !master) return
+  const at = a.currentTime + 0.03
+  const dur = 2
+  const src = a.createBufferSource()
+  src.buffer = white(a, dur + 0.1)
+  const bp = a.createBiquadFilter()
+  bp.type = 'bandpass'
+  bp.Q.value = 0.7
+  bp.frequency.setValueAtTime(380, at)
+  bp.frequency.linearRampToValueAtTime(620, at + dur * 0.5)
+  bp.frequency.linearRampToValueAtTime(420, at + dur)
+  const g = a.createGain()
+  g.gain.setValueAtTime(0.0001, at)
+  g.gain.linearRampToValueAtTime(0.35 * SETTLE, at + dur * 0.45)
+  g.gain.linearRampToValueAtTime(0.0001, at + dur)
+  src.connect(bp).connect(g).connect(master)
+  src.start(at)
+  src.stop(at + dur + 0.1)
 }
 
 /** The square settles: its colour's sound — a drop, a knock, or sand. */
