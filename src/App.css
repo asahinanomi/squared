@@ -1034,16 +1034,16 @@ sup.ord {
   stroke-linejoin: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  animation: ghost-trail 0.85s var(--ghost-delay, 0.4s) linear forwards;
+  animation: ghost-trail 1.15s var(--ghost-delay, 0.4s) linear forwards;
 }
 .ghost-brush {
   stroke: #141413;
   stroke-width: 1.2;
   stroke-linejoin: round;
   opacity: 0;
-  animation: ghost-brush 0.85s var(--ghost-delay, 0.4s) linear forwards;
+  animation: ghost-brush 1.15s var(--ghost-delay, 0.4s) linear forwards;
 }
-/* Once, calmly (nomi, Nov 3, 2026): halfway through its 0.85s sweep the brush and its trail begin to fade, and they're
+/* Once, calmly (nomi, Nov 3, 2026): a slow 1.15s sweep; halfway through it the brush and its trail begin to fade, and they're
    gone just as the stroke reaches its end. */
 @keyframes ghost-brush {
   0%,

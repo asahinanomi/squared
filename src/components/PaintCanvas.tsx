@@ -52,7 +52,7 @@ function GhostBrush({ delay }: { delay: number }) {
     const start = performance.now()
     let raf = 0
     const tick = (now: number) => {
-      const k = Math.min(1, Math.max(0, (now - start - delay) / 850))
+      const k = Math.min(1, Math.max(0, (now - start - delay) / 1150))
       const pt = path.getPointAtLength(k * total)
       g.setAttribute('transform', `translate(${pt.x} ${pt.y})`)
       if (k < 1) raf = requestAnimationFrame(tick)
