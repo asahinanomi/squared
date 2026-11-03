@@ -13,6 +13,7 @@ import type { Profile } from '../lib/profile'
 import { Chevron } from './Today'
 import { MAX_CHARS, type Kind } from '../lib/matters'
 import type { Ask } from '../state/useAsked'
+import { askTest } from '../state/app'
 
 type Props = {
   days: Days
@@ -109,31 +110,40 @@ export function MyDays({
   // would you regret?". Each once: answered or skipped, never again. Before either, with nothing written: the plain
   // question, which stays until a line is written. A card on my days, never a sheet: it waits, it doesn't interrupt.
   const painted = Object.values(days)
-  const ask: { id: Ask | 'first'; kind: Kind; label: string; question: string; hint: string } | null =
-    painted.length >= 7 && painted.some((d) => d.color === 'green') && !asked('week')
-      ? {
-          id: 'week',
-          kind: 'meaningful',
-          label: 'a week painted',
-          question: 'What made the green ones green?',
-          hint: 'time with people I love…',
-        }
+  const CARDS = {
+    week: {
+      id: 'week',
+      kind: 'meaningful',
+      label: 'a week painted',
+      question: 'What made the green ones green?',
+      hint: 'time with people I love…',
+    },
+    red: {
+      id: 'red',
+      kind: 'wasted',
+      label: 'what matters',
+      question: 'What would you regret?',
+      hint: 'an evening lost to my phone…',
+    },
+    first: {
+      id: 'first',
+      kind: 'meaningful',
+      label: 'what matters',
+      question: 'What makes a day worth it to you?',
+      hint: 'a walk without my phone…',
+    },
+  } as const
+  // A test link forces one (it saves nothing: answering or skipping only hides it).
+  const [testDone, setTestDone] = useState(false)
+  const testing = !!askTest && !testDone
+  const ask = testing
+    ? CARDS[askTest!]
+    : painted.length >= 7 && painted.some((d) => d.color === 'green') && !asked('week')
+      ? CARDS.week
       : painted.some((d) => d.color === 'red' && !d.outOfHands) && !regrets && !asked('red')
-        ? {
-            id: 'red',
-            kind: 'wasted',
-            label: 'what matters',
-            question: 'What would you regret?',
-            hint: 'an evening lost to my phone…',
-          }
+        ? CARDS.red
         : !matters.length
-          ? {
-              id: 'first',
-              kind: 'meaningful',
-              label: 'what matters',
-              question: 'What makes a day worth it to you?',
-              hint: 'a walk without my phone…',
-            }
+          ? CARDS.first
           : null
   // Picked once per visit (and again only if the list itself changes, say once it has loaded).
   const line = useMemo(() => (matters.length ? oneOf(matters, 'squared.mattersShown') : ''), [matters.join('\n')]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -172,10 +182,11 @@ export function MyDays({
           question={ask.question}
           hint={ask.hint}
           onAdd={(t) => {
+            if (testing) return setTestDone(true)
             onAddMatter(ask.kind, t)
-            if (ask.id !== 'first') onAsked(ask.id as Ask)
+            if (ask.id !== 'first') onAsked(ask.id)
           }}
-          onNotNow={ask.id === 'first' ? undefined : () => onAsked(ask.id as Ask)}
+          onNotNow={ask.id === 'first' ? undefined : () => (testing ? setTestDone(true) : onAsked(ask.id as Ask))}
         />
       ) : matters.length ? (
         <button className="home-card matters-card" onClick={onMatters}>
