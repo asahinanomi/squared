@@ -622,7 +622,7 @@ export function Today(props: Props) {
         {/* Someone's first visit: what a square is and what its colours mean, once. "got it" is a keyline, not the
             black main pill: dismissing a tip is never the day's main action (painting is). */}
         <Sheet open={introOpen} onClose={introDone}>
-          <h2 className="intro-title">Each square is one day of your life.</h2>
+          <h2 className="torn-title">Each square is one day of your life.</h2>
           <ul className="intro-colours">
             {INTRO.map(([paint, line]) => (
               <li key={paint}>
@@ -641,7 +641,7 @@ export function Today(props: Props) {
           </button>
         </Sheet>
         <Sheet open={birthdayOpen} onClose={() => setBirthdayOpen(false)}>
-          <h2 className="intro-title">
+          <h2 className="torn-title">
             <Raised text={age > 0 ? `Happy ${ordinal(age)} birthday.` : 'Happy birthday.'} />
           </h2>
           <p className="intro-how birthday-line">Today starts a new year of your life.</p>
@@ -650,7 +650,7 @@ export function Today(props: Props) {
           <p className="birthday-sign">— nomi</p>
         </Sheet>
         <Sheet open={moreOpen} onClose={() => setMoreOpen(false)}>
-          <h2 className="intro-title">Keep this day in a special way?</h2>
+          <h2 className="torn-title">Keep this day in a special way?</h2>
           <button
             className="more-row"
             onClick={() => {
