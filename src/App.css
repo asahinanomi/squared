@@ -1391,6 +1391,21 @@ sup.ord {
   margin: 0;
   border-radius: 4px;
 }
+/* Keep a moment's words in what matters: a quiet link, the size of helper text, on its own line. */
+.why-keep {
+  display: block;
+  margin-top: 12px;
+  padding: 6px 0;
+  font-size: 15px;
+  color: var(--ink-soft);
+  text-decoration: underline dotted;
+  text-underline-offset: 4px;
+}
+.why-keep:disabled {
+  opacity: 1;
+  text-decoration: none;
+  color: var(--ink);
+}
 .why-actions {
   display: flex;
   justify-content: flex-end;
@@ -5124,6 +5139,39 @@ button.home-card:active {
   font-size: 13px;
   font-weight: 600; /* lighter (12px, 400) was tried: it read weaker, not calmer (nomi) */
   color: var(--muted);
+}
+.matters-ask .matters-line {
+  margin-top: 14px;
+}
+/* The first line of what matters, written on the card: an underline, as the moment bubble's. */
+.matters-first {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 0;
+  font: inherit;
+  font-size: 16px;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--grey-1);
+  border-radius: 0;
+  outline: none;
+}
+.matters-first:focus {
+  border-bottom-color: var(--grey-2);
+}
+.matters-first::placeholder {
+  color: var(--muted);
+}
+.matters-all {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 4px 0;
+  font-size: 15px;
+  color: var(--ink-soft);
+  text-decoration: underline dotted;
+  text-underline-offset: 4px;
 }
 .matters-card > svg {
   flex: none;

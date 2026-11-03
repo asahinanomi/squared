@@ -93,6 +93,9 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, layoutD, 
         onPaintNote={act.onPaintNote}
         onZoomOut={nav.outOfDay}
         onMatters={nav.openMatters}
+        onKeepMatter={(kind, text) =>
+          lists.addLines({ ...lists.matters, [kind]: [...lists.matters[kind], { id: crypto.randomUUID(), text }] })
+        }
         onSetUp={() => nav.askSquares('today')}
         // Someone new (nothing painted, squares not set): the colours, once. ?welcome shows it on any account.
         intro={tryWelcome || (!profile && Object.keys(days).length === 0 && !introSeen())}
@@ -125,6 +128,12 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, layoutD, 
         onPainting={openPainting}
         onSquares={nav.goLifeDays}
         onMatters={nav.openMatters}
+        onAddMatter={(text) =>
+          lists.addLines({
+            ...lists.matters,
+            meaningful: [...lists.matters.meaningful, { id: crypto.randomUUID(), text }],
+          })
+        }
         onFramed={() => setScreenValue('framed')}
         onPaintings={() => setScreenValue('paintings')}
       />

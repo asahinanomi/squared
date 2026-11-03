@@ -11,6 +11,7 @@ import type { Days } from '../lib/days'
 import type { Notes } from '../lib/notes'
 import type { Profile } from '../lib/profile'
 import { Chevron } from './Today'
+import { MAX_CHARS } from '../lib/matters'
 
 type Props = {
   days: Days
@@ -29,6 +30,8 @@ type Props = {
   onPainting: (period: string) => void
   onSquares: () => void
   onMatters: () => void
+  /** The first line of what matters, written right here: what makes a day worth it to you. */
+  onAddMatter: (text: string) => void
   onFramed: () => void
   onPaintings: () => void
 }
@@ -70,6 +73,7 @@ export function MyDays({
   onPainting,
   onSquares,
   onMatters,
+  onAddMatter,
   onFramed,
   onPaintings,
 }: Props) {
@@ -130,7 +134,7 @@ export function MyDays({
           <Chevron dir="right" />
         </button>
       ) : (
-        <div className="settings-rows">{row('what matters', 'what makes a day worth it', onMatters, 'set up')}</div>
+        <FirstMatter onAdd={onAddMatter} onOpen={onMatters} />
       )}
       {/* Your paintings, a shelf (nomi, Oct 31, 2026: seeing your life is a hero, so they sit above the framed day, and
           small, so they take a strip, not half the page): every painting, newest first, side by side; more than fit, the
@@ -226,5 +230,42 @@ function SetUp() {
       set up now
       <Chevron dir="right" />
     </span>
+  )
+}
+
+/**
+ * What matters, not written yet: the question itself, not a row to "set up" (nomi, Nov 3, 2026: asked, not assigned).
+ * One line is enough; it's kept as you leave the box (or press return), and the card becomes "you said this matters".
+ * The link opens the whole page, for both lists.
+ */
+function FirstMatter({ onAdd, onOpen }: { onAdd: (text: string) => void; onOpen: () => void }) {
+  const [text, setText] = useState('')
+  const keep = () => {
+    const t = text.trim()
+    if (t) onAdd(t)
+  }
+  return (
+    <div className="home-card matters-card matters-ask">
+      <span className="matters-text">
+        <span className="matters-label">what matters</span>
+        <label className="matters-line" htmlFor="first-matter">
+          What makes a day worth it to you?
+        </label>
+        <input
+          id="first-matter"
+          className="matters-first"
+          maxLength={MAX_CHARS}
+          placeholder="a walk without my phone…"
+          value={text}
+          enterKeyHint="done"
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+          onBlur={keep}
+        />
+        <button className="matters-all" onClick={onOpen}>
+          or open what matters
+        </button>
+      </span>
+    </div>
   )
 }

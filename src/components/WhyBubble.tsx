@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { MAX_CHARS } from '../lib/matters'
 import type { Paint } from '../lib/paints'
 import { MomentColour } from './MomentColour'
 import { flyAway } from '../lib/fly'
@@ -21,6 +22,8 @@ type Props = {
   pinned?: boolean
   /** Today, not painted yet: a moment as it happens, "this moment…". */
   now?: boolean
+  /** A moment on a worth-it or regret day (or painted so): offer to keep its words in what matters too. */
+  keep?: { has: (text: string) => boolean; add: (text: string) => void }
   /** Editing a note: pin it to the top of its day, or unpin it. */
   onPin?: () => void
   isPinned?: boolean
@@ -48,6 +51,7 @@ export function WhyBubble({
   paint,
   onPaint,
   now,
+  keep,
 }: Props) {
   const [text, setText] = useState(initial)
   const error = initialError
@@ -76,6 +80,8 @@ export function WhyBubble({
   }, [text])
 
   const value = text.trim()
+  // Kept in what matters: the link says so a moment, then the bubble leaves as it always does.
+  const [keptIn, setKeptIn] = useState(false)
 
   const kept = useRef(false)
   const bubble = useRef<HTMLDivElement>(null)
@@ -161,6 +167,21 @@ export function WhyBubble({
               }, 1100)
             }}
           />
+        )}
+        {/* Your own words, kept as what matters to you (nomi, Nov 3, 2026): no blank page, no list to fill in. Offered
+            only on a worth-it or regret moment, short enough for a line, and not kept there already. */}
+        {keep && value && value.length <= MAX_CHARS && (keptIn || !keep.has(value)) && (
+          <button
+            className="why-keep"
+            disabled={keptIn}
+            onClick={() => {
+              keep.add(value)
+              setKeptIn(true)
+              setTimeout(save, 700)
+            }}
+          >
+            {keptIn ? 'kept in what matters ✓' : 'keep this in what matters'}
+          </button>
         )}
         {editing && (
           <div className="why-actions">

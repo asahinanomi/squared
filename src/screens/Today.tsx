@@ -16,7 +16,7 @@ import { handsOn, type Days } from '../lib/days'
 import type { Note, Why } from '../lib/notes'
 import { PAINTS, paintHex, type Paint } from '../lib/paints'
 import { dayWords, firstSquare } from '../lib/pastWords'
-import type { Matters } from '../lib/matters'
+import type { Kind, Matters } from '../lib/matters'
 import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
 import { Raised } from '../components/Raised'
@@ -65,6 +65,8 @@ type Props = {
   onZoomOut: () => void
   /** Off to my days → what matters, to edit the compass. */
   onMatters: () => void
+  /** Keep a moment's words as a line in what matters (worth it, or regret). */
+  onKeepMatter: (kind: Kind, text: string) => void
   /** "how many squares?", from the day finder (without a birth date, its years start at your first square's). */
   onSetUp?: () => void
   /** Someone's first visit: the colours, once, in a sheet (each square is a day, what each colour means). Read when
@@ -133,6 +135,18 @@ export function Today(props: Props) {
   const prev = addDays(date, -1)
   const next = addDays(date, 1)
   const day = days[date]
+  // A moment's words can go into what matters: a worth-it one into "worth it", a regret one into "regret" (its own
+  // colour, else the day's). Not a framed day's "what do you want to remember?", a marked day's, or one written as it
+  // happens (the day isn't answered yet).
+  const keepIn = (w: Why) => {
+    const kind = (c?: Paint): Kind | undefined => (c === 'green' ? 'meaningful' : c === 'red' ? 'wasted' : undefined)
+    const k = w.note ? kind(w.note.color ?? day?.color) : w.pinned || w.happened ? undefined : kind(day?.color)
+    if (!k) return undefined
+    return {
+      has: (t: string) => props.matters[k].some((e) => e.text.trim() === t),
+      add: (t: string) => props.onKeepMatter(k, t),
+    }
+  }
   const special = specialDay(date, born)
   // The day you started squared: found once per change to your squares, not on every render.
   const first = useMemo(() => firstSquare(days), [days])
@@ -499,6 +513,7 @@ export function Today(props: Props) {
                 paint={why.note?.color}
                 onPaint={why.note ? (c) => props.onPaintNote(why.note!, c) : undefined}
                 now={!day && date === today && !why.note}
+                keep={keepIn(why)}
               />
             ) : (
               // A painted day is closed: the brush is put away ("start over" brings it back).
