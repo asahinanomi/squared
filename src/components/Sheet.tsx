@@ -6,7 +6,11 @@ export function Sheet({ open, onClose, children, className }: Props) {
   // Keep mounted through the slide-down so it animates out.
   const [mounted, setMounted] = useState(open)
   useEffect(() => {
-    if (open) setMounted(true)
+    if (open) return setMounted(true)
+    // Gone once it has slid away, and in any case a moment after: if its slide never ends (its part of the page hidden
+    // as it closed), it would stay, unseen, over everything (nomi, Nov 3, 2026: frame it, then nothing could be tapped).
+    const t = setTimeout(() => setMounted(false), 400)
+    return () => clearTimeout(t)
   }, [open])
   // Escape closes it too, for a keyboard (the sheets have no close button).
   useEffect(() => {
