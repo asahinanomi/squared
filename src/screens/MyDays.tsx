@@ -241,10 +241,10 @@ function SetUp() {
 }
 
 /**
- * What matters, not written yet: the question on the card, and a box to answer it (the moment box's look). Typing
- * brings a small "add" (nomi, Nov 3, 2026: leaving the box to keep it never happened on iPhone, where a tap on the page
- * doesn't take the cursor away, and nothing said it was kept). Added: "added to what matters ✓" a moment, then the
- * card becomes "you said this matters". No link to the page while it's empty: there's nothing to open.
+ * What matters, not written yet: the question on the card, and a box to answer it (the moment box's look). One rule,
+ * as every box: leaving it keeps what you wrote (the ✓ above a phone's keyboard, a tap or click away), and so does
+ * return; no save button (an "add" was tried, Nov 3, 2026, and taken out for the rule). Kept: "added to what matters
+ * ✓" a moment, then the card becomes "you said this matters". No link to the page while it's empty.
  */
 function FirstMatter({ onAdd, test }: { onAdd: (text: string) => void; test?: boolean }) {
   const [text, setText] = useState('')
@@ -272,23 +272,12 @@ function FirstMatter({ onAdd, test }: { onAdd: (text: string) => void; test?: bo
           enterKeyHint="done"
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && add()}
-          // Leaving the box keeps it, as every writing box does (the ✓ above a phone's keyboard, or a tap away): the
-          // keyboard's ✓, return and "add" all do the same thing (nomi, Nov 3, 2026: the ✓ above the keyboard didn't).
+          // Leaving the box keeps it, as every writing box does (the ✓ above a phone's keyboard, a tap or click away);
+          // return (the keyboard's blue ✓) too. No save button: the one rule (nomi, Nov 3, 2026).
           onBlur={add}
         />
-        {added ? (
+        {added && (
           <span className="matters-added">{test ? 'added ✓ (a test: nothing saved)' : 'added to what matters ✓'}</span>
-        ) : (
-          text.trim() && (
-            <button
-              className="matters-add"
-              tabIndex={-1} // not a stop for the keyboard's arrows: the box is the only field
-              onMouseDown={(e) => e.preventDefault()} // the tap adds; the box needn't blur first
-              onClick={add}
-            >
-              add
-            </button>
-          )
         )}
       </span>
     </div>
