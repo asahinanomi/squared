@@ -180,7 +180,7 @@ export function WhyBubble({
               setTimeout(save, 700)
             }}
           >
-            {keptIn ? 'kept in what matters ✓' : 'keep this in what matters'}
+            {keptIn ? 'added to what matters ✓' : 'add this to what matters'}
           </button>
         )}
         {editing && (
