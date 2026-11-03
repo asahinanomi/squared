@@ -2706,12 +2706,6 @@ body[data-screen='questions'] .idea {
   background: var(--grey-1);
   margin: 0 auto 22px;
 }
-.sheet-title {
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  margin: 0 0 12px;
-}
 .sheet-body {
   font-size: 18px;
   line-height: 1.5;
@@ -4087,16 +4081,6 @@ button.settings-row:active {
 .painting-keep:disabled {
   opacity: 0.5;
 }
-/* A kept painting can come off the wall here, quietly, under its download. */
-.painting-down {
-  display: block;
-  margin: 14px auto 0;
-  padding: 6px;
-  font-size: 14px;
-  color: var(--muted);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
-}
 
 /* paintings (my days): a gallery wall, three to a row, grouped by year under its name (16px, as every month's and
    year's name); each painting with a small caption, as on the shelf. */
@@ -4349,11 +4333,6 @@ button.settings-row:active {
 button.home-card:active {
   transform: scale(0.99);
 }
-.home-t {
-  display: block;
-  font-size: 16px;
-  font-weight: 600;
-}
 /* this month and this year so far, side by side, each titled above (still unsigned) */
 /* A wait: the hourglass alone, centred on the paper. Its grains fall, then it's turned over (half a turn, a
    little ease), and again, as long as the wait lasts. Its sand is half and half, so every turn looks the same. */
@@ -4483,9 +4462,6 @@ button.home-card:active {
   gap: 12px;
   padding: 2px 0 6px;
   background: #fff;
-}
-.finder-head .sheet-title {
-  margin: 0;
 }
 /* What's chosen so far, on the right: plain text in the body's ink, so it reads as an answer, not part of the
    question. Each part can be tapped to choose again. */
@@ -4866,25 +4842,6 @@ button.home-card:active {
   flex-direction: column;
   gap: 3px;
   min-width: 0;
-}
-/* "set up now ›": at the far right of a row (or the card's head), where its arrow is, the two one group. */
-.settings-row > span.set-up-now,
-.set-up-now {
-  flex-direction: row;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0;
-  color: var(--ink-soft);
-  white-space: nowrap;
-}
-.set-up-now svg {
-  width: 18px;
-  height: 18px;
-  color: var(--ink-soft);
 }
 /* The pie, opened from my days: its way back, at the top left. */
 .pie-back {

@@ -60,8 +60,9 @@ const oneOf = (lines: string[], key: string) => {
 // bar (days lived, days ahead; it opens the list), what matters, your paintings, a life
 // in squares, in slices, the days you framed and your paintings. Home stays today, now. Each row is named
 // after the page it opens; the page is "my days", so no row says "my".
-// There's no onboarding: what isn't set up yet waits here, an empty slot (a dashed edge on paper, as for every
-// empty slot) that says "set up now". The life card shows a ghost of its bar, so you can see what's coming.
+// There's no onboarding: what isn't there yet waits here. What matters asks its question on the card; no paintings or
+// framed days yet, an empty slot (a dashed edge) that says how one is made. The life card, before the squares are set,
+// shows a ghost of its bar and "set up now", so you can see what's coming.
 export function MyDays({
   days,
   profile,
@@ -104,9 +105,8 @@ export function MyDays({
   const testing = askFirstTest && !testDone
   // Picked once per visit (and again only if the list itself changes, say once it has loaded).
   const line = useMemo(() => (matters.length ? oneOf(matters, 'squared.mattersShown') : ''), [matters.join('\n')]) // eslint-disable-line react-hooks/exhaustive-deps
-  // Each row opens its page; `empty` is an empty slot (dashed). Not set up yet: its sub says what it is, and "set up
-  // now" sits at the far right with the arrow.
-  const row = (label: string, sub: string, go: () => void, empty?: 'set up' | 'none') => {
+  // An empty slot (dashed): nothing there yet, its sub says what it is; it opens how to make one.
+  const row = (label: string, sub: string, go: () => void) => {
     const text = (
       <span className="settings-text">
         <span className="settings-label">{label}</span>
@@ -114,9 +114,9 @@ export function MyDays({
       </span>
     )
     return (
-      <button className={'settings-row' + (empty ? ' is-empty' : '')} onClick={go}>
+      <button className="settings-row is-empty" onClick={go}>
         {text}
-        {empty === 'set up' ? <SetUp /> : <Chevron dir="right" />}
+        <Chevron dir="right" />
       </button>
     )
   }
@@ -149,7 +149,7 @@ export function MyDays({
           with how a painting is made. */}
       {!shelf.length && (
         <div className="settings-rows">
-          {row('paintings', 'none yet · how a painting is made', () => setHelp('paintings'), 'none')}
+          {row('paintings', 'none yet · how a painting is made', () => setHelp('paintings'))}
         </div>
       )}
       {shelf.length > 0 && (
@@ -199,7 +199,7 @@ export function MyDays({
         </section>
       ) : (
         <div className="settings-rows">
-          {row('framed days', 'none yet · how to frame a day', () => setHelp('framed'), 'none')}
+          {row('framed days', 'none yet · how to frame a day', () => setHelp('framed'))}
         </div>
       )}
       {/* Help, only when asked for: how a day is framed, how a painting is made. */}
@@ -227,16 +227,6 @@ export function MyDays({
         </div>
       </Sheet>
     </main>
-  )
-}
-
-/** "set up now ›": where the arrow is, on a row or card that isn't set up yet. */
-function SetUp() {
-  return (
-    <span className="set-up-now">
-      set up now
-      <Chevron dir="right" />
-    </span>
   )
 }
 
