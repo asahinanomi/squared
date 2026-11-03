@@ -134,7 +134,7 @@ export function MyDays({
           <Chevron dir="right" />
         </button>
       ) : (
-        <FirstMatter onAdd={onAddMatter} onOpen={onMatters} />
+        <FirstMatter onAdd={onAddMatter} />
       )}
       {/* Your paintings, a shelf (nomi, Oct 31, 2026: seeing your life is a hero, so they sit above the framed day, and
           small, so they take a strip, not half the page): every painting, newest first, side by side; more than fit, the
@@ -236,9 +236,9 @@ function SetUp() {
 /**
  * What matters, not written yet: the question itself, not a row to "set up" (nomi, Nov 3, 2026: asked, not assigned).
  * One line is enough; it's kept as you leave the box (or press return), and the card becomes "you said this matters".
- * The link opens the whole page, for both lists.
+ * No link to the page yet: there's nothing in it (nomi). Once a line is written, the card opens both lists.
  */
-function FirstMatter({ onAdd, onOpen }: { onAdd: (text: string) => void; onOpen: () => void }) {
+function FirstMatter({ onAdd }: { onAdd: (text: string) => void }) {
   const [text, setText] = useState('')
   const keep = () => {
     const t = text.trim()
@@ -262,9 +262,6 @@ function FirstMatter({ onAdd, onOpen }: { onAdd: (text: string) => void; onOpen:
           onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
           onBlur={keep}
         />
-        <button className="matters-all" onClick={onOpen}>
-          or open what matters
-        </button>
       </span>
     </div>
   )

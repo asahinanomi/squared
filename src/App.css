@@ -5164,15 +5164,6 @@ button.home-card:active {
 .matters-first::placeholder {
   color: var(--muted);
 }
-.matters-all {
-  display: inline-block;
-  margin-top: 14px;
-  padding: 4px 0;
-  font-size: 15px;
-  color: var(--ink-soft);
-  text-decoration: underline dotted;
-  text-underline-offset: 4px;
-}
 .matters-card > svg {
   flex: none;
   color: #b5b5ae;
