@@ -1278,13 +1278,6 @@ sup.ord {
      (nomi, Nov 1, 2026: they overshot by a pixel). The cut sits just under the edge, so the white still covers it. */
   clip-path: polygon(0 0, 100% 0, 100% 1.5px, 1.5px 100%, 0 100%);
 }
-/* The bubble after marking a day out of my hands: a kind word above the question, in the reading size. */
-.why-comfort {
-  margin: 0 0 10px;
-  font-size: 16px;
-  line-height: 1.45;
-  color: var(--ink);
-}
 .why-label {
   display: block;
   font-size: 18px;

@@ -44,7 +44,7 @@ type Props = {
   onWipe: () => void
   /** Frame (or unframe) a day you want to keep. */
   onFrame: () => void
-  /** Mark the day "out of my hands" (then "what happened?", skippable); or unmark it. */
+  /** Mark the day "out of my hands" (then "Some days aren’t yours to choose.", a few words or skip); or unmark it. */
   onMarkHands: () => void
   onUnmarkHands: () => void
   /** Pin a note to the top of its day, or unpin it. */
@@ -495,7 +495,6 @@ export function Today(props: Props) {
                 pinned={(why.pinned || why.note?.pinned) && !!day?.framed}
                 isPinned={why.note?.pinned}
                 happened={why.happened && !why.note}
-                dayRed={day?.color === 'red'}
                 onPin={why.note ? () => props.onPinNote(why.note!) : undefined}
                 paint={why.note?.color}
                 onPaint={why.note ? (c) => props.onPaintNote(why.note!, c) : undefined}

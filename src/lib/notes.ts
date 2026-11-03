@@ -23,7 +23,7 @@ export type Why = {
   n?: number
   /** A new note for a day just framed: it's pinned, and asks "what do you want to remember?". */
   pinned?: boolean
-  /** A new note for a day just marked out of my hands: it asks "what happened?" (skippable, as framing's). */
+  /** A new note for a day just marked out of my hands: "Some days aren’t yours to choose." over the box (skippable, as framing's). */
   happened?: boolean
 }
 

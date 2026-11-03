@@ -52,7 +52,7 @@ export function useDayActions(
   }
 
   // Out of my hands: a day that wasn't yours to choose. The colour stays; the mark makes sure it's never called a
-  // regret. As framing: marked at once, then "what happened?" (a few words, or skip: nomi, Nov 3, 2026, never required
+  // regret. As framing: marked at once, then "Some days aren’t yours to choose." (a few words, or skip: nomi, Nov 3, 2026, never required
   // to explain your pain); what you write becomes the day's moment. Unmarking keeps the moment.
   const onMarkHands = () => {
     const day = date
@@ -60,7 +60,7 @@ export function useDayActions(
     setDays((d) => (d[day] ? { ...d, [day]: { ...d[day], outOfHands: true } } : d))
     handsSound()
     save({ k: 'hands', date: day, outOfHands: true })
-    setWhy({ happened: true }) // then, as framing does: what happened? (a few words, or skip)
+    setWhy({ happened: true }) // then, as framing does: a kind line over the box (a few words, or skip)
   }
   const onUnmarkHands = () => {
     const day = date
