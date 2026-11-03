@@ -16,6 +16,12 @@ squared is a daily conscience tracker. Each day you paint one square, one honest
 
 squared in eight words: the days behind are done (lived, painted); now is what you have; spend it on what matters, with less regret. Warm, not preachy: it hands today back to you. It sits on home, at the foot (home is today, now), and on my days as the page's epigraph, right under the title, beside "today ›": the serif, 22px, ink, left like the title, no box. Since Oct 25, 2026 it's on sign-in too, right under "An 80-year life is about 29,200 days.": the number, then the line, one message. It may become squared's tagline (the store page, the share card).
 
+## 1c. nomi's own line (Nov 3, 2026)
+
+> **Don't ask how you'll spend your day. Ask how you'll spend your life today.**
+
+What nomi has told themself and others for years; it makes people stop and think. It's the why behind squared's picture (today, one square of a life), so it lives where words do: the letter (after the zoom out, in its lowercase voice) and the store page's first lines, the hook for a stranger. Not the daily question (that stays, locked), not "you are here" in a life (that's a map's plain marker).
+
 ## 2. The idea (the why)
 
 - The **practice** is awareness: noticing your days *as you live them*.

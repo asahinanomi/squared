@@ -16,7 +16,7 @@ type Props = {
 
 // "the idea" (the letter): why squared exists, in the maker's own words. Rewritten by nomi, Oct 23, 2026, on the brand
 // story; made shorter, all why, Nov 2, 2026 (the how lives in the faq): the lost days, the question and its colours,
-// the zoom out, noticing without blame, the line. Its p.s. begins where squared does: today.
+// the zoom out and nomi's own line (spend your life today), noticing without blame, the line. Its p.s. begins where squared does: today.
 export function Idea({ onBegin, onBack }: Props) {
   return (
     <main className="idea">
@@ -44,6 +44,8 @@ export function Idea({ onBegin, onBack }: Props) {
         ))}
       </ul>
       <p>then I zoom out, and today is one small square among all the days I’ll have.</p>
+      {/* nomi's own line, said for years, inward and out loud (Nov 3, 2026). */}
+      <p>so I keep telling myself: don’t ask how I’ll spend my day. ask how I’ll spend my life today.</p>
       <p>no streaks, no scores. just a moment to be here and now. noticing a red day is how the next one changes ;)</p>
       <p>the past is painted. today is still yours.</p>
       <p className="idea-sign">— nomi</p>

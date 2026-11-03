@@ -81,9 +81,12 @@ is still yours." stays the brand line inside (sign-in, my days, the letter), and
 
 - **Name:** squared
 - **Subtitle** (27 of 30): Your life, one square a day
-- **Promotional text** (164 of 170; changeable any time without a review):
-  > Did you spend Today meaningfully? Paint one square: worth it, a regret, or a blur. Watch your life take shape, one day at a time, and keep each month as a painting.
+- **Promotional text** (155 of 170; changeable any time without a review). It opens with nomi's own line (Nov 3, 2026),
+  the hook a stranger reads first:
+  > Don't ask how you'll spend your day. Ask how you'll spend your life today. Paint one square: worth it, a regret, or a blur, and watch your life take shape.
 - **Description:**
+  > Don't ask how you'll spend your day. Ask how you'll spend your life today.
+  >
   > squared asks one question each day: am I spending Today meaningfully?
   >
   > You answer with a brush. Paint the day's square green if it was worth it, red if you wish you'd spent it differently, grey if it passed in a blur. No typing needed, no mood faces, no scores.
@@ -102,7 +105,8 @@ is still yours." stays the brand line inside (sign-in, my days, the letter), and
 ### The share card, to match (Claude, when the store page goes up)
 
 - [ ] `index.html`: og:title → "squared.today: your life, one square a day"; og:description → "Did I spend Today
-  meaningfully? Paint one square a day: worth it, a regret, or a blur, and watch your life take shape."
+  meaningfully? Paint one square a day: worth it, a regret, or a blur, and watch your life take shape." (or, if it reads
+  stronger when the card is made: "Don't ask how you'll spend your day. Ask how you'll spend your life today.")
 - [ ] `public/og.png`: keep the card (the question, the grid of squares); only its small line under the question
   becomes "Your life, one square a day." (was "Paint one square a day.").
 
