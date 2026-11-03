@@ -5,11 +5,12 @@ import { supabase } from '../lib/supabase'
 /** The questions my days asks once, at their moment: after a week painted, after the first red day. */
 export type Ask = 'week' | 'red'
 
-const KEY = 'squared.asked'
+// Per account (the demo is its own): one phone, two accounts, each asked on its own.
+const key = (who: string) => `squared.asked.${who}`
 
-function onDevice(): Ask[] {
+function onDevice(who: string): Ask[] {
   try {
-    return JSON.parse(localStorage.getItem(KEY) ?? '[]')
+    return JSON.parse(localStorage.getItem(key(who)) ?? '[]')
   } catch {
     return []
   }
@@ -20,15 +21,18 @@ function onDevice(): Ask[] {
  * again), and on the device for the demo and until the account has it.
  */
 export function useAsked(session: Session | null | undefined) {
+  const who = session?.user.id ?? 'demo'
   const saved: Ask[] = session?.user.user_metadata?.asked ?? []
-  const [here, setHere] = useState<Ask[]>(onDevice)
-  const asked = new Set([...saved, ...here])
+  const [here, setHere] = useState<{ who: string; list: Ask[] }>(() => ({ who, list: onDevice(who) }))
+  // Signed in as someone else: their own list.
+  const list = here.who === who ? here.list : onDevice(who)
+  const asked = new Set([...saved, ...list])
   const done = (a: Ask) => {
     if (asked.has(a)) return
     const next = [...asked, a]
-    setHere(next)
+    setHere({ who, list: next })
     try {
-      localStorage.setItem(KEY, JSON.stringify(next))
+      localStorage.setItem(key(who), JSON.stringify(next))
     } catch {
       /* the account keeps it */
     }
