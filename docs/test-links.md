@@ -11,7 +11,7 @@ Hidden links for trying squared's first-time moments on your own account. Open t
 | [squared.today/?year](https://squared.today/?year) | Last year's painting (the new-year moment). Works any day. |
 | [squared.today/?birthday](https://squared.today/?birthday) | The birthday sheet over today ("Happy 55th birthday.", from your birth date; "Happy birthday." without one). Works any day. |
 | [squared.today/?firstlife](https://squared.today/?firstlife) | The first zoom out to a life, again: the slower first fill (about 4s) and two pulses (normally once per device). |
-| [squared.today/?askfirst](https://squared.today/?askfirst) | my days with what matters' first question, as an account with no lines sees it: "What makes a day worth it to you?", a box, and "add" once you type. Adding only hides it: nothing is saved. |
+| [squared.today/?askfirst](https://squared.today/?askfirst) | my days with what matters' first question, as an account with no lines sees it: "What makes a day worth it to you?", a box, and "add" once you type. Adding says "added ✓ (a test: nothing saved)", then the card goes back to yours: nothing is saved. |
 | [squared.today/?today=d](https://squared.today/?today=d) | Today's layout D, on trial (lab row 14): the square first, a little smaller, the moment box under the palette. Open it once in Safari while signed in: it's saved to your account, so the home screen app follows (it keeps its own storage and opens at plain squared.today). [?today=now](https://squared.today/?today=now) turns it off the same way. Rollback point if D goes: commit 3743f11. |
 
 ## my days' what-matters card: when it asks

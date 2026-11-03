@@ -133,7 +133,7 @@ export function MyDays({
       {/* What matters, one line at a time: a different one of your own each visit, in the sans of your own words, a
           note to yourself under the time you have. The card opens all of them. Not set yet: the empty slot, as before. */}
       {testing || !matters.length ? (
-        <FirstMatter onAdd={(t) => (testing ? setTestDone(true) : onAddMatter(t))} />
+        <FirstMatter test={testing} onAdd={(t) => (testing ? setTestDone(true) : onAddMatter(t))} />
       ) : (
         <button className="home-card matters-card" onClick={onMatters}>
           <span className="matters-text">
@@ -246,14 +246,14 @@ function SetUp() {
  * doesn't take the cursor away, and nothing said it was kept). Added: "added to what matters ✓" a moment, then the
  * card becomes "you said this matters". No link to the page while it's empty: there's nothing to open.
  */
-function FirstMatter({ onAdd }: { onAdd: (text: string) => void }) {
+function FirstMatter({ onAdd, test }: { onAdd: (text: string) => void; test?: boolean }) {
   const [text, setText] = useState('')
   const [added, setAdded] = useState(false)
   const add = () => {
     const t = text.trim()
     if (!t || added) return
     setAdded(true)
-    setTimeout(() => onAdd(t), 900)
+    setTimeout(() => onAdd(t), test ? 2000 : 900) // a test holds its line a little longer, to read it
   }
   return (
     <div className="home-card matters-card matters-ask">
@@ -274,7 +274,7 @@ function FirstMatter({ onAdd }: { onAdd: (text: string) => void }) {
           onKeyDown={(e) => e.key === 'Enter' && add()}
         />
         {added ? (
-          <span className="matters-added">added to what matters ✓</span>
+          <span className="matters-added">{test ? 'added ✓ (a test: nothing saved)' : 'added to what matters ✓'}</span>
         ) : (
           text.trim() && (
             <button className="matters-add" onClick={add}>
