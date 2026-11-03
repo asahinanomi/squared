@@ -5143,35 +5143,46 @@ button.home-card:active {
 .matters-ask .matters-line {
   margin-top: 14px;
 }
-/* The first line of what matters, written on the card: an underline, as the moment bubble's. */
+/* The answer, written on the card: the same white keyline box as the day's moment box, so it reads as a place to
+   write, not a line of information (nomi, Nov 3, 2026: the underline looked like part of the page). */
 .matters-first {
   display: block;
   width: 100%;
-  margin-top: 10px;
-  padding: 8px 0;
+  box-sizing: border-box;
+  margin-top: 14px;
+  padding: 13px 16px;
   font: inherit;
-  font-size: 16px;
+  font-size: 17px;
+  line-height: 22px;
   color: var(--ink);
-  background: none;
+  background: #fff;
   border: 0;
-  border-bottom: 1px solid var(--grey-1);
-  border-radius: 0;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1.5px #e2e2db;
   outline: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 .matters-first:focus {
-  border-bottom-color: var(--grey-2);
+  box-shadow: inset 0 0 0 1.5px var(--grey-3); /* every writing box, focused: the same soft grey */
 }
 .matters-first::placeholder {
   color: var(--muted);
 }
+/* "skip": a small keyline pill, the secondary action (the buttons table), clearly a button, never louder than the box. */
 .matters-later {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 6px 0;
-  font-size: 15px;
-  color: var(--ink-soft);
-  text-decoration: underline dotted;
-  text-underline-offset: 4px;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  margin-top: 14px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 16px;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+.matters-later:active {
+  transform: scale(0.98);
 }
 .matters-card > svg {
   flex: none;

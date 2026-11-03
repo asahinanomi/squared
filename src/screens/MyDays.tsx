@@ -35,7 +35,7 @@ type Props = {
   regrets: number
   /** A line of what matters, written right here (worth it, or regret). */
   onAddMatter: (kind: Kind, text: string) => void
-  /** The once-only questions: asked already (answered or "not now"), and marking one asked. */
+  /** The once-only questions: asked already (answered or skipped), and marking one asked. */
   asked: (a: Ask) => boolean
   onAsked: (a: Ask) => void
   onFramed: () => void
@@ -106,7 +106,7 @@ export function MyDays({
   ])
   // What matters asks, at its moment, one question at a time (nomi, Nov 3, 2026): after a week painted (with a green
   // one), "What made the green ones green?"; after the first red day (and once that's answered or set aside), "What
-  // would you regret?". Each once: answered or "not now", never again. Before either, with nothing written: the plain
+  // would you regret?". Each once: answered or skipped, never again. Before either, with nothing written: the plain
   // question, which stays until a line is written. A card on my days, never a sheet: it waits, it doesn't interrupt.
   const painted = Object.values(days)
   const ask: { id: Ask | 'first'; kind: Kind; label: string; question: string; hint: string } | null =
@@ -286,7 +286,8 @@ function SetUp() {
 /**
  * A question of what matters, asked on the card, not a row to "set up" (nomi, Nov 3, 2026: asked, not assigned). One
  * line is enough; it's kept as you leave the box (or press return). No link to the page while it's empty (nomi:
- * there's nothing to open). The once-only questions have "not now", and never come back.
+ * there's nothing to open). The once-only questions have "skip" (nomi: "not now" was unclear, and promised a later that never comes), and never
+ * come back.
  */
 function AskMatter(props: {
   label: string
@@ -320,7 +321,7 @@ function AskMatter(props: {
         />
         {props.onNotNow && (
           <button className="matters-later" onMouseDown={(e) => e.preventDefault()} onClick={props.onNotNow}>
-            not now
+            skip
           </button>
         )}
       </span>

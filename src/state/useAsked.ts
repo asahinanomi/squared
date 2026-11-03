@@ -16,7 +16,7 @@ function onDevice(): Ask[] {
 }
 
 /**
- * Which have been asked (answered, or "not now"): never again. Kept with the account (so a second phone doesn't ask
+ * Which have been asked (answered, or skipped): never again. Kept with the account (so a second phone doesn't ask
  * again), and on the device for the demo and until the account has it.
  */
 export function useAsked(session: Session | null | undefined) {
