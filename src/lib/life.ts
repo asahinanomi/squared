@@ -1,6 +1,8 @@
 import { fromIso, isoDate } from './dates'
 
-export const DEFAULT_LIFESPAN = 85
+// Where the lifespan starts for someone new: 80, as sign-in's "An 80-year life" and near the average (nomi, Nov 4,
+// 2026; was 85). Saved accounts keep theirs.
+export const DEFAULT_LIFESPAN = 80
 
 /** Whole days from a to b (both YYYY-MM-DD), ignoring time zones and clock changes. */
 export function daysBetween(a: string, b: string): number {

@@ -2832,6 +2832,10 @@ body[data-screen='questions'] .idea {
   line-height: 1.4;
   color: var(--muted);
 }
+/* Each part whole: if the line must break, it breaks at the "·", never inside a part. */
+.setup-hint > span {
+  white-space: nowrap;
+}
 .setup-label {
   display: block;
   font-size: 14px;
