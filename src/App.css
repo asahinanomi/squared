@@ -2472,7 +2472,13 @@ body[data-screen='questions'] .idea {
   white-space: pre-line;
 }
 .confirm-export {
-  width: 100%;
+  display: block;
+  margin: -4px auto 4px;
+  padding: 6px 8px;
+  font-size: 16px;
+  color: var(--ink-soft);
+  text-decoration: underline dotted;
+  text-underline-offset: 4px;
 }
 .confirm-actions {
   display: flex;

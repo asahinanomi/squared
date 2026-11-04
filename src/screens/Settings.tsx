@@ -155,17 +155,18 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
           body={"Everything goes for good.\nIt can't be undone."}
           confirm="delete"
           typeToConfirm="delete"
-          typeLabel={'have your copy, or don’t need one?\ntype “delete” to go ahead'}
+          typeLabel={'type “delete” to go ahead'}
           aside={
             <>
+              {/* A copy first, if you want one: a quiet link with the warning, not a big button (nomi, Nov 4, 2026). */}
               <button
-                className="pill is-keyline confirm-export"
+                className="confirm-export"
                 onClick={() => {
                   setAsking(false)
                   onExport()
                 }}
               >
-                export my data
+                export my data first
               </button>
               <label className="confirm-type confirm-why">
                 <span>why are you leaving? (optional)</span>
