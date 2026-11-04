@@ -48,7 +48,8 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
     const state = iso > today ? 'is-ahead' : iso === today ? 'is-today' : born && iso < born ? 'is-before' : ''
     const framed = !!day?.framed && iso <= today
     return {
-      className: 'where-cell ' + state + (framed ? ' is-framed' : ''),
+      className:
+        'where-cell ' + state + (framed ? ' is-framed' : '') + (day?.outOfHands && iso <= today ? ' is-marked' : ''),
       // Framed: its paint's deeper shade (a small square shows a frame as depth, not a ring).
       style:
         day && iso <= today

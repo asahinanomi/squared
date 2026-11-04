@@ -2385,8 +2385,16 @@ body[data-screen='questions'] .idea {
   border-radius: 50%;
   background: var(--ink);
 }
-/* Out of my hands, in a month: a small ink stroke over its colour (the full eraser strokes are on the day itself). */
-.month-day.is-marked::after {
+/* Out of my hands, on every small square of a day (a month, the list's cards, my days' week and month): a small ink
+   stroke over its colour (the full eraser strokes are on the day itself). Not in a life or the paintings: pure colour. */
+.day-card-swatch.is-marked,
+.where-cell.is-marked {
+  position: relative;
+  overflow: hidden;
+}
+.month-day.is-marked::after,
+.day-card-swatch.is-marked::after,
+.where-cell.is-marked::after {
   content: '';
   position: absolute;
   inset: 0;

@@ -149,7 +149,7 @@ export function DayCard({
       style={day?.framed ? frameVars(day.color) : undefined}
     >
       <span
-        className={'day-card-swatch' + (day?.framed ? ' is-framed' : '')}
+        className={'day-card-swatch' + (day?.framed ? ' is-framed' : '') + (day?.outOfHands ? ' is-marked' : '')}
         style={day ? { background: squareFill(day.color, day.framed) } : undefined}
         aria-hidden="true"
       />
