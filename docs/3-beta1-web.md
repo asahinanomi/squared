@@ -19,33 +19,32 @@ write in squared is theirs, so the queries never show a moment's text.
 
 - **New people, at a glance:** Supabase → Authentication → Users. Each row: the email, when they joined ("Created"),
   when they last signed in. Click "Created" to put the newest first.
-- **Who joined, newest first** (with when they first painted):
+- **Everyone, in one table** (one row per person, the most recently active first): who they are, when they joined,
+  how often they come back, and what they did today (UTC).
 
 ```sql
-select u.email,
-       u.created_at                         as joined,
-       (select min(created_at) from public.days d where d.user_id = u.id) as first_square
-from auth.users u
-order by u.created_at desc;
-```
-
-- **Today, so far: who** painted or wrote anything today (UTC), with how many squares and moments each:
-
-```sql
-select u.email,
-       count(*) filter (where a.kind = 'square') as squares_today,
-       count(*) filter (where a.kind = 'moment') as moments_today,
-       max(a.t)                                  as last_at
-from (
-  select user_id, 'square' as kind, greatest(created_at, coalesce(changed_at, created_at)) as t
-    from public.days  where created_at >= current_date or changed_at >= current_date
+with acts as (
+  select user_id, greatest(created_at, coalesce(changed_at, created_at)) as t, 'square' as kind from public.days
   union all
-  select user_id, 'moment', written_at from public.notes where written_at >= current_date
-) a
-join auth.users u on u.id = a.user_id
-group by u.email
-order by last_at desc;
+  select user_id, written_at, 'moment' from public.notes
+)
+select u.email,
+       u.created_at::date                                                      as joined,
+       u.last_sign_in_at::date                                                 as last_sign_in,
+       (select min(d.created_at)::date from public.days d where d.user_id = u.id) as first_square,
+       (select count(*) from public.days  d where d.user_id = u.id)            as squares,
+       (select count(*) from public.notes n where n.user_id = u.id)            as moments,
+       count(distinct a.t::date) filter (where a.t > now() - interval '14 days') as active_days_last_14,
+       count(*) filter (where a.kind = 'square' and a.t >= current_date)       as squares_today,
+       count(*) filter (where a.kind = 'moment' and a.t >= current_date)       as moments_today,
+       max(a.t)                                                                as last_active
+from auth.users u
+left join acts a on a.user_id = u.id
+group by u.id, u.email, u.created_at, u.last_sign_in_at
+order by max(a.t) desc nulls last, u.created_at desc;
 ```
+
+  Active means they painted a square or wrote a moment that day (not logins: people stay signed in).
 
 - **Messages from "get in touch":** they're emailed to you as they arrive; the full list is
   `select created_at, body from public.feedback order by created_at desc;`
@@ -53,25 +52,7 @@ order by last_at desc;
   (a failed save or a crash, with the browser; see `docs/4-developer-handbook.md` → "When something breaks").
 - **Someone left:** `select created_at, body from public.farewells order by created_at desc;` (why they left, if they said; no name on it).
 
-### How often each person comes back
-
-- How often each person comes back, **one row per person, with their email**: on how many of the last 14 days they painted a square or wrote a moment (not
-  logins: people stay signed in). Paste in Supabase's SQL Editor; it only reads.
-
-```sql
-select u.email,
-       u.created_at::date      as joined,
-       u.last_sign_in_at::date as last_sign_in,
-       (select count(*) from public.days  d where d.user_id = u.id) as squares,
-       (select count(*) from public.notes n where n.user_id = u.id) as moments,
-       (select count(distinct t::date) from (
-          select created_at as t from public.days  where user_id = u.id
-          union all
-          select written_at      from public.notes where user_id = u.id
-        ) a where t > now() - interval '14 days') as active_days_last_14
-from auth.users u
-order by u.created_at;
-```
+### Their answers
 
 - Their answers go to Claude, sorted into: fix now, try next, parked.
 
