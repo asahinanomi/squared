@@ -1,6 +1,6 @@
 # squared.today
 
-_last updated Nov 4, 2026, 12:26 UTC_
+_last updated Nov 4, 2026, 16:38 UTC_
 
 A quiet, minimal app where I paint one square per day with a color for how I spent that day. I'm the only user. This is version one — build exactly what's here and nothing more.
 
@@ -19,16 +19,7 @@ A quiet, minimal app where I paint one square per day with a color for how I spe
 
 ## Third-party services
 
-Everything squared relies on outside its own code, what it's for, and where its settings and secrets live. **No secret values are written here** — the repo is public; each lives only in the service named.
-
-| Service | What it does for squared | Settings & secrets |
-|---|---|---|
-| **GoDaddy** | Owns the domain squared.today and **all its DNS** (Vercel shows it as "Third Party"): the records pointing the site at Vercel, Resend's sending records (DKIM, SPF/MX on `send`), and DMARC (`_dmarc`, `v=DMARC1; p=none;`). Any new DNS record goes here, not in Vercel. | godaddy.com → My Products → squared.today → DNS |
-| **GitHub** — `asahinanomi/squared` | The code. `main` is what's live. | github.com/asahinanomi/squared |
-| **Vercel** | Hosts squared.today; deploys `main` on every push, and a preview for every branch / PR (previews run as the demo — they have no Supabase keys). | Vercel → project `squared` → Settings → Environment Variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_GOOGLE_CLIENT_ID` (production) |
-| **Supabase** | The account (Google sign-in), the database (days, notes, profile, what matters, feedback — each person sees only their own rows), the SQL migrations in `supabase/migrations/`, and the `feedback-email` edge function. | supabase.com → project → SQL Editor (migrations), Authentication → Providers (Google), Edge Functions → Secrets, Integrations → Database Webhooks |
-| **Google Cloud** | "continue with Google": the OAuth client Supabase signs people in with. | Google Cloud Console → APIs & Services → Credentials (client ID & secret, also entered in Supabase → Authentication → Providers → Google) |
-| **Resend** | Emails each new feedback note to the maker, from `feedback@squared.today` (the domain is verified in Resend). | resend.com → API Keys. In Supabase → Edge Functions → Secrets: `RESEND_API_KEY`, `FEEDBACK_TO` (the address), `FEEDBACK_SECRET` (the shared secret the feedback webhook sends as `x-feedback-secret`), optional `FEEDBACK_FROM` |
+GoDaddy (domain, DNS), GitHub, Vercel, Supabase, Google Cloud, Resend: what each does and where its settings and secrets live is in `docs/4-developer-handbook.md` ("Services, settings and secrets"). No secret values are written in this repo.
 
 ## Screens (from the design mockups)
 
@@ -409,7 +400,7 @@ squared's three heroes (the question, the brush, and seeing your life: a life in
 
 Decided Oct 22, 2026, after a device copy of what matters replaced the account's lists: a device never keeps your changes to send later, because you can't see (or care) which copy is which, and a lost or unsynced device would hide them from your other devices.
 
-- **Every change saves straight to the account** (`src/lib/save.ts`): painting, wiping, framing, notes, what matters, kept paintings. Changes go one at a time, in order. A blip (a phone just woken, a dropped request) is tried again 1.5s later, quietly; requests also give up after 10s and try once more on a fresh connection (`src/lib/supabase.ts`).
+- **Every change saves straight to the account** (`src/lib/save.ts`): painting, wiping, framing, marking, notes, what matters. Changes go one at a time, in order. A blip (a phone just woken, a dropped request) is tried again 1.5s later, quietly; requests also give up after 10s and try once more on a fresh connection (`src/lib/supabase.ts`).
 - **What you see**: usually nothing. If a save is slow (over 3s), a quiet "saving…" sits under the top bar. If it can't get through, an ink speech bubble (never red: red is a paint) says "Not saved. squared couldn't reach your account. Check your connection." with **try again** and **discard** (discard reloads what the account has). The change stays on screen meanwhile, and the bubble stays until it's in; when the connection or the app comes back, it tries again by itself. Leaving the page while a save is waiting asks first.
 - **Opening reads from the account**: days, notes, what matters (fresh on opening home or what matters, and when the app comes back). If your squares can't load, squared says "Couldn't load your squares. Check your connection." with "try again", never an empty life in their place.
 - **What matters is one row per line** (`matters_entries`, migration 0017, which copied your lists in; 0018 removed the old `matters` table and its history): each line added, edited, deleted or moved saves on its own (what changed against what the account had), so edits from two devices add up instead of one list overwriting the other. The order is saved too. Every earlier version of a line is kept in `matters_entries_history`.
@@ -435,28 +426,6 @@ All test links live in `docs/test-links.md`.
 - **Feedback is limited** to 5 messages per person per day (migration 0019, a check in the database): the sixth says "that's today's limit of five messages. thank you, send more tomorrow". No captcha (it would need a third-party script, and "get in touch" already needs a Google account).
 - **Packages**: `npm audit` is clean; run it again about monthly.
 - **Backups**: on Supabase Pro, daily backups are kept for 7 days (Dashboard → Database → Backups). Once a month, download one (or Dashboard → Database → Backups → download) and keep it somewhere private: a copy outside Supabase.
-
-## Code structure
-
-Split Oct 22, 2026, so each piece lives in one place (no change in behaviour): `src/App.tsx` (about 150 lines) only wires the pieces together.
-
-- `src/state/app.ts`: the screens, and what the web address asked for (the demo, `?welcome`, `/terms`…), and the first visit's sheet, once.
-- `src/state/useAuth.ts`: who's signed in (and finishing Google's sign-in).
-- `src/state/useAccount.ts`: what the account holds: the question, the profile, every painted day, notes a month at a time; "couldn't load your squares" if it fails.
-- `src/state/useDayActions.ts`: paint, start over, frame, and notes (each saved straight to the account).
-- `src/state/useMatters.ts`, `useKept.ts`: what matters, my paintings.
-- `src/state/usePaintingArrival.ts`: the painting that's open, and the new month's (or year's) arrival.
-- `src/state/useNavigation.ts`: where you are and how you move: the zoom ladder, the list and pie, the small print, settings, pinching.
-- `src/state/useLanding.ts`: where you land: home when today is painted, otherwise today.
-- `src/state/useBrowserHistory.ts`: the browser's back button.
-- `src/Screens.tsx`: which screen shows, and what each one gets. `src/screens/SignedOut.tsx`: sign-in and its pages.
-
-## Setup (for future sessions)
-
-1. **Supabase**: run each file in `supabase/migrations/` in order (0001, 0002, …) in the SQL Editor. It creates `settings` (holds the `question` value) and `days` (row-level security: each person sees only their own rows; `painted_on_day` is set by a trigger on first paint).
-2. **Google sign-in**: Supabase → Authentication → Providers → Google, using an OAuth client from Google Cloud. Add the site URLs under Authentication → URL Configuration.
-3. **Env vars** (Vercel and local `.env`, see `.env.example`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. Without them, the app runs as a local demo (sign-in skipped, nothing saved).
-4. **Google screen says "squared.today"** (optional): set `VITE_GOOGLE_CLIENT_ID` to the same OAuth web client's ID, and in Google Cloud add `https://squared.today` to its Authorized JavaScript origins and `https://squared.today/` to its Authorized redirect URIs. The app then signs in with Google directly (ID token + nonce → `signInWithIdToken`). Without the variable it uses Supabase's redirect, whose Google screen shows the Supabase address.
 
 ## Phase 2 — the zoom (done)
 
@@ -534,10 +503,6 @@ Design: https://claude.ai/artifact/PFuFHaZmJXTG82GkJsT1NH. One zoom from a day o
 - **Date labels on day squares (agreed):** big date number; a small line under it. Normal size: "Thu". Zoomed in: "2026.10 Thu" (year.month, then weekday — never "Oct '26", which reads like a date). Zoomed far out: color only, no text. Applies to the month view and "a life · in days" once pinch zoom lands (steps 6–7).
 - Step 8 (done): **ship** — full regression pass (paint, notes, swipe delete, instant save, every zoom level, pinch anchoring, labels, "today"), speed check with ~18,000 painted days, README wrapped up, PR merged into `main`.
 
-## Live
+## Live, setup and how it's built
 
-- App: **https://squared.today** (Vercel; `www.squared.today` redirects here). Backup URL: https://squared-peach.vercel.app
-- DNS at GoDaddy: `A @ → 76.76.21.21`, `CNAME www → cname.vercel-dns.com`. No other A/AAAA records for `@` (the GoDaddy "Parked" A record must stay deleted).
-- Supabase project `xsqpdmtruajdunawpxhk`: Site URL `https://squared.today`; Redirect URLs `https://squared.today/**` and `https://squared-peach.vercel.app/**`.
-- Google sign-in: the OAuth client's redirect URIs are `https://xsqpdmtruajdunawpxhk.supabase.co/auth/v1/callback` and (for direct sign-in) `https://squared.today/`; its ID and secret live in Supabase → Authentication → Providers → Google.
-- Vercel env vars (Production + Preview): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (the publishable key of the project above). They are baked in at build time, so redeploy after changing them.
+https://squared.today. The stack, running it locally, the code map, the database and migrations, deploying, every service and where its settings and secrets live, and what to do when something breaks: **`docs/4-developer-handbook.md`** (Nov 4, 2026, written for a developer taking over). This file stays the product and its decisions.
