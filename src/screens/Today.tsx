@@ -4,7 +4,7 @@ import { showFirstPaint } from '../lib/firstPaint'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { MomentBox } from '../components/MomentBox'
 import { Turn } from '../components/Turn'
-import { onceToday } from '../lib/onceADay'
+import { onceEver, onceToday } from '../lib/onceADay'
 import { NotesList } from '../components/NotesList'
 import { Sheet } from '../components/Sheet'
 import { PaintCanvas } from '../components/PaintCanvas'
@@ -247,17 +247,23 @@ export function Today(props: Props) {
   }, [compassOpen]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => setCompassOpen(false), [date])
 
-  // How to paint, acted out by the brush (lab: ?firstpaint): on a blank today, once the page has settled and the
-  // square's own hint has swept by. Any touch ends it.
+  // How to paint, acted out by the brush, once ever for each person (nomi, Nov 4, 2026; it replaced the ghost hint
+  // that swept every blank square): on a blank today, once the first-visit sheet is closed, and after the date has
+  // turned over if it does. ?firstpaint plays it any time. Any touch ends it.
   useEffect(() => {
-    if (!firstPaintTest || day || date !== today) return
+    if (day || date !== today || introOpen) return
     let stop = () => {}
-    const t = setTimeout(() => (stop = showFirstPaint()), 3200)
+    const t = setTimeout(
+      () => {
+        if (firstPaintTest || onceEver('firstPaint')) stop = showFirstPaint() // marked seen only once it plays
+      },
+      dayTurns ? 2200 : 1200,
+    )
     return () => {
       clearTimeout(t)
       stop()
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [introOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
   const hasPrev = prev >= firstDay(days, born)
@@ -494,7 +500,6 @@ export function Today(props: Props) {
                 onFilled={onFilled}
                 blank={special ? `paint\n${blankSpecial(special.split(' · ')[0])}` : blankWord(date, today)}
                 breathing={breathing}
-                ghostDelay={dayTurns ? 1700 : 400}
               />
             </div>
             {hasNext ? peek(next, 1) : <span className="peek is-none" />}

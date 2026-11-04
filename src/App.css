@@ -1028,62 +1028,6 @@ sup.ord {
   text-align: left;
 }
 
-/* The ghost brush (for someone new): a faint green trail drawn as the brush sweeps, then it fades and repeats. */
-.ghost {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-}
-.ghost-trail {
-  fill: none;
-  stroke: rgba(110, 155, 123, 0.2);
-  stroke-width: 9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: ghost-trail 1.15s var(--ghost-delay, 0.4s) linear forwards;
-}
-.ghost-brush {
-  stroke: #141413;
-  stroke-width: 1.2;
-  stroke-linejoin: round;
-  opacity: 0;
-  animation: ghost-brush 1.15s var(--ghost-delay, 0.4s) linear forwards;
-}
-/* Once, calmly (nomi, Nov 3, 2026): a slow 1.15s sweep; halfway through it the brush and its trail begin to fade, and they're
-   gone just as the stroke reaches its end. */
-@keyframes ghost-brush {
-  0%,
-  50% {
-    opacity: 0.85;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-@keyframes ghost-trail {
-  0% {
-    stroke-dashoffset: 1;
-    opacity: 1;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    stroke-dashoffset: 0;
-    opacity: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ghost {
-    display: none;
-  }
-}
 
 /* ---------- note under the square ---------- */
 .notes {

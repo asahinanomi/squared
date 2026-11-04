@@ -1,12 +1,8 @@
-import { PAINTS } from './paints'
-
-// How to paint, acted out once (lab, nomi, Nov 4, 2026: a beta tester didn't know what to do): the palette's own brush
+// How to paint, acted out once (nomi, Nov 4, 2026: a beta tester didn't know what to do; it replaced the ghost hint): the palette's own brush
 // lifts out of its notch, dips into green (its head takes the colour), flies to the square, paints one soft stroke
 // across it, and flies home; the stroke fades and the square is blank again. Painting is never done for you: the stroke
 // is a ghost, never a colour. A copy of the brush flies, in a layer over the page, drawn in the palette's own units so
 // it's the same brush; the real one waits, hidden, in its notch. Any touch ends it at once.
-
-const GREEN = PAINTS.find((p) => p.id === 'green')!.hex
 
 const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2)
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t
@@ -36,22 +32,17 @@ export function showFirstPaint(): () => void {
     height: `${box.height}px`,
   })
 
-  // The stroke it paints: a soft wave across the middle of the square, a ghost of green.
+  // The stroke it paints: the square's old hint (two sweeps, each rising left to right), in its faint green.
   const sq = square.getBoundingClientRect()
-  const [ax, ay] = toUnits(sq.left + sq.width * 0.2, sq.top + sq.height * 0.58)
-  const [bx, by] = toUnits(sq.left + sq.width * 0.8, sq.top + sq.height * 0.42)
-  const midY = (ay + by) / 2
+  const pt = (x: number, y: number) => toUnits(sq.left + (sq.width * x) / 100, sq.top + (sq.height * y) / 100).join(' ')
   const trail = document.createElementNS(NS, 'path')
-  trail.setAttribute(
-    'd',
-    `M${ax} ${ay} C${lerp(ax, bx, 0.33)} ${midY - 14} ${lerp(ax, bx, 0.66)} ${midY + 14} ${bx} ${by}`,
-  )
+  trail.setAttribute('d', `M${pt(18, 46)} L${pt(82, 28)} L${pt(18, 68)} L${pt(82, 50)}`)
   Object.assign(trail.style, {
     fill: 'none',
-    stroke: GREEN,
-    strokeWidth: String(18 / scale),
+    stroke: 'rgba(110, 155, 123, 0.2)',
+    strokeWidth: String((sq.width * 0.09) / scale),
     strokeLinecap: 'round',
-    opacity: '0.5',
+    strokeLinejoin: 'round',
   })
   trail.setAttribute('pathLength', '1')
   trail.style.strokeDasharray = '1'
@@ -60,7 +51,12 @@ export function showFirstPaint(): () => void {
 
   // The brush, copied, and its tip (where its hairs end), the point that travels.
   const copy = brush.cloneNode(true) as SVGGElement
-  copy.querySelectorAll('.brush-load').forEach((p) => p.classList.remove('is-on'))
+  // It starts clean, whatever the brush held (no fade from the last colour: nomi, Nov 4, 2026).
+  copy.querySelectorAll<SVGPathElement>('.brush-load').forEach((p) => {
+    p.style.transition = 'none'
+    p.classList.remove('is-on')
+  })
+  const green = copy.querySelector<SVGPathElement>('.brush-load')! // the paints' order: green first
   layer.appendChild(copy)
   document.body.appendChild(layer)
   brush.style.visibility = 'hidden'
@@ -78,7 +74,7 @@ export function showFirstPaint(): () => void {
     [600, (k) => [lerp(tip[0], wellAt[0], ease(k)), lerp(tip[1], wellAt[1], ease(k))]],
     [450, (k) => [wellAt[0], wellAt[1] + Math.sin(k * Math.PI) * 5]],
     [700, (k) => [lerp(wellAt[0], at(0)[0], ease(k)), lerp(wellAt[1], at(0)[1], ease(k))] as [number, number]],
-    [1300, (k) => at(ease(k)) as [number, number]],
+    [1600, (k) => at(ease(k)) as [number, number]],
     [700, (k) => [lerp(at(1)[0], tip[0], ease(k)), lerp(at(1)[1], tip[1], ease(k))]],
   ]
   const end = steps.reduce((s, [ms]) => s + ms, 0)
@@ -112,7 +108,11 @@ export function showFirstPaint(): () => void {
     const k = t / steps[i][0]
     const [x, y] = steps[i][1](k)
     copy.setAttribute('transform', `translate(${x - tip[0]} ${y - tip[1]})`)
-    if (i === 1 && k > 0.5) copy.querySelector('.brush-load')?.classList.add('is-on') // the head takes the green
+    if (i === 1 && k > 0.5 && !green.classList.contains('is-on')) {
+      green.style.transition = '' // the head takes the green, softly
+      green.classList.add('is-on')
+    }
+    if (i === 4) green.classList.remove('is-on') // the paint is on the square: it goes home clean
     if (i === 3) trail.style.strokeDashoffset = String(1 - ease(k))
     raf = requestAnimationFrame(tick)
   }
