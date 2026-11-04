@@ -146,6 +146,12 @@ support address is needed either way; a form would add code and spam to handle f
 - The routine stays beta 1's (`docs/3-beta1-web.md` → Support): bug, confusion or idea; same day for sign-in and lost
   data; never change anyone's data without asking.
 
+## Payments, when they come (Claude)
+
+- [ ] The paywall shows the price, what you get, and links to the terms and the privacy policy, right by the subscribe
+  button (Apple guideline 3.1.2), with "By subscribing, you agree to the terms and privacy."
+- [ ] Sign-in keeps its line under "continue with Google" (the industry standard; decided Nov 4, 2026, nomi).
+
 ## How a build gets made
 
 Claude writes the code in the cloud and pushes it. On the Mac, nomi:
