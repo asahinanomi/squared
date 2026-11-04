@@ -9,7 +9,7 @@ import { reportError } from '../lib/report'
 import type { Profile } from '../lib/profile'
 import { LOCK_CHOICES, lockAfter, setLockAfter } from '../lib/lock'
 import { setSoundOn, soundOn, soundOnChime } from '../lib/sound'
-import { Chevron, SpeakerIcon } from './Today'
+import { SpeakerIcon } from './Today'
 
 type Props = {
   profile: Profile | null
@@ -57,13 +57,17 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
         setDeleting(!navigator.onLine || /fetch|network|load failed/i.test(msg) ? 'offline' : 'error')
       })
   }
-  const row = (label: string, sub: string, go: () => void) => (
+  // Every row carries its own small icon at the right, as sound has its speaker: what it is, known at a glance
+  // (nomi, Nov 4, 2026).
+  const row = (label: string, sub: string, go: () => void, icon: React.ReactNode) => (
     <button className="settings-row" onClick={go}>
       <span>
         <span className="settings-label">{label}</span>
         <span className="settings-sub">{sub}</span>
       </span>
-      <Chevron dir="right" />
+      <span className="settings-switch" aria-hidden="true">
+        {icon}
+      </span>
     </button>
   )
   return (
@@ -71,7 +75,7 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
       <h1 className="settings-title">settings</h1>
 
       <div className="settings-rows is-last">
-        {row('how many squares', summary, onSquares)}
+        {row('how many squares', summary, onSquares, <SquaresIcon />)}
         <button className="settings-row" role="switch" aria-checked={sound} onClick={() => toggleSound()}>
           <span>
             <span className="settings-label">sound</span>
@@ -86,6 +90,9 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
           <span>
             <span className="settings-label">lock when I leave</span>
             <span className="settings-sub">sign out after I’ve been away</span>
+          </span>
+          <span className="settings-switch" aria-hidden="true">
+            <LockIcon />
           </span>
           <span className="seg settings-seg" role="group" aria-label="Lock when I leave">
             {LOCK_CHOICES.map(([id, label]) => (
@@ -103,7 +110,7 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
             ))}
           </span>
         </div>
-        {row('export my data', 'a Word copy of your squares and moments', onExport)}
+        {row('export my data', 'a Word copy of your squares and moments', onExport, <ExportIcon />)}
         <button className="settings-row" disabled={deleting === 'deleting'} onClick={() => setAsking(true)}>
           <span>
             <span className="settings-label">delete my account</span>
@@ -189,6 +196,52 @@ function BinIcon() {
       <path d="M9.5 6.5 V4 H14.5 V6.5" />
       <path d="M6 6.5 L7 20 H17 L18 6.5" />
       <path d="M10.5 10.5 V16.5 M13.5 10.5 V16.5" />
+    </svg>
+  )
+}
+
+/** Four squares: days, as on the view switch. */
+function SquaresIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round">
+      <rect x="4" y="4" width="6.5" height="6.5" rx="1.5" />
+      <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5" />
+      <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5" />
+      <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5" />
+    </svg>
+  )
+}
+
+/** A padlock. */
+function LockIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="5" y="10.5" width="14" height="10" rx="2" />
+      <path d="M8.5 10.5 V7.5 a3.5 3.5 0 0 1 7 0 V10.5" />
+    </svg>
+  )
+}
+
+/** A copy coming down to you: an arrow into a tray. */
+function ExportIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 4 V14.5 M7.5 10 L12 14.5 L16.5 10" />
+      <path d="M4.5 15.5 V19.5 H19.5 V15.5" />
     </svg>
   )
 }

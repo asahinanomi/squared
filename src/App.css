@@ -116,6 +116,10 @@
   flex-wrap: wrap;
   row-gap: 10px;
 }
+/* Its words and its padlock on the first line, the choices under them. */
+.settings-row.is-lock > span:first-child {
+  flex: 1 1 60%;
+}
 .settings-row > .settings-seg {
   display: flex;
   flex-direction: row;
