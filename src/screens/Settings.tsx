@@ -109,6 +109,10 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
             <span className="settings-label">delete my account</span>
             <span className="settings-sub">your squares, notes and lists, for good</span>
           </span>
+          {/* A bin, where the sound row has its speaker: known at a glance, no reading needed (nomi, Nov 4, 2026). */}
+          <span className="settings-switch" aria-hidden="true">
+            <BinIcon />
+          </span>
         </button>
       </div>
       {/* Couldn't delete: the same ink bubble as a save that can't get through, under the top bar. */}
@@ -167,5 +171,24 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
         />
       )}
     </main>
+  )
+}
+
+/** A bin: the lid, its handle, and the can with two lines, drawn like the speaker beside it. */
+function BinIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 6.5 H20" />
+      <path d="M9.5 6.5 V4 H14.5 V6.5" />
+      <path d="M6 6.5 L7 20 H17 L18 6.5" />
+      <path d="M10.5 10.5 V16.5 M13.5 10.5 V16.5" />
+    </svg>
   )
 }
