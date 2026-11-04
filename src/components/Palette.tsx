@@ -8,13 +8,17 @@ type Props = {
   onLoad: (p: Paint) => void
 }
 
-// Drawn to match the reference illustration (traced at 1/5 scale). Tap zones (r 26) stop just short of each other.
+// Drawn to match the reference illustration (traced at 1/5 scale). The wells sit as far apart as the board allows
+// (nomi, Nov 4, 2026, beta 1: they were small and close, and taps picked the wrong one: green and grey were 54 apart,
+// now 61), and a tap anywhere on the board picks the nearest well within REACH (so each colour's target is about 50px
+// on a phone, split halfway between neighbours).
 const R = 21
 const HIT = 26
+const REACH = 38
 const WELLS: Record<Paint, { x: number; y: number }> = {
-  green: { x: 114, y: 72 },
-  grey: { x: 100, y: 124 },
-  red: { x: 170, y: 100 },
+  green: { x: 110, y: 72 },
+  grey: { x: 92, y: 130 },
+  red: { x: 168, y: 98 },
 }
 
 const BOARD =
@@ -127,12 +131,26 @@ const DROPS: Record<Paint, { x: number; y: number; r: number; d: string }[]> = O
 ) as Record<Paint, { x: number; y: number; r: number; d: string }[]>
 
 export function Palette({ loaded, nudge, onLoad }: Props) {
+  // A tap (or click) picks the nearest well, in the palette's own units; too far from every well, nothing.
+  const pick = (e: React.MouseEvent<SVGSVGElement>) => {
+    const m = e.currentTarget.getScreenCTM()
+    if (!m) return
+    const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse())
+    let best: Paint | null = null
+    let bestD = REACH
+    for (const { id } of PAINTS) {
+      const d = Math.hypot(p.x - WELLS[id].x, p.y - WELLS[id].y)
+      if (d < bestD) [best, bestD] = [id, d]
+    }
+    if (best) onLoad(best)
+  }
   return (
     <svg
       className={'palette' + (nudge ? ' is-nudging' : '')}
       viewBox="48 22 224 152"
       role="radiogroup"
       aria-label="Paint palette"
+      onClick={pick}
     >
       <defs>
         {PAINTS.map(({ id, hex }) => (
@@ -168,7 +186,6 @@ export function Palette({ loaded, nudge, onLoad }: Props) {
             aria-checked={on}
             aria-label={id}
             tabIndex={0}
-            onClick={() => onLoad(id)}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onLoad(id)}
           >
             <circle className="well-hit" cx={x} cy={y} r={HIT} />
