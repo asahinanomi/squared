@@ -82,7 +82,10 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
         onOpenWhy={(note) => ui.setWhy({ note })}
         onDryBrush={ui.onDryBrush}
         onFilled={act.onFilled}
-        onWipe={act.onWipe}
+        onWipe={() => {
+          act.onWipe()
+          ui.setLoaded(null) // start over: a clean brush too, so the colour is chosen again (nomi, Nov 4, 2026)
+        }}
         onFrame={act.onFrame}
         onMarkHands={act.onMarkHands}
         onUnmarkHands={act.onUnmarkHands}
