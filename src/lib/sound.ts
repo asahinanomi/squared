@@ -150,20 +150,29 @@ function well(a: AudioContext, out: AudioNode, at: number) {
   lp.frequency.value = 900
   delay.connect(lp).connect(fade).connect(delay)
   lp.connect(out)
-  const o = a.createOscillator()
+  // Its own low pitch (330 falling to 150), but louder on a phone (nomi, Nov 4, 2026: much quieter than the drop and
+  // the sand; a higher pitch was the wrong fix): a phone's speaker barely plays below 200Hz, so the tap carries its own
+  // overtones (2x and 3x), which a phone does play; the ear still hears the low note.
   const g = a.createGain()
-  // Louder, and its fall a touch higher (nomi, Nov 4, 2026: it was much quieter than the drop and the sand on a phone,
-  // whose speaker barely plays below 200Hz).
-  o.frequency.setValueAtTime(480, at)
-  o.frequency.exponentialRampToValueAtTime(220, at + 0.12)
   g.gain.setValueAtTime(0, at)
-  g.gain.linearRampToValueAtTime(2.4, at + 0.005)
+  g.gain.linearRampToValueAtTime(1.6, at + 0.005)
   g.gain.exponentialRampToValueAtTime(0.0001, at + 0.2)
-  o.connect(g)
+  for (const [mult, share] of [
+    [1, 1],
+    [2, 0.55],
+    [3, 0.3],
+  ]) {
+    const o = a.createOscillator()
+    const og = a.createGain()
+    og.gain.value = share
+    o.frequency.setValueAtTime(330 * mult, at)
+    o.frequency.exponentialRampToValueAtTime(150 * mult, at + 0.12)
+    o.connect(og).connect(g)
+    o.start(at)
+    o.stop(at + 0.25)
+  }
   g.connect(out)
   g.connect(delay)
-  o.start(at)
-  o.stop(at + 0.25)
 }
 
 let pour: AudioBuffer | null = null
