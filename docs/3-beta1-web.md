@@ -29,15 +29,22 @@ from auth.users u
 order by u.created_at desc;
 ```
 
-- **Today, so far** (how many people painted or wrote anything today, UTC):
+- **Today, so far: who** painted or wrote anything today (UTC), with how many squares and moments each:
 
 ```sql
-select count(distinct user_id) as people_today
+select u.email,
+       count(*) filter (where a.kind = 'square') as squares_today,
+       count(*) filter (where a.kind = 'moment') as moments_today,
+       max(a.t)                                  as last_at
 from (
-  select user_id from public.days  where created_at >= current_date or changed_at >= current_date
+  select user_id, 'square' as kind, greatest(created_at, coalesce(changed_at, created_at)) as t
+    from public.days  where created_at >= current_date or changed_at >= current_date
   union all
-  select user_id from public.notes where written_at >= current_date
-) a;
+  select user_id, 'moment', written_at from public.notes where written_at >= current_date
+) a
+join auth.users u on u.id = a.user_id
+group by u.email
+order by last_at desc;
 ```
 
 - **Messages from "get in touch":** they're emailed to you as they arrive; the full list is
@@ -48,7 +55,7 @@ from (
 
 ### How often each person comes back
 
-- How often each person comes back: on how many of the last 14 days they painted a square or wrote a moment (not
+- How often each person comes back, **one row per person, with their email**: on how many of the last 14 days they painted a square or wrote a moment (not
   logins: people stay signed in). Paste in Supabase's SQL Editor; it only reads.
 
 ```sql
