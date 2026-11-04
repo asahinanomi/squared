@@ -4,7 +4,7 @@ import { showFirstPaint } from '../lib/firstPaint'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { MomentBox } from '../components/MomentBox'
 import { Turn } from '../components/Turn'
-import { onceEver, onceToday } from '../lib/onceADay'
+import { onceToday } from '../lib/onceADay'
 import { NotesList } from '../components/NotesList'
 import { Sheet } from '../components/Sheet'
 import { PaintCanvas } from '../components/PaintCanvas'
@@ -235,15 +235,16 @@ export function Today(props: Props) {
   const [compassOpen, setCompassOpen] = useState(false)
   useEffect(() => setCompassOpen(false), [date])
 
-  // How to paint, acted out by the brush, once ever for each person (nomi, Nov 4, 2026; it replaced the ghost hint
-  // that swept every blank square): on a blank today, once the first-visit sheet is closed, and after the date has
-  // turned over if it does. ?firstpaint plays it any time. Any touch ends it.
+  // How to paint, acted out by the brush (nomi, Nov 4, 2026; it replaced the ghost hint): on a blank today, at most once
+  // a day, until someone has painted their first square, then never again; once the first-visit sheet is closed, and
+  // after the date has turned over if it does. ?firstpaint plays it any time. Any touch ends it.
   useEffect(() => {
     if (day || date !== today || introOpen) return
     let stop = () => {}
     const t = setTimeout(
       () => {
-        if (firstPaintTest || onceEver('firstPaint')) stop = showFirstPaint() // marked seen only once it plays
+        // Marked seen for the day only once it plays.
+        if (firstPaintTest || (Object.keys(days).length === 0 && onceToday('firstPaint'))) stop = showFirstPaint()
       },
       dayTurns ? 2200 : 1200,
     )

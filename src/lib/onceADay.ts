@@ -19,16 +19,3 @@ export function onceToday(what: string): boolean {
   }
   return true
 }
-
-/** True only the first time `what` is asked for, ever, for this person on this device (and remembers it). */
-export function onceEver(what: string): boolean {
-  if (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches) return false
-  const key = `squared.${what}.${who}`
-  try {
-    if (localStorage.getItem(key)) return false
-    localStorage.setItem(key, '1')
-  } catch {
-    return false
-  }
-  return true
-}

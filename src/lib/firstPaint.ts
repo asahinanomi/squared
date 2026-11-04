@@ -69,12 +69,13 @@ export function showFirstPaint(): () => void {
     return [p.x, p.y]
   }
 
-  // The steps, in ms: to the green, a dip, to the square, the stroke, home, then the stroke fades.
+  // The steps, in ms: to the green, a dip, to the square, the stroke (exactly the old hint's: 1.15s at an even pace,
+  // fading from halfway, gone as it ends), home.
   const steps: [number, (k: number) => [number, number]][] = [
     [600, (k) => [lerp(tip[0], wellAt[0], ease(k)), lerp(tip[1], wellAt[1], ease(k))]],
     [450, (k) => [wellAt[0], wellAt[1] + Math.sin(k * Math.PI) * 5]],
     [700, (k) => [lerp(wellAt[0], at(0)[0], ease(k)), lerp(wellAt[1], at(0)[1], ease(k))] as [number, number]],
-    [1600, (k) => at(ease(k)) as [number, number]],
+    [1150, (k) => at(k) as [number, number]],
     [700, (k) => [lerp(at(1)[0], tip[0], ease(k)), lerp(at(1)[1], tip[1], ease(k))]],
   ]
   const end = steps.reduce((s, [ms]) => s + ms, 0)
@@ -95,12 +96,10 @@ export function showFirstPaint(): () => void {
     let t = now - start
     if (t >= end) {
       copy.setAttribute('transform', '')
-      // Home: the real brush is back; the ghost stroke lingers a moment, then fades.
+      // Home: the real brush is back (the stroke faded as it ended).
       brush.style.visibility = ''
       copy.remove()
-      trail.style.transition = 'opacity 0.9s'
-      trail.style.opacity = '0'
-      setTimeout(finish, 900)
+      finish()
       return
     }
     let i = 0
@@ -113,7 +112,11 @@ export function showFirstPaint(): () => void {
       green.classList.add('is-on')
     }
     if (i === 4) green.classList.remove('is-on') // the paint is on the square: it goes home clean
-    if (i === 3) trail.style.strokeDashoffset = String(1 - ease(k))
+    if (i === 3) {
+      trail.style.strokeDashoffset = String(1 - k)
+      trail.style.opacity = String(k < 0.5 ? 1 : 1 - (k - 0.5) * 2)
+    }
+    if (i === 4) trail.style.opacity = '0'
     raf = requestAnimationFrame(tick)
   }
   raf = requestAnimationFrame(tick)
