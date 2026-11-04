@@ -239,7 +239,10 @@ export function Today(props: Props) {
   // a day, until someone has painted their first square, then never again; only with nothing over the day (the
   // first-visit sheet, a painting that arrived, a birthday: nomi, Nov 4, 2026), and after the date has turned over if
   // it does. ?firstpaint plays it any time. Any touch ends it.
+  // Something was over the day: as it goes (its slide out), the brush starts, with no pause (nomi, Nov 4, 2026).
+  const covered = useRef(false)
   useEffect(() => {
+    if (introOpen || paintingUp || birthdayOpen) covered.current = true
     if (day || date !== today || introOpen || paintingUp || birthdayOpen) return
     let stop = () => {}
     const t = setTimeout(
@@ -247,7 +250,7 @@ export function Today(props: Props) {
         // Marked seen for the day only once it plays.
         if (firstPaintTest || (Object.keys(days).length === 0 && onceToday('firstPaint'))) stop = showFirstPaint()
       },
-      dayTurns ? 2200 : 1200,
+      covered.current ? 320 : dayTurns ? 2200 : 1200,
     )
     return () => {
       clearTimeout(t)
