@@ -423,7 +423,10 @@ export function PaintCanvas({
         onPointerEnter={(e) => {
           if (e.pointerType !== 'mouse') return
           hovering.current = true
-          if (!loaded && !saved) setAskPick(true)
+          if (!loaded && !saved) {
+            setAskPick(true)
+            onDryBrush() // and the colours hop with it, so the eye goes to them (nomi, Nov 4, 2026)
+          }
         }}
         onPointerLeave={(e) => {
           if (e.pointerType !== 'mouse') return
