@@ -3133,6 +3133,23 @@ button.settings-row:active {
   padding-right: 4px;
 }
 
+.settings-rows:has(> .settings-group) {
+  gap: 16px;
+}
+/* A group of rows: one card, its rows split by hairlines. */
+.settings-group {
+  border: 1.5px solid #e2e2db;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.settings-group > .settings-row {
+  border: 0;
+  border-radius: 0;
+}
+.settings-group > .settings-row + .settings-row {
+  border-top: 1px solid #ecece5;
+}
 .settings-rows.is-last {
   margin-bottom: 28px; /* room before the footer's hairline */
 }

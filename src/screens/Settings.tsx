@@ -75,50 +75,56 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
     <main className="settings">
       <h1 className="settings-title">settings</h1>
 
+      {/* Three groups, as on a phone's own settings (nomi, Nov 4, 2026: with less copy, five boxes read heavy): your life;
+          how squared behaves; your data, delete last. */}
       <div className="settings-rows is-last">
-        {row('how many squares', summary, onSquares, <SquaresIcon />)}
-        <button className="settings-row" role="switch" aria-checked={sound} onClick={() => toggleSound()}>
-          <span>
-            <span className="settings-label">sound</span>
-          </span>
-          <span className="settings-switch" aria-hidden="true">
-            <SpeakerIcon on={sound} />
-          </span>
-        </button>
-        {/* Lock when I leave: a private journal locks itself; only how soon is yours to choose (never isn't). */}
-        <div className="settings-row is-lock">
-          <span>
-            <span className="settings-label">lock when I leave</span>
-          </span>
-          <span className="settings-switch" aria-hidden="true">
-            <LockIcon />
-          </span>
-          <span className="seg settings-seg" role="group" aria-label="Lock when I leave">
-            {LOCK_CHOICES.map(([id, label]) => (
-              <button
-                key={id}
-                className={id === lock ? 'is-on' : undefined}
-                aria-pressed={id === lock}
-                onClick={() => {
-                  setLockAfter(id)
-                  setLock(id)
-                }}
-              >
-                {label}
-              </button>
-            ))}
-          </span>
+        <div className="settings-group">{row('how many squares', summary, onSquares, <SquaresIcon />)}</div>
+        <div className="settings-group">
+          <button className="settings-row" role="switch" aria-checked={sound} onClick={() => toggleSound()}>
+            <span>
+              <span className="settings-label">sound</span>
+            </span>
+            <span className="settings-switch" aria-hidden="true">
+              <SpeakerIcon on={sound} />
+            </span>
+          </button>
+          {/* Lock when I leave: a private journal locks itself; only how soon is yours to choose (never isn't). */}
+          <div className="settings-row is-lock">
+            <span>
+              <span className="settings-label">lock when I leave</span>
+            </span>
+            <span className="settings-switch" aria-hidden="true">
+              <LockIcon />
+            </span>
+            <span className="seg settings-seg" role="group" aria-label="Lock when I leave">
+              {LOCK_CHOICES.map(([id, label]) => (
+                <button
+                  key={id}
+                  className={id === lock ? 'is-on' : undefined}
+                  aria-pressed={id === lock}
+                  onClick={() => {
+                    setLockAfter(id)
+                    setLock(id)
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </span>
+          </div>
         </div>
-        {row('export my data', null, onExport, <ExportIcon />)}
-        <button className="settings-row" disabled={deleting === 'deleting'} onClick={() => setAsking(true)}>
-          <span>
-            <span className="settings-label">delete my account</span>
-          </span>
-          {/* A bin, where the sound row has its speaker: known at a glance, no reading needed (nomi, Nov 4, 2026). */}
-          <span className="settings-switch" aria-hidden="true">
-            <BinIcon />
-          </span>
-        </button>
+        <div className="settings-group">
+          {row('export my data', null, onExport, <ExportIcon />)}
+          <button className="settings-row" disabled={deleting === 'deleting'} onClick={() => setAsking(true)}>
+            <span>
+              <span className="settings-label">delete my account</span>
+            </span>
+            {/* A bin, where the sound row has its speaker: known at a glance, no reading needed (nomi, Nov 4, 2026). */}
+            <span className="settings-switch" aria-hidden="true">
+              <BinIcon />
+            </span>
+          </button>
+        </div>
       </div>
       {/* Couldn't delete: the same ink bubble as a save that can't get through, under the top bar. */}
       {(deleting === 'offline' || deleting === 'error') && (
