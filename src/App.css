@@ -411,7 +411,7 @@
   background: none;
   box-shadow: inset 0 0 0 1.5px var(--ink-soft);
 }
-/* The day's moment box, right under the date: a white keyline box (rounded, not a pill: pills are buttons), "this
+/* The day's moment box, under the palette: a white keyline box (rounded, not a pill: pills are buttons), "this
    moment…", no button (the keyboard's ✓, Enter or a colour keeps it). It grows as you write. */
 /* The moment box's place: it stays while the bubble is open, only unseen (nothing below moves). */
 .moment-slot {
@@ -421,7 +421,6 @@
   visibility: hidden;
 }
 .moment-box {
-  margin-top: 8px; /* the first thing on the day, right under the bar (the date sits in the bar) */
   width: min(100%, 342px);
   box-sizing: border-box;
   display: flex;
@@ -458,9 +457,6 @@
 }
 /* A short phone (an iPhone SE): the day's top tightens, so the palette stays above the bar. */
 @media (max-height: 700px) {
-  .moment-box {
-    margin-top: 4px;
-  }
   .question {
     margin-top: 28px;
     font-size: 24px;
@@ -746,12 +742,12 @@ sup.ord {
 .canvas-word.is-painted .canvas-hand {
   font-size: 30px;
 }
-/* The smaller square (layout D) signs a little smaller too, so the word sits in balance (nomi, Nov 3, 2026); "out of my
-   hands", on two lines, a touch smaller again. Still readable at a glance. */
-.today.is-d .canvas-word.is-painted .canvas-hand {
+/* Today's square is a little smaller, so it signs a little smaller too, the word in balance (nomi, Nov 3, 2026); "out
+   of my hands", on two lines, a touch smaller again. Still readable at a glance. */
+.today .canvas-word.is-painted .canvas-hand {
   font-size: 26px;
 }
-.today.is-d .canvas-word.is-painted .canvas-hand.is-two {
+.today .canvas-word.is-painted .canvas-hand.is-two {
   font-size: 23px;
 }
 .paint-wrap {
@@ -807,12 +803,13 @@ sup.ord {
   align-items: center;
   margin-top: 0;
 }
-/* Layout D, on trial (?today=d): the square first and a little smaller, the palette with it; the moment box under the palette, a group gap below it. */
-.today.is-d .canvas,
-.today.is-d .palette {
+/* Today (layout D, tried from Oct 31 and kept Nov 4, 2026): the question and the square first, the square a little
+   smaller, the palette with it; the moment box under the palette, a group gap above it. */
+.today .canvas,
+.today .palette {
   width: min(41.5vw, 162px); /* between the old 176px and the first try's 148px (nomi, Oct 31, 2026) */
 }
-.today.is-d .moment-box {
+.today .moment-box {
   margin-top: 22px;
 }
 /* Square → palette board, the same 22px as question → square (the brush tip reaches a little higher). */
@@ -4742,6 +4739,36 @@ button.home-card:active {
 }
 .frame-demo .day-wipe.is-tapped {
   color: var(--ink);
+}
+/* The more sheet in miniature: a small white card with "frame it", rising under the links, then gone once framed. */
+.frame-demo {
+  position: relative;
+  padding-bottom: 40px; /* room for it, so it never covers the words below */
+}
+.frame-demo-menu {
+  position: absolute;
+  left: 50%;
+  bottom: -38px;
+  padding: 7px 14px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow:
+    inset 0 0 0 1px #e2e2db,
+    0 6px 14px rgba(20, 20, 19, 0.1);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 6px);
+  transition:
+    opacity 0.25s,
+    transform 0.25s;
+  pointer-events: none;
+}
+.frame-demo-menu.is-open {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 /* The painting demo: first where a painting lives (a month's name, its tiny painting at the right), then the
    painting opened over the space below it, the size of the framing demo's square, its pill in proportion. */

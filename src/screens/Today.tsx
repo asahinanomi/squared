@@ -25,8 +25,6 @@ import { tryBirthday } from '../state/app'
 import { questionFor } from '../lib/question'
 
 type Props = {
-  /** Layout D, on trial (?today=d): the square first, the moment box under the palette. */
-  layoutD?: boolean
   question: string
   /** Birth date, if known: the earliest day you can step back to. */
   born?: string
@@ -85,6 +83,14 @@ const INTRO: [Paint, string][] = [
   ['grey', 'grey means I wasn’t paying attention.'],
 ]
 
+// A special day's word on its blank square, short enough for the square's two hand-written lines (nomi, Nov 4, 2026:
+// "paint your 18th birthday" ran edge to edge): the heading and the date already say which birthday.
+function blankSpecial(occasion: string) {
+  if (/^your \S+ birthday$/.test(occasion)) return 'your birthday'
+  if (occasion === 'the day you were born') return 'your first day'
+  return occasion
+}
+
 function blankWord(date: string, today: string) {
   const days = Math.round((fromIso(today).getTime() - fromIso(date).getTime()) / 86_400_000)
   const ago = (n: number, unit: string) => `paint\n${n} ${unit}${n === 1 ? '' : 's'} ago`
@@ -105,7 +111,7 @@ const BREATH_MS = 2400
 export function Today(props: Props) {
   const { question, born, date, days, notes, loaded, why, nudge, onDate, onLoad, onDefine, onDryBrush, onFilled } =
     props
-  const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut, layoutD } = props
+  const { onSaveNote, onDeleteNote, onCloseWhy, onOpenWhy, onZoomOut } = props
   const today = todayIso()
   const [introOpen, setIntroOpen] = useState(!!props.intro)
   // The top bar's middle, where the date goes (found once the bar is on the page).
@@ -356,7 +362,7 @@ export function Today(props: Props) {
 
   // A moment, any time: "this moment…" while today is being lived, "add to today…" once it's painted, "add to this
   // day…" on any other day. Hidden while the bubble is open ("because…" right after painting, or updating a moment), but
-  // it keeps its place, so the square doesn't jump. At the top of the day, or under the palette in layout D (on trial).
+  // it keeps its place, so the square doesn't jump. Under the palette (layout D, kept Nov 4, 2026: the square and the question lead).
   const momentSlot = (
     <div className={'moment-slot' + (why ? ' is-away' : '')} inert={!!why}>
       <MomentBox
@@ -367,7 +373,7 @@ export function Today(props: Props) {
     </div>
   )
   return (
-    <main className={'today' + (day ? ' is-closed' : '') + (layoutD ? ' is-d' : '')}>
+    <main className={'today' + (day ? ' is-closed' : '')}>
       <div
         className="today-stage"
         style={lift === undefined ? undefined : { paddingTop: lift }}
@@ -416,8 +422,6 @@ export function Today(props: Props) {
               onSetUp={props.onSetUp}
             />
           </div>
-
-          {!layoutD && momentSlot}
 
           {/* "Today" belongs to now: its tense follows the day ("am I spending…" until it's painted, "did I spend…" once
               it is); on any other day, the question asks about "this day". */}
@@ -473,7 +477,7 @@ export function Today(props: Props) {
                 loaded={loaded}
                 onDryBrush={onDryBrush}
                 onFilled={onFilled}
-                blank={special ? `paint\n${special.split(' · ')[0]}` : blankWord(date, today)}
+                blank={special ? `paint\n${blankSpecial(special.split(' · ')[0])}` : blankWord(date, today)}
                 breathing={breathing}
                 ghostDelay={dayTurns ? 1700 : 400}
               />
@@ -544,7 +548,7 @@ export function Today(props: Props) {
             )}
           </div>
           {/* D: the moment box under the palette, right above the moments it adds to. */}
-          {layoutD && momentSlot}
+          {momentSlot}
         </div>
       </div>
 

@@ -55,11 +55,6 @@ try {
 } catch {
   /* without storage, a test link works only while signed in */
 }
-// Trying today's layout D (nomi, Oct 31, 2026): the square first, a little smaller, the moment box under the palette.
-// ?today=d turns it on, ?today=now off, saved to the account (useTodayD): the iPhone's home screen app keeps its own
-// storage and always opens at plain squared.today, so a device-only switch never reached it. If D stays, it becomes the
-// only layout; if not, this goes (rollback point: commit 3743f11).
-export const askedD = params.get('today') === 'd' ? true : params.get('today') === 'now' ? false : null
 // The first visit's sheet (each square is a day, the three colours) shows once on this device.
 const INTRO_KEY = 'squared.introSeen'
 export const introSeen = () => {

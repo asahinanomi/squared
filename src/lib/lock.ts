@@ -17,16 +17,17 @@ const LIMIT: Record<LockAfter, number> = { now: 30_000, '15': 15 * 60_000, '30':
 export function lockAfter(): LockAfter {
   try {
     const v = localStorage.getItem(KEY)
-    return v === '15' || v === '30' ? v : 'now'
+    // Not chosen yet: 15 minutes (nomi, Nov 4, 2026: 30 seconds was too short to start with); 30 sec stays a choice.
+    return v === 'now' || v === '30' ? v : '15'
   } catch {
-    return 'now'
+    return '15'
   }
 }
 export function setLockAfter(v: LockAfter) {
   try {
     localStorage.setItem(KEY, v)
   } catch {
-    /* the default stays: immediately */
+    /* the default stays: 15 minutes */
   }
 }
 

@@ -20,7 +20,6 @@ import { useAccount } from './state/useAccount'
 import { useAuth } from './state/useAuth'
 import { useBrowserHistory } from './state/useBrowserHistory'
 import { useDayActions } from './state/useDayActions'
-import { useTodayD } from './state/useTodayD'
 import { useLanding } from './state/useLanding'
 import { useLock } from './state/useLock'
 import { useMatters } from './state/useMatters'
@@ -52,7 +51,6 @@ export default function App() {
   const { screen, date } = nav
   const act = useDayActions(date, acc, why, setWhy)
   const lists = useMatters(userId, screen)
-  const layoutD = useTodayD(session)
   // Paintings aren't kept any more, every one hangs by itself (nomi, Nov 1, 2026): the old list of kept paintings
   // leaves the account (and this device's demo), once.
   useEffect(() => {
@@ -159,7 +157,6 @@ export default function App() {
               lists={lists}
               openPainting={painting.openPainting}
               painter={painter}
-              layoutD={layoutD}
               onDeleted={() => {
                 setDeleted(true)
                 signOut()
