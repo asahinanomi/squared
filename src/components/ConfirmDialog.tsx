@@ -49,7 +49,7 @@ export function ConfirmDialog({ title, body, aside, confirm, onConfirm, onCancel
               autoComplete="off"
               autoCapitalize="none"
               spellCheck={false}
-              autoFocus
+              // No keyboard until you tap a box (nomi, Nov 4, 2026: it rose at once, over the alert).
             />
           </label>
         )}

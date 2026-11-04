@@ -2508,8 +2508,8 @@ body[data-screen='questions'] .idea {
   padding: 11px 14px;
   border: 0;
   border-radius: 12px;
-  background: var(--grey-1);
-  box-shadow: inset 0 0 0 1px #e2e2db; /* the same field as the type "delete" box below */
+  background: #fff;
+  box-shadow: var(--field); /* every writing box: pressed into the page, as the day's moment box */
   font: inherit;
   font-size: 16px; /* no zoom on iPhone */
   color: var(--ink);
@@ -2517,21 +2517,25 @@ body[data-screen='questions'] .idea {
 }
 .confirm-why textarea:focus {
   outline: none;
-  box-shadow: inset 0 0 0 1.5px var(--grey-3);
+  box-shadow: var(--field-focus);
+}
+.confirm-why textarea::placeholder,
+.confirm-type input::placeholder {
+  color: var(--hint);
 }
 .confirm-type input {
   padding: 11px 14px;
   border: 0;
   border-radius: 12px;
-  background: var(--grey-1);
-  box-shadow: inset 0 0 0 1px #e2e2db;
+  background: #fff;
+  box-shadow: var(--field);
   font: inherit;
   font-size: 16px; /* no zoom on iPhone */
   color: var(--ink);
 }
 .confirm-type input:focus {
   outline: none;
-  box-shadow: inset 0 0 0 1.5px var(--grey-3);
+  box-shadow: var(--field-focus);
 }
 
 /* The first visit's sheet: a square is a day, the three colours, how the day goes; then a quiet "got it". */
@@ -3193,11 +3197,12 @@ button.settings-row:active {
   display: block;
   resize: none;
   overflow: hidden;
-  border-color: var(--ink);
+  border-color: transparent;
+  box-shadow: var(--field-focus); /* a line being written: the same pressed-in box as every writing box */
   outline: none;
 }
 .matters-input::placeholder {
-  color: var(--faint);
+  color: var(--hint);
 }
 .matters-list .swipe {
   border-radius: 10px;
