@@ -150,7 +150,7 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
       {asking && (
         <ConfirmDialog
           title="Delete your account?"
-          body={"Everything goes for good.\nIt can't be undone."}
+          body="It can't be undone."
           confirm="delete"
           typeToConfirm="delete"
           typeLabel={'type “delete” to go ahead'}
@@ -164,7 +164,7 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
                   onExport()
                 }}
               >
-                export my data first
+                export my data
               </button>
               <label className="confirm-type confirm-why">
                 <span>why are you leaving? (optional)</span>
