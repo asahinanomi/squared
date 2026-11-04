@@ -78,7 +78,7 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
       {/* Three groups, as on a phone's own settings (nomi, Nov 4, 2026: with less copy, five boxes read heavy): your life;
           how squared behaves; your data, delete last. */}
       <div className="settings-rows is-last">
-        <div className="settings-group">{row('how many squares', summary, onSquares, <SquaresIcon />)}</div>
+        <div className="settings-group">{row('your life in squares', summary, onSquares, <SquaresIcon />)}</div>
         <div className="settings-group">
           <button className="settings-row" role="switch" aria-checked={sound} onClick={() => toggleSound()}>
             <span>

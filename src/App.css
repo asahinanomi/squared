@@ -2806,6 +2806,7 @@ body[data-screen='questions'] .idea {
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.15;
+  text-wrap: balance; /* "See your whole life / at once." never leaves a word alone */
 }
 .setup-fields {
   display: flex;

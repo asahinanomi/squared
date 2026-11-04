@@ -155,13 +155,16 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
         profile={profile}
         onBack={nav.leaveSetup}
         mode={nav.afterSetup === 'settings' ? 'settings' : 'onboarding'}
-        why={
-          nav.afterSetup === 'life' || nav.afterSetup === 'pie'
-            ? 'To see your whole life at once, squared needs two answers.'
+        // The title follows the way in (nomi, Nov 4, 2026): what you came for leads, the two answers follow; from
+        // settings (or anywhere else), the setting's own name, as its row.
+        title={
+          nav.afterSetup === 'life' || nav.afterSetup === 'pie' || nav.afterSetup === 'mydays'
+            ? 'See your whole life at once.'
             : nav.afterSetup === 'month' || nav.afterSetup === 'list' || nav.afterSetup === 'today'
-              ? 'To go further back, squared needs two answers.'
+              ? 'Go further back.'
               : undefined
         }
+        why={nav.afterSetup && nav.afterSetup !== 'settings' ? 'squared needs two answers.' : undefined}
         onSave={async (p) => {
           await saveProfile(p)
           acc.setProfile(p)

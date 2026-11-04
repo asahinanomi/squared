@@ -207,7 +207,7 @@ Why: now, then the day (be here, then what matters, the order squared works in).
 
 **my days** (the menu) — this week · a life (the bar, with an ink dot and "today" where lived meets ahead; opens your life in squares) · October, so far · 2026, so far · all my paintings · what matters · framed days (Oct 26, 2026: "today ›", "a life, in squares", "a life, in slices" and the "paintings" row cut). Each row is named after the page it opens; none says "my", since the page does. Under the title, as the epigraph: *The past is painted. Today is still yours.* (the line, 1b)
 
-**Settings** — how many squares · sound · lock when I leave · export my data · delete my account (sign out is the menu's last line, under "about")
+**Settings** — your life in squares · sound when I paint · lock when I leave · export my data · delete my account (sign out is the menu's last line, under "about")
 
 **The paintings help** — title: *Your days, painted by you.* (nomi, Oct 26, 2026) · **A painting** — "October, painted" / "October, so far" · a new month: "a new month. here's the last one." · **keep this painting ↓** (once kept: download ↓) · "Yours to keep once the month ends."
 

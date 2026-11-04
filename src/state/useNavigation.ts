@@ -32,7 +32,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const [monthFocus, setMonthFocus] = useState<string | undefined>()
   // Which view of a life: one square per year (where a life always lands), month or day.
   const [lifeRes, setLifeResValue] = useState<Resolution>('years')
-  // Where "how many squares?" returns to: a life, when it was asked for on the way there.
+  // Where "your life in squares" returns to: a life, when it was asked for on the way there.
   const [afterSetup, setAfterSetup] = useState<Screen>('today')
   // The zoom level the pie was opened from: the switch returns there.
   const [pieFrom, setPieFrom] = useState<Screen>('life')
@@ -101,7 +101,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setDayFromList(false)
     setScreen('list')
   }
-  /** "how many squares?", then on to `then`. */
+  /** "your life in squares" (birth date, lifespan), then on to `then`. */
   const askSquares = (then: Screen) => {
     setAfterSetup(then)
     setScreenValue('setup')
