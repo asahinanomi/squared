@@ -89,7 +89,6 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
         <div className="settings-row is-lock">
           <span>
             <span className="settings-label">lock when I leave</span>
-            <span className="settings-sub">sign out after I’ve been away</span>
           </span>
           <span className="settings-switch" aria-hidden="true">
             <LockIcon />
