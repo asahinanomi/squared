@@ -12,6 +12,42 @@ own.
 
 ## While it runs
 
+### Who joined, and what's happening (Supabase, read only)
+
+Everything below only reads. Paste a query into Supabase → SQL Editor → Run. Counts, never their words: what people
+write in squared is theirs, so the queries never show a moment's text.
+
+- **New people, at a glance:** Supabase → Authentication → Users. Each row: the email, when they joined ("Created"),
+  when they last signed in. Click "Created" to put the newest first.
+- **Who joined, newest first** (with when they first painted):
+
+```sql
+select u.email,
+       u.created_at                         as joined,
+       (select min(created_at) from public.days d where d.user_id = u.id) as first_square
+from auth.users u
+order by u.created_at desc;
+```
+
+- **Today, so far** (how many people painted or wrote anything today, UTC):
+
+```sql
+select count(distinct user_id) as people_today
+from (
+  select user_id from public.days  where created_at >= current_date or changed_at >= current_date
+  union all
+  select user_id from public.notes where written_at >= current_date
+) a;
+```
+
+- **Messages from "get in touch":** they're emailed to you as they arrive; the full list is
+  `select created_at, body from public.feedback order by created_at desc;`
+- **Something went wrong for someone:** `select * from public.client_errors order by happened_at desc limit 50;`
+  (a failed save or a crash, with the browser; see `docs/4-developer-handbook.md` → "When something breaks").
+- **Someone left:** `select created_at, body from public.farewells order by created_at desc;` (why they left, if they said; no name on it).
+
+### How often each person comes back
+
 - How often each person comes back: on how many of the last 14 days they painted a square or wrote a moment (not
   logins: people stay signed in). Paste in Supabase's SQL Editor; it only reads.
 
