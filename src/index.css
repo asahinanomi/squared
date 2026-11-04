@@ -15,9 +15,10 @@
      field waiting, never as a card (nomi, Nov 4, 2026). */
   --hint: #a5a59f;
   /* A writing box, pressed into the page: its keyline and a soft shadow inside its top edge, so it's never taken for a
-     moment's card (they sit on the page). Focused, the keyline turns soft grey. */
-  --field: inset 0 0 0 1.5px #e2e2db, inset 0 3px 7px rgba(20, 20, 19, 0.13);
-  --field-focus: inset 0 0 0 1.5px var(--grey-3), inset 0 3px 7px rgba(20, 20, 19, 0.13);
+     moment's card (they sit on the page). Light from the top left, so the shadow falls inside the top and left edges
+     (nomi, Nov 4, 2026). Focused, the keyline turns soft grey. */
+  --field: inset 0 0 0 1.5px #e2e2db, inset 2px 3px 6px rgba(20, 20, 19, 0.13);
+  --field-focus: inset 0 0 0 1.5px var(--grey-3), inset 2px 3px 6px rgba(20, 20, 19, 0.13);
   --faint: #c4c4bf; /* decoration only: future and empty squares' labels, placeholders, chevrons — never text you need to read */
   --muted: #6f6f6a; /* the one grey for small text you read (4.8:1 on paper); fainter greys are decoration only */
   --dot: #dddcd6; /* the paper's dots: a texture you barely notice, never competing with text */
