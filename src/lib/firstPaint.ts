@@ -47,6 +47,8 @@ export function showFirstPaint(): () => void {
   trail.setAttribute('pathLength', '1')
   trail.style.strokeDasharray = '1'
   trail.style.strokeDashoffset = '1'
+  // Unseen until the stroke begins: a round cap on an undrawn line still shows as a dot (nomi, Nov 4, 2026).
+  trail.style.opacity = '0'
   layer.appendChild(trail)
 
   // The brush, copied, and its tip (where its hairs end), the point that travels.
