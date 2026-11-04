@@ -30,7 +30,7 @@ const GRID = 24
 const FLOW_MS = 450
 const WET_MS = 520 // wet, as painted, while it saves
 const DRY_MS = 1700 // then it dries smooth (2400 until Oct 29, 2026: nomi found the wait a little slow)
-const SIGN_MS = 1400 // the word and its sound, once the paint is mostly dry (in step with the CSS)
+const SIGN_MS = 60 // the word and its sound, the moment it's filled (nomi, Nov 4, 2026: 1.4s in, people wondered)
 const FILLED = 0.9 // most of it painted; the wet paint flows into the gaps left
 
 // Desktop cursor: a little brush whose tip carries the loaded paint; hotspot at the tip.
@@ -322,8 +322,9 @@ export function PaintCanvas({
     }, 520)
     return () => clearTimeout(t)
   }, [settling])
-  // Just filled: the strokes stay as painted, then dry smooth, and the day's word signs the corner
-  // together with its sound (the drop, the knock, the sand): the answer arrives as one. Only on the stroke that filled
+  // Just filled: the day's word signs the corner at once, faint, together with its sound (the drop, the knock, the
+  // sand): the answer arrives as one, right away. Then the paint dries smooth and the word deepens with it, in full ink
+  // as the colour settles. Only on the stroke that filled
   // it, never when a painted day opens. Then the strokes are cleared, ready for another coat.
   const [drying, setDrying] = useState<Paint | null>(null)
   const dry = () => {

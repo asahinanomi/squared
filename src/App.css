@@ -785,7 +785,11 @@ sup.ord {
 /* Then it dries, as paint does (drawn on the canvas, in PaintCanvas). The day's word signs the corner once it's mostly
    dry, written left to right. */
 .canvas.is-drying .canvas-word.is-painted .canvas-hand {
-  animation: sign 1s 1.4s ease-out both; /* with its sound: SIGN_MS */
+  /* Signed at once, with its sound (SIGN_MS), faint; then it deepens as the paint dries (WET_MS + DRY_MS, 2.2s), in
+     full ink as the colour settles (nomi, Nov 4, 2026). */
+  animation:
+    sign 0.6s 0.06s ease-out both,
+    deepen 2.2s 0.06s ease-in both;
 }
 @keyframes sign {
   from {
@@ -793,6 +797,14 @@ sup.ord {
   }
   to {
     clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes deepen {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
   }
 }
 @media (prefers-reduced-motion: reduce) {
