@@ -152,10 +152,12 @@ function well(a: AudioContext, out: AudioNode, at: number) {
   lp.connect(out)
   const o = a.createOscillator()
   const g = a.createGain()
-  o.frequency.setValueAtTime(330, at)
-  o.frequency.exponentialRampToValueAtTime(150, at + 0.12)
+  // Louder, and its fall a touch higher (nomi, Nov 4, 2026: it was much quieter than the drop and the sand on a phone,
+  // whose speaker barely plays below 200Hz).
+  o.frequency.setValueAtTime(420, at)
+  o.frequency.exponentialRampToValueAtTime(190, at + 0.12)
   g.gain.setValueAtTime(0, at)
-  g.gain.linearRampToValueAtTime(0.7, at + 0.005)
+  g.gain.linearRampToValueAtTime(1.5, at + 0.005)
   g.gain.exponentialRampToValueAtTime(0.0001, at + 0.2)
   o.connect(g)
   g.connect(out)
