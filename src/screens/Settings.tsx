@@ -59,11 +59,12 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
   }
   // Every row carries its own small icon at the right, as sound has its speaker: what it is, known at a glance
   // (nomi, Nov 4, 2026).
-  const row = (label: string, sub: string, go: () => void, icon: React.ReactNode) => (
+  // Its line under the name only where it says something the name and icon don't (nomi, Nov 4, 2026: less to read).
+  const row = (label: string, sub: string | null, go: () => void, icon: React.ReactNode) => (
     <button className="settings-row" onClick={go}>
       <span>
         <span className="settings-label">{label}</span>
-        <span className="settings-sub">{sub}</span>
+        {sub && <span className="settings-sub">{sub}</span>}
       </span>
       <span className="settings-switch" aria-hidden="true">
         {icon}
@@ -79,7 +80,6 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
         <button className="settings-row" role="switch" aria-checked={sound} onClick={() => toggleSound()}>
           <span>
             <span className="settings-label">sound</span>
-            <span className="settings-sub">the brush on paper · a soft tone when done</span>
           </span>
           <span className="settings-switch" aria-hidden="true">
             <SpeakerIcon on={sound} />
@@ -110,11 +110,10 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
             ))}
           </span>
         </div>
-        {row('export my data', 'a Word copy of your squares and moments', onExport, <ExportIcon />)}
+        {row('export my data', null, onExport, <ExportIcon />)}
         <button className="settings-row" disabled={deleting === 'deleting'} onClick={() => setAsking(true)}>
           <span>
             <span className="settings-label">delete my account</span>
-            <span className="settings-sub">your squares, notes and lists, for good</span>
           </span>
           {/* A bin, where the sound row has its speaker: known at a glance, no reading needed (nomi, Nov 4, 2026). */}
           <span className="settings-switch" aria-hidden="true">
