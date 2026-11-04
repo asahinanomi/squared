@@ -379,9 +379,9 @@ export function Today(props: Props) {
     <div className={'moment-slot' + (why ? ' is-away' : '')} inert={!!why}>
       <MomentBox
         key={date}
-        // A #tag, shown by example, always (nomi, Nov 4, 2026: nothing told you tags exist). #health, not #family: not
+        // "+" first, as an add-a-line row (Reminders' "+ New Reminder"), and a #tag, shown by example, always (nomi, Nov 4, 2026: nothing told you tags exist). #health, not #family: not
         // everyone has family; everyone has health.
-        placeholder={(date !== today ? 'add to this day…' : day ? 'add to today…' : 'this moment…') + ' #health'}
+        placeholder={'+ ' + (date !== today ? 'add to this day…' : day ? 'add to today…' : 'this moment…') + ' #health'}
         onAdd={(text, color) => void onSaveNote(undefined, text, color)}
       />
     </div>
