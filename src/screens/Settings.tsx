@@ -82,7 +82,7 @@ export function Settings({ profile, onSquares, onDeleted, onPrivacy, onTerms, on
         <div className="settings-group">
           <button className="settings-row" role="switch" aria-checked={sound} onClick={() => toggleSound()}>
             <span>
-              <span className="settings-label">sound</span>
+              <span className="settings-label">sound when I paint</span>
             </span>
             <span className="settings-switch" aria-hidden="true">
               <SpeakerIcon on={sound} />
