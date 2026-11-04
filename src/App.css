@@ -810,7 +810,7 @@ sup.ord {
   width: min(41.5vw, 162px); /* between the old 176px and the first try's 148px (nomi, Oct 31, 2026) */
 }
 .today .moment-box {
-  margin-top: 22px;
+  margin-top: 34px; /* room for the whisper line under the palette, with a little air below it (nomi, Nov 4, 2026) */
 }
 /* Square → palette board, the same 22px as question → square (the brush tip reaches a little higher). */
 .tray > .palette {
@@ -2758,7 +2758,8 @@ body[data-screen='questions'] .idea {
   top: 100%;
   left: 0;
   right: 0;
-  height: 22px;
+  margin-top: 4px;
+  height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
