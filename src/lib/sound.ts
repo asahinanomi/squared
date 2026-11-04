@@ -154,10 +154,10 @@ function well(a: AudioContext, out: AudioNode, at: number) {
   const g = a.createGain()
   // Louder, and its fall a touch higher (nomi, Nov 4, 2026: it was much quieter than the drop and the sand on a phone,
   // whose speaker barely plays below 200Hz).
-  o.frequency.setValueAtTime(420, at)
-  o.frequency.exponentialRampToValueAtTime(190, at + 0.12)
+  o.frequency.setValueAtTime(480, at)
+  o.frequency.exponentialRampToValueAtTime(220, at + 0.12)
   g.gain.setValueAtTime(0, at)
-  g.gain.linearRampToValueAtTime(1.5, at + 0.005)
+  g.gain.linearRampToValueAtTime(2.4, at + 0.005)
   g.gain.exponentialRampToValueAtTime(0.0001, at + 0.2)
   o.connect(g)
   g.connect(out)
