@@ -41,7 +41,7 @@ const params = new URLSearchParams(location.search)
 // A test link (?welcome, ?month, ?year, ?birthday) or ?touch opened while signed out survives the trip through Google
 // sign-in, which returns to the bare address: kept on the device for 10 minutes, used once when it comes back.
 const TEST_KEY = 'squared.testLink'
-const TESTS = ['welcome', 'month', 'year', 'birthday', 'touch', 'askfirst']
+const TESTS = ['welcome', 'month', 'year', 'birthday', 'touch', 'askfirst', 'firstpaint']
 // Back from Google: a ?code, or an #id_token (direct sign-in).
 const returning = location.search.includes('code=') || /id_token|access_token/.test(location.hash)
 try {
@@ -122,3 +122,6 @@ export const endTouchLink = () => {
  * Adding only hides it: nothing is saved (nomi's account holds real data).
  */
 export const askFirstTest = params.has('askfirst')
+
+/** ?firstpaint: on a blank today, the brush shows how to paint, once (a lab, Nov 4, 2026). It saves nothing. */
+export const firstPaintTest = params.has('firstpaint')

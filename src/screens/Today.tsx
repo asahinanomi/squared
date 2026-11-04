@@ -1,5 +1,6 @@
 import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { showFirstPaint } from '../lib/firstPaint'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { MomentBox } from '../components/MomentBox'
 import { Turn } from '../components/Turn'
@@ -21,7 +22,7 @@ import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
 import { Raised } from '../components/Raised'
 import { OpenPainting } from '../components/PaintingButton'
-import { tryBirthday } from '../state/app'
+import { firstPaintTest, tryBirthday } from '../state/app'
 import { questionFor } from '../lib/question'
 
 type Props = {
@@ -245,6 +246,18 @@ export function Today(props: Props) {
     setMatterAt(h % compass.length)
   }, [compassOpen]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => setCompassOpen(false), [date])
+
+  // How to paint, acted out by the brush (lab: ?firstpaint): on a blank today, once the page has settled and the
+  // square's own hint has swept by. Any touch ends it.
+  useEffect(() => {
+    if (!firstPaintTest || day || date !== today) return
+    let stop = () => {}
+    const t = setTimeout(() => (stop = showFirstPaint()), 3200)
+    return () => {
+      clearTimeout(t)
+      stop()
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
   const hasPrev = prev >= firstDay(days, born)

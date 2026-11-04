@@ -464,6 +464,13 @@
 }
 /* A kept moment, sent like mail (lib/fly.ts): a copy of the box or the bubble it was written in lifts off the page and
    flies into the list. On the body, so its own rules (the bubble is placed relatively) never place it. */
+/* How to paint, acted out (lib/firstPaint.ts): the brush's layer over the page, in the palette's own units. */
+body > .first-paint {
+  position: absolute;
+  z-index: 20;
+  overflow: visible;
+  pointer-events: none;
+}
 body > .is-flying {
   position: absolute;
   z-index: 25;

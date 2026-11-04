@@ -1,6 +1,6 @@
 # Test links
 
-_last updated Nov 3, 2026, 06:40 UTC_
+_last updated Nov 4, 2026, 19:33 UTC_
 
 Hidden links for trying squared's first-time moments on your own account. Open them on your phone while signed in. They save nothing.
 
@@ -11,6 +11,7 @@ Hidden links for trying squared's first-time moments on your own account. Open t
 | [squared.today/?year](https://squared.today/?year) | Last year's painting (the new-year moment). Works any day. |
 | [squared.today/?birthday](https://squared.today/?birthday) | The birthday sheet over today ("Happy 55th birthday.", from your birth date; "Happy birthday." without one). Works any day. |
 | [squared.today/?firstlife](https://squared.today/?firstlife) | The first zoom out to a life, again: the slower first fill (about 4s) and two pulses (normally once per device). |
+| [squared.today/?firstpaint](https://squared.today/?firstpaint) | A lab (Nov 4, 2026): on a blank today, about 3 seconds in, the palette's brush shows how to paint, once: it dips into green, flies to the square, paints one ghost stroke across it, flies home, and the stroke fades. Any touch stops it. Saves nothing. Today must be unpainted. |
 | [squared.today/?askfirst](https://squared.today/?askfirst) | my days with what matters' first question, as an account with no lines sees it: "What makes a day worth it to you?", and a box (return, or the ✓ above the keyboard, keeps it). Adding says "added ✓ (a test: nothing saved)", then the card goes back to yours: nothing is saved. |
 
 ## my days' what-matters card: when it asks
