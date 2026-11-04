@@ -1014,21 +1014,6 @@ sup.ord {
   box-shadow: 0 0 0 1.5px var(--ink);
 }
 
-.compass-edit {
-  margin-top: 4px;
-  padding: 4px 0;
-  font-size: 14px;
-  color: var(--muted);
-  text-decoration: underline dotted #c9c9c2;
-  text-underline-offset: 4px;
-}
-.compass-name {
-  align-self: flex-start;
-  margin: 8px 0 28px;
-  text-align: left;
-}
-
-
 /* ---------- note under the square ---------- */
 .notes {
   width: min(100%, 360px);
@@ -2743,8 +2728,7 @@ body[data-screen='questions'] .idea {
   text-underline-offset: 4px;
   animation: fade-in 0.3s ease-out;
 }
-/* Torn: never more than half the screen. One line of question; the list scrolls, with a fade at its foot while
-   there's more below. */
+/* A sheet's title (every sheet): the question's serif, a step smaller. */
 .torn-title {
   margin: 0 0 14px;
   font-family: var(--font-reflect);
@@ -2755,67 +2739,9 @@ body[data-screen='questions'] .idea {
   color: var(--ink);
   text-wrap: balance;
 }
-/* The two reasons, two equal cards: the question in ink, its tip running on in soft grey. */
-.torn-card {
-  padding: 16px 18px;
-  border-radius: 18px;
-  background: #f6f6f3;
-}
-.torn-card + .torn-card {
+/* Torn, short: the advice, then the other reason, each a line of the sheet's body. */
+.torn-line + .torn-line {
   margin-top: 10px;
-}
-.torn-sheet .sheet-handle {
-  margin-bottom: 16px;
-}
-/* The two reasons a day is torn, each a question in ink, with its tip under it in soft grey. */
-.torn-q {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.45;
-  color: var(--ink);
-}
-.torn-sheet .compass-name {
-  margin: 10px 0 0;
-}
-/* What you said matters, one at a time: the thought in the middle, ‹ › either side (the day's own chevrons). */
-.matter-one {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin: 10px -12px 0;
-  min-height: 72px;
-}
-.matter-text {
-  flex: 1;
-  margin: 0;
-  font-size: 18px;
-  line-height: 1.45;
-  text-align: center;
-  color: var(--ink);
-  animation: fade-in 0.3s ease-out;
-}
-.matter-arrow {
-  flex: none;
-  width: 36px;
-  height: 44px;
-  padding: 0;
-  border: none;
-  background: none;
-  color: var(--ink-soft);
-  display: grid;
-  place-items: center;
-}
-.matter-arrow svg {
-  width: 14px;
-  height: 22px;
-}
-.matter-arrow:disabled {
-  opacity: 0.2;
-}
-.torn-lead {
-  font-weight: 400;
-  color: var(--ink-soft);
 }
 @keyframes fade {
   from {

@@ -31,7 +31,7 @@ type Props = {
   born?: string
   date: string
   days: Days
-  /** What matters, from the account: the compass when torn. */
+  /** What matters, from the account: a moment's words can be added to it. */
   matters: Matters
   notes: Note[]
   loaded: Paint | null
@@ -62,8 +62,6 @@ type Props = {
   onFilled: (p: Paint) => void
   /** Zoom out to the month. */
   onZoomOut: () => void
-  /** Off to my days → what matters, to edit the compass. */
-  onMatters: () => void
   /** Keep a moment's words as a line in what matters (worth it, or regret). */
   onKeepMatter: (kind: Kind, text: string) => void
   /** "how many squares?", from the day finder (without a birth date, its years start at your first square's). */
@@ -193,8 +191,8 @@ export function Today(props: Props) {
     return () => document.removeEventListener('pointerdown', away, true)
   }, [whispering])
   // Torn between green and red: on the third dip into them (both among them), the line under the palette becomes
-  // "torn? paint what won ›" until the brush touches the square; a tap opens the torn sheet (your compass, and out of my
-  // hands). Never a sheet on its own (nomi, Nov 4, 2026: it rose for people only trying the colours, and covered the
+  // "torn? paint what won ›" (once a dip's meaning has faded: meanings always win) until the brush touches the square; a
+  // tap opens the short torn sheet. Never a sheet on its own (nomi, Nov 4, 2026: it rose for people only trying the colours, and covered the
   // square). Grey dips don't count.
   const dips = useRef<Paint[]>([])
   const [torn, setTorn] = useState(false)
@@ -228,23 +226,13 @@ export function Today(props: Props) {
     setWhisper({ paint: p, at: Date.now() })
     if (p === 'grey') return
     const d = (dips.current = [...dips.current, p])
-    if (!torn && d.length >= 3 && d.includes('green') && d.includes('red')) {
+    // Never for someone new (fewer than 7 days painted): tapping the colours to read them looks just like being torn.
+    if (!torn && Object.keys(days).length >= 7 && d.length >= 3 && d.includes('green') && d.includes('red')) {
       setTorn(true)
     }
   }
   // Your own "mattered" entries, listed in the sheet.
-  const compass = props.matters.meaningful.map((e) => e.text.trim()).filter(Boolean)
   const [compassOpen, setCompassOpen] = useState(false)
-  // The matter on show when torn: the same one all day to start (picked by the date), then ‹ › or a swipe, looping
-  // round (the start can be any of them, so neither end is a wall).
-  const [matterAt, setMatterAt] = useState(0)
-  const swipeAt = useRef<number | null>(null)
-  useEffect(() => {
-    if (!compassOpen || !compass.length) return
-    let h = 0
-    for (const ch of today) h = (h * 31 + ch.charCodeAt(0)) >>> 0
-    setMatterAt(h % compass.length)
-  }, [compassOpen]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => setCompassOpen(false), [date])
 
   // How to paint, acted out by the brush, once ever for each person (nomi, Nov 4, 2026; it replaced the ghost hint
@@ -547,7 +535,7 @@ export function Today(props: Props) {
                   {/* Under the palette, in the gap above the moment box (so nothing moves): the dipped colour's
                       meaning, or, torn, a way to the torn sheet. */}
                   <div className="whisper-line" aria-live="polite">
-                    {torn ? (
+                    {torn && !whispering ? (
                       <button className="whisper-torn" onClick={() => setCompassOpen(true)}>
                         torn? paint what won ›
                       </button>
@@ -583,62 +571,12 @@ export function Today(props: Props) {
         )}
         {/* Torn has two reasons, so it asks both (nomi, Oct 30, 2026): was it mixed (what you said matters, one at a
             time, ‹ › to move through, never a scrolling list), or was it out of your hands. Each its own card. */}
-        <Sheet open={compassOpen} onClose={() => setCompassOpen(false)} className="torn-sheet">
-          {/* squared asks, in the question's serif; the two reasons a day is torn answer in two equal cards. */}
+        <Sheet open={compassOpen} onClose={() => setCompassOpen(false)}>
+          {/* Short (nomi, Nov 4, 2026: two cards and a list of what matters were a lot to read): the advice, and the
+              other reason a day is torn. */}
           <h2 className="torn-title">Torn?</h2>
-          <div className="torn-card">
-            <p className="torn-q">
-              Did what mattered outweigh the rest?{' '}
-              <span className="torn-lead">
-                Paint what won. Keep the rest in a moment, in its own colour.
-                {compass.length > 0 && ' You said these matter:'}
-              </span>
-            </p>
-            {compass.length ? (
-              <div
-                className="matter-one"
-                onTouchStart={(e) => (swipeAt.current = e.touches[0].clientX)}
-                onTouchEnd={(e) => {
-                  const dx = e.changedTouches[0].clientX - (swipeAt.current ?? e.changedTouches[0].clientX)
-                  swipeAt.current = null
-                  if (Math.abs(dx) > 40) setMatterAt((i) => (i - Math.sign(dx) + compass.length) % compass.length)
-                }}
-              >
-                <button
-                  className="matter-arrow"
-                  aria-label="Previous"
-                  disabled={compass.length < 2}
-                  onClick={() => setMatterAt((i) => (i - 1 + compass.length) % compass.length)}
-                >
-                  <Chevron dir="left" />
-                </button>
-                <p key={matterAt} className="matter-text">
-                  {compass[Math.min(matterAt, compass.length - 1)]}
-                </p>
-                <button
-                  className="matter-arrow"
-                  aria-label="Next"
-                  disabled={compass.length < 2}
-                  onClick={() => setMatterAt((i) => (i + 1) % compass.length)}
-                >
-                  <Chevron dir="right" />
-                </button>
-              </div>
-            ) : (
-              <button className="compass-edit compass-name" onClick={props.onMatters}>
-                name what matters to you in my days → what matters
-              </button>
-            )}
-          </div>
-          {/* A day that wasn't yours to choose: the same weight as a mixed one, never a footnote. */}
-          {handsOn() && (
-            <div className="torn-card">
-              <p className="torn-q">
-                Or was it out of your hands?{' '}
-                <span className="torn-lead">Paint it honestly, then tap “more” → “out of my hands”.</span>
-              </p>
-            </div>
-          )}
+          <p className="intro-how torn-line">Paint what won. Keep the rest in a moment.</p>
+          {handsOn() && <p className="intro-how torn-line">Not your choice? Paint it, then more → out of my hands.</p>}
         </Sheet>
         {/* Someone's first visit: what a square is and what its colours mean, once. "got it" is a keyline, not the
             black main pill: dismissing a tip is never the day's main action (painting is). */}

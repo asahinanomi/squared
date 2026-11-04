@@ -89,7 +89,6 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
         onPinNote={act.onPinNote}
         onPaintNote={act.onPaintNote}
         onZoomOut={nav.outOfDay}
-        onMatters={nav.openMatters}
         onKeepMatter={(kind, text) =>
           lists.addLines({ ...lists.matters, [kind]: [...lists.matters[kind], { id: crypto.randomUUID(), text }] })
         }
