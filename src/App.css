@@ -2603,7 +2603,8 @@ body[data-screen='questions'] .idea {
   max-width: calc(560px - 2 * var(--gutter));
   background: #fff;
   border-radius: 32px 32px 0 0;
-  padding: 14px 28px calc(env(safe-area-inset-bottom) + 28px);
+  /* Its foot: the phone's home bar area, and a little room (nomi, Nov 4, 2026: 28px more read as empty). */
+  padding: 14px 28px calc(env(safe-area-inset-bottom) + 16px);
   transform: translateY(100%);
   transition: transform 0.3s cubic-bezier(0.3, 0.9, 0.3, 1);
 }
@@ -2688,7 +2689,7 @@ body[data-screen='questions'] .idea {
 }
 .legend.meaning-legend {
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 .legend li {
   display: flex;

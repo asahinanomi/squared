@@ -98,8 +98,10 @@ Voice rule: all three one-liners are **first person** (it's your own conscience,
 
 ## 6. "Meaningful" — the definition (the meaningful sheet)
 
-> **meaningful**
-> Not a good day or a bad one. Not what you got done. A day is meaningful when you spent it on what matters to you.
+> **What makes a day meaningful?**
+> Not a good day or a bad one. A day spent on what matters to you.
+
+(Shortened Nov 4, 2026, nomi; it was "Not a good day or a bad one. Not what you got done. A day is meaningful when you spent it on what matters to you.")
 
 Then the three one-liners (section 4).
 
