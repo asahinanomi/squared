@@ -236,10 +236,11 @@ export function Today(props: Props) {
   useEffect(() => setCompassOpen(false), [date])
 
   // How to paint, acted out by the brush (nomi, Nov 4, 2026; it replaced the ghost hint): on a blank today, at most once
-  // a day, until someone has painted their first square, then never again; once the first-visit sheet is closed, and
-  // after the date has turned over if it does. ?firstpaint plays it any time. Any touch ends it.
+  // a day, until someone has painted their first square, then never again; only with nothing over the day (the
+  // first-visit sheet, a painting that arrived, a birthday: nomi, Nov 4, 2026), and after the date has turned over if
+  // it does. ?firstpaint plays it any time. Any touch ends it.
   useEffect(() => {
-    if (day || date !== today || introOpen) return
+    if (day || date !== today || introOpen || paintingUp || birthdayOpen) return
     let stop = () => {}
     const t = setTimeout(
       () => {
@@ -252,7 +253,7 @@ export function Today(props: Props) {
       clearTimeout(t)
       stop()
     }
-  }, [introOpen]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [introOpen, paintingUp, birthdayOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
   const hasPrev = prev >= firstDay(days, born)
