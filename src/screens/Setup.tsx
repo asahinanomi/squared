@@ -122,14 +122,15 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave, why, title
 
         <div className="setup-fields">
           <div>
-            <label className="setup-label" htmlFor="born">
+            {/* The question lives in the box itself (nomi, Nov 4, 2026: a line less); the label stays for screen readers. */}
+            <label className="setup-label is-hidden" htmlFor="born">
               when were you born?
             </label>
             <div className="setup-field">
               <span className={born ? '' : 'setup-placeholder'}>
                 {born
                   ? fromIso(born).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-                  : 'pick a date'}
+                  : 'when were you born?'}
               </span>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <rect x="3" y="5" width="18" height="16" rx="2.5" />

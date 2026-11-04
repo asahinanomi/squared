@@ -2800,6 +2800,19 @@ body[data-screen='questions'] .idea {
   gap: 30px;
   padding: 16px 0;
 }
+/* Its line under the title belongs to it: close under it, not a group's gap away (nomi, Nov 4, 2026). */
+.setup-title + .setup-why {
+  margin-top: -22px;
+}
+/* A label kept for screen readers only. */
+.setup-label.is-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 .setup-title {
   margin: 0;
   font-size: 28px;
