@@ -314,13 +314,18 @@ export function PaintCanvas({
   // frame late on iPhone, a blink).
   useEffect(() => {
     if (!settling) return
+    // The answer's sound, the moment the paint is down (with the word, signing faint: nomi, Nov 4, 2026).
+    const sound = setTimeout(() => settleSound(settling), SIGN_MS)
     const t = setTimeout(() => {
       setDrying(settling)
       filled.current(settling)
       setTouched(false)
       setSettling(null)
     }, 520)
-    return () => clearTimeout(t)
+    return () => {
+      clearTimeout(sound)
+      clearTimeout(t)
+    }
   }, [settling])
   // Just filled: the day's word signs the corner at once, faint, together with its sound (the drop, the knock, the
   // sand): the answer arrives as one, right away. Then the paint dries smooth and the word deepens with it, in full ink
@@ -336,14 +341,12 @@ export function PaintCanvas({
   }
   useEffect(() => {
     if (!drying) return
-    const sound = setTimeout(() => settleSound(drying), SIGN_MS)
     const t = setTimeout(dry, 3000)
-    return () => {
-      clearTimeout(sound)
-      clearTimeout(t)
-    }
+    return () => clearTimeout(t)
   }, [drying]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // What the square says it is: saved, or just painted and saving.
+  const shown = saved ?? settling
   return (
     <div className="paint-wrap">
       <div
@@ -365,22 +368,24 @@ export function PaintCanvas({
         <canvas ref={canvas} className="paint-surface" />
         {saved && marked && <MarkStrokes />}
 
-        {!touched && !settling && (
+        {/* The word: from the moment the paint is down (settling, before it's saved), one element throughout, so it
+            never restarts (nomi, Nov 4, 2026: a blur, painted fast while the square still breathed, blinked). */}
+        {(!touched || settling) && (
           <span
-            className={'canvas-word' + (saved ? ' is-painted' : '')}
-            style={saved ? { color: paintDeep(saved) } : undefined}
+            className={'canvas-word' + (shown ? ' is-painted' : '')}
+            style={shown ? { color: paintDeep(shown) } : undefined}
             aria-hidden="true"
           >
             <span className="canvas-sign">
               <span
-                key={breathing ? 'breath' : 'word'}
+                key={!shown && breathing ? 'breath' : 'word'}
                 className={
                   'canvas-hand' +
-                  (breathed && !breathing && !saved ? ' is-writing' : '') +
-                  (marked && saved === 'red' ? ' is-two' : '')
+                  (breathed && !breathing && !shown ? ' is-writing' : '') +
+                  (marked && shown === 'red' ? ' is-two' : '')
                 }
               >
-                {saved ? (marked && saved === 'red' ? 'out of\nmy hands' : WORD[saved]) : breathing ? 'be here' : blank}
+                {shown ? (marked && shown === 'red' ? 'out of\nmy hands' : WORD[shown]) : breathing ? 'be here' : blank}
               </span>
             </span>
           </span>

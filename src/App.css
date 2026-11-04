@@ -784,6 +784,7 @@ sup.ord {
    iPhone; removed Oct 27, 2026, a test with nomi). */
 /* Then it dries, as paint does (drawn on the canvas, in PaintCanvas). The day's word signs the corner once it's mostly
    dry, written left to right. */
+.canvas.is-settling .canvas-word.is-painted .canvas-hand,
 .canvas.is-drying .canvas-word.is-painted .canvas-hand {
   /* Signed at once, with its sound (SIGN_MS), faint; then it deepens as the paint dries (WET_MS + DRY_MS, 2.2s), in
      full ink as the colour settles (nomi, Nov 4, 2026). */
@@ -808,6 +809,7 @@ sup.ord {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .canvas.is-settling .canvas-word.is-painted .canvas-hand,
   .canvas.is-drying .canvas-word.is-painted .canvas-hand {
     animation: none;
   }

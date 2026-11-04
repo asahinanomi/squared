@@ -150,14 +150,14 @@ function well(a: AudioContext, out: AudioNode, at: number) {
   lp.frequency.value = 900
   delay.connect(lp).connect(fade).connect(delay)
   lp.connect(out)
-  // The same pebble (one low note, 330 falling to 150), only louder (nomi, Nov 4, 2026: much quieter than the drop and
+  // The same pebble (one low note, 330 falling to 150), only louder (about four times; nomi, Nov 4, 2026: much quieter than the drop and
   // the sand; a higher pitch, then overtones, changed the sound itself: it's the level that was wrong, not the note).
   const o = a.createOscillator()
   const g = a.createGain()
   o.frequency.setValueAtTime(330, at)
   o.frequency.exponentialRampToValueAtTime(150, at + 0.12)
   g.gain.setValueAtTime(0, at)
-  g.gain.linearRampToValueAtTime(2, at + 0.005)
+  g.gain.linearRampToValueAtTime(3, at + 0.005)
   g.gain.exponentialRampToValueAtTime(0.0001, at + 0.2)
   o.connect(g)
   o.start(at)
