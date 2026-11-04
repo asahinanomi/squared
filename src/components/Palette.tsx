@@ -10,7 +10,7 @@ type Props = {
 
 // Drawn to match the reference illustration (traced at 1/5 scale). The wells sit as far apart as the board allows
 // (nomi, Nov 4, 2026, beta 1: they were small and close, and taps picked the wrong one: green and grey were 54 apart,
-// now 61), and a tap anywhere on the board picks the nearest well within REACH (so each colour's target is about 50px
+// now 61; red moved right and up), and a tap anywhere on the board picks the nearest well within REACH (so each colour's target is about 50px
 // on a phone, split halfway between neighbours).
 const R = 21
 const HIT = 26
@@ -18,7 +18,7 @@ const REACH = 38
 const WELLS: Record<Paint, { x: number; y: number }> = {
   green: { x: 110, y: 72 },
   grey: { x: 92, y: 130 },
-  red: { x: 168, y: 98 },
+  red: { x: 178, y: 90 },
 }
 
 const BOARD =
