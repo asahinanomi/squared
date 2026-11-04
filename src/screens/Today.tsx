@@ -171,9 +171,9 @@ export function Today(props: Props) {
       })
     : null
 
-  // On each dip, the dipped colour's meaning rises from the bottom, one line (nomi: three took the focus off
-  // painting). No backdrop, so nothing waits on it: it goes by itself after a few seconds, or at the next touch, and
-  // a stroke on the square still paints.
+  // On each dip, the dipped colour's meaning, one quiet line right under the palette (nomi, Nov 4, 2026: from the
+  // bottom of the screen, it sat under the painting hand). It blocks nothing: it goes by itself after a few seconds,
+  // or at the next touch, and a stroke on the square still paints.
   const [whisper, setWhisper] = useState<{ paint: Paint; at: number } | null>(null)
   const [whispering, setWhispering] = useState(false)
   const [wiping, setWiping] = useState(false)
@@ -191,9 +191,10 @@ export function Today(props: Props) {
     document.addEventListener('pointerdown', away, true)
     return () => document.removeEventListener('pointerdown', away, true)
   }, [whispering])
-  // Torn between green and red: on the third dip into them (both among them), whatever the brush held before, a
-  // sheet rises from the bottom (like "meaningful") with a question to settle it, and your own compass. Once a day;
-  // grey dips don't count.
+  // Torn between green and red: on the third dip into them (both among them), the line under the palette becomes
+  // "torn? paint what won ›" until the brush touches the square; a tap opens the torn sheet (your compass, and out of my
+  // hands). Never a sheet on its own (nomi, Nov 4, 2026: it rose for people only trying the colours, and covered the
+  // square). Grey dips don't count.
   const dips = useRef<Paint[]>([])
   const [torn, setTorn] = useState(false)
   useEffect(() => {
@@ -228,11 +229,10 @@ export function Today(props: Props) {
     const d = (dips.current = [...dips.current, p])
     if (!torn && d.length >= 3 && d.includes('green') && d.includes('red')) {
       setTorn(true)
-      setCompassOpen(true)
     }
   }
   // Your own "mattered" entries, listed in the sheet.
-  const compass = torn ? props.matters.meaningful.map((e) => e.text.trim()).filter(Boolean) : []
+  const compass = props.matters.meaningful.map((e) => e.text.trim()).filter(Boolean)
   const [compassOpen, setCompassOpen] = useState(false)
   // The matter on show when torn: the same one all day to start (picked by the date), then ‹ › or a swipe, looping
   // round (the start can be any of them, so neither end is a wall).
@@ -526,25 +526,22 @@ export function Today(props: Props) {
               !day && (
                 <>
                   <Palette loaded={loaded} nudge={nudge} onLoad={dip} />
-                  {/* The colours' meanings rise from the bottom, like the day's other help, and never sit in the day. */}
-                  {createPortal(
-                    <div
-                      className={'sheet colours-sheet' + (whispering && !compassOpen ? ' is-open' : '')}
-                      aria-live="polite"
-                      aria-hidden={!whispering}
-                    >
-                      <div className="sheet-handle" />
-                      <ul className="legend">
-                        {PAINTS.filter((x) => x.id === whisper?.paint).map((x) => (
-                          <li key={x.id} className="is-dipped">
-                            <span className="legend-swatch" style={{ background: x.hex }} />
-                            {x.meaning}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>,
-                    document.body,
-                  )}
+                  {/* Under the palette, in the gap above the moment box (so nothing moves): the dipped colour's
+                      meaning, or, torn, a way to the torn sheet. */}
+                  <div className="whisper-line" aria-live="polite">
+                    {torn ? (
+                      <button className="whisper-torn" onClick={() => setCompassOpen(true)}>
+                        torn? paint what won ›
+                      </button>
+                    ) : (
+                      PAINTS.filter((x) => x.id === whisper?.paint).map((x) => (
+                        <span key={x.id} className={'whisper-meaning' + (whispering ? ' is-on' : '')}>
+                          <span className="legend-swatch" style={{ background: x.hex }} />
+                          {x.meaning}
+                        </span>
+                      ))
+                    )}
+                  </div>
                 </>
               )
             )}

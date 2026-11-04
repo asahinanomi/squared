@@ -429,7 +429,7 @@
   padding: 7px 18px;
   border-radius: 14px;
   background: #fff;
-  box-shadow: inset 0 0 0 1.5px #e2e2db;
+  box-shadow: var(--field);
 }
 .moment-box textarea {
   flex: 1;
@@ -450,10 +450,10 @@
   flex-wrap: wrap;
 }
 .moment-box textarea::placeholder {
-  color: var(--muted);
+  color: var(--hint);
 }
 .moment-box:focus-within {
-  box-shadow: inset 0 0 0 1.5px var(--grey-3); /* every writing box, focused: the same soft grey (nomi, Oct 31, 2026) */
+  box-shadow: var(--field-focus); /* every writing box, focused: the same soft grey (nomi, Oct 31, 2026) */
 }
 /* A short phone (an iPhone SE): the day's top tightens, so the palette stays above the bar. */
 @media (max-height: 700px) {
@@ -1303,7 +1303,7 @@ sup.ord {
   border-bottom-color: var(--grey-2);
 }
 .why-input::placeholder {
-  color: var(--grey-3);
+  color: var(--hint);
 }
 /* A moment's own colour (optional): one thin strip in two parts, worth it and regret (a dot is a day, a bar is a moment, like the card's
    edge), each word under its part. The chosen part thickens, its word in ink; the others fade. In the box at the top
@@ -2725,7 +2725,6 @@ body[data-screen='questions'] .idea {
   padding-left: 22px;
   padding-right: 22px;
 }
-.colours-sheet .legend li,
 .is-legend .legend li {
   gap: 12px;
 }
@@ -2752,40 +2751,45 @@ body[data-screen='questions'] .idea {
   border-radius: 50%;
   box-shadow: 0 0 0 1.5px var(--ink);
 }
-/* The colours, on each dip: the same sheet, without a backdrop, so the next touch paints. Taps pass through it. */
-.colours-sheet {
-  position: fixed;
-  z-index: 40;
-  left: 50%;
-  bottom: 0;
-  box-sizing: border-box;
-  padding-left: 22px;
-  padding-right: 22px;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
-  box-shadow: 0 -8px 28px rgba(20, 20, 19, 0.1);
+/* The colours, on each dip: one quiet line right under the palette, in the gap above the moment box (so nothing
+   moves), with the colour's dot; it fades in and out. Torn, the same place holds a way to the torn sheet. */
+.whisper-line {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   pointer-events: none;
-  transform: translate(-50%, 100%);
 }
-.colours-sheet.is-open {
-  transform: translate(-50%, 0);
+.whisper-meaning {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
-.colours-sheet .sheet-handle {
-  display: none; /* one quiet line, not a sheet to pull */
+.whisper-meaning.is-on {
+  opacity: 1;
 }
-.colours-sheet {
-  padding-top: 18px;
+.whisper-meaning .legend-swatch {
+  width: 9px;
+  height: 9px;
+  margin-top: 0;
 }
-.colours-sheet .legend {
-  margin: 0;
-  gap: 12px;
-}
-.colours-sheet .legend li {
-  font-size: 16px;
-  color: var(--muted);
-}
-.colours-sheet .legend li.is-dipped {
+.whisper-torn {
+  pointer-events: auto;
+  padding: 4px 8px;
+  font-size: 14px;
   color: var(--ink);
-  font-weight: 500;
+  text-decoration: underline dotted;
+  text-underline-offset: 4px;
+  animation: fade-in 0.3s ease-out;
 }
 /* Torn: never more than half the screen. One line of question; the list scrolls, with a fade at its foot while
    there's more below. */
@@ -3072,7 +3076,7 @@ body[data-screen='questions'] .idea {
   border: 0;
   border-radius: 16px;
   background: #fff;
-  box-shadow: inset 0 0 0 1px #ecece5;
+  box-shadow: var(--field);
   font: inherit;
   font-size: 16px;
   line-height: 1.45;
@@ -3081,10 +3085,10 @@ body[data-screen='questions'] .idea {
 }
 .feedback-input:focus {
   outline: none;
-  box-shadow: inset 0 0 0 1.5px var(--grey-3);
+  box-shadow: var(--field-focus);
 }
 .feedback-input::placeholder {
-  color: var(--faint);
+  color: var(--hint);
 }
 .feedback-error {
   margin: 10px 0 0;
@@ -5145,16 +5149,16 @@ button.home-card:active {
   background: #fff;
   border: 0;
   border-radius: 14px;
-  box-shadow: inset 0 0 0 1.5px #e2e2db;
+  box-shadow: var(--field);
   outline: none;
   -webkit-appearance: none;
   appearance: none;
 }
 .matters-first:focus {
-  box-shadow: inset 0 0 0 1.5px var(--grey-3); /* every writing box, focused: the same soft grey */
+  box-shadow: var(--field-focus); /* every writing box, focused: the same soft grey */
 }
 .matters-first::placeholder {
-  color: var(--muted);
+  color: var(--hint);
 }
 .matters-added {
   display: inline-flex;
