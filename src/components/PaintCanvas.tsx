@@ -168,12 +168,28 @@ export function PaintCanvas({
       return
     }
     if (!loaded) {
-      onDryBrush()
+      dryTouch()
       return
     }
     begin()
     strokeTo(p)
   }
+
+  // No colour yet: the square says what to do (nomi, Nov 4, 2026: the brush cursor and the colours' hop were missed).
+  // On a computer while the cursor is over it; on a phone for a few seconds after a dry touch, with the hop.
+  const [askPick, setAskPick] = useState(false)
+  const pickTimer = useRef(0)
+  const hovering = useRef(false)
+  const dryTouch = () => {
+    onDryBrush()
+    setAskPick(true)
+    clearTimeout(pickTimer.current)
+    if (!hovering.current) pickTimer.current = window.setTimeout(() => setAskPick(false), 2500)
+  }
+  useEffect(() => {
+    if (loaded) setAskPick(false)
+  }, [loaded])
+  useEffect(() => () => clearTimeout(pickTimer.current), [])
 
   const begin = () => {
     wakeSound()
@@ -194,7 +210,7 @@ export function PaintCanvas({
       if (Math.hypot(p.x - start.x, p.y - start.y) < 8) return
       pending.current = null
       if (!loaded) {
-        onDryBrush()
+        dryTouch()
         return
       }
       begin()
@@ -385,7 +401,15 @@ export function PaintCanvas({
                   (marked && shown === 'red' ? ' is-two' : '')
                 }
               >
-                {shown ? (marked && shown === 'red' ? 'out of\nmy hands' : WORD[shown]) : breathing ? 'be here' : blank}
+                {shown
+                  ? marked && shown === 'red'
+                    ? 'out of\nmy hands'
+                    : WORD[shown]
+                  : askPick && !loaded
+                    ? 'pick a colour\nfirst'
+                    : breathing
+                      ? 'be here'
+                      : blank}
               </span>
             </span>
           </span>
@@ -394,7 +418,18 @@ export function PaintCanvas({
       {/* Strokes may start a little outside the square. */}
       <div
         className="paint-reach"
-        style={{ cursor: brushCursor(loaded ? paintHex(loaded) : '#f4f4f1') }}
+        // The brush only once there's paint on it: until then, the plain pointer.
+        style={{ cursor: loaded ? brushCursor(paintHex(loaded)) : 'default' }}
+        onPointerEnter={(e) => {
+          if (e.pointerType !== 'mouse') return
+          hovering.current = true
+          if (!loaded && !saved) setAskPick(true)
+        }}
+        onPointerLeave={(e) => {
+          if (e.pointerType !== 'mouse') return
+          hovering.current = false
+          setAskPick(false)
+        }}
         onPointerDown={down}
         onPointerMove={move}
         onPointerUp={up}
