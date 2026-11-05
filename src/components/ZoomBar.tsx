@@ -15,6 +15,8 @@ type Props = {
   today?: () => void
   /** On today itself: "today" stays, underlined (you're here), and a tap gives the square a small pulse instead. */
   here?: () => void
+  /** A quiet line beside zoom out, which hops once: where to see what was just done (a first painted day). */
+  hint?: string
 }
 
 const stroke = {
@@ -131,7 +133,7 @@ function MyDaysTab({ here, onClick }: { here: boolean; onClick: () => void }) {
 // today's square in the centre, my days at the right, the same on every page). Zoom is a tool on the squares, not a way around, so it floats over
 // them at the bottom right, like a map's + and −: a slim capsule (zoom in on top, zoom out below; on a day, zoom out
 // alone), with ◎ (back to today's square, once it's out of view) on top of it. The list has no zoom: nothing floats.
-export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props) {
+export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here, hint }: Props) {
   const view = useContext(ViewSwitch)
   const goToday = today ?? view?.goToday
   // Scrolled down the page (a day's notes): you're reading, not zooming, so the zoom steps aside until you're back up.
@@ -186,8 +188,13 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here }: Props)
               <RecenterIcon />
             </button>
           )}
+          {hint && onOut && (
+            <button className="zoom-hint" onClick={onOut}>
+              {hint}
+            </button>
+          )}
           {(onIn || onOut) && (
-            <div className="zoom-capsule">
+            <div className={'zoom-capsule' + (hint ? ' is-hinting' : '')}>
               {onIn && (
                 <button aria-label="Zoom in" onClick={onIn}>
                   <ZoomInIcon />

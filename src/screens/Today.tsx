@@ -258,6 +258,30 @@ export function Today(props: Props) {
     }
   }, [introOpen, paintingUp, birthdayOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // A first painted day: where it went (nomi, Nov 5, 2026, beta 1: "once I finished, I didn't know what had happened").
+  // On someone's first three painted days, as the "because…" bubble closes, zoom out hops once with "see your month →"
+  // beside it; it goes at the next touch, or after a while.
+  const [monthHint, setMonthHint] = useState(false)
+  const hadWhy = useRef(false)
+  useEffect(() => {
+    const closed = hadWhy.current && !why
+    hadWhy.current = !!why
+    if (!closed || !day || date !== today || Object.keys(days).length > 3) return
+    setMonthHint(true)
+    const t = setTimeout(() => setMonthHint(false), 9000)
+    // Any touch elsewhere puts it away (a touch on it, or on zoom out, goes to the month).
+    const away = (e: PointerEvent) => {
+      if ((e.target as Element | null)?.closest?.('.zoom-stack')) return
+      setMonthHint(false)
+    }
+    const arm = setTimeout(() => document.addEventListener('pointerdown', away), 400)
+    return () => {
+      clearTimeout(t)
+      clearTimeout(arm)
+      document.removeEventListener('pointerdown', away)
+    }
+  }, [why]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
   const hasPrev = prev >= firstDay(days, born)
   const hasNext = next <= today
@@ -692,6 +716,7 @@ export function Today(props: Props) {
       {!why && (
         <ZoomBar
           onOut={onZoomOut}
+          hint={monthHint ? 'see your month →' : undefined}
           listAt={() => date}
           today={() => {
             setSlide('from-right')

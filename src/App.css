@@ -1858,6 +1858,36 @@ body[data-screen='questions'] .idea {
     inset 0 0 0 1px #e4e4dd,
     0 6px 16px rgba(20, 20, 19, 0.12);
 }
+.zoom-capsule.is-hinting {
+  animation: zoom-hop 0.6s 0.2s ease-out both;
+}
+@keyframes zoom-hop {
+  35% {
+    transform: translateY(-8px);
+  }
+  70% {
+    transform: translateY(1px);
+  }
+}
+/* A first painted day: where it went ("see your month →"), a quiet line to the left of zoom out (nomi, Nov 5, 2026). */
+.zoom-hint {
+  position: absolute;
+  right: calc(100% + 10px);
+  bottom: 6px;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(20, 20, 19, 0.1);
+  font-size: 14px;
+  color: var(--ink);
+  animation: fade-in 0.4s 0.2s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .zoom-capsule.is-hinting {
+    animation: none;
+  }
+}
 .zoom-capsule button {
   width: 44px;
   height: 44px;
