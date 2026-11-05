@@ -798,7 +798,7 @@ sup.ord {
 }
 /* Today's line, as the answer is done: written in from left to right, as the square signs its word. */
 .question.is-signing {
-  animation: sign-line 1.2s ease-out both;
+  animation: sign-line 2s ease-in-out both;
 }
 @keyframes sign-line {
   from {

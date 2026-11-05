@@ -286,7 +286,7 @@ export function Today(props: Props) {
   useEffect(() => {
     if (wasAnswering.current && !answering) {
       setSigning(true)
-      const t = setTimeout(() => setSigning(false), 1600)
+      const t = setTimeout(() => setSigning(false), 2400)
       wasAnswering.current = answering
       return () => clearTimeout(t)
     }
