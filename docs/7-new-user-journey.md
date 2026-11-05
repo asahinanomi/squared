@@ -2,7 +2,7 @@
 
 _last updated Nov 5, 2026_
 
-Every moment squared shows someone new, in the order they meet it: what they see, when it shows, when it stops, and how to test it on your own account. squared has no onboarding tour on purpose: each hint comes at the moment it's useful, points at the real control, goes at a touch (or after 10 seconds, fading out, never just vanishing), and stops once it has done its job. Add every new first-time moment here.
+Every moment squared shows someone new, in the order they meet it: what they see, when it shows, when it stops, and how to test it on your own account. squared has no onboarding tour on purpose: each hint comes at the moment it's useful, points at the real control, goes at a touch (or after 10 seconds, fading out, never just vanishing), and stops once it has done its job. Only one hint shows at a time (`src/lib/oneHint.ts`): whichever is due first takes the moment, any other skips that time and comes back on a later visit. Add every new first-time moment here.
 
 Test links save nothing; they're listed in full in `docs/test-links.md`. Open them signed in, on your phone. "Per device" below means remembered on that phone or browser only; "with the account" means everywhere you sign in.
 

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { markDone } from '../lib/onceADay'
 import { useLeaving } from '../lib/useLeaving'
+import { useOneHint } from '../lib/oneHint'
 import { inProgress } from '../lib/painting'
 
 /** The painting open right now, so its button stays lit while the sheet is up. */
@@ -73,7 +74,7 @@ export function PaintingButton({ period, label, onOpen, className, noHint }: Pro
       document.removeEventListener('pointerdown', away)
     }
   }, [hinted, seen])
-  const bubble = useLeaving(hint && hinted)
+  const bubble = useLeaving(useOneHint(`painting-${period}`, hint && hinted))
   return (
     <button
       ref={self}

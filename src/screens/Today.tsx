@@ -6,6 +6,7 @@ import { MomentBox } from '../components/MomentBox'
 import { Turn } from '../components/Turn'
 import { countUp, doneOnce, markDone, onceToday } from '../lib/onceADay'
 import { useLeaving } from '../lib/useLeaving'
+import { useOneHint } from '../lib/oneHint'
 import { NotesList } from '../components/NotesList'
 import { Sheet } from '../components/Sheet'
 import { PaintCanvas } from '../components/PaintCanvas'
@@ -391,9 +392,9 @@ export function Today(props: Props) {
   }
 
   // Each hint fades out as it goes (useLeaving).
-  const monthBubble = useLeaving(monthHint)
-  const frameBubble = useLeaving(frameHint)
-  const listBubble = useLeaving(listHint && !monthHint)
+  const monthBubble = useLeaving(useOneHint('month', monthHint))
+  const frameBubble = useLeaving(useOneHint('frame', frameHint))
+  const listBubble = useLeaving(useOneHint('list', listHint))
 
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
   const hasPrev = prev >= firstDay(days, born)
