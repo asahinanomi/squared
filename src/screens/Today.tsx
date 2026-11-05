@@ -361,7 +361,7 @@ export function Today(props: Props) {
 
   // The list, found (nomi, Nov 5, 2026): once someone has written 5 moments (any writing: the moment box, "because…",
   // a framed or marked day's words), right after the next is kept, an ink bubble over the list icon, "read your
-  // moments back ↓". Until the list has been opened once; it goes at a touch, or after 10 seconds.
+  // moments back", its tail on the list icon. Until the list has been opened once; it goes at a touch, or after 10 seconds.
   const [listHint, setListHint] = useState(false)
   const listTimer = useRef(0)
   const wrote = () => {
@@ -839,7 +839,7 @@ export function Today(props: Props) {
           onOut={onZoomOut}
           hint={monthBubble.shown ? 'see today in your month →' : undefined}
           hintLeaving={monthBubble.leaving}
-          listHint={listBubble.shown ? 'read your moments back ↓' : undefined}
+          listHint={listBubble.shown ? 'read your moments back' : undefined}
           listHintLeaving={listBubble.leaving}
           listAt={() => date}
           today={() => {

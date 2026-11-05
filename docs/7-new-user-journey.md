@@ -75,7 +75,7 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 - **When:** as "because…" closes, once the life is set up and 3 days are painted. **Stops:** at another touch or after 10 seconds; for good once "more" has been opened (per device).
 - **Test:** `?hintframe` (on a painted day).
 
-## 12b. "read your moments back ↓"
+## 12b. "read your moments back"
 
 - **Sees:** an ink bubble over the list icon in the bottom bar; a tap opens the list, every moment with its day.
 - **When:** right after something written is kept (the moment box, "because…", a framed or marked day's words), once they've written 5 (counted per device from Nov 5, 2026), about 1.5 seconds on, when the words have landed and the keyboard has gone. **Stops:** at another touch or after 10 seconds; for good once the list has been opened (per device). Never at the same time as "see today in your month →".

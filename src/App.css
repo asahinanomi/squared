@@ -982,8 +982,9 @@ sup.ord {
 .zoombar-switch > .list-hint::after {
   content: '';
   position: absolute;
-  bottom: -6px;
-  left: 52px; /* over the list icon, the right of the switch's two */
+  /* Under the bubble, pointing down at the list icon (the switch's second button: 2px in, 40px each, so its middle
+     is 62px from the switch's left). Its own inset, so the switch buttons' larger tap area never moves it. */
+  inset: auto auto -6px 56px;
   width: 12px;
   height: 12px;
   background: var(--ink);
