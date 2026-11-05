@@ -5353,6 +5353,40 @@ button.home-card:active {
 .where-track.is-ghost {
   opacity: 0.4;
 }
+/* "this life", not set up: one breath each visit to my days, half a second in, like the square's "be here": it swells
+   (3%, not the square's 6%: the row is wide) and its faint bar fills in, then both settle (nomi, Nov 5, 2026). */
+.where-row.is-asking {
+  animation: breathe-row 2.4s ease-in-out 0.5s;
+}
+.where-row.is-asking .where-track {
+  animation: breathe-track 2.4s ease-in-out 0.5s;
+}
+@keyframes breathe-row {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45%,
+  55% {
+    transform: scale(1.03);
+  }
+}
+@keyframes breathe-track {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  45%,
+  55% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .where-row.is-asking,
+  .where-row.is-asking .where-track {
+    animation: none;
+  }
+}
 
 /* my days: one of your "what matters" lines, a note to yourself, in the question's serif. */
 .matters-card {

@@ -62,6 +62,12 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 - **Sees:** the list's first card, where earlier days would be: a keyline card with a stack of earlier days folded under it, "see your whole life ›" (it replaced a grey "set your birth date to go further back ›" pill).
 - **When:** every time the list opens, until the life is set up. **Test:** an account without a birth date.
 
+## 9c. "this life", breathing, on my days
+
+- **Sees:** on my days, the "this life · set up now ›" row breathes once, half a second in: it swells a little and its faint bar fills in, then both settle (the square's "be here" breath, gentler).
+- **When:** each visit to my days, until the life is set up. Never with reduce motion. Not a bubble, so the one-hint rule doesn't hold it back.
+- **Test:** an account without a birth date, then my days.
+
 ## 10. Your life in squares
 
 - **Sees:** "See your whole life at once." (from a zoom out, the list's card, or the date picker's "see your whole life ›" under its years), then "when were you born?" inside its box and "how long do you hope to live?" (starting at 80 years, with "US average lifespan: 79 years · men 76, women 81").
