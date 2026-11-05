@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { DayFinder } from './components/DayFinder'
 import { MeaningSheet } from './components/MeaningSheet'
 import { MonthPainting } from './components/MonthPainting'
-import { OpenPainting } from './components/PaintingButton'
+import { OpenPainting, PaintingHint } from './components/PaintingButton'
+import { doneOnce } from './lib/onceADay'
+import { hintTest } from './state/app'
 import { SyncStatus } from './components/SyncStatus'
 import { Topbar } from './components/Topbar'
 import { onceADayFor } from './lib/onceADay'
@@ -63,6 +65,15 @@ export default function App() {
       supabase.auth.updateUser({ data: { kept_paintings: null } }).catch(() => undefined)
   }, [session])
   const painting = usePaintingArrival(acc.days, !!userId && acc.checking, session)
+  // The painting hint's month: the latest finished month with days, until a painting has been opened from its picture
+  // or downloaded (docs/7-new-user-journey.md). ?hintpainting shows it on any account.
+  const thisMonth = todayIso().slice(0, 7)
+  const finished = Object.keys(acc.days)
+    .map((d) => d.slice(0, 7))
+    .filter((m) => m < thisMonth)
+    .sort()
+    .at(-1)
+  const paintingHint = finished && (hintTest.painting || !doneOnce('paintingOpened')) ? finished : null
 
   // Notes load a month at a time: the day you're on.
   const { loadNotes } = acc
@@ -131,83 +142,85 @@ export default function App() {
       }}
     >
       <OpenPainting.Provider value={painting.paintedMonth}>
-        {/* Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint). */}
-        <div
-          className={
-            'app' +
-            (oneScreen ? ' is-one-screen' : '') +
-            (oneScreen && screen !== 'pie' ? ' has-bar' : '') +
-            (pageBar ? ' has-page-bar' : '')
-          }
-        >
-          <Topbar
-            onHome={nav.goHome}
-            onIdea={() => nav.setScreen('idea')}
-            onSettings={nav.openSettings}
-            onSignOut={signOut}
-          />
+        <PaintingHint.Provider value={paintingHint}>
+          {/* Zoom levels fill exactly one screen (set here, not via the body attribute, so it applies on first paint). */}
           <div
-            className={'stage' + (nav.motion ? ` is-zoom-${nav.motion}` : '')}
-            key={screen === 'life' ? `life-${nav.lifeRes}` : screen}
+            className={
+              'app' +
+              (oneScreen ? ' is-one-screen' : '') +
+              (oneScreen && screen !== 'pie' ? ' has-bar' : '') +
+              (pageBar ? ' has-page-bar' : '')
+            }
           >
-            <Screens
-              nav={nav}
-              acc={acc}
-              act={act}
-              lists={lists}
-              openPainting={painting.openPainting}
-              painter={painter}
-              onDeleted={() => {
-                setDeleted(true)
-                signOut()
-              }}
-              ui={{
-                why,
-                setWhy,
-                loaded,
-                setLoaded,
-                nudge,
-                onDryBrush,
-                onDefine: () => setDefining(true),
-                onFind: () => setFinding(true),
-              }}
+            <Topbar
+              onHome={nav.goHome}
+              onIdea={() => nav.setScreen('idea')}
+              onSettings={nav.openSettings}
+              onSignOut={signOut}
             />
-          </div>
-          <MeaningSheet open={defining} onClose={() => setDefining(false)} />
-          <DayFinder
-            open={finding}
-            onClose={() => setFinding(false)}
-            date={todayIso()}
-            today={todayIso()}
-            born={acc.profile?.born}
-            days={acc.days}
-            onPick={(iso) => {
-              setFinding(false)
-              setWhy(null)
-              nav.openDay(iso)
-            }}
-            onSetUp={() => nav.askSquares('today')}
-          />
-          {pageBar && (
-            <PageBar
-              onToday={nav.goToday}
-              onSquares={() => nav.goMonth()}
-              onList={() => nav.openList()}
-              onMyDays={nav.openMyDays}
-              atMyDays={screen === 'mydays'}
-            />
-          )}
-          {withPainting.includes(screen) && (
-            <MonthPainting
-              month={painting.paintedMonth}
-              arrived={painting.paintedArrived}
+            <div
+              className={'stage' + (nav.motion ? ` is-zoom-${nav.motion}` : '')}
+              key={screen === 'life' ? `life-${nav.lifeRes}` : screen}
+            >
+              <Screens
+                nav={nav}
+                acc={acc}
+                act={act}
+                lists={lists}
+                openPainting={painting.openPainting}
+                painter={painter}
+                onDeleted={() => {
+                  setDeleted(true)
+                  signOut()
+                }}
+                ui={{
+                  why,
+                  setWhy,
+                  loaded,
+                  setLoaded,
+                  nudge,
+                  onDryBrush,
+                  onDefine: () => setDefining(true),
+                  onFind: () => setFinding(true),
+                }}
+              />
+            </div>
+            <MeaningSheet open={defining} onClose={() => setDefining(false)} />
+            <DayFinder
+              open={finding}
+              onClose={() => setFinding(false)}
+              date={todayIso()}
+              today={todayIso()}
+              born={acc.profile?.born}
               days={acc.days}
-              name={painter}
-              onClose={painting.closePainting}
+              onPick={(iso) => {
+                setFinding(false)
+                setWhy(null)
+                nav.openDay(iso)
+              }}
+              onSetUp={() => nav.askSquares('today')}
             />
-          )}
-          {!demo && <SyncStatus />}
-        </div>
+            {pageBar && (
+              <PageBar
+                onToday={nav.goToday}
+                onSquares={() => nav.goMonth()}
+                onList={() => nav.openList()}
+                onMyDays={nav.openMyDays}
+                atMyDays={screen === 'mydays'}
+              />
+            )}
+            {withPainting.includes(screen) && (
+              <MonthPainting
+                month={painting.paintedMonth}
+                arrived={painting.paintedArrived}
+                days={acc.days}
+                name={painter}
+                onClose={painting.closePainting}
+              />
+            )}
+            {!demo && <SyncStatus />}
+          </div>
+        </PaintingHint.Provider>
       </OpenPainting.Provider>
     </ViewSwitch.Provider>
   )

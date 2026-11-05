@@ -926,6 +926,38 @@ sup.ord {
     opacity: 0;
   }
 }
+.painting-hint.is-leaving {
+  animation: fade-out 0.7s ease-in forwards;
+}
+/* "your October, as a painting ↑": the same ink bubble, under a finished month's name and picture, its tail on it. */
+.painting-hint {
+  position: absolute;
+  z-index: 8;
+  top: calc(100% + 12px);
+  left: 0;
+  white-space: nowrap;
+  padding: 11px 16px;
+  border-radius: 14px;
+  background: var(--ink);
+  box-shadow: 0 8px 22px rgba(20, 20, 19, 0.22);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: #fff;
+  text-decoration: none;
+  animation: fade-in 1s ease-out both;
+}
+.painting-hint::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 24px;
+  width: 12px;
+  height: 12px;
+  background: var(--ink);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
 .days-filter-wrap {
   position: relative;
   display: inline-flex;

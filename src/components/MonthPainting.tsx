@@ -1,3 +1,4 @@
+import { markDone } from '../lib/onceADay'
 import { useEffect, useRef, useState } from 'react'
 import type { Days } from '../lib/days'
 import { save } from '../lib/exportData'
@@ -33,6 +34,7 @@ export function MonthPainting({ month, days, name, onClose, arrived }: Props) {
   const named = month.length === 4 ? month : `${monthName(month)} ${month.slice(0, 4)}`
   const title = `${named}, ${inProgress(month) ? 'so far' : 'painted'}`
   const download = async () => {
+    markDone('paintingOpened') // a painting kept: the hint has done its job
     setBusy(true)
     try {
       const blob = await paintingImage(month, days, name)

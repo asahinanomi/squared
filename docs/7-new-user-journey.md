@@ -92,6 +92,12 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 - **When:** each time the list opens, until the filter has been opened once (per device). **Stops:** at a touch or after 10 seconds; for good once used.
 - **Test:** `?hintfilter` (then open the list).
 
+## 12d. "your October, as a painting ↑"
+
+- **Sees:** an ink bubble under a finished month's name and its small picture (on the list, and on the month view when you step back to it); a tap opens the month's painting, with "download".
+- **When:** from the first finished month with days, each time a view shows that month's name, until a painting has been opened from its picture or downloaded once (per device). Opening it from the new month's sheet doesn't count, so the hint is the way back if that sheet was closed. **Stops:** at a touch or after 10 seconds.
+- **Test:** `?hintpainting` (then open the list).
+
 ## 13. What matters, asked
 
 - **Sees:** on my days, "What makes a day worth it to you?" with a writing box (return, or leaving it, keeps the line); then "you said this matters" with one of your lines.
@@ -111,4 +117,4 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 
 ## Walking it end to end
 
-A real first run: sign out, open a private window (or a new Google account), sign in, and go through 1 to 13 in order. On your own account, use the test links above for the moments your account is past (2, 3, 8, 9, 12, 12b, 12c, 13, and the month and year paintings).
+A real first run: sign out, open a private window (or a new Google account), sign in, and go through 1 to 13 in order. On your own account, use the test links above for the moments your account is past (2, 3, 8, 9, 12, 12b, 12c, 12d, 13, and the month and year paintings).

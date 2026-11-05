@@ -148,4 +148,5 @@ export const hintTest = {
   frame: params.has('hintframe'),
   list: params.has('hintlist'),
   filter: params.has('hintfilter'),
+  painting: params.has('hintpainting'),
 }
