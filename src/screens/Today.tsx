@@ -607,7 +607,7 @@ export function Today(props: Props) {
                 </button>
                 {frameHint && (
                   <button className="more-hint" onClick={openMore}>
-                    a day to remember? it’s in more ↑
+                    a day to remember?
                   </button>
                 )}
               </span>
