@@ -1,6 +1,6 @@
 // How to paint, acted out (nomi, Nov 4, 2026: a beta tester didn't know what to do; it replaced the ghost hint), the
 // way squared really works (nomi, Nov 5, 2026: a flying brush taught "carry the brush to the well", which isn't how it
-// works): a fingertip (a soft touch dot, pale with a grey edge so it reads on the dark wells and the pale square alike) taps the green well, the brush takes the green right where it rests, then
+// works): a pointing hand (its fingertip doing the work) taps the green well, the brush takes the green right where it rests, then
 // the fingertip paints one soft stroke across the square; the stroke fades, the brush goes clean, the square is blank
 // again. Painting is never done for you: the stroke is a ghost, never a colour. A copy of the brush, over the real one
 // in its notch, takes the colour, in a layer over the page drawn in the palette's own units. Any touch ends it at once.
@@ -33,15 +33,16 @@ export function showFirstPaint(): () => void {
     height: `${box.height}px`,
   })
 
-  // The stroke it paints: the square's old hint (two sweeps, each rising left to right), in its faint green.
+  // The stroke it paints: one sweep across the middle, as wide as the real brush (nomi, Nov 5, 2026: a thin line taught
+  // careful colouring in; one swipe paints most of a day), in a faint green.
   const sq = square.getBoundingClientRect()
   const pt = (x: number, y: number) => toUnits(sq.left + (sq.width * x) / 100, sq.top + (sq.height * y) / 100).join(' ')
   const trail = document.createElementNS(NS, 'path')
-  trail.setAttribute('d', `M${pt(18, 46)} L${pt(82, 28)} L${pt(18, 68)} L${pt(82, 50)}`)
+  trail.setAttribute('d', `M${pt(24, 54)} L${pt(76, 46)}`)
   Object.assign(trail.style, {
     fill: 'none',
     stroke: 'rgba(110, 155, 123, 0.2)',
-    strokeWidth: String((sq.width * 0.09) / scale),
+    strokeWidth: String((sq.width * 0.58 * 0.86) / scale), // PaintCanvas's BRUSH, at its solid core
     strokeLinecap: 'round',
     strokeLinejoin: 'round',
   })
@@ -63,19 +64,28 @@ export function showFirstPaint(): () => void {
   layer.appendChild(copy)
   document.body.appendChild(layer)
   brush.style.visibility = 'hidden'
-  // The fingertip: a soft dot, the size of a touch. Its tap loads the real well, exactly as a real tap does (its splash
+  // The fingertip, a touch wide. Its tap loads the real well, exactly as a real tap does (its splash
   // of drops at the edge and its swirl: nomi, Nov 5, 2026, never an effect of its own).
   const wellG = well.closest<SVGGElement>('.well')!
   const finger = (sq.width * 0.16) / scale / 2
-  const dot = document.createElementNS(NS, 'circle')
-  dot.setAttribute('r', String(finger))
-  Object.assign(dot.style, {
-    fill: 'rgba(255, 255, 255, 0.5)',
-    stroke: 'rgba(47, 47, 43, 0.5)',
-    strokeWidth: String(1.5 / scale),
+  // A pointing hand in the palette's own ink keyline and white (lab B, nomi, Nov 5, 2026: a dot read as a bubble or a
+  // drop), its fingertip at 0,0; turned to come from the lower right, and sized so its fingertip is a touch wide.
+  const hand = document.createElementNS(NS, 'path')
+  hand.setAttribute(
+    'd',
+    'M-7 30 L-7 7 A7 7 0 0 1 7 7 L7 26 C9 22 16 22 17 27 C19 23 26 24 26 29 C28 26 34 27 34 33 L34 46 C34 56 27 62 17 62 L5 62 C-3 62 -9 57 -12 50 L-20 37 C-23 32 -17 27 -12 31 L-7 36 Z M7 26 L7 34 M17 27 L17 34 M26 29 L26 35',
+  )
+  const handSize = finger / 16
+  Object.assign(hand.style, {
+    fill: '#fff',
+    stroke: '#141413',
+    strokeWidth: String(1.45 / scale / handSize),
+    strokeLinejoin: 'round',
+    strokeLinecap: 'round',
+    filter: 'drop-shadow(0 3px 5px rgba(20, 20, 19, 0.18))',
     opacity: '0',
   })
-  layer.appendChild(dot)
+  layer.appendChild(hand)
   const wellAt = [Number(well.getAttribute('cx')), Number(well.getAttribute('cy'))]
   const total = trail.getTotalLength()
   const at = (len: number) => {
@@ -121,11 +131,10 @@ export function showFirstPaint(): () => void {
     while (t > steps[i][0]) t -= steps[i++][0]
     const k = t / steps[i][0]
     const [x, y] = steps[i][1](k)
-    dot.setAttribute('cx', String(x))
-    dot.setAttribute('cy', String(y))
-    // In, fading; pressed small for the tap; lifting away at the end.
-    dot.style.opacity = String(i === 0 ? k : i === 4 ? 1 - k : 1)
-    dot.setAttribute('r', String(finger * (i === 1 ? 1 - Math.sin(k * Math.PI) * 0.25 : 1)))
+    // In, fading; pressing a little for the tap; lifting away at the end.
+    const press = i === 1 ? 1 - Math.sin(k * Math.PI) * 0.08 : 1
+    hand.setAttribute('transform', `translate(${x} ${y}) rotate(-28) scale(${handSize * press})`)
+    hand.style.opacity = String(i === 0 ? k : i === 4 ? 1 - k : 1)
     if (i === 1 && k > 0.4 && !green.classList.contains('is-on')) {
       green.style.transition = '' // the tap: the brush takes the green, softly, where it rests
       green.classList.add('is-on')
