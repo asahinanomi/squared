@@ -1709,6 +1709,15 @@ body[data-screen='questions'] .idea {
   flex: none;
   overflow: visible;
 }
+/* One slow turn, over and back, as a real hourglass is turned: so its sand still tells the truth when it rests. */
+.lifeglass.is-turning svg {
+  animation: glass-turn 1.3s ease-in-out;
+}
+@keyframes glass-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .lifeglass-frame {
   fill: none;
   stroke: var(--zoom-ink);

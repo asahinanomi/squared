@@ -4,7 +4,7 @@ import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands } from '../lib/tally'
-import { calmMotion, FILL_MS, LAND_MS, waveAt } from '../lib/lifeFill'
+import { calmMotion, FILL_MS, LAND_MS, sayHere, waveAt } from '../lib/lifeFill'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 type Props = {
@@ -42,7 +42,13 @@ export function Life({ days, profile, onPick, onIn, onResolution, onOut }: Props
   }
   const [here, setHere] = useState(false)
   useEffect(() => {
-    const t = setTimeout(() => setHere(true), calmMotion() ? 0 : YEARS_FILL + 400)
+    const t = setTimeout(
+      () => {
+        setHere(true)
+        sayHere()
+      },
+      calmMotion() ? 0 : YEARS_FILL + 400,
+    )
     return () => clearTimeout(t)
   }, [])
   // Where this year's tile is, for the line under it.

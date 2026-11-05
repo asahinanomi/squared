@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { calmMotion, onHere } from '../lib/lifeFill'
 import { todayIso } from '../lib/dates'
 import { lifeCounts } from '../lib/life'
 import type { Profile } from '../lib/profile'
@@ -13,8 +14,33 @@ type Unit = 'days' | 'months' | 'years'
  * Every half minute a few grains fall, a small nudge that time is moving. It sits beside "a life" in the
  * title: information about your life, not a control.
  */
+// Tapped once (ever, on this device): the glass has been found, so it no longer turns to invite a tap.
+const TAPPED = 'squared.glassTapped'
+const tapped = () => {
+  try {
+    return !!localStorage.getItem(TAPPED)
+  } catch {
+    return false
+  }
+}
+
 export function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
   const [open, setOpen] = useState(false)
+  // As "You are here." lands: one slow turn, over and back (nomi, Nov 5, 2026), its sand running after; until tapped.
+  const [turning, setTurning] = useState(false)
+  useEffect(
+    () =>
+      onHere(() => {
+        if (tapped() || calmMotion()) return
+        setTurning(true)
+        setTimeout(() => {
+          setTurning(false)
+          setFalling(true)
+          setTimeout(() => setFalling(false), 1800)
+        }, 1300)
+      }),
+    [],
+  )
   const [falling, setFalling] = useState(true) // trickle once on arrival…
   useEffect(() => {
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return setFalling(false)
@@ -35,8 +61,15 @@ export function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
   const count = per ? `${fmt(per - Math.round((c.sofar / c.total) * per))} ${unit}` : `${fmt(c.left)} days`
   return (
     <button
-      className={'lifeglass' + (falling ? ' is-falling' : '')}
-      onClick={() => setOpen(!open)}
+      className={'lifeglass' + (falling ? ' is-falling' : '') + (turning ? ' is-turning' : '')}
+      onClick={() => {
+        setOpen(!open)
+        try {
+          localStorage.setItem(TAPPED, '1')
+        } catch {
+          /* it may turn again next time */
+        }
+      }}
       aria-label={`${count} ahead`}
       aria-expanded={open}
     >

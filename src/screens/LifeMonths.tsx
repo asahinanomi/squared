@@ -8,7 +8,7 @@ import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands, monthEnd, type Band } from '../lib/tally'
 import { MIN_TEXT_PX, roundRect, textFits, useCanvasList } from '../lib/useCanvasList'
-import { calmMotion, FILL_MS, LAND_MS, waveAt } from '../lib/lifeFill'
+import { calmMotion, FILL_MS, LAND_MS, sayHere, waveAt } from '../lib/lifeFill'
 import type { Focal } from '../lib/usePinch'
 
 type Props = {
@@ -210,6 +210,7 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
     if (fillAt.current === null) return
     let raf = 0
     let pulsed = false
+    let said = false
     const tick = () => {
       repaint.current()
       if (fillAt.current === null) return
@@ -219,7 +220,11 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
         pulsed = true
         pulseAt.current = performance.now()
       }
-      if (t >= MONTHS_FILL - LAND + 400) setHere(true)
+      if (t >= MONTHS_FILL - LAND + 400 && !said) {
+        said = true
+        setHere(true)
+        sayHere()
+      }
       if (t < MONTHS_FILL || performance.now() - pulseAt.current < PULSE_MS + 50) raf = requestAnimationFrame(tick)
       else fillAt.current = null
     }

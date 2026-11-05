@@ -11,3 +11,11 @@ export const calmMotion = () =>
  * fill: the days' own easing, gentle from the top and gentle into today (never rushing into it).
  */
 export const waveAt = (q: number) => (q < 0.5 ? Math.sqrt(q / 2) : 1 - Math.sqrt(2 * (1 - q)) / 2)
+
+// "You are here." has landed: the hourglass beside "a life" turns over once, an invitation to tap it (LifeGlass).
+const HERE = 'squared:here'
+export const sayHere = () => window.dispatchEvent(new Event(HERE))
+export const onHere = (f: () => void) => {
+  window.addEventListener(HERE, f)
+  return () => window.removeEventListener(HERE, f)
+}

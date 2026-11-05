@@ -1,4 +1,4 @@
-import { calmMotion, FILL_MS, LAND_MS, waveAt } from '../lib/lifeFill'
+import { calmMotion, FILL_MS, LAND_MS, sayHere, waveAt } from '../lib/lifeFill'
 import { LIFE_AHEAD, LIFE_AHEAD_EDGE, LIFE_LIVED } from '../lib/life'
 import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { glide } from '../lib/backToToday'
@@ -357,13 +357,18 @@ export function LifeDays({
     const lineAt = intro ? f.ms + 1800 : f.ms + 400
     const until = Math.max(pulses[pulses.length - 1] + PULSE_MS + 50, lineAt) + LAND_MS
     let raf = 0
+    let said = false
     const tick = () => {
       if (skipped.current) return
       const t = performance.now() - start
       const due = pulses.filter((ms) => t >= ms).pop()
       if (due !== undefined && pulseAt.current < start + due) pulseAt.current = start + due
       onScroll() // repaint
-      if (t >= lineAt) setThisIsToday(true)
+      if (t >= lineAt && !said) {
+        said = true
+        setThisIsToday(true)
+        sayHere()
+      }
       if (t < until) raf = requestAnimationFrame(tick)
       else fill.current = null
     }
