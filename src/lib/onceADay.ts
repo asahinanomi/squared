@@ -19,3 +19,19 @@ export function onceToday(what: string): boolean {
   }
   return true
 }
+
+/** Whether something has been done once, ever, by this person on this device (a hint that stops once it's used). */
+export function doneOnce(what: string): boolean {
+  try {
+    return !!localStorage.getItem(`squared.${what}.${who}`)
+  } catch {
+    return false
+  }
+}
+export function markDone(what: string) {
+  try {
+    localStorage.setItem(`squared.${what}.${who}`, '1')
+  } catch {
+    /* it may hint again */
+  }
+}

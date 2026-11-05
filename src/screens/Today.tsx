@@ -4,7 +4,7 @@ import { showFirstPaint } from '../lib/firstPaint'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { MomentBox } from '../components/MomentBox'
 import { Turn } from '../components/Turn'
-import { onceToday } from '../lib/onceADay'
+import { doneOnce, markDone, onceToday } from '../lib/onceADay'
 import { NotesList } from '../components/NotesList'
 import { Sheet } from '../components/Sheet'
 import { PaintCanvas } from '../components/PaintCanvas'
@@ -323,6 +323,35 @@ export function Today(props: Props) {
     }
   }, [why]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Framing, found (nomi, Nov 5, 2026): once someone's life is set up and they've painted 5 days, as "because…" closes,
+  // an ink bubble under "more": "a day to remember? it's in more ↑" (any colour: a hard day can be worth keeping
+  // too). Until "more" has been opened once; it goes at a touch, or after 15 seconds.
+  const [frameHint, setFrameHint] = useState(false)
+  const hadWhy2 = useRef(false)
+  useEffect(() => {
+    const closed = hadWhy2.current && !why
+    hadWhy2.current = !!why
+    if (!closed || !day || !born || Object.keys(days).length < 5 || doneOnce('moreOpened')) return
+    setFrameHint(true)
+    const t = setTimeout(() => setFrameHint(false), 15000)
+    const away = (e: PointerEvent) => {
+      if ((e.target as Element | null)?.closest?.('.day-links')) return
+      setFrameHint(false)
+    }
+    const arm = setTimeout(() => document.addEventListener('pointerdown', away), 400)
+    return () => {
+      clearTimeout(t)
+      clearTimeout(arm)
+      document.removeEventListener('pointerdown', away)
+    }
+  }, [why]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => setFrameHint(false), [date])
+  const openMore = () => {
+    setFrameHint(false)
+    markDone('moreOpened')
+    setMoreOpen(true)
+  }
+
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
   const hasPrev = prev >= firstDay(days, born)
   const hasNext = next <= today
@@ -572,9 +601,16 @@ export function Today(props: Props) {
               </button>
               {/* The rare ways to keep a day sit one step away, in a sheet that says what each does (nomi, Oct 30,
                   2026: three links under every day was a lot of choice). Start over stays one tap. */}
-              <button className="day-wipe" onClick={() => setMoreOpen(true)}>
-                more
-              </button>
+              <span className="day-more">
+                <button className="day-wipe" onClick={openMore}>
+                  more
+                </button>
+                {frameHint && (
+                  <button className="more-hint" onClick={openMore}>
+                    a day to remember? it’s in more ↑
+                  </button>
+                )}
+              </span>
             </div>
           )}
 
