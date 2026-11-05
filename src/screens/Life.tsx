@@ -23,7 +23,7 @@ type Props = {
 // A life, in years — every year of it on one screen, on purpose: the whole life at a glance.
 // Lived years are banded, this year is outlined, the years ahead are empty.
 // The years' fill, ms: slower than the months' (a year is a big tile; fast, they flickered).
-const YEARS_FILL = FILL_MS // the days' own time, so every view of a life feels the same (lib/lifeFill.ts)
+const YEARS_FILL = FILL_MS * 1.25 // a little longer than days: the fewest squares, each landing a shade darker, read fast
 
 export function Life({ days, profile, onPick, onIn, onResolution, onOut }: Props) {
   const today = todayIso()

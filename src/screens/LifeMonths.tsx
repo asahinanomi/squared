@@ -60,10 +60,10 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
   // in place, out of sight).
   const thisIndex = (Number(thisMonth.slice(0, 4)) - firstYear) * 12 + Number(thisMonth.slice(5, 7)) - 1
   const fillFrom = useRef(0)
-  // The days' feel (lib/lifeFill.ts), a little shorter: months has fewer rows from the top to today, so the days'
-  // full time felt slow (nomi, Nov 5, 2026).
+  // The days' time (lib/lifeFill.ts): once months landed a shade darker, as days do, the wave showed clearly and a
+  // shorter time felt rushed (nomi, Nov 5, 2026).
   const LAND = LAND_MS
-  const MONTHS_FILL = FILL_MS * 0.8 + LAND_MS
+  const MONTHS_FILL = FILL_MS + LAND_MS
   const landAt = (i: number) => {
     const q = Math.min(1, Math.max(0, (i - fillFrom.current) / Math.max(1, thisIndex - fillFrom.current + 1)))
     return waveAt(q) * (MONTHS_FILL - LAND)
