@@ -109,7 +109,7 @@ export function showFirstPaint(): () => void {
 
   // The steps, in ms, as where the fingertip is: it comes in to the green, taps, goes to the square, paints its
   // passes (1.5s at an even pace), and lifts away as the paint fades.
-  const from = [wellAt[0] + finger * 2.5, wellAt[1] + finger * 3]
+  const from = [wellAt[0] + finger * 4, wellAt[1] + finger * 5] // far enough to be seen arriving
   const steps: [number, (k: number) => [number, number]][] = [
     [600, (k) => [lerp(from[0], wellAt[0], ease(k)), lerp(from[1], wellAt[1], ease(k))]],
     [450, () => [wellAt[0], wellAt[1]]],
@@ -118,7 +118,10 @@ export function showFirstPaint(): () => void {
     [500, () => at(1) as [number, number]],
   ]
   const end = steps.reduce((s, [ms]) => s + ms, 0)
-  const start = performance.now()
+  // The clock starts on the first frame drawn, and stands still while the phone is busy (a stalled frame once jumped
+  // it straight to the tap, so the brush went green before the hand was there: nomi, Nov 5, 2026).
+  let start = 0
+  let last = 0
   let raf = 0
   let done = false
   const finish = () => {
@@ -133,6 +136,9 @@ export function showFirstPaint(): () => void {
     removeEventListener('pointerdown', finish, true)
   }
   const tick = (now: number) => {
+    if (!start) start = now
+    if (last && now - last > 50) start += now - last - 16
+    last = now
     let t = now - start
     if (t >= end) {
       // Done: the real brush is back, clean (the stroke faded as it ended).
@@ -148,7 +154,7 @@ export function showFirstPaint(): () => void {
     // In, fading; pressing a little for the tap; lifting away at the end.
     const press = i === 1 ? 1 - Math.sin(k * Math.PI) * 0.08 : 1
     hand.setAttribute('transform', `translate(${x} ${y}) rotate(-28) scale(${handSize * press})`)
-    hand.style.opacity = String(i === 0 ? k : i === 4 ? 1 - k : 1)
+    hand.style.opacity = String(i === 0 ? Math.min(1, k * 2.5) : i === 4 ? 1 - k : 1) // fully there before it taps
     if (i === 1 && k > 0.4 && !green.classList.contains('is-on')) {
       green.style.transition = '' // the tap: the brush takes the green, softly, where it rests
       green.classList.add('is-on')
