@@ -64,7 +64,7 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 
 ## 9c. my days' card, breathing
 
-- **Sees:** on my days, the whole card (this week, this month, this life · see your whole life ›) breathes once, half a second in: it swells a little and lifts off the paper while the life's faint bar pours in from the left, as the real one does, then all settle; a tap asks the two answers, then opens the life (the square's "be here" breath; the row alone was too subtle).
+- **Sees:** on my days, the whole card (this week, this month, this life · see your whole life ›) breathes once, half a second in: it swells a little and lifts off the paper while the life's ghost bar (fainter than any real bar) pours in from the left, as the real one does, and a "?" fades in where "now" would be; as all settles, the › of "see your whole life ›" (ink, the heading's size: the card's strongest call) nudges twice; a tap asks the two answers, then opens the life (the square's "be here" breath; the row alone was too subtle).
 - **When:** each visit to my days, until the life is set up. Never with reduce motion. Not a bubble, so the one-hint rule doesn't hold it back.
 - **Test:** an account without a birth date, then my days.
 

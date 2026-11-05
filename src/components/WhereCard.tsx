@@ -149,12 +149,16 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
         <button className="where-row" onClick={onSetUp}>
           <span className="where-head">
             <span>this life</span>
-            <small className="is-setup">see your whole life ›</small>
+            {/* The card's one call to action, in the heading's size; its › nudges once the breath settles. */}
+            <small className="is-setup">
+              see your whole life <span className="where-go">›</span>
+            </small>
           </span>
+          {/* Where you are isn't known yet: the bar ends on a "?", not on a made-up spot (nomi, Nov 5, 2026). */}
           <span className="where-track is-ghost" aria-hidden="true">
             <span className="where-reach">
               <i className="where-lived" />
-              <i className="where-now" />
+              <i className="where-ask">?</i>
             </span>
             <i className="where-ahead" />
           </span>
