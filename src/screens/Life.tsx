@@ -92,6 +92,7 @@ export function Life({ days, profile, onPick, onIn, onResolution, onOut }: Props
               key={y}
               className={'life-year' + (y === thisYear ? ' is-current' : '') + (bs.length ? '' : ' is-blank')}
               style={{ '--land-at': `${landAt(y - first)}ms` } as React.CSSProperties}
+              data-year={y}
               aria-label={String(y)}
               onClick={() => onPick(y)}
             >

@@ -1,4 +1,4 @@
-import { LIFE_AHEAD, LIFE_AHEAD_EDGE, LIFE_BEFORE, LIFE_LIVED } from '../lib/life'
+import { LIFE_AHEAD, LIFE_BEFORE, LIFE_LIVED } from '../lib/life'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react'
 import { glide } from '../lib/backToToday'
 import { LifeHead, type Resolution } from '../components/LifeHead'
@@ -143,13 +143,6 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
             }
           }
           ctx.restore()
-          // The months ahead: a thin keyline, slots still to come (as a life's days).
-          if (key > thisMonth) {
-            roundRect(ctx, x + 0.5, y + 0.5, cell - 1, cell - 1, radius)
-            ctx.lineWidth = 1
-            ctx.strokeStyle = LIFE_AHEAD_EDGE
-            ctx.stroke()
-          }
           if (showLabels && key >= bornMonth) {
             ctx.textAlign = 'center'
             ctx.fillStyle = lived ? '#24241f' : '#bfbfb8'

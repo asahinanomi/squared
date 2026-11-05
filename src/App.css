@@ -2183,9 +2183,8 @@ body[data-screen='questions'] .idea {
   color: var(--muted);
 }
 .life-year.is-ahead {
-  /* The years ahead greyed out further, kept by a thin keyline (LIFE_AHEAD, LIFE_AHEAD_EDGE in lib/life.ts). */
+  /* The years ahead greyed out further (LIFE_AHEAD in lib/life.ts), no keyline (nomi, Nov 5, 2026). */
   background: #f6f6f2;
-  box-shadow: inset 0 0 0 1px #e6e6df;
   color: var(--faint);
   font-weight: 600;
 }
@@ -2196,8 +2195,27 @@ body[data-screen='questions'] .idea {
 }
 /* The quick fill (switching to years): each lived year lands from the paper, one after another into this year, which
    then pulses once. */
-.life-years.is-filling .life-year:not(.is-ahead) {
-  animation: life-land var(--land, 1.2s) var(--land-at, 0ms) ease-out both;
+.life-years.is-filling .life-year:not(.is-ahead)::before {
+  /* Until the wave reaches it, a lived year is an empty slot like the years ahead (as days and months): this cover,
+     in the ahead's paper, fades away as it lands. */
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: #f6f6f2;
+  content: attr(data-year); /* its name, faint, as the years ahead show theirs */
+  display: grid;
+  place-items: center;
+  color: var(--faint);
+  font-weight: 600;
+  animation: life-uncover var(--land, 1.2s) var(--land-at, 0ms) ease-out both;
+  pointer-events: none;
+}
+@keyframes life-uncover {
+  to {
+    opacity: 0;
+  }
 }
 .life-years.is-filling .life-year.is-current::after {
   content: '';
@@ -2207,11 +2225,6 @@ body[data-screen='questions'] .idea {
   box-shadow: 0 0 0 2px rgba(20, 20, 19, 0.4);
   animation: life-pulse 0.9s var(--pulse-at, 3.2s) ease-out both; /* as the wave reaches this year */
   pointer-events: none;
-}
-@keyframes life-land {
-  from {
-    opacity: 0;
-  }
 }
 @keyframes life-pulse {
   from {
