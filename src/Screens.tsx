@@ -155,7 +155,8 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
         profile={profile}
         onBack={nav.leaveSetup}
         mode={nav.afterSetup === 'settings' ? 'settings' : 'onboarding'}
-        // The title follows the way in (nomi, Nov 4, 2026): what you came for leads, the two answers follow; from
+        // The title follows the way in (nomi, Nov 4, 2026): what you came for leads, its two questions follow (no line
+        // between: nomi, Nov 5, 2026); from
         // settings (or anywhere else), the setting's own name, as its row.
         title={
           nav.afterSetup === 'life' || nav.afterSetup === 'pie' || nav.afterSetup === 'mydays'
@@ -164,7 +165,6 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
               ? 'Go further back.'
               : undefined
         }
-        why={nav.afterSetup && nav.afterSetup !== 'settings' ? 'squared needs two answers.' : undefined}
         onSave={async (p) => {
           await saveProfile(p)
           acc.setProfile(p)

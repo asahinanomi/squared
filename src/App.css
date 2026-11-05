@@ -880,14 +880,6 @@ sup.ord {
 .ladder-setup.is-in-head {
   margin: 22px auto 0;
 }
-/* how many squares: why it's asked, on the way somewhere. */
-.setup-why {
-  margin: 6px 0 0;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1.4;
-  color: var(--ink); /* part of the question, not a footnote */
-}
 .tray-rest {
   width: 100%;
   display: flex;
@@ -2936,10 +2928,6 @@ body[data-screen='questions'] .idea {
   justify-content: center;
   gap: 30px;
   padding: 16px 0;
-}
-/* Its line under the title belongs to it: close under it, not a group's gap away (nomi, Nov 4, 2026). */
-.setup-title + .setup-why {
-  margin-top: -22px;
 }
 /* A label kept for screen readers only. */
 .setup-label.is-hidden {

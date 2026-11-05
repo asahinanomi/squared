@@ -13,8 +13,6 @@ type Props = {
   onBack?: () => void
   /** Rejects if it couldn't be saved. */
   onSave: (p: Profile) => Promise<void>
-  /** Why it's asked, when it's on the way somewhere (zooming out to a life, or further back). */
-  why?: string
   /** The page's title: what the person came for (a whole life, further back), else the setting's own name. */
   title?: string
 }
@@ -25,7 +23,7 @@ const fmt = (n: number) => n.toLocaleString('en-US')
 
 // "How many squares?": birth date and hoped-for lifespan, and what they add up to.
 // The one screen where a number belongs: it's there to feel how finite the squares are.
-export function Setup({ profile, mode = 'onboarding', onBack, onSave, why, title = 'your life in squares' }: Props) {
+export function Setup({ profile, mode = 'onboarding', onBack, onSave, title = 'your life in squares' }: Props) {
   const today = todayIso()
   const [born, setBorn] = useState(profile?.born ?? '')
   const [lifespan, setLifespanValue] = useState(profile?.lifespan ?? DEFAULT_LIFESPAN)
@@ -118,7 +116,6 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave, why, title
 
       <div className="setup-body">
         <h1 className="setup-title">{title}</h1>
-        {why && <p className="setup-why">{why}</p>}
 
         <div className="setup-fields">
           <div>
