@@ -144,7 +144,7 @@ These describe squares, not feelings. Keep them out of the three-colour language
 **First visit** (Oct 25, 2026: onboarding's four steps are gone; one sheet over today, once)
 - **Each square is one day of your life.**
 - ● green means I spent it on what matters. ● red means I wish I'd spent it differently. ● grey means I wasn't paying attention.
-- Add moments as they come. / Paint the square when the day is done.
+- Today is yours to paint. (Nov 5, 2026: was "Add moments as they come. / Paint the square when the day is done."; a day can be painted any time, and the moment box speaks for itself)
 - got it (a keyline: a tip is never the day's main action)
 - How many squares and what matters are set up later, from my days ("set up now").
 

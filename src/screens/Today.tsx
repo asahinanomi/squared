@@ -741,11 +741,10 @@ export function Today(props: Props) {
               </li>
             ))}
           </ul>
-          <p className="intro-how">
-            Add moments as they come.
-            <br />
-            Paint the square when the day is done.
-          </p>
+          {/* One warm line, an invitation to paint (nomi, Nov 5, 2026: "Add moments as they come. Paint the square when
+              the day is done." was two lines, and a day can be painted any time). It echoes sign-in's "Today is still
+              yours." */}
+          <p className="intro-how">Today is yours to paint.</p>
           <button className="pill is-keyline intro-done" onClick={introDone}>
             got it
           </button>

@@ -13,7 +13,7 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 
 ## 2. The first visit's sheet
 
-- **Sees:** "Each square is one day of your life." with the three colours' meanings, "Add moments as they come. Paint the square when the day is done.", and "got it".
+- **Sees:** "Each square is one day of your life." with the three colours' meanings, "Today is yours to paint.", and "got it".
 - **When:** the first visit on a device, with nothing painted and no birth date. **Stops:** once closed (per device).
 - **Test:** `?welcome`.
 
