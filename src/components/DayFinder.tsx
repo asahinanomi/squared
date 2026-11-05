@@ -129,7 +129,7 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick, onSe
             ))}
           </ul>
         )}
-        {/* Without a birth date the years start at your first square's: a nudge to go further back. */}
+        {/* Without a birth date the years start at your first square's: the way to your whole life, the same line as the list's card (nomi, Nov 5, 2026). */}
         {step === 'year' && !born && onSetUp && (
           <button
             className="finder-setup"
@@ -138,7 +138,7 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick, onSe
               onSetUp()
             }}
           >
-            set your birth date to go further back ›
+            see your whole life ›
           </button>
         )}
 

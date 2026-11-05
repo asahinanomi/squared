@@ -95,7 +95,7 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
         onKeepMatter={(kind, text) =>
           lists.addLines({ ...lists.matters, [kind]: [...lists.matters[kind], { id: crypto.randomUUID(), text }] })
         }
-        onSetUp={() => nav.askSquares('today')}
+        onSetUp={() => nav.goLife()} // the finder's "see your whole life ›": the two answers, then the life
         // Someone new (nothing painted, squares not set): the colours, once. ?welcome shows it on any account.
         intro={tryWelcome || (!profile && Object.keys(days).length === 0 && !introSeen())}
         onIntroDone={() => {
@@ -155,19 +155,10 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
         profile={profile}
         onBack={nav.leaveSetup}
         mode={nav.afterSetup === 'settings' ? 'settings' : 'onboarding'}
-        // The title follows the way in (nomi, Nov 4, 2026): what you came for leads, its two questions follow (no line
-        // between: nomi, Nov 5, 2026); from
-        // settings (or anywhere else), the setting's own name, as its row.
-        title={
-          nav.afterSetup === 'life' ||
-          nav.afterSetup === 'pie' ||
-          nav.afterSetup === 'mydays' ||
-          nav.afterSetup === 'list'
-            ? 'See your whole life at once.'
-            : nav.afterSetup === 'month' || nav.afterSetup === 'today'
-              ? 'Go further back.'
-              : undefined
-        }
+        // The title follows the way in (nomi, Nov 4, 2026): every way in is the whole life, one line everywhere (its
+        // "Go further back." went with the finder's own wording: nomi, Nov 5, 2026); from settings, the setting's own
+        // name, as its row. Its two questions follow, no line between.
+        title={nav.afterSetup === 'settings' ? undefined : 'See your whole life at once.'}
         onSave={async (p) => {
           await saveProfile(p)
           acc.setProfile(p)
