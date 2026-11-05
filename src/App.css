@@ -3625,6 +3625,7 @@ button.settings-row:active {
 }
 .days-month.is-cards > .ladder-label {
   position: relative;
+  z-index: 9; /* the painting hint under it sits over the cards below, never behind them (nomi, Nov 5, 2026) */
   margin: 14px 0 10px;
   padding: 0 4px;
   font-size: 16px;
