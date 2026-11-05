@@ -19,7 +19,7 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 
 ## 3. How to paint, acted out
 
-- **Sees:** on a blank today, the way it really works: a pointing hand (ink keyline and white, like the palette; lab B) taps the green well with its fingertip, which loads exactly as a real tap loads it (its splash of drops and its swirl), and the brush takes the green where it rests; the fingertip then paints a faint round trip across the square, as wide as the real brush: lower left up to upper right, then back just below, fading from halfway back (a ghost, never a colour, kept inside the square), and lifts away; the brush goes clean. (It was a brush flying to the well, which taught carrying the brush.)
+- **Sees:** on a blank today, the way it really works: a pointing hand (ink keyline and white, like the palette; lab B) taps the green well with its fingertip, which loads exactly as a real tap loads it (its splash of drops and its swirl), and the brush takes the green where it rests; the fingertip then paints the square with a few quick passes, as wide as the real brush (lower left to upper right, back across the upper left, out across the lower right), covering about 80% of it in a faint green kept inside the square; the hand lifts and the paint fades (a ghost, never a colour); the brush goes clean. (It was a brush flying to the well, which taught carrying the brush.)
 - **When:** every time today opens blank, until the first square is ever painted; it waits until no sheet covers the day and starts as one slides away. **Stops:** at any touch; never again once a square is painted; never with reduce motion.
 - **Test:** `?firstpaint` (on a blank today).
 

@@ -34,13 +34,13 @@ export function showFirstPaint(): () => void {
   })
 
   // The stroke it paints: as wide as the real brush (nomi, Nov 5, 2026: a thin line taught careful colouring in), a
-  // round trip the way a finger really swipes: from the lower left up to the upper right, then back on a line just
-  // below. A faint green, a little stronger at first; it fades from halfway back. Kept inside the square's face, as
-  // real paint is (its round ends spilled over the frame).
+  // few quick passes the way a finger really swipes (nomi, Nov 5, 2026): lower left up to upper right, back across the
+  // upper left corner, out again across the lower right, painting most of the square (about 80%); it holds as the hand
+  // lifts, then fades. A faint green, kept inside the square's face, as real paint is.
   const sq = square.getBoundingClientRect()
   const pt = (x: number, y: number) => toUnits(sq.left + (sq.width * x) / 100, sq.top + (sq.height * y) / 100).join(' ')
   const trail = document.createElementNS(NS, 'path')
-  trail.setAttribute('d', `M${pt(22, 72)} L${pt(78, 30)} L${pt(78, 44)} L${pt(26, 78)}`)
+  trail.setAttribute('d', `M${pt(22, 78)} L${pt(78, 22)} L${pt(62, 14)} L${pt(14, 62)} L${pt(38, 86)} L${pt(86, 38)}`)
   Object.assign(trail.style, {
     fill: 'none',
     stroke: 'rgba(110, 155, 123, 0.3)',
@@ -107,14 +107,14 @@ export function showFirstPaint(): () => void {
     return [p.x, p.y]
   }
 
-  // The steps, in ms, as where the fingertip is: it comes in to the green, taps, goes to the square, paints the round
-  // trip (1.4s at an even pace, fading from halfway back, gone as it ends), and lifts away.
+  // The steps, in ms, as where the fingertip is: it comes in to the green, taps, goes to the square, paints its
+  // passes (1.5s at an even pace), and lifts away as the paint fades.
   const from = [wellAt[0] + finger * 2.5, wellAt[1] + finger * 3]
   const steps: [number, (k: number) => [number, number]][] = [
     [600, (k) => [lerp(from[0], wellAt[0], ease(k)), lerp(from[1], wellAt[1], ease(k))]],
     [450, () => [wellAt[0], wellAt[1]]],
-    [700, (k) => [lerp(wellAt[0], at(0)[0], ease(k)), lerp(wellAt[1], at(0)[1], ease(k))] as [number, number]],
-    [1400, (k) => at(k) as [number, number]],
+    [560, (k) => [lerp(wellAt[0], at(0)[0], ease(k)), lerp(wellAt[1], at(0)[1], ease(k))] as [number, number]],
+    [1500, (k) => at(k) as [number, number]], // three passes, a little quicker than a calm hand
     [500, () => at(1) as [number, number]],
   ]
   const end = steps.reduce((s, [ms]) => s + ms, 0)
@@ -160,9 +160,9 @@ export function showFirstPaint(): () => void {
     }
     if (i === 3) {
       trail.style.strokeDashoffset = String(1 - k)
-      trail.style.opacity = String(k < 0.75 ? 1 : 1 - (k - 0.75) * 4) // fades from halfway back
+      trail.style.opacity = '1'
     }
-    if (i === 4) trail.style.opacity = '0'
+    if (i === 4) trail.style.opacity = String(1 - k) // the paint fades as the hand lifts
     raf = requestAnimationFrame(tick)
   }
   raf = requestAnimationFrame(tick)
