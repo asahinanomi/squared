@@ -26,7 +26,7 @@ type Props = {
   onDay: (iso: string) => void
   /** This month, in squares. */
   onMonth: () => void
-  /** "set up now" on the life card, before the squares are set: how many squares, then back here. */
+  /** "see your whole life ›" on the life card, before the squares are set: how many squares, then back here. */
   onSetUp: () => void
   onPainting: (period: string) => void
   onSquares: () => void
@@ -62,7 +62,7 @@ const oneOf = (lines: string[], key: string) => {
 // after the page it opens; the page is "my days", so no row says "my".
 // There's no onboarding: what isn't there yet waits here. What matters asks its question on the card; no paintings or
 // framed days yet, an empty slot (a dashed edge) that says how one is made. The life card, before the squares are set,
-// shows a ghost of its bar and "set up now", so you can see what's coming.
+// shows a ghost of its bar and "see your whole life ›", so you can see what's coming.
 export function MyDays({
   days,
   profile,

@@ -123,7 +123,7 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
         matters={lists.matters.meaningful.map((e) => e.text.trim()).filter(Boolean)}
         onDay={(iso) => nav.openDay(iso)}
         onMonth={() => nav.goMonth()}
-        onSetUp={() => nav.askSquares('mydays')}
+        onSetUp={nav.goLifeDays} // "see your whole life ›": the two answers, then the life
         onPainting={openPainting}
         onSquares={nav.goLifeDays}
         onMatters={nav.openMatters}

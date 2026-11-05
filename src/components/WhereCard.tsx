@@ -149,7 +149,7 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
         <button className="where-row" onClick={onSetUp}>
           <span className="where-head">
             <span>this life</span>
-            <small className="is-setup">set up now ›</small>
+            <small className="is-setup">see your whole life ›</small>
           </span>
           <span className="where-track is-ghost" aria-hidden="true">
             <span className="where-reach">

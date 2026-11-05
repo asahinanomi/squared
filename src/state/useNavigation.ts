@@ -35,6 +35,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   const [lifeRes, setLifeResValue] = useState<Resolution>('years')
   // Where "your life in squares" returns to: a life, when it was asked for on the way there.
   const [afterSetup, setAfterSetup] = useState<Screen>('today')
+  const [setupFrom, setSetupFrom] = useState<Screen>('month') // where its back goes, when a life asked for it
   // The zoom level the pie was opened from: the switch returns there.
   const [pieFrom, setPieFrom] = useState<Screen>('life')
   // Which days the pie is out of; it always opens on the whole life.
@@ -106,6 +107,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   /** "your life in squares" (birth date, lifespan), then on to `then`. */
   const askSquares = (then: Screen) => {
     setAfterSetup(then)
+    setSetupFrom(screen)
     setScreenValue('setup')
   }
   // Zooming out of a month lands on a life in days (every day of it, one square each), centred on the month you
@@ -197,7 +199,11 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   // Back from how many squares: wherever it was asked from.
   const leaveSetup = () =>
     afterSetup === 'life'
-      ? setScreen('month')
+      ? setupFrom === 'mydays'
+        ? setScreenValue('mydays')
+        : setupFrom === 'today'
+          ? goToday()
+          : setScreen('month') // back where it was asked: my days, today's finder, or a month's zoom out
       : afterSetup === 'pie'
         ? setScreen(pieFrom)
         : afterSetup === 'settings' || afterSetup === 'mydays'
