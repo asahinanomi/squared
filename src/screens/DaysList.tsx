@@ -43,6 +43,8 @@ type Props = {
   /** The life's own head — title, life glass and the years · months · days capsule — as on the squares. */
   /** The list's head, given what goes beside its title (the filter). */
   head?: (extra: ReactNode) => ReactNode
+  /** No birth date yet: a card at the very top, where earlier days would be, to see your whole life. */
+  onWholeLife?: () => void
   /** The kinds of day the list shows (any of them); none: every day. A pie slice opens it on one. */
   only?: Only[]
   /** Choose what the list shows. */
@@ -237,6 +239,7 @@ export function DaysList({
   only = [],
   onOnly,
   onAllNotes,
+  onWholeLife,
 }: Props) {
   // "with moments" and tags need every moment, not just the months seen so far.
   useEffect(() => {
@@ -515,6 +518,13 @@ export function DaysList({
         onWheel={() => (touched.current = true)}
         onTouchStart={() => (touched.current = true)}
       >
+        {/* Where earlier days would be, before a birth date: the way to your whole life, as a card (an empty slot's
+            dashed edge), the same words as the month's bubble and the page it opens (nomi, Nov 5, 2026). */}
+        {onWholeLife && !filtered && (
+          <button className="whole-life-card" onClick={onWholeLife}>
+            see your whole life ›
+          </button>
+        )}
         {/* A filter with nothing in it says so, rather than an empty page. */}
         {filtered && !months.some((m) => monthCells(m).some((iso) => !!iso && iso <= today && shown(iso))) && (
           <p className="days-empty">No days here yet.</p>

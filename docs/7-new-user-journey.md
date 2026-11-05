@@ -57,9 +57,14 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 - **When:** every month visit until the life is set up. **Stops:** at a touch or after 10 seconds; for good once set up.
 - **Test:** `?hintlife` (then zoom out to the month).
 
+## 9b. "see your whole life ›", in the list
+
+- **Sees:** the list's first card, where earlier days would be: a dashed empty slot with "see your whole life ›" (it replaced a grey "set your birth date to go further back ›" pill).
+- **When:** every time the list opens, until the life is set up. **Test:** an account without a birth date.
+
 ## 10. Your life in squares
 
-- **Sees:** "See your whole life at once." (from a zoom out) or "Go further back." (from the date picker or the list), then "when were you born?" inside its box and "how long do you hope to live?" (starting at 80 years, with "US average lifespan: 79 years · men 76, women 81").
+- **Sees:** "See your whole life at once." (from a zoom out or the list) or "Go further back." (from the date picker), then "when were you born?" inside its box and "how long do you hope to live?" (starting at 80 years, with "US average lifespan: 79 years · men 76, women 81").
 - **When:** zooming to a life (or further back) without a birth date. From settings it's titled "your life in squares".
 - **Test:** an account without a birth date, or settings → your life in squares.
 

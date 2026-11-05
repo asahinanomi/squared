@@ -877,9 +877,6 @@ sup.ord {
 .ladder-setup.is-in-finder {
   margin: 18px auto 4px;
 }
-.ladder-setup.is-in-head {
-  margin: 22px auto 0;
-}
 .tray-rest {
   width: 100%;
   display: flex;
@@ -3787,6 +3784,25 @@ button.settings-row:active {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+/* The list, before a birth date: a card at the very top, where earlier days would be: an empty slot (dashed), its
+   words the way in. */
+.whole-life-card {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 4px 0 26px;
+  padding: 22px 18px;
+  border: 1.5px dashed #b0b0a8;
+  border-radius: 16px;
+  background: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: center;
+}
+.whole-life-card:active {
+  transform: scale(0.99);
 }
 .day-card {
   position: relative;

@@ -159,9 +159,12 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
         // between: nomi, Nov 5, 2026); from
         // settings (or anywhere else), the setting's own name, as its row.
         title={
-          nav.afterSetup === 'life' || nav.afterSetup === 'pie' || nav.afterSetup === 'mydays'
+          nav.afterSetup === 'life' ||
+          nav.afterSetup === 'pie' ||
+          nav.afterSetup === 'mydays' ||
+          nav.afterSetup === 'list'
             ? 'See your whole life at once.'
-            : nav.afterSetup === 'month' || nav.afterSetup === 'list' || nav.afterSetup === 'today'
+            : nav.afterSetup === 'month' || nav.afterSetup === 'today'
               ? 'Go further back.'
               : undefined
         }
@@ -220,9 +223,6 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
             <h1 className="life-title">a life</h1>
             {extra}
           </div>
-          <button className="ladder-setup is-in-head" onClick={() => nav.askSquares('list')}>
-            set your birth date to go further back ›
-          </button>
         </div>
       )
     return listRes === 'days' ? (
@@ -233,6 +233,7 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
         onAllNotes={acc.loadAllNotes}
         mid={listMid}
         head={head}
+        onWholeLife={profile ? undefined : () => nav.askSquares('list')}
         days={days}
         notes={notes}
         born={profile?.born}
