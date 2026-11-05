@@ -1,5 +1,6 @@
 import { doneOnce, markDone } from '../lib/onceADay'
 import { hintTest } from '../state/app'
+import { useLeaving } from '../lib/useLeaving'
 import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { Sheet } from '../components/Sheet'
@@ -420,6 +421,7 @@ export function DaysList({
   // The filter, found (nomi, Nov 5, 2026): each time the list opens, until the filter has been used once (per device),
   // an ink bubble under it says what it's for; it goes at a touch, or after 10 seconds.
   const [filterHint, setFilterHint] = useState(false)
+  const filterBubble = useLeaving(filterHint)
   useEffect(() => {
     if (!onOnly || (doneOnce('filterUsed') && !hintTest.filter)) return
     const show = setTimeout(() => setFilterHint(true), 600)
@@ -454,7 +456,11 @@ export function DaysList({
       >
         <SlidersIcon />
       </button>
-      {filterHint && <span className="filter-hint">find days by colour or #tag ↑</span>}
+      {filterBubble.shown && (
+        <span className={'filter-hint' + (filterBubble.leaving ? ' is-leaving' : '')}>
+          find days by colour or #tag ↑
+        </span>
+      )}
     </span>
   )
 

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { hintTest } from '../state/app'
+import { useLeaving } from '../lib/useLeaving'
 import { firstDay, fromIso, isoDate, longDate, monthCells, monthTitle, todayIso, dayCaption } from '../lib/dates'
 import type { Days } from '../lib/days'
 import { useBackToToday } from '../lib/backToToday'
@@ -92,6 +93,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
   // No birth date yet: an ink bubble points at zoom out, the way to your whole life (it asks the two answers first),
   // as today's first painted days point to the month (nomi, Nov 5, 2026). It goes at a touch, or after 10 seconds.
   const [lifeHint, setLifeHint] = useState(false)
+  const lifeBubble = useLeaving(lifeHint)
   useEffect(() => {
     if ((born && !hintTest.life) || !onOut) return
     const show = setTimeout(() => setLifeHint(true), 0) // at once, fading in (nomi, Nov 5, 2026)
@@ -201,7 +203,8 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
       <ZoomBar
         onIn={onIn}
         onOut={onOut && (() => onOut(middle()))}
-        hint={lifeHint ? 'see your whole life →' : undefined}
+        hint={lifeBubble.shown ? 'see your whole life →' : undefined}
+        hintLeaving={lifeBubble.leaving}
         onRecenter={toToday.away ? toToday.back : undefined}
         listAt={() => (toToday.away ? `${middle().slice(0, 8)}01` : todayIso())} // today if on screen, else the 1st
       />

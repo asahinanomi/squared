@@ -20,6 +20,9 @@ type Props = {
   hint?: string
   /** A quiet bubble over the list icon: where your moments live (once there are a few). */
   listHint?: string
+  /** The hints are fading out (they're still shown a moment). */
+  hintLeaving?: boolean
+  listHintLeaving?: boolean
 }
 
 const stroke = {
@@ -136,7 +139,18 @@ function MyDaysTab({ here, onClick }: { here: boolean; onClick: () => void }) {
 // today's square in the centre, my days at the right, the same on every page). Zoom is a tool on the squares, not a way around, so it floats over
 // them at the bottom right, like a map's + and −: a slim capsule (zoom in on top, zoom out below; on a day, zoom out
 // alone), with ◎ (back to today's square, once it's out of view) on top of it. The list has no zoom: nothing floats.
-export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here, hint, listHint }: Props) {
+export function ZoomBar({
+  onOut,
+  onIn,
+  onRecenter,
+  listAt,
+  today,
+  here,
+  hint,
+  listHint,
+  hintLeaving,
+  listHintLeaving,
+}: Props) {
   const view = useContext(ViewSwitch)
   const goToday = today ?? view?.goToday
   // Scrolled down the page (a day's notes): you're reading, not zooming, so the zoom steps aside until you're back up.
@@ -157,7 +171,7 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here, hint, li
           <div className="zoombar-switch" role="group" aria-label="View">
             {listHint && (
               <button
-                className="list-hint"
+                className={'list-hint' + (listHintLeaving ? ' is-leaving' : '')}
                 onClick={() => {
                   markDone('listOpened')
                   view.toggleList(listAt?.())
@@ -204,7 +218,7 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here, hint, li
             </button>
           )}
           {hint && onOut && (
-            <button className="zoom-hint" onClick={onOut}>
+            <button className={'zoom-hint' + (hintLeaving ? ' is-leaving' : '')} onClick={onOut}>
               {hint}
             </button>
           )}

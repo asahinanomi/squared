@@ -913,6 +913,22 @@ sup.ord {
   color: #fff;
   animation: fade-in 1s ease-out both;
 }
+/* Every hint fades out as it goes (useLeaving), never just vanishing. */
+.zoom-hint.is-leaving,
+.more-hint.is-leaving,
+.filter-hint.is-leaving,
+.zoombar-switch > .list-hint.is-leaving {
+  animation: fade-out 0.7s ease-in forwards;
+  pointer-events: none;
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
 .days-filter-wrap {
   position: relative;
   display: inline-flex;

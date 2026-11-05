@@ -5,6 +5,7 @@ import { ConfirmDialog } from '../components/ConfirmDialog'
 import { MomentBox } from '../components/MomentBox'
 import { Turn } from '../components/Turn'
 import { countUp, doneOnce, markDone, onceToday } from '../lib/onceADay'
+import { useLeaving } from '../lib/useLeaving'
 import { NotesList } from '../components/NotesList'
 import { Sheet } from '../components/Sheet'
 import { PaintCanvas } from '../components/PaintCanvas'
@@ -389,6 +390,11 @@ export function Today(props: Props) {
     return onSaveNote(note, text, color)
   }
 
+  // Each hint fades out as it goes (useLeaving).
+  const monthBubble = useLeaving(monthHint)
+  const frameBubble = useLeaving(frameHint)
+  const listBubble = useLeaving(listHint && !monthHint)
+
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
   const hasPrev = prev >= firstDay(days, born)
   const hasNext = next <= today
@@ -642,8 +648,8 @@ export function Today(props: Props) {
                 <button className="day-wipe" onClick={openMore}>
                   more
                 </button>
-                {frameHint && (
-                  <button className="more-hint" onClick={openMore}>
+                {frameBubble.shown && (
+                  <button className={'more-hint' + (frameBubble.leaving ? ' is-leaving' : '')} onClick={openMore}>
                     a day to remember?
                   </button>
                 )}
@@ -831,8 +837,10 @@ export function Today(props: Props) {
       {!why && (
         <ZoomBar
           onOut={onZoomOut}
-          hint={monthHint ? 'see today in your month →' : undefined}
-          listHint={listHint && !monthHint ? 'read your moments back ↓' : undefined}
+          hint={monthBubble.shown ? 'see today in your month →' : undefined}
+          hintLeaving={monthBubble.leaving}
+          listHint={listBubble.shown ? 'read your moments back ↓' : undefined}
+          listHintLeaving={listBubble.leaving}
           listAt={() => date}
           today={() => {
             setSlide('from-right')
