@@ -63,7 +63,9 @@ export function showFirstPaint(): () => void {
   layer.appendChild(copy)
   document.body.appendChild(layer)
   brush.style.visibility = 'hidden'
-  // The fingertip: a soft grey dot, the size of a touch, and the ripple of its tap.
+  // The fingertip: a soft dot, the size of a touch. Its tap loads the real well, exactly as a real tap does (its splash
+  // of drops at the edge and its swirl: nomi, Nov 5, 2026, never an effect of its own).
+  const wellG = well.closest<SVGGElement>('.well')!
   const finger = (sq.width * 0.16) / scale / 2
   const dot = document.createElementNS(NS, 'circle')
   dot.setAttribute('r', String(finger))
@@ -73,14 +75,6 @@ export function showFirstPaint(): () => void {
     strokeWidth: String(1.5 / scale),
     opacity: '0',
   })
-  const ripple = document.createElementNS(NS, 'circle')
-  Object.assign(ripple.style, {
-    fill: 'none',
-    stroke: 'rgba(47, 47, 43, 0.3)',
-    strokeWidth: String(1.5 / scale),
-    opacity: '0',
-  })
-  layer.appendChild(ripple)
   layer.appendChild(dot)
   const wellAt = [Number(well.getAttribute('cx')), Number(well.getAttribute('cy'))]
   const total = trail.getTotalLength()
@@ -108,6 +102,7 @@ export function showFirstPaint(): () => void {
     done = true
     cancelAnimationFrame(raf)
     brush.style.visibility = ''
+    wellG.classList.remove('is-loaded')
     layer.style.transition = 'opacity 0.5s'
     layer.style.opacity = '0'
     setTimeout(() => layer.remove(), 520)
@@ -131,17 +126,15 @@ export function showFirstPaint(): () => void {
     // In, fading; pressed small for the tap; lifting away at the end.
     dot.style.opacity = String(i === 0 ? k : i === 4 ? 1 - k : 1)
     dot.setAttribute('r', String(finger * (i === 1 ? 1 - Math.sin(k * Math.PI) * 0.25 : 1)))
-    if (i === 1) {
-      ripple.setAttribute('cx', String(wellAt[0]))
-      ripple.setAttribute('cy', String(wellAt[1]))
-      ripple.setAttribute('r', String(finger * (1 + k * 1.2)))
-      ripple.style.opacity = String(k < 0.3 ? k / 0.3 : (1 - k) / 0.7)
-    } else ripple.style.opacity = '0'
     if (i === 1 && k > 0.4 && !green.classList.contains('is-on')) {
       green.style.transition = '' // the tap: the brush takes the green, softly, where it rests
       green.classList.add('is-on')
+      wellG.classList.add('is-loaded')
     }
-    if (i === 4) green.classList.remove('is-on') // the paint is on the square: the brush goes clean
+    if (i === 4) {
+      green.classList.remove('is-on') // the paint is on the square: the brush goes clean
+      wellG.classList.remove('is-loaded')
+    }
     if (i === 3) {
       trail.style.strokeDashoffset = String(1 - k)
       trail.style.opacity = String(k < 0.5 ? 1 : 1 - (k - 0.5) * 2)

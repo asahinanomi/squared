@@ -19,7 +19,7 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 
 ## 3. How to paint, acted out
 
-- **Sees:** on a blank today, the way it really works: a fingertip (a pale touch dot) taps the green well, with a small ripple, and the brush takes the green where it rests; the fingertip then paints a faint two-sweep stroke across the square (a ghost, never a colour) and lifts away; the brush goes clean. (It was a brush flying to the well, which taught carrying the brush.)
+- **Sees:** on a blank today, the way it really works: a fingertip (a pale touch dot) taps the green well, which loads exactly as a real tap loads it (its splash of drops and its swirl), and the brush takes the green where it rests; the fingertip then paints a faint two-sweep stroke across the square (a ghost, never a colour) and lifts away; the brush goes clean. (It was a brush flying to the well, which taught carrying the brush.)
 - **When:** every time today opens blank, until the first square is ever painted; it waits until no sheet covers the day and starts as one slides away. **Stops:** at any touch; never again once a square is painted; never with reduce motion.
 - **Test:** `?firstpaint` (on a blank today).
 
