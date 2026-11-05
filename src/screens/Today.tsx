@@ -279,6 +279,19 @@ export function Today(props: Props) {
     if (!answering) hadAnswer.current = false
   }, [why, answering])
   useEffect(() => setAnswering(false), [date])
+  // As the answer is done, the day's line writes itself in, left to right, as the square signs its word (nomi, Nov 5,
+  // 2026: swapped in at once, it was easy to miss). Only at that moment, never when a painted day opens.
+  const [signing, setSigning] = useState(false)
+  const wasAnswering = useRef(false)
+  useEffect(() => {
+    if (wasAnswering.current && !answering) {
+      setSigning(true)
+      const t = setTimeout(() => setSigning(false), 1600)
+      wasAnswering.current = answering
+      return () => clearTimeout(t)
+    }
+    wasAnswering.current = answering
+  }, [answering])
 
   // A first painted day: where it went (nomi, Nov 5, 2026, beta 1: "once I finished, I didn't know what had happened").
   // On someone's first three painted days, as the "because…" bubble closes, zoom out hops once with an ink bubble
@@ -495,7 +508,7 @@ export function Today(props: Props) {
               // every painted day (nomi, Oct 29, 2026): always saying "today", never a verdict, pointing forward
               // (src/lib/pastWords.ts). "start over" brings the question back.
               <div className="day-closed">
-                <h1 className="question">{words}</h1>
+                <h1 className={'question' + (signing ? ' is-signing' : '')}>{words}</h1>
               </div>
             ) : day && date !== today ? (
               // A past day, painted: squared speaks back, the day's own words as the heading (2 lines at most), from its
