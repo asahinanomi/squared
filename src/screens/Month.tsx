@@ -93,7 +93,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
   const [lifeHint, setLifeHint] = useState(false)
   useEffect(() => {
     if (born || !onOut) return
-    const show = setTimeout(() => setLifeHint(true), 800)
+    const show = setTimeout(() => setLifeHint(true), 0) // at once, fading in (nomi, Nov 5, 2026)
     const hide = setTimeout(() => setLifeHint(false), 15800)
     const away = (e: PointerEvent) => {
       if ((e.target as Element | null)?.closest?.('.zoom-stack')) return

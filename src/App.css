@@ -1878,7 +1878,7 @@ body[data-screen='questions'] .idea {
     0 6px 16px rgba(20, 20, 19, 0.12);
 }
 .zoom-capsule.is-hinting {
-  animation: zoom-hop 0.6s 0.2s ease-out both;
+  animation: zoom-hop 0.6s ease-out both;
 }
 @keyframes zoom-hop {
   35% {
@@ -1902,7 +1902,7 @@ body[data-screen='questions'] .idea {
   font-size: 16px;
   font-weight: 500;
   color: #fff;
-  animation: fade-in 0.4s 0.2s ease-out both;
+  animation: fade-in 0.6s ease-out both; /* at once, fading in, never sudden */
 }
 .zoom-hint::after {
   content: '';
