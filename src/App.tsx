@@ -62,7 +62,7 @@ export default function App() {
     if (supabase && session?.user.user_metadata?.kept_paintings != null)
       supabase.auth.updateUser({ data: { kept_paintings: null } }).catch(() => undefined)
   }, [session])
-  const painting = usePaintingArrival(acc.days, !!userId && acc.checking)
+  const painting = usePaintingArrival(acc.days, !!userId && acc.checking, session)
 
   // Notes load a month at a time: the day you're on.
   const { loadNotes } = acc
