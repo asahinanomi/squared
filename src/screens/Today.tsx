@@ -324,7 +324,7 @@ export function Today(props: Props) {
   }, [why]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Framing, found (nomi, Nov 5, 2026): once someone's life is set up and they've painted 5 days, as "because…" closes,
-  // an ink bubble under "more": "a day to remember? it's in more ↑" (any colour: a hard day can be worth keeping
+  // an ink bubble under "more": "a day to remember?" (any colour: a hard day can be worth keeping
   // too). Until "more" has been opened once; it goes at a touch, or after 15 seconds.
   const [frameHint, setFrameHint] = useState(false)
   const hadWhy2 = useRef(false)
