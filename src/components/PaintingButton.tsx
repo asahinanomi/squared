@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { markDone } from '../lib/onceADay'
 import { useLeaving } from '../lib/useLeaving'
 import { inProgress } from '../lib/painting'
@@ -25,18 +25,44 @@ const MONTHS = [
   'December',
 ]
 
-type Props = { period: string; label: string; onOpen: (period: string) => void; className?: string }
+type Props = {
+  period: string
+  label: string
+  onOpen: (period: string) => void
+  className?: string
+  /** Never carries the painting hint: a view's big title (the hint teaches the small month names in the body, the
+   *  pattern met everywhere; one bubble at a time: nomi, Nov 5, 2026). */
+  noHint?: boolean
+}
 
 /** A month's or a year's name, as the way to its painting ("so far" while it's still going), with a small ink picture
  *  right after it: the name alone (dotted) was too quiet a cue (nomi, Oct 29, 2026). Name and picture are one button. */
-export function PaintingButton({ period, label, onOpen, className }: Props) {
+export function PaintingButton({ period, label, onOpen, className, noHint }: Props) {
   const open = useContext(OpenPainting)
   // The painting hint, on this picture if it's the one: "your October, as a painting ↑", each visit, until used; it goes
   // at a touch elsewhere or after 10 seconds, fading.
-  const hinted = useContext(PaintingHint) === period
+  const hinted = useContext(PaintingHint) === period && !noHint
+  // It comes when this name is actually on screen (a view may build many months up front), and again each time it
+  // comes back into view, until used.
   const [hint, setHint] = useState(false)
+  const self = useRef<HTMLButtonElement>(null)
+  const [seen, setSeen] = useState(0) // counts each time it comes into view
   useEffect(() => {
-    if (!hinted) return
+    const el = self.current
+    if (!hinted || !el) return
+    let inView = false
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting && !inView) setSeen((n) => n + 1)
+        inView = e.isIntersecting
+      },
+      { threshold: 1 },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [hinted])
+  useEffect(() => {
+    if (!hinted || !seen) return
     setHint(true)
     const t = setTimeout(() => setHint(false), 10000)
     const away = (e: PointerEvent) => !(e.target as Element | null)?.closest?.('.painting-hint') && setHint(false)
@@ -46,10 +72,11 @@ export function PaintingButton({ period, label, onOpen, className }: Props) {
       clearTimeout(arm)
       document.removeEventListener('pointerdown', away)
     }
-  }, [hinted])
+  }, [hinted, seen])
   const bubble = useLeaving(hint && hinted)
   return (
     <button
+      ref={self}
       className={'painting-name' + (open === period ? ' is-on' : '') + (className ? ' ' + className : '')}
       onClick={() => {
         markDone('paintingOpened')

@@ -94,8 +94,8 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 
 ## 12d. "your October, as a painting ↑"
 
-- **Sees:** an ink bubble under a finished month's name and its small picture (on the list, and on the month view when you step back to it); a tap opens the month's painting, with "download".
-- **When:** from the first finished month with days, each time a view shows that month's name, until a painting has been opened from its picture or downloaded once (per device). Opening it from the new month's sheet doesn't count, so the hint is the way back if that sheet was closed. **Stops:** at a touch or after 10 seconds.
+- **Sees:** an ink bubble under a finished month's name and its small picture in the body (on the list, and on the month view when you step back to it; never on the month view's big title, so there's one bubble at a time, on the pattern met everywhere); a tap opens the month's painting, with "download".
+- **When:** from the first finished month with days, each time that month's name comes into view, until a painting has been opened from its picture or downloaded once (per device). Opening it from the new month's sheet doesn't count, so the hint is the way back if that sheet was closed. **Stops:** at a touch or after 10 seconds.
 - **Test:** `?hintpainting` (then open the list).
 
 ## 13. What matters, asked

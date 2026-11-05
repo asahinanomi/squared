@@ -123,7 +123,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
         {/* The big title opens its month's painting too, the most obvious place for it. */}
         <h1 className="ladder-title">
           {onPainting && visible <= current && Object.keys(days).some((iso) => iso.startsWith(visible.slice(0, 7))) ? (
-            <PaintingButton period={visible.slice(0, 7)} label={monthTitle(visible)} onOpen={onPainting} />
+            <PaintingButton period={visible.slice(0, 7)} label={monthTitle(visible)} onOpen={onPainting} noHint />
           ) : (
             monthTitle(visible)
           )}
