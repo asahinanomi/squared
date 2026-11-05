@@ -1,3 +1,4 @@
+import { LIFE_AHEAD, LIFE_AHEAD_EDGE, LIFE_BEFORE, LIFE_LIVED } from '../lib/life'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react'
 import { glide } from '../lib/backToToday'
 import { LifeHead, type Resolution } from '../components/LifeHead'
@@ -33,9 +34,9 @@ type Props = {
 // Space between squares grows with them, so big squares stay apart.
 const gapFor = (n: number) => ({ 12: 4, 6: 7, 4: 9, 3: 10 })[n] ?? 4
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-const LIVED_BLANK = '#e2e2da' // lived, not painted: a shade deeper than the months ahead
-const AHEAD = '#f1f1ec'
-const BEFORE = '#f6f6f2'
+const LIVED_BLANK = LIFE_LIVED // lived, not painted: a shade deeper than the months ahead
+const AHEAD = LIFE_AHEAD
+const BEFORE = LIFE_BEFORE
 const INK = '#141413'
 const PULSE_MS = 900
 const FONT = "'Inter', system-ui, sans-serif"
@@ -141,6 +142,13 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
             }
           }
           ctx.restore()
+          // The months ahead: a thin keyline, slots still to come (as a life's days).
+          if (key > thisMonth) {
+            roundRect(ctx, x + 0.5, y + 0.5, cell - 1, cell - 1, radius)
+            ctx.lineWidth = 1
+            ctx.strokeStyle = LIFE_AHEAD_EDGE
+            ctx.stroke()
+          }
           if (showLabels && key >= bornMonth) {
             ctx.textAlign = 'center'
             ctx.fillStyle = lived ? '#24241f' : '#bfbfb8'

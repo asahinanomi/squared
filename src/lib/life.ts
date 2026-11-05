@@ -34,3 +34,11 @@ export function lifeCounts(born: string, lifespan: number, today: string) {
   const left = total - sofar
   return { total, sofar, left, percentLeft: Math.round((left / total) * 100), age: age(born, today) }
 }
+
+// A life's squares, the same in years, months and days (nomi, Nov 5, 2026: months read flat, past and future too
+// alike): lived but unpainted a quiet grey; the time ahead greyed out further, nearly the paper, its squares kept by a
+// thin keyline, so it reads as slots still to come; before you were born, the paper itself.
+export const LIFE_LIVED = '#e2e2da'
+export const LIFE_AHEAD = '#f6f6f2'
+export const LIFE_AHEAD_EDGE = '#e6e6df'
+export const LIFE_BEFORE = '#fafaf8'

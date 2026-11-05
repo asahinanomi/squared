@@ -1,3 +1,4 @@
+import { LIFE_AHEAD, LIFE_AHEAD_EDGE, LIFE_LIVED } from '../lib/life'
 import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { glide } from '../lib/backToToday'
 import { LifeHead, type Resolution } from '../components/LifeHead'
@@ -37,9 +38,9 @@ const gapFor = (n: number) => ({ 28: 2, 14: 4, 7: 9, 3: 10 })[n] ?? 2
 const LABEL_H = 30 // year label above each block (a finger-sized name and picture, clear of the first row)
 const BLOCK_GAP = 16 // space between years
 const TOP = 24 // room above the first year, clear of the top fade (its label and painting icon stay easy to tap)
-const LIVED_BLANK = '#e2e2da' // lived, not painted: a shade deeper than the days ahead, so lived and ahead read apart
-const AHEAD = '#f1f1ec'
-const AHEAD_EDGE = '#e4e4dd'
+const LIVED_BLANK = LIFE_LIVED // lived, not painted: a shade deeper than the days ahead, so lived and ahead read apart
+const AHEAD = LIFE_AHEAD
+const AHEAD_EDGE = LIFE_AHEAD_EDGE
 const INK = '#141413'
 const NUM_MIN = 40 // squares at least this big print their day number…
 // …and "2026.10 Thu" under it as soon as that fits at a readable size (checked with the widest weekday).
@@ -54,7 +55,7 @@ const FILL_FIRST = 4200
 const FILL_AGAIN = 3200
 const LAND_MS = 1200
 const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))
-const AHEAD_RGB = rgb('#f1f1ec')
+const AHEAD_RGB = rgb(LIFE_AHEAD)
 const LAND = rgb('#cdcdc6') // the grey a lived day lands in, softening to LIVED_BLANK
 const mix = (a: number[], b: number[], k: number) =>
   `rgb(${a.map((v, n) => Math.round(v + (b[n] - v) * k)).join(', ')})`
@@ -154,7 +155,9 @@ export function LifeDays({
         ctx.textAlign = 'left'
         ctx.textBaseline = 'alphabetic'
         ctx.font = `600 16px ${FONT}`
-        ctx.fillStyle = String(year) === today.slice(0, 4) ? INK : '#6f6f6a'
+        // This year in ink, the years lived in soft grey, the years ahead greyed out, as their squares (nomi, Nov 5, 2026).
+        ctx.fillStyle =
+          String(year) === today.slice(0, 4) ? INK : String(year) > today.slice(0, 4) ? '#bfbfb8' : '#6f6f6a'
         ctx.fillText(String(year), 0, y0 + 16)
         const n = daysInYear(year)
         const rowFrom = Math.max(0, Math.floor((-y0 - LABEL_H) / pitch)) // first row on screen
