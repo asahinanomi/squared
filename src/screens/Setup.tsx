@@ -205,7 +205,7 @@ export function Setup({ profile, mode = 'onboarding', onBack, onSave, why, title
             </div>
             {/* A point of reference, not a target: most people pick near it, some hope for more. */}
             <p className="setup-hint">
-              <span>America average lifespan: 79 years</span> · <span>men 76, women 81</span>
+              <span>US average lifespan: 79 years</span> · <span>men 76, women 81</span>
             </p>
           </div>
         </div>
