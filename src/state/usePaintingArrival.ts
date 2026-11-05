@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { monthsAgo, todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Session } from '@supabase/supabase-js'
@@ -14,8 +14,14 @@ const PAINTED_KEY = 'squared.paintedMonth' // the month whose arrival last showe
 export function usePaintingArrival(days: Days, waiting: boolean, session?: Session | null) {
   const [paintedMonth, setPaintedMonth] = useState<string | null>(null)
   const [paintedArrived, setPaintedArrived] = useState(false) // shown by the new month, not opened from a view
+  // Decided once, as squared opens (for each person signed in), never again as days are painted: painting a past day
+  // of last month mid-month brought "a new month. here's the last one." up over the square's answer (nomi, Nov 5,
+  // 2026, as a new user). Last month with no days when squared opens: no painting until next month.
+  const decidedFor = useRef<string | null>(null)
   useEffect(() => {
-    if (waiting || !Object.keys(days).length) return
+    const who = session?.user.id ?? 'demo'
+    if (waiting || decidedFor.current === who) return
+    decidedFor.current = who
     const now = todayIso().slice(0, 7)
     const last =
       now.endsWith('-01') || tryYear

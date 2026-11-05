@@ -64,7 +64,7 @@ export default function App() {
     if (supabase && session?.user.user_metadata?.kept_paintings != null)
       supabase.auth.updateUser({ data: { kept_paintings: null } }).catch(() => undefined)
   }, [session])
-  const painting = usePaintingArrival(acc.days, !!userId && acc.checking, session)
+  const painting = usePaintingArrival(acc.days, !signedIn || !acc.daysReady || (!!userId && acc.checking), session) // decided once the days are in
   // The painting hint's month: the latest finished month with days, until a painting has been opened from its picture
   // or downloaded (docs/7-new-user-journey.md). ?hintpainting shows it on any account.
   const thisMonth = todayIso().slice(0, 7)

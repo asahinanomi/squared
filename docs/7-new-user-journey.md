@@ -117,7 +117,7 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 ## 15. Now and then
 
 - **The date turns over** from yesterday's on the first look at today each day (per device, per person).
-- **A new month's painting** rises once over today, the last month as a painting (January: the whole year), once per person, with the account. **Test:** `?month`, `?year`.
+- **A new month's painting** rises once over today, the last month as a painting (January: the whole year), once per person, with the account. Decided once, as squared opens: only if last month already has painted days then; painting a day of last month later never brings it up (it once did, over the square's answer). **Test:** `?month`, `?year`.
 - **A birthday:** "Happy 18th birthday." over today, signed "— nomi". **Test:** `?birthday`.
 - **The life bar** on my days: its numbers roll and its dot breathes, once a day.
 
