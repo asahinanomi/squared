@@ -301,7 +301,7 @@ export function Today(props: Props) {
   // Until their life is set up (a birth date and lifespan: nomi, Nov 5, 2026, one rule with the month's "see your
   // whole life →", so day → month → life is one guided path that ends when it's done), as the "because…" bubble
   // closes, zoom out hops once with an ink bubble beside it, "see today in your month →"; it goes at the next touch,
-  // or after 15 seconds.
+  // or after 10 seconds.
   const [monthHint, setMonthHint] = useState(false)
   const hadTest = useRef(false) // ?hintmonth: shown once as today opens
   const hadWhy = useRef(false)
@@ -312,7 +312,7 @@ export function Today(props: Props) {
     if (test) hadTest.current = true
     else if (!closed || !day || date !== today || born) return
     setMonthHint(true)
-    const t = setTimeout(() => setMonthHint(false), 15000)
+    const t = setTimeout(() => setMonthHint(false), 10000)
     // Any touch elsewhere puts it away (a touch on it, or on zoom out, goes to the month).
     const away = (e: PointerEvent) => {
       if ((e.target as Element | null)?.closest?.('.zoom-stack')) return
@@ -328,7 +328,7 @@ export function Today(props: Props) {
 
   // Framing, found (nomi, Nov 5, 2026): once someone's life is set up and they've painted 3 days, as "because…" closes,
   // an ink bubble under "more": "a day to remember?" (any colour: a hard day can be worth keeping
-  // too). Until "more" has been opened once; it goes at a touch, or after 15 seconds.
+  // too). Until "more" has been opened once; it goes at a touch, or after 10 seconds.
   const [frameHint, setFrameHint] = useState(false)
   const hadFrameTest = useRef(false) // ?hintframe: shown once on a painted day
   useEffect(() => setFrameHint(false), [date]) // before the effect below, so stepping to a day can still show it
@@ -340,7 +340,7 @@ export function Today(props: Props) {
     if (test) hadFrameTest.current = true
     else if (!closed || !day || !born || Object.keys(days).length < 3 || doneOnce('moreOpened')) return
     setFrameHint(true)
-    const t = setTimeout(() => setFrameHint(false), 15000)
+    const t = setTimeout(() => setFrameHint(false), 10000)
     const away = (e: PointerEvent) => {
       if ((e.target as Element | null)?.closest?.('.day-links')) return
       setFrameHint(false)
@@ -360,7 +360,7 @@ export function Today(props: Props) {
 
   // The list, found (nomi, Nov 5, 2026): once someone has written 5 moments (any writing: the moment box, "because…",
   // a framed or marked day's words), right after the next is kept, an ink bubble over the list icon, "read your
-  // moments back ↓". Until the list has been opened once; it goes at a touch, or after 15 seconds.
+  // moments back ↓". Until the list has been opened once; it goes at a touch, or after 10 seconds.
   const [listHint, setListHint] = useState(false)
   const listTimer = useRef(0)
   const wrote = () => {
@@ -369,7 +369,7 @@ export function Today(props: Props) {
     // After the words have flown into the day's moments and the keyboard has gone.
     window.setTimeout(() => setListHint(true), 1500)
     clearTimeout(listTimer.current)
-    listTimer.current = window.setTimeout(() => setListHint(false), 16500)
+    listTimer.current = window.setTimeout(() => setListHint(false), 11500)
   }
   useEffect(() => {
     if (!listHint) return

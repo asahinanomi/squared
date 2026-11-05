@@ -913,6 +913,38 @@ sup.ord {
   color: #fff;
   animation: fade-in 1s ease-out both;
 }
+.days-filter-wrap {
+  position: relative;
+  display: inline-flex;
+}
+/* "find days by colour or #tag ↑": the same ink bubble, under the filter, its tail on it; kept clear of the edge. */
+.filter-hint {
+  position: absolute;
+  z-index: 6;
+  top: calc(100% + 12px);
+  right: -18px;
+  white-space: nowrap;
+  padding: 11px 16px;
+  border-radius: 14px;
+  background: var(--ink);
+  box-shadow: 0 8px 22px rgba(20, 20, 19, 0.22);
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  pointer-events: none;
+  animation: fade-in 1s ease-out both;
+}
+.filter-hint::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 34px;
+  width: 12px;
+  height: 12px;
+  background: var(--ink);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
 .zoombar-switch > .list-hint {
   width: auto; /* not one of the switch's own buttons */
   height: auto;

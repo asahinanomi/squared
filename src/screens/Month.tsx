@@ -90,12 +90,12 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
   }, [zoomed]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // No birth date yet: an ink bubble points at zoom out, the way to your whole life (it asks the two answers first),
-  // as today's first painted days point to the month (nomi, Nov 5, 2026). It goes at a touch, or after 15 seconds.
+  // as today's first painted days point to the month (nomi, Nov 5, 2026). It goes at a touch, or after 10 seconds.
   const [lifeHint, setLifeHint] = useState(false)
   useEffect(() => {
     if ((born && !hintTest.life) || !onOut) return
     const show = setTimeout(() => setLifeHint(true), 0) // at once, fading in (nomi, Nov 5, 2026)
-    const hide = setTimeout(() => setLifeHint(false), 15800)
+    const hide = setTimeout(() => setLifeHint(false), 10000)
     const away = (e: PointerEvent) => {
       if ((e.target as Element | null)?.closest?.('.zoom-stack')) return
       setLifeHint(false)

@@ -147,4 +147,5 @@ export const hintTest = {
   life: params.has('hintlife'),
   frame: params.has('hintframe'),
   list: params.has('hintlist'),
+  filter: params.has('hintfilter'),
 }

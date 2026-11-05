@@ -2,7 +2,7 @@
 
 _last updated Nov 5, 2026_
 
-Every moment squared shows someone new, in the order they meet it: what they see, when it shows, when it stops, and how to test it on your own account. squared has no onboarding tour on purpose: each hint comes at the moment it's useful, points at the real control, goes at a touch, and stops once it has done its job. Add every new first-time moment here.
+Every moment squared shows someone new, in the order they meet it: what they see, when it shows, when it stops, and how to test it on your own account. squared has no onboarding tour on purpose: each hint comes at the moment it's useful, points at the real control, goes at a touch (or after 10 seconds), and stops once it has done its job. Add every new first-time moment here.
 
 Test links save nothing; they're listed in full in `docs/test-links.md`. Open them signed in, on your phone. "Per device" below means remembered on that phone or browser only; "with the account" means everywhere you sign in.
 
@@ -48,13 +48,13 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 ## 8. "see today in your month →"
 
 - **Sees:** an ink bubble by zoom out, which hops once; a tap opens the month with the new square in it.
-- **When:** as "because…" closes on today, until the person's life is set up (a birth date and lifespan). **Stops:** at another touch or after 15 seconds; for good once the life is set up.
+- **When:** as "because…" closes on today, until the person's life is set up (a birth date and lifespan). **Stops:** at another touch or after 10 seconds; for good once the life is set up.
 - **Test:** `?hintmonth` (shows as today opens).
 
 ## 9. "see your whole life →"
 
 - **Sees:** on the month view, an ink bubble by zoom out.
-- **When:** every month visit until the life is set up. **Stops:** at a touch or after 15 seconds; for good once set up.
+- **When:** every month visit until the life is set up. **Stops:** at a touch or after 10 seconds; for good once set up.
 - **Test:** `?hintlife` (then zoom out to the month).
 
 ## 10. Your life in squares
@@ -72,14 +72,20 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 ## 12. "a day to remember?"
 
 - **Sees:** an ink bubble under "more", on a painted day; a tap opens the sheet (frame it, out of my hands).
-- **When:** as "because…" closes, once the life is set up and 3 days are painted. **Stops:** at another touch or after 15 seconds; for good once "more" has been opened (per device).
+- **When:** as "because…" closes, once the life is set up and 3 days are painted. **Stops:** at another touch or after 10 seconds; for good once "more" has been opened (per device).
 - **Test:** `?hintframe` (on a painted day).
 
 ## 12b. "read your moments back ↓"
 
 - **Sees:** an ink bubble over the list icon in the bottom bar; a tap opens the list, every moment with its day.
-- **When:** right after something written is kept (the moment box, "because…", a framed or marked day's words), once they've written 5 (counted per device from Nov 5, 2026), about 1.5 seconds on, when the words have landed and the keyboard has gone. **Stops:** at another touch or after 15 seconds; for good once the list has been opened (per device). Never at the same time as "see today in your month →".
+- **When:** right after something written is kept (the moment box, "because…", a framed or marked day's words), once they've written 5 (counted per device from Nov 5, 2026), about 1.5 seconds on, when the words have landed and the keyboard has gone. **Stops:** at another touch or after 10 seconds; for good once the list has been opened (per device). Never at the same time as "see today in your month →".
 - **Test:** `?hintlist` (write a moment, then wait).
+
+## 12c. "find days by colour or #tag ↑"
+
+- **Sees:** in the list, an ink bubble under the filter (the sliders beside "a life").
+- **When:** each time the list opens, until the filter has been opened once (per device). **Stops:** at a touch or after 10 seconds; for good once used.
+- **Test:** `?hintfilter` (then open the list).
 
 ## 13. What matters, asked
 
@@ -100,4 +106,4 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 
 ## Walking it end to end
 
-A real first run: sign out, open a private window (or a new Google account), sign in, and go through 1 to 13 in order. On your own account, use the test links above for the moments your account is past (2, 3, 8, 9, 12, 12b, 13, and the month and year paintings).
+A real first run: sign out, open a private window (or a new Google account), sign in, and go through 1 to 13 in order. On your own account, use the test links above for the moments your account is past (2, 3, 8, 9, 12, 12b, 12c, 13, and the month and year paintings).

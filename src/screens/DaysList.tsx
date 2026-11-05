@@ -1,3 +1,5 @@
+import { doneOnce, markDone } from '../lib/onceADay'
+import { hintTest } from '../state/app'
 import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { Sheet } from '../components/Sheet'
@@ -415,20 +417,45 @@ export function DaysList({
     setAway(false)
   }
 
+  // The filter, found (nomi, Nov 5, 2026): each time the list opens, until the filter has been used once (per device),
+  // an ink bubble under it says what it's for; it goes at a touch, or after 10 seconds.
+  const [filterHint, setFilterHint] = useState(false)
+  useEffect(() => {
+    if (!onOnly || (doneOnce('filterUsed') && !hintTest.filter)) return
+    const show = setTimeout(() => setFilterHint(true), 600)
+    const hide = setTimeout(() => setFilterHint(false), 10600)
+    const away = (e: PointerEvent) => {
+      if ((e.target as Element | null)?.closest?.('.days-filter-wrap')) return
+      setFilterHint(false)
+    }
+    const arm = setTimeout(() => document.addEventListener('pointerdown', away), 700)
+    return () => {
+      clearTimeout(show)
+      clearTimeout(hide)
+      clearTimeout(arm)
+      document.removeEventListener('pointerdown', away)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   // The filter: a small pill with sliders beside the title and its glass (clear of the menu, no line of its own); ink
   // while the list is filtered. Its choices open in a sheet: tick any kinds of day; the list follows when it closes.
   const filter = onOnly && (
-    <button
-      className={'days-filter' + (filtered ? ' is-on' : '')}
-      onClick={() => {
-        onAllNotes?.() // your tags come from every moment
-        setPicking(only)
-      }}
-      aria-haspopup="dialog"
-      aria-label={filtered ? 'Which days: filtered' : 'Which days'}
-    >
-      <SlidersIcon />
-    </button>
+    <span className="days-filter-wrap">
+      <button
+        className={'days-filter' + (filtered ? ' is-on' : '')}
+        onClick={() => {
+          onAllNotes?.() // your tags come from every moment
+          setFilterHint(false)
+          markDone('filterUsed')
+          setPicking(only)
+        }}
+        aria-haspopup="dialog"
+        aria-label={filtered ? 'Which days: filtered' : 'Which days'}
+      >
+        <SlidersIcon />
+      </button>
+      {filterHint && <span className="filter-hint">find days by colour or #tag ↑</span>}
+    </span>
   )
 
   return (
