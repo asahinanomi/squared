@@ -305,7 +305,7 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
       focus={nav.monthFocus}
       onPick={(iso) => nav.openDay(iso)}
       onIn={nav.goToday}
-      onOut={(at) => nav.goLife(at)}
+      onOut={(at) => nav.outOfMonth(at)}
       mid={listMid}
       onPainting={openPainting}
     />

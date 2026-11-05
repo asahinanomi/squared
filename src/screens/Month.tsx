@@ -1,3 +1,4 @@
+import { hintDue } from '../lib/onceADay'
 import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { hintTest } from '../state/app'
@@ -91,12 +92,12 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
     el.scrollTop += r.top + r.height / 2 - anchor.y
   }, [zoomed]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // No birth date yet: an ink bubble points at zoom out, the way to your whole life (it asks the two answers first),
+  // Until zooming out to a life is learnt (twice, on different days: nomi, Nov 5, 2026): an ink bubble points at zoom out, the way to your whole life (it asks the two answers first),
   // as today's first painted days point to the month (nomi, Nov 5, 2026). It goes at a touch, or after 10 seconds.
   const [lifeHint, setLifeHint] = useState(false)
   const lifeBubble = useLeaving(useOneHint('life', lifeHint))
   useEffect(() => {
-    if ((born && !hintTest.life) || !onOut) return
+    if ((!hintDue('zoomLife') && !hintTest.life) || !onOut) return
     const show = setTimeout(() => setLifeHint(true), 0) // at once, fading in (nomi, Nov 5, 2026)
     const hide = setTimeout(() => setLifeHint(false), 10000)
     const away = (e: PointerEvent) => {
@@ -109,7 +110,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
       clearTimeout(hide)
       document.removeEventListener('pointerdown', away)
     }
-  }, [born]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <main className={'month' + (zoomed ? ' is-zoomed' : '')}>

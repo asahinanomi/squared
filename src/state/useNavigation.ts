@@ -1,3 +1,4 @@
+import { didIt } from '../lib/onceADay'
 import { useCallback, useRef, useState } from 'react'
 import type { Resolution } from '../components/LifeHead'
 import type { Only } from '../screens/DaysList'
@@ -96,6 +97,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   // Zoom out of a day: to its own month (a day in 2013 zooms out to that December, not this month; nomi, Oct 30,
   // 2026) — or back to the list, if it was opened from there.
   const outOfDay = () => {
+    didIt('zoomMonth') // the zoom, taught twice (docs/7-new-user-journey.md)
     if (!dayFromList) return goMonth(date)
     setWhy(null)
     setDayFromList(false)
@@ -114,6 +116,11 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     setLifeFocus(focus)
     if (profile) return setScreen('life')
     askSquares('life')
+  }
+  // Zoom out of a month (the button or a pinch): to a life, and the zoom learnt once more.
+  const outOfMonth = (focus?: string) => {
+    didIt('zoomLife')
+    goLife(focus)
   }
   // A life, in days (from my days' life card): on today.
   const goLifeDays = () => goLife()
@@ -244,7 +251,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
   }
   const pinchOut = () => {
     if (screen === 'today') outOfDay()
-    else if (screen === 'month') goLife(listMid.current())
+    else if (screen === 'month') outOfMonth(listMid.current())
     else if (screen === 'pie') {
       const i = SCOPE_ORDER.indexOf(pieScope)
       if (i <= 0) return false
@@ -285,6 +292,7 @@ export function useNavigation(profile: Profile | null, setWhy: (w: Why | null) =
     goHome,
     goMonth,
     goLife,
+    outOfMonth,
     goLifeDays,
     openList,
     lifeFocus,

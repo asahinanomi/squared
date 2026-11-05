@@ -2,7 +2,7 @@
 
 _last updated Nov 5, 2026_
 
-Every moment squared shows someone new, in the order they meet it: what they see, when it shows, when it stops, and how to test it on your own account. squared has no onboarding tour on purpose: each hint comes at the moment it's useful, points at the real control, goes at a touch (or after 10 seconds, fading out, never just vanishing), and stops once it has done its job. Only one hint shows at a time (`src/lib/oneHint.ts`): whichever is due first takes the moment, any other skips that time and comes back on a later visit. Add every new first-time moment here.
+Every moment squared shows someone new, in the order they meet it: what they see, when it shows, when it stops, and how to test it on your own account. squared has no onboarding tour on purpose: each hint comes at the moment it's useful, points at the real control, goes at a touch (or after 10 seconds, fading out, never just vanishing), and stops once it has done its job. Most hints teach once: once it's done, it's learnt. The zoom is taught twice (8 and 9), since nothing else brings it back. Only one hint shows at a time (`src/lib/oneHint.ts`): whichever is due first takes the moment, any other skips that time and comes back on a later visit. Add every new first-time moment here.
 
 Test links save nothing; they're listed in full in `docs/test-links.md`. Open them signed in, on your phone. "Per device" below means remembered on that phone or browser only; "with the account" means everywhere you sign in.
 
@@ -48,13 +48,13 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 ## 8. "see today in your month →"
 
 - **Sees:** an ink bubble by zoom out, which hops once; a tap opens the month with the new square in it.
-- **When:** as "because…" closes on today, until the person's life is set up (a birth date and lifespan). **Stops:** at another touch or after 10 seconds; for good once the life is set up.
+- **When:** as "because…" closes on today, until the zoom is learnt. **Stops:** at another touch or after 10 seconds. **Taught twice:** after the first zoom out it rests a week; if they haven't zoomed out again on their own by then, it comes back until they do. Once they've zoomed out on two different days, it stops for good (per device).
 - **Test:** `?hintmonth` (shows as today opens).
 
 ## 9. "see your whole life →"
 
 - **Sees:** on the month view, an ink bubble by zoom out.
-- **When:** every month visit until the life is set up. **Stops:** at a touch or after 10 seconds; for good once set up.
+- **When:** every month visit until zooming out to a life is learnt, the same way: twice, on different days, a week's rest between (per device). **Stops:** at a touch or after 10 seconds.
 - **Test:** `?hintlife` (then zoom out to the month).
 
 ## 9b. "see your whole life ›", in the list
