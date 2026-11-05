@@ -40,7 +40,7 @@ type Props = {
  *  right after it: the name alone (dotted) was too quiet a cue (nomi, Oct 29, 2026). Name and picture are one button. */
 export function PaintingButton({ period, label, onOpen, className, noHint }: Props) {
   const open = useContext(OpenPainting)
-  // The painting hint, on this picture if it's the one: "your October, as a painting ↑", each visit, until used; it goes
+  // The painting hint, on this picture if it's the one: "your October, as a painting" (no ↑: its tail points already), each visit, until used; it goes
   // at a touch elsewhere or after 10 seconds, fading.
   const hinted = useContext(PaintingHint) === period && !noHint
   // It comes when this name is actually on screen (a view may build many months up front), and again each time it
@@ -93,7 +93,7 @@ export function PaintingButton({ period, label, onOpen, className, noHint }: Pro
       </svg>
       {bubble.shown && (
         <span className={'painting-hint' + (bubble.leaving ? ' is-leaving' : '')}>
-          your {MONTHS[Number(period.slice(5, 7)) - 1]}, as a painting ↑
+          your {MONTHS[Number(period.slice(5, 7)) - 1]}, as a painting
         </span>
       )}
     </button>
