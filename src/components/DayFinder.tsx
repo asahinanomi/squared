@@ -132,7 +132,7 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick, onSe
         {/* Without a birth date the years start at your first square's: a nudge to go further back. */}
         {step === 'year' && !born && onSetUp && (
           <button
-            className="ladder-setup is-in-finder"
+            className="finder-setup"
             onClick={() => {
               onClose()
               onSetUp()
