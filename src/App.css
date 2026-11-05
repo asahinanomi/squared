@@ -1869,19 +1869,32 @@ body[data-screen='questions'] .idea {
     transform: translateY(1px);
   }
 }
-/* A first painted day: where it went ("see your month →"), a quiet line to the left of zoom out (nomi, Nov 5, 2026). */
+/* A first painted day: where it went, an ink speech bubble to the left of zoom out, its tail pointing at it (nomi,
+   Nov 5, 2026: a small white line was missed). Ink, like squared's other bubbles: no colour outside the paint. */
 .zoom-hint {
   position: absolute;
-  right: calc(100% + 10px);
-  bottom: 6px;
+  right: calc(100% + 14px);
+  bottom: 2px;
   white-space: nowrap;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(20, 20, 19, 0.1);
-  font-size: 14px;
-  color: var(--ink);
+  padding: 11px 16px;
+  border-radius: 14px;
+  background: var(--ink);
+  box-shadow: 0 8px 22px rgba(20, 20, 19, 0.22);
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
   animation: fade-in 0.4s 0.2s ease-out both;
+}
+.zoom-hint::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  bottom: 16px;
+  width: 12px;
+  height: 12px;
+  background: var(--ink);
+  transform: rotate(45deg);
+  border-radius: 2px;
 }
 @media (prefers-reduced-motion: reduce) {
   .zoom-capsule.is-hinting {

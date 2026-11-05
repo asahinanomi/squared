@@ -281,8 +281,8 @@ export function Today(props: Props) {
   useEffect(() => setAnswering(false), [date])
 
   // A first painted day: where it went (nomi, Nov 5, 2026, beta 1: "once I finished, I didn't know what had happened").
-  // On someone's first three painted days, as the "because…" bubble closes, zoom out hops once with "see your month →"
-  // beside it; it goes at the next touch, or after a while.
+  // On someone's first three painted days, as the "because…" bubble closes, zoom out hops once with an ink bubble
+  // beside it, "see today in your month →"; it goes at the next touch, or after 15 seconds.
   const [monthHint, setMonthHint] = useState(false)
   const hadWhy = useRef(false)
   useEffect(() => {
@@ -290,7 +290,7 @@ export function Today(props: Props) {
     hadWhy.current = !!why
     if (!closed || !day || date !== today || Object.keys(days).length > 3) return
     setMonthHint(true)
-    const t = setTimeout(() => setMonthHint(false), 9000)
+    const t = setTimeout(() => setMonthHint(false), 15000)
     // Any touch elsewhere puts it away (a touch on it, or on zoom out, goes to the month).
     const away = (e: PointerEvent) => {
       if ((e.target as Element | null)?.closest?.('.zoom-stack')) return
@@ -739,7 +739,7 @@ export function Today(props: Props) {
       {!why && (
         <ZoomBar
           onOut={onZoomOut}
-          hint={monthHint ? 'see your month →' : undefined}
+          hint={monthHint ? 'see today in your month →' : undefined}
           listAt={() => date}
           today={() => {
             setSlide('from-right')
