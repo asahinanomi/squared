@@ -185,7 +185,9 @@ export function DayFinder({ open, onClose, date, today, born, days, onPick, onSe
                       className={(iso === (picked ?? date) ? 'is-here' : '') + (d ? ' is-painted' : '')}
                       style={d ? { background: squareFill(d.color, d.framed), boxShadow: 'none' } : undefined}
                       aria-label={fromIso(iso).toLocaleDateString('en-US', { dateStyle: 'full' })}
-                      onClick={() => (picked === iso ? onPick(iso) : setPicked(iso))}
+                      // The pause is there to read your age; without a birth date there's none, so the day opens at
+                      // once (nomi, Nov 5, 2026: it waited 4.5s with no way on).
+                      onClick={() => (picked === iso || !born ? onPick(iso) : setPicked(iso))}
                     >
                       {Number(iso.slice(8))}
                     </button>
