@@ -307,7 +307,6 @@ export function Screens({ nav, acc, act, lists, openPainting, painter, onDeleted
       onOut={(at) => nav.goLife(at)}
       mid={listMid}
       onPainting={openPainting}
-      onSetUp={() => nav.askSquares('month')}
     />
   )
 }

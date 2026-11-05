@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, type MutableRefObject } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { ZoomBar } from '../components/ZoomBar'
 import { firstDay, fromIso, isoDate, longDate, monthCells, monthTitle, todayIso, dayCaption } from '../lib/dates'
 import type { Days } from '../lib/days'
@@ -26,8 +26,6 @@ type Props = {
   zoomed?: boolean
   /** The day under the fingers when the zoom changed, kept where it was on screen. */
   anchor?: { iso?: string; y: number }
-  /** Without a birth date, the months stop at your first square's year; this asks for one, to go further back. */
-  onSetUp?: () => void
   /** A finished month's painting ("YYYY-MM"): opens it, to look at and keep. */
   onPainting?: (month: string) => void
 }
@@ -44,19 +42,7 @@ export const monthsBetween = (a: string, b: string) =>
 
 // My squares — your months, one after another in a single scroll, from the birth month
 // down to this one (next month peeks in faintly below). Opens centred on this month.
-export function Month({
-  days,
-  born,
-  focus,
-  onPick,
-  onIn,
-  onOut,
-  zoomed = false,
-  anchor,
-  onPainting,
-  onSetUp,
-  mid,
-}: Props) {
+export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, anchor, onPainting, mid }: Props) {
   const today = todayIso()
   const current = shiftMonth(today, 0)
   const first = shiftMonth(firstDay(days, born), 0)
@@ -102,6 +88,25 @@ export function Month({
     el.scrollTop += r.top + r.height / 2 - anchor.y
   }, [zoomed]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // No birth date yet: an ink bubble points at zoom out, the way to your whole life (it asks the two answers first),
+  // as today's first painted days point to the month (nomi, Nov 5, 2026). It goes at a touch, or after 15 seconds.
+  const [lifeHint, setLifeHint] = useState(false)
+  useEffect(() => {
+    if (born || !onOut) return
+    const show = setTimeout(() => setLifeHint(true), 800)
+    const hide = setTimeout(() => setLifeHint(false), 15800)
+    const away = (e: PointerEvent) => {
+      if ((e.target as Element | null)?.closest?.('.zoom-stack')) return
+      setLifeHint(false)
+    }
+    document.addEventListener('pointerdown', away)
+    return () => {
+      clearTimeout(show)
+      clearTimeout(hide)
+      document.removeEventListener('pointerdown', away)
+    }
+  }, [born]) // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <main className={'month' + (zoomed ? ' is-zoomed' : '')}>
       <div className="ladder-head">
@@ -124,12 +129,6 @@ export function Month({
           <Chevron dir="right" />
         </button>
       </div>
-      {/* Without a birth date: the way further back, under the title (where the capsule sits on the list). */}
-      {!born && onSetUp && (
-        <button className="ladder-setup" onClick={onSetUp}>
-          set your birth date to go further back ›
-        </button>
-      )}
       <div className="month-grid is-weekdays" aria-hidden="true" hidden={zoomed}>
         {WEEKDAYS.map((d, i) => (
           <span key={i}>{d}</span>
@@ -201,6 +200,7 @@ export function Month({
       <ZoomBar
         onIn={onIn}
         onOut={onOut && (() => onOut(middle()))}
+        hint={lifeHint ? 'see your whole life →' : undefined}
         onRecenter={toToday.away ? toToday.back : undefined}
         listAt={() => (toToday.away ? `${middle().slice(0, 8)}01` : todayIso())} // today if on screen, else the 1st
       />
