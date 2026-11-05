@@ -2,6 +2,13 @@
 
 Ideas parked for later. Not promises, not in order. When one ships, move it into the README.
 
+## Coming back after time away (parked Nov 5, 2026)
+
+Not a lesson again: painting is one gesture and isn't forgotten, and a tutorial for someone returning says "we think you forgot". What they meet is a row of blank days and maybe some guilt. Build once beta shows people drifting away and returning.
+
+- **A welcome back:** after about two weeks away, one warm line over today: "Welcome back. Today is yours to paint." No count of missed days, no blame.
+- **The days they missed:** the date picker hint below, its natural partner.
+
 ## A hint for the date picker (parked Nov 5, 2026)
 
 Not now: the date capsule already reads as tappable (its ▾), it isn't a hero, and yesterday has the ← arrow and the swipe. Build it only if a beta tester says they couldn't find how to paint the days they missed.
