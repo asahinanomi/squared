@@ -2160,6 +2160,7 @@ body[data-screen='questions'] .idea {
 }
 /* Rows keep their squares' height: on a short, wide window the grid scrolls instead of squashing. */
 .life-years {
+  position: relative; /* "You are here." sits under this year's tile */
   margin-top: 9px;
   display: grid;
   grid-auto-rows: max-content;
@@ -2194,7 +2195,7 @@ body[data-screen='questions'] .idea {
 /* The quick fill (switching to years): each lived year lands from the paper, one after another into this year, which
    then pulses once. */
 .life-years.is-filling .life-year:not(.is-ahead) {
-  animation: life-land 0.3s var(--land-at, 0ms) ease-out both;
+  animation: life-land var(--land, 1.2s) var(--land-at, 0ms) ease-out both;
 }
 .life-years.is-filling .life-year.is-current::after {
   content: '';
@@ -2202,7 +2203,7 @@ body[data-screen='questions'] .idea {
   inset: -3px;
   border-radius: 7px;
   box-shadow: 0 0 0 2px rgba(20, 20, 19, 0.4);
-  animation: life-pulse 0.9s 1s ease-out both;
+  animation: life-pulse 0.9s var(--pulse-at, 3.2s) ease-out both; /* as the wave reaches this year */
   pointer-events: none;
 }
 @keyframes life-land {

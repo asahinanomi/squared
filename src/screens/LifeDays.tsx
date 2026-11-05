@@ -1,4 +1,3 @@
-import { justSwitched, QUICK_FILL } from '../lib/lifeSwitch'
 import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { glide } from '../lib/backToToday'
 import { LifeHead, type Resolution } from '../components/LifeHead'
@@ -103,7 +102,7 @@ export function LifeDays({
   // once it's done or skipped).
   const [intro] = useState(firstLife)
   const fill = useRef<{ at: number; span: number; ms: number } | null>(
-    calm() ? null : { at: -1, span: 0, ms: justSwitched() ? QUICK_FILL : intro ? FILL_FIRST : FILL_AGAIN },
+    calm() ? null : { at: -1, span: 0, ms: intro ? FILL_FIRST : FILL_AGAIN },
   )
   const [thisIsToday, setThisIsToday] = useState(intro && calm())
 

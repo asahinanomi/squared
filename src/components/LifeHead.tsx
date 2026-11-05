@@ -1,4 +1,3 @@
-import { markSwitch } from '../lib/lifeSwitch'
 import type { ReactNode } from 'react'
 import { LifeGlass } from './LifeGlass'
 import { todayIso } from '../lib/dates'
@@ -43,11 +42,7 @@ export function LifeHead({ profile, current, onPick, ready = ['years', 'months',
             className={r === current ? 'is-on' : undefined}
             aria-pressed={r === current}
             disabled={r !== current && !ready.includes(r)}
-            onClick={() => {
-              if (r === current) return
-              markSwitch()
-              onPick(r)
-            }}
+            onClick={() => r !== current && onPick(r)}
           >
             {label}
           </button>

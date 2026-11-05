@@ -7,7 +7,7 @@ import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands, monthEnd, type Band } from '../lib/tally'
 import { MIN_TEXT_PX, roundRect, textFits, useCanvasList } from '../lib/useCanvasList'
-import { calmMotion, QUICK_FILL } from '../lib/lifeSwitch'
+import { calmMotion, FILL_MS, LAND_MS } from '../lib/lifeSwitch'
 import type { Focal } from '../lib/usePinch'
 
 type Props = {
@@ -59,10 +59,12 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
   // in place, out of sight).
   const thisIndex = (Number(thisMonth.slice(0, 4)) - firstYear) * 12 + Number(thisMonth.slice(5, 7)) - 1
   const fillFrom = useRef(0)
-  const LAND = 300
+  // The days' own time, so every view of a life feels the same (lib/lifeSwitch.ts).
+  const LAND = LAND_MS
+  const MONTHS_FILL = FILL_MS + LAND_MS
   const landAt = (i: number) => {
     const q = Math.min(1, Math.max(0, (i - fillFrom.current) / Math.max(1, thisIndex - fillFrom.current + 1)))
-    return (q < 0.5 ? 2 * q * q : 1 - (-2 * q + 2) ** 2 / 2) * (QUICK_FILL - LAND)
+    return (q < 0.5 ? 2 * q * q : 1 - (-2 * q + 2) ** 2 / 2) * (MONTHS_FILL - LAND)
   }
 
   // Bands for each lived month, worked out once per change in your days.
@@ -196,6 +198,8 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
     el.scrollTop = Math.floor(i / cols) * pitch + cell / 2 - fy
   }, [cols]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // "You are here.", under this month's square once the fill has landed, until you move (as a life's days).
+  const [here, setHere] = useState(calmMotion())
   // Run the fill (repainting each frame), then pulse this month; any touch or scroll ends it at once. It repaints
   // through the latest onScroll (the first render's knows no size yet, so it would draw nothing).
   const repaint = useRef(onScroll)
@@ -203,22 +207,23 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
   useEffect(() => {
     if (fillAt.current === null) return
     let raf = 0
+    let pulsed = false
     const tick = () => {
       repaint.current()
-      const t = fillAt.current === null || fillAt.current < 0 ? 0 : performance.now() - fillAt.current
-      if (fillAt.current !== null && t < QUICK_FILL) raf = requestAnimationFrame(tick)
-      else if (fillAt.current !== null) {
-        fillAt.current = null
+      if (fillAt.current === null) return
+      const t = fillAt.current < 0 ? 0 : performance.now() - fillAt.current
+      // As the wave reaches this month (as in days): it pulses, and "You are here." comes a moment later.
+      if (!pulsed && t >= FILL_MS) {
+        pulsed = true
         pulseAt.current = performance.now()
-        const pulse = () => {
-          repaint.current()
-          if (performance.now() - pulseAt.current < PULSE_MS + 50) raf = requestAnimationFrame(pulse)
-        }
-        pulse()
       }
+      if (t >= FILL_MS + 400) setHere(true)
+      if (t < MONTHS_FILL || performance.now() - pulseAt.current < PULSE_MS + 50) raf = requestAnimationFrame(tick)
+      else fillAt.current = null
     }
     raf = requestAnimationFrame(tick)
     const stop = () => {
+      setHere(false)
       if (fillAt.current === null) return
       fillAt.current = null
       repaint.current()
@@ -301,6 +306,17 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
         onClick={onTap}
       >
         <canvas ref={canvas} style={{ width: size.w, height: size.h }} aria-hidden="true" />
+        {here && cell > 0 && (
+          <p
+            className="life-this-is-today"
+            style={{
+              top: Math.floor(thisIndex / cols) * pitch + cell + 14,
+              left: Math.min(Math.max((thisIndex % cols) * pitch + cell / 2, 110), size.w - 110),
+            }}
+          >
+            You are here.
+          </p>
+        )}
         <div style={{ height: Math.max(0, rows * pitch - gapFor(cols) - size.h) }} />
       </div>
       <ZoomBar
