@@ -258,6 +258,28 @@ export function Today(props: Props) {
     }
   }, [introOpen, paintingUp, birthdayOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Just painted today: the question stays up while "because…" is open, and the day's line comes as you close it
+  // (written or skipped): that's the "done" (nomi, Nov 5, 2026, beta 1: people didn't know they had finished).
+  const [answering, setAnswering] = useState(false)
+  const wasPainted = useRef(!!day)
+  useEffect(() => {
+    if (date === today && day && !wasPainted.current) setAnswering(true)
+    wasPainted.current = !!day
+  }, [day, date]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!answering) return
+    if (why) return
+    // Closed, or (if the bubble somehow never came) a few seconds on: the day's line comes.
+    const t = setTimeout(() => setAnswering(false), hadAnswer.current ? 0 : 4000)
+    return () => clearTimeout(t)
+  }, [why, answering])
+  const hadAnswer = useRef(false)
+  useEffect(() => {
+    if (answering && why) hadAnswer.current = true
+    if (!answering) hadAnswer.current = false
+  }, [why, answering])
+  useEffect(() => setAnswering(false), [date])
+
   // A first painted day: where it went (nomi, Nov 5, 2026, beta 1: "once I finished, I didn't know what had happened").
   // On someone's first three painted days, as the "because…" bubble closes, zoom out hops once with "see your month →"
   // beside it; it goes at the next touch, or after a while.
@@ -468,21 +490,22 @@ export function Today(props: Props) {
           {/* The title area keeps one height on every day (the ghost holds a 2-line heading, the tallest), so the square
               never moves; whatever shows sits in its middle. */}
           <div className="day-head">
-            {day && date === today ? (
+            {day && date === today && !answering ? (
               // Today, painted: the question is answered, so the day closes with one line, as the heading alone like
               // every painted day (nomi, Oct 29, 2026): always saying "today", never a verdict, pointing forward
               // (src/lib/pastWords.ts). "start over" brings the question back.
               <div className="day-closed">
                 <h1 className="question">{words}</h1>
               </div>
-            ) : day ? (
+            ) : day && date !== today ? (
               // A past day, painted: squared speaks back, the day's own words as the heading (2 lines at most), from its
               // colour's pool, the same each time you come back (src/lib/pastWords.ts), knowing where you stand.
               <div className="day-closed">
                 <h1 className="question">{words}</h1>
               </div>
             ) : (
-              <Question text={questionFor(question, date === today, !!days[date])} onDefine={onDefine} />
+              // Unpainted, or just painted and still answering "because…": the question stays up, as asked.
+              <Question text={questionFor(question, date === today, !!days[date] && !answering)} onDefine={onDefine} />
             )}
             <div className="day-head-ghost" aria-hidden="true" inert>
               <div className="day-closed">
