@@ -1,11 +1,14 @@
-import { addDays, todayIso } from './dates'
+import { todayIso } from './dates'
 
 // "A day passes" moments (the life bar on my days, the date turning over on today) play once a day for each person on
 // a device, the first time they're seen that day: signing out and in doesn't replay them; someone else signing in still
 // sees theirs. Never with "reduce motion" (nomi, Oct 31 – Nov 2, 2026).
 let who = 'demo'
 /** Whose day it is: the signed-in person. */
-export const onceADayFor = (id: string | undefined) => void (who = id ?? 'demo')
+export const onceADayFor = (id: string | undefined) => {
+  if (id !== who) visit = String(Date.now()) // signing in starts a visit
+  who = id ?? 'demo'
+}
 
 /** True the first time `what` is asked for today (and remembers it). */
 export function onceToday(what: string): boolean {
@@ -48,9 +51,17 @@ export function countUp(what: string): number {
   }
 }
 
-// Taught twice (nomi, Nov 5, 2026): a hint stops once it's been done on two different days. After the first, it rests
-// a week; if it hasn't been done again on its own by then, the hint comes back until it is. Spaced, so it sticks.
-const REST_DAYS = 7
+// Taught twice (nomi, Nov 5, 2026): a hint stops once it's been done in two different visits. A visit is opening
+// squared fresh, signing in, or coming back after 15 minutes away. The second lesson comes on the very next visit,
+// not a week on (nomi, Nov 5, 2026: a new user deciding about squared may be gone in a week).
+const AWAY_MS = 15 * 60 * 1000
+let visit = String(Date.now())
+let hiddenAt = 0
+if (typeof document !== 'undefined')
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') hiddenAt = Date.now()
+    else if (hiddenAt && Date.now() - hiddenAt >= AWAY_MS) visit = String(Date.now())
+  })
 function learning(what: string): { n: number; last?: string } {
   try {
     return JSON.parse(localStorage.getItem(`squared.${what}.${who}`) ?? '') ?? { n: 0 }
@@ -58,18 +69,17 @@ function learning(what: string): { n: number; last?: string } {
     return { n: 0 }
   }
 }
-/** Whether a taught-twice hint should show now. */
+/** Whether a taught-twice hint should show now: never done, or done once in an earlier visit. */
 export function hintDue(what: string): boolean {
   const { n, last } = learning(what)
-  if (n >= 2) return false
-  return n === 0 || !last || addDays(last, REST_DAYS) <= todayIso()
+  return n === 0 || (n === 1 && last !== visit)
 }
-/** It was done: counts once per day. */
+/** It was done: counts once per visit. */
 export function didIt(what: string) {
   const { n, last } = learning(what)
-  if (last === todayIso()) return
+  if (last === visit || n >= 2) return
   try {
-    localStorage.setItem(`squared.${what}.${who}`, JSON.stringify({ n: n + 1, last: todayIso() }))
+    localStorage.setItem(`squared.${what}.${who}`, JSON.stringify({ n: n + 1, last: visit }))
   } catch {
     /* it may hint again */
   }

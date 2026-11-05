@@ -48,13 +48,13 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 ## 8. "see today in your month"
 
 - **Sees:** an ink bubble by zoom out, which hops once; a tap opens the month with the new square in it.
-- **When:** as "because…" closes on today, until the zoom is learnt. **Stops:** at another touch or after 10 seconds. **Taught twice:** after the first zoom out it rests a week; if they haven't zoomed out again on their own by then, it comes back until they do. Once they've zoomed out on two different days, it stops for good (per device).
+- **When:** as "because…" closes on today, until the zoom is learnt. **Stops:** at another touch or after 10 seconds. **Taught twice:** after the first zoom out it comes back on the next visit (opening squared fresh, signing in, or coming back after 15 minutes away) until they zoom out again. Once they've zoomed out in two different visits, it stops for good (per device).
 - **Test:** `?hintmonth` (shows as today opens).
 
 ## 9. "see your whole life"
 
 - **Sees:** on the month view, an ink bubble by zoom out.
-- **When:** every month visit until zooming out to a life is learnt, the same way: twice, on different days, a week's rest between (per device). **Stops:** at a touch or after 10 seconds.
+- **When:** every month visit until zooming out to a life is learnt, the same way: twice, in two different visits (per device). **Stops:** at a touch or after 10 seconds.
 - **Test:** `?hintlife` (then zoom out to the month).
 
 ## 9b. "see your whole life ›", in the list
