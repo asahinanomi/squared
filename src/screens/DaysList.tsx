@@ -518,12 +518,15 @@ export function DaysList({
         onWheel={() => (touched.current = true)}
         onTouchStart={() => (touched.current = true)}
       >
-        {/* Where earlier days would be, before a birth date: the way to your whole life, as a card (an empty slot's
-            dashed edge), the same words as the month's bubble and the page it opens (nomi, Nov 5, 2026). */}
+        {/* Where earlier days would be, before a birth date: the way to your whole life, as a deep stack of cards (every
+            earlier year folded in), clear of the list's top fade, the same words as the month's bubble and the page it
+            opens (nomi, Nov 5, 2026). */}
         {onWholeLife && !filtered && (
-          <button className="whole-life-card" onClick={onWholeLife}>
-            see your whole life ›
-          </button>
+          <div className="whole-life-stack">
+            <button className="whole-life-card" onClick={onWholeLife}>
+              see your whole life ›
+            </button>
+          </div>
         )}
         {/* A filter with nothing in it says so, rather than an empty page. */}
         {filtered && !months.some((m) => monthCells(m).some((iso) => !!iso && iso <= today && shown(iso))) && (

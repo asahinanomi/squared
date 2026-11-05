@@ -59,7 +59,7 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 
 ## 9b. "see your whole life ›", in the list
 
-- **Sees:** the list's first card, where earlier days would be: a dashed empty slot with "see your whole life ›" (it replaced a grey "set your birth date to go further back ›" pill).
+- **Sees:** the list's first card, where earlier days would be: a keyline card with a stack of earlier days folded under it, "see your whole life ›" (it replaced a grey "set your birth date to go further back ›" pill).
 - **When:** every time the list opens, until the life is set up. **Test:** an account without a birth date.
 
 ## 10. Your life in squares

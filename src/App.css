@@ -3817,17 +3817,41 @@ button.settings-row:active {
   flex-direction: column;
   gap: 8px;
 }
-/* The list, before a birth date: a card at the very top, where earlier days would be: an empty slot (dashed), its
-   words the way in. */
+/* The list, before a birth date: at the very top, where earlier days would be, a deep stack of cards (as a run of
+   quiet days is stacked, but deeper: every earlier year folded in), in a keyline (a secondary action), starting below
+   the list's top fade so it's never greyed. */
+.whole-life-stack {
+  position: relative;
+  margin: 26px 0 34px; /* clear of the 20px fade at the top */
+}
+.whole-life-stack::before,
+.whole-life-stack::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -6px;
+  height: 22px;
+  border-radius: 0 0 14px 14px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #e2e2db;
+}
+.whole-life-stack::after {
+  left: 20px;
+  right: 20px;
+  bottom: -12px;
+  z-index: -1;
+}
 .whole-life-card {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   box-sizing: border-box;
-  margin: 4px 0 26px;
   padding: 22px 18px;
-  border: 1.5px dashed #b0b0a8;
   border-radius: 16px;
   background: #fff;
+  box-shadow: inset 0 0 0 1.5px var(--ink);
   font-size: 18px;
   font-weight: 600;
   color: var(--ink);
