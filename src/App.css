@@ -5362,13 +5362,19 @@ button.home-card:active {
   opacity: 0.25;
 }
 .where-ask {
+  /* A ring like the real bar's "now", a little bigger, holding the "?": your now, not known yet. A keyline, never a
+     filled help icon (nomi, Nov 5, 2026). */
   flex: none;
   width: 16px;
-  margin-left: 3px;
-  font-size: 14px;
+  height: 16px;
+  margin: 0 2px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1.5px #c9c9c2;
+  font-size: 11px;
   font-weight: 600;
   font-style: normal;
-  line-height: 12px;
+  line-height: 16px;
   text-align: center;
   color: var(--muted);
 }
@@ -5376,11 +5382,11 @@ button.home-card:active {
    square's 6%: the card is wide) and lifts off the paper, while the life's ghost bar pours in and its "?" appears; as it
    settles, the › of "see your whole life ›" nudges twice (nomi, Nov 5, 2026). Smooth as the square's: its own layer, a
    shadow that fades in on a layer of its own (never a box-shadow redrawn every frame), the pour eased with the breath,
-   and a start that waits for my days to finish drawing its paintings (as the real bar's pour does). */
+   and a start soon after landing (0.3s: nomi, Nov 5, 2026, 0.9s read as a pause). */
 .where-card.is-asking {
   position: relative;
   will-change: transform;
-  animation: breathe-card 2.4s ease-in-out 0.9s; /* the square's BREATH_MS */
+  animation: breathe-card 2.4s ease-in-out 0.3s; /* the square's BREATH_MS */
 }
 .where-card.is-asking::after {
   content: '';
@@ -5392,24 +5398,24 @@ button.home-card:active {
   opacity: 0;
   pointer-events: none;
   will-change: opacity;
-  animation: breathe-glow 2.4s ease-in-out 0.9s;
+  animation: breathe-glow 2.4s ease-in-out 0.3s;
 }
 .where-card.is-asking .where-track.is-ghost {
   clip-path: inset(-8px -8px -8px 0);
 }
 .where-card.is-asking .where-track.is-ghost .where-lived {
-  animation: breathe-ghost 2.4s ease-in-out 0.9s;
+  animation: breathe-ghost 2.4s ease-in-out 0.3s;
 }
 /* The bar pours in over the breath in, eased the same way: a glimpse of the life it opens. */
 .where-card.is-asking .where-track.is-ghost .where-reach {
   will-change: transform;
-  animation: where-pour 1.3s ease-in-out 0.9s both;
+  animation: where-pour 1.3s ease-in-out 0.3s both;
 }
 .where-card.is-asking .where-ask {
-  animation: fade-in 0.8s ease-out 2.2s both; /* once the pour has come to rest */
+  animation: fade-in 0.8s ease-out 1.6s both; /* once the pour has come to rest */
 }
 .where-card.is-asking .where-go {
-  animation: where-nudge 1.2s ease-in-out 3.3s; /* as the breath settles */
+  animation: where-nudge 1.2s ease-in-out 2.7s; /* as the breath settles */
 }
 @keyframes breathe-card {
   0%,
