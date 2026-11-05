@@ -958,7 +958,7 @@ sup.ord {
   position: relative;
   display: inline-flex;
 }
-/* "find days by colour or #tag ↑": the same ink bubble, under the filter, its tail on it; kept clear of the edge. */
+/* "find days by colour or #tag": the same ink bubble, under the filter, its tail on it; kept clear of the edge. */
 .filter-hint {
   position: absolute;
   z-index: 6;

@@ -139,7 +139,7 @@ export const firstPaintTest = params.has('firstpaint')
 
 /**
  * The new user's hints, forced on any account (docs/7-new-user-journey.md), saving nothing: ?hintmonth (today's "see
- * today in your month →"), ?hintlife (the month's "see your whole life →"), ?hintframe ("a day to remember?" under
+ * today in your month"), ?hintlife (the month's "see your whole life"), ?hintframe ("a day to remember?" under
  * "more", on a painted day), ?hintlist ("read your moments back" over the list icon, after keeping a moment).
  */
 export const hintTest = {

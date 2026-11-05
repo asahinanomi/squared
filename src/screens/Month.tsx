@@ -205,7 +205,7 @@ export function Month({ days, born, focus, onPick, onIn, onOut, zoomed = false, 
       <ZoomBar
         onIn={onIn}
         onOut={onOut && (() => onOut(middle()))}
-        hint={lifeBubble.shown ? 'see your whole life →' : undefined}
+        hint={lifeBubble.shown ? 'see your whole life' : undefined}
         hintLeaving={lifeBubble.leaving}
         onRecenter={toToday.away ? toToday.back : undefined}
         listAt={() => (toToday.away ? `${middle().slice(0, 8)}01` : todayIso())} // today if on screen, else the 1st

@@ -302,7 +302,7 @@ export function Today(props: Props) {
   // A first painted day: where it went (nomi, Nov 5, 2026, beta 1: "once I finished, I didn't know what had happened").
   // Until the zoom is learnt (zoomed out on two different days, a week's rest between: nomi, Nov 5, 2026; it once
   // stopped when the life was set up), as the "because…" bubble
-  // closes, zoom out hops once with an ink bubble beside it, "see today in your month →"; it goes at the next touch,
+  // closes, zoom out hops once with an ink bubble beside it, "see today in your month"; it goes at the next touch,
   // or after 10 seconds.
   const [monthHint, setMonthHint] = useState(false)
   const hadTest = useRef(false) // ?hintmonth: shown once as today opens
@@ -837,7 +837,7 @@ export function Today(props: Props) {
       {!why && (
         <ZoomBar
           onOut={onZoomOut}
-          hint={monthBubble.shown ? 'see today in your month →' : undefined}
+          hint={monthBubble.shown ? 'see today in your month' : undefined}
           hintLeaving={monthBubble.leaving}
           listHint={listBubble.shown ? 'read your moments back' : undefined}
           listHintLeaving={listBubble.leaving}

@@ -2,7 +2,7 @@
 
 _last updated Nov 5, 2026_
 
-Every moment squared shows someone new, in the order they meet it: what they see, when it shows, when it stops, and how to test it on your own account. squared has no onboarding tour on purpose: each hint comes at the moment it's useful, points at the real control, goes at a touch (or after 10 seconds, fading out, never just vanishing), and stops once it has done its job. Most hints teach once: once it's done, it's learnt. The zoom is taught twice (8 and 9), since nothing else brings it back. Only one hint shows at a time (`src/lib/oneHint.ts`): whichever is due first takes the moment, any other skips that time and comes back on a later visit. Add every new first-time moment here.
+Every moment squared shows someone new, in the order they meet it: what they see, when it shows, when it stops, and how to test it on your own account. squared has no onboarding tour on purpose: each hint comes at the moment it's useful, points at the real control, goes at a touch (or after 10 seconds, fading out, never just vanishing), and stops once it has done its job. Most hints teach once: once it's done, it's learnt. The zoom is taught twice (8 and 9), since nothing else brings it back. Every bubble points with its own tail; its words carry no arrow (→, ↑). Only one hint shows at a time (`src/lib/oneHint.ts`): whichever is due first takes the moment, any other skips that time and comes back on a later visit. Add every new first-time moment here.
 
 Test links save nothing; they're listed in full in `docs/test-links.md`. Open them signed in, on your phone. "Per device" below means remembered on that phone or browser only; "with the account" means everywhere you sign in.
 
@@ -45,13 +45,13 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 - **When:** every painting, any day. **Stops:** opening a painted day, or stepping to another, never plays it.
 - **Also there:** "+ add this to what matters" in the bubble, on a worth-it or regret day, once you've written a few words.
 
-## 8. "see today in your month →"
+## 8. "see today in your month"
 
 - **Sees:** an ink bubble by zoom out, which hops once; a tap opens the month with the new square in it.
 - **When:** as "because…" closes on today, until the zoom is learnt. **Stops:** at another touch or after 10 seconds. **Taught twice:** after the first zoom out it rests a week; if they haven't zoomed out again on their own by then, it comes back until they do. Once they've zoomed out on two different days, it stops for good (per device).
 - **Test:** `?hintmonth` (shows as today opens).
 
-## 9. "see your whole life →"
+## 9. "see your whole life"
 
 - **Sees:** on the month view, an ink bubble by zoom out.
 - **When:** every month visit until zooming out to a life is learnt, the same way: twice, on different days, a week's rest between (per device). **Stops:** at a touch or after 10 seconds.
@@ -89,10 +89,10 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 ## 12b. "read your moments back"
 
 - **Sees:** an ink bubble over the list icon in the bottom bar; a tap opens the list, every moment with its day.
-- **When:** right after something written is kept (the moment box, "because…", a framed or marked day's words), once they've written 5 (counted per device from Nov 5, 2026), about 1.5 seconds on, when the words have landed and the keyboard has gone. **Stops:** at another touch or after 10 seconds; for good once the list has been opened (per device). Never at the same time as "see today in your month →".
+- **When:** right after something written is kept (the moment box, "because…", a framed or marked day's words), once they've written 5 (counted per device from Nov 5, 2026), about 1.5 seconds on, when the words have landed and the keyboard has gone. **Stops:** at another touch or after 10 seconds; for good once the list has been opened (per device). Never at the same time as "see today in your month".
 - **Test:** `?hintlist` (write a moment, then wait).
 
-## 12c. "find days by colour or #tag ↑"
+## 12c. "find days by colour or #tag"
 
 - **Sees:** in the list, an ink bubble under the filter (the sliders beside "a life").
 - **When:** each time the list opens, until the filter has been opened once (per device). **Stops:** at a touch or after 10 seconds; for good once used.

@@ -12,11 +12,11 @@ Hidden links for trying squared's first-time moments on your own account (the wh
 | [squared.today/?birthday](https://squared.today/?birthday) | The birthday sheet over today ("Happy 55th birthday.", from your birth date; "Happy birthday." without one). Works any day. |
 | [squared.today/?firstlife](https://squared.today/?firstlife) | The first zoom out to a life, again: the slower first fill (about 4s) and two pulses (normally once per device). |
 | [squared.today/?firstpaint](https://squared.today/?firstpaint) | How to paint, acted out (it plays on a blank today, every time, until someone has painted their first square; this plays it any time): on a blank today, a moment in, the palette's brush dips into green, flies to the square, paints the faint two-sweep stroke (fading as it ends), and flies home clean. Any touch stops it. Saves nothing. Today must be unpainted. |
-| [squared.today/?hintmonth](https://squared.today/?hintmonth) | Today's "see today in your month →" bubble by zoom out, as today opens (normally: as "because…" closes, until a life is set up). |
-| [squared.today/?hintlife](https://squared.today/?hintlife) | The month's "see your whole life →" bubble (zoom out to the month; normally: until a life is set up). |
+| [squared.today/?hintmonth](https://squared.today/?hintmonth) | Today's "see today in your month" bubble by zoom out, as today opens (normally: as "because…" closes, until a life is set up). |
+| [squared.today/?hintlife](https://squared.today/?hintlife) | The month's "see your whole life" bubble (zoom out to the month; normally: until a life is set up). |
 | [squared.today/?hintframe](https://squared.today/?hintframe) | "a day to remember?" under "more", on a painted day (step to one if today is blank; normally: after 3 painted days, until "more" is opened). |
 | [squared.today/?hintlist](https://squared.today/?hintlist) | "read your moments back" over the list icon, after you keep a moment (normally: from the 5th moment written, until the list is opened). |
-| [squared.today/?hintfilter](https://squared.today/?hintfilter) | "find days by colour or #tag ↑" under the list's filter (open the list; normally: until the filter has been used once). |
+| [squared.today/?hintfilter](https://squared.today/?hintfilter) | "find days by colour or #tag" under the list's filter (open the list; normally: until the filter has been used once). |
 | [squared.today/?hintpainting](https://squared.today/?hintpainting) | "your October, as a painting" under the latest finished month's name (open the list; normally: until a painting is opened from its picture or downloaded). |
 | [squared.today/?askfirst](https://squared.today/?askfirst) | my days with what matters' first question, as an account with no lines sees it: "What makes a day worth it to you?", and a box (return, or the ✓ above the keyboard, keeps it). Adding says "added ✓ (a test: nothing saved)", then the card goes back to yours: nothing is saved. |
 

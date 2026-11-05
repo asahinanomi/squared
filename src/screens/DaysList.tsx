@@ -462,7 +462,7 @@ export function DaysList({
       </button>
       {filterBubble.shown && (
         <span className={'filter-hint' + (filterBubble.leaving ? ' is-leaving' : '')}>
-          find days by colour or #tag ↑
+          find days by colour or #tag
         </span>
       )}
     </span>
