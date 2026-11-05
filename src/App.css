@@ -2221,8 +2221,16 @@ body[data-screen='questions'] .idea {
   animation: life-uncover var(--land, 1.2s) var(--land-at, 0ms) ease-out both;
   pointer-events: none;
 }
+/* It lands as a life's days do: a shade darker first (LAND_GREY in lib/lifeFill.ts), then the year beneath shows. */
 @keyframes life-uncover {
+  30% {
+    background: #cdcdc6;
+    color: transparent;
+    opacity: 0.9;
+  }
   to {
+    background: #cdcdc6;
+    color: transparent;
     opacity: 0;
   }
 }

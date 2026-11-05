@@ -19,3 +19,16 @@ export const onHere = (f: () => void) => {
   window.addEventListener(HERE, f)
   return () => window.removeEventListener(HERE, f)
 }
+
+// How a lived square lands, as a life's days (nomi, Nov 5, 2026: months and years only faded in, so their wave read
+// lighter): unpainted, it lands a shade darker (LAND_GREY), then softens to its resting grey; painted, its colour comes
+// in quicker. `k` runs 0 to 1 over LAND_MS.
+export const LAND_GREY = '#cdcdc6'
+const rgbOf = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))
+const mixHex = (a: string, b: string, k: number) => {
+  const [x, y] = [rgbOf(a), rgbOf(b)]
+  return `rgb(${x.map((v, n) => Math.round(v + (y[n] - v) * Math.min(1, Math.max(0, k)))).join(', ')})`
+}
+/** The grey of a lived, unpainted square as it lands: from the ahead's paper, to the landing grey, to its rest. */
+export const landingGrey = (k: number, ahead: string, rest: string) =>
+  k < 0.3 ? mixHex(ahead, LAND_GREY, k / 0.3) : mixHex(LAND_GREY, rest, (k - 0.3) / 0.7)

@@ -8,7 +8,7 @@ import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands, monthEnd, type Band } from '../lib/tally'
 import { MIN_TEXT_PX, roundRect, textFits, useCanvasList } from '../lib/useCanvasList'
-import { calmMotion, FILL_MS, LAND_MS, sayHere, waveAt } from '../lib/lifeFill'
+import { calmMotion, FILL_MS, LAND_MS, landingGrey, sayHere, waveAt } from '../lib/lifeFill'
 import type { Focal } from '../lib/usePinch'
 
 type Props = {
@@ -120,10 +120,21 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
           ctx.save()
           roundRect(ctx, x, y, cell, cell, radius)
           ctx.clip()
-          ctx.fillStyle = key < bornMonth ? BEFORE : key > thisMonth ? AHEAD : LIVED_BLANK
+          // The fill: not reached yet, a lived month is still the paper of the months ahead; reached, it lands as a
+          // life's days do, a shade darker, softening to its grey, its colours coming in quicker (k: 0 to 1).
+          const k = lived && elapsed < Infinity ? (elapsed - landAt(i)) / LAND : 1
+          ctx.fillStyle =
+            key < bornMonth
+              ? BEFORE
+              : key > thisMonth || k < 0
+                ? AHEAD
+                : k < 1
+                  ? landingGrey(k, AHEAD, LIVED_BLANK)
+                  : LIVED_BLANK
           ctx.fillRect(x, y, cell, cell)
-          if (lived) {
+          if (lived && k > 0) {
             // Rising bands: green from the bottom, then grey, then red.
+            ctx.globalAlpha = Math.min(1, k * 1.6)
             let yb = y + cell
             for (const b of monthBands(key)) {
               const bh = b.share * cell
@@ -131,16 +142,7 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
               ctx.fillRect(x, yb - bh, cell, bh + 0.5)
               yb -= bh
             }
-          }
-          // Not reached by the fill yet: still the paper of the months ahead; then it fades in.
-          if (lived && elapsed < Infinity) {
-            const k = (elapsed - landAt(i)) / LAND
-            if (k < 1) {
-              ctx.globalAlpha = 1 - Math.max(0, k)
-              ctx.fillStyle = AHEAD
-              ctx.fillRect(x, y, cell, cell)
-              ctx.globalAlpha = 1
-            }
+            ctx.globalAlpha = 1
           }
           ctx.restore()
           if (showLabels && key >= bornMonth) {
