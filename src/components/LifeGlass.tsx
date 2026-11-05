@@ -14,24 +14,15 @@ type Unit = 'days' | 'months' | 'years'
  * Every half minute a few grains fall, a small nudge that time is moving. It sits beside "a life" in the
  * title: information about your life, not a control.
  */
-// Tapped once (ever, on this device): the glass has been found, so it no longer turns to invite a tap.
-const TAPPED = 'squared.glassTapped'
-const tapped = () => {
-  try {
-    return !!localStorage.getItem(TAPPED)
-  } catch {
-    return false
-  }
-}
-
 export function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
   const [open, setOpen] = useState(false)
-  // As "You are here." lands: one slow turn, over and back (nomi, Nov 5, 2026), its sand running after; until tapped.
+  // As "You are here." lands: one slow turn, over and back, its sand running after, every time (nomi, Nov 5, 2026:
+  // subtle enough never to nag, so it needn't stop once tapped).
   const [turning, setTurning] = useState(false)
   useEffect(
     () =>
       onHere(() => {
-        if (tapped() || calmMotion()) return
+        if (calmMotion()) return
         setTurning(true)
         setTimeout(() => {
           setTurning(false)
@@ -62,14 +53,7 @@ export function LifeGlass({ profile, unit }: { profile: Profile; unit: Unit }) {
   return (
     <button
       className={'lifeglass' + (falling ? ' is-falling' : '') + (turning ? ' is-turning' : '')}
-      onClick={() => {
-        setOpen(!open)
-        try {
-          localStorage.setItem(TAPPED, '1')
-        } catch {
-          /* it may turn again next time */
-        }
-      }}
+      onClick={() => setOpen(!open)}
       aria-label={`${count} ahead`}
       aria-expanded={open}
     >
