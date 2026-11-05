@@ -4,7 +4,7 @@ import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands } from '../lib/tally'
-import { calmMotion, FILL_MS, LAND_MS, waveAt } from '../lib/lifeSwitch'
+import { calmMotion, FILL_MS, LAND_MS, waveAt } from '../lib/lifeFill'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 type Props = {
@@ -23,7 +23,7 @@ type Props = {
 // A life, in years — every year of it on one screen, on purpose: the whole life at a glance.
 // Lived years are banded, this year is outlined, the years ahead are empty.
 // The years' fill, ms: slower than the months' (a year is a big tile; fast, they flickered).
-const YEARS_FILL = FILL_MS // the days' own time, so every view of a life feels the same (lib/lifeSwitch.ts)
+const YEARS_FILL = FILL_MS // the days' own time, so every view of a life feels the same (lib/lifeFill.ts)
 
 export function Life({ days, profile, onPick, onIn, onResolution, onOut }: Props) {
   const today = todayIso()
@@ -31,7 +31,7 @@ export function Life({ days, profile, onPick, onIn, onResolution, onOut }: Props
   const first = Number(born.slice(0, 4))
   const thisYear = Number(today.slice(0, 4))
   const years = Array.from({ length: lifespan }, (_, i) => first + i)
-  // The fill (lib/lifeSwitch.ts): the lived years land one after another, calmly (nomi, Nov 5, 2026: a second was
+  // The fill (lib/lifeFill.ts): the lived years land one after another, calmly (nomi, Nov 5, 2026: a second was
   // too fast here, each year a big tile), easing into this year, which then pulses; then "You are here." under it,
   // until you move. Any touch or scroll ends the fill.
   const [filling, setFilling] = useState(() => !calmMotion())

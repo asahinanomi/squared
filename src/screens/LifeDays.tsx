@@ -1,3 +1,4 @@
+import { calmMotion, FILL_MS, LAND_MS, waveAt } from '../lib/lifeFill'
 import { LIFE_AHEAD, LIFE_AHEAD_EDGE, LIFE_LIVED } from '../lib/life'
 import { useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { glide } from '../lib/backToToday'
@@ -52,8 +53,7 @@ const PULSE_MS = 900
 // time again (a test link).
 // Calm, not a rush: the wave eases in and out (no lurch at the start), and every day fades in rather than popping.
 const FILL_FIRST = 4200
-const FILL_AGAIN = 3200
-const LAND_MS = 1200
+const FILL_AGAIN = FILL_MS // every later time: the one feel every view of a life shares (lib/lifeFill.ts)
 const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))
 const AHEAD_RGB = rgb(LIFE_AHEAD)
 const LAND = rgb('#cdcdc6') // the grey a lived day lands in, softening to LIVED_BLANK
@@ -71,7 +71,7 @@ const firstLife = () => {
     return false
   }
 }
-const calm = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const calm = calmMotion
 const FONT = "'Inter', system-ui, sans-serif"
 
 const daysInYear = (y: number) => (new Date(y, 1, 29).getDate() === 29 ? 366 : 365)
@@ -147,7 +147,7 @@ export function LifeDays({
       const reachedAt = (d: number) => {
         if (!f) return 0
         const q = 1 - Math.min(1, d / f.span)
-        return (q < 0.5 ? Math.sqrt(q / 2) : 1 - Math.sqrt(2 * (1 - q)) / 2) * f.ms
+        return waveAt(q) * f.ms
       }
       for (let b = b0; b <= b1; b++) {
         const year = firstYear + b

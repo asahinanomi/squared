@@ -8,7 +8,7 @@ import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands, monthEnd, type Band } from '../lib/tally'
 import { MIN_TEXT_PX, roundRect, textFits, useCanvasList } from '../lib/useCanvasList'
-import { calmMotion, FILL_MS, LAND_MS, waveAt } from '../lib/lifeSwitch'
+import { calmMotion, FILL_MS, LAND_MS, waveAt } from '../lib/lifeFill'
 import type { Focal } from '../lib/usePinch'
 
 type Props = {
@@ -53,14 +53,14 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
   const bornMonth = born.slice(0, 7)
   const [away, setAway] = useState(false) // this month scrolled out of view
   const pulseAt = useRef(-1e9) // when this month's square last pulsed
-  // The quick fill (lib/lifeSwitch.ts): the lived months land one after another, easing into this month, which then
+  // The quick fill (lib/lifeFill.ts): the lived months land one after another, easing into this month, which then
   // pulses. When it started (-1: on the first paint), or null once it's done or skipped.
   const fillAt = useRef<number | null>(calmMotion() ? null : -1)
   // The wave runs from the top of the screen down to this month, as a life's days do (the months above are already
   // in place, out of sight).
   const thisIndex = (Number(thisMonth.slice(0, 4)) - firstYear) * 12 + Number(thisMonth.slice(5, 7)) - 1
   const fillFrom = useRef(0)
-  // The days' feel (lib/lifeSwitch.ts), a little shorter: months has fewer rows from the top to today, so the days'
+  // The days' feel (lib/lifeFill.ts), a little shorter: months has fewer rows from the top to today, so the days'
   // full time felt slow (nomi, Nov 5, 2026).
   const LAND = LAND_MS
   const MONTHS_FILL = FILL_MS * 0.8 + LAND_MS
