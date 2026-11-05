@@ -1,8 +1,9 @@
-// How to paint, acted out once (nomi, Nov 4, 2026: a beta tester didn't know what to do; it replaced the ghost hint): the palette's own brush
-// lifts out of its notch, dips into green (its head takes the colour), flies to the square, paints one soft stroke
-// across it, and flies home; the stroke fades and the square is blank again. Painting is never done for you: the stroke
-// is a ghost, never a colour. A copy of the brush flies, in a layer over the page, drawn in the palette's own units so
-// it's the same brush; the real one waits, hidden, in its notch. Any touch ends it at once.
+// How to paint, acted out (nomi, Nov 4, 2026: a beta tester didn't know what to do; it replaced the ghost hint), the
+// way squared really works (nomi, Nov 5, 2026: a flying brush taught "carry the brush to the well", which isn't how it
+// works): a fingertip (a soft touch dot, pale with a grey edge so it reads on the dark wells and the pale square alike) taps the green well, the brush takes the green right where it rests, then
+// the fingertip paints one soft stroke across the square; the stroke fades, the brush goes clean, the square is blank
+// again. Painting is never done for you: the stroke is a ghost, never a colour. A copy of the brush, over the real one
+// in its notch, takes the colour, in a layer over the page drawn in the palette's own units. Any touch ends it at once.
 
 const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2)
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t
@@ -51,7 +52,7 @@ export function showFirstPaint(): () => void {
   trail.style.opacity = '0'
   layer.appendChild(trail)
 
-  // The brush, copied, and its tip (where its hairs end), the point that travels.
+  // The brush, copied over the real one: it stays put and takes the colour.
   const copy = brush.cloneNode(true) as SVGGElement
   // It starts clean, whatever the brush held (no fade from the last colour: nomi, Nov 4, 2026).
   copy.querySelectorAll<SVGPathElement>('.brush-load').forEach((p) => {
@@ -62,8 +63,25 @@ export function showFirstPaint(): () => void {
   layer.appendChild(copy)
   document.body.appendChild(layer)
   brush.style.visibility = 'hidden'
-  const head = copy.querySelector<SVGPathElement>('.brush-head')!.getBBox()
-  const tip = [head.x + 2, head.y + head.height - 2]
+  // The fingertip: a soft grey dot, the size of a touch, and the ripple of its tap.
+  const finger = (sq.width * 0.16) / scale / 2
+  const dot = document.createElementNS(NS, 'circle')
+  dot.setAttribute('r', String(finger))
+  Object.assign(dot.style, {
+    fill: 'rgba(255, 255, 255, 0.5)',
+    stroke: 'rgba(47, 47, 43, 0.5)',
+    strokeWidth: String(1.5 / scale),
+    opacity: '0',
+  })
+  const ripple = document.createElementNS(NS, 'circle')
+  Object.assign(ripple.style, {
+    fill: 'none',
+    stroke: 'rgba(47, 47, 43, 0.3)',
+    strokeWidth: String(1.5 / scale),
+    opacity: '0',
+  })
+  layer.appendChild(ripple)
+  layer.appendChild(dot)
   const wellAt = [Number(well.getAttribute('cx')), Number(well.getAttribute('cy'))]
   const total = trail.getTotalLength()
   const at = (len: number) => {
@@ -71,14 +89,15 @@ export function showFirstPaint(): () => void {
     return [p.x, p.y]
   }
 
-  // The steps, in ms: to the green, a dip, to the square, the stroke (exactly the old hint's: 1.15s at an even pace,
-  // fading from halfway, gone as it ends), home.
+  // The steps, in ms, as where the fingertip is: it comes in to the green, taps, goes to the square, paints the stroke
+  // (exactly the old hint's: 1.15s at an even pace, fading from halfway, gone as it ends), and lifts away.
+  const from = [wellAt[0] + finger * 2.5, wellAt[1] + finger * 3]
   const steps: [number, (k: number) => [number, number]][] = [
-    [600, (k) => [lerp(tip[0], wellAt[0], ease(k)), lerp(tip[1], wellAt[1], ease(k))]],
-    [450, (k) => [wellAt[0], wellAt[1] + Math.sin(k * Math.PI) * 5]],
+    [600, (k) => [lerp(from[0], wellAt[0], ease(k)), lerp(from[1], wellAt[1], ease(k))]],
+    [450, () => [wellAt[0], wellAt[1]]],
     [700, (k) => [lerp(wellAt[0], at(0)[0], ease(k)), lerp(wellAt[1], at(0)[1], ease(k))] as [number, number]],
     [1150, (k) => at(k) as [number, number]],
-    [700, (k) => [lerp(at(1)[0], tip[0], ease(k)), lerp(at(1)[1], tip[1], ease(k))]],
+    [500, () => at(1) as [number, number]],
   ]
   const end = steps.reduce((s, [ms]) => s + ms, 0)
   const start = performance.now()
@@ -97,8 +116,7 @@ export function showFirstPaint(): () => void {
   const tick = (now: number) => {
     let t = now - start
     if (t >= end) {
-      copy.setAttribute('transform', '')
-      // Home: the real brush is back (the stroke faded as it ended).
+      // Done: the real brush is back, clean (the stroke faded as it ended).
       brush.style.visibility = ''
       copy.remove()
       finish()
@@ -108,12 +126,22 @@ export function showFirstPaint(): () => void {
     while (t > steps[i][0]) t -= steps[i++][0]
     const k = t / steps[i][0]
     const [x, y] = steps[i][1](k)
-    copy.setAttribute('transform', `translate(${x - tip[0]} ${y - tip[1]})`)
-    if (i === 1 && k > 0.5 && !green.classList.contains('is-on')) {
-      green.style.transition = '' // the head takes the green, softly
+    dot.setAttribute('cx', String(x))
+    dot.setAttribute('cy', String(y))
+    // In, fading; pressed small for the tap; lifting away at the end.
+    dot.style.opacity = String(i === 0 ? k : i === 4 ? 1 - k : 1)
+    dot.setAttribute('r', String(finger * (i === 1 ? 1 - Math.sin(k * Math.PI) * 0.25 : 1)))
+    if (i === 1) {
+      ripple.setAttribute('cx', String(wellAt[0]))
+      ripple.setAttribute('cy', String(wellAt[1]))
+      ripple.setAttribute('r', String(finger * (1 + k * 1.2)))
+      ripple.style.opacity = String(k < 0.3 ? k / 0.3 : (1 - k) / 0.7)
+    } else ripple.style.opacity = '0'
+    if (i === 1 && k > 0.4 && !green.classList.contains('is-on')) {
+      green.style.transition = '' // the tap: the brush takes the green, softly, where it rests
       green.classList.add('is-on')
     }
-    if (i === 4) green.classList.remove('is-on') // the paint is on the square: it goes home clean
+    if (i === 4) green.classList.remove('is-on') // the paint is on the square: the brush goes clean
     if (i === 3) {
       trail.style.strokeDashoffset = String(1 - k)
       trail.style.opacity = String(k < 0.5 ? 1 : 1 - (k - 0.5) * 2)
