@@ -34,13 +34,13 @@ export function showFirstPaint(): () => void {
   })
 
   // The stroke it paints: as wide as the real brush (nomi, Nov 5, 2026: a thin line taught careful colouring in), a
-  // few quick passes the way a finger really swipes (nomi, Nov 5, 2026): all along the same diagonal, up to the upper
-  // right, back, up again, each a lane further on, so the paint grows steadily from the lower right corner to the upper
+  // few quick passes the way a finger really swipes (nomi, Nov 5, 2026): up to the upper right, straight back at an
+  // angle, up again, turning sharply like a real back-and-forth (no step aside at the turns), so the paint grows steadily from the lower right corner to the upper
   // left (crossing corners read busy), painting most of the square (about 80%); it holds as the hand lifts, then fades. A faint green, kept inside the square's face, as real paint is.
   const sq = square.getBoundingClientRect()
   const pt = (x: number, y: number) => toUnits(sq.left + (sq.width * x) / 100, sq.top + (sq.height * y) / 100).join(' ')
   const trail = document.createElementNS(NS, 'path')
-  trail.setAttribute('d', `M${pt(40, 90)} L${pt(90, 40)} L${pt(78, 22)} L${pt(22, 78)} L${pt(10, 60)} L${pt(60, 10)}`)
+  trail.setAttribute('d', `M${pt(40, 90)} L${pt(88, 30)} L${pt(14, 72)} L${pt(66, 10)}`)
   Object.assign(trail.style, {
     fill: 'none',
     stroke: 'rgba(110, 155, 123, 0.3)',
