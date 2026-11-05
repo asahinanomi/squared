@@ -33,15 +33,17 @@ export function showFirstPaint(): () => void {
     height: `${box.height}px`,
   })
 
-  // The stroke it paints: one sweep across the middle, as wide as the real brush (nomi, Nov 5, 2026: a thin line taught
-  // careful colouring in; one swipe paints most of a day), in a faint green.
+  // The stroke it paints: as wide as the real brush (nomi, Nov 5, 2026: a thin line taught careful colouring in), a
+  // round trip the way a finger really swipes: from the lower left up to the upper right, then back on a line just
+  // below. A faint green, a little stronger at first; it fades from halfway back. Kept inside the square's face, as
+  // real paint is (its round ends spilled over the frame).
   const sq = square.getBoundingClientRect()
   const pt = (x: number, y: number) => toUnits(sq.left + (sq.width * x) / 100, sq.top + (sq.height * y) / 100).join(' ')
   const trail = document.createElementNS(NS, 'path')
-  trail.setAttribute('d', `M${pt(24, 54)} L${pt(76, 46)}`)
+  trail.setAttribute('d', `M${pt(22, 72)} L${pt(78, 30)} L${pt(78, 44)} L${pt(26, 78)}`)
   Object.assign(trail.style, {
     fill: 'none',
-    stroke: 'rgba(110, 155, 123, 0.2)',
+    stroke: 'rgba(110, 155, 123, 0.3)',
     strokeWidth: String((sq.width * 0.58 * 0.86) / scale), // PaintCanvas's BRUSH, at its solid core
     strokeLinecap: 'round',
     strokeLinejoin: 'round',
@@ -51,6 +53,18 @@ export function showFirstPaint(): () => void {
   trail.style.strokeDashoffset = '1'
   // Unseen until the stroke begins: a round cap on an undrawn line still shows as a dot (nomi, Nov 4, 2026).
   trail.style.opacity = '0'
+  const face = (square.querySelector('.canvas-face') ?? square).getBoundingClientRect()
+  const [fx, fy] = toUnits(face.left, face.top)
+  const clip = document.createElementNS(NS, 'clipPath')
+  clip.id = 'first-paint-face'
+  const faceRect = document.createElementNS(NS, 'rect')
+  faceRect.setAttribute('x', String(fx))
+  faceRect.setAttribute('y', String(fy))
+  faceRect.setAttribute('width', String(face.width / scale))
+  faceRect.setAttribute('height', String(face.height / scale))
+  clip.appendChild(faceRect)
+  layer.appendChild(clip)
+  trail.setAttribute('clip-path', 'url(#first-paint-face)')
   layer.appendChild(trail)
 
   // The brush, copied over the real one: it stays put and takes the colour.
@@ -93,14 +107,14 @@ export function showFirstPaint(): () => void {
     return [p.x, p.y]
   }
 
-  // The steps, in ms, as where the fingertip is: it comes in to the green, taps, goes to the square, paints the stroke
-  // (exactly the old hint's: 1.15s at an even pace, fading from halfway, gone as it ends), and lifts away.
+  // The steps, in ms, as where the fingertip is: it comes in to the green, taps, goes to the square, paints the round
+  // trip (1.4s at an even pace, fading from halfway back, gone as it ends), and lifts away.
   const from = [wellAt[0] + finger * 2.5, wellAt[1] + finger * 3]
   const steps: [number, (k: number) => [number, number]][] = [
     [600, (k) => [lerp(from[0], wellAt[0], ease(k)), lerp(from[1], wellAt[1], ease(k))]],
     [450, () => [wellAt[0], wellAt[1]]],
     [700, (k) => [lerp(wellAt[0], at(0)[0], ease(k)), lerp(wellAt[1], at(0)[1], ease(k))] as [number, number]],
-    [1150, (k) => at(k) as [number, number]],
+    [1400, (k) => at(k) as [number, number]],
     [500, () => at(1) as [number, number]],
   ]
   const end = steps.reduce((s, [ms]) => s + ms, 0)
@@ -146,7 +160,7 @@ export function showFirstPaint(): () => void {
     }
     if (i === 3) {
       trail.style.strokeDashoffset = String(1 - k)
-      trail.style.opacity = String(k < 0.5 ? 1 : 1 - (k - 0.5) * 2)
+      trail.style.opacity = String(k < 0.75 ? 1 : 1 - (k - 0.75) * 4) // fades from halfway back
     }
     if (i === 4) trail.style.opacity = '0'
     raf = requestAnimationFrame(tick)
