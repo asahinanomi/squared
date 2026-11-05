@@ -298,14 +298,16 @@ export function Today(props: Props) {
   useEffect(() => setSigning(false), [date]) // only the day just answered, never the next one you step to
 
   // A first painted day: where it went (nomi, Nov 5, 2026, beta 1: "once I finished, I didn't know what had happened").
-  // On someone's first three painted days, as the "because…" bubble closes, zoom out hops once with an ink bubble
-  // beside it, "see today in your month →"; it goes at the next touch, or after 15 seconds.
+  // Until their life is set up (a birth date and lifespan: nomi, Nov 5, 2026, one rule with the month's "see your
+  // whole life →", so day → month → life is one guided path that ends when it's done), as the "because…" bubble
+  // closes, zoom out hops once with an ink bubble beside it, "see today in your month →"; it goes at the next touch,
+  // or after 15 seconds.
   const [monthHint, setMonthHint] = useState(false)
   const hadWhy = useRef(false)
   useEffect(() => {
     const closed = hadWhy.current && !why
     hadWhy.current = !!why
-    if (!closed || !day || date !== today || Object.keys(days).length > 3) return
+    if (!closed || !day || date !== today || born) return
     setMonthHint(true)
     const t = setTimeout(() => setMonthHint(false), 15000)
     // Any touch elsewhere puts it away (a touch on it, or on zoom out, goes to the month).
