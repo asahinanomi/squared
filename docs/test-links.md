@@ -1,8 +1,8 @@
 # Test links
 
-_last updated Nov 4, 2026, 19:33 UTC_
+_last updated Nov 5, 2026, 03:57 UTC_
 
-Hidden links for trying squared's first-time moments on your own account. Open them on your phone while signed in. They save nothing.
+Hidden links for trying squared's first-time moments on your own account (the whole new user's path, in order: `docs/7-new-user-journey.md`). Open them on your phone while signed in. They save nothing.
 
 | Link | What it shows |
 |---|---|
@@ -12,6 +12,9 @@ Hidden links for trying squared's first-time moments on your own account. Open t
 | [squared.today/?birthday](https://squared.today/?birthday) | The birthday sheet over today ("Happy 55th birthday.", from your birth date; "Happy birthday." without one). Works any day. |
 | [squared.today/?firstlife](https://squared.today/?firstlife) | The first zoom out to a life, again: the slower first fill (about 4s) and two pulses (normally once per device). |
 | [squared.today/?firstpaint](https://squared.today/?firstpaint) | How to paint, acted out (it plays on a blank today, every time, until someone has painted their first square; this plays it any time): on a blank today, a moment in, the palette's brush dips into green, flies to the square, paints the faint two-sweep stroke (fading as it ends), and flies home clean. Any touch stops it. Saves nothing. Today must be unpainted. |
+| [squared.today/?hintmonth](https://squared.today/?hintmonth) | Today's "see today in your month →" bubble by zoom out, as today opens (normally: as "because…" closes, until a life is set up). |
+| [squared.today/?hintlife](https://squared.today/?hintlife) | The month's "see your whole life →" bubble (zoom out to the month; normally: until a life is set up). |
+| [squared.today/?hintframe](https://squared.today/?hintframe) | "a day to remember?" under "more", on a painted day (step to one if today is blank; normally: after 3 painted days, until "more" is opened). |
 | [squared.today/?askfirst](https://squared.today/?askfirst) | my days with what matters' first question, as an account with no lines sees it: "What makes a day worth it to you?", and a box (return, or the ✓ above the keyboard, keeps it). Adding says "added ✓ (a test: nothing saved)", then the card goes back to yours: nothing is saved. |
 
 ## my days' what-matters card: when it asks

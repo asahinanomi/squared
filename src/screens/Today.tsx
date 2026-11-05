@@ -22,7 +22,7 @@ import { specialDay } from '../lib/special'
 import { DayFinder } from '../components/DayFinder'
 import { Raised } from '../components/Raised'
 import { OpenPainting } from '../components/PaintingButton'
-import { firstPaintTest, tryBirthday } from '../state/app'
+import { firstPaintTest, hintTest, tryBirthday } from '../state/app'
 import { questionFor } from '../lib/question'
 
 type Props = {
@@ -303,11 +303,14 @@ export function Today(props: Props) {
   // closes, zoom out hops once with an ink bubble beside it, "see today in your month →"; it goes at the next touch,
   // or after 15 seconds.
   const [monthHint, setMonthHint] = useState(false)
+  const hadTest = useRef(false) // ?hintmonth: shown once as today opens
   const hadWhy = useRef(false)
   useEffect(() => {
     const closed = hadWhy.current && !why
     hadWhy.current = !!why
-    if (!closed || !day || date !== today || born) return
+    const test = hintTest.month && !hadTest.current
+    if (test) hadTest.current = true
+    else if (!closed || !day || date !== today || born) return
     setMonthHint(true)
     const t = setTimeout(() => setMonthHint(false), 15000)
     // Any touch elsewhere puts it away (a touch on it, or on zoom out, goes to the month).
@@ -327,11 +330,15 @@ export function Today(props: Props) {
   // an ink bubble under "more": "a day to remember?" (any colour: a hard day can be worth keeping
   // too). Until "more" has been opened once; it goes at a touch, or after 15 seconds.
   const [frameHint, setFrameHint] = useState(false)
+  const hadFrameTest = useRef(false) // ?hintframe: shown once on a painted day
+  useEffect(() => setFrameHint(false), [date]) // before the effect below, so stepping to a day can still show it
   const hadWhy2 = useRef(false)
   useEffect(() => {
     const closed = hadWhy2.current && !why
     hadWhy2.current = !!why
-    if (!closed || !day || !born || Object.keys(days).length < 3 || doneOnce('moreOpened')) return
+    const test = hintTest.frame && !hadFrameTest.current && !!day
+    if (test) hadFrameTest.current = true
+    else if (!closed || !day || !born || Object.keys(days).length < 3 || doneOnce('moreOpened')) return
     setFrameHint(true)
     const t = setTimeout(() => setFrameHint(false), 15000)
     const away = (e: PointerEvent) => {
@@ -344,8 +351,7 @@ export function Today(props: Props) {
       clearTimeout(arm)
       document.removeEventListener('pointerdown', away)
     }
-  }, [why]) // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => setFrameHint(false), [date])
+  }, [why, day]) // eslint-disable-line react-hooks/exhaustive-deps
   const openMore = () => {
     setFrameHint(false)
     markDone('moreOpened')
