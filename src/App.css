@@ -5353,19 +5353,36 @@ button.home-card:active {
 .where-track.is-ghost {
   opacity: 0.4;
 }
-/* Not set up: the whole card breathes once each visit to my days, half a second in, like the square's "be here": it
-   swells (3%, not the square's 6%: the card is wide) and lifts off the paper, and the life's faint bar fills in, then
-   all settle (nomi, Nov 5, 2026: the row alone was too subtle). */
+/* Not set up: the whole card breathes once each visit to my days, like the square's "be here": it swells (3%, not the
+   square's 6%: the card is wide) and lifts off the paper, while the life's faint bar pours in, then all settle (nomi,
+   Nov 5, 2026: the row alone was too subtle). Smooth as the square's (nomi, Nov 5, 2026: it felt sudden): its own layer,
+   a shadow that fades in on a layer of its own (never a box-shadow redrawn every frame), the pour eased with the breath,
+   and a start that waits for my days to finish drawing its paintings (as the real bar's pour does). */
 .where-card.is-asking {
-  animation: breathe-card 2.4s ease-in-out 0.5s;
+  position: relative;
+  will-change: transform;
+  animation: breathe-card 2.4s ease-in-out 0.9s; /* the square's BREATH_MS */
+}
+.where-card.is-asking::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: 0 22px 44px rgba(20, 20, 19, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+  animation: breathe-glow 2.4s ease-in-out 0.9s;
 }
 .where-card.is-asking .where-track.is-ghost {
-  animation: breathe-track 2.4s ease-in-out 0.5s;
   clip-path: inset(-8px -8px -8px 0);
+  animation: breathe-track 2.4s ease-in-out 0.9s;
 }
-/* Its bar pours in as the card breathes, the way the real one does once a day: a glimpse of the life it opens. */
+/* The bar pours in over the breath in, eased the same way: a glimpse of the life it opens. */
 .where-card.is-asking .where-track.is-ghost .where-reach {
-  animation: where-pour 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) 0.5s both;
+  will-change: transform;
+  animation: where-pour 1.3s ease-in-out 0.9s both;
 }
 @keyframes breathe-card {
   0%,
@@ -5375,7 +5392,16 @@ button.home-card:active {
   45%,
   55% {
     transform: scale(1.03);
-    box-shadow: 0 22px 44px rgba(20, 20, 19, 0.2);
+  }
+}
+@keyframes breathe-glow {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  45%,
+  55% {
+    opacity: 1;
   }
 }
 @keyframes breathe-track {
@@ -5390,6 +5416,7 @@ button.home-card:active {
 }
 @media (prefers-reduced-motion: reduce) {
   .where-card.is-asking,
+  .where-card.is-asking::after,
   .where-card.is-asking .where-track,
   .where-card.is-asking .where-reach {
     animation: none;
