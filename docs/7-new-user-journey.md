@@ -75,6 +75,12 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 - **When:** as "because…" closes, once the life is set up and 3 days are painted. **Stops:** at another touch or after 15 seconds; for good once "more" has been opened (per device).
 - **Test:** `?hintframe` (on a painted day).
 
+## 12b. "read your moments back ↓"
+
+- **Sees:** an ink bubble over the list icon in the bottom bar; a tap opens the list, every moment with its day.
+- **When:** right after something written is kept (the moment box, "because…", a framed or marked day's words), once they've written 5 (counted per device from Nov 5, 2026), about 1.5 seconds on, when the words have landed and the keyboard has gone. **Stops:** at another touch or after 15 seconds; for good once the list has been opened (per device). Never at the same time as "see today in your month →".
+- **Test:** `?hintlist` (write a moment, then wait).
+
 ## 13. What matters, asked
 
 - **Sees:** on my days, "What makes a day worth it to you?" with a writing box (return, or leaving it, keeps the line); then "you said this matters" with one of your lines.
@@ -94,4 +100,4 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 
 ## Walking it end to end
 
-A real first run: sign out, open a private window (or a new Google account), sign in, and go through 1 to 13 in order. On your own account, use the test links above for the moments your account is past (2, 3, 8, 9, 12, 13, and the month and year paintings).
+A real first run: sign out, open a private window (or a new Google account), sign in, and go through 1 to 13 in order. On your own account, use the test links above for the moments your account is past (2, 3, 8, 9, 12, 12b, 13, and the month and year paintings).

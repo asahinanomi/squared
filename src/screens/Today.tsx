@@ -4,7 +4,7 @@ import { showFirstPaint } from '../lib/firstPaint'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { MomentBox } from '../components/MomentBox'
 import { Turn } from '../components/Turn'
-import { doneOnce, markDone, onceToday } from '../lib/onceADay'
+import { countUp, doneOnce, markDone, onceToday } from '../lib/onceADay'
 import { NotesList } from '../components/NotesList'
 import { Sheet } from '../components/Sheet'
 import { PaintCanvas } from '../components/PaintCanvas'
@@ -358,6 +358,37 @@ export function Today(props: Props) {
     setMoreOpen(true)
   }
 
+  // The list, found (nomi, Nov 5, 2026): once someone has written 5 moments (any writing: the moment box, "because…",
+  // a framed or marked day's words), right after the next is kept, an ink bubble over the list icon, "read your
+  // moments back ↓". Until the list has been opened once; it goes at a touch, or after 15 seconds.
+  const [listHint, setListHint] = useState(false)
+  const listTimer = useRef(0)
+  const wrote = () => {
+    const n = countUp('momentsWritten')
+    if ((n < 5 && !hintTest.list) || doneOnce('listOpened')) return
+    // After the words have flown into the day's moments and the keyboard has gone.
+    window.setTimeout(() => setListHint(true), 1500)
+    clearTimeout(listTimer.current)
+    listTimer.current = window.setTimeout(() => setListHint(false), 16500)
+  }
+  useEffect(() => {
+    if (!listHint) return
+    const away = (e: PointerEvent) => {
+      if ((e.target as Element | null)?.closest?.('.zoombar-switch')) return
+      setListHint(false)
+    }
+    const arm = setTimeout(() => document.addEventListener('pointerdown', away), 400)
+    return () => {
+      clearTimeout(arm)
+      document.removeEventListener('pointerdown', away)
+    }
+  }, [listHint])
+  useEffect(() => () => clearTimeout(listTimer.current), [])
+  const saveNote: typeof onSaveNote = (note, text, color) => {
+    if (!note) wrote()
+    return onSaveNote(note, text, color)
+  }
+
   // Day by day, sideways: yesterday waits on the left, tomorrow (until today) on the right.
   const hasPrev = prev >= firstDay(days, born)
   const hasNext = next <= today
@@ -482,7 +513,7 @@ export function Today(props: Props) {
         // "+" first, as an add-a-line row (Reminders' "+ New Reminder"), and a #tag, shown by example, always (nomi, Nov 4, 2026: nothing told you tags exist). #health, not #family: not
         // everyone has family; everyone has health.
         placeholder={'+ ' + (date !== today ? 'add to this day…' : day ? 'add to today…' : 'this moment…') + ' #health'}
-        onAdd={(text, color) => void onSaveNote(undefined, text, color)}
+        onAdd={(text, color) => void saveNote(undefined, text, color)}
       />
     </div>
   )
@@ -628,7 +659,7 @@ export function Today(props: Props) {
                 original={why.note?.body}
                 initialError={why.error}
                 editing={!!why.note}
-                onSave={(text) => onSaveNote(why.note, text)}
+                onSave={(text) => saveNote(why.note, text)}
                 onDelete={why.note ? () => onDeleteNote(why.note!) : undefined}
                 onCancel={onCloseWhy}
                 pinned={(why.pinned || why.note?.pinned) && !!day?.framed}
@@ -801,6 +832,7 @@ export function Today(props: Props) {
         <ZoomBar
           onOut={onZoomOut}
           hint={monthHint ? 'see today in your month →' : undefined}
+          listHint={listHint && !monthHint ? 'read your moments back ↓' : undefined}
           listAt={() => date}
           today={() => {
             setSlide('from-right')

@@ -35,3 +35,15 @@ export function markDone(what: string) {
     /* it may hint again */
   }
 }
+
+/** Count something up for this person on this device; returns the new count. */
+export function countUp(what: string): number {
+  try {
+    const key = `squared.${what}.${who}`
+    const n = Number(localStorage.getItem(key) ?? 0) + 1
+    localStorage.setItem(key, String(n))
+    return n
+  } catch {
+    return 0
+  }
+}

@@ -1,3 +1,4 @@
+import { markDone } from '../lib/onceADay'
 import { createPortal } from 'react-dom'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { squareFill, type Paint } from '../lib/paints'
@@ -17,6 +18,8 @@ type Props = {
   here?: () => void
   /** A quiet line beside zoom out, which hops once: where to see what was just done (a first painted day). */
   hint?: string
+  /** A quiet bubble over the list icon: where your moments live (once there are a few). */
+  listHint?: string
 }
 
 const stroke = {
@@ -133,7 +136,7 @@ function MyDaysTab({ here, onClick }: { here: boolean; onClick: () => void }) {
 // today's square in the centre, my days at the right, the same on every page). Zoom is a tool on the squares, not a way around, so it floats over
 // them at the bottom right, like a map's + and −: a slim capsule (zoom in on top, zoom out below; on a day, zoom out
 // alone), with ◎ (back to today's square, once it's out of view) on top of it. The list has no zoom: nothing floats.
-export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here, hint }: Props) {
+export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here, hint, listHint }: Props) {
   const view = useContext(ViewSwitch)
   const goToday = today ?? view?.goToday
   // Scrolled down the page (a day's notes): you're reading, not zooming, so the zoom steps aside until you're back up.
@@ -152,6 +155,17 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here, hint }: 
         {view ? (
           // One switch for the two ways to look: squares · list. The one showing is raised.
           <div className="zoombar-switch" role="group" aria-label="View">
+            {listHint && (
+              <button
+                className="list-hint"
+                onClick={() => {
+                  markDone('listOpened')
+                  view.toggleList(listAt?.())
+                }}
+              >
+                {listHint}
+              </button>
+            )}
             {(
               [
                 ['squares', 'Squares', <SquaresIcon key="s" />],
@@ -160,6 +174,7 @@ export function ZoomBar({ onOut, onIn, onRecenter, listAt, today, here, hint }: 
             ).map(([id, label, icon]) => {
               const now = view.list ? 'list' : 'squares'
               const go = () => {
+                if (id === 'list') markDone('listOpened') // the list found: its hint never comes again
                 if (id !== now) view.toggleList(listAt?.())
               }
               return (
