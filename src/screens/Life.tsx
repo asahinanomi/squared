@@ -4,7 +4,7 @@ import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands } from '../lib/tally'
-import { calmMotion, FILL_MS, LAND_MS } from '../lib/lifeSwitch'
+import { calmMotion, FILL_MS, LAND_MS, waveAt } from '../lib/lifeSwitch'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 type Props = {
@@ -38,7 +38,7 @@ export function Life({ days, profile, onPick, onIn, onResolution, onOut }: Props
   const lived = Math.max(1, thisYear - first + 1)
   const landAt = (i: number) => {
     const q = Math.min(1, i / lived)
-    return Math.round((q < 0.5 ? 2 * q * q : 1 - (-2 * q + 2) ** 2 / 2) * YEARS_FILL)
+    return Math.round(waveAt(q) * YEARS_FILL)
   }
   const [here, setHere] = useState(false)
   useEffect(() => {

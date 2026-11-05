@@ -8,7 +8,7 @@ import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands, monthEnd, type Band } from '../lib/tally'
 import { MIN_TEXT_PX, roundRect, textFits, useCanvasList } from '../lib/useCanvasList'
-import { calmMotion, FILL_MS, LAND_MS } from '../lib/lifeSwitch'
+import { calmMotion, FILL_MS, LAND_MS, waveAt } from '../lib/lifeSwitch'
 import type { Focal } from '../lib/usePinch'
 
 type Props = {
@@ -60,12 +60,13 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
   // in place, out of sight).
   const thisIndex = (Number(thisMonth.slice(0, 4)) - firstYear) * 12 + Number(thisMonth.slice(5, 7)) - 1
   const fillFrom = useRef(0)
-  // The days' own time, so every view of a life feels the same (lib/lifeSwitch.ts).
+  // The days' feel (lib/lifeSwitch.ts), a little shorter: months has fewer rows from the top to today, so the days'
+  // full time felt slow (nomi, Nov 5, 2026).
   const LAND = LAND_MS
-  const MONTHS_FILL = FILL_MS + LAND_MS
+  const MONTHS_FILL = FILL_MS * 0.8 + LAND_MS
   const landAt = (i: number) => {
     const q = Math.min(1, Math.max(0, (i - fillFrom.current) / Math.max(1, thisIndex - fillFrom.current + 1)))
-    return (q < 0.5 ? 2 * q * q : 1 - (-2 * q + 2) ** 2 / 2) * (MONTHS_FILL - LAND)
+    return waveAt(q) * (MONTHS_FILL - LAND)
   }
 
   // Bands for each lived month, worked out once per change in your days.
@@ -221,11 +222,11 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
       if (fillAt.current === null) return
       const t = fillAt.current < 0 ? 0 : performance.now() - fillAt.current
       // As the wave reaches this month (as in days): it pulses, and "You are here." comes a moment later.
-      if (!pulsed && t >= FILL_MS) {
+      if (!pulsed && t >= MONTHS_FILL - LAND) {
         pulsed = true
         pulseAt.current = performance.now()
       }
-      if (t >= FILL_MS + 400) setHere(true)
+      if (t >= MONTHS_FILL - LAND + 400) setHere(true)
       if (t < MONTHS_FILL || performance.now() - pulseAt.current < PULSE_MS + 50) raf = requestAnimationFrame(tick)
       else fillAt.current = null
     }
