@@ -5353,15 +5353,16 @@ button.home-card:active {
 .where-track.is-ghost {
   opacity: 0.4;
 }
-/* "this life", not set up: one breath each visit to my days, half a second in, like the square's "be here": it swells
-   (3%, not the square's 6%: the row is wide) and its faint bar fills in, then both settle (nomi, Nov 5, 2026). */
-.where-row.is-asking {
-  animation: breathe-row 2.4s ease-in-out 0.5s;
+/* Not set up: the whole card breathes once each visit to my days, half a second in, like the square's "be here": it
+   swells (3%, not the square's 6%: the card is wide) and lifts off the paper, and the life's faint bar fills in, then
+   all settle (nomi, Nov 5, 2026: the row alone was too subtle). */
+.where-card.is-asking {
+  animation: breathe-card 2.4s ease-in-out 0.5s;
 }
-.where-row.is-asking .where-track {
+.where-card.is-asking .where-track.is-ghost {
   animation: breathe-track 2.4s ease-in-out 0.5s;
 }
-@keyframes breathe-row {
+@keyframes breathe-card {
   0%,
   100% {
     transform: scale(1);
@@ -5369,6 +5370,7 @@ button.home-card:active {
   45%,
   55% {
     transform: scale(1.03);
+    box-shadow: 0 22px 44px rgba(20, 20, 19, 0.2);
   }
 }
 @keyframes breathe-track {
@@ -5382,8 +5384,8 @@ button.home-card:active {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .where-row.is-asking,
-  .where-row.is-asking .where-track {
+  .where-card.is-asking,
+  .where-card.is-asking .where-track {
     animation: none;
   }
 }

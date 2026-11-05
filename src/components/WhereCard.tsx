@@ -87,7 +87,7 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
     return () => clearTimeout(t)
   }, [tick, go])
   return (
-    <section className="home-card where-card" aria-label="where you are">
+    <section className={'home-card where-card' + (profile ? '' : ' is-asking')} aria-label="where you are">
       <div className="where-row">
         <div className="where-head">
           <span>
@@ -145,8 +145,8 @@ export function WhereCard({ days, profile, onDay, onMonth, onLife, onSetUp }: Pr
           </span>
         </button>
       ) : (
-        // Not set up yet: the row breathes once each visit, as the square's "be here" does (nomi, Nov 5, 2026).
-        <button className="where-row is-asking" onClick={onSetUp}>
+        // Not set up yet: the whole card breathes once each visit, as the square's "be here" does (nomi, Nov 5, 2026).
+        <button className="where-row" onClick={onSetUp}>
           <span className="where-head">
             <span>this life</span>
             <small className="is-setup">set up now ›</small>

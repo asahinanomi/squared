@@ -62,9 +62,9 @@ Test links save nothing; they're listed in full in `docs/test-links.md`. Open th
 - **Sees:** the list's first card, where earlier days would be: a keyline card with a stack of earlier days folded under it, "see your whole life ›" (it replaced a grey "set your birth date to go further back ›" pill).
 - **When:** every time the list opens, until the life is set up. **Test:** an account without a birth date.
 
-## 9c. "this life", breathing, on my days
+## 9c. my days' card, breathing
 
-- **Sees:** on my days, the "this life · set up now ›" row breathes once, half a second in: it swells a little and its faint bar fills in, then both settle (the square's "be here" breath, gentler).
+- **Sees:** on my days, the whole card (this week, this month, this life · set up now ›) breathes once, half a second in: it swells a little and lifts off the paper, and the life's faint bar fills in, then all settle (the square's "be here" breath; the row alone was too subtle).
 - **When:** each visit to my days, until the life is set up. Never with reduce motion. Not a bubble, so the one-hint rule doesn't hold it back.
 - **Test:** an account without a birth date, then my days.
 
