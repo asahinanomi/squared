@@ -7,6 +7,7 @@ import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands, monthEnd, type Band } from '../lib/tally'
 import { MIN_TEXT_PX, roundRect, textFits, useCanvasList } from '../lib/useCanvasList'
+import { calmMotion, QUICK_FILL } from '../lib/lifeSwitch'
 import type { Focal } from '../lib/usePinch'
 
 type Props = {
@@ -51,6 +52,18 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
   const bornMonth = born.slice(0, 7)
   const [away, setAway] = useState(false) // this month scrolled out of view
   const pulseAt = useRef(-1e9) // when this month's square last pulsed
+  // The quick fill (lib/lifeSwitch.ts): the lived months land one after another, easing into this month, which then
+  // pulses. When it started (-1: on the first paint), or null once it's done or skipped.
+  const fillAt = useRef<number | null>(calmMotion() ? null : -1)
+  // The wave runs from the top of the screen down to this month, as a life's days do (the months above are already
+  // in place, out of sight).
+  const thisIndex = (Number(thisMonth.slice(0, 4)) - firstYear) * 12 + Number(thisMonth.slice(5, 7)) - 1
+  const fillFrom = useRef(0)
+  const LAND = 300
+  const landAt = (i: number) => {
+    const q = Math.min(1, Math.max(0, (i - fillFrom.current) / Math.max(1, thisIndex - fillFrom.current + 1)))
+    return (q < 0.5 ? 2 * q * q : 1 - (-2 * q + 2) ** 2 / 2) * (QUICK_FILL - LAND)
+  }
 
   // Bands for each lived month, worked out once per change in your days.
   const monthBands = useMemo(() => {
@@ -85,6 +98,11 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
       const r1 = Math.min(rows - 1, Math.ceil((top + h) / pitch) + 1)
       const radius = Math.min(9, Math.max(3, cell * 0.12))
       const showLabels = labelled(cell)
+      if (fillAt.current === -1) fillAt.current = performance.now()
+      // Where the screen's top is once it has opened on this month (its first paint comes before that scroll).
+      if (fillAt.current !== null && performance.now() - fillAt.current < 150)
+        fillFrom.current = Math.max(0, Math.floor(top / pitch)) * cols
+      const elapsed = fillAt.current === null ? Infinity : performance.now() - fillAt.current
       for (let r = r0; r <= r1; r++) {
         for (let c = 0; c < cols; c++) {
           const i = r * cols + c
@@ -108,6 +126,16 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
               ctx.fillStyle = b.fill
               ctx.fillRect(x, yb - bh, cell, bh + 0.5)
               yb -= bh
+            }
+          }
+          // Not reached by the fill yet: still the paper of the months ahead; then it fades in.
+          if (lived && elapsed < Infinity) {
+            const k = (elapsed - landAt(i)) / LAND
+            if (k < 1) {
+              ctx.globalAlpha = 1 - Math.max(0, k)
+              ctx.fillStyle = AHEAD
+              ctx.fillRect(x, y, cell, cell)
+              ctx.globalAlpha = 1
             }
           }
           ctx.restore()
@@ -167,6 +195,43 @@ export function LifeMonths({ days, profile, onPick, onIn, onResolution, onOut, c
     const i = Math.floor((topBefore.current + fy) / old.pitch) * was + Math.min(was - 1, Math.floor(fx / old.pitch))
     el.scrollTop = Math.floor(i / cols) * pitch + cell / 2 - fy
   }, [cols]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Run the fill (repainting each frame), then pulse this month; any touch or scroll ends it at once. It repaints
+  // through the latest onScroll (the first render's knows no size yet, so it would draw nothing).
+  const repaint = useRef(onScroll)
+  repaint.current = onScroll
+  useEffect(() => {
+    if (fillAt.current === null) return
+    let raf = 0
+    const tick = () => {
+      repaint.current()
+      const t = fillAt.current === null || fillAt.current < 0 ? 0 : performance.now() - fillAt.current
+      if (fillAt.current !== null && t < QUICK_FILL) raf = requestAnimationFrame(tick)
+      else if (fillAt.current !== null) {
+        fillAt.current = null
+        pulseAt.current = performance.now()
+        const pulse = () => {
+          repaint.current()
+          if (performance.now() - pulseAt.current < PULSE_MS + 50) raf = requestAnimationFrame(pulse)
+        }
+        pulse()
+      }
+    }
+    raf = requestAnimationFrame(tick)
+    const stop = () => {
+      if (fillAt.current === null) return
+      fillAt.current = null
+      repaint.current()
+    }
+    const el = scroller.current
+    el?.addEventListener('pointerdown', stop)
+    el?.addEventListener('wheel', stop)
+    return () => {
+      cancelAnimationFrame(raf)
+      el?.removeEventListener('pointerdown', stop)
+      el?.removeEventListener('wheel', stop)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // "today": glide back to this month's square on this same screen, then pulse it.
   const nowTop = () => {

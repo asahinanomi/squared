@@ -2191,6 +2191,41 @@ body[data-screen='questions'] .idea {
   outline: 2px solid var(--ink);
   outline-offset: 1px;
 }
+/* The quick fill (switching to years): each lived year lands from the paper, one after another into this year, which
+   then pulses once. */
+.life-years.is-filling .life-year:not(.is-ahead) {
+  animation: life-land 0.3s var(--land-at, 0ms) ease-out both;
+}
+.life-years.is-filling .life-year.is-current::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 7px;
+  box-shadow: 0 0 0 2px rgba(20, 20, 19, 0.4);
+  animation: life-pulse 0.9s 1s ease-out both;
+  pointer-events: none;
+}
+@keyframes life-land {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes life-pulse {
+  from {
+    inset: -3px;
+    opacity: 1;
+  }
+  to {
+    inset: -13px;
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .life-years.is-filling .life-year,
+  .life-years.is-filling .life-year::after {
+    animation: none;
+  }
+}
 .life-year:not(:disabled):active {
   transform: scale(0.94);
 }

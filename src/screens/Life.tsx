@@ -4,6 +4,8 @@ import { todayIso } from '../lib/dates'
 import type { Days } from '../lib/days'
 import type { Profile } from '../lib/profile'
 import { bands } from '../lib/tally'
+import { calmMotion, QUICK_FILL } from '../lib/lifeSwitch'
+import { useState } from 'react'
 
 type Props = {
   days: Days
@@ -26,12 +28,25 @@ export function Life({ days, profile, onPick, onIn, onResolution, onOut }: Props
   const first = Number(born.slice(0, 4))
   const thisYear = Number(today.slice(0, 4))
   const years = Array.from({ length: lifespan }, (_, i) => first + i)
+  // The quick fill (lib/lifeSwitch.ts): the lived years land one after another, easing into this year, which then
+  // pulses. Any touch or scroll ends it.
+  const [filling, setFilling] = useState(() => !calmMotion())
+  const lived = Math.max(1, thisYear - first + 1)
+  const landAt = (i: number) => {
+    const q = Math.min(1, i / lived)
+    return Math.round((q < 0.5 ? 2 * q * q : 1 - (-2 * q + 2) ** 2 / 2) * (QUICK_FILL - 300))
+  }
 
   return (
     <main className="life">
       <LifeHead profile={profile} current="years" onPick={onResolution} />
 
-      <div className="life-years" style={{ gridTemplateColumns: `repeat(${lifespan > 100 ? 10 : 8}, 1fr)` }}>
+      <div
+        className={'life-years' + (filling ? ' is-filling' : '')}
+        style={{ gridTemplateColumns: `repeat(${lifespan > 100 ? 10 : 8}, 1fr)` }}
+        onPointerDown={() => setFilling(false)}
+        onWheel={() => setFilling(false)}
+      >
         {years.map((y) => {
           if (y > thisYear)
             return (
@@ -44,6 +59,7 @@ export function Life({ days, profile, onPick, onIn, onResolution, onOut }: Props
             <button
               key={y}
               className={'life-year' + (y === thisYear ? ' is-current' : '') + (bs.length ? '' : ' is-blank')}
+              style={{ '--land-at': `${landAt(y - first)}ms` } as React.CSSProperties}
               aria-label={String(y)}
               onClick={() => onPick(y)}
             >
