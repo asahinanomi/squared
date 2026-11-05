@@ -260,12 +260,15 @@ export function Today(props: Props) {
 
   // Just painted today: the question stays up while "because…" is open, and the day's line comes as you close it
   // (written or skipped): that's the "done" (nomi, Nov 5, 2026, beta 1: people didn't know they had finished).
+  // Any day you paint, not only today (nomi, Nov 5, 2026). Stepping to another day never counts as painting it.
   const [answering, setAnswering] = useState(false)
   const wasPainted = useRef(!!day)
+  const wasDate = useRef(date)
   useEffect(() => {
-    if (date === today && day && !wasPainted.current) setAnswering(true)
+    if (wasDate.current === date && day && !wasPainted.current) setAnswering(true)
     wasPainted.current = !!day
-  }, [day, date]) // eslint-disable-line react-hooks/exhaustive-deps
+    wasDate.current = date
+  }, [day, date])
   useEffect(() => {
     if (!answering) return
     if (why) return
@@ -292,6 +295,7 @@ export function Today(props: Props) {
     }
     wasAnswering.current = answering
   }, [answering])
+  useEffect(() => setSigning(false), [date]) // only the day just answered, never the next one you step to
 
   // A first painted day: where it went (nomi, Nov 5, 2026, beta 1: "once I finished, I didn't know what had happened").
   // On someone's first three painted days, as the "because…" bubble closes, zoom out hops once with an ink bubble
@@ -510,11 +514,11 @@ export function Today(props: Props) {
               <div className="day-closed">
                 <h1 className={'question' + (signing ? ' is-signing' : '')}>{words}</h1>
               </div>
-            ) : day && date !== today ? (
+            ) : day && date !== today && !answering ? (
               // A past day, painted: squared speaks back, the day's own words as the heading (2 lines at most), from its
               // colour's pool, the same each time you come back (src/lib/pastWords.ts), knowing where you stand.
               <div className="day-closed">
-                <h1 className="question">{words}</h1>
+                <h1 className={'question' + (signing ? ' is-signing' : '')}>{words}</h1>
               </div>
             ) : (
               // Unpainted, or just painted and still answering "because…": the question stays up, as asked.
