@@ -289,7 +289,7 @@ export function Today(props: Props) {
   useEffect(() => {
     if (wasAnswering.current && !answering) {
       setSigning(true)
-      const t = setTimeout(() => setSigning(false), 2400)
+      const t = setTimeout(() => setSigning(false), 2800)
       wasAnswering.current = answering
       return () => clearTimeout(t)
     }
@@ -512,13 +512,13 @@ export function Today(props: Props) {
               // every painted day (nomi, Oct 29, 2026): always saying "today", never a verdict, pointing forward
               // (src/lib/pastWords.ts). "start over" brings the question back.
               <div className="day-closed">
-                <h1 className={'question' + (signing ? ' is-signing' : '')}>{words}</h1>
+                <h1 className="question">{signing ? <Signed text={words ?? ''} /> : words}</h1>
               </div>
             ) : day && date !== today && !answering ? (
               // A past day, painted: squared speaks back, the day's own words as the heading (2 lines at most), from its
               // colour's pool, the same each time you come back (src/lib/pastWords.ts), knowing where you stand.
               <div className="day-closed">
-                <h1 className={'question' + (signing ? ' is-signing' : '')}>{words}</h1>
+                <h1 className="question">{signing ? <Signed text={words ?? ''} /> : words}</h1>
               </div>
             ) : (
               // Unpainted, or just painted and still answering "because…": the question stays up, as asked.
@@ -777,6 +777,25 @@ export function Today(props: Props) {
         />
       )}
     </main>
+  )
+}
+
+/**
+ * A line written in as you'd write it: word after word, so a two-line heading writes its first line, then its second
+ * (nomi, Nov 5, 2026: revealed left to right, both lines came at once). About 2 seconds whatever its length.
+ */
+function Signed({ text }: { text: string }) {
+  const words = text.split(' ')
+  const step = 2000 / Math.max(1, words.length)
+  return (
+    <>
+      {words.map((w, i) => (
+        <span key={i} className="signed-word" style={{ animationDelay: `${Math.round(i * step)}ms` }}>
+          {w}
+          {i < words.length - 1 ? ' ' : ''}
+        </span>
+      ))}
+    </>
   )
 }
 

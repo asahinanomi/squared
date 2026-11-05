@@ -796,14 +796,15 @@ sup.ord {
     sign 0.6s 0.06s ease-out both,
     deepen 2.2s 0.06s ease-in both;
 }
-/* Today's line, as the answer is done: written in from left to right, as the square signs its word. */
-.question.is-signing {
-  animation: sign-line 2s ease-in-out both;
+/* A day's line, as the answer is done: written in word after word (Signed in Today.tsx), each word inking in from the
+   left, so a two-line heading writes line one, then line two. */
+.signed-word {
+  animation: sign-word 0.7s ease-out both;
 }
-@keyframes sign-line {
+@keyframes sign-word {
   from {
     clip-path: inset(0 100% 0 0);
-    opacity: 0.3;
+    opacity: 0.2;
   }
   to {
     clip-path: inset(0 0 0 0);
@@ -811,7 +812,7 @@ sup.ord {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .question.is-signing {
+  .signed-word {
     animation: none;
   }
 }
