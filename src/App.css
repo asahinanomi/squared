@@ -2256,12 +2256,18 @@ body[data-screen='questions'] .idea {
 }
 .life-year-name {
   position: relative;
-  color: #1f1f1d;
+  /* Lighter, so the years' colours lead and the grid reads cleaner (nomi, Nov 5, 2026); this year keeps its ink. */
+  color: var(--ink-soft);
+  font-weight: 500;
   text-shadow: 0 0 3px rgba(255, 255, 255, 0.65);
 }
 .life-year.is-blank .life-year-name {
-  color: var(--ink-soft); /* on a grey tile: soft ink stays readable (muted drops under 4.5:1) */
+  color: var(--muted);
   text-shadow: none;
+}
+.life-year.is-current .life-year-name {
+  color: #1f1f1d;
+  font-weight: 600;
 }
 .life-canvas {
   position: relative;
