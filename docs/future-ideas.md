@@ -2,6 +2,15 @@
 
 Ideas parked for later. Not promises, not in order. When one ships, move it into the README.
 
+## A hint for the date picker (parked Nov 5, 2026)
+
+Not now: the date capsule already reads as tappable (its ▾), it isn't a hero, and yesterday has the ← arrow and the swipe. Build it only if a beta tester says they couldn't find how to paint the days they missed.
+
+- **When:** opening today with 2 or more unpainted days since the last painted one.
+- **What:** an ink bubble under the date, its tail pointing up: "paint a day you missed ↑". A tap opens the picker.
+- **Stops:** at a touch or after 10 seconds; taught once, for good once a past day is painted through the picker. Through `useOneHint`, like every hint.
+- **Test:** `?hintdate`, listed in `docs/7-new-user-journey.md` and `docs/test-links.md`.
+
 ## Private notes, the Day One way, in the iOS app (rethought Oct 29, 2026)
 
 Not urgent: squared already does what most journals do (notes locked to your account, encrypted on the server's disks; the privacy page says plainly it isn't end to end). This is a trust upgrade for when squared reaches strangers, not a blocker. Regret notes are raw, and "not even I can read them" turns nomi's promise into a fact.
